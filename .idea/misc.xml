@@ -3,6 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Bookworm/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_bookworm.xml" value="0.1296875" />
+        <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_feed.xml" value="0.1296875" />
+        <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_profile.xml" value="0.22864583333333333" />
+        <entry key="..\:/Bookworm/app/src/main/res/layout/menu_bottom.xml" value="0.11626139817629179" />
+        <entry key="..\:/Bookworm/app/src/main/res/menu/menu_bottom.xml" value="0.264" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/activity_main.xml" value="0.34322916666666664" />
       </map>
     </option>
