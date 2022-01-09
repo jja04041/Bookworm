@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/btnfeed"
+        android:enabled="true"
+        android:icon="@drawable/feed"
+        android:title="피드"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/btnsearch"
+        android:enabled="true"
+        android:icon="@drawable/search"
+        android:title="탐색"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/btnworm"
+        android:enabled="true"
+        android:icon="@drawable/worm"
+        android:title="책볼레"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/btnchallenge"
+        android:enabled="true"
+        android:icon="@drawable/challenge"
+        android:title="챌린지"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/btnprofile"
+        android:enabled="true"
+        android:icon="@drawable/profile"
+        android:title="프로필"
+        app:showAsAction="ifRoom" />
+
+</menu>
