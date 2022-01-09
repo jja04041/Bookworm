@@ -7,8 +7,10 @@
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/activity_login.xml" value="0.32760416666666664" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_bookworm.xml" value="0.32760416666666664" />
+        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_challenge.xml" value="0.17916666666666667" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_feed.xml" value="0.240625" />
-        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_search.xml" value="0.32760416666666664" />
+        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_profile.xml" value="0.23020833333333332" />
+        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_search.xml" value="0.25" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/menu/tabitem.xml" value="0.32760416666666664" />
       </map>
     </option>
