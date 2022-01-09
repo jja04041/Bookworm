@@ -1,4 +1,4 @@
-package com.example.bookworm;
+package com.example.bookworm.fragments;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.bookworm.R;
 
 
 public class fragment_feed extends Fragment {

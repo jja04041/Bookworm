@@ -4,9 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <FrameLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#81c147"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/icon_bookworm"
+            android:layout_gravity= "center"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true">
+        </ImageView>
+
+    </FrameLayout >
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#81c147"
+        android:layout_alignParentTop="true">
+
+
+    </FrameLayout >
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id = "@+id/bottom"
         android:layout_width="match_parent"
