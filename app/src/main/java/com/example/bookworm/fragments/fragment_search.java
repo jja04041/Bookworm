@@ -1,4 +1,4 @@
-package com.example.bookworm;
+package com.example.bookworm.fragments;
 
 import android.os.Bundle;
 
@@ -8,14 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.bookworm.R;
+
 
 public class fragment_search extends Fragment {
 
 
-    public static fragment_search newInstance(){
-        fragment_search fragment_search = new fragment_search();
-        return fragment_search;
-    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

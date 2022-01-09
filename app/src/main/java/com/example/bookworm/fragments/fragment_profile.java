@@ -1,4 +1,4 @@
-package com.example.bookworm;
+package com.example.bookworm.fragments;
 
 import android.os.Bundle;
 
@@ -8,13 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.bookworm.R;
+
 public class fragment_profile extends Fragment {
-
-
-    public static fragment_profile newInstance(){
-        fragment_profile fragment_profile = new fragment_profile();
-        return fragment_profile;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
