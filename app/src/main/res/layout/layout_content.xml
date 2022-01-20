@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+            <ImageView
+                  android:id="@+id/img_profile"
+                android:layout_marginLeft="7dp"
+                android:layout_centerVertical="true"
+                android:layout_width="40dp"
+                android:layout_height="40dp"/>
+
+            <TextView
+                android:id="@+id/tv_username"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/img_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="17sp"
+                android:textColor="@android:color/black"
+                android:text="durumyisking"/>
+
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:src="@drawable/bookimg"
+            android:scaleType="centerCrop"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+            <ImageView
+                android:id="@+id/ic_like"
+                android:layout_marginLeft="7dp"
+                android:layout_centerVertical="true"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_like"/>
+
+            <ImageView
+                android:id="@+id/ic_chat"
+                android:layout_toRightOf="@+id/ic_like"
+                android:layout_marginLeft="10dp"
+                android:layout_centerVertical="true"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_reply"/>
+
+            <ImageView
+                android:id="@+id/ic_send"
+                android:layout_toRightOf="@+id/ic_chat"
+                android:layout_marginLeft="10dp"
+                android:layout_centerVertical="true"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_share"/>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <ImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/img_like_profile"
+                android:layout_marginLeft="7dp"
+                android:layout_centerVertical="true"
+                android:layout_width="40dp"
+                android:layout_height="40dp"/>
+
+            <TextView
+                android:id="@+id/tv_comment1"
+                android:layout_marginLeft="10dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/img_like_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:text="Liked by"/>
+            <TextView
+                android:id="@+id/tv_comment2"
+                android:layout_marginLeft="5dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/tv_comment1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:text="bookworm"/>
+
+            <TextView
+                android:id="@+id/tv_comment3"
+                android:layout_marginLeft="5dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/tv_comment2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:text="and"/>
+
+            <TextView
+                android:id="@+id/tv_comment4"
+                android:layout_marginLeft="5dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/tv_comment3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:text="24 others"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_profile_id"
+                android:layout_marginLeft="7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:text="profile_id"/>
+
+            <LinearLayout
+                android:layout_toRightOf="@id/tv_profile_id"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_feed"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@id/tv_profile_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:text="정말 재미있는 책이에요"/>
+
+                <TextView
+                    android:id="@+id/tv_tag"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@id/tv_tag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#1D2285"
+                    android:text="#책볼레  #책  #독서"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+            <ImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/img_reply_profle"
+                android:layout_marginLeft="7dp"
+                android:layout_centerVertical="true"
+                android:layout_width="40dp"
+                android:layout_height="40dp"/>
+
+            <EditText
+                android:id="@+id/et_comment"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/img_reply_profle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ems="10"
+                android:hint="Add a comment....."
+                android:background="@null"
+                android:inputType="text" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_marginLeft="7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="8 HOURS AGO"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+</merge>

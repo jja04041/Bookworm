@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/maincolor">
+
+        <ImageView
+            android:id="@+id/img_logo"
+            android:layout_marginLeft="20dp"
+            android:layout_centerVertical="true"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/appicon_bookworm" />
+
+        <ImageView
+            android:id="@+id/img_createfeed"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:layout_centerVertical="true"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/create_feed" />
+
+
+
+    </RelativeLayout>
+
+
+</merge>

@@ -1,26 +1,22 @@
 package com.example.bookworm.Login;
 
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bookworm.MainActivity;
 import com.example.bookworm.R;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.sdk.user.model.Account;
-import com.kakao.sdk.user.model.User;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -30,10 +26,9 @@ public class activity_login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Log.d("KeyHash", getKeyHash());
+        Log.e("KeyHash", getKeyHash());
 
         ImageButton kakao_login_button = (ImageButton)findViewById(R.id.btn_login);
-
         kakao_login_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -122,6 +117,7 @@ public class activity_login extends AppCompatActivity {
         }
         return null;
     }
+
 }
 
 
