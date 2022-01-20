@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:gravity="center"
-            android:layout_bottom="@id/setting">
+            android:id="@id/setting">
 
             <LinearLayout
                 android:layout_weight="1"
