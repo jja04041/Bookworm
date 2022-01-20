@@ -1,22 +1,17 @@
 package com.example.bookworm;
 
 
+import android.os.Bundle;
+import android.view.MenuItem;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ComponentActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import android.os.Bundle;
-import android.provider.Settings;
-import android.view.MenuItem;
-
-import com.example.bookworm.Login.GlobalApplication;
-import com.example.bookworm.Login.activity_login;
+import com.example.bookworm.fragments.fragment_feed;
 import com.example.bookworm.fragments.functions.frag_functions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import com.example.bookworm.fragments.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     frag_functions frag_functions = new frag_functions();
 
-    activity_login activity_login = new activity_login();
+    //activity_login activity_login = new activity_login();
 
 
 
