@@ -30,7 +30,7 @@ public class activity_login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Log.d("KeyHash", getKeyHash());
+        Log.e("KeyHash", getKeyHash());
 
         ImageButton kakao_login_button = (ImageButton)findViewById(R.id.btn_login);
 
