@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/activity_login.xml" value="0.5" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/activity_main.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/activity_search_fragment_sub.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/activity_search_fragment_sub2.xml" value="0.36614583333333334" />
@@ -17,27 +18,6 @@
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/search_recyclerview_item.xml" value="0.14351851851851852" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_search_fragment_result.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_search_main.xml" value="0.30886075949367087" />
-        <entry key="..\:/Bookworm/app/src/main/res/layout/activity_loading.xml" value="0.1296875" />
-        <entry key="..\:/Bookworm/app/src/main/res/layout/activity_login.xml" value="0.25364583333333335" />
-        <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_feed.xml" value="0.1" />
-        <entry key="..\:/Bookworm/app/src/main/res/layout/layout_content.xml" value="0.264" />
-        <entry key="..\:/Bookworm/app/src/main/res/layout/layout_profile.xml" value="0.25364583333333335" />
-        <entry key="..\:/Bookworm/app/src/main/res/layout/layout_topbar.xml" value="0.14375" />
-        <entry key="..\:/Bookworm/app/src/main/res/layout/search_recyclerview_item.xml" value="0.14375" />
-        <entry key="..\:/Users/USER/AndroidStudioProjects/Bookworm/app/src/main/res/drawable/back_icon.xml" value="0.26979166666666665" />
-        <entry key="..\:/Users/USER/AndroidStudioProjects/Bookworm/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.26979166666666665" />
-        <entry key="..\:/Users/USER/AndroidStudioProjects/Bookworm/app/src/main/res/drawable/setting.xml" value="0.26979166666666665" />
-        <entry key="..\:/Users/USER/AndroidStudioProjects/Bookworm/app/src/main/res/layout/activity_loading.xml" value="0.2033514492753623" />
-        <entry key="..\:/Users/USER/AndroidStudioProjects/Bookworm/app/src/main/res/layout/activity_profile_follow.xml" value="0.24947916666666667" />
-        <entry key="..\:/Users/USER/AndroidStudioProjects/Bookworm/app/src/main/res/layout/activity_profile_modify.xml" value="0.25364583333333335" />
-        <entry key="..\:/Users/USER/AndroidStudioProjects/Bookworm/app/src/main/res/layout/activity_profile_setting.xml" value="0.25364583333333335" />
-        <entry key="..\:/Users/USER/AndroidStudioProjects/Bookworm/app/src/main/res/layout/challenge_listview_item.xml" value="0.25364583333333335" />
-        <entry key="..\:/Users/USER/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_bookworm.xml" value="0.1983695652173913" />
-        <entry key="..\:/Users/USER/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_challenge.xml" value="0.25364583333333335" />
-        <entry key="..\:/Users/USER/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_feed.xml" value="0.25364583333333335" />
-        <entry key="..\:/Users/USER/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_profile.xml" value="0.264" />
-        <entry key="..\:/Users/USER/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_search.xml" value="0.25364583333333335" />
-        <entry key="..\:/Users/USER/AndroidStudioProjects/Bookworm/app/src/main/res/layout/search_recyclerview_item.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/drawable/bottom_icon_color.xml" value="0.2824074074074074" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/activity_loading.xml" value="0.32760416666666664" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/activity_login.xml" value="0.32760416666666664" />

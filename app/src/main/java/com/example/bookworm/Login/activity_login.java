@@ -1,9 +1,10 @@
 package com.example.bookworm.Login;
+import static com.kakao.util.helper.Utility.getKeyHash;
 
-
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
 import android.util.Base64;
@@ -11,113 +12,80 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.annotation.Nullable;
+import android.content.pm.PackageManager;
 import com.example.bookworm.MainActivity;
 import com.example.bookworm.R;
-import com.kakao.sdk.user.UserApiClient;
-import com.kakao.sdk.user.model.Account;
+import com.kakao.auth.AuthType;
+import com.kakao.auth.Session;
+import com.kakao.util.helper.Utility;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class activity_login extends AppCompatActivity {
+public class activity_login extends Activity {
+    private SessionCallback sessionCallback = new SessionCallback();
+    private static final String TAG = "MainActivity";
+    public static Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Log.e("KeyHash", getKeyHash());
+        mContext=this;
+        Session session = Session.getCurrentSession();
+        session.addCallback(new SessionCallback());
+//        try {
+//            PackageInfo info = getPackageManager().getPackageInfo("com.example.bookworm", PackageManager.GET_SIGNATURES);
+//            for (Signature signature : info.signatures) {
+//                MessageDigest md = MessageDigest.getInstance("SHA");
+//                md.update(signature.toByteArray());
+//                Log.e("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+//            }
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//        }
 
-        ImageButton kakao_login_button = (ImageButton)findViewById(R.id.btn_login);
-        kakao_login_button.setOnClickListener(new View.OnClickListener(){
+        if (Session.getCurrentSession().checkAndImplicitOpen()) {
+            Log.d(TAG, "onClick: 로그인 세션살아있음");
+            // 카카오 로그인 시도 (창이 안뜬다.)
+            sessionCallback.requestMe();
+        }
+
+        ImageButton kakao_login_button = (ImageButton) findViewById(R.id.btn_login);
+        kakao_login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(UserApiClient.getInstance().isKakaoTalkLoginAvailable(activity_login.this)){
-                    login();
-                }
-                else{
-                    accountLogin();
-                }
+                    Log.d(TAG, "onClick: 로그인 세션끝남");
+                    // 카카오 로그인 시도 (창이 뜬다.)
+                    session.open(AuthType.KAKAO_LOGIN_ALL, activity_login.this);
             }
-        });
-
-
-    }
-
-
-    public void login(){
-        String TAG = "login()";
-        UserApiClient.getInstance().loginWithKakaoTalk(activity_login.this,(oAuthToken, error) -> {
-            if (error != null) {
-                Log.e(TAG, "로그인 실패", error);
-            } else if (oAuthToken != null) {
-                Log.i(TAG, "로그인 성공(토큰) : " + oAuthToken.getAccessToken());
-                getUserInfo();
-                final Intent intent = new Intent (this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-            return null;
         });
     }
 
-    public void accountLogin(){
-        String TAG = "accountLogin()";
-        UserApiClient.getInstance().loginWithKakaoAccount(activity_login.this,(oAuthToken, error) -> {
-            if (error != null) {
-                Log.e(TAG, "로그인 실패", error);
-            } else if (oAuthToken != null) {
-                Log.i(TAG, "로그인 성공(토큰) : " + oAuthToken.getAccessToken());
-                getUserInfo();
-                final Intent intent = new Intent (this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-            return null;
-        });
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // 세션 콜백 삭제
+        Session.getCurrentSession().removeCallback(sessionCallback);
     }
 
-    public void getUserInfo(){
-        String TAG = "getUserInfo()";
-        UserApiClient.getInstance().me((user, meError) -> {
-            if (meError != null) {
-                Log.e(TAG, "사용자 정보 요청 실패", meError);
-            } else {
-                System.out.println("로그인 완료");
-                Log.i(TAG, user.toString());
-                {
-                    Log.i(TAG, "사용자 정보 요청 성공" +
-                            "\n회원번호: "+user.getId() +
-                            "\n이메일: "+user.getKakaoAccount().getEmail());
-                }
-                Account user1 = user.getKakaoAccount();
-                System.out.println("사용자 계정" + user1);
-            }
-            return null;
-        });
-    }
-
-
-    // 키해시 얻기
-    public String getKeyHash(){
-        try{
-            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
-            if(packageInfo == null) return null;
-            for(Signature signature: packageInfo.signatures){
-                try{
-                    MessageDigest md = MessageDigest.getInstance("SHA");
-                    md.update(signature.toByteArray());
-                    return android.util.Base64.encodeToString(md.digest(), Base64.NO_WRAP);
-                }catch (NoSuchAlgorithmException e){
-                    Log.w("getKeyHash", "Unable to get MessageDigest. signature="+signature, e);
-                }
-            }
-        }catch(PackageManager.NameNotFoundException e){
-            Log.w("getPackageInfo", "Unable to getPackageInfo");
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        // 카카오톡|스토리 간편로그인 실행 결과를 받아서 SDK로 전달
+        if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
+            return;
         }
-        return null;
-    }
 
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+    public void move(){
+        Intent intent=new Intent(this,MainActivity.class);
+        startActivity(intent);
+        this.finish();
+    }
 }
 
 
