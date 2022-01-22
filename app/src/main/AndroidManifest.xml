@@ -11,7 +11,19 @@
         android:label="책볼레"
         android:roundIcon="@drawable/appicon_bookworm"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:usesCleartextTraffic="true">
+
+        <!---->
+        <activity
+            android:name=".Search.subActivity.search_fragment_subActivity_result"
+            android:exported="false"
+            android:parentActivityName=".Search.subActivity.search_fragment_subActivity_main" />
+        <activity
+            android:name=".Search.subActivity.search_fragment_subActivity_main"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+        <!--Main Activities-->
         <activity
             android:name=".PreferActivity"
             android:exported="false" />
@@ -25,35 +37,39 @@
             android:name=".ProfileSettingActivity"
             android:exported="false" />
         <activity
-            android:name=".LoadingActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
-        <activity
-            android:name=".Login.activity_login"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <!-- Redirect URI: "kakao{NATIVE_APP_KEY}://oauth" -->
-                <data
-                    android:host="oauth"
-                    android:scheme="cd44810051deea6f9245b43a98310f47" />
-            </intent-filter>
         </activity>
+<!--        <activity-->
+<!--            android:name=".Login.activity_login"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
+<!--        <activity-->
+<!--            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
+
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" />-->
+
+<!--                &lt;!&ndash; Redirect URI: "kakao{NATIVE_APP_KEY}://oauth" &ndash;&gt;-->
+<!--                <data-->
+<!--                    android:host="oauth"-->
+<!--                    android:scheme="cd44810051deea6f9245b43a98310f47" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
     </application>
 
 </manifest>

@@ -17,7 +17,7 @@ public class LoadingActivity extends AppCompatActivity {
         mHander.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(),MainActivity.class);//로그인 액티비티로 넘어가야함.
                 startActivity(intent);
                 finish();
             }
