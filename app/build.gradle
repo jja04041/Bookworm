@@ -52,11 +52,9 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
     // 카카오 SDK 모듈 설정
-    implementation "com.kakao.sdk:v2-user:2.8.3" // 카카오 로그인
-    implementation "com.kakao.sdk:v2-talk:2.8.3" // 친구, 메시지(카카오톡)
-    implementation "com.kakao.sdk:v2-story:2.8.3" // 카카오스토리
-    implementation "com.kakao.sdk:v2-link:2.8.3" // 메시지(카카오링크)
-    implementation "com.kakao.sdk:v2-navi:2.8.3" // 카카오내비
+    implementation group: 'com.kakao.sdk', name: 'usermgmt', version: '1.30.7' // 카카오 로그인
+    implementation group: 'com.kakao.sdk', name: 'kakaotalk', version: '1.30.7' // 친구, 메시지(카카오톡)
+
 
     // Retrofit 라이브러리
     implementation 'com.squareup.retrofit2:retrofit:2.6.4'

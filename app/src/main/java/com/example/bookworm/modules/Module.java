@@ -54,9 +54,10 @@ public class Module {
 
         switch (idx) {
             case 0:
-                Log.d("page",page+"dd");
                 querys.put("Start", String.valueOf(page));
                 call = mainInterface.string_call(querys);
+                break;
+            case 1: //추천 책
                 break;
         }
         call.enqueue(new Callback<String>() {
@@ -65,7 +66,7 @@ public class Module {
                 if (response.isSuccessful() && response.body() != null) {
                     try {
                         JSONObject json = new JSONObject(response.body());
-                        Log.d("get",response.body());
+                        Log.d("get", response.body());
                         parseResult(idx, json);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -81,38 +82,45 @@ public class Module {
     }
 
 
-
     //결과를 보여주는 곳
-    public void parseResult(int idx, JSONObject json) throws JSONException {
+    private void parseResult(int idx, JSONObject json) throws JSONException {
         switch (idx) {
-            case 0:
-                count = Integer.parseInt(json.get("totalResults").toString());
-                JSONArray jsonArray = json.getJSONArray("item");
-                //리스트만
-                if (page == 1) {
-                    Log.d("count", count +"ehla");
-                    check = count;
-                    bookList = new ArrayList<>(); //book을 담는 리스트 생성
-                }
-                //booklist에 책을 담음
-                //이미 한번 검색한 경우 추가 페이지 로딩하도록 설계해야 함.
-                //아마 북리스트에 아이템을 계속 추가하면 되지 않을까,,
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject obj = jsonArray.getJSONObject(i);
-                    Book book = new Book(obj.getString("title"), obj.getString("description"), obj.getString("publisher"), obj.getString("author"), obj.getString("cover"), obj.getString("itemId"));
-                    bookList.add(book);
-                }
-                if (check > 20) {
-                    Log.d("check", check + "개"+bookList.size());
-                    bookList.add(new Book("", "", "", "", ""));
-                    check = count - bookList.size();
-                } else {
-                    Log.d("count", count + "개");
-//                    ((search_fragment_subActivity_main)context).isLoading=true;
-                }
-                page++;
+            case 0://검색 결과 표시
+                setResult(json);
                 break;
+            case 1: //추천 책
+                break;
+
         }
+    }
+
+    private void setResult(JSONObject json) throws JSONException //리사이클러 뷰에 결과를 표시하는 함수
+    {
+        count = Integer.parseInt(json.get("totalResults").toString());
+        JSONArray jsonArray = json.getJSONArray("item");
+        //리스트만
+        if (page == 1) {
+            Log.d("count", count + "ehla");
+            check = count;
+            bookList = new ArrayList<>(); //book을 담는 리스트 생성
+        }
+        //booklist에 책을 담음
+        //이미 한번 검색한 경우 추가 페이지 로딩하도록 설계해야 함.
+        //아마 북리스트에 아이템을 계속 추가하면 되지 않을까,,
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject obj = jsonArray.getJSONObject(i);
+            Book book = new Book(obj.getString("title"), obj.getString("description"), obj.getString("publisher"), obj.getString("author"), obj.getString("cover"), obj.getString("itemId"));
+            bookList.add(book);
+        }
+        if (check > 20) {
+            Log.d("check", check + "개" + bookList.size());
+            bookList.add(new Book("", "", "", "", ""));
+            check = count - bookList.size();
+        } else {
+            Log.d("count", count + "개");
+//                    ((search_fragment_subActivity_main)context).isLoading=true;
+        }
+        page++;
     }
 
     public int getCount() {
@@ -126,7 +134,5 @@ public class Module {
     public ArrayList<Book> getBookList() {
         return bookList;
     }
-    public void setPage(int page) {
-        this.page = page;
-    }
+
 }
