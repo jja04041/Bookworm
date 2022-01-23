@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -30,6 +31,10 @@ import com.example.bookworm.Search.items.OnBookItemClickListener;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_result;
 import com.example.bookworm.modules.Module;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,21 +54,21 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
     private Map<String, String> querys;
     public ArrayList<Book> bookList;
     Module module;
-    public boolean isLoading = false;
-    int count = 0, page = 0;
+    public boolean isLoading = false; //스크롤을 당겨서 추가로 로딩 중인지 여부를 확인하는 변수
+    int count = 0, page = 0, check = 0;
+    final int CPP=10; //Contents Per Page : 페이지당 보이는 컨텐츠의 개수
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.subactivity_search_main);
-
         //각 위젯 변수와 실제 위젯을 매칭
         btnBefore = findViewById(R.id.btnBefore);
         btnSearch = findViewById(R.id.btnSearch);
         spinner1 = findViewById(R.id.spinner1);
         edtSearch = findViewById(R.id.edtSearch);
         mRecyclerView = findViewById(R.id.recyclerView);
-        bookList=new ArrayList<>();
+        bookList = new ArrayList<>();
 
         //spinner를 위한 adapter 생성
         ArrayAdapter<String> dap = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
@@ -122,13 +127,14 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
 
     }//onCreate End
 
+    //아이템 세팅
     private void setItems() throws InterruptedException {
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(edtSearch.getWindowToken(), 0);
         edtSearch.clearFocus();
 
-        if (edtSearch.getText().toString().replaceAll(" ","").equals("")!=true) {
+        if (edtSearch.getText().toString().replaceAll(" ", "").equals("") != true) {
             querys = new HashMap<>();
             querys.put("Query", edtSearch.getText().toString());
             querys.put("QueryType", type[option_idx]);
@@ -142,12 +148,11 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
 
             module = new Module(this, url, querys);
             module.connect(0);
-            moduleUpdated();
-        }else{
-            Toast.makeText(getApplicationContext(),"검색어를 입력해 주세요",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "검색어를 입력해 주세요", Toast.LENGTH_SHORT).show();
         }
-
     }
+
 
     //리사이클러뷰를 초기화
     private void initRecyclerView() {
@@ -170,23 +175,20 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
                 int lastVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition();
                 if (!isLoading) {
                     try {
-
                         if (layoutManager != null && lastVisibleItemPosition == bookAdapter.getItemCount() - 1) {
-                            page=module.getPage();
-                            count=module.getCount();
-
+                            page = module.getPage();
+                            count = module.getCount();
                             bookAdapter.deleteLoading();
-                            if ((page * 10) < count) {
-                                Log.d("얼", "우울ㄴㄹ" + page + count);
+                            if ((page * CPP) < count) {
+                                Log.d("얼", "우울ㄴㄹ" + page + "," + count);
                                 //리스트 마지막
                                 //여기서 로딩바를 보여주고, 새로운 아이템을 로딩해야 함.
                                 //무한 스크롤 가능 => 로딩바 구현
                                 module.connect(0);
-                                moduleUpdated();
                             }
                             isLoading = true;
                         }
-                    } catch (NullPointerException | InterruptedException ex) {
+                    } catch (NullPointerException e) {
 
                     }
                 }
@@ -196,44 +198,58 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
 
     }
 
-    private void moduleUpdated() throws InterruptedException {
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    count = module.getCount();
-                    page= module.getPage();
 
-                    if (count == 0) {
-                        bookList = new ArrayList<>();
-                        bookAdapter = new BookAdapter(bookList, getApplicationContext());
-                        initRecyclerView();
-                        Toast.makeText(getApplicationContext(),"검색 결과가 없습니다",Toast.LENGTH_SHORT).show();
-                    } else {
-                        bookList=module.getBookList();
-                        if (page != 2) {
-                            isLoading = false;
-                            bookAdapter.notifyItemRangeChanged(0, bookList.size(), null);
-                        } else {
-                            bookAdapter = new BookAdapter(bookList, getApplicationContext());
-                            bookAdapter.setListener(new OnBookItemClickListener() {
-                                @Override
-                                public void onItemClick(BookAdapter.ItemViewHolder holder, View view, int position) {
-                                    Intent intent = new Intent(getApplicationContext(), search_fragment_subActivity_result.class); //선택한 아이템에 대한 상세 정보를 표가
-                                    intent.putExtra("itemid", bookList.get(position).getItemId());
-                                    startActivity(intent);
-                                }
-                            });
-                            initRecyclerView(); //initialize RecyclerView
-                        }
-                    }
-                } catch (NullPointerException e){
-                    Log.d("null","ㅇㅇ");
+    //module에서 사용하는 함수
+    public void moduleUpdated(JSONArray jsonArray) throws JSONException {
+        page = module.getPage();
+        count = module.getCount();
 
-                }
+        if (page == 1) {
+            check = count;
+            bookList = new ArrayList<>(); //book을 담는 리스트 생성
+        }
+        if (count == 0) {
+            //검색결과가 없을 경우엔 리사이클러 뷰를 비움.
+            bookList = new ArrayList<>();
+            bookAdapter = new BookAdapter(bookList, this);
+            initRecyclerView();
+            Toast.makeText(this, "검색결과가 없습니다", Toast.LENGTH_SHORT).show();
+        } else {
+            //booklist에 책을 담음
+            //이미 한번 검색한 경우 추가 페이지 로딩하도록 설계해야 함.
+            //아마 북리스트에 아이템을 계속 추가하면 되지 않을까,,
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+                Book book = new Book(obj.getString("title"), obj.getString("description"), obj.getString("publisher"), obj.getString("author"), obj.getString("cover"), obj.getString("itemId"));
+                bookList.add(book);
             }
-        }, 1000);
+            if (check > 20 && page<20) {
+                Log.d("check", check + "개");
+                bookList.add(new Book("", "", "", "", ""));
+                this.check = count - bookList.size();
+            } else {
+                Log.d("count", count + "개");
+                isLoading = true;
+            }
+
+            if (page != 1&&page<20) {
+                isLoading = false;
+                bookAdapter.notifyItemRangeChanged(0, bookList.size() - 1, null);
+            } else {
+                bookAdapter = new BookAdapter(bookList, this);
+                bookAdapter.setListener(new OnBookItemClickListener() {
+                    @Override
+                    public void onItemClick(BookAdapter.ItemViewHolder holder, View view, int position) {
+                        Intent intent = new Intent(getApplicationContext(), search_fragment_subActivity_result.class);
+                        intent.putExtra("itemid", bookList.get(position).getItemId());
+                        startActivity(intent);
+                    }
+                });
+                initRecyclerView(); //initialize RecyclerView
+            }
+            this.page++;
+            module.setPage(page);
+        }
 
     }
 }//subActivity End

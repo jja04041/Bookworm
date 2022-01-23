@@ -2,6 +2,7 @@ package com.example.bookworm.Search.items;
 
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,21 +50,16 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     //Arraylist에 있는 아이템을 뷰 홀더에 바인딩 하는 메소드
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        int safePosition=holder.getAdapterPosition();
         if (holder instanceof ItemViewHolder) {
-            Book item = BookList.get(position);
+            Book item = BookList.get(safePosition);
             ((ItemViewHolder) holder).setItem(item);
         } else if (holder instanceof LoadingViewHolder) {
-            showLoadingView((LoadingViewHolder) holder, position);
+            showLoadingView((LoadingViewHolder) holder, safePosition);
         }
 
 
     }
-
-    //리스트의 해당 인덱스의 DTO 객체를 반환하는 메서드
-    public Book getItem(int position) {
-        return BookList.get(position);
-    }
-
     @Override
     public int getItemCount() {
         return BookList.size();
@@ -100,7 +96,8 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
     public void deleteLoading() {
-        BookList.remove(BookList.size() - 1); // 로딩이 완료되면 프로그레스바를 지움
+        BookList.remove(BookList.size() - 1);
+        // 로딩이 완료되면 프로그레스바를 지움
     }
 
     //뷰홀더 클래스 부분

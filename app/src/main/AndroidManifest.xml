@@ -4,7 +4,6 @@
     <!-- 인터넷 사용 권한 설정 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
-
     <application
         android:name=".Login.GlobalApplication"
         android:allowBackup="true"
@@ -14,10 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".Feed.subActivity_Feed_Create"
+            android:exported="false" />
+
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="@string/kakaoKey" />
-        <!--SubActivities-->
+            android:value="@string/kakaoKey" /> <!-- SubActivities -->
         <activity
             android:name=".Search.subActivity.search_fragment_subActivity_result"
             android:exported="false"
@@ -25,35 +27,29 @@
         <activity
             android:name=".Search.subActivity.search_fragment_subActivity_main"
             android:exported="false"
-            android:parentActivityName=".MainActivity" />
-        <!--Main Activities-->
-        <!--선호장르 설정-->
+            android:parentActivityName=".MainActivity" /> <!-- Main Activities -->
+        <!-- 선호장르 설정 -->
         <activity
             android:name=".PreferActivity"
-            android:exported="false" />
-        <!--회원 정보 입력-->
+            android:exported="false" /> <!-- 회원 정보 입력 -->
         <activity
             android:name=".JoinActivity"
-            android:exported="false" />
-        <!--회원 정보 수정-->
+            android:exported="false" /> <!-- 회원 정보 수정 -->
         <activity
             android:name=".ProfileModifyActivity"
-            android:exported="false" />
-        <!--회원 설정-->
+            android:exported="false" /> <!-- 회원 설정 -->
         <activity
             android:name=".ProfileSettingActivity"
-            android:exported="false" />
-        <!--메인 화면-->
+            android:exported="false" /> <!-- 메인 화면 -->
         <activity
             android:name=".MainActivity"
-            android:exported="false" />
-
-        <!--로그인 화면-->
+            android:exported="false" /> <!-- 로그인 화면 -->
         <activity
             android:name=".Login.activity_login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

@@ -20,6 +20,7 @@ public class SessionCallback implements ISessionCallback {
     // 로그인에 성공한 상태
     @Override
     public void onSessionOpened() {
+        Log.d("done","끝남");
 //        requestMe();
     }
 
@@ -30,6 +31,7 @@ public class SessionCallback implements ISessionCallback {
     }
 
     // 사용자 정보 요청
+    //이곳에 우리가 필요한 정보를 전달받아 retrofit 등을 통해 db에 저장하면 될 듯 함.
     public void requestMe() {
 
         UserManagement.getInstance()
@@ -49,11 +51,13 @@ public class SessionCallback implements ISessionCallback {
                         Log.i("KAKAO_API", "사용자 아이디: " + result.getId());
                         String id = String.valueOf(result.getId());
                         UserAccount kakaoAccount = result.getKakaoAccount();
+                        //회원정보 보유 시
                         if (kakaoAccount != null) {
 
                             // 이메일
                             String email = kakaoAccount.getEmail();
                             Profile profile = kakaoAccount.getProfile();
+
                             if (profile == null) {
                                 Log.d("KAKAO_API", "onSuccess:profile null ");
                             } else {
@@ -81,7 +85,10 @@ public class SessionCallback implements ISessionCallback {
                                 // 프로필 획득 불가
                             }
                             ((activity_login)activity_login.mContext).move();
-                        } else {
+                        }
+
+                        //해당하는 회원정보가 없을 경우
+                        else {
                             Log.i("KAKAO_API", "onSuccess: kakaoAccount null");
                         }
                     }
