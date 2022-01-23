@@ -13,13 +13,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".Feed.subActivity_Feed_Create"
-            android:exported="false" />
+
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="@string/kakaoKey" /> <!-- SubActivities -->
+            android:value="@string/kakaoKey" />
+
+        <!-- SubActivities -->
+        <activity
+            android:name=".Feed.subActivity_Feed_Create"
+            android:parentActivityName=".MainActivity"
+            android:exported="false" />
         <activity
             android:name=".Search.subActivity.search_fragment_subActivity_result"
             android:exported="false"
