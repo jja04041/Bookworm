@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.bookworm.Login.SessionCallback;
 import com.example.bookworm.fragments.fragment_feed;
 import com.example.bookworm.fragments.functions.frag_functions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -22,8 +23,6 @@ public class MainActivity extends AppCompatActivity {
     FragmentManager fragmentManager;
 
     frag_functions frag_functions = new frag_functions();
-
-    //activity_login activity_login = new activity_login();
 
 
 

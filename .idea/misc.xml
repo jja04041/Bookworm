@@ -16,12 +16,17 @@
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/activity_profile_setting.xml" value="0.25" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/challenge_listview_item.xml" value="0.31614583333333335" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/custom_recyclerview_item.xml" value="0.31614583333333335" />
-        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_bookworm.xml" value="0.32760416666666664" />
+        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_bookworm.xml" value="0.25" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_challenge.xml" value="0.33" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_feed.xml" value="0.240625" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_profile.xml" value="0.23020833333333332" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_search.xml" value="0.25" />
+        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/layout_content.xml" value="0.18020833333333333" />
+        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/layout_topbar.xml" value="0.18020833333333333" />
+        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/search_item_loading.xml" value="0.18020833333333333" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/search_recyclerview_item.xml" value="0.303125" />
+        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/subactivity_search_fragment_result.xml" value="0.18020833333333333" />
+        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/subactivity_search_main.xml" value="0.18020833333333333" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/menu/tabitem.xml" value="0.32760416666666664" />
       </map>
     </option>
