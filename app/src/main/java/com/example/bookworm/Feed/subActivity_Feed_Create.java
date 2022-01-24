@@ -1,11 +1,16 @@
 package com.example.bookworm.Feed;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.graphics.drawable.DrawableCompat;
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -17,10 +22,11 @@ import java.util.ArrayList;
 
 public class subActivity_Feed_Create extends AppCompatActivity {
     EditText edtFeedContent;
-    Button btnAdd;
+    Button btnAdd,btnFinish;
     LinearLayout layout;
     ArrayList<Button> btn;
     int label = 0;
+    String a="가나다라마바아";
     //라벨은 알럿 다이어그램을 통해 입력을 받고, 선택한 값으로 라벨이 지정됨
 
     @Override
@@ -29,44 +35,90 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         setContentView(R.layout.subactivity_feed_create);
         edtFeedContent = findViewById(R.id.edtFeedContent);
         btnAdd = findViewById(R.id.btnAdd);
+        btnFinish=findViewById(R.id.btnFinish);
         layout = findViewById(R.id.llLabel);
         btn = new ArrayList<>();
-
+        btn.add(btnAdd);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (label < 3) {
-                    Button btn = new Button(getApplicationContext());
-                    btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                    btn.setBackground(getDrawable(R.drawable.label_design));
-                    btn.setText("안녕");
-                    Log.d("label", label + "개");
-                    btn.setEnabled(false);
-                    AddBtn(btn);
-                    if (label == 2) {
-                        btnAdd.setVisibility(View.INVISIBLE);
-                    }
-                    label++;
-                }
+                //ShowDialog 만들기
+
+                //라벨생성
+                setLabel(a,Color.parseColor("#EFDDDD"));
+            }
+    });
+        btnFinish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 
 
-    }
+}
 
-    public void AddBtn(Button button) {
-        int count = layout.getChildCount(); //현재 버튼 개수
-        btn.add(button);
-        for (int i = 0; i < count; i++) {
-            btn.add((Button) layout.getChildAt(i));
+    private void labelCtrl(int mode, Button button) {
+
+        switch (mode) {
+            case 0: //ADD
+                btn.add(button);
+                if(btn.size()==4){
+                    btn.remove(btnAdd);
+                }
+                break;
+            case 1: //Remove
+                btn.remove(button);
+                if(!btn.contains(btnAdd)){
+                    btn.add(0,btnAdd);
+                }
+                label--;
+                break;
         }
         layout.removeAllViews();
         for (Button i : btn) {
             layout.addView(i);
         }
-        btn.clear();
+        Log.d("arrayNow",btn.toString());
+//        //레이아웃을 새로고침 함.
+
     }
 
-    public void RemoveBtn(int idx) {
+    private void setLabel(String Text,int btnColor) {
+        if (label < 3) {
+            //버튼 세팅
+            Button btn = new Button(getApplicationContext());
+            btn.setClickable(true);
+            //label 디자인
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT, 150);
+            layoutParams.setMargins(10, 10, 10, 10);
+            btn.setLayoutParams(layoutParams);
+            btn.setPadding(10, 0, 10, 0);
+            Drawable unwrappedDrawable = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.label_design);
+            Drawable wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable);
+            DrawableCompat.setTint(wrappedDrawable,btnColor);
+            btn.setBackground(wrappedDrawable);
+
+            btn.setText(Text+"\t\t\tX");
+            //클릭 불가능하게 만들기
+//            btn.setOnLongClickListener(new View.OnLongClickListener() {
+//                @Override
+//                public boolean onLongClick(View view) {
+//                    labelCtrl(1,btn);
+//                    return true;
+//                }
+//            });
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    labelCtrl(1,btn);
+                }
+            });
+            //라벨 추가
+            labelCtrl(0, btn);
+            label++;
+        }
     }
+
 }
