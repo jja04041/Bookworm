@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "1083848491002",
-    "project_id": "bookworm-a19a1",
-    "storage_bucket": "bookworm-a19a1.appspot.com"
+    "project_number": "607071435790",
+    "project_id": "bookworm-a1094",
+    "storage_bucket": "bookworm-a1094.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1083848491002:android:fcebb1a122bc5bd9e1ee43",
+        "mobilesdk_app_id": "1:607071435790:android:6747ff67cf17ef9695105f",
         "android_client_info": {
           "package_name": "com.example.bookworm"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1083848491002-bikst3uva2dl3qqipk33289opumnd1sg.apps.googleusercontent.com",
+          "client_id": "607071435790-h3etfolg1pam0kvoj5nub130noo9ctro.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBwR9njzGGyjRG_kMX0vXOXKiB5kqFVXMw"
+          "current_key": "AIzaSyCVRK06mT-dYOotH27Kk9lqTnh17YoGQHI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1083848491002-bikst3uva2dl3qqipk33289opumnd1sg.apps.googleusercontent.com",
+              "client_id": "607071435790-h3etfolg1pam0kvoj5nub130noo9ctro.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

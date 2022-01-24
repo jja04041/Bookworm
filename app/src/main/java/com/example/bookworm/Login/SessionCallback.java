@@ -23,7 +23,7 @@ public class SessionCallback implements ISessionCallback {
     @Override
     public void onSessionOpened() {
         Log.d("done","끝남");
-//        requestMe();
+        requestMe();
     }
 
     // 로그인에 실패한 상태
