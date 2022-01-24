@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import android.content.pm.PackageManager;
 import com.example.bookworm.MainActivity;
 import com.example.bookworm.R;
+import com.example.bookworm.User.UserInfo;
 import com.kakao.auth.AuthType;
 import com.kakao.auth.Session;
 import com.kakao.util.helper.Utility;
