@@ -17,18 +17,32 @@
         android:layout_weight="1">
 
         <TextView
-            android:id="@+id/textview"
+            android:id="@+id/tv_kakao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="kakao 로그인"
             android:textStyle="bold"
             />
         <ImageButton
-            android:id="@+id/btn_login"
+            android:id="@+id/btn_login_kakao"
             android:layout_marginTop="30dp"
            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/kakao_login_medium_wide"
+            />
+        <TextView
+            android:id="@+id/tv_google"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Google 로그인"
+            android:textStyle="bold"
+            />
+        <ImageButton
+            android:id="@+id/btn_login_google"
+            android:layout_marginTop="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/google_login_medium"
             />
 
     </LinearLayout>

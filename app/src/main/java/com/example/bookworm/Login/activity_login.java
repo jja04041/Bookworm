@@ -34,18 +34,18 @@ public class activity_login extends Activity {
         mContext=this;
         Session session = Session.getCurrentSession();
         session.addCallback(new SessionCallback());
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo("com.example.bookworm", PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.e("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            PackageInfo info = getPackageManager().getPackageInfo("com.example.bookworm", PackageManager.GET_SIGNATURES);
+//            for (Signature signature : info.signatures) {
+//                MessageDigest md = MessageDigest.getInstance("SHA");
+//                md.update(signature.toByteArray());
+//                Log.e("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+//            }
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//        }
 
         if (Session.getCurrentSession().checkAndImplicitOpen()) {
             Log.d(TAG, "onClick: 로그인 세션살아있음");
@@ -53,15 +53,20 @@ public class activity_login extends Activity {
             sessionCallback.requestMe();
         }
 
-        ImageButton kakao_login_button = (ImageButton) findViewById(R.id.btn_login);
+        ImageButton kakao_login_button = (ImageButton) findViewById(R.id.btn_login_kakao);
         kakao_login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                     Log.d(TAG, "onClick: 로그인 세션끝남");
                     // 카카오 로그인 시도 (창이 뜬다.)
                     session.open(AuthType.KAKAO_LOGIN_ALL, activity_login.this);
+
+
             }
         });
+
+
+        ImageButton google_login_button = (ImageButton) findViewById(R.id.btn_login_google);
     }
 
     @Override
@@ -81,8 +86,12 @@ public class activity_login extends Activity {
 
         super.onActivityResult(requestCode, resultCode, data);
     }
-    public void move(){
+    public void move(UserInfo UserInfo){
         Intent intent=new Intent(this,MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("name", UserInfo.username);
+        intent.putExtra("profileimg", UserInfo.profileimg);
+        intent.putExtra("email", UserInfo.email);
         startActivity(intent);
         this.finish();
     }

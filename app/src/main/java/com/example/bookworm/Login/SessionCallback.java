@@ -17,6 +17,7 @@ import com.kakao.util.exception.KakaoException;
 
 public class SessionCallback implements ISessionCallback {
 
+
     // 로그인에 성공한 상태
     @Override
     public void onSessionOpened() {
@@ -84,11 +85,9 @@ public class SessionCallback implements ISessionCallback {
                             } else {
                                 // 프로필 획득 불가
                             }
-                            ((activity_login)activity_login.mContext).move();
-                        }
-
-                        //해당하는 회원정보가 없을 경우
-                        else {
+                            UserInfo userinfo = new UserInfo(email, _profile.getNickname(), _profile.getProfileImageUrl());
+                            ((activity_login)activity_login.mContext).move(userinfo);
+                        } else {
                             Log.i("KAKAO_API", "onSuccess: kakaoAccount null");
                         }
                     }
