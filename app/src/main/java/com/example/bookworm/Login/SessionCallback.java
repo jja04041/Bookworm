@@ -1,10 +1,8 @@
 package com.example.bookworm.Login;
 
-import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
-import com.example.bookworm.MainActivity;
+import com.example.bookworm.User.UserInfo;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
@@ -16,6 +14,7 @@ import com.kakao.util.OptionalBoolean;
 import com.kakao.util.exception.KakaoException;
 
 public class SessionCallback implements ISessionCallback {
+
 
     // 로그인에 성공한 상태
     @Override
@@ -46,7 +45,7 @@ public class SessionCallback implements ISessionCallback {
 
                     @Override
                     public void onSuccess(MeV2Response result) {
-                        Log.i("KAKAO_API", "사용자 아이디: " + result.getId());
+                         Log.i("KAKAO_API", "사용자 아이디: " + result.getId());
                         String id = String.valueOf(result.getId());
                         UserAccount kakaoAccount = result.getKakaoAccount();
                         if (kakaoAccount != null) {
@@ -80,7 +79,8 @@ public class SessionCallback implements ISessionCallback {
                             } else {
                                 // 프로필 획득 불가
                             }
-                            ((activity_login)activity_login.mContext).move();
+                            UserInfo userinfo = new UserInfo(email, _profile.getNickname(), _profile.getProfileImageUrl());
+                            ((activity_login)activity_login.mContext).move(userinfo);
                         } else {
                             Log.i("KAKAO_API", "onSuccess: kakaoAccount null");
                         }

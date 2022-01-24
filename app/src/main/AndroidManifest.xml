@@ -48,6 +48,11 @@
             android:name=".MainActivity"
             android:exported="false" />
 
+        <!--피드 작성 화면-->
+        <activity
+            android:name=".Feed.activity_createfeed"
+            android:exported="true" />
+
         <!--로그인 화면-->
         <activity
             android:name=".Login.activity_login"
@@ -57,6 +62,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

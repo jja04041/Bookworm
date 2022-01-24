@@ -1,27 +1,19 @@
 package com.example.bookworm.Login;
-import static com.kakao.util.helper.Utility.getKeyHash;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.Signature;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
 import androidx.annotation.Nullable;
-import android.content.pm.PackageManager;
+
 import com.example.bookworm.MainActivity;
 import com.example.bookworm.R;
+import com.example.bookworm.User.UserInfo;
 import com.kakao.auth.AuthType;
 import com.kakao.auth.Session;
-import com.kakao.util.helper.Utility;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class activity_login extends Activity {
     private SessionCallback sessionCallback = new SessionCallback();
@@ -34,6 +26,8 @@ public class activity_login extends Activity {
         mContext=this;
         Session session = Session.getCurrentSession();
         session.addCallback(new SessionCallback());
+
+        // 해쉬 키 얻기
 //        try {
 //            PackageInfo info = getPackageManager().getPackageInfo("com.example.bookworm", PackageManager.GET_SIGNATURES);
 //            for (Signature signature : info.signatures) {
@@ -53,15 +47,20 @@ public class activity_login extends Activity {
             sessionCallback.requestMe();
         }
 
-        ImageButton kakao_login_button = (ImageButton) findViewById(R.id.btn_login);
+        ImageButton kakao_login_button = (ImageButton) findViewById(R.id.btn_login_kakao);
         kakao_login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                     Log.d(TAG, "onClick: 로그인 세션끝남");
                     // 카카오 로그인 시도 (창이 뜬다.)
                     session.open(AuthType.KAKAO_LOGIN_ALL, activity_login.this);
+
+
             }
         });
+
+
+        ImageButton google_login_button = (ImageButton) findViewById(R.id.btn_login_google);
     }
 
     @Override
@@ -81,8 +80,12 @@ public class activity_login extends Activity {
 
         super.onActivityResult(requestCode, resultCode, data);
     }
-    public void move(){
+    public void move(UserInfo UserInfo){
         Intent intent=new Intent(this,MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("name", UserInfo.username);
+        intent.putExtra("profileimg", UserInfo.profileimg);
+        intent.putExtra("email", UserInfo.email);
         startActivity(intent);
         this.finish();
     }
