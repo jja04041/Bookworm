@@ -86,7 +86,7 @@ public class SessionCallback implements ISessionCallback {
                             } else {
                                 // 프로필 획득 불가
                             }
-                            UserInfo userinfo = new UserInfo(email, _profile.getNickname(), _profile.getProfileImageUrl());
+                            UserInfo userinfo = new UserInfo(_profile.getProfileImageUrl(), _profile.getNickname(), email);
                             ((activity_login)activity_login.mContext).move(userinfo);
                         } else {
                             Log.i("KAKAO_API", "onSuccess: kakaoAccount null");

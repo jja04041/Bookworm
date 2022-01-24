@@ -49,6 +49,7 @@ public class fragment_profile extends Fragment {
         strEmail = intent.getStringExtra("email");
 
         tvNickname.setText(strNickname);
+        tvEmail.setText(strEmail);
         Glide.with(this).load(strProfile).into(imgProfile);
 
         btnLogout.setOnClickListener(new Button.OnClickListener() {
