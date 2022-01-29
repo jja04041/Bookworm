@@ -2,15 +2,87 @@ package com.example.bookworm.Search.subActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
+import com.example.bookworm.modules.Module;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class search_fragment_subActivity_result extends AppCompatActivity {
+    ImageView iv_selectedItem;
+    final int textViewCount = 8;
+    String itemId;
+    int textViewID[] = {R.id.tvResTitle, R.id.tvResAuthor, R.id.tvLink, R.id.tvResPublisher, R.id.tvResDescription, R.id.tvResPriceSales, R.id.tvResPriceStandard, R.id.tvResRatingscore};
+    String getContent[] = {"title", "author", "link", "publisher", "description", "priceSales", "priceStandard", "customerReviewRank"};
+    TextView[] textViews = new TextView[textViewCount];
+    RatingBar customerReviewRank;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.subactivity_search_fragment_result);
+        Intent intent = getIntent();
+        itemId = intent.getExtras().getString("itemid");
+        iv_selectedItem = findViewById(R.id.iv_selectedItem);
+        customerReviewRank = findViewById(R.id.customerReviewRank);
+        for (int i = 0; i < textViewCount; i++) {
+            textViews[i] = findViewById(textViewID[i]);
+        }
+        setItem();
     }
+
+    private void setItem() {
+        Map querys = new HashMap<String, String>();
+        querys.put("ItemId", itemId);
+        querys.put("ItemIdType", "ItemId");
+        //기본값
+        querys.put("ttbkey", getString(R.string.ttbKey));
+        querys.put("output", "js");
+        querys.put("SearchTarget", "Book");
+        querys.put("Version", "20131101");
+        String url = "http://www.aladin.co.kr/ttb/api/"; //API 이용
+        Module module = new Module(this, url, querys);
+        module.connect(2);
+    }
+
+    public void putItem(JSONObject json) throws JSONException {
+        Glide.with(this).load(json.getString("cover")).into(iv_selectedItem);
+        for (int i = 0; i < textViewCount; i++) {
+            String text = getContent[i];
+            if (text.equals("link")) {
+                textViews[i].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        try {
+                            intent.setData(Uri.parse(json.getString(text)));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        startActivity(intent);
+                    }
+                });
+            } else if (text.equals("customerReviewRank")) {
+                float rank = Float.parseFloat(json.getString(text)) / 2;
+                customerReviewRank.setRating(rank);
+                textViews[i].setText(String.valueOf(rank));
+            } else textViews[i].setText(json.getString(getContent[i]));
+        }
+    }
+
 }

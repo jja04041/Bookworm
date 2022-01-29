@@ -32,7 +32,7 @@ public class fragment_feed extends Fragment {
         Glide.with(this).load(R.drawable.profile_img).circleCrop().into(profileimg_like);
         Glide.with(this).load(R.drawable.profile_img).circleCrop().into(profileimg_reply);
 
-        //Create New Feed
+//        //Create New Feed
         imgCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

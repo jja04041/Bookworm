@@ -6,8 +6,12 @@ import android.content.Context;
 import android.util.Log;
 
 
+import com.example.bookworm.MainActivity;
+import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_main;
+import com.example.bookworm.Search.subActivity.search_fragment_subActivity_result;
+import com.example.bookworm.fragments.fragment_search;
 import com.example.bookworm.modules.Interface.GetDataInterface;
 
 import org.json.JSONArray;
@@ -54,10 +58,13 @@ public class Module {
             case 0:
                 Log.d("검색페이지","페이지 : "+page);
                 querys.put("Start", String.valueOf(page));
-                call = mainInterface.string_call(querys);
+                call = mainInterface.getResult(querys);
                 break;
             case 1: //추천 책
+                call = mainInterface.getRecom(querys);
                 break;
+            case 2:
+                call=mainInterface.getItem(querys);
         }
         //이곳에 로딩중이라는 alertDialog 넣어도 좋을듯
         call.enqueue(new Callback<String>() {
@@ -66,6 +73,7 @@ public class Module {
                 if (response.isSuccessful() && response.body() != null) {
                     try {
                         //이곳에서 alertDialog 지우면 됨.
+                        Log.d("result",response.body());
                         JSONObject json = new JSONObject(response.body());
                         parseResult(idx, json);
                     } catch (JSONException | InterruptedException e) {
@@ -88,7 +96,13 @@ public class Module {
             case 0://검색 결과 표시
                 setResult(json);
                 break;
-            case 1: //추천 책
+            case 1: //추천 책(카테고리 별)
+                JSONArray jsonArray = json.getJSONArray("item");
+                ((fragment_search)((MainActivity)context).getSupportFragmentManager().findFragmentByTag("1")).updateRecom(jsonArray);
+                break;
+            case 2: //책 상세 내용
+                JSONObject jsonObject= json.getJSONArray("item").getJSONObject(0);
+                ((search_fragment_subActivity_result)context).putItem(jsonObject);
                 break;
 
         }
