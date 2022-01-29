@@ -7,8 +7,13 @@
     tools:context=".Search.subActivity.search_fragment_subActivity_result">
 
     <ScrollView
+        android:id="@+id/ScrParents"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fadeScrollbars="false"
+        android:fillViewport="true"
+        android:orientation="vertical"
+        android:scrollbars="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -57,100 +62,109 @@
                     android:layout_margin="20dp"
                     android:src="@drawable/bookimg" />
 
-                <LinearLayout
+                <ScrollView
+                    android:id="@+id/ScrChild"
                     android:layout_width="match_parent"
-                    android:layout_height="185dp"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent"
+                    android:fadeScrollbars="false"
+                    android:orientation="vertical"
+                    android:scrollbars="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="135dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/tvResTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:maxLines="3"
-                            android:text="도서 제목"
-                            android:textColor="#000000"
-                            android:textSize="20dp"
-                            android:textStyle="bold" />
-
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:orientation="horizontal">
+                            android:layout_marginTop="20dp"
+                            android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/tvResTitle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="저자 : " />
+                                android:ellipsize="end"
+                                android:maxLines="3"
+                                android:text="도서 제목"
+                                android:textColor="#000000"
+                                android:textSize="20dp"
+                                android:textStyle="bold" />
 
-                            <TextView
-                                android:id="@+id/tvResAuthor"
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="" />
+                                android:layout_marginTop="5dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="저자 : " />
+
+                                <TextView
+                                    android:id="@+id/tvResAuthor"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="" />
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="출판사 : " />
+
+                                <TextView
+                                    android:id="@+id/tvResPublisher"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="평점" />
+
+                                <RatingBar
+                                    android:id="@+id/customerReviewRank"
+                                    style="?android:attr/ratingBarStyleSmall"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:isIndicator="true"
+                                    android:numStars="5"
+                                    android:rating="0"
+                                    android:stepSize="0.1" />
+
+                                <TextView
+                                    android:id="@+id/tvResRatingscore"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:text="0.0 점" />
+                            </LinearLayout>
+
                         </LinearLayout>
 
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="출판사 : " />
-
-                            <TextView
-                                android:id="@+id/tvResPublisher"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="" />
-                        </LinearLayout>
-
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="평점" />
-
-                        <RatingBar
-                            android:id="@+id/customerReviewRank"
-                            style="?android:attr/ratingBarStyleSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:isIndicator="true"
-                            android:numStars="5"
-                            android:rating="0"
-                            android:stepSize="0.1" />
-
-                        <TextView
-                            android:id="@+id/tvResRatingscore"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="0.0 점" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
+                </ScrollView>
             </LinearLayout>
 
             <TextView
@@ -245,11 +259,15 @@
                 android:textStyle="bold" />
 
             <!-- 이 리사이클러 뷰에 들어가는 아이템이 search_fragment_result_feed.xml   -->
+            <!--            https://velog.io/@kimbsu00/Android-7  -->
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:nestedScrollingEnabled="false"
+
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         </LinearLayout>

@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -32,6 +34,7 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
     RatingBar customerReviewRank;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +47,17 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
             textViews[i] = findViewById(textViewID[i]);
         }
         setItem();
+
+        ScrollView ScrParents = (ScrollView) findViewById(R.id.ScrParents);
+        ScrollView ScrChild = (ScrollView) findViewById(R.id.ScrChild);
+//제목,저자,출판사가 나오는 스크롤뷰를 터치해도 부모 스크롤뷰가 반응하지 않게 함
+        ScrChild.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                ScrParents.requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
     }
 
     private void setItem() {
