@@ -8,19 +8,22 @@ import retrofit2.http.QueryMap;
 
 
 public interface GetDataInterface {
+    //추천 도서
     @GET("ItemList.aspx")
-    Call<String> bestSeller(
-            @QueryMap Map<String,String> querys
+    Call<String> getRecom(
+            @QueryMap Map<String, String> querys
 
     );
+    //도서 검색
     @GET("ItemSearch.aspx")
-    Call<String> string_call(
-            @QueryMap Map<String,String> querys
+    Call<String> getResult(
+            @QueryMap Map<String, String> querys
     );
 
+    //도서별 상세 정보
     @GET("ItemLookUp.aspx")
     Call<String> getItem(
-            @QueryMap Map<String,String> querys
+            @QueryMap Map<String, String> querys
     );
 
 }

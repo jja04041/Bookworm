@@ -14,11 +14,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:orientation="horizontal"
-                android:background="#DDDDDD">
+                android:background="#DDDDDD"
+                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btnBack"
@@ -26,19 +27,21 @@
                     android:layout_height="30dp"
                     android:layout_gravity="start|center_vertical"
                     android:layout_marginStart="20dp"
-                    android:background="@drawable/back_icon"/>
+                    android:background="@drawable/back_icon" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="여기엔 뭐 쓸까"
-                    android:textSize="20dp"/>
+                    android:textSize="20dp" />
+
                 <Button
                     android:id="@+id/btnFeedCreate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="피드 작성"
-                    android:layout_gravity="end|center_vertical"/>
+                    android:layout_gravity="end|center_vertical"
+                    android:text="피드 작성" />
 
             </FrameLayout>
 
@@ -66,7 +69,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/tvTitle"
+                            android:id="@+id/tvResTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
@@ -86,29 +89,31 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="저자 : " />
+
                             <TextView
-                                android:id="@+id/tvAuthor"
+                                android:id="@+id/tvResAuthor"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text=""/>
+                                android:text="" />
                         </LinearLayout>
 
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginTop="5dp">
+                            android:layout_marginTop="5dp"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="출판사 : "/>
+                                android:text="출판사 : " />
+
                             <TextView
-                                android:id="@+id/tvPublisher"
+                                android:id="@+id/tvResPublisher"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text=""/>
+                                android:text="" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -136,7 +141,7 @@
                             android:stepSize="0.1" />
 
                         <TextView
-                            android:id="@+id/ratingscore"
+                            android:id="@+id/tvResRatingscore"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
@@ -165,11 +170,11 @@
                 android:background="@drawable/textview_design">
 
                 <TextView
-                    android:id="@+id/description"
+                    android:id="@+id/tvResDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:text="@string/lorem"/>
+                    android:text="@string/lorem" />
 
             </LinearLayout>
 
@@ -186,7 +191,7 @@
                     android:text="정가 : " />
 
                 <TextView
-                    android:id="@+id/priceStandard"
+                    android:id="@+id/tvResPriceStandard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
@@ -206,7 +211,7 @@
                     android:text="판매가 : " />
 
                 <TextView
-                    android:id="@+id/priceSales"
+                    android:id="@+id/tvResPriceSales"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
@@ -221,7 +226,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/link"
+                    android:id="@+id/tvLink"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -233,13 +238,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="책볼레 리뷰"
                 android:layout_marginHorizontal="20dp"
+                android:text="책볼레 리뷰"
                 android:textColor="#000000"
-                android:textStyle="bold"
-                android:textSize="18dp"/>
+                android:textSize="18dp"
+                android:textStyle="bold" />
 
-<!-- 이 리사이클러 뷰에 들어가는 아이템이 search_fragment_result_feed.xml   -->
+            <!-- 이 리사이클러 뷰에 들어가는 아이템이 search_fragment_result_feed.xml   -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"

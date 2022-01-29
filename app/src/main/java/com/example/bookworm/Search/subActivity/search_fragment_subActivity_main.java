@@ -8,8 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -23,12 +21,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.bookworm.MainActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.items.BookAdapter;
 import com.example.bookworm.Search.items.OnBookItemClickListener;
-import com.example.bookworm.Search.subActivity.search_fragment_subActivity_result;
+import com.example.bookworm.Search.items.RecomBookAdapter;
 import com.example.bookworm.modules.Module;
 
 import org.json.JSONArray;
@@ -243,6 +240,11 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), search_fragment_subActivity_result.class);
                         intent.putExtra("itemid", bookList.get(position).getItemId());
                         startActivity(intent);
+                    }
+
+                    @Override
+                    public void onItemClick(RecomBookAdapter.ItemViewHolder holder, View view, int position) {
+
                     }
                 });
                 initRecyclerView(); //initialize RecyclerView

@@ -2,12 +2,10 @@ package com.example.bookworm.Search.items;
 
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
@@ -69,8 +67,14 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         BookList.add(item);
     }
 
+
     @Override
-    //아이템 선택 시 보여줄 화면 구성 => 아마 인텐트로 넘기지 않을까?
+    public void onItemClick(RecomBookAdapter.ItemViewHolder holder, View view, int position) {
+
+    }
+
+//    @Override
+//    //아이템 선택 시 보여줄 화면 구성 => 아마 인텐트로 넘기지 않을까?
     public void onItemClick(ItemViewHolder holder, View view, int position) {
         if (listener != null) {
             listener.onItemClick(holder, view, position);

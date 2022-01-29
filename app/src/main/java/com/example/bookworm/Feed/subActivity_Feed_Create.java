@@ -1,5 +1,6 @@
 package com.example.bookworm.Feed;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -16,17 +17,23 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.example.bookworm.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class subActivity_Feed_Create extends AppCompatActivity {
     EditText edtFeedContent;
-    Button btnAdd,btnFinish;
+    Button btnAdd, btnFinish;
     LinearLayout layout;
     ArrayList<Button> btn;
     int label = 0;
-    String a="가나다라마바아";
+    String a = "가나다라마바아";
     //라벨은 알럿 다이어그램을 통해 입력을 받고, 선택한 값으로 라벨이 지정됨
 
     @Override
@@ -35,7 +42,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         setContentView(R.layout.subactivity_feed_create);
         edtFeedContent = findViewById(R.id.edtFeedContent);
         btnAdd = findViewById(R.id.btnAdd);
-        btnFinish=findViewById(R.id.btnFinish);
+        btnFinish = findViewById(R.id.btnFinish);
         layout = findViewById(R.id.llLabel);
         btn = new ArrayList<>();
         btn.add(btnAdd);
@@ -43,11 +50,11 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //ShowDialog 만들기
-
-                //라벨생성
-                setLabel(a,Color.parseColor("#EFDDDD"));
+                saveData();
+//                //라벨생성
+//                setLabel(a,Color.parseColor("#EFDDDD"));
             }
-    });
+        });
         btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,21 +63,43 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         });
 
 
-}
+    }
+
+    private void saveData() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> user = new HashMap<>();
+        user.put("name", "john");
+        user.put("age", 22);
+
+        db.collection("member")
+                .add(user)
+                .addOnSuccessListener(new OnSuccessListener() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        Log.d("TAG", "DocumentSnapshot added with ID: " + o.toString());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("TAG", "Error adding document", e);
+                    }
+                });
+    }
 
     private void labelCtrl(int mode, Button button) {
 
         switch (mode) {
             case 0: //ADD
                 btn.add(button);
-                if(btn.size()==4){
+                if (btn.size() == 4) {
                     btn.remove(btnAdd);
                 }
                 break;
             case 1: //Remove
                 btn.remove(button);
-                if(!btn.contains(btnAdd)){
-                    btn.add(0,btnAdd);
+                if (!btn.contains(btnAdd)) {
+                    btn.add(0, btnAdd);
                 }
                 label--;
                 break;
@@ -79,12 +108,12 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         for (Button i : btn) {
             layout.addView(i);
         }
-        Log.d("arrayNow",btn.toString());
+        Log.d("arrayNow", btn.toString());
 //        //레이아웃을 새로고침 함.
 
     }
 
-    private void setLabel(String Text,int btnColor) {
+    private void setLabel(String Text, int btnColor) {
         if (label < 3) {
             //버튼 세팅
             Button btn = new Button(getApplicationContext());
@@ -97,10 +126,10 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             btn.setPadding(10, 0, 10, 0);
             Drawable unwrappedDrawable = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.label_design);
             Drawable wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable);
-            DrawableCompat.setTint(wrappedDrawable,btnColor);
+            DrawableCompat.setTint(wrappedDrawable, btnColor);
             btn.setBackground(wrappedDrawable);
 
-            btn.setText(Text+"\t\t\tX");
+            btn.setText(Text + "\t\t\tX");
             //클릭 불가능하게 만들기
 //            btn.setOnLongClickListener(new View.OnLongClickListener() {
 //                @Override
@@ -112,7 +141,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    labelCtrl(1,btn);
+                    labelCtrl(1, btn);
                 }
             });
             //라벨 추가

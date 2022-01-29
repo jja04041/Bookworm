@@ -37,13 +37,14 @@ public class frag_functions {
                             break;
                     }
 
-                    fragmentManager.beginTransaction().add(R.id.container, fragments[i]).commitAllowingStateLoss();
+                    fragmentManager.beginTransaction().add(R.id.container, fragments[i],String.valueOf(i)).commitAllowingStateLoss();
                 } else
                     fragmentManager.beginTransaction().show(fragments[i]).commitAllowingStateLoss();
             } else {
                 if (fragments[i] != null)
                     fragmentManager.beginTransaction().hide(fragments[i]).commitAllowingStateLoss();
             }
+            fragmentManager.executePendingTransactions();
         }
     }
 }

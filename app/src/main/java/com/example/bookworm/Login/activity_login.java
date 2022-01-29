@@ -35,18 +35,6 @@ public class activity_login extends Activity {
         mContext=this;
         Session session = Session.getCurrentSession();
         session.addCallback(new SessionCallback());
-//        try {
-//            PackageInfo info = getPackageManager().getPackageInfo("com.example.bookworm", PackageManager.GET_SIGNATURES);
-//            for (Signature signature : info.signatures) {
-//                MessageDigest md = MessageDigest.getInstance("SHA");
-//                md.update(signature.toByteArray());
-//                Log.e("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-//            }
-//        } catch (PackageManager.NameNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (NoSuchAlgorithmException e) {
-//            e.printStackTrace();
-//        }
 
         if (Session.getCurrentSession().checkAndImplicitOpen()) {
             Log.d(TAG, "onClick: 로그인 세션살아있음");
@@ -61,11 +49,8 @@ public class activity_login extends Activity {
                     Log.d(TAG, "onClick: 로그인 세션끝남");
                     // 카카오 로그인 시도 (창이 뜬다.)
                     session.open(AuthType.KAKAO_LOGIN_ALL, activity_login.this);
-
-
             }
         });
-
 
         ImageButton google_login_button = (ImageButton) findViewById(R.id.btn_login_google);
     }
@@ -73,7 +58,6 @@ public class activity_login extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         // 세션 콜백 삭제
         Session.getCurrentSession().removeCallback(sessionCallback);
     }
