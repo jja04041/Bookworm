@@ -31,8 +31,8 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
     int textViewID[] = {R.id.tvResTitle, R.id.tvResAuthor, R.id.tvLink, R.id.tvResPublisher, R.id.tvResDescription, R.id.tvResPriceSales, R.id.tvResPriceStandard, R.id.tvResRatingscore};
     String getContent[] = {"title", "author", "link", "publisher", "description", "priceSales", "priceStandard", "customerReviewRank"};
     TextView[] textViews = new TextView[textViewCount];
+    TextView tvViewMore;
     RatingBar customerReviewRank;
-
 
 
     @Override
@@ -42,6 +42,7 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
         Intent intent = getIntent();
         itemId = intent.getExtras().getString("itemid");
         iv_selectedItem = findViewById(R.id.iv_selectedItem);
+        tvViewMore = findViewById(R.id.tvViewMore);
         customerReviewRank = findViewById(R.id.customerReviewRank);
         for (int i = 0; i < textViewCount; i++) {
             textViews[i] = findViewById(textViewID[i]);
@@ -97,6 +98,27 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
                 textViews[i].setText(String.valueOf(rank));
             } else textViews[i].setText(json.getString(getContent[i]));
         }
+
+        textViews[1].post(new Runnable() {
+            @Override
+            public void run() {
+                int lineCount = textViews[1].getLineCount();
+                // Use lineCount here
+                if (lineCount > 0) {
+                    if (textViews[1].getLayout().getEllipsisCount(lineCount - 1) > 0) {
+                        Log.d("count", textViews[1].getLayout().getEllipsisCount(lineCount - 1) + "dd");
+                        tvViewMore.setVisibility(View.VISIBLE);
+                        tvViewMore.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                textViews[1].setMaxLines(Integer.MAX_VALUE);
+                                tvViewMore.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                }
+            }
+        });
     }
 
 }

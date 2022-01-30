@@ -67,16 +67,19 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 
     private void saveData() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        // Create a new user with a first and last name
         Map<String, Object> user = new HashMap<>();
-        user.put("name", "john");
-        user.put("age", 22);
+        user.put("first", "killingverse");
+        user.put("last", "Lovelace");
+        user.put("born", 1815);
 
-        db.collection("member")
+// Add a new document with a generated ID
+        db.collection("users")
                 .add(user)
-                .addOnSuccessListener(new OnSuccessListener() {
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
-                    public void onSuccess(Object o) {
-                        Log.d("TAG", "DocumentSnapshot added with ID: " + o.toString());
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
