@@ -17,10 +17,14 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.example.bookworm.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -59,6 +63,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+                readData();
             }
         });
 
@@ -67,25 +72,40 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 
     private void saveData() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        // Create a new user with a first and last name
         Map<String, Object> user = new HashMap<>();
-        user.put("first", "killingverse");
-        user.put("last", "Lovelace");
-        user.put("born", 1815);
+        user.put("name", "john");
+        user.put("age", 22);
 
-// Add a new document with a generated ID
         db.collection("users")
                 .add(user)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                .addOnSuccessListener(new OnSuccessListener() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
+                    public void onSuccess(Object o) {
+                        Log.d("TAG", "DocumentSnapshot added with ID: " + o.toString());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w("TAG", "Error adding document", e);
+                    }
+                });
+    }
+
+    private void readData() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("TAG", document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.w("TAG", "Error getting documents.", task.getException());
+                        }
                     }
                 });
     }
