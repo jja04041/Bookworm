@@ -263,7 +263,7 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
                         else if(classindex == 2)
                         {
                             activity_createchallenge  activity_createchallenge = new activity_createchallenge();
-                            activity_createchallenge.get_Bookid(bookid);
+                            activity_createchallenge.get_Bookid(bookList.get(position).getItemId());
                             finish();
                         }
                     }
