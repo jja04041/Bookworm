@@ -1,10 +1,7 @@
 package com.example.bookworm.Login;
 
-import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
-import com.example.bookworm.MainActivity;
 import com.example.bookworm.User.UserInfo;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.network.ErrorResult;
@@ -85,7 +82,8 @@ public class SessionCallback implements ISessionCallback {
                             } else {
                                 // 프로필 획득 불가
                             }
-                            UserInfo userinfo = new UserInfo(_profile.getProfileImageUrl(), _profile.getNickname(), email);
+                            UserInfo userinfo = new UserInfo(kakaoAccount);
+                            ((activity_login)activity_login.mContext).signUp(userinfo, id);
                             ((activity_login)activity_login.mContext).move(userinfo);
                         } else {
                             Log.i("KAKAO_API", "onSuccess: kakaoAccount null");
