@@ -5,7 +5,7 @@
     <item
         android:id="@+id/tab_feed"
         android:enabled="true"
-        android:icon="@drawable/feed"
+        android:icon="@drawable/icon_feed"
         android:title="피드"
         app:showAsAction="ifRoom" />
     <item
