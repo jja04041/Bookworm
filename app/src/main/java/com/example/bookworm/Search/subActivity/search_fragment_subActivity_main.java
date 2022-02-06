@@ -58,7 +58,7 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
     Module module;
     public boolean isLoading = false; //스크롤을 당겨서 추가로 로딩 중인지 여부를 확인하는 변수
     int count = 0, page = 0, check = 0;
-    final int CPP=10; //Contents Per Page : 페이지당 보이는 컨텐츠의 개수
+    final int CPP = 10; //Contents Per Page : 페이지당 보이는 컨텐츠의 개수
 
     String bookid = "\0";
     int classindex = 0;
@@ -190,10 +190,6 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
                             count = module.getCount();
                             bookAdapter.deleteLoading();
                             if ((page * CPP) < count) {
-                                Log.d("얼", "우울ㄴㄹ" + page + "," + count);
-                                //리스트 마지막
-                                //여기서 로딩바를 보여주고, 새로운 아이템을 로딩해야 함.
-                                //무한 스크롤 가능 => 로딩바 구현
                                 module.connect(0);
                             }
                             isLoading = true;
@@ -233,16 +229,12 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
                 Book book = new Book(obj.getString("title"), obj.getString("description"), obj.getString("publisher"), obj.getString("author"), obj.getString("cover"), obj.getString("itemId"));
                 bookList.add(book);
             }
-            if (check > 20 && page<20) {
-                Log.d("check", check + "개");
+            if (check > 20 && page < 20) {
                 bookList.add(new Book("", "", "", "", ""));
                 this.check = count - bookList.size();
-            } else {
-                Log.d("count", count + "개");
-                isLoading = true;
-            }
+            } else isLoading = true;
 
-            if (page != 1&&page<20) {
+            if (page != 1 && page < 20) {
                 isLoading = false;
                 bookAdapter.notifyItemRangeChanged(0, bookList.size() - 1, null);
             } else {

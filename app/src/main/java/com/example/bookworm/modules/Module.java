@@ -48,31 +48,28 @@ public class Module {
                 .build();
         mainInterface = retrofit.create(GetDataInterface.class);
         this.querys = querys;
-
     }
 
     //Methods
     public void connect(int idx) {
 
         switch (idx) {
-            case 0:
-                Log.d("검색페이지","페이지 : "+page);
+            case 0: //검색한 책 목록
                 querys.put("Start", String.valueOf(page));
                 call = mainInterface.getResult(querys);
                 break;
-            case 1: //추천 책
+            case 1: //추천 책목록
                 call = mainInterface.getRecom(querys);
                 break;
-            case 2:
+            case 2://개별 도서 검색
                 call=mainInterface.getItem(querys);
         }
-        //이곳에 로딩중이라는 alertDialog 넣어도 좋을듯
+
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     try {
-                        //이곳에서 alertDialog 지우면 됨.
                         Log.d("result",response.body());
                         JSONObject json = new JSONObject(response.body());
                         parseResult(idx, json);

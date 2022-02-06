@@ -75,7 +75,6 @@ public class fragment_search extends Fragment {
 
     public void updateRecom(JSONArray json) throws JSONException {
         ArrayList<Book> bookList=new ArrayList<>();
-        Log.d("json",json.toString());
         //책 입력
         for (int i = 0; i < json.length(); i++) {
             JSONObject obj = json.getJSONObject(i);
@@ -90,14 +89,13 @@ public class fragment_search extends Fragment {
             }
             @Override
             public void onItemClick(RecomBookAdapter.ItemViewHolder holder, View view, int position) {
-                Log.d("bookId", bookList.get(position).getItemId());
                 Intent intent = new Intent(getContext(), search_fragment_subActivity_result.class);
                 intent.putExtra("itemid", bookList.get(position).getItemId());
                 startActivity(intent);
             }
         });
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 1,GridLayoutManager.HORIZONTAL, false);
-        favRecyclerView.setLayoutManager(gridLayoutManager);
+        favRecyclerView.setLayoutManager(gridLayoutManager);//그리드 뷰로 보이게 함.
         favRecyclerView.setAdapter(bookAdapter);
     }
 }
