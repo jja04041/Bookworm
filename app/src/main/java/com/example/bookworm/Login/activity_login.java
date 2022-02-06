@@ -1,38 +1,40 @@
 package com.example.bookworm.Login;
-import static com.kakao.util.helper.Utility.getKeyHash;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.Signature;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
 import androidx.annotation.Nullable;
-import android.content.pm.PackageManager;
+
 import com.example.bookworm.MainActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.User.UserInfo;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.kakao.auth.AuthType;
 import com.kakao.auth.Session;
-import com.kakao.util.helper.Utility;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class activity_login extends Activity {
+
     private SessionCallback sessionCallback = new SessionCallback();
     private static final String TAG = "MainActivity";
     public static Context mContext;
+    private FirebaseAuth mAuth;
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseReference = firebaseDatabase.getReference();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mContext=this;
+        mAuth = FirebaseAuth.getInstance();
+
         Session session = Session.getCurrentSession();
         session.addCallback(new SessionCallback());
 
@@ -48,6 +50,7 @@ public class activity_login extends Activity {
             public void onClick(View v) {
                     Log.d(TAG, "onClick: 로그인 세션끝남");
                     // 카카오 로그인 시도 (창이 뜬다.)
+
                     session.open(AuthType.KAKAO_LOGIN_ALL, activity_login.this);
             }
         });
@@ -80,6 +83,18 @@ public class activity_login extends Activity {
         startActivity(intent);
         this.finish();
     }
+
+
+    public void signUp(UserInfo UserInfo, String idtoken) {
+
+        if(null != idtoken && null != UserInfo.username) {
+            databaseReference.child("kakao_id_token").push().setValue(idtoken);
+            databaseReference.child("User_name").push().setValue(UserInfo.username);
+
+                } else {
+                     Log.d("fucntion signup", "nono token ");
+                }
+        }
 }
 
 

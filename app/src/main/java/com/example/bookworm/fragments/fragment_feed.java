@@ -23,10 +23,14 @@ public class fragment_feed extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
 
-        //ImageView profileimg = (ImageView) view.findViewById(R.id.img_profile);
+        ImageView profileimg = (ImageView) view.findViewById(R.id.img_profile);
+        ImageView profileimg_like = (ImageView) view.findViewById(R.id.img_like_profile);
+        ImageView profileimg_reply = (ImageView) view.findViewById(R.id.img_reply_profle);
         imgCreate=(ImageView)view.findViewById(R.id.img_createfeed);
 
-        //Glide.with(this).load(R.drawable.profile_img).circleCrop().into(profileimg);
+        Glide.with(this).load(R.drawable.profile_img).circleCrop().into(profileimg);
+        Glide.with(this).load(R.drawable.profile_img).circleCrop().into(profileimg_like);
+        Glide.with(this).load(R.drawable.profile_img).circleCrop().into(profileimg_reply);
 
 //        //Create New Feed
         imgCreate.setOnClickListener(new View.OnClickListener() {
