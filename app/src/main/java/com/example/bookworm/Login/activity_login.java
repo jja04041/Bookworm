@@ -13,9 +13,9 @@ import androidx.annotation.Nullable;
 import com.example.bookworm.MainActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.User.UserInfo;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+//import com.google.firebase.auth.FirebaseAuth;
+//import com.google.firebase.database.DatabaseReference;
+//import com.google.firebase.database.FirebaseDatabase;
 import com.kakao.auth.AuthType;
 import com.kakao.auth.Session;
 
@@ -24,16 +24,16 @@ public class activity_login extends Activity {
     private SessionCallback sessionCallback = new SessionCallback();
     private static final String TAG = "MainActivity";
     public static Context mContext;
-    private FirebaseAuth mAuth;
-    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference databaseReference = firebaseDatabase.getReference();
+//    private FirebaseAuth mAuth;
+//    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+//    private DatabaseReference databaseReference = firebaseDatabase.getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mContext=this;
-        mAuth = FirebaseAuth.getInstance();
+//        mAuth = FirebaseAuth.getInstance();
 
         Session session = Session.getCurrentSession();
         session.addCallback(new SessionCallback());
@@ -88,8 +88,8 @@ public class activity_login extends Activity {
     public void signUp(UserInfo UserInfo, String idtoken) {
 
         if(null != idtoken && null != UserInfo.username) {
-            databaseReference.child("kakao_id_token").push().setValue(idtoken);
-            databaseReference.child("User_name").push().setValue(UserInfo.username);
+//            databaseReference.child("kakao_id_token").push().setValue(idtoken);
+//            databaseReference.child("User_name").push().setValue(UserInfo.username);
 
                 } else {
                      Log.d("fucntion signup", "nono token ");

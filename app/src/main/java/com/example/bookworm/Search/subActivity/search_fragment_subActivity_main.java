@@ -1,6 +1,8 @@
 package com.example.bookworm.Search.subActivity;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,7 +46,6 @@ import java.util.Map;
 public class search_fragment_subActivity_main extends AppCompatActivity {
 
 
-
     Button btnBefore, btnSearch;
     Spinner spinner1;
     EditText edtSearch;
@@ -59,10 +60,10 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
     public boolean isLoading = false; //스크롤을 당겨서 추가로 로딩 중인지 여부를 확인하는 변수
     int count = 0, page = 0, check = 0;
     final int CPP = 10; //Contents Per Page : 페이지당 보이는 컨텐츠의 개수
-
+    ContextWrapper c ;
+    Intent intent;
     String bookid = "\0";
     int classindex = 0;
-
 
 
     @Override
@@ -76,8 +77,7 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
         edtSearch = findViewById(R.id.edtSearch);
         mRecyclerView = findViewById(R.id.recyclerView);
         bookList = new ArrayList<>();
-
-        Intent intent = getIntent();
+        intent = getIntent();
         classindex = intent.getIntExtra("classindex", 0);
 
         //spinner를 위한 adapter 생성
@@ -148,7 +148,7 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
             querys = new HashMap<>();
             querys.put("Query", edtSearch.getText().toString());
             querys.put("QueryType", type[option_idx]);
-             //기본값
+            //기본값
             this.querys.put("ttbkey", getString(R.string.ttbKey));
             this.querys.put("MaxResults", "10"); //최대 길이
             this.querys.put("output", "js");
@@ -243,19 +243,16 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
                     @Override
                     public void onItemClick(BookAdapter.ItemViewHolder holder, View view, int position) {
 
-                        if(classindex == 0) {
+                        if (classindex == 0) {
                             Intent intent = new Intent(getApplicationContext(), search_fragment_subActivity_result.class);
                             intent.putExtra("itemid", bookList.get(position).getItemId());
                             startActivity(intent);
-                        }
-                        else if(classindex == 1)
-                        {
+                        } else if (classindex == 1) {
                             finish();
-                        }
-                        else if(classindex == 2)
-                        {
-                            activity_createchallenge  activity_createchallenge = new activity_createchallenge();
-                            activity_createchallenge.get_Bookid(bookList.get(position).getItemId());
+                        } else if (classindex == 2) {
+                            Intent intent=new Intent();
+                            intent.putExtra("data",bookList.get(position));
+                            setResult(Activity.RESULT_OK,intent);
                             finish();
                         }
                     }
