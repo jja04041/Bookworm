@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".Challenge.Activity_info_challenge">
+    android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -41,7 +40,7 @@
             android:layout_height="300dp"
             android:orientation="vertical"
             android:gravity="center"
-            android:background="">
+            >
 
             <ImageView
                 android:id="@+id/ivprofileImage"

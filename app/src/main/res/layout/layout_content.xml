@@ -57,8 +57,8 @@
 
         <ImageView
             android:id="@+id/ivThumb"
-            android:layout_width="60dp"
-            android:layout_height="88dp"
+            android:layout_width="80dp"
+            android:layout_height="118dp"
             android:layout_marginEnd="10dp"
             android:src="@drawable/bookimg" />
 
