@@ -35,14 +35,11 @@ public class activity_createchallenge extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_createchallenge);
 
-        activity_createchallenge activity_createchallenge = new activity_createchallenge();
-
-
         btn_search = findViewById(R.id.btn_createchallenge_search);
         btn_dupli = findViewById(R.id.btn_createchallenge_duplicheck);
         tv_bookname= findViewById(R.id.tv_createchallenge_bookname);
         tv_selectdate_start =  findViewById(R.id.tv_createchallenge_selectdate_start);
-        tv_selectdate_start =  findViewById(R.id.tv_createchallenge_selectdate_end);
+        tv_selectdate_end =  findViewById(R.id.tv_createchallenge_selectdate_end);
 
         DatePickerDialog.OnDateSetListener StartDatePicker = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -65,6 +62,15 @@ public class activity_createchallenge extends Activity {
         };
 
 
+
+        tv_bookname.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getApplicationContext(), search_fragment_subActivity_main.class);
+                intent.putExtra("classindex", 2);
+                startActivity(intent);
+            }
+        });
         btn_search.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
