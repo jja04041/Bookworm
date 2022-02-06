@@ -24,18 +24,18 @@ public class fragment_feed extends Fragment {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
 
         //ImageView profileimg = (ImageView) view.findViewById(R.id.img_profile);
-        //imgCreate=(ImageView)view.findViewById(R.id.img_createfeed);
+        imgCreate=(ImageView)view.findViewById(R.id.img_createfeed);
 
         //Glide.with(this).load(R.drawable.profile_img).circleCrop().into(profileimg);
 
 //        //Create New Feed
-//        imgCreate.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent=new Intent(getContext(),subActivity_Feed_Create.class);
-//                startActivity(intent);
-//            }
-//        });
+        imgCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getContext(),subActivity_Feed_Create.class);
+                startActivity(intent);
+            }
+        });
 
 
 

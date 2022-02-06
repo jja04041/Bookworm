@@ -18,14 +18,14 @@
             android:src="@drawable/appicon_bookworm" />
 
 
-<!--        <ImageView-->
-<!--            android:id="@+id/img_createfeed"-->
-<!--            android:layout_alignParentRight="true"-->
-<!--            android:layout_marginRight="20dp"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:layout_width="50dp"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:src="@drawable/create_feed" />-->
+        <ImageView
+            android:id="@+id/img_createfeed"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:layout_centerVertical="true"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/create_feed" />
 
 
 
