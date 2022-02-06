@@ -13,13 +13,11 @@ import com.example.bookworm.fragments.fragment_search;
 public class frag_functions {
 
 
-
     public void show_fragment(Fragment[] fragments, FragmentManager fragmentManager, int idx) {
         for (int i = 0; i < 5; i++) {
             if (i == idx) {
                 if (fragments[i] == null) {
-                    switch (idx)
-                    {
+                    switch (idx) {
                         case 0:
                             fragments[i] = new fragment_feed();
                             break;
@@ -37,7 +35,7 @@ public class frag_functions {
                             break;
                     }
 
-                    fragmentManager.beginTransaction().add(R.id.container, fragments[i],String.valueOf(i)).commitAllowingStateLoss();
+                    fragmentManager.beginTransaction().add(R.id.container, fragments[i], String.valueOf(i)).commitAllowingStateLoss();
                 } else
                     fragmentManager.beginTransaction().show(fragments[i]).commitAllowingStateLoss();
             } else {
@@ -47,4 +45,18 @@ public class frag_functions {
             fragmentManager.executePendingTransactions();
         }
     }
+
+//    public void show_fragment(Fragment fragments, FragmentManager fragmentManager, int fragment_value) {
+//
+//        if (fragments == null) {
+//            Log.d("KAKAO_API", "onSuccess:profile null ");
+//            fragmentManager.beginTransaction().add(R.id.container, fragments, String.valueOf(fragment_value)).commitAllowingStateLoss();
+//        } else
+//            fragmentManager.beginTransaction().show(fragments).commitAllowingStateLoss();
+//
+//        if(fragments !=null)
+//          fragmentManager.beginTransaction().hide(fragments).commitAllowingStateLoss();
+//
+//        fragmentManager.executePendingTransactions();
+//    }
 }

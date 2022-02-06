@@ -1,10 +1,5 @@
 package com.example.bookworm.Search.subActivity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +16,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.bookworm.Challenge.activity_createchallenge;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.items.BookAdapter;
@@ -35,11 +36,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 //검색 창을 누르거나 하는 경우 나타나는 화면
 //검색 결과를 보여주는 리사이클러뷰가 위치할 예정
 //검색 아이템의 세부 내용은 subActivity_result 에서 담당
 
 public class search_fragment_subActivity_main extends AppCompatActivity {
+
+
+
     Button btnBefore, btnSearch;
     Spinner spinner1;
     EditText edtSearch;
@@ -55,6 +60,11 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
     int count = 0, page = 0, check = 0;
     final int CPP=10; //Contents Per Page : 페이지당 보이는 컨텐츠의 개수
 
+    String bookid = "\0";
+    int classindex = 0;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +76,9 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
         edtSearch = findViewById(R.id.edtSearch);
         mRecyclerView = findViewById(R.id.recyclerView);
         bookList = new ArrayList<>();
+
+        Intent intent = getIntent();
+        classindex = intent.getIntExtra("classindex", 0);
 
         //spinner를 위한 adapter 생성
         ArrayAdapter<String> dap = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
@@ -135,7 +148,7 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
             querys = new HashMap<>();
             querys.put("Query", edtSearch.getText().toString());
             querys.put("QueryType", type[option_idx]);
-            //기본값
+             //기본값
             this.querys.put("ttbkey", getString(R.string.ttbKey));
             this.querys.put("MaxResults", "10"); //최대 길이
             this.querys.put("output", "js");
@@ -237,9 +250,22 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
                 bookAdapter.setListener(new OnBookItemClickListener() {
                     @Override
                     public void onItemClick(BookAdapter.ItemViewHolder holder, View view, int position) {
-                        Intent intent = new Intent(getApplicationContext(), search_fragment_subActivity_result.class);
-                        intent.putExtra("itemid", bookList.get(position).getItemId());
-                        startActivity(intent);
+
+                        if(classindex == 0) {
+                            Intent intent = new Intent(getApplicationContext(), search_fragment_subActivity_result.class);
+                            intent.putExtra("itemid", bookList.get(position).getItemId());
+                            startActivity(intent);
+                        }
+                        else if(classindex == 1)
+                        {
+                            finish();
+                        }
+                        else if(classindex == 2)
+                        {
+                            activity_createchallenge  activity_createchallenge = new activity_createchallenge();
+                            activity_createchallenge.get_Bookid(bookList.get(position).getItemId());
+                            finish();
+                        }
                     }
 
                     @Override
