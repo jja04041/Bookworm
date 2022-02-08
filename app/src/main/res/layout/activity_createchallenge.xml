@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_createchallenge"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/fragment_createchallenge"
     android:orientation="vertical"
     tools:context="com.example.bookworm.fragments.fragment_challenge">
 
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <include layout="@layout/layout_topbar"/>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <include layout="@layout/layout_topbar" />
     </LinearLayout>
 
 
@@ -26,12 +27,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_margin="35dp"
             android:text="챌린지 생성"
             android:textColor="#000000"
             android:textSize="20dp"
-            android:textStyle="bold"
-            android:layout_gravity="center"/>
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,8 +46,8 @@
                 android:layout_height="wrap_content"
                 android:text="도서 명"
                 android:textAlignment="center"
-                android:textStyle="bold"
-                android:textColor="#000000"/>
+                android:textColor="#000000"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_createchallenge_bookname"
@@ -60,9 +61,9 @@
                 android:textSize="20dp" />
 
             <Button
+                android:id="@+id/btn_createchallenge_search"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:id="@+id/btn_createchallenge_search"
                 android:layout_gravity="center"
                 android:background="@drawable/search"
                 android:gravity="end" />
@@ -81,104 +82,99 @@
                 android:layout_height="wrap_content"
                 android:text="챌린지 명"
                 android:textAlignment="center"
-                android:textStyle="bold"
-                android:textColor="#000000"/>
+                android:textColor="#000000"
+                android:textStyle="bold" />
 
             <EditText
+                android:id="@+id/et_createchallenge_challengename"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/et_createchallenge_challengename"
-                android:hint="     내용을 입력해주세요     "
+                android:layout_margin="10dp"
                 android:background="@drawable/edittext_shadow"
+                android:hint="     내용을 입력해주세요     "
                 android:textAlignment="center"
-                android:textColor="#000000"
-                android:layout_margin="10dp" />
+                android:textColor="#000000" />
 
             <Button
+                android:id="@+id/btn_createchallenge_duplicheck"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:id="@+id/btn_createchallenge_duplicheck"
-                android:background="@drawable/icon_check"/>
+                android:background="@drawable/icon_check" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="25dp"
-            android:gravity="center_vertical"
+            android:layout_marginTop="25dp"
+            android:layout_marginHorizontal="25dp"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="30dp"
-                android:text="챌린지 \n 기간"
-                android:textStyle="bold"
-                android:textColor="#000000"/>
+                android:layout_marginRight="20dp"
+                android:text="챌린지 기간 설정"
+                android:textColor="#000000"
+                android:textStyle="bold" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <EditText
+                android:layout_width="60dp"
+                android:layout_height="20dp"
+                android:background="@drawable/edittext_shadow"
+                android:gravity="end"
+                android:paddingRight="8dp"/>
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginRight="10dp"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="   시작   "
-                        android:textAlignment="center"
-                        android:background="#36bc9b"
-                        android:textColor="#ffffff"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/tv_createchallenge_selectdate_start"
-                        android:hint="      날짜 지정      "
-                        android:background="@drawable/edittext_shadow"
-                        android:textAlignment="center"
-                        android:textColor="#000000"
-                        android:layout_marginLeft="20dp" />
+                android:text="일"
+                android:textColor="#000000"
+                android:textStyle="bold"/>
 
 
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="25dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-                </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#36bc9b"
+                android:text="   시작   "
+                android:textAlignment="center"
+                android:textColor="#ffffff" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_createchallenge_selectdate_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:hint="      시작일      "
+                android:textAlignment="center"
+                android:textColor="#000000" />
+            <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#ffd400"
+            android:text="   종료   "
+            android:textAlignment="center"
+            android:textColor="#000000" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="   종료   "
-                        android:textAlignment="center"
-                        android:background="#ffd400"
-                        android:textColor="#000000"/>
+            <TextView
+                android:id="@+id/tv_createchallenge_selectdate_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:hint="      종료일      "
+                android:textAlignment="center"
+                android:textColor="#000000" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/tv_createchallenge_selectdate_end"
-                        android:hint="      날짜 지정      "
-                        android:background="@drawable/edittext_shadow"
-                        android:textAlignment="center"
-                        android:textColor="#000000"
-                        android:layout_marginLeft="20dp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
 
         </LinearLayout>
 
@@ -194,14 +190,15 @@
                 android:layout_margin="10dp"
                 android:text="챌린지 설명"
                 android:textAlignment="center"
-                android:textStyle="bold"
-                android:textColor="#000000"/>
+                android:textColor="#000000"
+                android:textStyle="bold" />
+
             <EditText
+                android:id="@+id/et_createchallenge_challengeinfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/et_createchallenge_challengeinfo"
                 android:background="@drawable/edittext_shadow"
-                android:hint="   내용을 입력해주세요.\n\n"/>
+                android:hint="   내용을 입력해주세요.\n\n" />
 
         </LinearLayout>
 
@@ -217,27 +214,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="인원 제한\n(max : 30)"
-                android:textStyle="bold"
-                android:textColor="#000000"/>
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textStyle="bold" />
 
             <EditText
+                android:id="@+id/et_createchallenge_participant"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/et_createchallenge_participant"
-                android:background="@drawable/edittext_shadow"
                 android:layout_marginLeft="10dp"
-                android:hint="인원수"/>
+                android:background="@drawable/edittext_shadow"
+                android:hint="인원수" />
 
         </LinearLayout>
 
         <Button
+            android:id="@+id/btn_createchallenge_confirm"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:id="@+id/btn_createchallenge_confirm"
-            android:text="확인"
+            android:layout_gravity="center"
             android:layout_marginTop="15dp"
             android:backgroundTint="#3498db"
-            android:layout_gravity="center"/>
+            android:text="확인" />
     </LinearLayout>
 
 
