@@ -39,7 +39,7 @@ public class activity_createchallenge extends AppCompatActivity {
     //액티비티 간 데이터 전달 핸들러(검색한 데이터의 값을 전달받는 매개체가 된다.)
     ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            (ActivityResultCallback<ActivityResult>) result -> {
+            result -> {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent intent = result.getData();
                     this.selected_book = (Book) intent.getSerializableExtra("data");

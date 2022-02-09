@@ -14,6 +14,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.example.bookworm.R;
+import com.example.bookworm.modules.FBModule;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,6 +28,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class subActivity_Feed_Create extends AppCompatActivity {
+    FBModule fbModule;
+    HashMap<String,String> data;
     EditText edtFeedContent;
     Button btnAdd, btnFinish;
     LinearLayout layout;
@@ -44,13 +47,17 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         btnFinish = findViewById(R.id.btnFinish);
         layout = findViewById(R.id.llLabel);
         btn = new ArrayList<>();
-
+        fbModule=new FBModule();
         btn.add(btnAdd);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //ShowDialog 만들기
-                saveData();
+
+//                data=new HashMap();
+//                //data.put()을 이용하여, data에 값을 넣는다
+//
+//                fbModule.saveData(0,data);
 //                //라벨생성
 //                setLabel(a,Color.parseColor("#EFDDDD"));
             }
@@ -59,52 +66,14 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
-                readData();
+                fbModule.readData();
             }
         });
 
 
     }
 
-    private void saveData() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Map<String, Object> user = new HashMap<>();
-        user.put("name", "john");
-        user.put("age", 22);
 
-        db.collection("users")
-                .add(user)
-                .addOnSuccessListener(new OnSuccessListener() {
-                    @Override
-                    public void onSuccess(Object o) {
-                        Log.d("TAG", "DocumentSnapshot added with ID: " + o.toString());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("TAG", "Error adding document", e);
-                    }
-                });
-    }
-
-    private void readData() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("users")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("TAG", document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.w("TAG", "Error getting documents.", task.getException());
-                        }
-                    }
-                });
-    }
 
     private void labelCtrl(int mode, Button button) {
 
