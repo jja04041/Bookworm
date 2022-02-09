@@ -4,13 +4,18 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.activity.result.ActivityResult;
@@ -24,13 +29,16 @@ import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_main;
 
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class activity_createchallenge extends AppCompatActivity {
     Button btn_search, btn_dupli;
     TextView tv_bookname, tv_selectdate_start, tv_selectdate_end;
+    EditText et_challenge_date;
     Button btn_confirm;
     Book selected_book; //선택한 책 객체
     Calendar Start_calendar;
@@ -57,26 +65,63 @@ public class activity_createchallenge extends AppCompatActivity {
         tv_bookname = findViewById(R.id.tv_createchallenge_bookname);
         tv_selectdate_start = findViewById(R.id.tv_createchallenge_selectdate_start);
         tv_selectdate_end = findViewById(R.id.tv_createchallenge_selectdate_end);
+        et_challenge_date = findViewById(R.id.et_createchallenge_challengedate);
 
-        DatePickerDialog.OnDateSetListener StartDatePicker = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                Start_calendar.set(Calendar.YEAR, year);
-                Start_calendar.set(Calendar.MONTH, month);
-                Start_calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel(tv_selectdate_start, Start_calendar);
-            }
-        };
+//        DatePickerDialog.OnDateSetListener StartDatePicker = new DatePickerDialog.OnDateSetListener() {
+//            @Override
+//            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+//                Start_calendar.set(Calendar.YEAR, year);
+//                Start_calendar.set(Calendar.MONTH, month);
+//                Start_calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+//                updateLabel(tv_selectdate_start, Start_calendar);
+//            }
+//        };
+//
+//        DatePickerDialog.OnDateSetListener EndDatePicker = new DatePickerDialog.OnDateSetListener() {
+//            @Override
+//            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+//                End_calendar.set(Calendar.YEAR, year);
+//                End_calendar.set(Calendar.MONTH, month);
+//                End_calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+//                updateLabel(tv_selectdate_end, End_calendar);
+//            }
+//        };
 
-        DatePickerDialog.OnDateSetListener EndDatePicker = new DatePickerDialog.OnDateSetListener() {
+        //챌린지 시작일에 오늘 날짜가 나오게 함
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+        tv_selectdate_start.setText(df.format(cal.getTime()));
+
+        //챌린지 기간설정 EditText의 내용이 바뀔때 이벤트
+        et_challenge_date.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                End_calendar.set(Calendar.YEAR, year);
-                End_calendar.set(Calendar.MONTH, month);
-                End_calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel(tv_selectdate_end, End_calendar);
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //바뀌기 전 이벤트
             }
-        };
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //바뀌는 동시에 이벤트
+                String addDate = et_challenge_date.getText().toString();
+
+                if (!addDate.equals("")) { //EditText가 공백이 아니면 적힌 값만큼 날짜를 더해서 출력
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(new Date());
+                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                    cal.add(Calendar.DATE, Integer.parseInt(addDate));
+                    tv_selectdate_end.setText(df.format(cal.getTime()));
+                } else { //EditText가 공백이면 종료일이라고 출력
+                    tv_selectdate_end.setText("종료일");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                //바뀌고 나서 이벤트
+            }
+        });
 
 
         tv_bookname.setOnClickListener(new View.OnClickListener() {
@@ -92,12 +137,12 @@ public class activity_createchallenge extends AppCompatActivity {
                 btn_search.clearFocus();
             }
         });
-        tv_selectdate_start.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DatePickerDialog(activity_createchallenge.this, StartDatePicker, Start_calendar.get(Calendar.YEAR), Start_calendar.get(Calendar.MONTH), Start_calendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
+//        tv_selectdate_start.setOnClickListener(new Button.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                new DatePickerDialog(activity_createchallenge.this, StartDatePicker, Start_calendar.get(Calendar.YEAR), Start_calendar.get(Calendar.MONTH), Start_calendar.get(Calendar.DAY_OF_MONTH)).show();
+//            }
+//        });
     }
 
     @Override
@@ -107,7 +152,7 @@ public class activity_createchallenge extends AppCompatActivity {
 
 
     //검색창을 열어서 책을 검색한다.
-    public void getBook(){
+    public void getBook() {
         Intent intent = new Intent(this, search_fragment_subActivity_main.class);
         intent.putExtra("classindex", 2);
         startActivityResult.launch(intent); //검색 결과를 받는 핸들러를 작동한다.
