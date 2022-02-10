@@ -3,6 +3,7 @@ package com.example.bookworm.Login;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -40,7 +41,7 @@ public class activity_login extends Activity {
     private FirebaseAuth mAuth;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
-    private GoogleSignInClient mGoogleSignInClient;
+    private GoogleSignInClient gsi;
 
     private int RC_SIGN_IN=123;
 
@@ -57,18 +58,27 @@ public class activity_login extends Activity {
 
         // 구글
 
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.firebase_web_client_id))
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        gsi = GoogleSignIn.getClient(this, gso);
 
+
+        /*
+        if(null != gsi) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            this.finish();
+
+        }
         mAuth = FirebaseAuth.getInstance();
-
+*/
         ImageButton google_login_button = (ImageButton) findViewById(R.id.btn_login_google);
 
         google_login_button.setOnClickListener(new View.OnClickListener(){
-
             @Override
             public void onClick(View v){
                 signIn();
@@ -107,6 +117,7 @@ public class activity_login extends Activity {
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
+
     }
 
     @Override
@@ -118,17 +129,28 @@ public class activity_login extends Activity {
 
         super.onActivityResult(requestCode, resultCode, data);
 
+
         if (requestCode == RC_SIGN_IN) {
+
+            /*
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                // 구글 로그인 성공시 파이어베이스 연동
+                // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
+                Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                // 구글 로그인 실패
+                // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
-                Toast.makeText(getApplicationContext(), "Google sign in Failed", Toast.LENGTH_LONG).show();
             }
+            */
+
+            Intent intent=new Intent(this,MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            this.finish();
+
+
         }
     }
     public void move(UserInfo UserInfo){
@@ -160,6 +182,35 @@ public class activity_login extends Activity {
 
     // 구글 관련 메소드
 
+    // 사용자 정보 가져오기
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount acct = completedTask.getResult(ApiException.class);
+
+            if (acct != null) {
+                String personName = acct.getDisplayName();
+                String personGivenName = acct.getGivenName();
+                String personFamilyName = acct.getFamilyName();
+                String personEmail = acct.getEmail();
+                String personId = acct.getId();
+                Uri personPhoto = acct.getPhotoUrl();
+
+                Log.d(TAG, "handleSignInResult:personName "+personName);
+                Log.d(TAG, "handleSignInResult:personGivenName "+personGivenName);
+                Log.d(TAG, "handleSignInResult:personEmail "+personEmail);
+                Log.d(TAG, "handleSignInResult:personId "+personId);
+                Log.d(TAG, "handleSignInResult:personFamilyName "+personFamilyName);
+                Log.d(TAG, "handleSignInResult:personPhoto "+personPhoto);
+            }
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.e(TAG, "signInResult:failed code=" + e.getStatusCode());
+
+        }
+    }
+
+
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
@@ -183,14 +234,14 @@ public class activity_login extends Activity {
 
 
     private void signIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        Intent signInIntent = gsi.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     private void signOut() {
         mAuth.signOut();
 
-        mGoogleSignInClient.signOut().addOnCompleteListener(this,
+        gsi.signOut().addOnCompleteListener(this,
                 new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -202,7 +253,7 @@ public class activity_login extends Activity {
     private void revokeAccess() {
         mAuth.signOut();
 
-        mGoogleSignInClient.revokeAccess().addOnCompleteListener(this,
+        gsi.revokeAccess().addOnCompleteListener(this,
                 new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
