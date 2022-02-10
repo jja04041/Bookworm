@@ -3,7 +3,6 @@ package com.example.bookworm.Search.subActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -255,7 +254,7 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
                         else if(classindex == 2)
                         {
                             activity_createchallenge  activity_createchallenge = new activity_createchallenge();
-                            activity_createchallenge.get_Bookid(bookList.get(position).getItemId());
+                            activity_createchallenge.Set_Bookid(activity_createchallenge.tv_bookname ,bookList.get(position).getItemId());
                             finish();
                         }
                     }

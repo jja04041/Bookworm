@@ -21,7 +21,8 @@ public class activity_createchallenge extends Activity {
     String bookid = "default";
     String bookname;
     Button btn_search, btn_dupli;
-    TextView tv_bookname, tv_selectdate_start, tv_selectdate_end;
+    public TextView tv_bookname;
+    TextView tv_selectdate_start, tv_selectdate_end;
     Button btn_confirm;
 
     Calendar Start_calendar;
@@ -97,9 +98,9 @@ public class activity_createchallenge extends Activity {
 
 
 
-    public void get_Bookid(String bookname)
+    public void Set_Bookid(TextView tv, String bookname)
     {
-        this.bookid = bookname;
+        tv.setText(bookname);
     }
 
     private void updateLabel(TextView tv, Calendar calendar) {
