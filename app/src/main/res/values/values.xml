@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">906416699266-sqj1tkdtpigv2tq0mbqhn3afhdr3uug8.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">906416699266</string>
+    <string name="google_api_key" translatable="false">AIzaSyDzudgjz_6ZD9Rse5jc0GTCvnIt4LtYxvc</string>
+    <string name="google_app_id" translatable="false">1:906416699266:android:a9033ba6a056cc487e019b</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDzudgjz_6ZD9Rse5jc0GTCvnIt4LtYxvc</string>
+    <string name="google_storage_bucket" translatable="false">bookworm-98bcc.appspot.com</string>
+    <string name="project_id" translatable="false">bookworm-98bcc</string>
+</resources>
