@@ -36,9 +36,10 @@ public class activity_login extends Activity {
 //        mAuth = FirebaseAuth.getInstance();
 
         Session session = Session.getCurrentSession();
+        Log.d("session_now",String.valueOf(session.isOpened()));
         session.addCallback(new SessionCallback());
 
-        if (Session.getCurrentSession().checkAndImplicitOpen()) {
+        if (session.checkAndImplicitOpen()) {
             Log.d(TAG, "onClick: 로그인 세션살아있음");
             // 카카오 로그인 시도 (창이 안뜬다.)
             sessionCallback.requestMe();
