@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Login.activity_login;
 import com.example.bookworm.R;
+import com.google.firebase.auth.FirebaseAuth;
 import com.kakao.network.ApiErrorCode;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
@@ -27,11 +28,14 @@ import com.kakao.usermgmt.callback.UnLinkResponseCallback;
 public class fragment_profile extends Fragment {
 
     String strNickname, strProfile, strEmail;
+    private FirebaseAuth mAuth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        mAuth = FirebaseAuth.getInstance();
 
         Button btnLogout = (Button) view.findViewById(R.id.btn_logout);
         Button btnSignout = (Button) view.findViewById(R.id.btn_withdraw);
@@ -60,6 +64,7 @@ public class fragment_profile extends Fragment {
                 UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
                     @Override
                     public void onCompleteLogout() {
+                        FirebaseAuth.getInstance().signOut();
                         Intent intent = new Intent(current_context, activity_login.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
@@ -92,6 +97,7 @@ public class fragment_profile extends Fragment {
                                     @Override
                                     // 세션 닫힘
                                     public void onSessionClosed(ErrorResult errorResult) {
+                                        mAuth.getCurrentUser().delete();
                                         Toast.makeText(current_context, "세션이 닫혔습니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(current_context, activity_login.class);
                                         startActivity(intent);
@@ -133,4 +139,7 @@ public class fragment_profile extends Fragment {
         return view;
 
     }
+
+
+
 }

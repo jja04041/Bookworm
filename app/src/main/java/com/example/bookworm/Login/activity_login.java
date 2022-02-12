@@ -60,13 +60,13 @@ public class activity_login extends Activity {
 
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestIdToken("906416699266-sqj1tkdtpigv2tq0mbqhn3afhdr3uug8.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
         gsi = GoogleSignIn.getClient(this, gso);
 
 
-        /*
+//로그인 유지하게 해주는 구문
         if(null != gsi) {
             Intent intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -75,7 +75,7 @@ public class activity_login extends Activity {
 
         }
         mAuth = FirebaseAuth.getInstance();
-*/
+
         ImageButton google_login_button = (ImageButton) findViewById(R.id.btn_login_google);
 
         google_login_button.setOnClickListener(new View.OnClickListener(){
