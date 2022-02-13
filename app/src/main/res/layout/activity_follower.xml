@@ -101,7 +101,9 @@
             android:layout_gravity="center"
             android:src="@drawable/profile"/>
 
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/list_follower"/>
     </LinearLayout>
-
-    /여기부터 리스트 들어갈꺼임/
 </FrameLayout>

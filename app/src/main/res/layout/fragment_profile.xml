@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="프로필"
-                android:textSize="20dp"/>
+                android:textSize="20sp"/>
 
             <Button
                 android:id="@+id/btnSetting"
@@ -61,12 +61,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/btn_follower"
-                    android:textSize="25dp"
+                    android:textSize="25sp"
                     android:text="팔로워"/>
                 <TextView
                     android:id="@+id/tv_follower_count"
                     android:text=""
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
@@ -80,13 +80,13 @@
                 <Button
                     android:text="팔로잉"
                     android:id="@+id/btn_following"
-                    android:textSize="25dp"
+                    android:textSize="25sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
                     android:id="@+id/tv_following_count"
                     android:text=""
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
@@ -102,7 +102,13 @@
             android:layout_gravity="center"
             android:src="@drawable/profile"/>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
     </LinearLayout>
 
-    /여기부턴 게시물/
 </FrameLayout>
