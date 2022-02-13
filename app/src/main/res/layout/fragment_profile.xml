@@ -45,10 +45,11 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
             android:gravity="center"
             android:id="@id/setting">
 
+
             <LinearLayout
                 android:layout_weight="1"
                 android:gravity="center"
@@ -56,28 +57,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content">
 
-                <TextView
+                <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="25dp"
-                    android:text="게시글"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tv_post_count"
-                    android:text=""
-                    android:textSize="15dp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_follower"
                     android:textSize="25dp"
                     android:text="팔로워"/>
                 <TextView
@@ -94,8 +77,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content">
 
-                <TextView
+                <Button
                     android:text="팔로잉"
+                    android:id="@+id/btn_following"
                     android:textSize="25dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -109,127 +93,18 @@
 
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcView"
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
-        </androidx.recyclerview.widget.RecyclerView>
-
-        <LinearLayout
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal"
-            android:background="#DDDDDD">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_logout"
-                android:text="로그아웃" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_withdraw"
-                android:text="회원 탈퇴" />
-
-
-
-        </LinearLayout>
-
 
         <ImageView
             android:id="@+id/img_frag_profile_profile"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginTop="10dp"
-            android:layout_gravity="center"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="10dp"
-            android:textSize="20sp"
-            android:text="닉네임: "/>
-
-        <TextView
-            android:id="@+id/tv_frag_profile_nickname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:textSize="20sp"
-            android:text="..." />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="15dp"
-            android:textSize="16sp"
-            android:text="이메일: "/>
-
-        <TextView
-            android:id="@+id/tv_frag_profile_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:textSize="16sp"
-            android:text="..." />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="15dp"
-            android:textSize="16sp"
-            android:text="나이: "/>
-
-        <TextView
-            android:id="@+id/tv_frag_profile_age"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:textSize="16sp"
-            android:text="..." />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="15dp"
-            android:textSize="16sp"
-            android:text="성별: " />
-
-        <TextView
-            android:id="@+id/tv_frag_profile_gender"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:textSize="16sp"
-            android:text="..." />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="15dp"
-            android:textSize="16sp"
-            android:text="생일: " />
-
-        <TextView
-            android:id="@+id/tv_frag_profile_birthday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:textSize="16sp"
-            android:text="..." />
-
-
-
+            android:layout_gravity="center"
+            android:src="@drawable/profile"/>
 
     </LinearLayout>
+
+
 
 
 </FrameLayout>

@@ -18,6 +18,8 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Login.activity_login;
 import com.example.bookworm.R;
+import com.example.bookworm.User.FollowerActivity;
+import com.example.bookworm.User.FollowingActivity;
 import com.kakao.network.ApiErrorCode;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
@@ -31,6 +33,30 @@ public class fragment_profile extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_profile);
+
+        //팔로워 버튼 클릭시 액티비티 전환
+        Button btnFollower = (Button) getView().findViewById(R.id.btn_follower);
+        btnFollower.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), FollowerActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //팔로잉 버튼 클릭시 액티비티 전환
+        Button btnFollowing = (Button) getView().findViewById(R.id.btn_following);
+        btnFollower.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), FollowingActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //엄... 실수한듯..
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         Button btnLogout = (Button) view.findViewById(R.id.btn_logout);

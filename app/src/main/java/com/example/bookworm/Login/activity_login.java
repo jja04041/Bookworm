@@ -60,7 +60,7 @@ public class activity_login extends Activity {
 
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestIdToken("906416699266-sqj1tkdtpigv2tq0mbqhn3afhdr3uug8.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
         gsi = GoogleSignIn.getClient(this, gso);
