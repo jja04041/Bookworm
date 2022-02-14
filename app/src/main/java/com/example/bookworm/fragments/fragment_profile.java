@@ -106,7 +106,7 @@ public class fragment_profile extends Fragment {
                                     @Override
                                     // 세션 닫힘
                                     public void onSessionClosed(ErrorResult errorResult) {
-                                        // mGoogleSignInClient.signOut();
+                                        gsi.revokeAccess();
                                         Toast.makeText(current_context, "세션이 닫혔습니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(current_context, activity_login.class);
                                         startActivity(intent);
