@@ -75,4 +75,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
 
     implementation 'com.google.firebase:firebase-firestore'
+
+    // ViewPager2
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
 }
