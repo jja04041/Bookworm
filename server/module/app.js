@@ -10,14 +10,25 @@ app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }))
+//user 토큰이 있어야 서버 이용이 가능=> 어플 내에서만 웹 접근이 가능하도록 하기 위함.
+app.use((req,res,next)=>{ 
+    var a=req.header('user-token');
+    if (a==undefined||a!='dbproject2021'){
+        res.status(403);
+        res.send('forbidden error');
+    }else{
+        res.status(200);
+        next();
+    }
 
+})
 
 //서버 개방
 app.listen(port, hostname, () => {
     console.log(`Server running at https://${hostname}:${port}/`);
 })
 
-app.get("/",(req,res)=>{
-    res.send("hello world!");
+app.post("/upload",(req,res)=>{
+    
 })
 // app.use('/',router); //라우터 사용

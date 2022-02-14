@@ -143,6 +143,8 @@ public class fragment_profile extends Fragment {
             }
         });
 
+
+
         return view;
 
     }

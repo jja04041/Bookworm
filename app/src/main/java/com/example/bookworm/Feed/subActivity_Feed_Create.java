@@ -23,8 +23,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 public class subActivity_Feed_Create extends AppCompatActivity {
@@ -35,7 +38,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     LinearLayout layout;
     ArrayList<Button> btn;
     int label = 0;
-    String a = "가나다라마바아";
     //라벨은 알럿 다이어그램을 통해 입력을 받고, 선택한 값으로 라벨이 지정됨
 
     @Override
@@ -49,15 +51,20 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         btn = new ArrayList<>();
         fbModule=new FBModule();
         btn.add(btnAdd);
+        LocalDateTime now = LocalDateTime.now();
+        SimpleDateFormat now_date= new SimpleDateFormat();
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //ShowDialog 만들기
 
-//                data=new HashMap();
-//                //data.put()을 이용하여, data에 값을 넣는다
-//
-//                fbModule.saveData(0,data);
+                data=new HashMap();
+                data.put("feed_content",edtFeedContent.getText().toString());
+                data.put("upload_date",now_date.toString() );
+
+                //data.put()을 이용하여, data에 값을 넣는다
+
+                fbModule.saveData(1,data);
 //                //라벨생성
 //                setLabel(a,Color.parseColor("#EFDDDD"));
             }
@@ -66,11 +73,9 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
-                fbModule.readData();
+//                fbModule.readData(0);
             }
         });
-
-
     }
 
 
