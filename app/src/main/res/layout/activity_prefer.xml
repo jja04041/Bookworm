@@ -29,96 +29,175 @@
             android:textSize="20dp" />
     </FrameLayout>
 
-    <LinearLayout
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="선호장르 선택" />
-
-        <CheckBox
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="소설/시/희곡" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="20dp">
 
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="에세이" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="선호장르 선택" />
 
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="인문학" />
+            <CheckBox
+                android:id="@+id/prefer1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="소설/시/희곡" />
 
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="만화" />
+            <CheckBox
+                android:id="@+id/prefer2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="에세이" />
 
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="자기계발" />
+            <CheckBox
+                android:id="@+id/prefer3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="인문학" />
 
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="어린이" />
+            <CheckBox
+                android:id="@+id/prefer4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="만화" />
 
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="경제경영" />
+            <CheckBox
+                android:id="@+id/prefer5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="자기계발" />
 
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="사회과학" />
+            <CheckBox
+                android:id="@+id/prefer6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="어린이" />
 
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="청소년" />
+            <CheckBox
+                android:id="@+id/prefer7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="경제경영" />
 
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="역사" />
+            <CheckBox
+                android:id="@+id/prefer8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="사회과학" />
 
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="예술/대중문화" />
+            <CheckBox
+                android:id="@+id/prefer9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="청소년" />
 
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="과학" />
+            <CheckBox
+                android:id="@+id/prefer10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="역사" />
 
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="유아" />
+            <CheckBox
+                android:id="@+id/prefer11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="예술/대중문화" />
 
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="종교/역학" />
+            <CheckBox
+                android:id="@+id/prefer12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="과학" />
 
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="고전" />
+            <CheckBox
+                android:id="@+id/prefer13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="유아" />
 
-<!--        목록 더 만들어야됨 -->
+            <CheckBox
+                android:id="@+id/prefer14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="종교/역학" />
 
-    </LinearLayout>
+            <CheckBox
+                android:id="@+id/prefer15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="고전" />
 
+            <CheckBox
+                android:id="@+id/prefer16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="가정/요리/뷰티" />
+
+            <CheckBox
+                android:id="@+id/prefer17"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="대학교재/전문서적" />
+
+            <CheckBox
+                android:id="@+id/prefer18"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="건강/취미/레저" />
+
+            <CheckBox
+                android:id="@+id/prefer19"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="여행" />
+
+            <CheckBox
+                android:id="@+id/prefer20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="컴퓨터/모바일" />
+
+            <CheckBox
+                android:id="@+id/prefer21"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="좋은부모" />
+
+            <CheckBox
+                android:id="@+id/prefer22"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="외국어" />
+
+            <CheckBox
+                android:id="@+id/prefer23"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="잡지" />
+
+            <CheckBox
+                android:id="@+id/prefer24"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="수험서/자격증" />
+
+            <CheckBox
+                android:id="@+id/prefer25"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="인물/평전" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
