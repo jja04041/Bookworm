@@ -190,6 +190,7 @@ public class activity_login extends Activity {
             GoogleSignInAccount acct = completedTask.getResult(ApiException.class);
 
             if (acct != null) {
+                String token = acct.getId();
                 String personName = acct.getDisplayName();
                 String personGivenName = acct.getGivenName();
                 String personFamilyName = acct.getFamilyName();
@@ -199,7 +200,7 @@ public class activity_login extends Activity {
 
                 Intent intent=new Intent(this,MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("name", personFamilyName + " " +personGivenName);
+                intent.putExtra("name", personName);
                 intent.putExtra("profileimg", personPhoto.toString());
                 intent.putExtra("email", personEmail);
 
