@@ -47,7 +47,7 @@ public class activity_createchallenge extends AppCompatActivity {
     //액티비티 간 데이터 전달 핸들러(검색한 데이터의 값을 전달받는 매개체가 된다.)
     ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            (ActivityResultCallback<ActivityResult>) result -> {
+            result -> {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent intent = result.getData();
                     this.selected_book = (Book) intent.getSerializableExtra("data");
@@ -123,7 +123,6 @@ public class activity_createchallenge extends AppCompatActivity {
             }
         });
 
-
         tv_bookname.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -150,14 +149,12 @@ public class activity_createchallenge extends AppCompatActivity {
         super.onDestroy();
     }
 
-
     //검색창을 열어서 책을 검색한다.
     public void getBook() {
         Intent intent = new Intent(this, search_fragment_subActivity_main.class);
         intent.putExtra("classindex", 2);
         startActivityResult.launch(intent); //검색 결과를 받는 핸들러를 작동한다.
     }
-
 
     private void updateLabel(TextView tv, Calendar calendar) {
         String myFormat = "yyyy/MM/dd";
