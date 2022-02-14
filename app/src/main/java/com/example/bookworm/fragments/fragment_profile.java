@@ -1,5 +1,7 @@
 package com.example.bookworm.fragments;
 
+import static com.example.bookworm.Login.activity_login.gsi;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,6 +20,8 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Login.activity_login;
 import com.example.bookworm.R;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.firebase.auth.FirebaseAuth;
 import com.kakao.network.ApiErrorCode;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
@@ -27,14 +31,19 @@ import com.kakao.usermgmt.callback.UnLinkResponseCallback;
 public class fragment_profile extends Fragment {
 
     String strNickname, strProfile, strEmail;
+    private FirebaseAuth mAuth;
+    private GoogleSignInClient mGoogleSignInClient;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
+        mAuth = FirebaseAuth.getInstance();
+
         Button btnLogout = (Button) view.findViewById(R.id.btn_logout);
         Button btnSignout = (Button) view.findViewById(R.id.btn_withdraw);
+
 
         TextView tvNickname = view.findViewById(R.id.tv_frag_profile_nickname);
         ImageView imgProfile = view.findViewById(R.id.img_frag_profile_profile);
@@ -48,9 +57,13 @@ public class fragment_profile extends Fragment {
         strProfile = intent.getStringExtra("profileimg");
         strEmail = intent.getStringExtra("email");
 
+
+
         tvNickname.setText(strNickname);
         tvEmail.setText(strEmail);
         Glide.with(this).load(strProfile).into(imgProfile);
+
+
 
         btnLogout.setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -60,6 +73,7 @@ public class fragment_profile extends Fragment {
                 UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
                     @Override
                     public void onCompleteLogout() {
+                        gsi.signOut();
                         Intent intent = new Intent(current_context, activity_login.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
@@ -92,6 +106,7 @@ public class fragment_profile extends Fragment {
                                     @Override
                                     // 세션 닫힘
                                     public void onSessionClosed(ErrorResult errorResult) {
+                                        // mGoogleSignInClient.signOut();
                                         Toast.makeText(current_context, "세션이 닫혔습니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(current_context, activity_login.class);
                                         startActivity(intent);
@@ -128,9 +143,10 @@ public class fragment_profile extends Fragment {
             }
         });
 
-
-
         return view;
 
     }
+
+
+
 }
