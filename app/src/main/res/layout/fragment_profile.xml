@@ -134,8 +134,6 @@
                 android:id="@+id/btn_withdraw"
                 android:text="회원 탈퇴" />
 
-
-
         </LinearLayout>
 
 

@@ -41,7 +41,7 @@ public class activity_login extends Activity {
     private FirebaseAuth mAuth;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
-    private GoogleSignInClient gsi;
+    public static GoogleSignInClient gsi;
 
     private int RC_SIGN_IN=123;
 
@@ -58,23 +58,33 @@ public class activity_login extends Activity {
 
         // 구글
 
+        /*
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() != null) {
+            Intent intent = new Intent(getApplication(), MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        */
 
+
+
+        // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("906416699266-sqj1tkdtpigv2tq0mbqhn3afhdr3uug8.apps.googleusercontent.com")
+   //           .requestIdToken("553081648947-d9pg1iul2af205gn1ii44c3l8vn7jpsv.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
         gsi = GoogleSignIn.getClient(this, gso);
 
+        GoogleSignInAccount gsa = GoogleSignIn.getLastSignedInAccount(activity_login.this);
 
-//로그인 유지하게 해주는 구문
-        if(null != gsi) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            this.finish();
 
+        if(gsa != null)
+        {
+            signIn();
         }
-        mAuth = FirebaseAuth.getInstance();
+
+
 
         ImageButton google_login_button = (ImageButton) findViewById(R.id.btn_login_google);
 
@@ -98,10 +108,10 @@ public class activity_login extends Activity {
         kakao_login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    Log.d(TAG, "onClick: 로그인 세션끝남");
-                    // 카카오 로그인 시도 (창이 뜬다.)
+                Log.d(TAG, "onClick: 로그인 세션끝남");
+                // 카카오 로그인 시도 (창이 뜬다.)
 
-                    session.open(AuthType.KAKAO_LOGIN_ALL, activity_login.this);
+                session.open(AuthType.KAKAO_LOGIN_ALL, activity_login.this);
             }
         });
     }
@@ -113,44 +123,36 @@ public class activity_login extends Activity {
         Session.getCurrentSession().removeCallback(sessionCallback);
     }
 
+
+    /*
     @Override
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        updateUI(currentUser);
 
     }
-
+    */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         // 카카오톡|스토리 간편로그인 실행 결과를 받아서 SDK로 전달
+
         if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
             return;
         }
 
-        super.onActivityResult(requestCode, resultCode, data);
-
-
         if (requestCode == RC_SIGN_IN) {
-
-            /*
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+
             try {
-                // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
-                firebaseAuthWithGoogle(account);
+
+                //firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
-                Log.w(TAG, "Google sign in failed", e);
             }
-            */
-
-            Intent intent=new Intent(this,MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            this.finish();
-
-
         }
     }
     public void move(UserInfo UserInfo){
@@ -170,9 +172,9 @@ public class activity_login extends Activity {
             databaseReference.child("kakao_id_token").push().setValue(idtoken);
             databaseReference.child("User_name").push().setValue(UserInfo.username);
 
-                } else {
-                     Log.d("fucntion signup", "nono token ");
-                }
+        } else {
+            Log.d("fucntion signup", "nono token ");
+        }
     }
 
 
@@ -195,12 +197,15 @@ public class activity_login extends Activity {
                 String personId = acct.getId();
                 Uri personPhoto = acct.getPhotoUrl();
 
-                Log.d(TAG, "handleSignInResult:personName "+personName);
-                Log.d(TAG, "handleSignInResult:personGivenName "+personGivenName);
-                Log.d(TAG, "handleSignInResult:personEmail "+personEmail);
-                Log.d(TAG, "handleSignInResult:personId "+personId);
-                Log.d(TAG, "handleSignInResult:personFamilyName "+personFamilyName);
-                Log.d(TAG, "handleSignInResult:personPhoto "+personPhoto);
+                Intent intent=new Intent(this,MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("name", personFamilyName + " " +personGivenName);
+                intent.putExtra("profileimg", personPhoto.toString());
+                intent.putExtra("email", personEmail);
+
+
+                startActivity(intent);
+                this.finish();
             }
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
@@ -213,6 +218,9 @@ public class activity_login extends Activity {
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+        // [START_EXCLUDE silent]
+        //showProgressDialog();
+        // [END_EXCLUDE]
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -220,47 +228,41 @@ public class activity_login extends Activity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);
                             Toast.makeText(getApplicationContext(), "Complete", Toast.LENGTH_LONG).show();
 
                         } else {
+                            // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(getApplicationContext(), "Authentication Failed", Toast.LENGTH_LONG).show();
+                            updateUI(null);
                         }
+
+                        // [START_EXCLUDE]
+                        // hideProgressDialog();
+                        // [END_EXCLUDE]
                     }
                 });
     }
 
 
     private void signIn() {
+
         Intent signInIntent = gsi.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    private void signOut() {
-        mAuth.signOut();
-
-        gsi.signOut().addOnCompleteListener(this,
-                new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(getApplicationContext(), "Complete", Toast.LENGTH_LONG).show();
-                    }
-                });
+    private void updateUI(FirebaseUser user) {
+        if (user != null) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
-    private void revokeAccess() {
-        mAuth.signOut();
-
-        gsi.revokeAccess().addOnCompleteListener(this,
-                new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(getApplicationContext(), "Complete", Toast.LENGTH_LONG).show();
-                    }
-                });
-    }
 
 }
 
