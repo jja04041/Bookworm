@@ -111,6 +111,11 @@
             android:layout_height="wrap_content"
             android:text="종교/역학" />
 
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="고전" />
+
 <!--        목록 더 만들어야됨 -->
 
     </LinearLayout>
