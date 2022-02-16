@@ -20,7 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Map;
 
 public class FBModule {
-    String location[] = {"users", "feed"}; //각 함수에서 전달받은 인덱스에 맞는 값을 뽑아냄.
+    String location[] = {"users", "feed", "challenge"}; //각 함수에서 전달받은 인덱스에 맞는 값을 뽑아냄.
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     Context context = null;
 
@@ -35,6 +35,7 @@ public class FBModule {
                 db.collection(location[idx]).document(data.get("idToken").toString()).set(data);
                 break;
             case 2://챌린지 생성
+                db.collection(location[idx]).document(data.get("strChallengeName").toString()).set(data);
                 break;
         }
     }
@@ -52,9 +53,11 @@ public class FBModule {
                             DocumentSnapshot document = task.getResult();
                             //중복인 값이 있을 때
                             if (document.exists()) {
-                                if (idx==2){
-                                    Toast.makeText(context, "중복입니다", Toast.LENGTH_SHORT).show();
-                                }
+                                // 이거 챌린지 명 중복 있으면 컨텍스트때매 오류나는듯 함
+                                // 일단 중복 있으면 아무 행동도 안하는걸로 해놓음
+//                                if (idx==2){
+//                                    Toast.makeText(context, "이미 존재하는 챌린지명 입니다", Toast.LENGTH_SHORT).show();
+//                                }
                             }
                             //중복인 값이 없을 때
                             else {
