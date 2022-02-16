@@ -27,7 +27,6 @@ public class UserInfo implements Serializable {
         this.platform="Kakao";
     }
     public void add(GoogleSignInAccount account) {
-//        this.profileimg= account.getPhotoUrl().toString();
         try {
             Log.d("profile", account.getPhotoUrl().toString());
         }catch (NullPointerException e){
