@@ -41,15 +41,17 @@ public class ProfileSettingActivity extends AppCompatActivity {
 
         Intent intent = this.getIntent();
         UserInfo userInfo = (UserInfo) intent.getSerializableExtra("userinfo");
-        strNickname = userInfo.username;
-        strProfile = userInfo.profileimg;
-        strEmail = userInfo.email;
+        strNickname = userInfo.getUsername();
+        strProfile = userInfo.getProfileimg();
+        strEmail = userInfo.getEmail();
 
         //설정 버튼
         btnModify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(current_context, ProfileModifyActivity.class);
+                //프로필 수정 화면으로 유저정보 넘겨주기
+                intent.putExtra("userinfo",userInfo);
                 startActivity(intent);
             }
         });
@@ -91,9 +93,9 @@ public class ProfileSettingActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 //토큰을 이용하여 파이어베이스에 있는 데이터 삭제
                                 //카카오로 가입한 계정인 경우
-                                if (userInfo.platform.equals("Kakao")) {
+                                if (userInfo.getPlatform().equals("Kakao")) {
                                     signOutKakao(fbModule, userInfo);
-                                } else if (userInfo.platform.equals("Google")) {
+                                } else if (userInfo.getPlatform().equals("Google")) {
                                     signOutGoogle(fbModule, userInfo);
                                 }
                                 dialog.dismiss();

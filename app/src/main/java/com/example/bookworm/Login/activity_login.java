@@ -148,12 +148,14 @@ public class activity_login extends Activity {
 
     //회원가입 함수
     public void signUp(UserInfo UserInfo, String idtoken) {
-        if (null != idtoken && null != UserInfo.username) {
+        if (null != idtoken && null != UserInfo.getUsername()) {
             HashMap<String, String> map = new HashMap<>();
             UserInfo.setToken(idtoken);
-            map.put("user_name", UserInfo.username);
+            map.put("user_name", UserInfo.getUsername());
             map.put("idToken", idtoken);
-            map.put("platform", UserInfo.platform);
+            map.put("platform", UserInfo.getPlatform());
+            map.put("email", UserInfo.getEmail());
+            map.put("profileURL", UserInfo.getProfileimg());
             //파이어베이스에 해당 계정이 등록되있지 않다면
             fbModule.readData(0, idtoken, map);
         } else {

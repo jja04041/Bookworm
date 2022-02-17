@@ -58,9 +58,9 @@ public class fragment_profile extends Fragment {
 
         Intent intent = getActivity().getIntent();
         UserInfo userInfo = (UserInfo) intent.getSerializableExtra("userinfo");
-        strNickname = userInfo.username;
-        strProfile = userInfo.profileimg;
-        strEmail = userInfo.email;
+        strNickname = userInfo.getUsername();
+        strProfile = userInfo.getProfileimg();
+        strEmail = userInfo.getEmail();
 
         btnSetting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +76,7 @@ public class fragment_profile extends Fragment {
         //뷰에 값 세팅
         //tvNickname.setText(strNickname);
         //tvEmail.setText(strEmail);
-        Glide.with(this).load(strProfile).into(imgProfile); //프로필사진 로딩후 삽입.
+        Glide.with(this).load(strProfile).circleCrop().into(imgProfile); //프로필사진 로딩후 삽입.
 
 
         //로그아웃 버튼
