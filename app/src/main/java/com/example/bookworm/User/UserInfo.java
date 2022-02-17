@@ -11,10 +11,10 @@ import java.io.Serializable;
 
 public class UserInfo implements Serializable {
 
-    public String profileimg; // 회원가입시 프로필사진
-    public String username; // 회원가입시 닉네임
-    public String email; // 로그인한 이메일
-    public String platform;
+    private String profileimg; // 회원가입시 프로필사진
+    private String username; // 회원가입시 닉네임
+    private String email; // 로그인한 이메일
+    private String platform;
     private String token;
 
     private enum_wormtype wormtype = enum_wormtype.디폴트;
@@ -64,5 +64,21 @@ public class UserInfo implements Serializable {
     }
     public String getToken(){
         return this.token;
+    }
+
+    public String getProfileimg() {
+        return profileimg;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPlatform() {
+        return platform;
     }
 }

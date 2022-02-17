@@ -29,9 +29,9 @@ public class fragment_challenge extends Fragment {
         //로그인 액티비티에서 값 받아오기
         Intent intent = getActivity().getIntent();
         UserInfo userInfo = (UserInfo) intent.getSerializableExtra("userinfo");
-        strNickname = userInfo.username;
-        strProfile = userInfo.profileimg;
-        strEmail = userInfo.email;
+        strNickname = userInfo.getUsername();
+        strProfile = userInfo.getProfileimg();
+        strEmail = userInfo.getEmail();
 
 
         btn_create_challenge.setOnClickListener(new Button.OnClickListener() {
