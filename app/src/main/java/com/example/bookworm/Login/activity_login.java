@@ -22,6 +22,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.Gson;
 import com.kakao.auth.AuthType;
 import com.kakao.auth.Session;
 
@@ -128,17 +129,23 @@ public class activity_login extends Activity {
         }
     }
 
-    public void move(UserInfo UserInfo) {
+    public void move(UserInfo userInfo) {
         Intent intent = new Intent(this, MainActivity.class);
+
+
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("userinfo",UserInfo);
+        intent.putExtra("userinfo",userInfo);
 
         SharedPreferences pref = getSharedPreferences("user",MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
+        Gson gson = new Gson();
 
-        editor.putString("name", UserInfo.username);
-        editor.putString("email", UserInfo.email);
+        String userinfo = gson.toJson(userInfo, UserInfo.class);
+
+        editor.putString("key_user", userinfo);
         editor.commit();
+
+
 
         startActivity(intent);
         this.finish();

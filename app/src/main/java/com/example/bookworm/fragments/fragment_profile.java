@@ -1,11 +1,13 @@
 package com.example.bookworm.fragments;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.example.bookworm.Login.activity_login.gsi;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,13 +24,16 @@ import com.example.bookworm.Login.activity_login;
 import com.example.bookworm.R;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.modules.FBModule;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.kakao.network.ApiErrorCode;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
 import com.kakao.usermgmt.callback.UnLinkResponseCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class fragment_profile extends Fragment {
 
@@ -40,7 +45,7 @@ public class fragment_profile extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)  {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
 
@@ -55,15 +60,39 @@ public class fragment_profile extends Fragment {
 
 
         Intent intent = getActivity().getIntent();
+
         UserInfo userInfo = (UserInfo) intent.getSerializableExtra("userinfo");
         strNickname = userInfo.username;
         strProfile = userInfo.profileimg;
         strEmail = userInfo.email;
 
+        UserInfo userInfo1;
+
+        SharedPreferences pref = current_context.getSharedPreferences("user", MODE_PRIVATE);
+
+        Gson gson = new GsonBuilder().create();
+
+        String str123 = pref.getString("key_user", null);
+
+        try {
+            JSONObject json = new JSONObject(str123);
+            userInfo1 = gson.fromJson(json.toString(), UserInfo.class);
+
+            tvNickname.setText(userInfo1.username);
+            tvEmail.setText(userInfo1.email);
+            Glide.with(this).load(userInfo1.profileimg).into(imgProfile); //프로필사진 로딩후 삽입.
+
+
+        } catch (JSONException e){
+
+        }
+
+
+
         //뷰에 값 세팅
-        tvNickname.setText(strNickname);
-        tvEmail.setText(strEmail);
-        Glide.with(this).load(strProfile).into(imgProfile); //프로필사진 로딩후 삽입.
+//        tvNickname.setText(strNickname);
+//        tvEmail.setText(strEmail);
+//        Glide.with(this).load(strProfile).into(imgProfile); //프로필사진 로딩후 삽입.
 
 
         //로그아웃 버튼
