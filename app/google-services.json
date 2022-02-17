@@ -15,7 +15,7 @@
       "oauth_client": [
         {
           "client_id": "553081648947-vtu2pbr4t2ofqpnrp2vhp57rpaqkssp0.apps.googleusercontent.com",
-          "client_type": 1,
+          "client_type": 3,
           "android_info": {
             "package_name": "com.example.bookworm",
             "certificate_hash": "8c5112e0e063d9d34bcae95e1a7c93545726181e"

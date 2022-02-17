@@ -2,12 +2,14 @@ package com.example.bookworm.Challenge;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -24,30 +26,38 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bookworm.MainActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_main;
+import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.modules.FBModule;
 
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 public class activity_createchallenge extends AppCompatActivity {
     Button btn_search, btn_dupli;
-    TextView tv_bookname, tv_selectdate_start, tv_selectdate_end;
-    EditText et_challenge_date;
-    Button btn_confirm;
+    TextView tv_bookname, tv_challenge_start, tv_challenge_end;
+    EditText et_challenge_date, et_challenge_name, et_challenge_max, et_challenge_info;
+    Button btn_confirm, btn_start_challenge;
+    String strNickname, strProfile, strEmail; //회원정보 받아오기
+    String strBookname, strChallengeName, strChallengeInfo, strChallengeStartDate, strChallengeEndDate, strCurrentParticipation, strMaxParticipation, strChallengeDate;
     Book selected_book; //선택한 책 객체
     Calendar Start_calendar;
     Calendar End_calendar;
+    private FBModule fbModule;
+    Context mContext;
 
     //액티비티 간 데이터 전달 핸들러(검색한 데이터의 값을 전달받는 매개체가 된다.)
     ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            (ActivityResultCallback<ActivityResult>) result -> {
+            result -> {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent intent = result.getData();
                     this.selected_book = (Book) intent.getSerializableExtra("data");
@@ -58,14 +68,27 @@ public class activity_createchallenge extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_createchallenge);
+        setContentView(R.layout.subactivity_challenge_createchallenge);
 
         btn_search = findViewById(R.id.btn_createchallenge_search);
         btn_dupli = findViewById(R.id.btn_createchallenge_duplicheck);
+        btn_start_challenge = findViewById(R.id.btn_start_challenge);
         tv_bookname = findViewById(R.id.tv_createchallenge_bookname);
-        tv_selectdate_start = findViewById(R.id.tv_createchallenge_selectdate_start);
-        tv_selectdate_end = findViewById(R.id.tv_createchallenge_selectdate_end);
+        tv_challenge_start = findViewById(R.id.tv_createchallenge_start);
+        tv_challenge_end = findViewById(R.id.tv_createchallenge_end);
         et_challenge_date = findViewById(R.id.et_createchallenge_challengedate);
+        et_challenge_name = findViewById(R.id.et_createchallenge_challengename);
+        et_challenge_max = findViewById(R.id.etMax);
+        et_challenge_info = findViewById(R.id.et_createchallenge_challengeinfo);
+
+        fbModule = new FBModule(mContext);
+        mContext = this;
+
+        //파이어베이스 챌린지 컬렉션에 유저이름과 프로필 URL을 올리기 위해 fragment_challenge.java에서 받아옴
+        Intent intent = this.getIntent();
+        strNickname = intent.getStringExtra("strNickname");
+        strProfile = intent.getStringExtra("strProfile");
+
 
 //        DatePickerDialog.OnDateSetListener StartDatePicker = new DatePickerDialog.OnDateSetListener() {
 //            @Override
@@ -92,7 +115,8 @@ public class activity_createchallenge extends AppCompatActivity {
         cal.setTime(new Date());
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-        tv_selectdate_start.setText(df.format(cal.getTime()));
+        tv_challenge_start.setText(df.format(cal.getTime()));
+
 
         //챌린지 기간설정 EditText의 내용이 바뀔때 이벤트
         et_challenge_date.addTextChangedListener(new TextWatcher() {
@@ -111,9 +135,9 @@ public class activity_createchallenge extends AppCompatActivity {
                     cal.setTime(new Date());
                     DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                     cal.add(Calendar.DATE, Integer.parseInt(addDate));
-                    tv_selectdate_end.setText(df.format(cal.getTime()));
+                    tv_challenge_end.setText(df.format(cal.getTime()));
                 } else { //EditText가 공백이면 종료일이라고 출력
-                    tv_selectdate_end.setText("종료일");
+                    tv_challenge_end.setText("종료일");
                 }
             }
 
@@ -122,7 +146,6 @@ public class activity_createchallenge extends AppCompatActivity {
                 //바뀌고 나서 이벤트
             }
         });
-
 
         tv_bookname.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,13 +166,21 @@ public class activity_createchallenge extends AppCompatActivity {
 //                new DatePickerDialog(activity_createchallenge.this, StartDatePicker, Start_calendar.get(Calendar.YEAR), Start_calendar.get(Calendar.MONTH), Start_calendar.get(Calendar.DAY_OF_MONTH)).show();
 //            }
 //        });
+
+        //챌린지 시작 버튼
+        btn_start_challenge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createChallenge();
+            }
+        });
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
-
 
     //검색창을 열어서 책을 검색한다.
     public void getBook() {
@@ -158,10 +189,43 @@ public class activity_createchallenge extends AppCompatActivity {
         startActivityResult.launch(intent); //검색 결과를 받는 핸들러를 작동한다.
     }
 
-
     private void updateLabel(TextView tv, Calendar calendar) {
         String myFormat = "yyyy/MM/dd";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.KOREA);
         tv.setText(sdf.format(calendar.getTime()));
     }
+
+    private void createChallenge() {
+        //파이어베이스에 올릴것들
+        strBookname = tv_bookname.getText().toString();
+        strChallengeName = et_challenge_name.getText().toString();
+        strChallengeInfo = et_challenge_info.getText().toString();
+        strChallengeStartDate = tv_challenge_start.getText().toString();
+        strChallengeEndDate = tv_challenge_end.getText().toString();
+        strCurrentParticipation = "0";
+        strMaxParticipation = et_challenge_max.getText().toString();
+        strChallengeDate = et_challenge_date.getText().toString();
+
+        //입력 안한 항목 있는지 찾기
+        if(strBookname.equals("")||strChallengeName.equals("")||strChallengeInfo.equals("")||strMaxParticipation.equals("")||strChallengeDate.equals("")){
+            Toast.makeText(this, "입력하지 않은 항목이 있습니다.", Toast.LENGTH_SHORT).show();
+        }else{//다 입력 했다면
+            HashMap<String, String> map = new HashMap<>();
+
+            map.put("user_name", strNickname);
+            map.put("ProfileURL", strProfile);
+            map.put("thumbnailURL", "책 썸네일 URL이 들어갈 곳");
+            map.put("bookname", strBookname);
+            map.put("strChallengeName", strChallengeName);
+            map.put("challengeInfo", strChallengeInfo);
+            map.put("challengeStartDate", strChallengeStartDate);
+            map.put("ChallengeEndDate", strChallengeEndDate);
+            map.put("CurrentParticipation", strCurrentParticipation);
+            map.put("MaxParticipation", strMaxParticipation);
+
+            //파이어베이스에 해당 챌린지명이 등록돼있지 않다면
+            fbModule.readData(2, strChallengeName, map);
+        }
+    }
+
 }

@@ -3,27 +3,23 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Bookworm/app/src/main/res/drawable/bg_fading_edge.xml" value="0.124" />
-        <entry key="..\:/Bookworm/app/src/main/res/drawable/bg_indicator_active.xml" value="0.1895" />
-        <entry key="..\:/Bookworm/app/src/main/res/drawable/bg_indicator_inactive.xml" value="0.1895" />
-        <entry key="..\:/Bookworm/app/src/main/res/layout/activity_join.xml" value="0.25364583333333335" />
-        <entry key="..\:/Bookworm/app/src/main/res/layout/activity_login.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/activity_profile_setting.xml" value="0.25364583333333335" />
-        <entry key="..\:/Bookworm/app/src/main/res/layout/bg_fading_edge.xml" value="0.11302083333333333" />
-        <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_bookworm.xml" value="0.25364583333333335" />
-        <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_challenge.xml" value="0.25364583333333335" />
-        <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_feed.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_profile.xml" value="0.1" />
-        <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_search.xml" value="0.25364583333333335" />
-        <entry key="..\:/Bookworm/app/src/main/res/layout/item_slider.xml" value="0.1" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/activity_createchallenge.xml" value="0.36614583333333334" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/activity_info_challenge.xml" value="0.33" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/challenge_listview_item.xml" value="0.2" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_challenge.xml" value="0.2" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_feed.xml" value="0.21614583333333334" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_profile.xml" value="0.325" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_search.xml" value="0.36614583333333334" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/item_slider.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/layout_topbar.xml" value="0.21614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/search_favoriteitem.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/search_fragment_result_feed.xml" value="0.21614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/search_item_loading.xml" value="0.21614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/search_recyclerview_item.xml" value="0.36614583333333334" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_challenge_challengeinfo.xml" value="0.35052083333333334" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_challenge_createchallenge.xml" value="0.33" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_feed_create.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_search_fragment_result.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_search_main.xml" value="0.1037037037037037" />
@@ -62,6 +58,8 @@
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/search_fragment_result_feed.xml" value="0.33" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/search_item_loading.xml" value="0.18020833333333333" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/search_recyclerview_item.xml" value="0.303125" />
+        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/subactivity_challenge_challengeinfo.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/subactivity_challenge_createchallenge.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/subactivity_feed_create.xml" value="0.33" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/subactivity_search_fragment_result.xml" value="0.25" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/subactivity_search_main.xml" value="0.18020833333333333" />

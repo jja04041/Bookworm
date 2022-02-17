@@ -15,7 +15,6 @@ import com.kakao.util.exception.KakaoException;
 
 public class SessionCallback implements ISessionCallback {
 
-
     // 로그인에 성공한 상태
     @Override
     public void onSessionOpened() {
@@ -31,7 +30,6 @@ public class SessionCallback implements ISessionCallback {
     // 사용자 정보 요청
     //이곳에 우리가 필요한 정보를 전달받아 retrofit 등을 통해 db에 저장하면 될 듯 함.
     public void requestMe() {
-
         UserManagement.getInstance()
                 .me(new MeV2ResponseCallback() {
                     @Override
@@ -51,7 +49,6 @@ public class SessionCallback implements ISessionCallback {
                         UserAccount kakaoAccount = result.getKakaoAccount();
                         //회원정보 보유 시
                         if (kakaoAccount != null) {
-
                             // 이메일
                             String email = kakaoAccount.getEmail();
                             Profile profile = kakaoAccount.getProfile();
@@ -82,7 +79,8 @@ public class SessionCallback implements ISessionCallback {
                             } else {
                                 // 프로필 획득 불가
                             }
-                            UserInfo userinfo = new UserInfo(kakaoAccount);
+                            UserInfo userinfo = new UserInfo();
+                            userinfo.add(kakaoAccount);
                             ((activity_login)activity_login.mContext).signUp(userinfo, id);
                             ((activity_login)activity_login.mContext).move(userinfo);
                         } else {
