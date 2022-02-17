@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.bookworm.MainActivity;
+import com.example.bookworm.ProfileSettingActivity;
 import com.example.bookworm.fragments.fragment_profile;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -81,7 +82,7 @@ public class FBModule {
                     public void onSuccess(Void aVoid) {
                         switch (idx) {
                             case 0:
-                                ((fragment_profile) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("4")).moveToLogin();
+                                (((ProfileSettingActivity) context)).moveToLogin();
                                 break;
                         }
                     }
