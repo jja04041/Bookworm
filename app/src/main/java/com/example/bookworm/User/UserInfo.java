@@ -25,14 +25,6 @@ public class UserInfo implements Serializable {
     // 가장 최댓값의 index의 번호에 따라 최고 선호 장르를 설정합니다.
     private int [] genre = new int [enum_size];
 
-
-
-
-
-
-
-
-
     public UserInfo() {
     }
 
@@ -59,13 +51,6 @@ public class UserInfo implements Serializable {
         this.wormtype = enum_wormtype.디폴트;
     }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
-    public String getToken(){
-        return this.token;
-    }
-
     public String getProfileimg() {
         return profileimg;
     }
@@ -80,5 +65,20 @@ public class UserInfo implements Serializable {
 
     public String getPlatform() {
         return platform;
+    }
+
+    public enum_wormtype getWormtype() {
+        return wormtype;
+    }
+
+    public int[] getGenre() {
+        return genre;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+    public String getToken(){
+        return this.token;
     }
 }
