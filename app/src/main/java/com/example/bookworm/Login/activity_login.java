@@ -3,14 +3,12 @@ package com.example.bookworm.Login;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.bookworm.MainActivity;
@@ -22,15 +20,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
 import com.kakao.auth.AuthType;
 import com.kakao.auth.Session;
 
@@ -137,10 +129,21 @@ public class activity_login extends Activity {
         }
     }
 
-    public void move(UserInfo UserInfo) {
+    public void move(UserInfo userInfo) {
         Intent intent = new Intent(this, MainActivity.class);
+
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("userinfo",UserInfo);
+        intent.putExtra("userinfo", userInfo);
+
+        SharedPreferences pref = getSharedPreferences("user", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        Gson gson = new Gson();
+
+        String userinfo = gson.toJson(userInfo, UserInfo.class);
+
+        editor.putString("key_user", userinfo);
+        editor.commit();
+
         startActivity(intent);
         this.finish();
     }
@@ -148,12 +151,14 @@ public class activity_login extends Activity {
 
     //회원가입 함수
     public void signUp(UserInfo UserInfo, String idtoken) {
-        if (null != idtoken && null != UserInfo.username) {
+        if (null != idtoken && null != UserInfo.getUsername()) {
             HashMap<String, String> map = new HashMap<>();
             UserInfo.setToken(idtoken);
-            map.put("user_name", UserInfo.username);
+            map.put("user_name", UserInfo.getUsername());
             map.put("idToken", idtoken);
-            map.put("platform", UserInfo.platform);
+            map.put("platform", UserInfo.getPlatform());
+            map.put("email", UserInfo.getEmail());
+            map.put("profileURL", UserInfo.getProfileimg());
             //파이어베이스에 해당 계정이 등록되있지 않다면
             fbModule.readData(0, idtoken, map);
         } else {

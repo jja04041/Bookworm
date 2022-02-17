@@ -67,7 +67,7 @@
         android:background="@drawable/square_button">
 
         <Button
-            android:id="@+id/btnSignout"
+            android:id="@+id/btnLogout"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:orientation="horizontal"
@@ -98,7 +98,7 @@
         android:background="@drawable/square_button">
 
         <Button
-            android:id="@+id/btnWithdrawal"
+            android:id="@+id/btnSignout"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:orientation="horizontal"

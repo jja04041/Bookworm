@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.bookworm.MainActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
@@ -46,6 +48,7 @@ public class activity_createchallenge extends AppCompatActivity {
     TextView tv_bookname, tv_challenge_start, tv_challenge_end;
     EditText et_challenge_date, et_challenge_name, et_challenge_max, et_challenge_info;
     Button btn_confirm, btn_start_challenge;
+    ImageView Thumbnail;
     String strNickname, strProfile, strEmail; //회원정보 받아오기
     String strBookname, strChallengeName, strChallengeInfo, strChallengeStartDate, strChallengeEndDate, strCurrentParticipation, strMaxParticipation, strChallengeDate;
     Book selected_book; //선택한 책 객체
@@ -62,6 +65,7 @@ public class activity_createchallenge extends AppCompatActivity {
                     Intent intent = result.getData();
                     this.selected_book = (Book) intent.getSerializableExtra("data");
                     tv_bookname.setText(selected_book.getTitle()); //책 제목만 세팅한다.
+                    Glide.with(this).load(selected_book.getImg_url()).into(Thumbnail); //책 표지 로딩후 삽입.
                 }
             });
 
@@ -80,6 +84,7 @@ public class activity_createchallenge extends AppCompatActivity {
         et_challenge_name = findViewById(R.id.et_createchallenge_challengename);
         et_challenge_max = findViewById(R.id.etMax);
         et_challenge_info = findViewById(R.id.et_createchallenge_challengeinfo);
+        Thumbnail = findViewById(R.id.ivThumbnail);
 
         fbModule = new FBModule(mContext);
         mContext = this;
@@ -214,8 +219,9 @@ public class activity_createchallenge extends AppCompatActivity {
 
             map.put("user_name", strNickname);
             map.put("ProfileURL", strProfile);
-            map.put("thumbnailURL", "책 썸네일 URL이 들어갈 곳");
+            map.put("thumbnailURL", selected_book.getImg_url());
             map.put("bookname", strBookname);
+            map.put("BookId", selected_book.getItemId());
             map.put("strChallengeName", strChallengeName);
             map.put("challengeInfo", strChallengeInfo);
             map.put("challengeStartDate", strChallengeStartDate);
@@ -225,6 +231,8 @@ public class activity_createchallenge extends AppCompatActivity {
 
             //파이어베이스에 해당 챌린지명이 등록돼있지 않다면
             fbModule.readData(2, strChallengeName, map);
+            finish();
+            Toast.makeText(this, "챌린지 등록 성공", Toast.LENGTH_SHORT).show();
         }
     }
 
