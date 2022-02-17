@@ -9,9 +9,8 @@ import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.Glide;
-import com.example.bookworm.R;
 import com.example.bookworm.Feed.subActivity_Feed_Create;
+import com.example.bookworm.R;
 
 public class fragment_feed extends Fragment {
     ImageView imgCreate;

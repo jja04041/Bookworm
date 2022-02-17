@@ -13,9 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".User.FollowingActivity"
-            android:exported="false" />
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
