@@ -1,42 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.bookworm.fragments.fragment_profile">
-
-    <!-- TODO: Update blank fragment layout -->
-
+    tools:context=".User.FollowerActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <FrameLayout
+        <LinearLayout
             android:id="@+id/setting"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:orientation="horizontal"
             android:background="#DDDDDD">
 
+            <Button
+                android:id="@+id/btnBack"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/back_icon"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="프로필"
-                android:textSize="20sp"/>
+                android:text="팔로워"
+                android:textSize="20dp"/>
 
             <Button
                 android:id="@+id/btnSetting"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="end|center_vertical"
-                android:layout_marginEnd="15dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="250dp"
                 android:background="@drawable/setting" />
-
-
-        </FrameLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -56,15 +59,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/btn_follower"
-                    android:textSize="25sp"
+                    android:textSize="25dp"
                     android:text="팔로워"/>
                 <TextView
                     android:id="@+id/tv_follower_count"
                     android:text=""
-                    android:textSize="15sp"
+                    android:textSize="15dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
+
+
             <LinearLayout
                 android:layout_weight="1"
                 android:gravity="center"
@@ -75,19 +80,18 @@
                 <Button
                     android:text="팔로잉"
                     android:id="@+id/btn_following"
-                    android:textSize="25sp"
+                    android:textSize="25dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
                     android:id="@+id/tv_following_count"
                     android:text=""
-                    android:textSize="15sp"
+                    android:textSize="15dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
 
         </LinearLayout>
-
 
         <ImageView
             android:id="@+id/img_frag_profile_profile"
@@ -97,13 +101,9 @@
             android:layout_gravity="center"
             android:src="@drawable/profile"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <ListView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </androidx.recyclerview.widget.RecyclerView>
-
+            android:layout_height="wrap_content"
+            android:id="@+id/list_follower"/>
     </LinearLayout>
-
 </FrameLayout>

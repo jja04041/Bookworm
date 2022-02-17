@@ -13,11 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".User.FollowingActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="@string/kakaoKey" />
-        <!-- SubActivities -->
+            android:value="@string/kakaoKey" /> <!-- SubActivities -->
         <activity
             android:name=".Feed.subActivity_Feed_Create"
             android:exported="false"
@@ -33,14 +35,10 @@
         <activity
             android:name=".Challenge.activity_createchallenge"
             android:exported="false"
-            android:parentActivityName=".MainActivity"/>
-
-
-        <!-- Main Activities -->
-
+            android:parentActivityName=".MainActivity" /> <!-- Main Activities -->
         <activity
             android:name=".PreferActivity"
-            android:exported="false" /> <!--  선호장르 설정 -->
+            android:exported="false" /> <!-- 선호장르 설정 -->
         <activity
             android:name=".JoinActivity"
             android:exported="false" /> <!-- 회원 정보 수정 -->
