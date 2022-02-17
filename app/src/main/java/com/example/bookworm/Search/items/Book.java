@@ -1,6 +1,8 @@
 package com.example.bookworm.Search.items;
 
-public class Book {
+import java.io.Serializable;
+
+public class Book implements Serializable {
     //제목, 간단한 내용, 출판사, 저자 정도 표기?
     private String img_url;
     private String title;
