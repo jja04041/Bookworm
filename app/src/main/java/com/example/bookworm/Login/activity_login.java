@@ -132,11 +132,10 @@ public class activity_login extends Activity {
     public void move(UserInfo userInfo) {
         Intent intent = new Intent(this, MainActivity.class);
 
-
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("userinfo",userInfo);
+        intent.putExtra("userinfo", userInfo);
 
-        SharedPreferences pref = getSharedPreferences("user",MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences("user", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         Gson gson = new Gson();
 
@@ -144,8 +143,6 @@ public class activity_login extends Activity {
 
         editor.putString("key_user", userinfo);
         editor.commit();
-
-
 
         startActivity(intent);
         this.finish();

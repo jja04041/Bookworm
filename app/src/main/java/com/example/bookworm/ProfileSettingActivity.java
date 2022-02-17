@@ -8,23 +8,31 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.bookworm.Login.activity_login;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.modules.FBModule;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
 import com.kakao.usermgmt.callback.UnLinkResponseCallback;
 import com.kakao.network.ApiErrorCode;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class ProfileSettingActivity extends AppCompatActivity {
 
-    String strNickname, strProfile, strEmail;
+    private UserInfo userInfo;
+
     Button btnSignout, btnLogout, btnModify, btnBack;
     Context current_context;
 
@@ -33,17 +41,25 @@ public class ProfileSettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_setting);
 
+        SharedPreferences pref = getSharedPreferences("user", MODE_PRIVATE);
+
+        Gson gson = new GsonBuilder().create();
+
+        String key_user = pref.getString("key_user", null);
+
+        try {
+            JSONObject json = new JSONObject(key_user);
+            userInfo = gson.fromJson(json.toString(), UserInfo.class);
+
+        } catch (JSONException e) {
+
+        }
+
         btnLogout = findViewById(R.id.btnLogout);
         btnSignout = findViewById(R.id.btnSignout);
         btnModify = findViewById(R.id.btnModify);
         btnBack = findViewById(R.id.btnBack);
         current_context = this;
-
-        Intent intent = this.getIntent();
-        UserInfo userInfo = (UserInfo) intent.getSerializableExtra("userinfo");
-        strNickname = userInfo.getUsername();
-        strProfile = userInfo.getProfileimg();
-        strEmail = userInfo.getEmail();
 
         //설정 버튼
         btnModify.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +67,7 @@ public class ProfileSettingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(current_context, ProfileModifyActivity.class);
                 //프로필 수정 화면으로 유저정보 넘겨주기
-                intent.putExtra("userinfo",userInfo);
+//                intent.putExtra("userinfo",userInfo);
                 startActivity(intent);
             }
         });
