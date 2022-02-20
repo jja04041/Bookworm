@@ -44,7 +44,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public class activity_createchallenge extends AppCompatActivity {
-    Button btn_search, btn_dupli;
+    Button btn_search, btn_dupli, btn_back;
     TextView tv_bookname, tv_challenge_start, tv_challenge_end;
     EditText et_challenge_date, et_challenge_name, et_challenge_max, et_challenge_info;
     Button btn_confirm, btn_start_challenge;
@@ -77,6 +77,7 @@ public class activity_createchallenge extends AppCompatActivity {
         btn_search = findViewById(R.id.btn_createchallenge_search);
         btn_dupli = findViewById(R.id.btn_createchallenge_duplicheck);
         btn_start_challenge = findViewById(R.id.btn_start_challenge);
+        btn_back = findViewById(R.id.btnBack);
         tv_bookname = findViewById(R.id.tv_createchallenge_bookname);
         tv_challenge_start = findViewById(R.id.tv_createchallenge_start);
         tv_challenge_end = findViewById(R.id.tv_createchallenge_end);
@@ -177,6 +178,14 @@ public class activity_createchallenge extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 createChallenge();
+            }
+        });
+
+        //뒤로가기 버튼
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 
