@@ -3,6 +3,7 @@ package com.example.bookworm.Search.subActivity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -83,6 +84,8 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
                 textViews[i].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        //구매하기 누르면 글씨색 보라색으로 바뀌게
+                        textViews[2].setTextColor(Color.parseColor("#660099"));
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         try {
                             intent.setData(Uri.parse(json.getString(text)));
