@@ -34,22 +34,24 @@ import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_main;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.modules.FBModule;
+import com.example.bookworm.modules.personalD.PersonalD;
 
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
 public class activity_createchallenge extends AppCompatActivity {
+    UserInfo userInfo;
     Button btn_search, btn_dupli, btn_back;
     TextView tv_bookname, tv_challenge_start, tv_challenge_end;
     EditText et_challenge_date, et_challenge_name, et_challenge_max, et_challenge_info;
     Button btn_confirm, btn_start_challenge;
     ImageView Thumbnail;
-    String strNickname, strProfile, strEmail; //회원정보 받아오기
     String strBookname, strChallengeName, strChallengeInfo, strChallengeStartDate, strChallengeEndDate, strCurrentParticipation, strMaxParticipation, strChallengeDate;
     Book selected_book; //선택한 책 객체
     Calendar Start_calendar;
@@ -90,12 +92,7 @@ public class activity_createchallenge extends AppCompatActivity {
         mContext = this;
         fbModule = new FBModule(mContext);
 
-        //파이어베이스 챌린지 컬렉션에 유저이름과 프로필 URL을 올리기 위해 fragment_challenge.java에서 받아옴
-        Intent intent = this.getIntent();
-
-        strNickname = intent.getStringExtra("strNickname");
-        strProfile = intent.getStringExtra("strProfile");
-
+        userInfo=new PersonalD(mContext).getUserInfo(); //저장된 UserInfo값을 가져온다.
 
 //        DatePickerDialog.OnDateSetListener StartDatePicker = new DatePickerDialog.OnDateSetListener() {
 //            @Override
@@ -225,19 +222,26 @@ public class activity_createchallenge extends AppCompatActivity {
         if(strBookname.equals("")||strChallengeName.equals("")||strChallengeInfo.equals("")||strMaxParticipation.equals("")||strChallengeDate.equals("")){
             Toast.makeText(this, "입력하지 않은 항목이 있습니다.", Toast.LENGTH_SHORT).show();
         }else{//다 입력 했다면
-            HashMap<String, String> map = new HashMap<>();
+            HashMap<String, Object> map = new HashMap<>();
 
-            map.put("user_name", strNickname);
-            map.put("ProfileURL", strProfile);
-            map.put("thumbnailURL", selected_book.getImg_url());
-            map.put("bookname", strBookname);
-            map.put("BookId", selected_book.getItemId());
-            map.put("strChallengeName", strChallengeName);
-            map.put("challengeInfo", strChallengeInfo);
-            map.put("challengeStartDate", strChallengeStartDate);
-            map.put("ChallengeEndDate", strChallengeEndDate);
-            map.put("CurrentParticipation", strCurrentParticipation);
-            map.put("MaxParticipation", strMaxParticipation);
+            String[] strCurrentParticipation = {userInfo.getToken()};
+
+            //기간 지났는지 확인하기 위한 값
+            boolean outDated = false;
+
+            map.put("Profileimg", userInfo.getProfileimg()); //프로필 이미지
+            map.put("Username", userInfo.getUsername()); //닉네임
+            map.put("masterToken", userInfo.getToken()); //토큰
+            map.put("thumbnailURL", selected_book.getImg_url()); //책 썸네일
+            map.put("bookname", strBookname); //책 이름
+            map.put("BookId", selected_book.getItemId()); //책 ID
+            map.put("strChallengeName", strChallengeName); //챌린지 명
+            map.put("challengeInfo", strChallengeInfo); //챌린지 설명
+            map.put("challengeStartDate", strChallengeStartDate); //챌린지 시작일
+            map.put("ChallengeEndDate", strChallengeEndDate); //챌린지 종료일
+            map.put("CurrentParticipation", Arrays.asList(strCurrentParticipation)); //현재 참가자
+            map.put("MaxParticipation", Integer.parseInt(strMaxParticipation)); //최대 참가자 수
+            map.put("outDated", outDated); //기간 종료 확인 값
 
             //파이어베이스에 해당 챌린지명이 등록돼있지 않다면
             fbModule.readData(2,map,strChallengeName);

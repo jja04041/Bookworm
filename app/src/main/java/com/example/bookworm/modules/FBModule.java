@@ -47,7 +47,7 @@ public class FBModule {
     public void readData(int idx, Map map,String... token) {
         collectionReference = db.collection(location[idx]);
         //해당 정보가 있는지 확인(회원 여부 확인)
-        if (idx != 2) task = collectionReference.document(token[0]).get();
+        if (idx != 2||token[0]!=null) task = collectionReference.document(token[0]).get();
         else {
             //챌린지인 경우 map으로 전달된 값은 쿼리에 넣는 값들이 됨.
             //paging 기법과
@@ -67,7 +67,7 @@ public class FBModule {
             @Override
             public void onComplete(@NonNull Task task) {
                 if (task.isSuccessful()) {
-                    if (idx != 2) successRead((DocumentSnapshot) task.getResult(), idx, map);
+                    if (idx != 2||token[0]!=null) successRead((DocumentSnapshot) task.getResult(), idx, map);
                     else successRead((QuerySnapshot) task.getResult(), map);
                 } else {
                     Log.d("TAG3", "get failed with ", task.getException());
@@ -106,7 +106,7 @@ public class FBModule {
         else {
             //해당 토큰이 파이어베이스에 등록되있지 않은 경우
             //해당 값을 파이어베이스에 등록
-//            saveData(idx, map);
+            saveData(idx, map[0]);
             Log.d("data print", document.toString());
         }
     }

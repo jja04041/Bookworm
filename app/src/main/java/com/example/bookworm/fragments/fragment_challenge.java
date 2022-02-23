@@ -33,7 +33,6 @@ import java.util.Map;
 
 public class fragment_challenge extends Fragment {
 
-    private String strNickname, strProfile, strEmail;
     private RecyclerView mRecyclerView;
     private ChallengeAdapter challengeAdapter;
     private Spinner spinnerC;
@@ -56,17 +55,11 @@ public class fragment_challenge extends Fragment {
         personalD = new PersonalD(getContext()); //UserInfo 값을 가져옴
         //UserInfo값 가져오기
         userInfo = personalD.getUserInfo();
-        strNickname = userInfo.getUsername();
-        strProfile = userInfo.getProfileimg();
-        strEmail = userInfo.getEmail();
 
         btn_create_challenge.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), activity_createchallenge.class);
-                //파이어베이스 챌린지 컬렉션에 유저이름과 프로필 URL을 올리기 위해 activity_login에서 받은 값을 activity_createchallenge.java로 넘겨줌
-                intent.putExtra("strNickname", strNickname);
-                intent.putExtra("strProfile", strProfile);
                 startActivity(intent);
                 btn_create_challenge.clearFocus();
             }
