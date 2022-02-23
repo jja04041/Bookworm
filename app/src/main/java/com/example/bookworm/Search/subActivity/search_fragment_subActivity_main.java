@@ -60,9 +60,7 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
     public boolean isLoading = false; //스크롤을 당겨서 추가로 로딩 중인지 여부를 확인하는 변수
     int count = 0, page = 0, check = 0;
     final int CPP = 10; //Contents Per Page : 페이지당 보이는 컨텐츠의 개수
-    ContextWrapper c ;
     Intent intent;
-    String bookid = "\0";
     int classindex = 0;
 
 

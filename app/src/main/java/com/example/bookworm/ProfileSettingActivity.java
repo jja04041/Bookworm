@@ -109,9 +109,10 @@ public class ProfileSettingActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 //토큰을 이용하여 파이어베이스에 있는 데이터 삭제
                                 //카카오로 가입한 계정인 경우
-                                if (userInfo.getPlatform().equals("Kakao")) {
+                                String platform=userInfo.getPlatform();
+                                if (platform.equals("Kakao")) {
                                     signOutKakao(fbModule, userInfo);
-                                } else if (userInfo.getPlatform().equals("Google")) {
+                                } else if (platform.equals("Google")) {
                                     signOutGoogle(fbModule, userInfo);
                                 }
                                 dialog.dismiss();

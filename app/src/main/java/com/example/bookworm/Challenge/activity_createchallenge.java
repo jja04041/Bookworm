@@ -87,11 +87,12 @@ public class activity_createchallenge extends AppCompatActivity {
         et_challenge_info = findViewById(R.id.et_createchallenge_challengeinfo);
         Thumbnail = findViewById(R.id.ivThumbnail);
 
-        fbModule = new FBModule(mContext);
         mContext = this;
+        fbModule = new FBModule(mContext);
 
         //파이어베이스 챌린지 컬렉션에 유저이름과 프로필 URL을 올리기 위해 fragment_challenge.java에서 받아옴
         Intent intent = this.getIntent();
+
         strNickname = intent.getStringExtra("strNickname");
         strProfile = intent.getStringExtra("strProfile");
 
@@ -239,7 +240,7 @@ public class activity_createchallenge extends AppCompatActivity {
             map.put("MaxParticipation", strMaxParticipation);
 
             //파이어베이스에 해당 챌린지명이 등록돼있지 않다면
-            fbModule.readData(2, strChallengeName, map);
+            fbModule.readData(2,map,strChallengeName);
             finish();
             Toast.makeText(this, "챌린지 등록 성공", Toast.LENGTH_SHORT).show();
         }

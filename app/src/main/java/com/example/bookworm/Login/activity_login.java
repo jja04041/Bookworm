@@ -15,6 +15,7 @@ import com.example.bookworm.MainActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.modules.FBModule;
+import com.example.bookworm.modules.personalD.PersonalD;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -131,19 +132,8 @@ public class activity_login extends Activity {
 
     public void move(UserInfo userInfo) {
         Intent intent = new Intent(this, MainActivity.class);
-
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("userinfo", userInfo);
-
-        SharedPreferences pref = getSharedPreferences("user", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        Gson gson = new Gson();
-
-        String userinfo = gson.toJson(userInfo, UserInfo.class);
-
-        editor.putString("key_user", userinfo);
-        editor.commit();
-
+        new PersonalD(this).saveUserInfo(userInfo); //값 저장
         startActivity(intent);
         this.finish();
     }
@@ -160,7 +150,7 @@ public class activity_login extends Activity {
             map.put("email", UserInfo.getEmail());
             map.put("profileURL", UserInfo.getProfileimg());
             //파이어베이스에 해당 계정이 등록되있지 않다면
-            fbModule.readData(0, idtoken, map);
+            fbModule.readData(0, map,idtoken);
         } else {
             Log.d("fucntion signup", "nono token ");
         }

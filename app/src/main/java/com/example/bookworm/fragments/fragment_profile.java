@@ -26,6 +26,7 @@ import com.example.bookworm.ProfileSettingActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.modules.FBModule;
+import com.example.bookworm.modules.personalD.PersonalD;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
@@ -40,9 +41,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class fragment_profile extends Fragment {
-
     UserInfo userInfo;
-
     ImageView imgProfile;
     Button btnSetting;
     Context current_context;
@@ -63,22 +62,7 @@ public class fragment_profile extends Fragment {
                 startActivity(intent);
             }
         });
-
-        SharedPreferences pref = current_context.getSharedPreferences("user", MODE_PRIVATE);
-
-        Gson gson = new GsonBuilder().create();
-
-        String key_user = pref.getString("key_user", null);
-
-        try {
-            JSONObject json = new JSONObject(key_user);
-            userInfo = gson.fromJson(json.toString(), UserInfo.class);
-
-            Glide.with(this).load(userInfo.getProfileimg()).circleCrop().into(imgProfile); //프로필사진 로딩후 삽입.
-
-        } catch (JSONException e) {
-
-        }
+        userInfo=new PersonalD(current_context).getUserInfo(); //저장된 UserInfo값을 가져온다.
 
         //자신이나 타인의 프로필 화면 실험을 위해 잠깐 추가한 코드
         imgProfile.setOnClickListener(new View.OnClickListener() {
