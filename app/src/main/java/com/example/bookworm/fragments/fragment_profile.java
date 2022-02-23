@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Login.activity_login;
+import com.example.bookworm.ProfileInfoActivity;
 import com.example.bookworm.ProfileSettingActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.User.UserInfo;
@@ -78,6 +79,15 @@ public class fragment_profile extends Fragment {
         } catch (JSONException e) {
 
         }
+
+        //자신이나 타인의 프로필 화면 실험을 위해 잠깐 추가한 코드
+        imgProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(current_context, ProfileInfoActivity.class);
+                startActivity(intent);
+            }
+        });
         return view;
     }
 }
