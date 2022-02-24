@@ -4,10 +4,14 @@ import android.util.Log;
 
 import com.example.bookworm.Bw.enum_wormtype;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.common.primitives.Ints;
 import com.kakao.usermgmt.response.model.Profile;
 import com.kakao.usermgmt.response.model.UserAccount;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class UserInfo implements Serializable {
 
@@ -23,7 +27,8 @@ public class UserInfo implements Serializable {
     // genre index의 1번 = enum_wormtype의 공포 2번은 추리 .... 이하 동문
     // 가장 최댓값을 가진 index를 벌레의 종류로 설정할 계획
     // 가장 최댓값의 index의 번호에 따라 최고 선호 장르를 설정합니다.
-    private int [] genre = new int [enum_size];
+    private List<Integer> genre = new ArrayList<>();
+
 
     public UserInfo() {
     }
@@ -72,7 +77,7 @@ public class UserInfo implements Serializable {
     }
 
     public int[] getGenre() {
-        return genre;
+        return Ints.toArray(genre);
     }
 
     public void setToken(String token) {
