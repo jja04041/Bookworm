@@ -15,8 +15,8 @@
             android:id="@+id/setting"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:orientation="horizontal"
-            android:background="#DDDDDD">
+            android:background="#DDDDDD"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btnBack"
@@ -24,13 +24,14 @@
                 android:layout_height="30dp"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginStart="20dp"
-                android:background="@drawable/back_icon"/>
+                android:background="@drawable/back_icon" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="팔로워"
-                android:textSize="20dp"/>
+                android:textSize="20dp" />
 
             <Button
                 android:id="@+id/btnSetting"
@@ -42,29 +43,29 @@
         </FrameLayout>
 
         <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/tab_layout">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/item_follower"
-                android:text="팔로워"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="팔로워" />
 
 
             <com.google.android.material.tabs.TabItem
+                android:id="@+id/item_following"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/item_following"
-                android:text="팔로잉"/>
+                android:text="팔로잉" />
 
         </com.google.android.material.tabs.TabLayout>
 
         <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewpager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/viewpager"/>
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 </FrameLayout>
