@@ -17,7 +17,7 @@
             android:name=".ProfileInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".User.FollowingActivity"
+            android:name=".User.FollowerActivity"
             android:exported="false" />
 
         <meta-data

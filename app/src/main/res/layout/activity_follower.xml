@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/setting"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -36,10 +36,10 @@
                 android:id="@+id/btnSetting"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:layout_marginStart="250dp"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="15dp"
                 android:background="@drawable/setting" />
-        </LinearLayout>
+        </FrameLayout>
 
         <com.google.android.material.tabs.TabLayout
             android:layout_width="match_parent"

@@ -23,6 +23,7 @@
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_feed_create.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_search_fragment_result.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_search_main.xml" value="0.1037037037037037" />
+        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/drawable/bg_fading_edge.xml" value="0.2295" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/drawable/bottom_icon_color.xml" value="0.2824074074074074" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/drawable/challenge_current_participation.xml" value="0.2295" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/drawable/feed_bottom_border_only.xml" value="0.32407407407407407" />
@@ -57,6 +58,8 @@
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_challenge.xml" value="0.33" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_feed.xml" value="0.33" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_profile.xml" value="0.25" />
+        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_profile_follower.xml" value="0.2453125" />
+        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_profile_follwing.xml" value="0.2453125" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_search.xml" value="0.25" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/layout_challenge_item.xml" value="0.33" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/layout_content.xml" value="0.33" />
