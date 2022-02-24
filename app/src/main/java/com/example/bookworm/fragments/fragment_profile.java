@@ -24,6 +24,7 @@ import com.example.bookworm.Login.activity_login;
 import com.example.bookworm.ProfileInfoActivity;
 import com.example.bookworm.ProfileSettingActivity;
 import com.example.bookworm.R;
+import com.example.bookworm.User.FollowerActivity;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.personalD.PersonalD;
@@ -42,6 +43,9 @@ import org.json.JSONObject;
 
 public class fragment_profile extends Fragment {
     UserInfo userInfo;
+
+    Button btnFollower;
+    Button btnFollowing;
     ImageView imgProfile;
     Button btnSetting;
     Context current_context;
@@ -53,6 +57,8 @@ public class fragment_profile extends Fragment {
 
         imgProfile = view.findViewById(R.id.img_frag_profile_profile);
         btnSetting = view.findViewById(R.id.btnSetting);
+        btnFollower = view.findViewById(R.id.btn_follower);
+        btnFollowing = view.findViewById(R.id.btn_following);
         current_context = getActivity();
 
         btnSetting.setOnClickListener(new View.OnClickListener() {
@@ -64,14 +70,27 @@ public class fragment_profile extends Fragment {
         });
         userInfo=new PersonalD(current_context).getUserInfo(); //저장된 UserInfo값을 가져온다.
 
-        //자신이나 타인의 프로필 화면 실험을 위해 잠깐 추가한 코드
-        imgProfile.setOnClickListener(new View.OnClickListener() {
+        //팔로워액티비티 실행하기
+        btnFollower.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(current_context, ProfileInfoActivity.class);
+                Intent intent = new Intent(getActivity(), FollowerActivity.class);
                 startActivity(intent);
             }
         });
+
+        //팔로워액티비티 실행하기
+        btnFollowing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), FollowerActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+            Glide.with(this).load(userInfo.getProfileimg()).circleCrop().into(imgProfile); //프로필사진 로딩후 삽입.
+
         return view;
     }
 }
