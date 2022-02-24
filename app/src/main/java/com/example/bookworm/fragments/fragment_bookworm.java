@@ -14,13 +14,15 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.bookworm.ImageSliderAdapter;
 import com.example.bookworm.R;
+import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.modules.personalD.PersonalD;
 
 public class fragment_bookworm extends Fragment {
 
     private ViewPager2 sliderViewPager;
     private LinearLayout layoutIndicator;
-    private String[] images = new String[] {getURLForResource(R.drawable.bookimg), getURLForResource(R.drawable.bookimg),
-            getURLForResource(R.drawable.bookimg), getURLForResource(R.drawable.bookimg)};
+    private String[] images;
+    private UserInfo userinfo;
 
 
 
@@ -30,6 +32,14 @@ public class fragment_bookworm extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_bookworm, container, false);
+
+        PersonalD personalD = new PersonalD(getContext());
+        userinfo = personalD.getUserInfo();
+
+
+        // 유저 책볼레 벡터를 이미지 슬라이더에 넣을 String[]에 넣는다.
+        images = new String[userinfo.getWormimgvec().size()];
+        userinfo.getWormimgvec().copyInto(images);
 
         sliderViewPager = view.findViewById(R.id.sliderViewPager);
         layoutIndicator = view.findViewById(R.id.layoutIndicators);
@@ -46,8 +56,6 @@ public class fragment_bookworm extends Fragment {
         });
 
         setupIndicators(images.length);
-
-
 
         return view;
     }
@@ -90,6 +98,9 @@ public class fragment_bookworm extends Fragment {
     }
 
 
-
+    private void setImage()
+    {
+        
+    }
 
 }
