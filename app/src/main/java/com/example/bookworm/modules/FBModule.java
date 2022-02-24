@@ -25,7 +25,9 @@ public class FBModule {
     String location[] = {"users", "feed", "challenge"}; //각 함수에서 전달받은 인덱스에 맞는 값을 뽑아냄.
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     Context context = null;
+    public final static int LIMIT = 10;
     Task task = null;
+
     CollectionReference collectionReference;
 
     //생성자
@@ -47,7 +49,7 @@ public class FBModule {
     public void readData(int idx, Map map,String... token) {
         collectionReference = db.collection(location[idx]);
         //해당 정보가 있는지 확인(회원 여부 확인)
-        if (idx != 2||token[0]!=null) task = collectionReference.document(token[0]).get();
+        if (idx != 2||token!=null) task = collectionReference.document(token[0]).get();
         else {
             //챌린지인 경우 map으로 전달된 값은 쿼리에 넣는 값들이 됨.
             //paging 기법과
@@ -56,10 +58,11 @@ public class FBModule {
                 String Keyword = map.get("like").toString();
                 query = query.startAt(Keyword).endAt(Keyword + "\uf8ff"); //SQL의 Like문과 같음
             }
-            if (map.get("limit") != null) {
-                String Limit = map.get("limit").toString();
-                query = query.limit(Long.parseLong(Limit));
+            if (map.get("lastVisible") != null) {
+                DocumentSnapshot snapshot=(DocumentSnapshot)map.get("lastVisible");
+                query = query.startAfter(snapshot);
             }
+            query=query.limit(LIMIT);
             task = query.get();
         }
         //결과 확인
@@ -67,8 +70,8 @@ public class FBModule {
             @Override
             public void onComplete(@NonNull Task task) {
                 if (task.isSuccessful()) {
-                    if (idx != 2||token[0]!=null) successRead((DocumentSnapshot) task.getResult(), idx, map);
-                    else successRead((QuerySnapshot) task.getResult(), map);
+                    if (idx != 2||token!=null) successRead((DocumentSnapshot) task.getResult(), idx, map);
+                    else successRead((QuerySnapshot) task.getResult(), map); //챌린지 조회
                 } else {
                     Log.d("TAG3", "get failed with ", task.getException());
                 }
@@ -118,7 +121,7 @@ public class FBModule {
         if (querySnapshot.isEmpty()) {
             f.moduleUpdated(null);
         } else {
-           f.moduleUpdated(querySnapshot.getDocuments().toArray());
+           f.moduleUpdated(querySnapshot.getDocuments());
         }
     }
 

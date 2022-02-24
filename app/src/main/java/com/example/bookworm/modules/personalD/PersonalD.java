@@ -15,6 +15,7 @@ public class PersonalD {
     public PersonalD(Context context){
         this.context=context;
     }
+
     //데이터 저장을 위해서
     public void saveUserInfo(UserInfo userInfo){
         SharedPreferences pref = context.getSharedPreferences("user", MODE_PRIVATE);
@@ -24,6 +25,7 @@ public class PersonalD {
         editor.putString("key_user", userinfo);
         editor.commit();
     }
+
     //데이터 출력을 위해서
     public UserInfo getUserInfo(){
         SharedPreferences pref = context.getSharedPreferences("user", MODE_PRIVATE);
