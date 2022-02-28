@@ -60,7 +60,7 @@
             android:layout_width="80dp"
             android:layout_height="118dp"
             android:layout_marginEnd="10dp"
-            android:src="@drawable/bookimg" />
+            android:src="@drawable/bookimg_sample" />
 
         <FrameLayout
             android:layout_width="match_parent"

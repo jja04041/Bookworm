@@ -53,7 +53,7 @@
                     android:layout_height="150dp"
                     android:layout_gravity="center"
                     android:layout_margin="20dp"
-                    android:src="@drawable/bookimg" />
+                    android:src="@drawable/bookimg_sample" />
 
             </LinearLayout>
 
