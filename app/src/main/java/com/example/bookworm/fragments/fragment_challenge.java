@@ -14,17 +14,21 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.bookworm.Challenge.Challenge;
 import com.example.bookworm.Challenge.activity_createchallenge;
 import com.example.bookworm.Challenge.items.ChallengeAdapter;
 import com.example.bookworm.Challenge.items.OnChallengeItemClickListener;
 import com.example.bookworm.R;
+import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.personalD.PersonalD;
@@ -33,6 +37,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,11 +52,21 @@ public class fragment_challenge extends Fragment {
     private PersonalD personalD;
     private Button btn_create_challenge, btnSearch;
     private UserInfo userInfo;
-    private int page = 1, count = 0, check = 0;
+    private Boolean canLoad = true; //더 로딩이 가능한지 확인하는 변수
+    private int page = 1;
     private ArrayList<Challenge> challengeList;
     private final int LIMIT = fbModule.LIMIT;
     public boolean isLoading = false; //스크롤을 당겨서 추가로 로딩 중인지 여부를 확인하는 변수
     private DocumentSnapshot lastVisible;
+    ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    challengeList.clear();
+                    Map<String, String> map = new HashMap();
+                    fbModule.readData(2, map, null); //검색한 데이터를 조회
+                }
+            });
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,16 +78,19 @@ public class fragment_challenge extends Fragment {
         etSearch = view.findViewById(R.id.etSearch);
         btnSearch = view.findViewById(R.id.btnSearch);
         mRecyclerView = view.findViewById(R.id.mRecyclerView);
+        //fbmodule을 이용하여 자료를 가져옴
         fbModule = new FBModule(getActivity());//파이어베이스를 통해서 챌린지를 가져와야함.
-        personalD = new PersonalD(getContext()); //UserInfo 값을 가져옴
-        userInfo = personalD.getUserInfo(); //UserInfo값 가져오기
         Map<String, String> map = new HashMap();
         fbModule.readData(2, map, null); //검색한 데이터를 조회
+        //사용자 데이터 가져옴
+        personalD = new PersonalD(getContext()); //UserInfo 값을 가져옴
+        userInfo = personalD.getUserInfo(); //UserInfo값 가져오기
+
         btn_create_challenge.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), activity_createchallenge.class);
-                startActivity(intent);
+                startActivityResult.launch(intent);
                 btn_create_challenge.clearFocus();
             }
         });
@@ -85,7 +103,9 @@ public class fragment_challenge extends Fragment {
                 btnSearch.clearFocus();
                 Map<String, String> map = new HashMap();
                 map.put("like", etSearch.getText().toString());
-                fbModule.readData(2, map); //검색한 데이터를 조회
+                challengeList.clear();
+                page=1;
+                fbModule.readData(2, map, null); //검색한 데이터를 조회
             }
         });
 
@@ -94,6 +114,8 @@ public class fragment_challenge extends Fragment {
 
     //리사이클러뷰 초기화
     private void initRecyclerView() {
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setAdapter(challengeAdapter);
         initScrollListener(); //무한스크롤
     }
@@ -118,11 +140,9 @@ public class fragment_challenge extends Fragment {
                     try {
                         if (layoutManager != null && lastVisibleItemPosition == challengeAdapter.getItemCount() - 1) {
                             challengeAdapter.deleteLoading();
-                            if ((page * LIMIT) < count) {
-                                Map map = new HashMap();
-                                map.put("lastVisible", lastVisible);
-                                fbModule.readData(2, map);
-                            }
+                            Map map = new HashMap();
+                            map.put("lastVisible", lastVisible);
+                            fbModule.readData(2, map, null);
                             isLoading = true;
                         }
                     } catch (NullPointerException e) {
@@ -139,47 +159,54 @@ public class fragment_challenge extends Fragment {
     public void moduleUpdated(List<DocumentSnapshot> a) {
 
         //페이지 관리를 어떻게 하여야 할지..
-
-        if (page == 1) {
-            check = count;
-            challengeList = new ArrayList<>(); //book을 담는 리스트 생성
+        if (page == 1 ) {
+            isLoading = false;
+            challengeList = new ArrayList<>(); //챌린지를 담는 리스트 생성
         }
-        if (a == null) {
+        if (a == null && lastVisible == null) {
             //검색결과가 없을 경우엔 리사이클러 뷰를 비움.
-            challengeList = new ArrayList<>();
+            isLoading = true;
+            page = 1;
+            canLoad = true;
+            lastVisible = null;
             challengeAdapter = new ChallengeAdapter(challengeList, getActivity());
             initRecyclerView();
             Toast.makeText(getContext(), "검색결과가 없습니다", Toast.LENGTH_SHORT).show();
         } else {
-            for (DocumentSnapshot snapshot : a) {
-                Map data = snapshot.getData();
-                //등록 순서: 참가자 목록, 책 ID, 시작일자,마감일자, 챌린지명, 최대 수용가능 인원
-//                Challenge challenge = new Challenge((ArrayList<String>)data.get("CurrentParticipation"),
-//                  data.get("BookId").toString(),data.get("").toString());
-//                challengeList.add(challenge);
-                Log.d("data", data.toString());
-//                Log.d("data", data.get("MaxParticipation").getClass().getName());
+            try {
+                for (DocumentSnapshot snapshot : a) {
+                    Map data = snapshot.getData();
+                    Challenge challenge = new Challenge(data);
+                    challengeList.add(challenge);
+                }
+                lastVisible = a.get(a.size() - 1); //가져온 값의 마지막 snapshot부터 이어서 가져올 수 있도록 하기 위함.
+                if (a.size()<LIMIT){
+                    canLoad = false;
+                }
+            } catch (NullPointerException e) {
+                canLoad = false;
             }
-            lastVisible = a.get(a.size() - 1); //가져온 값의 마지막 snapshot부터 이어서 가져올 수 있도록 하기 위함.
-            if (check > LIMIT && page < LIMIT) {
-//                challengeList.add(new Challenge(null, ""));
-                this.check = count - challengeList.size();
-            } else isLoading = true;
-
-            if (page != 1 && page < LIMIT) {
-                isLoading = false;
+            if (canLoad ==false) {
+                isLoading = true;
                 challengeAdapter.notifyItemRangeChanged(0, challengeList.size() - 1, null);
             } else {
-                challengeAdapter = new ChallengeAdapter(challengeList, getActivity());
-                challengeAdapter.setListener(new OnChallengeItemClickListener() {
-                    @Override
-                    public void onItemClick(ChallengeAdapter.ItemViewHolder holder, View view, int position) {
+                challengeList.add(new Challenge(null));
+                if (page > 1) {
+                    isLoading = false;
+                    challengeAdapter.notifyItemRangeChanged(0, challengeList.size() - 1, null);
+                } else {
+                    challengeAdapter = new ChallengeAdapter(challengeList, getContext());
+                    challengeAdapter.setListener(new OnChallengeItemClickListener() {
+                        @Override
+                        public void onItemClick(ChallengeAdapter.ItemViewHolder holder, View view, int position) {
 
-                    }
-                });
-                initRecyclerView(); //initialize RecyclerView
+                        }
+                    });
+                    initRecyclerView(); //리사이클러뷰에 띄워주기
+                }
+                page++;
             }
-            this.page++;
+
         }
 
     }
