@@ -210,6 +210,7 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
 
         if (page == 1) {
             check = count;
+            Log.d("cje",String.valueOf(check));
             bookList = new ArrayList<>(); //book을 담는 리스트 생성
         }
         if (count == 0) {

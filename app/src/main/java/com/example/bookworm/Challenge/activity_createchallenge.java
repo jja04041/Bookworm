@@ -210,7 +210,7 @@ public class activity_createchallenge extends AppCompatActivity {
     private void createChallenge() {
         //파이어베이스에 올릴것들
         strBookname = tv_bookname.getText().toString();
-        strChallengeName = et_challenge_name.getText().toString();
+        strChallengeName = et_challenge_name.getText().toString().trim();
         strChallengeInfo = et_challenge_info.getText().toString();
         strChallengeStartDate = tv_challenge_start.getText().toString();
         strChallengeEndDate = tv_challenge_end.getText().toString();
@@ -244,9 +244,10 @@ public class activity_createchallenge extends AppCompatActivity {
             map.put("outDated", outDated); //기간 종료 확인 값
 
             //파이어베이스에 해당 챌린지명이 등록돼있지 않다면
+
             fbModule.readData(2,map,strChallengeName);
-            finish();
-            Toast.makeText(this, "챌린지 등록 성공", Toast.LENGTH_SHORT).show();
+
+
         }
     }
 
