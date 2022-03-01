@@ -1,4 +1,4 @@
-package com.example.bookworm.Challenge;
+package com.example.bookworm.Challenge.subActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import com.example.bookworm.R;
 
-public class activity_info_challenge extends AppCompatActivity {
+public class subactivity_challenge_challengeinfo extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_info_challenge);
+        setContentView(R.layout.subactivity_challenge_challengeinfo);
     }
 }

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +21,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.bookworm.Challenge.Challenge;
-import com.example.bookworm.Challenge.activity_createchallenge;
+import com.example.bookworm.Challenge.subActivity.subactivity_challenge_createchallenge;
 import com.example.bookworm.Challenge.items.ChallengeAdapter;
 import com.example.bookworm.Challenge.items.OnChallengeItemClickListener;
 import com.example.bookworm.R;
-import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.personalD.PersonalD;
@@ -37,7 +34,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,7 +85,7 @@ public class fragment_challenge extends Fragment {
         btn_create_challenge.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), activity_createchallenge.class);
+                Intent intent = new Intent(getActivity(), subactivity_challenge_createchallenge.class);
                 startActivityResult.launch(intent);
                 btn_create_challenge.clearFocus();
             }

@@ -2,7 +2,6 @@ package com.example.bookworm.Search.subActivity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,7 +22,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.bookworm.Challenge.activity_createchallenge;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.items.BookAdapter;
