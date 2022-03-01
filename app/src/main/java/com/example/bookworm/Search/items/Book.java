@@ -18,7 +18,7 @@ public class Book implements Serializable {
         this.content = strings[1];
         this.publisher = strings[2];
         this.author = strings[3];
-        this.img_url = strings[4];
+        this.img_url = strings[4].replace("coversum","cover500");
         if (strings.length == 6) this.itemId = strings[5];
 
     }

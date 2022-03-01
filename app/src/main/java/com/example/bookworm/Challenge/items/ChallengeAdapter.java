@@ -140,8 +140,8 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         //아이템을 세팅하는 메소드
         public void setItem(Challenge item) {
             tvCTitle.setText(item.getTitle());
-            tvChallengeStartDate.setText(item.getStartDate());
-            tvChallengeEndDate.setText(item.getEndDate());
+            tvChallengeStartDate.setText(item.getStartDate().substring(5));
+            tvChallengeEndDate.setText(item.getEndDate().substring(5));
             tvPerson.setText(String.valueOf(item.getCurrentPart().size()));
             tvBookTitle.setText(item.getBookTitle());
             Glide.with(itemView).load(item.getBookThumb()).into(ivThumb); //책 썸네일 설정

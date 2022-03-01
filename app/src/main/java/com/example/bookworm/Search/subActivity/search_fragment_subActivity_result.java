@@ -77,7 +77,7 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
     }
 
     public void putItem(JSONObject json) throws JSONException {
-        Glide.with(this).load(json.getString("cover")).into(iv_selectedItem);
+        Glide.with(this).load(json.getString("cover").replace("coversum","cover500")).into(iv_selectedItem);
         for (int i = 0; i < textViewCount; i++) {
             String text = getContent[i];
             if (text.equals("link")) {
