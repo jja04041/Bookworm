@@ -1,4 +1,4 @@
-package com.example.bookworm.Challenge;
+package com.example.bookworm.Challenge.items;
 
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.modules.FBModule;

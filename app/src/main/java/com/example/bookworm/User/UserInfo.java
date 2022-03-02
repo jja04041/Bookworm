@@ -12,6 +12,7 @@ import com.kakao.usermgmt.response.model.Profile;
 import com.kakao.usermgmt.response.model.UserAccount;
 
 import java.io.Serializable;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.Vector;
 

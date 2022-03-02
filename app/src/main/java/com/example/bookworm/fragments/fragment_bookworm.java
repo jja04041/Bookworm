@@ -39,8 +39,7 @@ public class fragment_bookworm extends Fragment {
         PersonalD personalD = new PersonalD(getContext());
         userinfo = personalD.getUserInfo();
 
-        set_wormtype(userinfo);
-        setBookworm(userinfo);
+
 
         // 유저 책볼레 벡터를 이미지 슬라이더에 넣을 String[]에 넣는다.
         images = new String[userinfo.getWormimgvec().size()];
@@ -69,7 +68,11 @@ public class fragment_bookworm extends Fragment {
         return Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + resId).toString();
     }
 
-
+    public void onResume() {
+        super.onResume();
+        set_wormtype(userinfo);
+        setBookworm(userinfo);
+    }
     // 이미지 넘길때 밑에 페이지로 동그란 원 나오는거
     private void setupIndicators(int count) {
         ImageView[] indicators = new ImageView[count];

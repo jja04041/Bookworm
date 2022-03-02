@@ -82,6 +82,7 @@ public class FBModule {
             query = query.limit(LIMIT);
             task = query.get();
         }
+
         //결과 확인
         task.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
