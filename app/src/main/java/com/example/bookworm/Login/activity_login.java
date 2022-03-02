@@ -3,7 +3,6 @@ package com.example.bookworm.Login;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +22,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.gson.Gson;
 import com.kakao.auth.AuthType;
 import com.kakao.auth.Session;
 
@@ -149,6 +147,8 @@ public class activity_login extends Activity {
             map.put("platform", UserInfo.getPlatform());
             map.put("email", UserInfo.getEmail());
             map.put("profileURL", UserInfo.getProfileimg());
+
+            UserInfo.Initbookworm();
             //파이어베이스에 해당 계정이 등록되있지 않다면
             fbModule.readData(0, map,idtoken);
         } else {
@@ -162,6 +162,9 @@ public class activity_login extends Activity {
         Intent signInIntent = gsi.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
+
+
+
 
 }
 

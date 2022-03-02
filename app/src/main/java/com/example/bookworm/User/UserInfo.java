@@ -35,11 +35,13 @@ public class UserInfo implements Serializable {
 
 
     private enum_wormtype wormtype = enum_wormtype.디폴트;
+
+
     int enum_size = enum_wormtype.values().length;
 
 
 
-    // wormtype을 월별로 저장할 책볼레타입 리스트
+    // wormtype을 년별로 저장할 책볼레타입 리스트
     private Vector<Integer> wormvec = new Vector<Integer>();
 
     // 이미지 슬라이더의 함수에 사용할 책볼레 이미지 경로 벡터
@@ -63,12 +65,7 @@ public class UserInfo implements Serializable {
         this.email = kakaoAccount.getEmail();
         this.platform = "Kakao";
 
-        // 가입년도
-        this.register_year = today.get(today.YEAR);
-        this.wormtype = enum_wormtype.디폴트;
-        this.wormvec.add(wormtype.value());
-        // 이미지 슬라이더 함수를 사용하기 위해 int 경로인 drawble을 string으로 변환해준다
-        this.wormimgvec.add(Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + R.drawable.ex_default).toString());
+
     }
 
     public void add(GoogleSignInAccount account) {
@@ -82,13 +79,16 @@ public class UserInfo implements Serializable {
         this.email=account.getEmail();
         this.platform="Google";
 
+    }
+
+    public void Initbookworm()
+    {
         // 가입년도
         this.register_year = today.get(today.YEAR);
         this.wormtype = enum_wormtype.디폴트;
         this.wormvec.add(wormtype.value());
         // 이미지 슬라이더 함수를 사용하기 위해 int 경로인 drawble을 string으로 변환해준다
         this.wormimgvec.add(Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + R.drawable.ex_default).toString());
-
     }
 
     public void add(DocumentSnapshot document) {
@@ -125,6 +125,8 @@ public class UserInfo implements Serializable {
     public int[] getGenre() {
         return genre;
     }
+
+    public void setGenre(int idx) { this.genre[idx]++; } // 로컬에서 ++해주는게 아니라 서버에 업데이트 해야한다
 
     public Vector<Integer> getWormvec() {  return wormvec; }
 
