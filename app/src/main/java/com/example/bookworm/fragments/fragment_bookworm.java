@@ -24,7 +24,7 @@ public class fragment_bookworm extends Fragment {
 
     private ViewPager2 sliderViewPager;
     private LinearLayout layoutIndicator;
-    private String[] images;
+
     private UserInfo userinfo;
 
 
@@ -39,12 +39,21 @@ public class fragment_bookworm extends Fragment {
         PersonalD personalD = new PersonalD(getContext());
         userinfo = personalD.getUserInfo();
 
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        View view = getView();
+        String[] images;
+
         set_wormtype(userinfo);
         setBookworm(userinfo);
 
-        // 유저 책볼레 벡터를 이미지 슬라이더에 넣을 String[]에 넣는다.
-        images = new String[userinfo.getWormimgvec().size()];
-        userinfo.getWormimgvec().copyInto(images);
+        images = userinfo.getWormimgvec().toArray(new String[userinfo.getWormimgvec().size()]);
+        //userinfo.getWormimgvec().copyInto(images);
 
         sliderViewPager = view.findViewById(R.id.sliderViewPager);
         layoutIndicator = view.findViewById(R.id.layoutIndicators);
@@ -61,8 +70,11 @@ public class fragment_bookworm extends Fragment {
         });
 
         setupIndicators(images.length);
+    }
 
-        return view;
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
     private String getURLForResource(int resId) {
@@ -112,7 +124,7 @@ public class fragment_bookworm extends Fragment {
         GregorianCalendar today = new GregorianCalendar();
 
         int index = today.get(today.YEAR) % userinfo.getRegister_year();
-        int path = R.drawable.ex_default;
+        int path = userinfo.getWormtype().value();
 
         // 현재년도 % 가입년도 연산으로 현재의 책볼레타입으로 채움
         userinfo.getWormvec().set(index, userinfo.getWormtype().value());
@@ -135,9 +147,12 @@ public class fragment_bookworm extends Fragment {
                 break;
         }
 
-        userinfo.getWormimgvec().set(index, Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + path).toString());
+        userinfo.getWormimgvec().set(index, getURLForResource(path));
     }
 
+
+    // userinfo의 genre 배열의 어떤 인덱스(장르)가 가장 큰 값을 가지고 있는지 찾은 후
+    // 그 인덱스를 반환
     private int favorgenre(int[] genre) {
         int max = 0;
 
@@ -148,6 +163,8 @@ public class fragment_bookworm extends Fragment {
         return max;
     }
 
+
+    //
     private void set_wormtype(UserInfo userinfo) {
         switch (favorgenre(userinfo.getGenre()))
         {
