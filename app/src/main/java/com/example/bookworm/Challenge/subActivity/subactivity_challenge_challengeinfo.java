@@ -46,5 +46,7 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
         Intent intent = getIntent();
         challenge = (Challenge)intent.getSerializableExtra("challengeInfo");
 
+        tv_bookname.setText(challenge.getBookTitle());
+
     }
 }
