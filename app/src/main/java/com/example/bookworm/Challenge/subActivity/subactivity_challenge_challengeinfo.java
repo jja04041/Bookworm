@@ -18,7 +18,7 @@ import com.example.bookworm.modules.FBModule;
 
 public class subactivity_challenge_challengeinfo extends AppCompatActivity {
 
-    Button  btn_back, btn_join;
+    Button btn_back, btn_join;
     TextView tv_bookname, tv_challenge_end, tv_Dday, tv_challenge_current, tv_challenge_max, tv_end_date, tv_creator, tv_current_participants;
     FrameLayout board;
     ImageView Thumbnail;
@@ -44,7 +44,7 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
         Thumbnail = findViewById(R.id.ivThumbnail); // 썸네일
 
         Intent intent = getIntent();
-        challenge = (Challenge)intent.getSerializableExtra("challengeInfo");
+        challenge = (Challenge) intent.getSerializableExtra("challengeInfo");
 
         tv_bookname.setText(challenge.getBookTitle());
 
