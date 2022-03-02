@@ -3,6 +3,7 @@ package com.example.bookworm.Challenge;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.modules.FBModule;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
@@ -12,7 +13,7 @@ import java.util.concurrent.Future;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 
-public class Challenge {
+public class Challenge implements Serializable {
     private String bookId; //챌린지에서 사용하는 도서의 Id값
     private String bookThumb; //책 썸네일
     private String bookTitle; //책 이름

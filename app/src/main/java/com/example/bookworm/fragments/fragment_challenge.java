@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookworm.Challenge.Challenge;
+import com.example.bookworm.Challenge.subActivity.subactivity_challenge_challengeinfo;
 import com.example.bookworm.Challenge.subActivity.subactivity_challenge_createchallenge;
 import com.example.bookworm.Challenge.items.ChallengeAdapter;
 import com.example.bookworm.Challenge.items.OnChallengeItemClickListener;
@@ -194,8 +196,9 @@ public class fragment_challenge extends Fragment {
                     challengeAdapter = new ChallengeAdapter(challengeList, getContext());
                     challengeAdapter.setListener(new OnChallengeItemClickListener() {
                         @Override
-                        public void onItemClick(ChallengeAdapter.ItemViewHolder holder, View view, int position) {
-
+                        public void onItemClick(ChallengeAdapter.ItemViewHolder holder, View view, int position) { //아이템 클릭시 챌린지 정보로 넘어감
+                            Intent intent = new Intent(getActivity(), subactivity_challenge_challengeinfo.class);
+                            intent.putExtra("challengeInfo", challengeList.get(position));
                         }
                     });
                     initRecyclerView(); //리사이클러뷰에 띄워주기
