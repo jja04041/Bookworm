@@ -12,10 +12,13 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.bookworm.Bw.enum_wormtype;
 import com.example.bookworm.ImageSliderAdapter;
 import com.example.bookworm.R;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.modules.personalD.PersonalD;
+
+import java.util.GregorianCalendar;
 
 public class fragment_bookworm extends Fragment {
 
@@ -36,6 +39,8 @@ public class fragment_bookworm extends Fragment {
         PersonalD personalD = new PersonalD(getContext());
         userinfo = personalD.getUserInfo();
 
+        set_wormtype(userinfo);
+        setBookworm(userinfo);
 
         // 유저 책볼레 벡터를 이미지 슬라이더에 넣을 String[]에 넣는다.
         images = new String[userinfo.getWormimgvec().size()];
@@ -59,9 +64,13 @@ public class fragment_bookworm extends Fragment {
 
         return view;
     }
+
     private String getURLForResource(int resId) {
         return Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + resId).toString();
     }
+
+
+    // 이미지 넘길때 밑에 페이지로 동그란 원 나오는거
     private void setupIndicators(int count) {
         ImageView[] indicators = new ImageView[count];
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -98,9 +107,66 @@ public class fragment_bookworm extends Fragment {
     }
 
 
-    private void setImage()
-    {
-        
+    private void setBookworm(UserInfo userinfo) {
+        // 현재시간 얻고
+        GregorianCalendar today = new GregorianCalendar();
+
+        int index = today.get(today.YEAR) % userinfo.getRegister_year();
+        int path = R.drawable.ex_default;
+
+        // 현재년도 % 가입년도 연산으로 현재의 책볼레타입으로 채움
+        userinfo.getWormvec().set(index, userinfo.getWormtype().value());
+
+        switch (userinfo.getWormvec().get(index))
+        {
+            case 0:
+                path = R.drawable.ex_default;
+                break;
+            case 1:
+                path = R.drawable.ex_horror;
+                break;
+            case 2:
+                path = R.drawable.ex_detective;
+                break;
+            case 3:
+                path = R.drawable.ex_romance;
+                break;
+            default:
+                break;
+        }
+
+        userinfo.getWormimgvec().set(index, Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + path).toString());
     }
+
+    private int favorgenre(int[] genre) {
+        int max = 0;
+
+        for(int i=1; i<genre.length; ++i)
+            if(genre[max] < genre[i])
+                max = i;
+
+        return max;
+    }
+
+    private void set_wormtype(UserInfo userinfo) {
+        switch (favorgenre(userinfo.getGenre()))
+        {
+            case 0:
+                userinfo.setWormtype(enum_wormtype.디폴트);
+                break;
+            case 1:
+                userinfo.setWormtype(enum_wormtype.공포);
+                break;
+            case 2:
+                userinfo.setWormtype(enum_wormtype.추리);
+                break;
+            case 3:
+                userinfo.setWormtype(enum_wormtype.로맨스);
+                break;
+            default:
+                break;
+        }
+    }
+
 
 }
