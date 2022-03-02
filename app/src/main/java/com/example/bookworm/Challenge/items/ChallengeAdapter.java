@@ -17,8 +17,11 @@ import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.items.OnBookItemClickListener;
 import com.example.bookworm.Search.items.RecomBookAdapter;
+import com.example.bookworm.modules.Module;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnChallengeItemClickListener {
     ArrayList<Challenge> ChallengeList;
@@ -93,7 +96,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
     public int getItemViewType(int pos) {
-        if (ChallengeList.get(pos).getTitle().equals("") == false) return 0;
+        if (ChallengeList.get(pos).getTitle() != null) return 0;
         else return 1;
     }
 
@@ -104,19 +107,19 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     //뷰홀더 클래스 부분
     public class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle, tvAuthor, tvPublisher, tvDescription;
+        TextView tvBookTitle, tvCTitle, tvChallengeStartDate, tvChallengeEndDate,tvPerson;
         ImageView ivThumb;
 
         //생성자를 만든다.
         public ItemViewHolder(@NonNull View itemView, final OnChallengeItemClickListener listener) {
             super(itemView);
             //findViewById를 통해 View와 연결
+            tvBookTitle = itemView.findViewById(R.id.tvBookTitle);
+            tvCTitle = itemView.findViewById(R.id.tvCtitle);
             ivThumb = itemView.findViewById(R.id.ivThumb);
-            tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvAuthor = itemView.findViewById(R.id.tvAuthor);
-            tvPublisher = itemView.findViewById(R.id.tvPublisher);
-            tvDescription = itemView.findViewById(R.id.tvDescription);
-
+            tvChallengeStartDate = itemView.findViewById(R.id.tvChallengeStartDate);
+            tvChallengeEndDate = itemView.findViewById(R.id.tvChallengeEndDateDate);
+            tvPerson=itemView.findViewById(R.id.tvPerson);
             //아이템 선택 시 리스너
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -136,6 +139,13 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
         //아이템을 세팅하는 메소드
         public void setItem(Challenge item) {
+            tvCTitle.setText(item.getTitle());
+            tvChallengeStartDate.setText(item.getStartDate().substring(5));
+            tvChallengeEndDate.setText(item.getEndDate().substring(5));
+            tvPerson.setText(String.valueOf(item.getCurrentPart().size()));
+            tvBookTitle.setText(item.getBookTitle());
+            Glide.with(itemView).load(item.getBookThumb()).into(ivThumb); //책 썸네일 설정
+
         }
     }
 }

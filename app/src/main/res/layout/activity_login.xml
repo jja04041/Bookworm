@@ -4,46 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Login.activity_login"
     android:orientation="vertical"
-    >
+    tools:context=".Login.activity_login">
 
     <LinearLayout
-        android:gravity="center"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_kakao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="kakao 로그인"
-            android:textStyle="bold"
-            />
-        <ImageButton
-            android:id="@+id/btn_login_kakao"
-            android:layout_marginTop="30dp"
-           android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/kakao_login_medium_wide"
-            />
-        <TextView
-            android:id="@+id/tv_google"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Google 로그인"
-            android:textStyle="bold"
-            />
-        <ImageButton
-            android:id="@+id/btn_login_google"
-            android:layout_marginTop="30dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/google_login_medium"
-            />
+            android:layout_marginBottom="20dp"
+            android:text="소셜 로그인"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="250dp"
+            android:layout_height="150dp"
+            android:background="@drawable/loginbutton_design"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/btn_login_kakao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/kakao_login_medium_narrow" />
+
+            <ImageButton
+                android:id="@+id/btn_login_google"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/google_login_medium" />
+
+        </LinearLayout>
+
 
     </LinearLayout>
 

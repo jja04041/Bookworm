@@ -1,4 +1,4 @@
-package com.example.bookworm.Challenge;
+package com.example.bookworm.Challenge.subActivity;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -45,7 +45,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class activity_createchallenge extends AppCompatActivity {
+public class subactivity_challenge_createchallenge extends AppCompatActivity {
     UserInfo userInfo;
     Button btn_search, btn_dupli, btn_back;
     TextView tv_bookname, tv_challenge_start, tv_challenge_end;
@@ -54,8 +54,6 @@ public class activity_createchallenge extends AppCompatActivity {
     ImageView Thumbnail;
     String strBookname, strChallengeName, strChallengeInfo, strChallengeStartDate, strChallengeEndDate, strCurrentParticipation, strMaxParticipation, strChallengeDate;
     Book selected_book; //선택한 책 객체
-    Calendar Start_calendar;
-    Calendar End_calendar;
     private FBModule fbModule;
     Context mContext;
 
@@ -92,27 +90,8 @@ public class activity_createchallenge extends AppCompatActivity {
         mContext = this;
         fbModule = new FBModule(mContext);
 
-        userInfo=new PersonalD(mContext).getUserInfo(); //저장된 UserInfo값을 가져온다.
+        userInfo = new PersonalD(mContext).getUserInfo(); //저장된 UserInfo값을 가져온다.
 
-//        DatePickerDialog.OnDateSetListener StartDatePicker = new DatePickerDialog.OnDateSetListener() {
-//            @Override
-//            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//                Start_calendar.set(Calendar.YEAR, year);
-//                Start_calendar.set(Calendar.MONTH, month);
-//                Start_calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-//                updateLabel(tv_selectdate_start, Start_calendar);
-//            }
-//        };
-//
-//        DatePickerDialog.OnDateSetListener EndDatePicker = new DatePickerDialog.OnDateSetListener() {
-//            @Override
-//            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//                End_calendar.set(Calendar.YEAR, year);
-//                End_calendar.set(Calendar.MONTH, month);
-//                End_calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-//                updateLabel(tv_selectdate_end, End_calendar);
-//            }
-//        };
 
         //챌린지 시작일에 오늘 날짜가 나오게 함
         Calendar cal = Calendar.getInstance();
@@ -138,7 +117,12 @@ public class activity_createchallenge extends AppCompatActivity {
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(new Date());
                     DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                    cal.add(Calendar.DATE, Integer.parseInt(addDate));
+                    if (Integer.parseInt(addDate) == 0) { //챌린지 기간을 0일로 설정하려 했을 때
+                        Toast.makeText(getApplicationContext(), "챌린지 기간은 최소 1일 입니다.", Toast.LENGTH_SHORT).show();
+                        et_challenge_date.setText(null); // 챌린지 기간 항목 비우기
+                    } else {
+                        cal.add(Calendar.DATE, (Integer.parseInt(addDate) - 1));
+                    }
                     tv_challenge_end.setText(df.format(cal.getTime()));
                 } else { //EditText가 공백이면 종료일이라고 출력
                     tv_challenge_end.setText("종료일");
@@ -164,12 +148,6 @@ public class activity_createchallenge extends AppCompatActivity {
                 btn_search.clearFocus();
             }
         });
-//        tv_selectdate_start.setOnClickListener(new Button.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                new DatePickerDialog(activity_createchallenge.this, StartDatePicker, Start_calendar.get(Calendar.YEAR), Start_calendar.get(Calendar.MONTH), Start_calendar.get(Calendar.DAY_OF_MONTH)).show();
-//            }
-//        });
 
         //챌린지 시작 버튼
         btn_start_challenge.setOnClickListener(new View.OnClickListener() {
@@ -210,7 +188,7 @@ public class activity_createchallenge extends AppCompatActivity {
     private void createChallenge() {
         //파이어베이스에 올릴것들
         strBookname = tv_bookname.getText().toString();
-        strChallengeName = et_challenge_name.getText().toString();
+        strChallengeName = et_challenge_name.getText().toString().trim();
         strChallengeInfo = et_challenge_info.getText().toString();
         strChallengeStartDate = tv_challenge_start.getText().toString();
         strChallengeEndDate = tv_challenge_end.getText().toString();
@@ -219,9 +197,9 @@ public class activity_createchallenge extends AppCompatActivity {
         strChallengeDate = et_challenge_date.getText().toString();
 
         //입력 안한 항목 있는지 찾기
-        if(strBookname.equals("")||strChallengeName.equals("")||strChallengeInfo.equals("")||strMaxParticipation.equals("")||strChallengeDate.equals("")){
+        if (strBookname.equals("") || strChallengeName.equals("") || strChallengeInfo.equals("") || strMaxParticipation.equals("") || strChallengeDate.equals("")) {
             Toast.makeText(this, "입력하지 않은 항목이 있습니다.", Toast.LENGTH_SHORT).show();
-        }else{//다 입력 했다면
+        } else {//다 입력 했다면
             HashMap<String, Object> map = new HashMap<>();
 
             String[] strCurrentParticipation = {userInfo.getToken()};
@@ -244,9 +222,10 @@ public class activity_createchallenge extends AppCompatActivity {
             map.put("outDated", outDated); //기간 종료 확인 값
 
             //파이어베이스에 해당 챌린지명이 등록돼있지 않다면
-            fbModule.readData(2,map,strChallengeName);
-            finish();
-            Toast.makeText(this, "챌린지 등록 성공", Toast.LENGTH_SHORT).show();
+
+            fbModule.readData(2, map, strChallengeName);
+
+
         }
     }
 

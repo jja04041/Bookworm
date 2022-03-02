@@ -52,12 +52,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_gravity="center_horizontal"
-                android:textSize="17dp"
-                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:text="닉네임"
                 android:textColor="#000000"
-                android:text="닉네임"/>
+                android:textSize="17dp"
+                android:textStyle="bold" />
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -67,12 +68,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="###"/>
+                    android:text="###" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="명이 팔로우함"/>
+                    android:text="명이 팔로우함" />
 
             </LinearLayout>
 
@@ -91,23 +93,14 @@
             android:textColor="@color/white"
             android:textSize="17dp" />
 
-        <!--  -->
         <ImageView
             android:layout_width="250dp"
             android:layout_height="60dp"
             android:layout_gravity="center_horizontal|bottom"
             android:layout_marginBottom="15dp"
             android:background="#33000000"
-            android:src="@drawable/appicon_bookworm"/>
-
+            android:src="@drawable/appicon_bookworm" />
 
     </FrameLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="↑책볼레 들어갈 곳 레이아웃 크기 좀 보려고 일단 배경색 설정해뒀음\n\n여기 아래부터 앨범이 들어갈 곳"
-        android:textAlignment="center"
-        android:layout_gravity="center"/>
 
 </LinearLayout>

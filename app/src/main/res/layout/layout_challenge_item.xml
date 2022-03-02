@@ -8,6 +8,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="180dp"
         android:layout_height="300dp"
+        android:layout_margin="12.5dp"
         card:cardCornerRadius="3dp">
 
         <LinearLayout
@@ -47,7 +48,7 @@
                         android:id="@+id/tvPerson"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="123"
+                        android:text="##"
                         android:textColor="#FFFFFF"
                         android:textSize="15dp" />
 
@@ -77,6 +78,7 @@
             </FrameLayout>
 
             <TextView
+                android:id="@+id/tvCtitle"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginVertical="2dp"
@@ -94,7 +96,7 @@
                 android:orientation="horizontal">
                 <!-- 2022-02-22 형식에서 년도 지우고 월만 표시할것 -->
                 <TextView
-                    android:id="@+id/tvChallengeEndDate"
+                    android:id="@+id/tvChallengeStartDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
@@ -108,7 +110,7 @@
                     android:text=" ~ " />
 
                 <TextView
-                    android:id="@+id/tvChallengeStartDate"
+                    android:id="@+id/tvChallengeEndDateDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
