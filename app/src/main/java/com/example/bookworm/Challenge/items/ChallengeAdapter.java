@@ -12,16 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.bookworm.Challenge.Challenge;
 import com.example.bookworm.R;
-import com.example.bookworm.Search.items.Book;
-import com.example.bookworm.Search.items.OnBookItemClickListener;
-import com.example.bookworm.Search.items.RecomBookAdapter;
-import com.example.bookworm.modules.Module;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnChallengeItemClickListener {
     ArrayList<Challenge> ChallengeList;
@@ -61,8 +54,6 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         } else if (holder instanceof LoadingViewHolder) {
             showLoadingView((LoadingViewHolder) holder, safePosition);
         }
-
-
     }
     @Override
     public int getItemCount() {
@@ -145,7 +136,6 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             tvPerson.setText(String.valueOf(item.getCurrentPart().size()));
             tvBookTitle.setText(item.getBookTitle());
             Glide.with(itemView).load(item.getBookThumb()).into(ivThumb); //책 썸네일 설정
-
         }
     }
 }
