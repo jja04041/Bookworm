@@ -39,7 +39,18 @@ public class fragment_bookworm extends Fragment {
         PersonalD personalD = new PersonalD(getContext());
         userinfo = personalD.getUserInfo();
 
+        return view;
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        View view = getView();
+        String[] images;
+
+        set_wormtype(userinfo);
+        setBookworm(userinfo);
 
         // 유저 책볼레 벡터를 이미지 슬라이더에 넣을 String[]에 넣는다.
         images = new String[userinfo.getWormimgvec().size()];
@@ -60,19 +71,18 @@ public class fragment_bookworm extends Fragment {
         });
 
         setupIndicators(images.length);
+    }
 
-        return view;
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
     private String getURLForResource(int resId) {
         return Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + resId).toString();
     }
 
-    public void onResume() {
-        super.onResume();
-        set_wormtype(userinfo);
-        setBookworm(userinfo);
-    }
+
     // 이미지 넘길때 밑에 페이지로 동그란 원 나오는거
     private void setupIndicators(int count) {
         ImageView[] indicators = new ImageView[count];
@@ -141,6 +151,9 @@ public class fragment_bookworm extends Fragment {
         userinfo.getWormimgvec().set(index, Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + path).toString());
     }
 
+
+    // userinfo의 genre 배열의 어떤 인덱스(장르)가 가장 큰 값을 가지고 있는지 찾은 후
+    // 그 인덱스를 반환
     private int favorgenre(int[] genre) {
         int max = 0;
 
