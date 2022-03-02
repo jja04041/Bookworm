@@ -13,8 +13,9 @@ import com.kakao.usermgmt.response.model.UserAccount;
 
 import java.io.Serializable;
 import java.util.GregorianCalendar;
-import java.util.LinkedList;
 import java.util.Vector;
+
+import io.reactivex.Observer;
 
 public class UserInfo implements Serializable {
 
@@ -66,11 +67,12 @@ public class UserInfo implements Serializable {
 
 
     }
+
     public void add(GoogleSignInAccount account) {
         try {
             Log.d("profile", account.getPhotoUrl().toString());
-            this.profileimg=account.getPhotoUrl().toString();
-        }catch (NullPointerException e){
+            this.profileimg = account.getPhotoUrl().toString();
+        } catch (NullPointerException e) {
             Log.d("profile", "Null");
         }
         this.username= account.getDisplayName();
@@ -133,7 +135,6 @@ public class UserInfo implements Serializable {
     public void setToken(String token) {
         this.token = token;
     }
-
     public String getToken(){
         return this.token;
     }

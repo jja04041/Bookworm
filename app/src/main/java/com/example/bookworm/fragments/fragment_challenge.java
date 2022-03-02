@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookworm.Challenge.items.Challenge;
+import com.example.bookworm.Challenge.subActivity.subactivity_challenge_challengeinfo;
 import com.example.bookworm.Challenge.subActivity.subactivity_challenge_createchallenge;
 import com.example.bookworm.Challenge.items.ChallengeAdapter;
 import com.example.bookworm.Challenge.items.OnChallengeItemClickListener;
@@ -212,7 +213,9 @@ public class fragment_challenge extends Fragment {
                         @Override
                         public void onItemClick(ChallengeAdapter.ItemViewHolder holder, View view, int position) {
                             //아이템 선택시 실행할 코드를 입력
-
+                            Intent intent = new Intent(getActivity(), subactivity_challenge_challengeinfo.class);
+                            intent.putExtra("challengeInfo", challengeList.get(position));
+                            startActivity(intent);
                         }
                     });
                     initRecyclerView(); //리사이클러뷰에 띄워주기
