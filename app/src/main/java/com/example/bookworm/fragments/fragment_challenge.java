@@ -5,13 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -62,7 +65,7 @@ public class fragment_challenge extends Fragment {
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == Activity.RESULT_OK) {
-                    challengeList.clear();
+                    initChallenge();
                     Map<String, String> map = new HashMap();
                     fbModule.readData(2, map, null); //검색한 데이터를 조회
                 }
@@ -97,23 +100,34 @@ public class fragment_challenge extends Fragment {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
-                etSearch.clearFocus();
-                btnSearch.clearFocus();
-                Map<String, String> map = new HashMap();
-                //입력한 데이터를 Map 객체 내의 "like"의 값으로 설정한다.
-                map.put("like", etSearch.getText().toString());
-                //새로운 데이터를 받기 위해 초기화 한다.
-                initChallenge();
-                //검색한 데이터를 조회
-                fbModule.readData(2, map, null);
+               setItems();
+            }
+        });
+        etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == EditorInfo.IME_ACTION_SEARCH) {
+                    setItems();
+                }
+                return false;
             }
         });
 
         return view;
     }
 
+    private void setItems(){
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
+        etSearch.clearFocus();
+        Map<String, String> map = new HashMap();
+        //입력한 데이터를 Map 객체 내의 "like"의 값으로 설정한다.
+        map.put("like", etSearch.getText().toString());
+        //새로운 데이터를 받기 위해 초기화 한다.
+        initChallenge();
+        //검색한 데이터를 조회
+        fbModule.readData(2, map, null);
+    }
     //리사이클러뷰 초기화
     private void initRecyclerView() {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
@@ -161,10 +175,6 @@ public class fragment_challenge extends Fragment {
         page = 1;
         canLoad = true;
         lastVisible = null;
-        if (challengeList != null) {
-            challengeList.clear();
-        } else challengeList = new ArrayList<>(); //리스트 초기화
-        challengeAdapter = new ChallengeAdapter(challengeList, getActivity());
         initRecyclerView();
     }
 
@@ -198,7 +208,14 @@ public class fragment_challenge extends Fragment {
             //만약 더이상 불러오지 못 할 경우
             if (canLoad == false) {
                 isLoading = true;
-                challengeAdapter.notifyDataSetChanged();
+                if (page>1) challengeAdapter.notifyDataSetChanged();
+                else {
+                    initAdapter();
+                    initRecyclerView(); //리사이클러뷰에 띄워주기
+                }
+
+                Log.d("challengeList", Arrays.toString(challengeList.toArray()));
+                Log.d("challengeListSize", String.valueOf(challengeList.size()));
 //                challengeAdapter.notifyItemRangeChanged(0, challengeList.size()-1, null);
             } else {
                 challengeList.add(new Challenge(null));
@@ -208,16 +225,7 @@ public class fragment_challenge extends Fragment {
                     isLoading = false;
                     challengeAdapter.notifyItemRangeChanged(0, challengeList.size() - 1, null);
                 } else {
-                    challengeAdapter = new ChallengeAdapter(challengeList, getContext());
-                    challengeAdapter.setListener(new OnChallengeItemClickListener() {
-                        @Override
-                        public void onItemClick(ChallengeAdapter.ItemViewHolder holder, View view, int position) {
-                            //아이템 선택시 실행할 코드를 입력
-                            Intent intent = new Intent(getActivity(), subactivity_challenge_challengeinfo.class);
-                            intent.putExtra("challengeInfo", challengeList.get(position));
-                            startActivity(intent);
-                        }
-                    });
+                    initAdapter();
                     initRecyclerView(); //리사이클러뷰에 띄워주기
                 }
                 page++;
@@ -225,5 +233,17 @@ public class fragment_challenge extends Fragment {
 
         }
 
+    }
+    private void initAdapter(){
+        challengeAdapter = new ChallengeAdapter(challengeList, getContext());
+        challengeAdapter.setListener(new OnChallengeItemClickListener() {
+            @Override
+            public void onItemClick(ChallengeAdapter.ItemViewHolder holder, View view, int position) {
+                //아이템 선택시 실행할 코드를 입력
+                Intent intent = new Intent(getActivity(), subactivity_challenge_challengeinfo.class);
+                intent.putExtra("challengeInfo", challengeList.get(position));
+                startActivity(intent);
+            }
+        });
     }
 }
