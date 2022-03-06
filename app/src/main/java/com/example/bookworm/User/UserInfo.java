@@ -15,7 +15,6 @@ import java.io.Serializable;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
-import io.reactivex.Observer;
 
 public class UserInfo implements Serializable {
 
@@ -24,22 +23,10 @@ public class UserInfo implements Serializable {
     private String email; // 로그인한 이메일
     private String platform;
     private String token;
-
     private GregorianCalendar today;
-
-
-
     private int register_year;
-
-
-
-
     private enum_wormtype wormtype = enum_wormtype.디폴트;
-
-
     int enum_size = enum_wormtype.values().length;
-
-
 
     // wormtype을 년별로 저장할 책볼레타입 리스트
     private Vector<Integer> wormvec = new Vector<Integer>();
@@ -47,12 +34,10 @@ public class UserInfo implements Serializable {
     // 이미지 슬라이더의 함수에 사용할 책볼레 이미지 경로 벡터
     private Vector<String> wormimgvec = new Vector<String>();
 
-
     // genre index의 1번 = enum_wormtype의 공포 2번은 추리 .... 이하 동문
     // 가장 최댓값을 가진 index를 벌레의 종류로 설정할 계획
     // 가장 최댓값의 index의 번호에 따라 최고 선호 장르를 설정합니다.
     private int [] genre = new int [enum_size];
-
     public UserInfo() {
 
         today = new GregorianCalendar();

@@ -24,7 +24,7 @@ public class fragment_bookworm extends Fragment {
 
     private ViewPager2 sliderViewPager;
     private LinearLayout layoutIndicator;
-
+    private String[] images;
     private UserInfo userinfo;
 
 
@@ -52,8 +52,9 @@ public class fragment_bookworm extends Fragment {
         set_wormtype(userinfo);
         setBookworm(userinfo);
 
-        images = userinfo.getWormimgvec().toArray(new String[userinfo.getWormimgvec().size()]);
-        //userinfo.getWormimgvec().copyInto(images);
+        // 유저 책볼레 벡터를 이미지 슬라이더에 넣을 String[]에 넣는다.
+        images = new String[userinfo.getWormimgvec().size()];
+        userinfo.getWormimgvec().copyInto(images);
 
         sliderViewPager = view.findViewById(R.id.sliderViewPager);
         layoutIndicator = view.findViewById(R.id.layoutIndicators);
@@ -124,7 +125,7 @@ public class fragment_bookworm extends Fragment {
         GregorianCalendar today = new GregorianCalendar();
 
         int index = today.get(today.YEAR) % userinfo.getRegister_year();
-        int path = userinfo.getWormtype().value();
+        int path = R.drawable.ex_default;
 
         // 현재년도 % 가입년도 연산으로 현재의 책볼레타입으로 채움
         userinfo.getWormvec().set(index, userinfo.getWormtype().value());
@@ -147,7 +148,7 @@ public class fragment_bookworm extends Fragment {
                 break;
         }
 
-        userinfo.getWormimgvec().set(index, getURLForResource(path));
+        userinfo.getWormimgvec().set(index, Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + path).toString());
     }
 
 
@@ -163,8 +164,6 @@ public class fragment_bookworm extends Fragment {
         return max;
     }
 
-
-    //
     private void set_wormtype(UserInfo userinfo) {
         switch (favorgenre(userinfo.getGenre()))
         {
