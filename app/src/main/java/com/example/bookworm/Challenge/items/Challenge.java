@@ -1,17 +1,8 @@
 package com.example.bookworm.Challenge.items;
 
-import com.example.bookworm.User.UserInfo;
-import com.example.bookworm.modules.FBModule;
-
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
-import io.reactivex.Observable;
-import io.reactivex.Observer;
 
 public class Challenge implements Serializable {
     private String bookId; //챌린지에서 사용하는 도서의 Id값
