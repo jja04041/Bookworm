@@ -4,16 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.DatePicker;
-import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.example.bookworm.MainActivity;
 import com.example.bookworm.ProfileSettingActivity;
-import com.example.bookworm.Search.subActivity.search_fragment_subActivity_main;
-import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.fragments.fragment_challenge;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -25,14 +21,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Map;
 
-import io.reactivex.Observable;
-import io.reactivex.disposables.CompositeDisposable;
 
 public class FBModule {
     String location[] = {"users", "feed", "challenge"}; //각 함수에서 전달받은 인덱스에 맞는 값을 뽑아냄.

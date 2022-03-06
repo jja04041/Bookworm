@@ -29,15 +29,22 @@ import java.util.HashMap;
 
 public class activity_login extends Activity {
 
-    private SessionCallback sessionCallback = new SessionCallback();
+    protected SessionCallback sessionCallback = new SessionCallback();
     private static final String TAG = "MainActivity";
     public static Context mContext;
     private FirebaseAuth mAuth;
     private FBModule fbModule;
+    protected GoogleSignInAccount gsa;
 
     public static GoogleSignInClient gsi;
 
     private int RC_SIGN_IN = 123;
+
+//    public activity_login(GoogleSignInAccount gsa)
+//    {
+//        gsa = GoogleSignIn.getLastSignedInAccount(activity_login.this);
+//
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +66,10 @@ public class activity_login extends Activity {
                 .build();
         gsi = GoogleSignIn.getClient(this, gso);
 
-        GoogleSignInAccount gsa = GoogleSignIn.getLastSignedInAccount(activity_login.this);
-        //이미 로그인한 상태라면, 자동으로 로그인을 시도한다.
+        gsa = GoogleSignIn.getLastSignedInAccount(activity_login.this);
+
+
+        // 구글 자동 로그인
         if (gsa != null) {
             signInGoogle();
         }
@@ -78,7 +87,7 @@ public class activity_login extends Activity {
         // 카카오
         if (Session.getCurrentSession().checkAndImplicitOpen()) {
             Log.d(TAG, "onClick: 로그인 세션살아있음");
-            // 카카오 로그인 시도 (창이 안뜬다.)
+            // 카카오 자동 로그인
             sessionCallback.requestMe();
         }
 
@@ -150,7 +159,7 @@ public class activity_login extends Activity {
 
             UserInfo.Initbookworm();
             //파이어베이스에 해당 계정이 등록되있지 않다면
-            fbModule.readData(0, map,idtoken);
+            fbModule.readData(0, map, idtoken);
         } else {
             Log.d("fucntion signup", "nono token ");
         }
@@ -158,12 +167,10 @@ public class activity_login extends Activity {
 
 
     // 구글 로그인 메소드
-    private void signInGoogle() {
+    protected void signInGoogle() {
         Intent signInIntent = gsi.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
-
-
 
 
 }

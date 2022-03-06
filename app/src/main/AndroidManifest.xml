@@ -56,10 +56,12 @@
             android:exported="false" /> <!-- 메인 화면 -->
         <activity
             android:name=".Login.activity_login"
-            android:exported="true"> <!-- 로그인 화면 -->
+            android:exported="false" /> <!-- 메인 화면 -->
+        <activity
+            android:name=".LoadingActivity"
+            android:exported="true"> <!-- 로딩 화면 -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

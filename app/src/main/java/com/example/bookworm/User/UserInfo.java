@@ -6,7 +6,6 @@ import android.util.Log;
 import com.example.bookworm.Bw.enum_wormtype;
 import com.example.bookworm.R;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.kakao.usermgmt.response.model.Profile;
 import com.kakao.usermgmt.response.model.UserAccount;
@@ -15,7 +14,7 @@ import java.io.Serializable;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
-import io.reactivex.Observer;
+// import io.reactivex.Observer;
 
 public class UserInfo implements Serializable {
 
