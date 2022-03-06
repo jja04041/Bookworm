@@ -16,6 +16,7 @@ public class Challenge implements Serializable {
     private String master; //방장명
     private String masterThumb;//방장의 프로필 썸네일
     private String masterToken; //방장의 토큰값
+    private String ChallengeDescription; //챌린지 설명
 
     public Challenge(Map data) {
         if (data!=null) {
@@ -30,6 +31,7 @@ public class Challenge implements Serializable {
             masterThumb=(String) data.get("Profileimg");
             masterToken = (String) data.get("masterToken");
             master=(String)data.get("Username");
+            ChallengeDescription=(String) data.get("challengeInfo");
         }
     }
 
@@ -75,5 +77,9 @@ public class Challenge implements Serializable {
 
     public String getMasterToken() {
         return masterToken;
+    }
+
+    public String getChallengeDescription() {
+        return ChallengeDescription;
     }
 }
