@@ -14,34 +14,38 @@
         android:gravity="center"
         android:orientation="vertical">
 
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/appicon_bookworm" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="소셜 로그인"
-            android:textSize="25dp"
-            android:textStyle="bold" />
+            android:fontFamily="@font/fontstyle"
+            android:text="책  볼  레 ?"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="35dp" />
 
-        <LinearLayout
-            android:layout_width="250dp"
-            android:layout_height="150dp"
-            android:background="@drawable/loginbutton_design"
-            android:gravity="center"
-            android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/btn_login_kakao"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/kakao_login_medium_narrow" />
+        <ImageButton
+            android:id="@+id/btn_login_kakao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:background="#ffffff"
+            android:src="@drawable/kakao_login_medium_narrow" />
 
-            <ImageButton
-                android:id="@+id/btn_login_google"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/google_login_medium" />
-
-        </LinearLayout>
+        <ImageButton
+            android:id="@+id/btn_login_google"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="#ffffff"
+            android:src="@drawable/google_login_medium" />
 
 
     </LinearLayout>

@@ -17,7 +17,7 @@
     <item
         android:id="@+id/tab_bookworm"
         android:enabled="true"
-        android:icon="@drawable/worm"
+        android:icon="@drawable/icon_bookworm"
         android:title="책볼레"
         app:showAsAction="ifRoom" />
     <item
