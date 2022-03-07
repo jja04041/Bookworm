@@ -4,15 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".LoadingActivity">
+    android:orientation="horizontal"
+    tools:context=".LoadingActivity"
+    android:background="#FFFFFF">
 
-    <TextView
+    <LinearLayout
+        android:layout_gravity="center"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="15pt"
-        android:text="로딩화면"
-        android:gravity="center"/>
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF">
 
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:textSize="15pt"
+            android:src="@drawable/appicon_bookworm"
+            android:gravity="center"/>
+
+    </LinearLayout>
 
 </LinearLayout>

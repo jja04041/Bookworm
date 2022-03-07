@@ -39,6 +39,16 @@ public class fragment_bookworm extends Fragment {
         PersonalD personalD = new PersonalD(getContext());
         userinfo = personalD.getUserInfo();
 
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        View view = getView();
+        String[] images;
+
         set_wormtype(userinfo);
         setBookworm(userinfo);
 
@@ -61,8 +71,11 @@ public class fragment_bookworm extends Fragment {
         });
 
         setupIndicators(images.length);
+    }
 
-        return view;
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
     private String getURLForResource(int resId) {
@@ -138,6 +151,9 @@ public class fragment_bookworm extends Fragment {
         userinfo.getWormimgvec().set(index, Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + path).toString());
     }
 
+
+    // userinfo의 genre 배열의 어떤 인덱스(장르)가 가장 큰 값을 가지고 있는지 찾은 후
+    // 그 인덱스를 반환
     private int favorgenre(int[] genre) {
         int max = 0;
 

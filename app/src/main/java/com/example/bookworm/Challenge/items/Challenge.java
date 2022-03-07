@@ -1,18 +1,10 @@
-package com.example.bookworm.Challenge;
+package com.example.bookworm.Challenge.items;
 
-import com.example.bookworm.User.UserInfo;
-import com.example.bookworm.modules.FBModule;
-
-import java.lang.reflect.Array;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-
-public class Challenge {
+public class Challenge implements Serializable {
     private String bookId; //챌린지에서 사용하는 도서의 Id값
     private String bookThumb; //책 썸네일
     private String bookTitle; //책 이름
@@ -24,6 +16,7 @@ public class Challenge {
     private String master; //방장명
     private String masterThumb;//방장의 프로필 썸네일
     private String masterToken; //방장의 토큰값
+    private String ChallengeDescription; //챌린지 설명
 
     public Challenge(Map data) {
         if (data!=null) {
@@ -38,6 +31,7 @@ public class Challenge {
             masterThumb=(String) data.get("Profileimg");
             masterToken = (String) data.get("masterToken");
             master=(String)data.get("Username");
+            ChallengeDescription=(String) data.get("challengeInfo");
         }
     }
 
@@ -83,5 +77,9 @@ public class Challenge {
 
     public String getMasterToken() {
         return masterToken;
+    }
+
+    public String getChallengeDescription() {
+        return ChallengeDescription;
     }
 }

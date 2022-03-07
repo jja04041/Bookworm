@@ -4,16 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.DatePicker;
-import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.example.bookworm.MainActivity;
 import com.example.bookworm.ProfileSettingActivity;
-import com.example.bookworm.Search.subActivity.search_fragment_subActivity_main;
-import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.fragments.fragment_challenge;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -25,14 +21,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Map;
 
-import io.reactivex.Observable;
-import io.reactivex.disposables.CompositeDisposable;
 
 public class FBModule {
     String location[] = {"users", "feed", "challenge"}; //각 함수에서 전달받은 인덱스에 맞는 값을 뽑아냄.
@@ -68,13 +58,14 @@ public class FBModule {
         if (idx != 2 || token != null) task = collectionReference.document(token).get();
         else {
             //챌린지인 경우 map으로 전달된 값은 쿼리에 넣는 값들이 됨.
-            //paging 기법과
+            //paging 기법 사용
             Query query = collectionReference;
             if (map.get("like") != null) {
                 String Keyword = map.get("like").toString();
                 Log.d("keyword",Keyword);
                 query = query.orderBy("strChallengeName").startAt(Keyword).endAt(Keyword + "\uf8ff"); //SQL의 Like문과 같음
             }
+            //
             if (map.get("lastVisible") != null) {
                 DocumentSnapshot snapshot = (DocumentSnapshot) map.get("lastVisible");
                 query = query.startAfter(snapshot);
@@ -82,6 +73,7 @@ public class FBModule {
             query = query.limit(LIMIT);
             task = query.get();
         }
+
         //결과 확인
         task.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -142,9 +134,9 @@ public class FBModule {
         fragment_challenge f = ((fragment_challenge) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("3"));
         if (querySnapshot.isEmpty()) {
             if(map.get("strChallengeName")!=null) Toast.makeText(context, "이미 존재하는 챌린지명 입니다", Toast.LENGTH_SHORT).show();
-            else f.moduleUpdated(null);
+            else f.moduleUpdated(null); //빈값을 반환하여, 찾는 값이 없음을 사용자에게 알림.
         } else {
-            f.moduleUpdated(querySnapshot.getDocuments());
+            f.moduleUpdated(querySnapshot.getDocuments()); //찾은 챌린지 목록을 반환함.
         }
     }
 
