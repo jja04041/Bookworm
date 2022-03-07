@@ -85,7 +85,7 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
 
     }
 
-    public String countdday(String EndDate) {
+    public String countdday(String EndDate) { //D-day 계산
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
