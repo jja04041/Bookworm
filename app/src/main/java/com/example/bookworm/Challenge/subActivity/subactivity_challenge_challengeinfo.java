@@ -110,8 +110,14 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
         //챌린지 상세 정보 화면에 들어갈때 현재참여인원 등등 설정
         fbModule.setParticipating(challenge.getTitle(), progressBar, tv_challenge_current, tv_current_participants);
 
-        //사용자가 이 챌린지에 참여중인지 여부를 판단해서 챌린지 참여 버튼을 활성/비활성 함.
-        fbModule.isParticipating(challenge.getTitle(), userInfo.getToken(), btn_join);
+        if(tv_Dday.getText()=="종료된 챌린지입니다."){
+            btn_join.setEnabled(false); // 종료된 챌린지는 참여 버튼 비활성화
+            btn_join.setText("이미 종료된 챌린지입니다.");
+        }else{
+            //사용자가 이 챌린지에 참여중인지 여부를 판단해서 챌린지 참여 버튼을 활성/비활성 함.
+            fbModule.isParticipating(challenge.getTitle(), userInfo.getToken(), btn_join);
+        }
+
 
         //챌린지 참여 버튼을 눌렀을 때
         btn_join.setOnClickListener(new View.OnClickListener() {
