@@ -231,7 +231,7 @@ public class fragment_challenge extends Fragment {
                 //아이템 선택시 실행할 코드를 입력
                 Intent intent = new Intent(getActivity(), subactivity_challenge_challengeinfo.class);
                 intent.putExtra("challengeInfo", challengeList.get(position));
-                startActivity(intent);
+                startActivityResult.launch(intent);
             }
         });
     }

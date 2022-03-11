@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.bookworm.MainActivity;
@@ -19,7 +20,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kakao.auth.AuthType;
@@ -62,6 +66,7 @@ public class activity_login extends Activity {
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.server_client_id))
                 .requestEmail()
                 .build();
         gsi = GoogleSignIn.getClient(this, gso);
@@ -116,24 +121,33 @@ public class activity_login extends Activity {
 
         // 카카오톡|스토리 간편로그인 실행 결과를 받아서 SDK로 전달
         if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
+
             return;
         }
         super.onActivityResult(requestCode, resultCode, data);
         //구글 로그인시도시
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
-                UserInfo userInfo = new UserInfo();
-                userInfo.add(account);
-                signUp(userInfo, account.getId());
-                move(userInfo); //회원정보를 메인 액티비티로 넘기고, 액티비티를 메인액티비티로 변경함.
-            } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
-                Log.w(TAG, "Google sign in failed", e);
-            }
+            task.addOnCompleteListener(new OnCompleteListener<GoogleSignInAccount>() {
+                @Override
+                public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
+                    GoogleSignInAccount account = task.getResult();
+                    Log.d("account", account.getIdToken());
+                    UserInfo userInfo = new UserInfo();
+                    userInfo.add(account);
+                    signUp(userInfo, account.getId());
+                    move(userInfo); //회원정보를 메인 액티비티로 넘기고, 액티비티를 메인액티비티로 변경함.
+                }
+            });
+//            try {
+//                // Google Sign In was successful, authenticate with Firebase
+//                GoogleSignInAccount account = task.getResult(ApiException.class);
+//                Log.d(TAG, "firebaseAuthWithGoogle:" + account.getServerAuthCode());
+//
+//            } catch (ApiException e) {
+//                // Google Sign In failed, update UI appropriately
+//                Log.w(TAG, "Google sign in failed", e);
+//            }
         }
     }
 
@@ -150,6 +164,7 @@ public class activity_login extends Activity {
     public void signUp(UserInfo UserInfo, String idtoken) {
         if (null != idtoken && null != UserInfo.getUsername()) {
             HashMap<String, String> map = new HashMap<>();
+//            Log.d("token",Session.getCurrentSession().getTokenInfo().getAccessToken()); //실제 토큰
             UserInfo.setToken(idtoken);
             map.put("user_name", UserInfo.getUsername());
             map.put("idToken", idtoken);

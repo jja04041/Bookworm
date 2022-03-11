@@ -14,6 +14,17 @@
         android:layout_width="wrap_content"
         android:text="X"
         android:layout_height="wrap_content"/>
+    <Button
+        android:layout_margin="20dp"
+        android:background="@drawable/label_design"
+        android:id="@+id/btnimgUp"
+        android:layout_width="wrap_content"
+        android:text="이미지업로드"
+        android:layout_height="wrap_content"/>
+    <ImageView
+        android:layout_width="150dp"
+        android:id="@+id/ivUpload"
+        android:layout_height="150dp"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
