@@ -2,6 +2,7 @@ package com.example.bookworm.modules;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -105,7 +106,7 @@ public class FBModule {
                             ((subactivity_challenge_challengeinfo) context).isParticipating(document);
                             break;
                         case 1: //참여가능 확인
-                            ((subactivity_challenge_challengeinfo) context).checkChallenge(document);
+                            ((subactivity_challenge_challengeinfo) context).checkParticipating(document, (Dialog)map.get("dialog"));
                             break;
                         case 2: //챌린지 최신화
                             //받아온 값중에 CurrentParticipation의 값을 리스트에 넣음
