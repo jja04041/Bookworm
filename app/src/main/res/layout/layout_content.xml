@@ -67,7 +67,7 @@
             android:layout_height="88dp">
 
             <TextView
-                android:id="@+id/tvTitle"
+                android:id="@+id/feedtvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"

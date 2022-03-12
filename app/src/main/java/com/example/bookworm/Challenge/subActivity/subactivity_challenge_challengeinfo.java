@@ -238,7 +238,7 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
                     .setPositiveButton("아쉬워요 ㅠㅠ", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            partFull();
+                            setParticipating(CurrentParticipation);
                             dialog.dismiss();
                         }
                     }).show();
