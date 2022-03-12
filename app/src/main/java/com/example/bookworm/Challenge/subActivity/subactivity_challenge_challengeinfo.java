@@ -69,7 +69,6 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
         btn_join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //fb모듈 함수 중 successRead()에서 분기하기 위함.
                 checkChallenge();
             }
         });
@@ -177,33 +176,26 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
             return "error";
         }
     }
-    private void partFull(){
-        btn_join.setEnabled(false);
-        btn_join.setText("정원이 초과된 챌린지입니다.");
-    }
-    private void partJoin(){
-        btn_join.setEnabled(false); //이미 사용자의 토큰이 있다면 (이미 참여한 챌린지라면) 챌린지 참여 버튼 비활성화
-        btn_join.setText("참여중인 챌린지입니다.");
-    }
 
+    //
     public void checkChallenge() {
-            new AlertDialog.Builder(mContext)
-                    .setMessage("챌린지에 참여하시겠습니까? (참여 후 탈퇴 불가)")
-                    .setPositiveButton("네", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            sendMap.put("dialog",dialog);
-                            sendMap.put("check",1);
-                            fbModule.readData(2,sendMap,challenge.getTitle());
-                            //Firebase의 현재 참여자 배열에 토큰 추가
-                        }
-                    })
-                    .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    }).show();
+        new AlertDialog.Builder(mContext)
+                .setMessage("챌린지에 참여하시겠습니까? (참여 후 탈퇴 불가)")
+                .setPositiveButton("네", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        sendMap.put("dialog", dialog);
+                        sendMap.put("check", 1);
+                        fbModule.readData(2, sendMap, challenge.getTitle());
+                        //Firebase의 현재 참여자 배열에 토큰 추가
+                    }
+                })
+                .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).show();
     }
 
     public void setParticipating(ArrayList<String> CurrentParticipation) {
@@ -213,11 +205,11 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
         tv_challenge_current.setText(String.valueOf(CurrentParticipation.size())); // 프로그레스 바 상단의 현재 참여자 #/#명 설정
         tv_current_participants.setText(String.valueOf(CurrentParticipation.size())); // 챌린지 상세 정보의 참여자 #명 설정
         //인원이 가득찬 경우 정원이 찬 챌린지임을 알림 .
-        if (challenge.getMaxPart() <=CurrentParticipation.size()){
+        if (challenge.getMaxPart() <= CurrentParticipation.size()) {
             //해당 챌린지가 내가 참여한 챌린지인 경우
-            if(CurrentParticipation.contains(userInfo.getToken())){
+            if (CurrentParticipation.contains(userInfo.getToken())) {
                 partJoin(); //참여중인 챌린지임을 표시
-            }else partFull();
+            } else partFull();
         }
     }
 
@@ -230,7 +222,8 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
         }
     }
 
-    public void checkParticipating(DocumentSnapshot document,Dialog d) {
+    //참여가능한지 확인
+    public void checkParticipating(DocumentSnapshot document, Dialog d) {
         ArrayList<String> CurrentParticipation = (ArrayList<String>) document.get("CurrentParticipation");
         if (CurrentParticipation.size() >= Integer.parseInt(String.valueOf(document.get("MaxParticipation")))) { //참여인원 초과
             new AlertDialog.Builder(mContext)
@@ -242,7 +235,7 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
                             dialog.dismiss();
                         }
                     }).show();
-        }else{ //정원이 가득차지 않은 경우(참여 가능한 경우)
+        } else { //정원이 가득차지 않은 경우(참여 가능한 경우)
             document.getReference().update("CurrentParticipation", FieldValue.arrayUnion(userInfo.getToken()));
             partJoin();
             //참여했으니 현재 화면에서 참여인원, 프로그레스바 최신화
@@ -251,5 +244,16 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
             //열었던 다이어로그 닫음
             d.dismiss();
         }
+    }
+
+    //정원이 가득찬 경우 세팅
+    private void partFull() {
+        btn_join.setEnabled(false);
+        btn_join.setText("정원이 초과된 챌린지입니다.");
+    }
+    //참여한 경우 세팅
+    private void partJoin() {
+        btn_join.setEnabled(false); //이미 사용자의 토큰이 있다면 (이미 참여한 챌린지라면) 챌린지 참여 버튼 비활성화
+        btn_join.setText("참여중인 챌린지입니다.");
     }
 }

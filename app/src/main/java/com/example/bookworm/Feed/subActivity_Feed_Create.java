@@ -72,7 +72,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
                 {
                     if (result.getResultCode() == RESULT_OK) {
                         try {
-                            Log.d("map",result.getData().toString()); // 카메라로 찍을 경우에는 인식이 안된다.
+                            Log.d("map", result.getData().toString()); // 카메라로 찍을 경우에는 인식이 안된다.
                             InputStream in = getContentResolver().openInputStream(result.getData().getData());
                             Bitmap img = BitmapFactory.decodeStream(in);
                             in.close();
@@ -131,8 +131,21 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                FirebaseFirestore db = FirebaseFirestore.getInstance();
+//                Map map = new HashMap();
+//                Book book= new Book("a","b","c","d","e");
+//                Book book2= new Book("a1","b1","c1","d1","e1");
+//                ArrayList<Book> books=new ArrayList<>();//{ book,book2 }
+//                books.add(book);
+//                books.add(book2);
+//                map.put("book",books);
+//                db.collection("test").document("abc").set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        finish();
+//                    }
+//                });
                 finish();
-//                fbModule.readData(0);
             }
         });
     }
@@ -157,6 +170,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 
 
     }
+
     private void setCameraIntents(List<Intent> cameraIntents, Uri output) {
         final Intent captureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         final PackageManager packageManager = getPackageManager();
