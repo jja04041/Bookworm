@@ -60,14 +60,14 @@
             android:layout_width="80dp"
             android:layout_height="118dp"
             android:layout_marginEnd="10dp"
-            android:src="@drawable/bookimg" />
+            android:src="@drawable/bookimg_sample" />
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="88dp">
 
             <TextView
-                android:id="@+id/tvTitle"
+                android:id="@+id/feedtvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"

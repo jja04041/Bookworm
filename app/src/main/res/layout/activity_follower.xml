@@ -11,12 +11,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/setting"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:orientation="horizontal"
-            android:background="#DDDDDD">
+            android:background="#DDDDDD"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btnBack"
@@ -24,86 +24,48 @@
                 android:layout_height="30dp"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginStart="20dp"
-                android:background="@drawable/back_icon"/>
+                android:background="@drawable/back_icon" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="팔로워"
-                android:textSize="20dp"/>
+                android:text="팔로우"
+                android:textSize="20dp" />
 
             <Button
                 android:id="@+id/btnSetting"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:layout_marginStart="250dp"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="15dp"
                 android:background="@drawable/setting" />
-        </LinearLayout>
+        </FrameLayout>
 
-        <LinearLayout
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:gravity="center"
-            android:id="@id/setting">
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/item_follower"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="팔로워" />
 
 
-            <LinearLayout
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content">
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/item_following"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="팔로잉" />
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/btn_follower"
-                    android:textSize="25dp"
-                    android:text="팔로워"/>
-                <TextView
-                    android:id="@+id/tv_follower_count"
-                    android:text=""
-                    android:textSize="15dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
+        </com.google.android.material.tabs.TabLayout>
 
-
-            <LinearLayout
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content">
-
-                <Button
-                    android:text="팔로잉"
-                    android:id="@+id/btn_following"
-                    android:textSize="25dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/tv_following_count"
-                    android:text=""
-                    android:textSize="15dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/img_frag_profile_profile"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center"
-            android:src="@drawable/profile"/>
-
-        <ListView
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewpager"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/list_follower"/>
+            android:layout_height="match_parent" />
+
     </LinearLayout>
 </FrameLayout>

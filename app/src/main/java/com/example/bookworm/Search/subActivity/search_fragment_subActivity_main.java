@@ -2,7 +2,6 @@ package com.example.bookworm.Search.subActivity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,7 +22,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.bookworm.Challenge.activity_createchallenge;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.items.BookAdapter;
@@ -60,9 +58,7 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
     public boolean isLoading = false; //스크롤을 당겨서 추가로 로딩 중인지 여부를 확인하는 변수
     int count = 0, page = 0, check = 0;
     final int CPP = 10; //Contents Per Page : 페이지당 보이는 컨텐츠의 개수
-    ContextWrapper c ;
     Intent intent;
-    String bookid = "\0";
     int classindex = 0;
 
 
@@ -212,6 +208,7 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
 
         if (page == 1) {
             check = count;
+            Log.d("cje",String.valueOf(check));
             bookList = new ArrayList<>(); //book을 담는 리스트 생성
         }
         if (count == 0) {

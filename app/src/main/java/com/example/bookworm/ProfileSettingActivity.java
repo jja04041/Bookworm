@@ -2,8 +2,6 @@ package com.example.bookworm;
 
 import static com.example.bookworm.Login.activity_login.gsi;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,17 +12,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.bookworm.Login.activity_login;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.modules.FBModule;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.kakao.network.ApiErrorCode;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
 import com.kakao.usermgmt.callback.UnLinkResponseCallback;
-import com.kakao.network.ApiErrorCode;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -109,9 +108,10 @@ public class ProfileSettingActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 //토큰을 이용하여 파이어베이스에 있는 데이터 삭제
                                 //카카오로 가입한 계정인 경우
-                                if (userInfo.getPlatform().equals("Kakao")) {
+                                String platform=userInfo.getPlatform();
+                                if (platform.equals("Kakao")) {
                                     signOutKakao(fbModule, userInfo);
-                                } else if (userInfo.getPlatform().equals("Google")) {
+                                } else if (platform.equals("Google")) {
                                     signOutGoogle(fbModule, userInfo);
                                 }
                                 dialog.dismiss();
@@ -130,8 +130,10 @@ public class ProfileSettingActivity extends AppCompatActivity {
     //로그인 액티비티로 이동
     public void moveToLogin() {
         Intent intent = new Intent(current_context, activity_login.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         this.finish();
+
     }
 
     //카카오 회원탈퇴  메소드
@@ -175,5 +177,5 @@ public class ProfileSettingActivity extends AppCompatActivity {
     private void signOutGoogle(FBModule fbModule, UserInfo userInfo) {
         gsi.revokeAccess();
         fbModule.deleteData(0, userInfo.getToken());
-    }
+     }
 }

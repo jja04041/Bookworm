@@ -38,7 +38,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="여기엔 뭐 쓸까"
+                    android:text="책 정보"
                     android:textSize="20dp" />
 
                 <Button
@@ -60,7 +60,7 @@
                     android:layout_width="130dp"
                     android:layout_height="165dp"
                     android:layout_margin="20dp"
-                    android:src="@drawable/bookimg" />
+                    android:src="@drawable/bookimg_sample" />
 
                 <ScrollView
                     android:id="@+id/ScrChild"

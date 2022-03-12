@@ -3,6 +3,7 @@
     package="com.example.bookworm">
     <!-- 인터넷 사용 권한 설정 -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".Login.GlobalApplication"
@@ -14,7 +15,10 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".User.FollowingActivity"
+            android:name=".ProfileInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".User.FollowerActivity"
             android:exported="false" />
 
         <meta-data
@@ -33,7 +37,11 @@
             android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".Challenge.activity_createchallenge"
+            android:name=".Challenge.subActivity.subactivity_challenge_challengeinfo"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".Challenge.subActivity.subactivity_challenge_createchallenge"
             android:exported="false"
             android:parentActivityName=".MainActivity" /> <!-- Main Activities -->
         <activity
@@ -53,10 +61,12 @@
             android:exported="false" /> <!-- 메인 화면 -->
         <activity
             android:name=".Login.activity_login"
-            android:exported="true"> <!-- 로그인 화면 -->
+            android:exported="false" /> <!-- 메인 화면 -->
+        <activity
+            android:name=".LoadingActivity"
+            android:exported="true"> <!-- 로딩 화면 -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
