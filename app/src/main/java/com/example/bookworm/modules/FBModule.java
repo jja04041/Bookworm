@@ -103,7 +103,7 @@ public class FBModule {
                 if (value != null) {
                     switch ((int) value) {
                         case 0: //참여중 인지 확인
-                            ((subactivity_challenge_challengeinfo) context).isParticipating(document);
+                            ((subactivity_challenge_challengeinfo)context).isParticipating(document);
                             break;
                         case 1: //참여가능 확인
                             ((subactivity_challenge_challengeinfo) context).checkParticipating(document, (Dialog)map.get("dialog"));

@@ -181,6 +181,10 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
         btn_join.setEnabled(false);
         btn_join.setText("정원이 초과된 챌린지입니다.");
     }
+    private void partJoin(){
+        btn_join.setEnabled(false); //이미 사용자의 토큰이 있다면 (이미 참여한 챌린지라면) 챌린지 참여 버튼 비활성화
+        btn_join.setText("참여중인 챌린지입니다.");
+    }
 
     public void checkChallenge() {
             new AlertDialog.Builder(mContext)
@@ -210,7 +214,10 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
         tv_current_participants.setText(String.valueOf(CurrentParticipation.size())); // 챌린지 상세 정보의 참여자 #명 설정
         //인원이 가득찬 경우 정원이 찬 챌린지임을 알림 .
         if (challenge.getMaxPart() <=CurrentParticipation.size()){
-            partFull();
+            //해당 챌린지가 내가 참여한 챌린지인 경우
+            if(CurrentParticipation.contains(userInfo.getToken())){
+                partJoin(); //참여중인 챌린지임을 표시
+            }else partFull();
         }
     }
 
@@ -219,8 +226,7 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
         ArrayList<String> CurrentParticipation = (ArrayList<String>) document.get("CurrentParticipation");
         setParticipating(CurrentParticipation);
         if (CurrentParticipation.contains(userInfo.getToken())) { //Firebase의 CurrentParticipation 필드에 사용자의 토큰이 있는지 확인
-            btn_join.setEnabled(false); //이미 사용자의 토큰이 있다면 (이미 참여한 챌린지라면) 챌린지 참여 버튼 비활성화
-            btn_join.setText("참여중인 챌린지입니다.");
+            partJoin();
         }
     }
 
@@ -236,10 +242,9 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
                             dialog.dismiss();
                         }
                     }).show();
-        }else{
+        }else{ //정원이 가득차지 않은 경우(참여 가능한 경우)
             document.getReference().update("CurrentParticipation", FieldValue.arrayUnion(userInfo.getToken()));
-            btn_join.setEnabled(false); // 이제 참여했으니 버튼 비활성화
-            btn_join.setText("참여중인 챌린지입니다.");
+            partJoin();
             //참여했으니 현재 화면에서 참여인원, 프로그레스바 최신화
             sendMap.put("check", 2);
             fbModule.readData(2, sendMap, challenge.getTitle());
