@@ -1,16 +1,10 @@
 package com.example.bookworm.modules;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,21 +12,21 @@ import androidx.annotation.NonNull;
 import com.example.bookworm.Challenge.subActivity.subactivity_challenge_challengeinfo;
 import com.example.bookworm.MainActivity;
 import com.example.bookworm.ProfileSettingActivity;
+import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.fragments.fragment_challenge;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Vector;
 
 
 public class FBModule {
@@ -94,7 +88,11 @@ public class FBModule {
         if (document.exists()) {
             //유저정보 불러오기
             if (idx == 0) {
-
+                Vector<Integer> genre = (Vector<Integer>) map.get("genre");
+                if(genre != null)
+                {
+                    document.getReference().update("genre", genre);
+                }
             }
             //챌린지 관련
             if (idx == 2) {
@@ -150,8 +148,18 @@ public class FBModule {
     public void saveData(int idx, Map data) {
         switch (idx) {
             case 0://회원가입
+
+                UserInfo obj = (UserInfo) data.get("UserInfo");
+
+                obj.Initbookworm();
+
+
                 db.collection(location[idx]).document((String) data.get("idToken")).set(data);
+
+
+
                 break;
+
             case 2://챌린지 생성
                 db.collection(location[idx]).document((String) data.get("strChallengeName")).set(data);
                 break;
