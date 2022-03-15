@@ -1,10 +1,12 @@
 package com.example.bookworm.User;
 
+import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
 import com.example.bookworm.Bw.enum_wormtype;
 import com.example.bookworm.R;
+import com.example.bookworm.modules.FBModule;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.kakao.usermgmt.response.model.Profile;
@@ -12,6 +14,8 @@ import com.kakao.usermgmt.response.model.UserAccount;
 
 import java.io.Serializable;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 // import io.reactivex.Observer;
@@ -24,33 +28,32 @@ public class UserInfo implements Serializable {
     private String platform;
     private String token;
 
-    private GregorianCalendar today;
 
+    private Context context;
+    private FBModule fbModule;
+
+    private GregorianCalendar today;
 
 
     private int register_year;
 
+    private static enum_wormtype wormtype = enum_wormtype.디폴트;
 
-
-
-    private enum_wormtype wormtype = enum_wormtype.디폴트;
-
-
-    int enum_size = enum_wormtype.values().length;
-
+    private static int enum_size = enum_wormtype.enumsize.value();
 
 
     // wormtype을 년별로 저장할 책볼레타입 리스트
-    private Vector<Integer> wormvec = new Vector<Integer>();
+    private static Vector<Integer> wormvec = new Vector<Integer>();
 
     // 이미지 슬라이더의 함수에 사용할 책볼레 이미지 경로 벡터
-    private Vector<String> wormimgvec = new Vector<String>();
+    private static Vector<String> wormimgvec = new Vector<String>();
 
 
     // genre index의 1번 = enum_wormtype의 공포 2번은 추리 .... 이하 동문
     // 가장 최댓값을 가진 index를 벌레의 종류로 설정할 계획
     // 가장 최댓값의 index의 번호에 따라 최고 선호 장르를 설정합니다.
-    private int [] genre = new int [enum_size];
+    private Vector<Integer> genre = new Vector<Integer>();
+
 
     public UserInfo() {
 
@@ -64,7 +67,6 @@ public class UserInfo implements Serializable {
         this.email = kakaoAccount.getEmail();
         this.platform = "Kakao";
 
-
     }
 
     public void add(GoogleSignInAccount account) {
@@ -74,15 +76,23 @@ public class UserInfo implements Serializable {
         } catch (NullPointerException e) {
             Log.d("profile", "Null");
         }
-        this.username= account.getDisplayName();
-        this.email=account.getEmail();
-        this.platform="Google";
+        this.username = account.getDisplayName();
+        this.email = account.getEmail();
+        this.platform = "Google";
 
     }
 
-    public void Initbookworm()
-    {
-        // 가입년도
+    public void Initbookworm() {
+        genre.setSize(enum_size);
+
+        for (int i = 0; i < enum_size; ++i) {
+            genre.set(i, 0);
+    }
+    wormtype = enum_wormtype.디폴트;
+    wormvec = new Vector<Integer>();
+    wormimgvec = new Vector<String>();
+
+    // 가입년도
         this.register_year = today.get(today.YEAR);
         this.wormtype = enum_wormtype.디폴트;
         this.wormvec.add(wormtype.value());
@@ -91,10 +101,12 @@ public class UserInfo implements Serializable {
     }
 
     public void add(DocumentSnapshot document) {
-        this.username=(String) document.get("user_name");
-        this.email=(String) document.get("email");
-        this.profileimg=(String) document.get("profileURL");
-        this.token=document.getId();
+        this.username = (String) document.get("user_name");
+        this.email = (String) document.get("email");
+        this.profileimg = (String) document.get("profileURL");
+        this.token = document.getId();
+
+        // this.register_year =
     }
 
     public String getProfileimg() {
@@ -121,25 +133,53 @@ public class UserInfo implements Serializable {
         this.wormtype = wormtype;
     }
 
-    public int[] getGenre() {
+    public Vector<Integer> getGenre() {
         return genre;
     }
 
-    public void setGenre(int idx) { this.genre[idx]++; } // 로컬에서 ++해주는게 아니라 서버에 업데이트 해야한다
+    public void setGenre(int idx) {
+        int unboxint = (this.genre.get(idx));
 
-    public Vector<Integer> getWormvec() {  return wormvec; }
+        unboxint++;
 
-    public Vector<String> getWormimgvec() { return wormimgvec; }
+        this.genre.set(idx, unboxint);
+
+        Map map = new HashMap();
+        map.put("genre", this.genre);
+
+        fbModule.readData(0, map, token);
+
+
+    } // 로컬에서 ++해주는게 아니라 서버에 업데이트 해야한다
+
+    public Vector<Integer> getWormvec() {
+        return wormvec;
+    }
+
+    public Vector<String> getWormimgvec() {
+        return wormimgvec;
+    }
 
     public void setToken(String token) {
         this.token = token;
     }
-    public String getToken(){
+
+    public String getToken() {
         return this.token;
     }
 
     public int getRegister_year() {
         return register_year;
+    }
+
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+        fbModule = new FBModule(context);
     }
 
 

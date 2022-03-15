@@ -19,6 +19,7 @@ import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.modules.personalD.PersonalD;
 
 import java.util.GregorianCalendar;
+import java.util.Vector;
 
 public class fragment_bookworm extends Fragment {
 
@@ -154,11 +155,11 @@ public class fragment_bookworm extends Fragment {
 
     // userinfo의 genre 배열의 어떤 인덱스(장르)가 가장 큰 값을 가지고 있는지 찾은 후
     // 그 인덱스를 반환
-    private int favorgenre(int[] genre) {
+    private int favorgenre(Vector<Integer> genre) {
         int max = 0;
 
-        for(int i=1; i<genre.length; ++i)
-            if(genre[max] < genre[i])
+        for(int i=1; i<genre.size(); ++i)
+            if(genre.get(max) < genre.get(i))
                 max = i;
 
         return max;
