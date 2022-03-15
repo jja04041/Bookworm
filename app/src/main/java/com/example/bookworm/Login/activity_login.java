@@ -20,9 +20,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.Scopes;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -163,16 +160,16 @@ public class activity_login extends Activity {
     //회원가입 함수
     public void signUp(UserInfo UserInfo, String idtoken) {
         if (null != idtoken && null != UserInfo.getUsername()) {
-            HashMap<String, String> map = new HashMap<>();
+            HashMap<String, Object> map = new HashMap<>();
 //            Log.d("token",Session.getCurrentSession().getTokenInfo().getAccessToken()); //실제 토큰
             UserInfo.setToken(idtoken);
-            map.put("user_name", UserInfo.getUsername());
-            map.put("idToken", idtoken);
-            map.put("platform", UserInfo.getPlatform());
-            map.put("email", UserInfo.getEmail());
-            map.put("profileURL", UserInfo.getProfileimg());
 
-            UserInfo.Initbookworm();
+
+            map.put("UserInfo", UserInfo);
+
+            map.put("idToken", idtoken);
+
+
             //파이어베이스에 해당 계정이 등록되있지 않다면
             fbModule.readData(0, map, idtoken);
         } else {

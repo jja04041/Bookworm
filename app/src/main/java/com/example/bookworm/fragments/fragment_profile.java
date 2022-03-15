@@ -45,6 +45,8 @@ public class fragment_profile extends Fragment {
 
         userInfo = new PersonalD(current_context).getUserInfo(); //저장된 UserInfo값을 가져온다.
 
+        userInfo.setContext(current_context);
+
         btnSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
