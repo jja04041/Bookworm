@@ -49,9 +49,11 @@
 
             </FrameLayout>
 
+
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@drawable/feed_bottom_top_border">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -91,12 +93,10 @@
 
             </FrameLayout>
 
-
             <LinearLayout
                 android:id="@+id/llFeedBookSearch"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@drawable/feed_bottom_top_border"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -111,6 +111,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:background="@drawable/feed_bottom_top_border"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -141,25 +142,88 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/llLabel"
+
+            <HorizontalScrollView
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/feed_bottom_top_border"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:scrollbars="none">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="라벨 들어갈 칸.... 어떻게 하지" />
+                <LinearLayout
+                    android:id="@+id/llLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/tvlabel1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:layout_marginVertical="10dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@drawable/label_design"
+                        android:gravity="center"
+                        android:paddingHorizontal="10dp"
+                        android:text="   +   "
+                        android:textSize="18dp" />
+
+                    <!--                    <TextView-->
+                    <!--                        android:id="@+id/tvlabel2"-->
+                    <!--                        android:layout_width="wrap_content"-->
+                    <!--                        android:layout_height="32dp"-->
+                    <!--                        android:layout_marginVertical="10dp"-->
+                    <!--                        android:layout_marginStart="10dp"-->
+                    <!--                        android:background="@drawable/label_design"-->
+                    <!--                        android:gravity="center"-->
+                    <!--                        android:paddingHorizontal="10dp"-->
+                    <!--                        android:text="테스트중"-->
+                    <!--                        android:textSize="18dp" />-->
+
+                    <!--                    <TextView-->
+                    <!--                        android:id="@+id/tvlabel3"-->
+                    <!--                        android:layout_width="wrap_content"-->
+                    <!--                        android:layout_height="32dp"-->
+                    <!--                        android:layout_marginVertical="10dp"-->
+                    <!--                        android:layout_marginStart="10dp"-->
+                    <!--                        android:background="@drawable/label_design"-->
+                    <!--                        android:gravity="center"-->
+                    <!--                        android:paddingHorizontal="10dp"-->
+                    <!--                        android:text="테스트중"-->
+                    <!--                        android:textSize="18dp" />-->
+
+                    <!--                    <TextView-->
+                    <!--                        android:id="@+id/tvlabel4"-->
+                    <!--                        android:layout_width="wrap_content"-->
+                    <!--                        android:layout_height="32dp"-->
+                    <!--                        android:layout_marginVertical="10dp"-->
+                    <!--                        android:layout_marginStart="10dp"-->
+                    <!--                        android:background="@drawable/label_design"-->
+                    <!--                        android:gravity="center"-->
+                    <!--                        android:paddingHorizontal="10dp"-->
+                    <!--                        android:text="테스트중"-->
+                    <!--                        android:textSize="18dp" />-->
+
+                    <!--                    <TextView-->
+                    <!--                        android:id="@+id/tvlabel5"-->
+                    <!--                        android:layout_width="wrap_content"-->
+                    <!--                        android:layout_height="32dp"-->
+                    <!--                        android:layout_marginVertical="10dp"-->
+                    <!--                        android:layout_marginStart="10dp"-->
+                    <!--                        android:background="@drawable/label_design"-->
+                    <!--                        android:gravity="center"-->
+                    <!--                        android:paddingHorizontal="10dp"-->
+                    <!--                        android:text="테스트중"-->
+                    <!--                        android:textSize="18dp" />-->
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
 
             <ImageView
                 android:id="@+id/ivpicture"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_width="360dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
 
             <LinearLayout
                 android:layout_width="match_parent"

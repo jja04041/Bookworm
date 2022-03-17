@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -63,7 +65,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     Context current_context;
     Module module;
     HashMap<String, String> data;
-    TextView tvFinish, tvNickName;
+    TextView tvFinish, tvNickName, tvlabel1;
     Button btnAdd, btnUp;
     ImageView ivUpload, imgProfile;
     LinearLayout layout;
@@ -104,7 +106,10 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         imgProfile = findViewById(R.id.ivProfileImage);
         tvFinish = findViewById(R.id.tvFinish);
         tvNickName = findViewById(R.id.tvNickname);
+        tvlabel1 = findViewById(R.id.tvlabel1);
         layout = findViewById(R.id.llLabel);
+
+        //tvlabel1.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#55ff0000"))); //자바로 BackgroundTint 설정
 
         btn = new ArrayList<>();
         fbModule = new FBModule(null);
