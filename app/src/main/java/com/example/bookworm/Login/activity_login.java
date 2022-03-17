@@ -155,7 +155,7 @@ public class activity_login extends Activity {
     }
     //로그인 함수
     public void signIn(Boolean ResultCode,UserInfo fbUserInfo){
-        if (ResultCode==Boolean.TRUE) move(fbUserInfo);//회원이 아닌 경우
+        if (ResultCode) move(fbUserInfo);//회원이 아닌 경우
         else move(fbUserInfo); //회원인 경우
     }
     public void move(UserInfo userInfo) {

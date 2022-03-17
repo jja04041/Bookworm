@@ -13,6 +13,7 @@ import com.kakao.usermgmt.response.model.Profile;
 import com.kakao.usermgmt.response.model.UserAccount;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -26,13 +27,6 @@ public class UserInfo implements Serializable {
     private String email; // 로그인한 이메일
     private String platform;
     private String token;
-
-
-    private Context context;
-    private FBModule fbModule;
-
-
-
     private static enum_wormtype wormtype = enum_wormtype.디폴트;
 
     private static int enum_size = enum_wormtype.enumsize.value();
@@ -74,7 +68,6 @@ public class UserInfo implements Serializable {
         this.username = account.getDisplayName();
         this.email = account.getEmail();
         this.platform = "Google";
-
     }
 
     public void Initbookworm() {
@@ -100,6 +93,11 @@ public class UserInfo implements Serializable {
         this.profileimg = (String) document.get("profileimg");
         this.token = (String) document.get("token");
         this.platform = (String) document.get("platform");
+//        String a=(String)document.get("wormtype");
+        this.wormimgvec=new Vector<>((ArrayList<String>) document.get("wormimgvec"));
+        this.wormvec=new Vector<>((ArrayList<Integer>)document.get("wormvec"));
+//        this.wormtype=enum_wormtype.a;
+        this.genre=new Vector<>((ArrayList<Integer>) document.get("genre"));
     }
 
     public String getProfileimg() {
@@ -132,18 +130,10 @@ public class UserInfo implements Serializable {
 
     public void setGenre(int idx) {
         int unboxint = (this.genre.get(idx));
-
         unboxint++;
 
         this.genre.set(idx, unboxint);
-
-        Map map = new HashMap();
-        map.put("genre", this.genre);
-
-        fbModule.readData(0, map, token);
-
-
-    } // 로컬에서 ++해주는게 아니라 서버에 업데이트 해야한다
+    }
 
     public Vector<Integer> getWormvec() {
         return wormvec;
@@ -162,14 +152,7 @@ public class UserInfo implements Serializable {
     }
 
 
-    public Context getContext() {
-        return context;
-    }
 
-    public void setContext(Context context) {
-        this.context = context;
-        fbModule = new FBModule(context);
-    }
 
 
 }
