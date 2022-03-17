@@ -3,7 +3,10 @@
     package="com.example.bookworm">
     <!-- 인터넷 사용 권한 설정 -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 사진 업로드를 위한 권한 설정 -->
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".Login.GlobalApplication"
@@ -20,7 +23,7 @@
         <activity
             android:name=".User.FollowerActivity"
             android:exported="false" />
-
+        <!--카카오 계정 연동을 위한 AppKey-->
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakaoKey" /> <!-- SubActivities -->

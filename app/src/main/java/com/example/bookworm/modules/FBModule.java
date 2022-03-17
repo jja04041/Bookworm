@@ -1,15 +1,22 @@
 package com.example.bookworm.modules;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.example.bookworm.Challenge.subActivity.subactivity_challenge_challengeinfo;
+import com.example.bookworm.Login.activity_login;
 import com.example.bookworm.MainActivity;
 import com.example.bookworm.ProfileSettingActivity;
 import com.example.bookworm.User.UserInfo;
@@ -19,7 +26,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -88,16 +97,16 @@ public class FBModule {
         if (document.exists()) {
             //유저정보 불러오기
             if (idx == 0) {
-
-                Vector<Integer> genre = (Vector<Integer>) map.get("genre");
-                if(genre != null) {
-                    document.getReference().update("genre", genre);
-
-
+                //장르를 업데이트
+                if(map.get("updateGenre")!=null){
+                    document.getReference().update("genre",map.get("updateGenre")); //지정한 값으로 데이터 업데이트
                 }
-
-
-
+                //회원인 경우, 로그인 처리
+                else {
+                    UserInfo userInfo=new UserInfo();
+                    userInfo.add((Map)document.get("UserInfo"));
+                    ((activity_login)context).signIn(Boolean.FALSE,userInfo);
+                }
             }
             //챌린지 관련
             if (idx == 2) {
@@ -153,18 +162,15 @@ public class FBModule {
     public void saveData(int idx, Map data) {
         switch (idx) {
             case 0://회원가입
+                UserInfo userInfo=(UserInfo)(data.get("UserInfo"));
+                userInfo.Initbookworm();
 
-                UserInfo obj = (UserInfo) data.get("UserInfo");
-                obj.Initbookworm();
-                db.collection(location[idx]).document((String) data.get("idToken")).set(data);
+                data.put("UserInfo",userInfo);
+                db.collection(location[idx]).document(userInfo.getToken()).set(data);
+                ((activity_login)context).signIn(Boolean.TRUE,userInfo); //회원이 아닌 경우
                 break;
-
             case 2://챌린지 생성
                 db.collection(location[idx]).document((String) data.get("strChallengeName")).set(data);
-                break;
-
-            case 3:
-                db.collection(location[idx]).document((String) data.get("wormvec")).update(data);
                 break;
         }
     }

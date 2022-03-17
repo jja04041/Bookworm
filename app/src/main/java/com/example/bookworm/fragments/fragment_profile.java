@@ -45,8 +45,6 @@ public class fragment_profile extends Fragment {
 
         userInfo = new PersonalD(current_context).getUserInfo(); //저장된 UserInfo값을 가져온다.
 
-        userInfo.setContext(current_context);
-
         btnSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,24 +74,24 @@ public class fragment_profile extends Fragment {
 
         // 지워도댐
 
-        btnd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                userInfo.setGenre(0);
-            }
-        });
-        btnh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                userInfo.setGenre(1);
-            }
-        });
-        btnde.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                userInfo.setGenre(2);
-            }
-        });
+//        btnd.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                userInfo.setGenre(0);
+//            }
+//        });
+//        btnh.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                userInfo.setGenre(1);
+//            }
+//        });
+//        btnde.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                userInfo.setGenre(2);
+//            }
+//        });
 
 
 
