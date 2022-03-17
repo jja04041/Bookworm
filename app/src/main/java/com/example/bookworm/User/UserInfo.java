@@ -13,7 +13,6 @@ import com.kakao.usermgmt.response.model.Profile;
 import com.kakao.usermgmt.response.model.UserAccount;
 
 import java.io.Serializable;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -29,12 +28,10 @@ public class UserInfo implements Serializable {
     private String token;
 
 
+    private Context context;
     private FBModule fbModule;
 
-    private GregorianCalendar today;
 
-
-    private int register_year;
 
     private static enum_wormtype wormtype = enum_wormtype.디폴트;
 
@@ -56,7 +53,6 @@ public class UserInfo implements Serializable {
 
     public UserInfo() {
 
-        today = new GregorianCalendar();
     }
 
     public void add(UserAccount kakaoAccount) {
@@ -65,7 +61,6 @@ public class UserInfo implements Serializable {
         this.username = profile.getNickname();
         this.email = kakaoAccount.getEmail();
         this.platform = "Kakao";
-
 
     }
 
@@ -93,7 +88,6 @@ public class UserInfo implements Serializable {
         wormimgvec = new Vector<String>();
 
         // 가입년도
-        this.register_year = today.get(today.YEAR);
         this.wormtype = enum_wormtype.디폴트;
         this.wormvec.add(wormtype.value());
         // 이미지 슬라이더 함수를 사용하기 위해 int 경로인 drawble을 string으로 변환해준다
@@ -167,8 +161,15 @@ public class UserInfo implements Serializable {
         return this.token;
     }
 
-    public int getRegister_year() {
-        return register_year;
+
+    public Context getContext() {
+        return context;
     }
+
+    public void setContext(Context context) {
+        this.context = context;
+        fbModule = new FBModule(context);
+    }
+
 
 }
