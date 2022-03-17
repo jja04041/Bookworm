@@ -2,6 +2,7 @@ package com.example.bookworm.Feed;
 
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -19,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -31,8 +33,10 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
+import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.Module;
+import com.example.bookworm.modules.personalD.PersonalD;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -55,11 +59,13 @@ import java.util.Map;
 
 public class subActivity_Feed_Create extends AppCompatActivity {
     FBModule fbModule;
+    UserInfo userInfo;
+    Context current_context;
     Module module;
     HashMap<String, String> data;
-    EditText edtFeedContent;
-    Button btnAdd, btnFinish, btnUp;
-    ImageView ivUpload;
+    TextView tvFinish, tvNickName;
+    Button btnAdd, btnUp;
+    ImageView ivUpload, imgProfile;
     LinearLayout layout;
     ArrayList<Button> btn;
     int label = 0;
@@ -91,44 +97,54 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.subactivity_feed_create);
-        edtFeedContent = findViewById(R.id.edtFeedContent);
-        btnAdd = findViewById(R.id.btnAdd);
-        btnUp = findViewById(R.id.btnimgUp);
-        ivUpload = findViewById(R.id.ivUpload);
-        btnFinish = findViewById(R.id.btnFinish);
+//        edtFeedContent = findViewById(R.id.edtFeedContent);
+//        btnAdd = findViewById(R.id.btnAdd);
+//        btnUp = findViewById(R.id.btnimgUp);
+//        ivUpload = findViewById(R.id.ivUpload);
+        imgProfile = findViewById(R.id.ivProfileImage);
+        tvFinish = findViewById(R.id.tvFinish);
+        tvNickName = findViewById(R.id.tvNickname);
         layout = findViewById(R.id.llLabel);
+
         btn = new ArrayList<>();
         fbModule = new FBModule(null);
         btn.add(btnAdd);
         LocalDateTime now = LocalDateTime.now();
         SimpleDateFormat now_date = new SimpleDateFormat();
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //ShowDialog 만들기
 
-                data = new HashMap();
-                data.put("feed_content", edtFeedContent.getText().toString());
-                data.put("upload_date", now_date.toString());
+        current_context = this;
+        userInfo = new PersonalD(current_context).getUserInfo(); //저장된 UserInfo값을 가져온다.
 
-                //data.put()을 이용하여, data에 값을 넣는다
+        Glide.with(this).load(userInfo.getProfileimg()).circleCrop().into(imgProfile); //프로필사진 로딩후 삽입.
+        tvNickName.setText(userInfo.getUsername());
 
-                fbModule.saveData(1, data);
-//                //라벨생성
-//                setLabel(a,Color.parseColor("#EFDDDD"));
-            }
-        });
-        btnUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                File file = getExternalFilesDir(Environment.DIRECTORY_DCIM);
-                Uri cameraOutputUri = Uri.fromFile(file);
-                Intent intent = getPickIntent(cameraOutputUri);
-                startActivityResult.launch(intent);
-            }
-        });
+//        btnAdd.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //ShowDialog 만들기
+//
+//                data = new HashMap();
+//                data.put("feed_content", edtFeedContent.getText().toString());
+//                data.put("upload_date", now_date.toString());
+//
+//                //data.put()을 이용하여, data에 값을 넣는다
+//
+//                fbModule.saveData(1, data);
+////                //라벨생성
+////                setLabel(a,Color.parseColor("#EFDDDD"));
+//            }
+//        });
+//        btnUp.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                File file = getExternalFilesDir(Environment.DIRECTORY_DCIM);
+//                Uri cameraOutputUri = Uri.fromFile(file);
+//                Intent intent = getPickIntent(cameraOutputUri);
+//                startActivityResult.launch(intent);
+//            }
+//        });
 
-        btnFinish.setOnClickListener(new View.OnClickListener() {
+        tvFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                FirebaseFirestore db = FirebaseFirestore.getInstance();
