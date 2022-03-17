@@ -106,12 +106,6 @@ public class FBModule {
                     UserInfo userInfo=new UserInfo();
                     userInfo.add((Map)document.get("UserInfo"));
                     ((activity_login)context).signIn(Boolean.FALSE,userInfo);
-
-                Vector<Integer> genre = (Vector<Integer>) map.get("genre");
-                if(genre != null) {
-                    document.getReference().update("genre", genre);
-
-
                 }
             }
             //챌린지 관련
@@ -175,7 +169,6 @@ public class FBModule {
                 db.collection(location[idx]).document(userInfo.getToken()).set(data);
                 ((activity_login)context).signIn(Boolean.TRUE,userInfo); //회원이 아닌 경우
                 break;
-
             case 2://챌린지 생성
                 db.collection(location[idx]).document((String) data.get("strChallengeName")).set(data);
                 break;
