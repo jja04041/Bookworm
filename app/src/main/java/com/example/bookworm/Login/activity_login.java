@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +21,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,6 +31,7 @@ import com.kakao.auth.AuthType;
 import com.kakao.auth.Session;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class activity_login extends Activity {
 
@@ -36,7 +41,7 @@ public class activity_login extends Activity {
     private FirebaseAuth mAuth;
     private FBModule fbModule;
     protected GoogleSignInAccount gsa;
-
+    UserInfo userInfo;
     public static GoogleSignInClient gsi;
 
     private int RC_SIGN_IN = 123;
@@ -51,8 +56,9 @@ public class activity_login extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        fbModule = new FBModule(mContext);
         mContext = this;
+        fbModule = new FBModule(mContext);
+
         mAuth = FirebaseAuth.getInstance();
 
         Session session = Session.getCurrentSession();
@@ -118,7 +124,6 @@ public class activity_login extends Activity {
 
         // 카카오톡|스토리 간편로그인 실행 결과를 받아서 SDK로 전달
         if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
-
             return;
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -128,12 +133,13 @@ public class activity_login extends Activity {
             task.addOnCompleteListener(new OnCompleteListener<GoogleSignInAccount>() {
                 @Override
                 public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
+                    //회원의 정보를 가져옴
                     GoogleSignInAccount account = task.getResult();
-                    Log.d("account", account.getIdToken());
-                    UserInfo userInfo = new UserInfo();
+                    //회원가입 여부를 확인.
+                    userInfo = new UserInfo();
                     userInfo.add(account);
-                    signUp(userInfo, account.getId());
-                    move(userInfo); //회원정보를 메인 액티비티로 넘기고, 액티비티를 메인액티비티로 변경함.
+                    userInfo.setToken(account.getId());
+                    signUp(userInfo,account.getId());
                 }
             });
 //            try {
@@ -147,7 +153,11 @@ public class activity_login extends Activity {
 //            }
         }
     }
-
+    //로그인 함수
+    public void signIn(Boolean ResultCode,UserInfo fbUserInfo){
+        if (ResultCode==Boolean.TRUE) move(fbUserInfo);//회원이 아닌 경우
+        else move(fbUserInfo); //회원인 경우
+    }
     public void move(UserInfo userInfo) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -158,22 +168,13 @@ public class activity_login extends Activity {
 
 
     //회원가입 함수
-    public void signUp(UserInfo UserInfo, String idtoken) {
-        if (null != idtoken && null != UserInfo.getUsername()) {
-            HashMap<String, Object> map = new HashMap<>();
-//            Log.d("token",Session.getCurrentSession().getTokenInfo().getAccessToken()); //실제 토큰
-            UserInfo.setToken(idtoken);
-
-
-            map.put("UserInfo", UserInfo);
-
-            map.put("idToken", idtoken);
-
-
-            //파이어베이스에 해당 계정이 등록되있지 않다면
-            fbModule.readData(0, map, idtoken);
+    public void signUp(UserInfo userInfo, String idtoken) {
+        if (null != idtoken && null != userInfo.getUsername()) {
+            Map map=new HashMap();
+            map.put("UserInfo",userInfo);
+            fbModule.readData(0,map,idtoken);
         } else {
-            Log.d("fucntion signup", "nono token ");
+            Log.d("function signup", "nono token ");
         }
     }
 

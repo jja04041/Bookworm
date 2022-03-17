@@ -82,7 +82,7 @@ public class UserInfo implements Serializable {
 
         for (int i = 0; i < enum_size; ++i) {
             genre.set(i, 0);
-       }
+        }
         wormtype = enum_wormtype.디폴트;
         wormvec = new Vector<Integer>();
         wormimgvec = new Vector<String>();
@@ -94,13 +94,12 @@ public class UserInfo implements Serializable {
         this.wormimgvec.add(Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + R.drawable.ex_default).toString());
     }
 
-    public void add(DocumentSnapshot document) {
+    public void add(Map document) {
         this.username = (String) document.get("user_name");
         this.email = (String) document.get("email");
-        this.profileimg = (String) document.get("profileURL");
-        this.token = document.getId();
-
-        // this.register_year =
+        this.profileimg = (String) document.get("profileimg");
+        this.token = (String) document.get("token");
+        this.platform = (String) document.get("platform");
     }
 
     public String getProfileimg() {
@@ -161,6 +160,7 @@ public class UserInfo implements Serializable {
     public String getToken() {
         return this.token;
     }
+
 
     public Context getContext() {
         return context;
