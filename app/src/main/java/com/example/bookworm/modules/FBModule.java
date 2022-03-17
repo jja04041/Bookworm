@@ -88,11 +88,16 @@ public class FBModule {
         if (document.exists()) {
             //유저정보 불러오기
             if (idx == 0) {
+
                 Vector<Integer> genre = (Vector<Integer>) map.get("genre");
-                if(genre != null)
-                {
+                if(genre != null) {
                     document.getReference().update("genre", genre);
+
+
                 }
+
+
+
             }
             //챌린지 관련
             if (idx == 2) {
@@ -150,18 +155,16 @@ public class FBModule {
             case 0://회원가입
 
                 UserInfo obj = (UserInfo) data.get("UserInfo");
-
                 obj.Initbookworm();
-
-
                 db.collection(location[idx]).document((String) data.get("idToken")).set(data);
-
-
-
                 break;
 
             case 2://챌린지 생성
                 db.collection(location[idx]).document((String) data.get("strChallengeName")).set(data);
+                break;
+
+            case 3:
+                db.collection(location[idx]).document((String) data.get("wormvec")).update(data);
                 break;
         }
     }

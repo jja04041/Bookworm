@@ -1,5 +1,6 @@
 package com.example.bookworm.fragments;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,18 +17,22 @@ import com.example.bookworm.Bw.enum_wormtype;
 import com.example.bookworm.ImageSliderAdapter;
 import com.example.bookworm.R;
 import com.example.bookworm.User.UserInfo;
-import com.example.bookworm.modules.personalD.PersonalD;
+import com.example.bookworm.modules.FBModule;
 
-import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Vector;
 
 public class fragment_bookworm extends Fragment {
 
     private ViewPager2 sliderViewPager;
     private LinearLayout layoutIndicator;
-    private String[] images;
+
     private UserInfo userinfo;
 
+    public static Context mContext;
+    private FBModule fbModule;
+
+    HashMap<String, Object> map = new HashMap<>();
 
 
 
@@ -37,8 +42,16 @@ public class fragment_bookworm extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_bookworm, container, false);
 
-        PersonalD personalD = new PersonalD(getContext());
-        userinfo = personalD.getUserInfo();
+        fbModule = new FBModule(mContext);
+        mContext = getActivity();
+
+//        PersonalD personalD = new PersonalD(getContext());
+//        userinfo = personalD.getUserInfo();
+
+
+        fbModule.readData(0, map, userinfo.getToken());
+
+        userinfo = (UserInfo) map.get("UserInfo");
 
         return view;
     }
@@ -122,16 +135,13 @@ public class fragment_bookworm extends Fragment {
 
 
     private void setBookworm(UserInfo userinfo) {
-        // 현재시간 얻고
-        GregorianCalendar today = new GregorianCalendar();
 
-        int index = today.get(today.YEAR) % userinfo.getRegister_year();
         int path = R.drawable.ex_default;
 
-        // 현재년도 % 가입년도 연산으로 현재의 책볼레타입으로 채움
-        userinfo.getWormvec().set(index, userinfo.getWormtype().value());
+        userinfo.getWormvec().set(0, userinfo.getWormtype().value());
 
-        switch (userinfo.getWormvec().get(index))
+
+        switch (userinfo.getWormvec().get(0))
         {
             case 0:
                 path = R.drawable.ex_default;
@@ -149,7 +159,7 @@ public class fragment_bookworm extends Fragment {
                 break;
         }
 
-        userinfo.getWormimgvec().set(index, Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + path).toString());
+        userinfo.getWormimgvec().set(0, Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + path).toString());
     }
 
 
