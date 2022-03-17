@@ -134,15 +134,15 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 ////                setLabel(a,Color.parseColor("#EFDDDD"));
 //            }
 //        });
-//        btnUp.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                File file = getExternalFilesDir(Environment.DIRECTORY_DCIM);
-//                Uri cameraOutputUri = Uri.fromFile(file);
-//                Intent intent = getPickIntent(cameraOutputUri);
-//                startActivityResult.launch(intent);
-//            }
-//        });
+        btnUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                File file = getExternalFilesDir(Environment.DIRECTORY_DCIM);
+                Uri cameraOutputUri = Uri.fromFile(file);
+                Intent intent = getPickIntent(cameraOutputUri);
+                startActivityResult.launch(intent);
+            }
+        });
 
         tvFinish.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,6 +188,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     }
 
     private void setCameraIntents(List<Intent> cameraIntents, Uri output) {
+        //인텐트 생성
         final Intent captureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         final PackageManager packageManager = getPackageManager();
         final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);

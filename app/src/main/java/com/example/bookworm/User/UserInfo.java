@@ -29,7 +29,6 @@ public class UserInfo implements Serializable {
     private String token;
 
 
-    private Context context;
     private FBModule fbModule;
 
     private GregorianCalendar today;
@@ -67,6 +66,7 @@ public class UserInfo implements Serializable {
         this.email = kakaoAccount.getEmail();
         this.platform = "Kakao";
 
+
     }
 
     public void add(GoogleSignInAccount account) {
@@ -87,12 +87,12 @@ public class UserInfo implements Serializable {
 
         for (int i = 0; i < enum_size; ++i) {
             genre.set(i, 0);
-    }
-    wormtype = enum_wormtype.디폴트;
-    wormvec = new Vector<Integer>();
-    wormimgvec = new Vector<String>();
+        }
+        wormtype = enum_wormtype.디폴트;
+        wormvec = new Vector<Integer>();
+        wormimgvec = new Vector<String>();
 
-    // 가입년도
+        // 가입년도
         this.register_year = today.get(today.YEAR);
         this.wormtype = enum_wormtype.디폴트;
         this.wormvec.add(wormtype.value());
@@ -100,13 +100,12 @@ public class UserInfo implements Serializable {
         this.wormimgvec.add(Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + R.drawable.ex_default).toString());
     }
 
-    public void add(DocumentSnapshot document) {
+    public void add(Map document) {
         this.username = (String) document.get("user_name");
         this.email = (String) document.get("email");
-        this.profileimg = (String) document.get("profileURL");
-        this.token = document.getId();
-
-        // this.register_year =
+        this.profileimg = (String) document.get("profileimg");
+        this.token = (String) document.get("token");
+        this.platform = (String) document.get("platform");
     }
 
     public String getProfileimg() {
@@ -171,16 +170,5 @@ public class UserInfo implements Serializable {
     public int getRegister_year() {
         return register_year;
     }
-
-
-    public Context getContext() {
-        return context;
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
-        fbModule = new FBModule(context);
-    }
-
 
 }

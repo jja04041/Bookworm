@@ -33,8 +33,40 @@ var _storage = multer.diskStorage({
     });
   }
 });
-//for firebase
 
+
+router.post('/upload', (req, res) => {
+  multer({
+      storage: _storage
+    }).single('upload'),
+    function (req, res) {
+      try {
+        let file = req.file;
+        let originalName = '';
+        let fileName = '';
+        let mimeType = '';
+        let size = 0;
+
+        if (file) {
+          originalName = file.originalname;
+          filename = file.fileName; //file.fileName
+          mimeType = file.mimetype;
+          size = file.size;
+          console.log("execute" + fileName);
+        } else {
+          console.log("request is null");
+        }
+
+      } catch (err) {
+
+        console.dir(err.stack);
+      }
+      console.log(req.file);
+      console.log(req.body);
+      res.redirect("/uploads/" + req.file.originalname); //fileName
+      return res.status
+//for firebase
+//커스텀 토큰 생성 
 
 function createFirebaseToken(kakaoAccessToken) {
   return requestMe(kakaoAccessToken).then((response) => {
@@ -108,36 +140,7 @@ function requestMe(kakaoAccessToken) {
 };
 
 
-router.post('/upload', (req, res) => {
-  multer({
-      storage: _storage
-    }).single('upload'),
-    function (req, res) {
-      try {
-        let file = req.file;
-        let originalName = '';
-        let fileName = '';
-        let mimeType = '';
-        let size = 0;
-
-        if (file) {
-          originalName = file.originalname;
-          filename = file.fileName; //file.fileName
-          mimeType = file.mimetype;
-          size = file.size;
-          console.log("execute" + fileName);
-        } else {
-          console.log("request is null");
-        }
-
-      } catch (err) {
-
-        console.dir(err.stack);
-      }
-      console.log(req.file);
-      console.log(req.body);
-      res.redirect("/uploads/" + req.file.originalname); //fileName
-      return res.status(200).end();
+(200).end();
     }
 });
 

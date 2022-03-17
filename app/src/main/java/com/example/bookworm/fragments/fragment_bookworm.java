@@ -50,18 +50,18 @@ public class fragment_bookworm extends Fragment {
         View view = getView();
         String[] images;
 
-        set_wormtype(userinfo);
-        setBookworm(userinfo);
-
-        // 유저 책볼레 벡터를 이미지 슬라이더에 넣을 String[]에 넣는다.
-        images = new String[userinfo.getWormimgvec().size()];
-        userinfo.getWormimgvec().copyInto(images);
+//        set_wormtype(userinfo);
+//        setBookworm(userinfo);
+//
+//        // 유저 책볼레 벡터를 이미지 슬라이더에 넣을 String[]에 넣는다.
+//        images = new String[userinfo.getWormimgvec().size()];
+//        userinfo.getWormimgvec().copyInto(images);
 
         sliderViewPager = view.findViewById(R.id.sliderViewPager);
         layoutIndicator = view.findViewById(R.id.layoutIndicators);
 
         sliderViewPager.setOffscreenPageLimit(1);
-        sliderViewPager.setAdapter(new ImageSliderAdapter(getActivity(), images));
+//        sliderViewPager.setAdapter(new ImageSliderAdapter(getActivity(), images));
 
         sliderViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -71,7 +71,7 @@ public class fragment_bookworm extends Fragment {
             }
         });
 
-        setupIndicators(images.length);
+//        setupIndicators(images.length);
     }
 
     @Override
@@ -120,37 +120,37 @@ public class fragment_bookworm extends Fragment {
         }
     }
 
-
-    private void setBookworm(UserInfo userinfo) {
-        // 현재시간 얻고
-        GregorianCalendar today = new GregorianCalendar();
-
-        int index = today.get(today.YEAR) % userinfo.getRegister_year();
-        int path = R.drawable.ex_default;
-
-        // 현재년도 % 가입년도 연산으로 현재의 책볼레타입으로 채움
-        userinfo.getWormvec().set(index, userinfo.getWormtype().value());
-
-        switch (userinfo.getWormvec().get(index))
-        {
-            case 0:
-                path = R.drawable.ex_default;
-                break;
-            case 1:
-                path = R.drawable.ex_horror;
-                break;
-            case 2:
-                path = R.drawable.ex_detective;
-                break;
-            case 3:
-                path = R.drawable.ex_romance;
-                break;
-            default:
-                break;
-        }
-
-        userinfo.getWormimgvec().set(index, Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + path).toString());
-    }
+//
+//    private void setBookworm(UserInfo userinfo) {
+//        // 현재시간 얻고
+//        GregorianCalendar today = new GregorianCalendar();
+//
+//        int index = today.get(today.YEAR) % userinfo.getRegister_year();
+//        int path = R.drawable.ex_default;
+//
+//        // 현재년도 % 가입년도 연산으로 현재의 책볼레타입으로 채움
+//        userinfo.getWormvec().set(index, userinfo.getWormtype().value());
+//
+//        switch (userinfo.getWormvec().get(index))
+//        {
+//            case 0:
+//                path = R.drawable.ex_default;
+//                break;
+//            case 1:
+//                path = R.drawable.ex_horror;
+//                break;
+//            case 2:
+//                path = R.drawable.ex_detective;
+//                break;
+//            case 3:
+//                path = R.drawable.ex_romance;
+//                break;
+//            default:
+//                break;
+//        }
+//
+//        userinfo.getWormimgvec().set(index, Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + path).toString());
+//    }
 
 
     // userinfo의 genre 배열의 어떤 인덱스(장르)가 가장 큰 값을 가지고 있는지 찾은 후
@@ -165,25 +165,25 @@ public class fragment_bookworm extends Fragment {
         return max;
     }
 
-    private void set_wormtype(UserInfo userinfo) {
-        switch (favorgenre(userinfo.getGenre()))
-        {
-            case 0:
-                userinfo.setWormtype(enum_wormtype.디폴트);
-                break;
-            case 1:
-                userinfo.setWormtype(enum_wormtype.공포);
-                break;
-            case 2:
-                userinfo.setWormtype(enum_wormtype.추리);
-                break;
-            case 3:
-                userinfo.setWormtype(enum_wormtype.로맨스);
-                break;
-            default:
-                break;
-        }
-    }
+//    private void set_wormtype(UserInfo userinfo) {
+//        switch (favorgenre(userinfo.getGenre()))
+//        {
+//            case 0:
+//                userinfo.setWormtype(enum_wormtype.디폴트);
+//                break;
+//            case 1:
+//                userinfo.setWormtype(enum_wormtype.공포);
+//                break;
+//            case 2:
+//                userinfo.setWormtype(enum_wormtype.추리);
+//                break;
+//            case 3:
+//                userinfo.setWormtype(enum_wormtype.로맨스);
+//                break;
+//            default:
+//                break;
+//        }
+//    }
 
 
 }
