@@ -16,7 +16,11 @@ import com.example.bookworm.ProfileSettingActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.User.FollowerActivity;
 import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.personalD.PersonalD;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class fragment_profile extends Fragment {
     UserInfo userInfo;
@@ -24,6 +28,7 @@ public class fragment_profile extends Fragment {
     Button btnFollower, btnFollowing, btnSetting, btnd, btnh, btnde;
     ImageView imgProfile;
     Context current_context;
+    FBModule fbModule;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,7 +47,7 @@ public class fragment_profile extends Fragment {
 
 
         current_context = getActivity();
-
+        fbModule = new FBModule(current_context);
         userInfo = new PersonalD(current_context).getUserInfo(); //저장된 UserInfo값을 가져온다.
 
         btnSetting.setOnClickListener(new View.OnClickListener() {
@@ -93,10 +98,17 @@ public class fragment_profile extends Fragment {
 //            }
 //        });
 
-
-
         Glide.with(this).load(userInfo.getProfileimg()).circleCrop().into(imgProfile); //프로필사진 로딩후 삽입.
 
         return view;
+    }
+    //장르를 세팅하는 함수
+    private void setGenre(int idx) {
+        //로컬에서 업데이트
+        userInfo.setGenre(idx);
+        //로컬 값 변경이후, 서버에 업데이트
+        Map map = new HashMap();
+        map.put("genre", userInfo.getGenre());
+        fbModule.readData(0,map,userInfo.getToken());
     }
 }

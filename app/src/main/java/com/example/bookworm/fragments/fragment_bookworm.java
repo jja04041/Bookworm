@@ -18,6 +18,7 @@ import com.example.bookworm.ImageSliderAdapter;
 import com.example.bookworm.R;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.modules.FBModule;
+import com.example.bookworm.modules.personalD.PersonalD;
 
 import java.util.HashMap;
 import java.util.Vector;
@@ -45,13 +46,10 @@ public class fragment_bookworm extends Fragment {
         fbModule = new FBModule(mContext);
         mContext = getActivity();
 
-//        PersonalD personalD = new PersonalD(getContext());
-//        userinfo = personalD.getUserInfo();
+        PersonalD personalD = new PersonalD(mContext);
+        userinfo = personalD.getUserInfo();
 
 
-        fbModule.readData(0, map, userinfo.getToken());
-
-        userinfo = (UserInfo) map.get("UserInfo");
 
         return view;
     }
