@@ -88,7 +88,7 @@ public class UserInfo implements Serializable {
     }
 
     public void add(Map document) {
-        this.username = (String) document.get("user_name");
+        this.username = (String) document.get("username");
         this.email = (String) document.get("email");
         this.profileimg = (String) document.get("profileimg");
         this.token = (String) document.get("token");
