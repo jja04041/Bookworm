@@ -1,6 +1,7 @@
 package com.example.bookworm.Feed;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -33,9 +35,11 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.bumptech.glide.Glide;
+import com.example.bookworm.MainActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.databinding.SubactivityFeedCreateBinding;
 import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.Module;
 import com.example.bookworm.modules.personalD.PersonalD;
@@ -60,6 +64,7 @@ import java.util.List;
 import java.util.Map;
 
 public class subActivity_Feed_Create extends AppCompatActivity {
+    private SubactivityFeedCreateBinding binding;
     FBModule fbModule;
     UserInfo userInfo;
     Context current_context;
@@ -68,8 +73,9 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     TextView tvFinish, tvNickName, tvlabel1;
     Button btnAdd, btnUp;
     ImageView ivUpload, imgProfile;
-    LinearLayout layout;
+    LinearLayout LLlabel;
     ArrayList<Button> btn;
+    Dialog customDialog;
     int label = 0;
     //라벨은 알럿 다이어그램을 통해 입력을 받고, 선택한 값으로 라벨이 지정됨 => 구현 예정
 
@@ -98,16 +104,17 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.subactivity_feed_create);
+        binding = SubactivityFeedCreateBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 //        edtFeedContent = findViewById(R.id.edtFeedContent);
 //        btnAdd = findViewById(R.id.btnAdd);
-//        btnUp = findViewById(R.id.btnimgUp);
+        btnUp = findViewById(R.id.btnImageUpload);
 //        ivUpload = findViewById(R.id.ivUpload);
         imgProfile = findViewById(R.id.ivProfileImage);
         tvFinish = findViewById(R.id.tvFinish);
         tvNickName = findViewById(R.id.tvNickname);
         tvlabel1 = findViewById(R.id.tvlabel1);
-        layout = findViewById(R.id.llLabel);
+        LLlabel = findViewById(R.id.llLabel);
 
         //tvlabel1.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#55ff0000"))); //자바로 BackgroundTint 설정
 
@@ -121,7 +128,19 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         userInfo = new PersonalD(current_context).getUserInfo(); //저장된 UserInfo값을 가져온다.
 
         Glide.with(this).load(userInfo.getProfileimg()).circleCrop().into(imgProfile); //프로필사진 로딩후 삽입.
-        tvNickName.setText(userInfo.getUsername());
+        binding.tvNickname.setText(userInfo.getUsername());
+
+        customDialog = new Dialog(subActivity_Feed_Create.this);       // Dialog 초기화
+        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
+        customDialog.setContentView(R.layout.custom_dialog_label);
+
+        LLlabel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showcustomDialog();
+            }
+        });
+
 
 //        btnAdd.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -208,67 +227,26 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         }
     }
 
-    private void labelCtrl(int mode, Button button) {
+    // 커스텀 다이얼로그(라벨)를 디자인하는 함수
+    public void showcustomDialog () {
+        customDialog.show(); // 다이얼로그 띄우기
 
-        switch (mode) {
-            case 0: //ADD
-                btn.add(button);
-                if (btn.size() == 4) {
-                    btn.remove(btnAdd);
-                }
-                break;
-            case 1: //Remove
-                btn.remove(button);
-                if (!btn.contains(btnAdd)) {
-                    btn.add(0, btnAdd);
-                }
-                label--;
-                break;
-        }
-        layout.removeAllViews();
-        for (Button i : btn) {
-            layout.addView(i);
-        }
-        Log.d("arrayNow", btn.toString());
-//        //레이아웃을 새로고침 함.
-
-    }
-
-    private void setLabel(String Text, int btnColor) {
-        if (label < 3) {
-            //버튼 세팅
-            Button btn = new Button(getApplicationContext());
-            btn.setClickable(true);
-            //label 디자인
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT, 150);
-            layoutParams.setMargins(10, 10, 10, 10);
-            btn.setLayoutParams(layoutParams);
-            btn.setPadding(10, 0, 10, 0);
-            Drawable unwrappedDrawable = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.label_design);
-            Drawable wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable);
-            DrawableCompat.setTint(wrappedDrawable, btnColor);
-            btn.setBackground(wrappedDrawable);
-
-            btn.setText(Text + "\t\t\tX");
-            //클릭 불가능하게 만들기
-//            btn.setOnLongClickListener(new View.OnLongClickListener() {
-//                @Override
-//                public boolean onLongClick(View view) {
-//                    labelCtrl(1,btn);
-//                    return true;
-//                }
-//            });
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    labelCtrl(1, btn);
-                }
-            });
-            //라벨 추가
-            labelCtrl(0, btn);
-            label++;
-        }
+        Button noBtn = customDialog.findViewById(R.id.btnCancle);
+        noBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 원하는 기능 구현
+                customDialog.dismiss(); // 다이얼로그 닫기
+            }
+        });
+        // 네 버튼
+        customDialog.findViewById(R.id.btnOk).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 원하는 기능 구현
+                customDialog.dismiss(); // 다이얼로그 닫기
+            }
+        });
     }
 
 }
