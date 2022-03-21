@@ -1,127 +1,97 @@
 package com.example.bookworm.Feed;
 
+
+import android.Manifest;
 import android.app.Activity;
-import android.content.ComponentName;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.content.res.ColorStateList;
+
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.example.bookworm.MainActivity;
 import com.example.bookworm.R;
-import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.databinding.SubactivityFeedCreateBinding;
 import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.Module;
 import com.example.bookworm.modules.personalD.PersonalD;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
-import org.w3c.dom.Text;
 
-import java.io.File;
-import java.io.InputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+
 import java.util.HashMap;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 public class subActivity_Feed_Create extends AppCompatActivity {
+
+
+    private SubactivityFeedCreateBinding binding;
     FBModule fbModule;
     UserInfo userInfo;
     Context current_context;
     Module module;
     HashMap<String, String> data;
-    TextView tvFinish, tvNickName, tvlabel1;
-    Button btnAdd, btnUp;
-    ImageView ivUpload, imgProfile;
-    LinearLayout layout;
-    ArrayList<Button> btn;
-    int label = 0;
+
+
     //라벨은 알럿 다이어그램을 통해 입력을 받고, 선택한 값으로 라벨이 지정됨 => 구현 예정
 
     //사용자가 선택한 어플로 이어서 사진을 선택할 수 있게 함.
     ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                {
-                    if (result.getResultCode() == RESULT_OK) {
-                        try {
-                            Log.d("map", result.getData().toString()); // 카메라로 찍을 경우에는 인식이 안된다.
-                            InputStream in = getContentResolver().openInputStream(result.getData().getData());
-                            Bitmap img = BitmapFactory.decodeStream(in);
-                            in.close();
-                            ivUpload.setImageBitmap(img);
-                        } catch (Exception e) {
+                int code = result.getResultCode();
+                if (code == Activity.RESULT_OK) {
+                    Uri uri = result.getData().getParcelableExtra("path");
+                    try {
+                        // You can update this bitmap to your server
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
 
-                        }
-                    } else if (result.getResultCode() == RESULT_CANCELED) {
-                        Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
+                        // loading profile image from local cache
+                        loadImage(uri.toString());
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
+
 
             });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.subactivity_feed_create);
-//        edtFeedContent = findViewById(R.id.edtFeedContent);
-//        btnAdd = findViewById(R.id.btnAdd);
-//        btnUp = findViewById(R.id.btnimgUp);
-//        ivUpload = findViewById(R.id.ivUpload);
-        imgProfile = findViewById(R.id.ivProfileImage);
-        tvFinish = findViewById(R.id.tvFinish);
-        tvNickName = findViewById(R.id.tvNickname);
-        tvlabel1 = findViewById(R.id.tvlabel1);
-        layout = findViewById(R.id.llLabel);
-
-        //tvlabel1.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#55ff0000"))); //자바로 BackgroundTint 설정
-
-        btn = new ArrayList<>();
+        binding = SubactivityFeedCreateBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         fbModule = new FBModule(null);
-        btn.add(btnAdd);
+
         LocalDateTime now = LocalDateTime.now();
         SimpleDateFormat now_date = new SimpleDateFormat();
 
         current_context = this;
         userInfo = new PersonalD(current_context).getUserInfo(); //저장된 UserInfo값을 가져온다.
 
-        Glide.with(this).load(userInfo.getProfileimg()).circleCrop().into(imgProfile); //프로필사진 로딩후 삽입.
-        tvNickName.setText(userInfo.getUsername());
+        Glide.with(this).load(userInfo.getProfileimg()).circleCrop().into(binding.ivProfileImage); //프로필사진 로딩후 삽입.
+        binding.tvNickname.setText(userInfo.getUsername());
 
 //        btnAdd.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -139,17 +109,33 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 ////                setLabel(a,Color.parseColor("#EFDDDD"));
 //            }
 //        });
-        btnUp.setOnClickListener(new View.OnClickListener() {
+        binding.btnImageUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                File file = getExternalFilesDir(Environment.DIRECTORY_DCIM);
-                Uri cameraOutputUri = Uri.fromFile(file);
-                Intent intent = getPickIntent(cameraOutputUri);
-                startActivityResult.launch(intent);
+
+                Dexter.withActivity((Activity) current_context)
+                        .withPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE)
+                        .withListener(new MultiplePermissionsListener() {
+                            @Override
+                            public void onPermissionsChecked(MultiplePermissionsReport report) {
+                                if (report.areAllPermissionsGranted()) {
+                                    showImagePickerOptions();
+                                }
+
+                                if (report.isAnyPermissionPermanentlyDenied()) {
+                                    showSettingsDialog();
+                                }
+                            }
+
+                            @Override
+                            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                                token.continuePermissionRequest();
+                            }
+                        }).check();
             }
         });
 
-        tvFinish.setOnClickListener(new View.OnClickListener() {
+        binding.tvFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -171,104 +157,76 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         });
     }
 
-    private Intent getPickIntent(Uri cameraOutputUri) {
-        final List<Intent> intents = new ArrayList<Intent>();
 
-        if (true) {
-            intents.add(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI));
-        }
+    //이미지 처리 코드
+    private void loadImage(String url) {
+        Log.d("이미지 캐싱 ", "Image cache path: " + url);
 
-        if (true) {
-            setCameraIntents(intents, cameraOutputUri);
-        }
+        Glide.with(this).load(url)
+                .into(binding.ivpicture);
+        binding.ivpicture.setColorFilter(ContextCompat.getColor(this, android.R.color.transparent));
+    }
 
-        if (intents.isEmpty()) return null;
-        Intent result = Intent.createChooser(intents.remove(0), null);
-        if (!intents.isEmpty()) {
-            result.putExtra(Intent.EXTRA_INITIAL_INTENTS, intents.toArray(new Parcelable[]{}));
-        }
-        return result;
+    private void showImagePickerOptions() {
+        ImagePicker.showImagePickerOptions(this, new ImagePicker.PickerOptionListener() {
+            @Override
+            public void onTakeCameraSelected() {
+                launchCameraIntent();
+            }
 
+            @Override
+            public void onChooseGallerySelected() {
+                launchGalleryIntent();
+            }
+        });
+    }
+
+    private void launchCameraIntent() {
+        Intent intent = new Intent(subActivity_Feed_Create.this, ImagePicker.class);
+        intent.putExtra(ImagePicker.INTENT_IMAGE_PICKER_OPTION, ImagePicker.REQUEST_IMAGE_CAPTURE);
+
+        // setting aspect ratio
+        intent.putExtra(ImagePicker.INTENT_LOCK_ASPECT_RATIO, true);
+        intent.putExtra(ImagePicker.INTENT_ASPECT_RATIO_X, 1); // 16x9, 1x1, 3:4, 3:2
+        intent.putExtra(ImagePicker.INTENT_ASPECT_RATIO_Y, 1);
+
+        // setting maximum bitmap width and height
+        intent.putExtra(ImagePicker.INTENT_SET_BITMAP_MAX_WIDTH_HEIGHT, true);
+        intent.putExtra(ImagePicker.INTENT_BITMAP_MAX_WIDTH, 1000);
+        intent.putExtra(ImagePicker.INTENT_BITMAP_MAX_HEIGHT, 1000);
+        startActivityResult.launch(intent);
+    }
+
+    private void launchGalleryIntent() {
+        Intent intent = new Intent(subActivity_Feed_Create.this, ImagePicker.class);
+        intent.putExtra(ImagePicker.INTENT_IMAGE_PICKER_OPTION, ImagePicker.REQUEST_GALLERY_IMAGE);
+
+        // setting aspect ratio
+        intent.putExtra(ImagePicker.INTENT_LOCK_ASPECT_RATIO, true);
+        intent.putExtra(ImagePicker.INTENT_ASPECT_RATIO_X, 1); // 16x9, 1x1, 3:4, 3:2
+        intent.putExtra(ImagePicker.INTENT_ASPECT_RATIO_Y, 1);
+        startActivityResult.launch(intent);
+    }
+
+    private void showSettingsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(subActivity_Feed_Create.this);
+        builder.setTitle(getString(R.string.dialog_permission_title));
+        builder.setMessage(getString(R.string.dialog_permission_message));
+        builder.setPositiveButton(getString(R.string.go_to_settings), (dialog, which) -> {
+            dialog.cancel();
+            openSettings();
+        });
+        builder.setNegativeButton(getString(android.R.string.cancel), (dialog, which) -> dialog.cancel());
+        builder.show();
 
     }
 
-    private void setCameraIntents(List<Intent> cameraIntents, Uri output) {
-        //인텐트 생성
-        final Intent captureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        final PackageManager packageManager = getPackageManager();
-        final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
-        //다양한 카메라 어플을 지원함.
-        for (ResolveInfo res : listCam) {
-            final String packageName = res.activityInfo.packageName;
-            final Intent intent = new Intent(captureIntent);
-            intent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-            intent.setPackage(packageName);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, output);
-            cameraIntents.add(intent);
-        }
-    }
-
-    private void labelCtrl(int mode, Button button) {
-
-        switch (mode) {
-            case 0: //ADD
-                btn.add(button);
-                if (btn.size() == 4) {
-                    btn.remove(btnAdd);
-                }
-                break;
-            case 1: //Remove
-                btn.remove(button);
-                if (!btn.contains(btnAdd)) {
-                    btn.add(0, btnAdd);
-                }
-                label--;
-                break;
-        }
-        layout.removeAllViews();
-        for (Button i : btn) {
-            layout.addView(i);
-        }
-        Log.d("arrayNow", btn.toString());
-//        //레이아웃을 새로고침 함.
-
-    }
-
-    private void setLabel(String Text, int btnColor) {
-        if (label < 3) {
-            //버튼 세팅
-            Button btn = new Button(getApplicationContext());
-            btn.setClickable(true);
-            //label 디자인
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT, 150);
-            layoutParams.setMargins(10, 10, 10, 10);
-            btn.setLayoutParams(layoutParams);
-            btn.setPadding(10, 0, 10, 0);
-            Drawable unwrappedDrawable = AppCompatResources.getDrawable(getApplicationContext(), R.drawable.label_design);
-            Drawable wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable);
-            DrawableCompat.setTint(wrappedDrawable, btnColor);
-            btn.setBackground(wrappedDrawable);
-
-            btn.setText(Text + "\t\t\tX");
-            //클릭 불가능하게 만들기
-//            btn.setOnLongClickListener(new View.OnLongClickListener() {
-//                @Override
-//                public boolean onLongClick(View view) {
-//                    labelCtrl(1,btn);
-//                    return true;
-//                }
-//            });
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    labelCtrl(1, btn);
-                }
-            });
-            //라벨 추가
-            labelCtrl(0, btn);
-            label++;
-        }
+    //권한 설정
+    private void openSettings() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        intent.setData(uri);
+        startActivityResult.launch(intent);
     }
 
 }
