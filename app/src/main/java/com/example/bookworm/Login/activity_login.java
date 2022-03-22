@@ -7,7 +7,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -72,13 +74,14 @@ public class activity_login extends Activity {
         } else {
             new AlertDialog.Builder(mContext)
                     .setMessage("인터넷 접속 후 다시 시도해 주세요")
-                    .setPositiveButton("알겠습니다.", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            finish();
-                        }
-                    }).show();
+                    .setPositiveButton("네트워크 설정", (dialog, which) -> {
+                        dialog.dismiss();
+                        startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+                        finish();
+                    }).setNegativeButton("닫기", (dialogInterface, i) -> {
+                dialogInterface.dismiss();
+                finish();
+            }).show();
         }
     }
 
