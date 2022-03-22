@@ -1,13 +1,18 @@
 package com.example.bookworm.Login;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -60,7 +65,24 @@ public class activity_login extends Activity {
         fbModule = new FBModule(mContext);
 
         mAuth = FirebaseAuth.getInstance();
+        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork != null) {
+            startLogin();
+        } else {
+            new AlertDialog.Builder(mContext)
+                    .setMessage("인터넷 접속 후 다시 시도해 주세요")
+                    .setPositiveButton("알겠습니다.", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            finish();
+                        }
+                    }).show();
+        }
+    }
 
+    private void startLogin() {
         Session session = Session.getCurrentSession();
         session.addCallback(sessionCallback);
 
@@ -139,7 +161,7 @@ public class activity_login extends Activity {
                     userInfo = new UserInfo();
                     userInfo.add(account);
                     userInfo.setToken(account.getId());
-                    signUp(userInfo,account.getId());
+                    signUp(userInfo, account.getId());
                 }
             });
 //            try {
@@ -153,11 +175,13 @@ public class activity_login extends Activity {
 //            }
         }
     }
+
     //로그인 함수
-    public void signIn(Boolean ResultCode,UserInfo fbUserInfo){
+    public void signIn(Boolean ResultCode, UserInfo fbUserInfo) {
         if (ResultCode) move(fbUserInfo);//회원이 아닌 경우
         else move(fbUserInfo); //회원인 경우
     }
+
     public void move(UserInfo userInfo) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -170,9 +194,9 @@ public class activity_login extends Activity {
     //회원가입 함수
     public void signUp(UserInfo userInfo, String idtoken) {
         if (null != idtoken && null != userInfo.getUsername()) {
-            Map map=new HashMap();
-            map.put("UserInfo",userInfo);
-            fbModule.readData(0,map,idtoken);
+            Map map = new HashMap();
+            map.put("UserInfo", userInfo);
+            fbModule.readData(0, map, idtoken);
         } else {
             Log.d("function signup", "nono token ");
         }
