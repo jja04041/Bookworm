@@ -20,7 +20,6 @@ import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.personalD.PersonalD;
 
-import java.util.HashMap;
 import java.util.Vector;
 
 public class fragment_bookworm extends Fragment {
@@ -30,10 +29,9 @@ public class fragment_bookworm extends Fragment {
 
     private UserInfo userinfo;
 
-    public static Context mContext;
+    public static Context current_context;
     private FBModule fbModule;
 
-    HashMap<String, Object> map = new HashMap<>();
 
 
 
@@ -43,13 +41,6 @@ public class fragment_bookworm extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_bookworm, container, false);
 
-        fbModule = new FBModule(mContext);
-        mContext = getActivity();
-
-        PersonalD personalD = new PersonalD(mContext);
-        userinfo = personalD.getUserInfo();
-
-//      userinfo = fbModule.readData(0, , "UserInfo");
 
 
 
@@ -62,6 +53,10 @@ public class fragment_bookworm extends Fragment {
 
         View view = getView();
         String[] images;
+
+        current_context = getActivity();
+        fbModule = new FBModule(current_context);
+        userinfo = new PersonalD(current_context).getUserInfo(); //저장된 UserInfo값을 가져온다.
 
         set_wormtype(userinfo);
         setBookworm(userinfo);
@@ -87,10 +82,6 @@ public class fragment_bookworm extends Fragment {
         setupIndicators(images.length);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
 
     private String getURLForResource(int resId) {
         return Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + resId).toString();

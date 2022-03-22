@@ -105,7 +105,7 @@ public class fragment_profile extends Fragment {
     //장르를 세팅하는 함수
     private void setGenre(int idx) {
         //로컬에서 업데이트
-        userInfo.setGenre(idx);
+        userInfo.setGenre(idx, current_context);
         //로컬 값 변경이후, 서버에 업데이트
         Map map = new HashMap();
         map.put("userinfo_genre", userInfo);

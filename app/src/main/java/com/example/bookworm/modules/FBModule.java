@@ -93,8 +93,6 @@ public class FBModule {
             //유저정보 불러오기
             if (idx == 0) {
                 //장르를 업데이트
-                UserInfo userinfo;
-
 
                 //userinfo = (UserInfo)document.getData().get("UserInfo");
 
