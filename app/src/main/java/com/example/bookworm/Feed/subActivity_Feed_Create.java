@@ -72,6 +72,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     LinearLayout LLlabel;
     ArrayList<Button> btn;
     Dialog customDialog;
+    String FeedID;
     Book selected_book; //선택한 책 객체
     int label = 0;
     //라벨은 알럿 다이어그램을 통해 입력을 받고, 선택한 값으로 라벨이 지정됨 => 구현 예정
@@ -203,8 +204,24 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         binding.tvFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                feedUpload();
-                finish();
+
+                new AlertDialog.Builder(current_context)
+                        .setMessage("피드를 업로드하시겠습니까?")
+                        .setPositiveButton("네", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        feedUpload();
+                                    }
+                                }
+                        )
+                        .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                }
+                        ).show();
             }
         });
     }
@@ -418,20 +435,36 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     }
 
     public void feedUpload() {
-        HashMap<String, Object> map = new HashMap<>();
 
-        ArrayList<String> labelList = new ArrayList<String>(); //선택한 라벨 목록을 담을 리스트
+        FeedID = userInfo.getToken() + "_" + String.valueOf(System.currentTimeMillis());
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String formatTime = dateFormat.format(System.currentTimeMillis());
+        if (binding.tvFeedBookTitle.getText().toString().equals("") || binding.edtFeedText.getText().toString().equals("")) {
+            new AlertDialog.Builder(current_context)
+                    .setMessage("책 제목과 피드 내용을 작성해주세요")
+                    .setPositiveButton("알겠습니다.", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).show();
+        } else {
+            HashMap<String, Object> map = new HashMap<>();
 
-        map.put("UserInfo", userInfo); //유저 정보
-        map.put("book", selected_book); //책 정보
-        map.put("feedText", binding.edtFeedText.getText().toString()); //피드 내용
-        map.put("label", labelAdd(labelList)); //라벨 리스트
-        map.put("date", formatTime); //현재 시간 millis로
+            ArrayList<String> labelList = new ArrayList<String>(); //선택한 라벨 목록을 담을 리스트
 
-        fbModule.readData(1, map, userInfo.getToken() + String.valueOf(System.currentTimeMillis()));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String formatTime = dateFormat.format(System.currentTimeMillis());
+
+            map.put("UserInfo", userInfo); //유저 정보
+            map.put("book", selected_book); //책 정보
+            map.put("feedText", binding.edtFeedText.getText().toString()); //피드 내용
+            map.put("label", labelAdd(labelList)); //라벨 리스트
+            map.put("date", formatTime); //현재 시간 millis로
+            map.put("FeedID", FeedID); //피드 아이디
+
+            fbModule.readData(1, map, FeedID);
+            finish();
+        }
     }
 
     //현재 화면의 라벨을 라벨 리스트에 추가하는 함수

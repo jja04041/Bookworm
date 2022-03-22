@@ -172,12 +172,12 @@ public class FBModule {
                 UserInfo userInfo1 = new UserInfo();
                 userInfo1 = (UserInfo) data.get("UserInfo");
 
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String formatTime = dateFormat.format(System.currentTimeMillis());
+//                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                String formatTime = dateFormat.format(System.currentTimeMillis());
 
-                String FeedID = userInfo1.getToken() + "_" + formatTime;
+//                String FeedID = userInfo1.getToken() + "_" + data.get("date");
 
-                db.collection(location[idx]).document(FeedID).set(data);
+                db.collection(location[idx]).document((String) data.get("FeedID")).set(data);
                 break;
 
             case 2://챌린지 생성
