@@ -6,15 +6,13 @@ import android.util.Log;
 
 import com.example.bookworm.Bw.enum_wormtype;
 import com.example.bookworm.R;
-import com.example.bookworm.modules.FBModule;
+import com.example.bookworm.modules.personalD.PersonalD;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.kakao.usermgmt.response.model.Profile;
 import com.kakao.usermgmt.response.model.UserAccount;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
@@ -128,11 +126,13 @@ public class UserInfo implements Serializable {
         return genre;
     }
 
-    public void setGenre(int idx) {
+    public void setGenre(int idx, Context context) {
         int unboxint = (this.genre.get(idx));
         unboxint++;
 
         this.genre.set(idx, unboxint);
+
+        new PersonalD(context).saveUserInfo(this);
     }
 
     public Vector<Integer> getWormvec() {
