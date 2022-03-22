@@ -79,24 +79,24 @@ public class fragment_profile extends Fragment {
 
         // 지워도댐
 
-//        btnd.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                userInfo.setGenre(0);
-//            }
-//        });
-//        btnh.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                userInfo.setGenre(1);
-//            }
-//        });
-//        btnde.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                userInfo.setGenre(2);
-//            }
-//        });
+        btnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setGenre(0);
+            }
+        });
+        btnh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setGenre(1);
+            }
+        });
+        btnde.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setGenre(2);
+            }
+        });
 
         Glide.with(this).load(userInfo.getProfileimg()).circleCrop().into(imgProfile); //프로필사진 로딩후 삽입.
 
@@ -108,7 +108,7 @@ public class fragment_profile extends Fragment {
         userInfo.setGenre(idx);
         //로컬 값 변경이후, 서버에 업데이트
         Map map = new HashMap();
-        map.put("genre", userInfo.getGenre());
+        map.put("userinfo_genre", userInfo);
         fbModule.readData(0,map,userInfo.getToken());
     }
 }

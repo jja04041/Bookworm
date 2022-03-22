@@ -49,6 +49,8 @@ public class fragment_bookworm extends Fragment {
         PersonalD personalD = new PersonalD(mContext);
         userinfo = personalD.getUserInfo();
 
+//      userinfo = fbModule.readData(0, , "UserInfo");
+
 
 
         return view;
