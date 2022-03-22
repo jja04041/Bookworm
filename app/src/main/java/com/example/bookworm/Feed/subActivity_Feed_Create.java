@@ -4,20 +4,37 @@ package com.example.bookworm.Feed;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -35,6 +52,7 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -42,6 +60,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public class subActivity_Feed_Create extends AppCompatActivity {
 
@@ -54,6 +73,13 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     HashMap<String, String> data;
 
 
+    TextView tvFinish, tvNickName, tvlabel1;
+    Button btnAdd, btnUp;
+    ImageView ivUpload, imgProfile;
+    LinearLayout LLlabel;
+    ArrayList<Button> btn;
+    Dialog customDialog;
+    int label = 0;
     //라벨은 알럿 다이어그램을 통해 입력을 받고, 선택한 값으로 라벨이 지정됨 => 구현 예정
 
     //사용자가 선택한 어플로 이어서 사진을 선택할 수 있게 함.
@@ -74,7 +100,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
                     }
                 }
 
-
             });
 
     @Override
@@ -82,6 +107,21 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = SubactivityFeedCreateBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        binding = SubactivityFeedCreateBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+//        edtFeedContent = findViewById(R.id.edtFeedContent);
+//        btnAdd = findViewById(R.id.btnAdd);
+        btnUp = findViewById(R.id.btnImageUpload);
+//        ivUpload = findViewById(R.id.ivUpload);
+        imgProfile = findViewById(R.id.ivProfileImage);
+        tvFinish = findViewById(R.id.tvFinish);
+        tvNickName = findViewById(R.id.tvNickname);
+        tvlabel1 = findViewById(R.id.tvlabel1);
+        LLlabel = findViewById(R.id.llLabel);
+
+        //tvlabel1.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#55ff0000"))); //자바로 BackgroundTint 설정
+
+        btn = new ArrayList<>();
         fbModule = new FBModule(null);
 
         LocalDateTime now = LocalDateTime.now();
@@ -92,6 +132,20 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 
         Glide.with(this).load(userInfo.getProfileimg()).circleCrop().into(binding.ivProfileImage); //프로필사진 로딩후 삽입.
         binding.tvNickname.setText(userInfo.getUsername());
+        Glide.with(this).load(userInfo.getProfileimg()).circleCrop().into(imgProfile); //프로필사진 로딩후 삽입.
+        binding.tvNickname.setText(userInfo.getUsername());
+
+        customDialog = new Dialog(subActivity_Feed_Create.this);       // Dialog 초기화
+        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
+        customDialog.setContentView(R.layout.custom_dialog_label);
+
+        LLlabel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showcustomDialog();
+            }
+        });
+
 
 //        btnAdd.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -157,6 +211,27 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         });
     }
 
+    // 커스텀 다이얼로그(라벨)를 디자인하는 함수
+    public void showcustomDialog () {
+        customDialog.show(); // 다이얼로그 띄우기
+
+        Button noBtn = customDialog.findViewById(R.id.btnCancle);
+        noBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 원하는 기능 구현
+                customDialog.dismiss(); // 다이얼로그 닫기
+            }
+        });
+        // 네 버튼
+        customDialog.findViewById(R.id.btnOk).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 원하는 기능 구현
+                customDialog.dismiss(); // 다이얼로그 닫기
+            }
+        });
+    }
 
     //이미지 처리 코드
     private void loadImage(String url) {

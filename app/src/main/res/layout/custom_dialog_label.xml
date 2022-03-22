@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="#FF0000"
+            android:text="재미" />
+
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="#FFBB00"
+            android:text="슬픔" />
+
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="#FFE400" />
+
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="#1DDB16" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginVertical="10dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/label_design"
+            android:gravity="center"
+            android:paddingHorizontal="10dp"
+            android:text="   aaa  "
+            android:textSize="18dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginVertical="10dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/label_design"
+            android:gravity="center"
+            android:paddingHorizontal="10dp"
+            android:text="   vvv   "
+            android:textSize="18dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginVertical="10dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/label_design"
+            android:gravity="center"
+            android:paddingHorizontal="10dp"
+            android:text="   bbb   "
+            android:textSize="18dp" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginVertical="10dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/label_design"
+            android:gravity="center"
+            android:paddingHorizontal="10dp"
+            android:text="   aaa   "
+            android:textSize="18dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginVertical="10dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/label_design"
+            android:gravity="center"
+            android:paddingHorizontal="10dp"
+            android:text="   bbb   "
+            android:textSize="18dp" />
+        <!--        <TextView-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="32dp"-->
+        <!--            android:layout_marginVertical="10dp"-->
+        <!--            android:layout_marginStart="10dp"-->
+        <!--            android:background="@drawable/label_design"-->
+        <!--            android:gravity="center"-->
+        <!--            android:paddingHorizontal="10dp"-->
+        <!--            android:text="   +   "-->
+        <!--            android:textSize="18dp" />-->
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnOk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="확인" />
+
+        <Button
+            android:id="@+id/btnCancle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="취소" />
+
+    </LinearLayout>
+
+</LinearLayout>
