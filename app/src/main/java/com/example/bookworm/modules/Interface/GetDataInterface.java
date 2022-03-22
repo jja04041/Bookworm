@@ -20,6 +20,7 @@ public interface GetDataInterface {
             @QueryMap Map<String, String> querys
 
     );
+
     //도서 검색
     @GET("ItemSearch.aspx")
     Call<String> getResult(
@@ -31,10 +32,10 @@ public interface GetDataInterface {
     Call<String> getItem(
             @QueryMap Map<String, String> querys
     );
-    interface ApiService {
-        @Multipart
-        @POST("/upload")
-        Call<ResponseBody> postImage(@Part MultipartBody.Part image, @Part("upload") RequestBody name);
 
-    }
+    @Multipart
+    @POST("/upload")
+    Call<String> postImage(@Part MultipartBody.Part image, @Part("upload") RequestBody name);
+
+
 }

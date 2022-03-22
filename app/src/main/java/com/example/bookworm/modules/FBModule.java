@@ -58,6 +58,7 @@ public class FBModule {
     //데이터 읽기
     public void readData(int idx, Map map, String token) {
         collectionReference = db.collection(location[idx]);
+
         //해당 정보가 있는지 확인(회원 여부 확인)
         if (idx != 2 || token != null) task = collectionReference.document(token).get();
             //챌린지 검색
@@ -80,7 +81,6 @@ public class FBModule {
         }
 
         //결과 확인
-//        task.s
         task.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task task) {
@@ -102,8 +102,8 @@ public class FBModule {
             //유저정보 불러오기
             if (idx == 0) {
                 //장르를 업데이트
-                if(map.get("updateGenre")!=null){
-                    document.getReference().update("genre",map.get("updateGenre")); //지정한 값으로 데이터 업데이트
+                if(map.get("UserInfo")==null){
+                    document.getReference().update("UserInfo",(UserInfo)map.get("UserInfo")); //지정한 값으로 데이터 업데이트
                 }
                 //회원인 경우, 로그인 처리
                 else {

@@ -96,6 +96,7 @@ public class ImagePicker extends AppCompatActivity {
         processingImage();
     }
 
+    //Methods
     private void processingImage() {
         Intent intent = getIntent();
         ASPECT_RATIO_X = intent.getIntExtra(INTENT_ASPECT_RATIO_X, ASPECT_RATIO_X);
@@ -124,7 +125,7 @@ public class ImagePicker extends AppCompatActivity {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         if (report.areAllPermissionsGranted()) {
-                            fileName = System.currentTimeMillis() + ".jpg";
+                            fileName = System.currentTimeMillis() + ".jpg"; //시간을 가져옴으로서 난수 생성
                             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, getCacheImagePath(fileName));
                             if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
