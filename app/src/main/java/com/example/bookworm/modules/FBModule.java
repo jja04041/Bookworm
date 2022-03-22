@@ -33,7 +33,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 import java.util.Vector;
 
@@ -169,6 +173,31 @@ public class FBModule {
                 db.collection(location[idx]).document(userInfo.getToken()).set(data);
                 ((activity_login)context).signIn(Boolean.TRUE,userInfo); //회원이 아닌 경우
                 break;
+
+            case 1: //피드 작성
+//                Date newdate = new Date();
+//                newdate = (Date)data.get("date");
+                UserInfo userInfo1 = new UserInfo();
+                userInfo1 = (UserInfo)data.get("UserInfo");
+
+                 //new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format((Date)data.get("date"));
+
+//                //챌린지 시작일에 오늘 날짜가 나오게 함
+//                Calendar cal = Calendar.getInstance();
+//                cal.setTime(new Date());
+//                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+//
+//                tv_challenge_start.setText(df.format(cal.getTime()));
+
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String formatTime = dateFormat.format(System.currentTimeMillis());
+
+                String FeedID = userInfo1.getToken() + "_" + formatTime;
+
+                db.collection(location[idx]).document(FeedID).set(data);
+                break;
+
             case 2://챌린지 생성
                 db.collection(location[idx]).document((String) data.get("strChallengeName")).set(data);
                 break;

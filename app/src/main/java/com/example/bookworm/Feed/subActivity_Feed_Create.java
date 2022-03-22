@@ -34,6 +34,8 @@ import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.example.bookworm.MainActivity;
 import com.example.bookworm.R;
+import com.example.bookworm.Search.items.Book;
+import com.example.bookworm.Search.subActivity.search_fragment_subActivity_main;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.databinding.SubactivityFeedCreateBinding;
 import com.example.bookworm.modules.FBModule;
@@ -50,6 +52,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -69,6 +72,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     LinearLayout LLlabel;
     ArrayList<Button> btn;
     Dialog customDialog;
+    Book selected_book; //선택한 책 객체
     int label = 0;
     //라벨은 알럿 다이어그램을 통해 입력을 받고, 선택한 값으로 라벨이 지정됨 => 구현 예정
 
@@ -91,6 +95,18 @@ public class subActivity_Feed_Create extends AppCompatActivity {
                 }
 
 
+            });
+
+    //액티비티 간 데이터 전달 핸들러(검색한 데이터의 값을 전달받는 매개체가 된다.)
+    ActivityResultLauncher<Intent> bookResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent intent = result.getData();
+                    this.selected_book = (Book) intent.getSerializableExtra("data");
+                    binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목만 세팅한다.
+                    //Glide.with(this).load(selected_book.getImg_url()).into(Thumbnail); //책 표지 로딩후 삽입.
+                }
             });
 
     @Override
@@ -139,12 +155,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         customDialog.setContentView(R.layout.custom_dialog_label);
 
-        binding.addLabel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showcustomDialog();
-            }
-        });
 
         binding.btnImageUpload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,9 +182,28 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             }
         });
 
+        binding.addLabel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showcustomDialog();
+            }
+        });
+
+        binding.tvFeedBookTitle.setSingleLine(true);    // 책 제목 한줄로 표시하기
+        binding.tvFeedBookTitle.setEllipsize(TextUtils.TruncateAt.MARQUEE); // 흐르게 만들기
+        binding.tvFeedBookTitle.setSelected(true);      // 선택하기
+
+        binding.tvFeedBookTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getBook();
+            }
+        });
+
         binding.tvFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                feedUpload();
                 finish();
             }
         });
@@ -384,5 +413,42 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void getBook() {
+        Intent intent = new Intent(this, search_fragment_subActivity_main.class);
+        intent.putExtra("classindex", 2);
+        bookResult.launch(intent); //검색 결과를 받는 핸들러를 작동한다.
+    }
+
+    public void feedUpload() {
+        HashMap<String, Object> map = new HashMap<>();
+
+        ArrayList<String> labelList = new ArrayList<String>(); //선택한 라벨 목록을 담을 리스트
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formatTime = dateFormat.format(System.currentTimeMillis());
+
+        map.put("UserInfo", userInfo); //유저 정보
+        map.put("book", selected_book); //책 정보
+        map.put("feedText", binding.edtFeedText.getText().toString()); //피드 내용
+        map.put("label", labelAdd(labelList)); //라벨 리스트
+        map.put("date", formatTime); //현재 시간 millis로
+
+        fbModule.readData(1, map, userInfo.getToken()+String.valueOf(System.currentTimeMillis()));
+    }
+
+    //현재 화면의 라벨을 라벨 리스트에 추가하는 함수
+    public ArrayList<String> labelAdd(ArrayList<String> label) {
+        //피드 생성화면에 존재하는 라벨
+        TextView feedCreateLabel[] = new TextView[5];
+        int[] feedCreateLabelID = {R.id.tvlabel1, R.id.tvlabel2, R.id.tvlabel3, R.id.tvlabel4, R.id.tvlabel5,};
+
+        //우선 빈 껍데기만 있는 라벨을 보이지 않게 설정해놓음
+        for (int i = 0; i < feedCreateLabel.length; i++) {
+            feedCreateLabel[i] = findViewById(feedCreateLabelID[i]);
+            label.add(feedCreateLabel[i].getText().toString());
+        }
+        return label;
     }
 }

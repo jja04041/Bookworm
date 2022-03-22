@@ -102,9 +102,16 @@
 
                 <TextView
                     android:id="@+id/tvFeedBookTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="피드로 작성할 책을 검색해주세요" />
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="피드로 작성할 책을 검색해주세요"
+                    android:ellipsize="marquee"
+                    android:gravity="center"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:singleLine="true"
+                    android:textAlignment="center"
+                    android:textColor="#000000"
+                    android:textSize="15dp"/>
 
             </LinearLayout>
 
@@ -155,6 +162,7 @@
                 android:orientation="vertical">
 
                 <EditText
+                    android:id="@+id/edtFeedText"
                     android:layout_width="match_parent"
                     android:layout_height="180dp"
                     android:layout_margin="15dp"
