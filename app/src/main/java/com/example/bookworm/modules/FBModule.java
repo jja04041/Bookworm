@@ -1,16 +1,10 @@
 package com.example.bookworm.modules;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,9 +20,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -39,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
-import java.util.Vector;
 
 
 public class FBModule {
@@ -102,8 +93,14 @@ public class FBModule {
             //유저정보 불러오기
             if (idx == 0) {
                 //장르를 업데이트
-                if(map.get("updateGenre")!=null){
-                    document.getReference().update("genre",map.get("updateGenre")); //지정한 값으로 데이터 업데이트
+                UserInfo userinfo;
+
+
+                //userinfo = (UserInfo)document.getData().get("UserInfo");
+
+                if(map.get("userinfo_genre") != null)
+                {
+                    document.getReference().update("UserInfo", map.get("userinfo_genre"));
                 }
                 //회원인 경우, 로그인 처리
                 else {
