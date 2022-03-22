@@ -349,7 +349,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
                 TextView tvlabelHint = findViewById(R.id.tvlabelHint); //라벨을 추가해보세요 라는 문구
                 int labelCount = 0; //라벨은 최대 5개까지만 설정하게끔 작동하게 하는 변수
 
-                //라벨 리스트 초기화하고 기존의 라벨 칸마다 INVISIBLE 시키고 Text를 Null로 만듦
+                //라벨 리스트 초기화
                 label.clear();
 
                 //감정 라벨이 선택돼있으면 라벨 리스트에 선택된 항목 추가
@@ -431,7 +431,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         map.put("label", labelAdd(labelList)); //라벨 리스트
         map.put("date", formatTime); //현재 시간 millis로
 
-        fbModule.readData(1, map, userInfo.getToken()+String.valueOf(System.currentTimeMillis()));
+        fbModule.readData(1, map, userInfo.getToken() + String.valueOf(System.currentTimeMillis()));
     }
 
     //현재 화면의 라벨을 라벨 리스트에 추가하는 함수

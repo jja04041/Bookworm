@@ -96,15 +96,14 @@ public class FBModule {
 
                 //userinfo = (UserInfo)document.getData().get("UserInfo");
 
-                if(map.get("userinfo_genre") != null)
-                {
+                if (map.get("userinfo_genre") != null) {
                     document.getReference().update("UserInfo", map.get("userinfo_genre"));
                 }
                 //회원인 경우, 로그인 처리
                 else {
-                    UserInfo userInfo=new UserInfo();
-                    userInfo.add((Map)document.get("UserInfo"));
-                    ((activity_login)context).signIn(Boolean.FALSE,userInfo);
+                    UserInfo userInfo = new UserInfo();
+                    userInfo.add((Map) document.get("UserInfo"));
+                    ((activity_login) context).signIn(Boolean.FALSE, userInfo);
                 }
             }
             //챌린지 관련
@@ -114,14 +113,14 @@ public class FBModule {
                 if (value != null) {
                     switch ((int) value) {
                         case 0: //참여중 인지 확인
-                            ((subactivity_challenge_challengeinfo)context).isParticipating(document);
+                            ((subactivity_challenge_challengeinfo) context).isParticipating(document);
                             break;
                         case 1: //참여가능 확인
-                            ((subactivity_challenge_challengeinfo)context).checkParticipating(document, (Dialog)map.get("dialog"));
+                            ((subactivity_challenge_challengeinfo) context).checkParticipating(document, (Dialog) map.get("dialog"));
                             break;
                         case 2: //챌린지 최신화
                             //받아온 값중에 CurrentParticipation의 값을 리스트에 넣음
-                            ((subactivity_challenge_challengeinfo)context).setParticipating((ArrayList<String>)document.get("CurrentParticipation"));
+                            ((subactivity_challenge_challengeinfo) context).setParticipating((ArrayList<String>) document.get("CurrentParticipation"));
                             break;
                     }
 
@@ -161,29 +160,17 @@ public class FBModule {
     public void saveData(int idx, Map data) {
         switch (idx) {
             case 0://회원가입
-                UserInfo userInfo=(UserInfo)(data.get("UserInfo"));
+                UserInfo userInfo = (UserInfo) (data.get("UserInfo"));
                 userInfo.Initbookworm();
 
-                data.put("UserInfo",userInfo);
+                data.put("UserInfo", userInfo);
                 db.collection(location[idx]).document(userInfo.getToken()).set(data);
-                ((activity_login)context).signIn(Boolean.TRUE,userInfo); //회원이 아닌 경우
+                ((activity_login) context).signIn(Boolean.TRUE, userInfo); //회원이 아닌 경우
                 break;
 
             case 1: //피드 작성
-//                Date newdate = new Date();
-//                newdate = (Date)data.get("date");
                 UserInfo userInfo1 = new UserInfo();
-                userInfo1 = (UserInfo)data.get("UserInfo");
-
-                 //new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format((Date)data.get("date"));
-
-//                //챌린지 시작일에 오늘 날짜가 나오게 함
-//                Calendar cal = Calendar.getInstance();
-//                cal.setTime(new Date());
-//                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-//
-//                tv_challenge_start.setText(df.format(cal.getTime()));
-
+                userInfo1 = (UserInfo) data.get("UserInfo");
 
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String formatTime = dateFormat.format(System.currentTimeMillis());
