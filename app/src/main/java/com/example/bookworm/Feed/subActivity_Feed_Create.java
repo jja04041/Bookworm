@@ -244,7 +244,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         });
         builder.setNegativeButton(getString(android.R.string.cancel), (dialog, which) -> dialog.cancel());
         builder.show();
-
     }
 
     //권한 설정
@@ -253,8 +252,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         Uri uri = Uri.fromParts("package", getPackageName(), null);
         intent.setData(uri);
         startActivityResult.launch(intent);
-
-
     }
 
     public void showcustomDialog() {
