@@ -49,6 +49,7 @@ public class FBModule {
     //데이터 읽기
     public void readData(int idx, Map map, String token) {
         collectionReference = db.collection(location[idx]);
+
         //해당 정보가 있는지 확인(회원 여부 확인)
         if (idx != 2 || token != null) task = collectionReference.document(token).get();
             //챌린지 검색
@@ -71,7 +72,6 @@ public class FBModule {
         }
 
         //결과 확인
-//        task.s
         task.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task task) {
@@ -172,10 +172,6 @@ public class FBModule {
                 UserInfo userInfo1 = new UserInfo();
                 userInfo1 = (UserInfo) data.get("UserInfo");
 
-//                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//                String formatTime = dateFormat.format(System.currentTimeMillis());
-
-//                String FeedID = userInfo1.getToken() + "_" + data.get("date");
 
                 db.collection(location[idx]).document((String) data.get("FeedID")).set(data);
                 break;

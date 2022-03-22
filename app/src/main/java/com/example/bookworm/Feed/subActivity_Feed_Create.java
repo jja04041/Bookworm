@@ -9,15 +9,24 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,6 +37,7 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -47,7 +57,12 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
+import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
@@ -56,6 +71,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class subActivity_Feed_Create extends AppCompatActivity {
 
@@ -64,12 +84,9 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     FBModule fbModule;
     UserInfo userInfo;
     Context current_context;
+    Bitmap uploaded;
     Module module;
-    HashMap<String, String> data;
-    TextView tvFinish, tvNickName, tvlabel1;
-    Button btnAdd, btnUp;
-    ImageView ivUpload, imgProfile;
-    LinearLayout LLlabel;
+    String imgurl=null;
     ArrayList<Button> btn;
     Dialog customDialog;
     String FeedID;
@@ -86,7 +103,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
                     Uri uri = result.getData().getParcelableExtra("path");
                     try {
                         // You can update this bitmap to your server
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                        uploaded= MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
 
                         // loading profile image from local cache
                         loadImage(uri.toString());
@@ -115,15 +132,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = SubactivityFeedCreateBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-//        edtFeedContent = findViewById(R.id.edtFeedContent);
-//        btnAdd = findViewById(R.id.btnAdd);
-        btnUp = findViewById(R.id.btnImageUpload);
-//        ivUpload = findViewById(R.id.ivUpload);
-        imgProfile = findViewById(R.id.ivProfileImage);
-        tvFinish = findViewById(R.id.tvFinish);
-        tvNickName = findViewById(R.id.tvNickname);
-//        tvlabel1 = findViewById(R.id.tvlabel1);
-        LLlabel = findViewById(R.id.llLabel);
 
         //피드 생성화면에 존재하는 라벨
         TextView feedCreateLabel[] = new TextView[5];
@@ -145,16 +153,27 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         SimpleDateFormat now_date = new SimpleDateFormat();
 
         current_context = this;
+        fbModule = new FBModule(current_context);
         userInfo = new PersonalD(current_context).getUserInfo(); //저장된 UserInfo값을 가져온다.
 
+
         Glide.with(this).load(userInfo.getProfileimg()).circleCrop().into(binding.ivProfileImage); //프로필사진 로딩후 삽입.
-        binding.tvNickname.setText(userInfo.getUsername());
-        Glide.with(this).load(userInfo.getProfileimg()).circleCrop().into(imgProfile); //프로필사진 로딩후 삽입.
         binding.tvNickname.setText(userInfo.getUsername());
 
         customDialog = new Dialog(subActivity_Feed_Create.this);       // Dialog 초기화
         customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         customDialog.setContentView(R.layout.custom_dialog_label);
+
+       binding.llLabel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showcustomDialog();
+            }
+        });
+
+
+        Glide.with(this).load(userInfo.getProfileimg()).circleCrop().into(binding.ivProfileImage); //프로필사진 로딩후 삽입.
+        binding.tvNickname.setText(userInfo.getUsername());
 
 
         binding.btnImageUpload.setOnClickListener(new View.OnClickListener() {
@@ -211,7 +230,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
-                                        feedUpload();
+                                        upload();
                                     }
                                 }
                         )
@@ -226,17 +245,15 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         });
     }
 
-
+    //메소드
     //이미지 처리 코드
     private void loadImage(String url) {
         Log.d("이미지 캐싱 ", "Image cache path: " + url);
-        // 커스텀 다이얼로그(라벨)를 디자인하는 함수
 
         Glide.with(this).load(url)
                 .into(binding.ivpicture);
         binding.ivpicture.setColorFilter(ContextCompat.getColor(this, android.R.color.transparent));
     }
-
 
     private void showImagePickerOptions() {
         ImagePicker.showImagePickerOptions(this, new ImagePicker.PickerOptionListener() {
@@ -244,7 +261,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             public void onTakeCameraSelected() {
                 launchCameraIntent();
             }
-
 
             @Override
             public void onChooseGallerySelected() {
@@ -290,6 +306,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         });
         builder.setNegativeButton(getString(android.R.string.cancel), (dialog, which) -> dialog.cancel());
         builder.show();
+
     }
 
     //권한 설정
@@ -298,7 +315,42 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         Uri uri = Uri.fromParts("package", getPackageName(), null);
         intent.setData(uri);
         startActivityResult.launch(intent);
+
     }
+
+    //서버에 이미지 업로드
+    private void upload() {
+        if(uploaded!=null) {
+            try {
+                File filesDir = getApplicationContext().getFilesDir();
+                File file = new File(filesDir, "feed_username_feedID" + ".jpg"); //파일명 설정
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                uploaded.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+                byte[] bitmapdata = bos.toByteArray();
+                //파일에 바이트배열로 담겨진 비트맵파일을 쓴다.
+                FileOutputStream fos = new FileOutputStream(file);
+                fos.write(bitmapdata);
+                fos.flush();
+                fos.close();
+                RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+                MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
+                RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "upload");
+                Map map = new HashMap();
+                map.put("rqbody", body);
+                map.put("rqname", name);
+                imgurl = "http://132.226.234.108:3000";
+                module = new Module(current_context, imgurl, map);
+                module.connect(3);
+
+            } catch (IOException e) {
+
+            }
+        }
+        else{
+            feedUpload(null);
+        }
+    }
+
 
     public void showcustomDialog() {
         customDialog.show(); // 다이얼로그 띄우기
@@ -434,7 +486,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         bookResult.launch(intent); //검색 결과를 받는 핸들러를 작동한다.
     }
 
-    public void feedUpload() {
+    public void feedUpload(String imgUrl) {
 
         FeedID = userInfo.getToken() + "_" + String.valueOf(System.currentTimeMillis());
 
@@ -461,6 +513,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             map.put("label", labelAdd(labelList)); //라벨 리스트
             map.put("date", formatTime); //현재 시간 millis로
             map.put("FeedID", FeedID); //피드 아이디
+        if (imgUrl!=null) map.put("imgurl", imgUrl); //이미지 url
 
             fbModule.readData(1, map, FeedID);
             finish();
@@ -480,4 +533,5 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         }
         return label;
     }
+
 }

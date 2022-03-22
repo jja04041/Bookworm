@@ -1,7 +1,11 @@
 var express = require('express'); //express를 사용하기 위함.
 const path = require('path');
 const multer = require('multer'); //이미지 업/다운로드를 위함.
+const fs = require('fs');
 var router = express.Router();
+
+var imgPath = "";
+var Path = "";
 require('dotenv').config({
   path: path.join(__dirname, '.env')
 });
@@ -16,6 +20,7 @@ const {
   cert
 } = require('firebase-admin/app');
 const firebaseAdmin = require('firebase-admin');
+
 const serviceAccount = require(path.join(__dirname, 'bookworm-f6973-firebase-adminsdk-lzs4b-a45e20e976.json'));
 initializeApp({
   credential: cert(serviceAccount)
@@ -23,48 +28,65 @@ initializeApp({
 
 //for image 
 var _storage = multer.diskStorage({
-  destination: 'uploads/',
-  filename: function (req, file, cb) {
-    return crypto.pseudoRandomBytes(16, function (err, raw) {
-      if (err) {
-        return cb(err);
+  destination: function (req, file, cb) {
+    var arr = file.originalname.split('_');
+
+    if (arr[0] == "feed") {
+      Path = "./feed";
+      if (!fs.existsSync(Path)) {
+        fs.mkdirSync(Path);
       }
-      return cb(null, file.originalname);
-    });
+
+    } else {
+      Path = "./profileimg";
+      if (!fs.existsSync(Path)) {
+        fs.mkdirSync(Path);
+      }
+    }
+
+    cb(null, Path);
+  },
+  filename: function (req, file, cb) {
+    var arr = file.originalname.split('_');
+    imgfile = `${arr[1]}_${arr[2]}`;
+    if (Path == "./profileimg") {
+      imgPath = "/getprofileimg/" + imgfile;
+    } else if (Path == "./feed") {
+      imgPath = "/getimage/" + imgfile;
+    }
+
+    cb(null, imgfile);
   }
 });
+const upload = multer({
+  storage: _storage
+}); // 미들웨어 생성
 
 
-router.post('/upload', (req, res) => {
-  multer({
-      storage: _storage
-    }).single('upload'),
-    function (req, res) {
-      try {
-        let file = req.file;
-        let originalName = '';
-        let fileName = '';
-        let mimeType = '';
-        let size = 0;
+router.post('/upload', upload.single('upload'), (req, res) => {
+  try {
+    res.status(200).send(imgPath);
 
-        if (file) {
-          originalName = file.originalname;
-          filename = file.fileName; //file.fileName
-          mimeType = file.mimetype;
-          size = file.size;
-          console.log("execute" + fileName);
-        } else {
-          console.log("request is null");
-        }
+  } catch (err) {
 
-      } catch (err) {
+    console.dir(err.stack);
+  }
 
-        console.dir(err.stack);
-      }
-      console.log(req.file);
-      console.log(req.body);
-      res.redirect("/uploads/" + req.file.originalname); //fileName
-      return res.status
+});
+
+router.use('/getimage/:data',(req,res)=>{
+
+  const dataPath ="./feed/"+req.params.data ;  
+  fs.readFile(dataPath, function (err, data) {
+    if (err) {
+      return res.status(404).end();
+    } // Fail if the file can't be read.
+    res.writeHead(200, {
+      'Content-Type': 'image/jpeg'
+    });
+    res.end(data); // Send the file data to the browser.
+  });
+});
 //for firebase
 //커스텀 토큰 생성 
 
@@ -140,10 +162,6 @@ function requestMe(kakaoAccessToken) {
 };
 
 
-(200).end();
-    }
-});
-
 router.get("/token", (req, res) => {
   const token = req.query.token;
   if (!token) return res.status(400).send({
@@ -161,7 +179,9 @@ router.get("/token", (req, res) => {
   });
 });
 
-
+router.get("/", (req, res) => {
+  res.send("hello,World!");
+});
 // router.get("/token", async(req, res) => {
 //   const {OAuth2Client} = require('google-auth-library');
 //   const CLIENT_ID=process.env.CLIENT_ID;
