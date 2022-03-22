@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import android.util.Log;
+import android.widget.Toast;
 
 
 import com.example.bookworm.Feed.subActivity_Feed_Create;
@@ -97,6 +98,7 @@ public class Module {
             @Override
             public void onFailure(Call<String> call, Throwable t) {
                 Log.e("에러 : ", t.getMessage());
+                Toast.makeText(context, "서버에 접속할 수 없습니다.\n 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
             }
         });
     }
