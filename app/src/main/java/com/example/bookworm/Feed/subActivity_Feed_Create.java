@@ -49,6 +49,7 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -121,8 +122,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         //tvlabel1.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#55ff0000"))); //자바로 BackgroundTint 설정
 
         btn = new ArrayList<>();
-        binding = SubactivityFeedCreateBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
         fbModule = new FBModule(null);
 
         LocalDateTime now = LocalDateTime.now();
@@ -147,35 +146,12 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             }
         });
 
-//        LLlabel.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//            }
-//        });
-
-
-//        btnAdd.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //ShowDialog 만들기
-//
-//                data = new HashMap();
-//                data.put("feed_content", edtFeedContent.getText().toString());
-//                data.put("upload_date", now_date.toString());
-//
-//                //data.put()을 이용하여, data에 값을 넣는다
-//
-//                fbModule.saveData(1, data);
-////                //라벨생성
-////                setLabel(a,Color.parseColor("#EFDDDD"));
-//            }
-//        });
         binding.btnImageUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 Dexter.withActivity((Activity) current_context)
-                        .withPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE)
+                        .withPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
                         .withListener(new MultiplePermissionsListener() {
                             @Override
                             public void onPermissionsChecked(MultiplePermissionsReport report) {
@@ -199,20 +175,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         binding.tvFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                FirebaseFirestore db = FirebaseFirestore.getInstance();
-//                Map map = new HashMap();
-//                Book book= new Book("a","b","c","d","e");
-//                Book book2= new Book("a1","b1","c1","d1","e1");
-//                ArrayList<Book> books=new ArrayList<>();//{ book,book2 }
-//                books.add(book);
-//                books.add(book2);
-//                map.put("book",books);
-//                db.collection("test").document("abc").set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        finish();
-//                    }
-//                });
                 finish();
             }
         });
@@ -222,49 +184,13 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     //이미지 처리 코드
     private void loadImage(String url) {
         Log.d("이미지 캐싱 ", "Image cache path: " + url);
-    // 커스텀 다이얼로그(라벨)를 디자인하는 함수
-    public void showcustomDialog() {
-        customDialog.show(); // 다이얼로그 띄우기
-
-        //감정에 해당하는 라벨
-        TextView Emotion[] = new TextView[7];
-        int[] EmotionID = {R.id.tvEmotion0, R.id.tvEmotion1, R.id.tvEmotion2, R.id.tvEmotion3, R.id.tvEmotion4, R.id.tvEmotion5, R.id.tvEmotion6,};
-
-        //추천에 해당하는 라벨
-        TextView Recommend[] = new TextView[5];
-        int[] RecommendID = {R.id.tvRecommend0, R.id.tvRecommend1, R.id.tvRecommend2, R.id.tvRecommend3, R.id.tvRecommend4};
-
-        //피드 생성화면에 존재하는 라벨
-        TextView feedCreateLabel[] = new TextView[5];
-        int[] feedCreateLabelID = {R.id.tvlabel1, R.id.tvlabel2, R.id.tvlabel3, R.id.tvlabel4, R.id.tvlabel5,};
+        // 커스텀 다이얼로그(라벨)를 디자인하는 함수
 
         Glide.with(this).load(url)
                 .into(binding.ivpicture);
         binding.ivpicture.setColorFilter(ContextCompat.getColor(this, android.R.color.transparent));
     }
-        //피드 생성화면의 라벨 findViewById 연결
-        for (int i = 0; i < feedCreateLabel.length; i++) {
-            feedCreateLabel[i] = findViewById(feedCreateLabelID[i]);
-        }
 
-        ArrayList<String> label = new ArrayList<String>(); //선택한 라벨 목록을 담을 리스트
-
-
-        //감정 라벨 선택시 선택되면서 배경색 변경
-        for (int i = 0; i < Emotion.length; i++) {
-            final int index = i;
-            Emotion[index] = customDialog.findViewById(EmotionID[index]);
-            Emotion[index].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (Emotion[index].isSelected()) {
-                        Emotion[index].setSelected(false);
-                    } else {
-                        Emotion[index].setSelected(true);
-                    }
-                }
-            });
-        }
 
     private void showImagePickerOptions() {
         ImagePicker.showImagePickerOptions(this, new ImagePicker.PickerOptionListener() {
@@ -272,21 +198,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             public void onTakeCameraSelected() {
                 launchCameraIntent();
             }
-        //추천 라벨 선택시 선택되면서 배경색 변경
-        for (int i = 0; i < Recommend.length; i++) {
-            final int index = i;
-            Recommend[index] = customDialog.findViewById(RecommendID[index]);
-            Recommend[index].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (Recommend[index].isSelected()) {
-                        Recommend[index].setSelected(false);
-                    } else {
-                        Recommend[index].setSelected(true);
-                    }
-                }
-            });
-        }
+
 
             @Override
             public void onChooseGallerySelected() {
@@ -342,7 +254,67 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         intent.setData(uri);
         startActivityResult.launch(intent);
 
-        // 완료 버튼
+
+    }
+
+    public void showcustomDialog() {
+        customDialog.show(); // 다이얼로그 띄우기
+
+        //감정에 해당하는 라벨
+        TextView Emotion[] = new TextView[7];
+        int[] EmotionID = {R.id.tvEmotion0, R.id.tvEmotion1, R.id.tvEmotion2, R.id.tvEmotion3, R.id.tvEmotion4, R.id.tvEmotion5, R.id.tvEmotion6,};
+
+        //추천에 해당하는 라벨
+        TextView Recommend[] = new TextView[5];
+        int[] RecommendID = {R.id.tvRecommend0, R.id.tvRecommend1, R.id.tvRecommend2, R.id.tvRecommend3, R.id.tvRecommend4};
+
+        //피드 생성화면에 존재하는 라벨
+        TextView feedCreateLabel[] = new TextView[5];
+        int[] feedCreateLabelID = {R.id.tvlabel1, R.id.tvlabel2, R.id.tvlabel3, R.id.tvlabel4, R.id.tvlabel5,};
+
+//피드 생성화면의 라벨 findViewById 연결
+        for (int i = 0; i < feedCreateLabel.length; i++) {
+            feedCreateLabel[i] = findViewById(feedCreateLabelID[i]);
+        }
+
+        ArrayList<String> label = new ArrayList<String>(); //선택한 라벨 목록을 담을 리스트
+
+
+        //감정 라벨 선택시 선택되면서 배경색 변경
+        for (int i = 0; i < Emotion.length; i++) {
+            final int index = i;
+            Emotion[index] = customDialog.findViewById(EmotionID[index]);
+            Emotion[index].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (Emotion[index].isSelected()) {
+                        Emotion[index].setSelected(false);
+                    } else {
+                        Emotion[index].setSelected(true);
+                    }
+                }
+            });
+        }
+
+        //추천 라벨 선택시 선택되면서 배경색 변경
+        for (
+                int i = 0;
+                i < Recommend.length; i++) {
+            final int index = i;
+            Recommend[index] = customDialog.findViewById(RecommendID[index]);
+            Recommend[index].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (Recommend[index].isSelected()) {
+                        Recommend[index].setSelected(false);
+                    } else {
+                        Recommend[index].setSelected(true);
+                    }
+                }
+            });
+        }
+
+// 완료 버튼
         customDialog.findViewById(R.id.btnOk).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -353,10 +325,10 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 
                 //라벨 리스트 초기화하고 기존의 라벨 칸마다 INVISIBLE 시키고 Text를 Null로 만듦
                 label.clear();
-//                for (int i = 0; i < 5; i++) {
-//                    feedCreateLabel[i].setVisibility(View.INVISIBLE);
-//                    feedCreateLabel[i].setText(null);
-//                }
+                for (int i = 0; i < 5; i++) {
+                    feedCreateLabel[i].setVisibility(View.INVISIBLE);
+                    feedCreateLabel[i].setText(null);
+                }
 
                 //감정 라벨이 선택돼있으면 라벨 리스트에 선택된 항목 추가
                 for (int i = 0; i < Emotion.length; i++) {
@@ -414,6 +386,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 
             }
         });
-    }
 
+    }
 }
