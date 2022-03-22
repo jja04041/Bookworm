@@ -351,10 +351,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 
                 //라벨 리스트 초기화하고 기존의 라벨 칸마다 INVISIBLE 시키고 Text를 Null로 만듦
                 label.clear();
-                for (int i = 0; i < 5; i++) {
-                    feedCreateLabel[i].setVisibility(View.INVISIBLE);
-                    feedCreateLabel[i].setText(null);
-                }
 
                 //감정 라벨이 선택돼있으면 라벨 리스트에 선택된 항목 추가
                 for (int i = 0; i < Emotion.length; i++) {
