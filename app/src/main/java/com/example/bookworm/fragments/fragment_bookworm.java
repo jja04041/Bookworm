@@ -1,5 +1,6 @@
 package com.example.bookworm.fragments;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,16 +17,20 @@ import com.example.bookworm.Bw.enum_wormtype;
 import com.example.bookworm.ImageSliderAdapter;
 import com.example.bookworm.R;
 import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.personalD.PersonalD;
 
-import java.util.GregorianCalendar;
+import java.util.Vector;
 
 public class fragment_bookworm extends Fragment {
 
     private ViewPager2 sliderViewPager;
     private LinearLayout layoutIndicator;
-    private String[] images;
+
     private UserInfo userinfo;
+
+    public static Context current_context;
+    private FBModule fbModule;
 
 
 
@@ -36,8 +41,8 @@ public class fragment_bookworm extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_bookworm, container, false);
 
-        PersonalD personalD = new PersonalD(getContext());
-        userinfo = personalD.getUserInfo();
+
+
 
         return view;
     }
@@ -48,6 +53,10 @@ public class fragment_bookworm extends Fragment {
 
         View view = getView();
         String[] images;
+
+        current_context = getActivity();
+        fbModule = new FBModule(current_context);
+        userinfo = new PersonalD(current_context).getUserInfo(); //저장된 UserInfo값을 가져온다.
 
         set_wormtype(userinfo);
         setBookworm(userinfo);
@@ -73,10 +82,6 @@ public class fragment_bookworm extends Fragment {
         setupIndicators(images.length);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
 
     private String getURLForResource(int resId) {
         return Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + resId).toString();
@@ -121,16 +126,13 @@ public class fragment_bookworm extends Fragment {
 
 
     private void setBookworm(UserInfo userinfo) {
-        // 현재시간 얻고
-        GregorianCalendar today = new GregorianCalendar();
 
-        int index = today.get(today.YEAR) % userinfo.getRegister_year();
         int path = R.drawable.ex_default;
 
-        // 현재년도 % 가입년도 연산으로 현재의 책볼레타입으로 채움
-        userinfo.getWormvec().set(index, userinfo.getWormtype().value());
+        userinfo.getWormvec().set(0, userinfo.getWormtype().value());
 
-        switch (userinfo.getWormvec().get(index))
+
+        switch (userinfo.getWormvec().get(0))
         {
             case 0:
                 path = R.drawable.ex_default;
@@ -148,17 +150,17 @@ public class fragment_bookworm extends Fragment {
                 break;
         }
 
-        userinfo.getWormimgvec().set(index, Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + path).toString());
+        userinfo.getWormimgvec().set(0, Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + path).toString());
     }
 
 
     // userinfo의 genre 배열의 어떤 인덱스(장르)가 가장 큰 값을 가지고 있는지 찾은 후
     // 그 인덱스를 반환
-    private int favorgenre(int[] genre) {
+    private int favorgenre(Vector<Integer> genre) {
         int max = 0;
 
-        for(int i=1; i<genre.length; ++i)
-            if(genre[max] < genre[i])
+        for(int i=1; i<genre.size(); ++i)
+            if(genre.get(max) < genre.get(i))
                 max = i;
 
         return max;

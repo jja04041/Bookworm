@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -79,6 +80,11 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity {
         btn_start_challenge = findViewById(R.id.btn_start_challenge);
         btn_back = findViewById(R.id.btnBack);
         tv_bookname = findViewById(R.id.tv_createchallenge_bookname);
+
+        tv_bookname.setSingleLine(true);    // 한줄로 표시하기
+        tv_bookname.setEllipsize(TextUtils.TruncateAt.MARQUEE); // 흐르게 만들기
+        tv_bookname.setSelected(true);      // 선택하기
+
         tv_challenge_start = findViewById(R.id.tv_createchallenge_start);
         tv_challenge_end = findViewById(R.id.tv_createchallenge_end);
         et_challenge_date = findViewById(R.id.et_createchallenge_challengedate);

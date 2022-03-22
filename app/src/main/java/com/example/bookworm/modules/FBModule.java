@@ -1,37 +1,35 @@
 package com.example.bookworm.modules;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.example.bookworm.Challenge.subActivity.subactivity_challenge_challengeinfo;
+import com.example.bookworm.Login.activity_login;
 import com.example.bookworm.MainActivity;
 import com.example.bookworm.ProfileSettingActivity;
+import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.fragments.fragment_challenge;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 
@@ -51,6 +49,7 @@ public class FBModule {
     //데이터 읽기
     public void readData(int idx, Map map, String token) {
         collectionReference = db.collection(location[idx]);
+
         //해당 정보가 있는지 확인(회원 여부 확인)
         if (idx != 2 || token != null) task = collectionReference.document(token).get();
             //챌린지 검색
@@ -73,7 +72,6 @@ public class FBModule {
         }
 
         //결과 확인
-//        task.s
         task.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task task) {
@@ -94,7 +92,19 @@ public class FBModule {
         if (document.exists()) {
             //유저정보 불러오기
             if (idx == 0) {
+                //장르를 업데이트
 
+                //userinfo = (UserInfo)document.getData().get("UserInfo");
+
+                if (map.get("userinfo_genre") != null) {
+                    document.getReference().update("UserInfo", map.get("userinfo_genre"));
+                }
+                //회원인 경우, 로그인 처리
+                else {
+                    UserInfo userInfo = new UserInfo();
+                    userInfo.add((Map) document.get("UserInfo"));
+                    ((activity_login) context).signIn(Boolean.FALSE, userInfo);
+                }
             }
             //챌린지 관련
             if (idx == 2) {
@@ -103,14 +113,14 @@ public class FBModule {
                 if (value != null) {
                     switch ((int) value) {
                         case 0: //참여중 인지 확인
-                            ((subactivity_challenge_challengeinfo)context).isParticipating(document);
+                            ((subactivity_challenge_challengeinfo) context).isParticipating(document);
                             break;
                         case 1: //참여가능 확인
-                            ((subactivity_challenge_challengeinfo)context).checkParticipating(document, (Dialog)map.get("dialog"));
+                            ((subactivity_challenge_challengeinfo) context).checkParticipating(document, (Dialog) map.get("dialog"));
                             break;
                         case 2: //챌린지 최신화
                             //받아온 값중에 CurrentParticipation의 값을 리스트에 넣음
-                            ((subactivity_challenge_challengeinfo)context).setParticipating((ArrayList<String>)document.get("CurrentParticipation"));
+                            ((subactivity_challenge_challengeinfo) context).setParticipating((ArrayList<String>) document.get("CurrentParticipation"));
                             break;
                     }
 
@@ -150,8 +160,22 @@ public class FBModule {
     public void saveData(int idx, Map data) {
         switch (idx) {
             case 0://회원가입
-                db.collection(location[idx]).document((String) data.get("idToken")).set(data);
+                UserInfo userInfo = (UserInfo) (data.get("UserInfo"));
+                userInfo.Initbookworm();
+
+                data.put("UserInfo", userInfo);
+                db.collection(location[idx]).document(userInfo.getToken()).set(data);
+                ((activity_login) context).signIn(Boolean.TRUE, userInfo); //회원이 아닌 경우
                 break;
+
+            case 1: //피드 작성
+                UserInfo userInfo1 = new UserInfo();
+                userInfo1 = (UserInfo) data.get("UserInfo");
+
+
+                db.collection(location[idx]).document((String) data.get("FeedID")).set(data);
+                break;
+
             case 2://챌린지 생성
                 db.collection(location[idx]).document((String) data.get("strChallengeName")).set(data);
                 break;

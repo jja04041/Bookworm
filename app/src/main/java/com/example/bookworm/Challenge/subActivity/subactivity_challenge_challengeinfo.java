@@ -124,10 +124,10 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
         Glide.with(this).load(challenge.getBookThumb()).into(Thumbnail);
         tv_challenge_end.setText(challenge.getEndDate());
         tv_Dday.setText(countdday(challenge.getEndDate()));
-//        tv_challenge_current.setText(String.valueOf(challenge.getCurrentPart().size())); // 받아온 ArrayList 의 길이를 넣음 (현재 참여 인원 수 )
+        tv_challenge_current.setText(String.valueOf(challenge.getCurrentPart().size())); // 받아온 ArrayList 의 길이를 넣음 (현재 참여 인원 수 )
         tv_challenge_max.setText(String.valueOf(challenge.getMaxPart()));
         tv_end_date.setText(challenge.getEndDate());
-//        tv_current_participants.setText(String.valueOf(challenge.getCurrentPart().size()));
+        tv_current_participants.setText(String.valueOf(challenge.getCurrentPart().size()));
         tv_creator.setText(challenge.getMaster());
         tv_challenge_description.setText(challenge.getChallengeDescription());
 
@@ -135,6 +135,10 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
         tv_bookname.setSingleLine(true);    // 한줄로 표시하기
         tv_bookname.setEllipsize(TextUtils.TruncateAt.MARQUEE); // 흐르게 만들기
         tv_bookname.setSelected(true);      // 선택하기
+
+        progressBar.setProgress(challenge.getCurrentPart().size());//현재인원 설정
+        progressBar.setMax(Integer.parseInt(String.valueOf(challenge.getMaxPart()))); //최대인원 설정
+
         if (tv_Dday.getText() == "종료된 챌린지입니다.") {
             btn_join.setEnabled(false); // 종료된 챌린지는 참여 버튼 비활성화
             btn_join.setText("이미 종료된 챌린지입니다.");
