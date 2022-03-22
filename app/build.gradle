@@ -19,6 +19,10 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    viewBinding {
+        enabled = true
+    }
+
 
     buildTypes {
         release {
@@ -59,9 +63,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:29.0.4')
     implementation 'com.google.firebase:firebase-analytics'
 
-    //글라이드
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+
     // 카카오 SDK 모듈 설정
     implementation group: 'com.kakao.sdk', name: 'usermgmt', version: '1.30.7' // 카카오 로그인
     implementation group: 'com.kakao.sdk', name: 'kakaotalk', version: '1.30.7' // 친구, 메시지(카카오톡)
@@ -88,6 +90,13 @@ dependencies {
     // gson
     implementation 'com.google.code.gson:gson:2.8.6'
 
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    //이미지 처리
+    //dexter permissions (권한 부여 쉽게 처리)
+    implementation "com.karumi:dexter:5.0.0"
+    //글라이드
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    //ucrop(이미지 자르기)
+    implementation 'com.github.yalantis:ucrop:2.2.6'
 
 }

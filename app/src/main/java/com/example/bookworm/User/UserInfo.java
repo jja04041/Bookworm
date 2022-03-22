@@ -87,13 +87,13 @@ public class UserInfo implements Serializable {
         this.wormimgvec.add(Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + R.drawable.ex_default).toString());
     }
 
+    //파이어베이스에서 값을 가져옴
     public void add(Map document) {
         this.username = (String) document.get("username");
         this.email = (String) document.get("email");
         this.profileimg = (String) document.get("profileimg");
         this.token = (String) document.get("token");
         this.platform = (String) document.get("platform");
-//        String a=(String)document.get("wormtype");
         this.wormimgvec=new Vector<>((ArrayList<String>) document.get("wormimgvec"));
         this.wormvec=new Vector<>((ArrayList<Integer>)document.get("wormvec"));
 //        this.wormtype=enum_wormtype.a;
