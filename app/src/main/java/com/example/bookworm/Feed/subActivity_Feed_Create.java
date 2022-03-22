@@ -86,8 +86,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     Context current_context;
     Bitmap uploaded;
     Module module;
-    String imgurl=null;
-    ArrayList<Button> btn;
+    String imgurl = null;
     Dialog customDialog;
     String FeedID;
     Book selected_book; //선택한 책 객체
@@ -103,7 +102,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
                     Uri uri = result.getData().getParcelableExtra("path");
                     try {
                         // You can update this bitmap to your server
-                        uploaded= MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                        uploaded = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
 
                         // loading profile image from local cache
                         loadImage(uri.toString());
@@ -146,11 +145,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 
         //tvlabel1.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#55ff0000"))); //자바로 BackgroundTint 설정
 
-        btn = new ArrayList<>();
         fbModule = new FBModule(null);
-
-        LocalDateTime now = LocalDateTime.now();
-        SimpleDateFormat now_date = new SimpleDateFormat();
 
         current_context = this;
         fbModule = new FBModule(current_context);
@@ -164,18 +159,8 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         customDialog.setContentView(R.layout.custom_dialog_label);
 
-       binding.llLabel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showcustomDialog();
-            }
-        });
 
-
-        Glide.with(this).load(userInfo.getProfileimg()).circleCrop().into(binding.ivProfileImage); //프로필사진 로딩후 삽입.
-        binding.tvNickname.setText(userInfo.getUsername());
-
-
+        //이미지 업로드 버튼
         binding.btnImageUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -202,6 +187,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             }
         });
 
+        //라벨 추가/수정 버튼
         binding.addLabel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -213,6 +199,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         binding.tvFeedBookTitle.setEllipsize(TextUtils.TruncateAt.MARQUEE); // 흐르게 만들기
         binding.tvFeedBookTitle.setSelected(true);      // 선택하기
 
+        //책 고르기
         binding.tvFeedBookTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -220,6 +207,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             }
         });
 
+        //완료 버튼 (피드 올리기)
         binding.tvFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -320,10 +308,13 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 
     //서버에 이미지 업로드
     private void upload() {
-        if(uploaded!=null) {
+
+        FeedID = userInfo.getToken() + "_" + String.valueOf(System.currentTimeMillis()); //사용자 토큰 + 현재 시각을 FeedID로 설정
+
+        if (uploaded != null) {
             try {
                 File filesDir = getApplicationContext().getFilesDir();
-                File file = new File(filesDir, "feed_username_feedID" + ".jpg"); //파일명 설정
+                File file = new File(filesDir, "feed_" + FeedID + ".jpg"); //파일명 설정
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 uploaded.compress(Bitmap.CompressFormat.JPEG, 100, bos);
                 byte[] bitmapdata = bos.toByteArray();
@@ -345,13 +336,13 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             } catch (IOException e) {
 
             }
-        }
-        else{
+        } else {
             feedUpload(null);
         }
     }
 
 
+    //라벨 선택하는 커스텀 다이얼로그
     public void showcustomDialog() {
         customDialog.show(); // 다이얼로그 띄우기
 
@@ -367,7 +358,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         TextView feedCreateLabel[] = new TextView[5];
         int[] feedCreateLabelID = {R.id.tvlabel1, R.id.tvlabel2, R.id.tvlabel3, R.id.tvlabel4, R.id.tvlabel5,};
 
-//피드 생성화면의 라벨 findViewById 연결
+        //피드 생성화면의 라벨 findViewById 연결
         for (int i = 0; i < feedCreateLabel.length; i++) {
             feedCreateLabel[i] = findViewById(feedCreateLabelID[i]);
         }
@@ -409,7 +400,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             });
         }
 
-// 완료 버튼
+        // 완료 버튼
         customDialog.findViewById(R.id.btnOk).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -480,17 +471,17 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 
     }
 
+    //책 검색해서 선택하는 함수
     public void getBook() {
         Intent intent = new Intent(this, search_fragment_subActivity_main.class);
         intent.putExtra("classindex", 2);
         bookResult.launch(intent); //검색 결과를 받는 핸들러를 작동한다.
     }
 
+    //피드 업로드
     public void feedUpload(String imgUrl) {
 
-        FeedID = userInfo.getToken() + "_" + String.valueOf(System.currentTimeMillis());
-
-        if (binding.tvFeedBookTitle.getText().toString().equals("") || binding.edtFeedText.getText().toString().equals("")) {
+        if (binding.tvFeedBookTitle.getText().toString().equals("") || binding.edtFeedText.getText().toString().equals("")) { //책 선택이나 피드 내용이 없으면 작성해달라는 알림 띄움
             new AlertDialog.Builder(current_context)
                     .setMessage("책 제목과 피드 내용을 작성해주세요")
                     .setPositiveButton("알겠습니다.", new DialogInterface.OnClickListener() {
@@ -499,7 +490,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
                             dialog.dismiss();
                         }
                     }).show();
-        } else {
+        } else { //필수 입력사항이 입력돼있다면 작성한 내용을 파이어베이스에 업로드
             HashMap<String, Object> map = new HashMap<>();
 
             ArrayList<String> labelList = new ArrayList<String>(); //선택한 라벨 목록을 담을 리스트
@@ -513,7 +504,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             map.put("label", labelAdd(labelList)); //라벨 리스트
             map.put("date", formatTime); //현재 시간 millis로
             map.put("FeedID", FeedID); //피드 아이디
-        if (imgUrl!=null) map.put("imgurl", imgUrl); //이미지 url
+            if (imgUrl != null) map.put("imgurl", imgUrl); //이미지 url
 
             fbModule.readData(1, map, FeedID);
             finish();
@@ -526,7 +517,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         TextView feedCreateLabel[] = new TextView[5];
         int[] feedCreateLabelID = {R.id.tvlabel1, R.id.tvlabel2, R.id.tvlabel3, R.id.tvlabel4, R.id.tvlabel5,};
 
-        //우선 빈 껍데기만 있는 라벨을 보이지 않게 설정해놓음
+        //라벨 리스트에 현재 선택된 라벨들을 추가
         for (int i = 0; i < feedCreateLabel.length; i++) {
             feedCreateLabel[i] = findViewById(feedCreateLabelID[i]);
             label.add(feedCreateLabel[i].getText().toString());
