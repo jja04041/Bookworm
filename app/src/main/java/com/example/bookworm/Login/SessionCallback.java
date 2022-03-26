@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.bookworm.User.UserInfo;
 import com.kakao.auth.ISessionCallback;
+import com.kakao.auth.Session;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.MeV2ResponseCallback;
@@ -14,7 +15,6 @@ import com.kakao.util.OptionalBoolean;
 import com.kakao.util.exception.KakaoException;
 
 public class SessionCallback implements ISessionCallback {
-
     // 로그인에 성공한 상태
     @Override
     public void onSessionOpened() {
@@ -30,6 +30,7 @@ public class SessionCallback implements ISessionCallback {
     // 사용자 정보 요청
     //이곳에 우리가 필요한 정보를 전달받아 retrofit 등을 통해 db에 저장하면 될 듯 함.
     public void requestMe() {
+
         UserManagement.getInstance()
                 .me(new MeV2ResponseCallback() {
                     @Override

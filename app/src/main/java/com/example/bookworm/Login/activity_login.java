@@ -50,14 +50,9 @@ public class activity_login extends Activity {
     protected GoogleSignInAccount gsa;
     UserInfo userInfo;
     public static GoogleSignInClient gsi;
-
+    Boolean isLogined=Boolean.FALSE;
     private int RC_SIGN_IN = 123;
 
-//    public activity_login(GoogleSignInAccount gsa)
-//    {
-//        gsa = GoogleSignIn.getLastSignedInAccount(activity_login.this);
-//
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +60,7 @@ public class activity_login extends Activity {
         setContentView(R.layout.activity_login);
         mContext = this;
         fbModule = new FBModule(mContext);
-
+        isLogined=Boolean.FALSE; //카카오 이중로그인 방지
         mAuth = FirebaseAuth.getInstance();
         ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -118,7 +113,8 @@ public class activity_login extends Activity {
 
 
         // 카카오
-        if (Session.getCurrentSession().checkAndImplicitOpen()) {
+        // 이미 로그인되어있고 세션이 살아있는 경우에만 작동
+        if (Session.getCurrentSession().checkAndImplicitOpen() && isLogined==Boolean.TRUE) {
             Log.d(TAG, "onClick: 로그인 세션살아있음");
             // 카카오 자동 로그인
             sessionCallback.requestMe();
@@ -128,9 +124,9 @@ public class activity_login extends Activity {
         kakao_login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: 로그인 세션끝남");
                 // 카카오 로그인 시도 (창이 뜬다.)
                 session.open(AuthType.KAKAO_LOGIN_ALL, activity_login.this);
+                isLogined=Boolean.TRUE;
             }
         });
     }
@@ -167,15 +163,6 @@ public class activity_login extends Activity {
                     signUp(userInfo, account.getId());
                 }
             });
-//            try {
-//                // Google Sign In was successful, authenticate with Firebase
-//                GoogleSignInAccount account = task.getResult(ApiException.class);
-//                Log.d(TAG, "firebaseAuthWithGoogle:" + account.getServerAuthCode());
-//
-//            } catch (ApiException e) {
-//                // Google Sign In failed, update UI appropriately
-//                Log.w(TAG, "Google sign in failed", e);
-//            }
         }
     }
 
@@ -185,6 +172,7 @@ public class activity_login extends Activity {
         else move(fbUserInfo); //회원인 경우
     }
 
+    //화면 이동 => 메인 액티비티로
     public void move(UserInfo userInfo) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -205,14 +193,11 @@ public class activity_login extends Activity {
         }
     }
 
-
     // 구글 로그인 메소드
     protected void signInGoogle() {
         Intent signInIntent = gsi.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
-
-
 }
 
 
