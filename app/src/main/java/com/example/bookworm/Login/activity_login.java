@@ -1,13 +1,20 @@
 package com.example.bookworm.Login;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,14 +50,9 @@ public class activity_login extends Activity {
     protected GoogleSignInAccount gsa;
     UserInfo userInfo;
     public static GoogleSignInClient gsi;
-
+    Boolean isLogined=Boolean.FALSE;
     private int RC_SIGN_IN = 123;
 
-//    public activity_login(GoogleSignInAccount gsa)
-//    {
-//        gsa = GoogleSignIn.getLastSignedInAccount(activity_login.this);
-//
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +60,27 @@ public class activity_login extends Activity {
         setContentView(R.layout.activity_login);
         mContext = this;
         fbModule = new FBModule(mContext);
-
+        isLogined=Boolean.FALSE; //카카오 이중로그인 방지
         mAuth = FirebaseAuth.getInstance();
+        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork != null) {
+            startLogin();
+        } else {
+            new AlertDialog.Builder(mContext)
+                    .setMessage("인터넷 접속 후 다시 시도해 주세요")
+                    .setPositiveButton("네트워크 설정", (dialog, which) -> {
+                        dialog.dismiss();
+                        startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+                        finish();
+                    }).setNegativeButton("닫기", (dialogInterface, i) -> {
+                dialogInterface.dismiss();
+                finish();
+            }).show();
+        }
+    }
 
+    private void startLogin() {
         Session session = Session.getCurrentSession();
         session.addCallback(sessionCallback);
 
@@ -93,7 +113,8 @@ public class activity_login extends Activity {
 
 
         // 카카오
-        if (Session.getCurrentSession().checkAndImplicitOpen()) {
+        // 이미 로그인되어있고 세션이 살아있는 경우에만 작동
+        if (Session.getCurrentSession().checkAndImplicitOpen() && isLogined==Boolean.TRUE) {
             Log.d(TAG, "onClick: 로그인 세션살아있음");
             // 카카오 자동 로그인
             sessionCallback.requestMe();
@@ -103,9 +124,9 @@ public class activity_login extends Activity {
         kakao_login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: 로그인 세션끝남");
                 // 카카오 로그인 시도 (창이 뜬다.)
                 session.open(AuthType.KAKAO_LOGIN_ALL, activity_login.this);
+                isLogined=Boolean.TRUE;
             }
         });
     }
@@ -139,25 +160,19 @@ public class activity_login extends Activity {
                     userInfo = new UserInfo();
                     userInfo.add(account);
                     userInfo.setToken(account.getId());
-                    signUp(userInfo,account.getId());
+                    signUp(userInfo, account.getId());
                 }
             });
-//            try {
-//                // Google Sign In was successful, authenticate with Firebase
-//                GoogleSignInAccount account = task.getResult(ApiException.class);
-//                Log.d(TAG, "firebaseAuthWithGoogle:" + account.getServerAuthCode());
-//
-//            } catch (ApiException e) {
-//                // Google Sign In failed, update UI appropriately
-//                Log.w(TAG, "Google sign in failed", e);
-//            }
         }
     }
+
     //로그인 함수
-    public void signIn(Boolean ResultCode,UserInfo fbUserInfo){
+    public void signIn(Boolean ResultCode, UserInfo fbUserInfo) {
         if (ResultCode) move(fbUserInfo);//회원이 아닌 경우
         else move(fbUserInfo); //회원인 경우
     }
+
+    //화면 이동 => 메인 액티비티로
     public void move(UserInfo userInfo) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -170,22 +185,19 @@ public class activity_login extends Activity {
     //회원가입 함수
     public void signUp(UserInfo userInfo, String idtoken) {
         if (null != idtoken && null != userInfo.getUsername()) {
-            Map map=new HashMap();
-            map.put("UserInfo",userInfo);
-            fbModule.readData(0,map,idtoken);
+            Map map = new HashMap();
+            map.put("UserInfo", userInfo);
+            fbModule.readData(0, map, idtoken);
         } else {
             Log.d("function signup", "nono token ");
         }
     }
-
 
     // 구글 로그인 메소드
     protected void signInGoogle() {
         Intent signInIntent = gsi.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
-
-
 }
 
 

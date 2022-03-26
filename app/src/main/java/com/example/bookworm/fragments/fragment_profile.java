@@ -108,7 +108,7 @@ public class fragment_profile extends Fragment {
         userInfo.setGenre(idx, current_context);
         //로컬 값 변경이후, 서버에 업데이트
         Map map = new HashMap();
-        map.put("userinfo_genre", userInfo);
+        map.put("userinfo_genre", userInfo.getGenre());
         fbModule.readData(0,map,userInfo.getToken());
     }
 }

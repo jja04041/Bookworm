@@ -19,6 +19,7 @@ import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.modules.FBModule;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.kakao.auth.Session;
 import com.kakao.network.ApiErrorCode;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
@@ -89,6 +90,9 @@ public class ProfileSettingActivity extends AppCompatActivity {
                     @Override
                     public void onCompleteLogout() {
                         gsi.signOut();
+                        if(Session.getCurrentSession().checkAndImplicitOpen()){
+                            Session.getCurrentSession().clearCallbacks();
+                        }
                         Intent intent = new Intent(current_context, activity_login.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
