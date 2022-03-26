@@ -11,9 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.example.bookworm.Feed.items.Feed;
-import com.example.bookworm.Feed.items.OnFeedItemClickListener;
 import com.example.bookworm.R;
 import com.example.bookworm.databinding.FragmentFeedBinding;
 
@@ -38,7 +35,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             View view = inflater.inflate(R.layout.layout_feed, parent, false);
             return new ItemViewHolder(view, listener);
         } else {
-            View view = inflater.inflate(R.layout.search_item_loading, parent, false);
+            View view = inflater.inflate(R.layout.layout_item_loading, parent, false);
             return new LoadingViewHolder(view);
         }
     }

@@ -35,7 +35,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             View view = inflater.inflate(R.layout.layout_challenge_item, parent, false);
             return new ItemViewHolder(view, listener);
         } else {
-            View view = inflater.inflate(R.layout.search_item_loading, parent, false);
+            View view = inflater.inflate(R.layout.layout_item_loading, parent, false);
             return new LoadingViewHolder(view);
         }
     }
