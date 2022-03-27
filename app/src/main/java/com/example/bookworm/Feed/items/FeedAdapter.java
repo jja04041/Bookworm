@@ -2,17 +2,23 @@ package com.example.bookworm.Feed.items;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
+import com.example.bookworm.Search.items.Book;
+import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.databinding.FragmentFeedBinding;
+import com.example.bookworm.databinding.LayoutFeedBinding;
 
 import java.util.ArrayList;
 
@@ -98,16 +104,14 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
     //뷰홀더 클래스 부분
     public class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView tvBookTitle, tvCTitle, tvFeedStartDate, tvFeedEndDate,tvPerson;
-        ImageView ivThumb;
-        FragmentFeedBinding binding;
+        LayoutFeedBinding binding;
 
         //생성자를 만든다.
         public ItemViewHolder(@NonNull View itemView, final OnFeedItemClickListener listener) {
             super(itemView);
             //findViewById를 통해 View와 연결
             //아이템 선택 시 리스너
-            binding=FragmentFeedBinding.bind(itemView);
+            binding=LayoutFeedBinding.bind(itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -115,8 +119,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                     //리스너 인터페이스 구현
                     if (position != RecyclerView.NO_POSITION) {
                         if (listener != null) {
-                            listener.onItemClick(ItemViewHolder.this, view, position);
-                            notifyItemChanged(position);
+//                            listener.onItemClick(ItemViewHolder.this, view, position);
+//                            notifyItemChanged(position);
                         }
                     }
                 }
@@ -126,7 +130,32 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         }
         //아이템을 세팅하는 메소드
         public void setItem(Feed item) {
+            Book book=item.getBook();
+            UserInfo user=item.getCreator();
+            binding.feedBookAuthor.setText(book.getAuthor());
+            Glide.with(itemView).load(book.getImg_url()).into(binding.feedBookThumb); //책 썸네일 설정
+            if(item.getImgurl()!=null) Glide.with(itemView).load(item.getImgurl()).into(binding.feedImage);
+            else binding.feedImage.setVisibility(View.INVISIBLE);
+            binding.feedBookTitle.setText(book.getTitle());
+            binding.tvFeedtext.setText(item.getFeedText());
+            setLabel(item.getLabel());
+            binding.tvNickname.setText(user.getUsername());
+            Glide.with(itemView).load(user.getProfileimg()).into(binding.ivProfileImage);
 
+        }
+        private void setLabel(ArrayList<String> label){
+            binding.lllabel.setOrientation(LinearLayout.HORIZONTAL);
+            for(int i=0;i<label.size();i++){
+                TextView tv=new TextView(context);
+                tv.setText(label.get(i));
+                tv.setBackground(context.getDrawable(R.drawable.label_design));
+                tv.setBackgroundColor(Color.parseColor("#0F000000"));
+                LinearLayout.LayoutParams params =new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(10,0,10,0);
+                tv.setLayoutParams(params);
+                tv.setId(View.generateViewId());
+                binding.lllabel.addView(tv);
+            }
         }
     }
 }

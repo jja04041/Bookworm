@@ -146,7 +146,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 
         //tvlabel1.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#55ff0000"))); //자바로 BackgroundTint 설정
 
-        fbModule = new FBModule(null);
 
         current_context = this;
         fbModule = new FBModule(current_context);

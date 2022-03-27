@@ -64,7 +64,7 @@ public class fragment_challenge extends Fragment {
     private Boolean canLoad = true; //더 로딩이 가능한지 확인하는 변수[자료의 끝을 판별한다.]
     private int page = 1;
     private ArrayList<Challenge> challengeList = null;
-    private final int LIMIT = fbModule.LIMIT;
+    private final int LIMIT = 20;
     private Boolean isRefreshing = false;
     public boolean isLoading = false; //스크롤을 당겨서 추가로 로딩 중인지 여부를 확인하는 변수
     private DocumentSnapshot lastVisible;
@@ -93,6 +93,7 @@ public class fragment_challenge extends Fragment {
         tvSearchR = view.findViewById(R.id.tvSearchR);
         //fbmodule을 이용하여 자료를 가져옴
         fbModule = new FBModule(getActivity());//파이어베이스를 통해서 챌린지를 가져와야함.
+        fbModule.setLIMIT(LIMIT);
         map = new HashMap();
         fbModule.readData(2, map, null); //검색한 데이터를 조회
         //사용자 데이터 가져옴

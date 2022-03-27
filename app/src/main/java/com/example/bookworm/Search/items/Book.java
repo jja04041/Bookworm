@@ -1,6 +1,7 @@
 package com.example.bookworm.Search.items;
 
 import java.io.Serializable;
+import java.util.Map;
 
 public class Book implements Serializable {
     //제목, 간단한 내용, 출판사, 저자 정도 표기?
@@ -13,16 +14,24 @@ public class Book implements Serializable {
 
 
     public Book(String... strings) {
-
-        this.title = strings[0];
-        this.content = strings[1];
-        this.publisher = strings[2];
-        this.author = strings[3];
-        this.img_url = strings[4].replace("coversum","cover500");
-        if (strings.length == 6) this.itemId = strings[5];
-
+        if (strings!=null) {
+            this.title = strings[0];
+            this.content = strings[1];
+            this.publisher = strings[2];
+            this.author = strings[3];
+            this.img_url = strings[4].replace("coversum", "cover500");
+            if (strings.length == 6) this.itemId = strings[5];
+        }
     }
 
+    public void setBook(Map map){
+        this.title=(String) map.get("title");
+        this.content=(String) map.get("content");
+        this.img_url=(String) map.get("img_url");
+        this.publisher=(String) map.get("publisher");
+        this.author=(String) map.get("author");
+        this.itemId=(String) map.get("itemId");
+    }
 
     public String getImg_url() {
         return img_url;
