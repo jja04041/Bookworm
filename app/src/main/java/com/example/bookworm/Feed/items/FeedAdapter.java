@@ -1,6 +1,7 @@
 package com.example.bookworm.Feed.items;
 
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -8,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,12 +19,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.bookworm.Challenge.subActivity.subactivity_challenge_challengeinfo;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_result;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.databinding.FragmentFeedBinding;
 import com.example.bookworm.databinding.LayoutFeedBinding;
+import com.example.bookworm.databinding.SubactivityFeedCreateBinding;
 import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.personalD.PersonalD;
 
@@ -35,6 +40,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     ArrayList<Feed> FeedList;
     Context context;
     OnFeedItemClickListener listener;
+    Dialog customDialog;
 
     public FeedAdapter(ArrayList<Feed> data, Context c) {
         FeedList = data;
@@ -112,6 +118,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         //생성자를 만든다.
         public ItemViewHolder(@NonNull View itemView, final OnFeedItemClickListener listener) {
             super(itemView);
+
             binding = LayoutFeedBinding.bind(itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -160,7 +167,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 binding.ivLike.setTag("depressed");
             }
 
-            binding.lllike.setOnClickListener(new View.OnClickListener() {
+            binding.ivLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     FBModule fbModule = new FBModule(context);
@@ -196,7 +203,21 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             else binding.feedImage.setVisibility(View.INVISIBLE);
             binding.tvFeedtext.setText(item.getFeedText());
             setLabel(item.getLabel()); //라벨 세팅
+
+            customDialog = new Dialog(context);       // Dialog 초기화
+            customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
+            customDialog.setContentView(R.layout.custom_dialog_comment);
+
+            //댓글창을 클릭했을때
+            binding.llComments.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showcustomDialog(getAdapterPosition());
+                }
+            });
+
         }
+
 
         //라벨을 동적으로 생성
         private void setLabel(ArrayList<String> label) {
@@ -211,6 +232,18 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 tv.setLayoutParams(params); //설정값 뷰에 저장
                 binding.lllabel.addView(tv); //레이아웃에 뷰 세팅
             }
+        }
+
+        //댓글창 다이얼로그 띄우기
+        public void showcustomDialog(int position) {
+            customDialog.show(); // 다이얼로그 띄우기
+
+
+            EditText edtComment = customDialog.findViewById(R.id.edtComment);
+            TextView tvCommentCount = customDialog.findViewById(R.id.tvCommentCount);
+            tvCommentCount.setText(FeedList.get(position).getFeedID());
+            edtComment.setText(FeedList.get(position).getFeedID());
+
         }
     }
 }
