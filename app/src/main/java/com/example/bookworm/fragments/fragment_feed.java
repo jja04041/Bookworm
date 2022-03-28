@@ -73,8 +73,8 @@ public class fragment_feed extends Fragment {
     //누수 방지를 위해 뷰가 Destroy될 때, binding값을 nullify 함.
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         binding = null;
+        super.onDestroyView();
     }
 
     //리사이클러뷰를 초기화

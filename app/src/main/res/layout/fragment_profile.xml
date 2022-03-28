@@ -1,139 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.bookworm.fragments.fragment_profile">
+    android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
+    <FrameLayout
+        android:id="@+id/setting"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#DDDDDD"
+        android:orientation="horizontal">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="프로필"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/btnSetting"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/setting" />
+
+
+    </FrameLayout>
 
     <LinearLayout
+        android:id="@+id/followerSettings"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="80dp"
+        android:gravity="center">
 
-        <FrameLayout
-            android:id="@+id/setting"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal"
-            android:background="#DDDDDD">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="프로필"
-                android:textSize="20sp"/>
-
-            <Button
-                android:id="@+id/btnSetting"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="end|center_vertical"
-                android:layout_marginEnd="15dp"
-                android:background="@drawable/setting" />
-
-
-        </FrameLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:gravity="center"
-            android:id="@id/setting">
-
-
-            <LinearLayout
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content">
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/btn_follower"
-                    android:textSize="25sp"
-                    android:text="팔로워"/>
-                <TextView
-                    android:id="@+id/tv_follower_count"
-                    android:text=""
-                    android:textSize="15sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content">
-
-                <Button
-                    android:text="팔로잉"
-                    android:id="@+id/btn_following"
-                    android:textSize="25sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:id="@+id/tv_following_count"
-                    android:text=""
-                    android:textSize="15sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-
-        </LinearLayout>
-
-
-        <ImageView
-            android:id="@+id/img_frag_profile_profile"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center"
-            android:src="@drawable/profile"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </androidx.recyclerview.widget.RecyclerView>
-
-        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:orientation="vertical">
 
             <Button
-                android:text="디폴트"
-                android:id="@+id/btn_d"
-                android:textSize="25sp"
+                android:id="@+id/btn_follower"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:text="팔로워"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/tv_follower_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <Button
-                android:text="공포"
-                android:id="@+id/btn_h"
-                android:textSize="25sp"
+                android:id="@+id/btn_following"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:text="팔로잉"
+                android:textSize="25sp" />
 
-            <Button
-                android:text="추리"
-                android:id="@+id/btn_de"
-                android:textSize="25sp"
+            <TextView
+                android:id="@+id/tv_following_count"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="15sp" />
         </LinearLayout>
 
     </LinearLayout>
 
-</FrameLayout>
+
+    <ImageView
+        android:id="@+id/img_frag_profile_profile"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/profile" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_d"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="디폴트"
+            android:textSize="25sp" />
+
+        <Button
+            android:id="@+id/btn_h"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="공포"
+            android:textSize="25sp" />
+
+        <Button
+            android:id="@+id/btn_de"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="추리"
+            android:textSize="25sp" />
+    </LinearLayout>
+
+</LinearLayout>
+

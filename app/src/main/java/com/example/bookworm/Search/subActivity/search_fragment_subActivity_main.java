@@ -233,7 +233,8 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
 
             if (page != 1 && page < 20) {
                 isLoading = false;
-                bookAdapter.notifyItemRangeChanged(0, bookList.size() - 1, null);
+                bookAdapter.notifyDataSetChanged();
+//                bookAdapter.notifyItemRangeChanged(0, bookList.size() - 1, null);
             } else {
                 bookAdapter = new BookAdapter(bookList, this);
                 bookAdapter.setListener(new OnBookItemClickListener() {

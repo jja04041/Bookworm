@@ -111,12 +111,23 @@ public class FBModule {
                 if (map.get("userinfo_genre") != null) {
                     document.getReference().update("UserInfo.genre", map.get("userinfo_genre"));
                 }
+                //좋아요 누른 게시물을 서버의 UserInfo에 추가/삭제
+                else if (map.get("nowUser")!=null){
+                    UserInfo user=(UserInfo) map.get("nowUser");
+                    document.getReference().update("UserInfo.likedPost",user.getLikedPost());
+                }
                 //회원인 경우, 로그인 처리
                 else {
                     UserInfo userInfo = new UserInfo();
                     userInfo.add((Map) document.get("UserInfo"));
                     ((activity_login) context).signIn(Boolean.FALSE, userInfo);
                 }
+            }
+            //피드 관련
+            if (idx ==1){
+                //피드 좋아요 추가/삭제
+                document.getReference().update("likeCount", map.get("likeCount"));
+                readData(0,map,(String)((UserInfo) map.get("nowUser")).getToken());
             }
             //챌린지 관련
             if (idx == 2) {

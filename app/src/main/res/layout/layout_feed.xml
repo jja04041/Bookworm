@@ -52,6 +52,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
+        android:id="@+id/llbook"
         android:background="@drawable/feed_bottom_top_border"
         android:orientation="horizontal">
 
@@ -147,14 +148,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
+            android:id="@+id/lllike"
             android:orientation="horizontal">
 
-            <ImageView
+            <Button
                 android:id="@+id/ivLike"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="start"
-                android:src="@drawable/icon_like" />
+                android:background="@drawable/icon_like" />
 
             <TextView
                 android:id="@+id/tvLike"

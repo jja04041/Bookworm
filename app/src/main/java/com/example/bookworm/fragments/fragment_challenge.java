@@ -35,6 +35,7 @@ import com.example.bookworm.Challenge.items.OnChallengeItemClickListener;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.databinding.FragmentChallengeBinding;
 import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.personalD.PersonalD;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -50,24 +51,16 @@ import java.util.Map;
 public class fragment_challenge extends Fragment {
 
     //Variable
-    private LinearLayout llSearchR;
-    private RecyclerView mRecyclerView;
-    private ChallengeAdapter challengeAdapter;
-    private Spinner spinnerC;
-    private EditText etSearch;
-    private TextView tvSearchR;
     private FBModule fbModule;
-    private PersonalD personalD;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private Button btn_create_challenge, btnSearch;
-    private UserInfo userInfo;
     private Boolean canLoad = true; //더 로딩이 가능한지 확인하는 변수[자료의 끝을 판별한다.]
     private int page = 1;
     private ArrayList<Challenge> challengeList = null;
-    private final int LIMIT = 20;
+    private ChallengeAdapter challengeAdapter;
+    private final int LIMIT = 10;
     private Boolean isRefreshing = false;
     public boolean isLoading = false; //스크롤을 당겨서 추가로 로딩 중인지 여부를 확인하는 변수
     private DocumentSnapshot lastVisible;
+    private FragmentChallengeBinding binding;
     Map<String, Object> map;
     //액티비티의 결과를 받아오기 위함.
     ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
@@ -82,47 +75,37 @@ public class fragment_challenge extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_challenge, container, false);
-        btn_create_challenge = view.findViewById(R.id.btn_create_challenge);
-        swipeRefreshLayout = view.findViewById(R.id.swiperefresh); // 당기면 새로고침
-        spinnerC = view.findViewById(R.id.spinnerC);
-        etSearch = view.findViewById(R.id.etSearch);
-        btnSearch = view.findViewById(R.id.btnSearch);
-        mRecyclerView = view.findViewById(R.id.mRecyclerView);
-        llSearchR = view.findViewById(R.id.llSearchR);
-        tvSearchR = view.findViewById(R.id.tvSearchR);
+        binding = FragmentChallengeBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
         //fbmodule을 이용하여 자료를 가져옴
         fbModule = new FBModule(getActivity());//파이어베이스를 통해서 챌린지를 가져와야함.
         fbModule.setLIMIT(LIMIT);
         map = new HashMap();
         fbModule.readData(2, map, null); //검색한 데이터를 조회
-        //사용자 데이터 가져옴
-        personalD = new PersonalD(getContext()); //UserInfo 값을 가져옴
-        userInfo = personalD.getUserInfo(); //UserInfo값 가져오기
 
         //리스너 설정
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        binding.swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 pageRefresh();
                 isRefreshing = true;
             }
         });
-        btn_create_challenge.setOnClickListener(new Button.OnClickListener() {
+        binding.btnCreateChallenge.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), subactivity_challenge_createchallenge.class);
                 startActivityResult.launch(intent);
-                btn_create_challenge.clearFocus();
+                binding.btnCreateChallenge.clearFocus();
             }
         });
-        btnSearch.setOnClickListener(new View.OnClickListener() {
+        binding.btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setItems();
             }
         });
-        etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        binding.etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == EditorInfo.IME_ACTION_SEARCH) {
@@ -134,17 +117,23 @@ public class fragment_challenge extends Fragment {
 
         return view;
     }
-
+    //뷰보다 프레그먼트의 생명주기가 길어서, 메모리 누수 발생가능
+    //누수 방지를 위해 뷰가 Destroy될 때, binding값을 nullify 함.
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
     //functions
 
     //검색 키워드를 쿼리에 싣는 함수
     private void setItems() {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
-        etSearch.clearFocus();
+        imm.hideSoftInputFromWindow(binding.etSearch.getWindowToken(), 0);
+        binding.etSearch.clearFocus();
         map = new HashMap();
         //입력한 데이터를 Map 객체 내의 "like"의 값으로 설정한다.
-        map.put("like", etSearch.getText().toString());
+        map.put("like", binding.etSearch.getText().toString());
         //새로운 데이터를 받기 위해 초기화 한다.
         initChallenge();
         //검색한 데이터를 조회
@@ -153,7 +142,7 @@ public class fragment_challenge extends Fragment {
 
     //리사이클러뷰 스크롤 초기화
     private void initScrollListener() {
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        binding.mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             //스크롤 감지
             @Override
@@ -192,17 +181,17 @@ public class fragment_challenge extends Fragment {
     //리사이클러뷰 초기화
     private void initRecyclerView() {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(gridLayoutManager);
-        mRecyclerView.setAdapter(challengeAdapter);
+        binding.mRecyclerView.setLayoutManager(gridLayoutManager);
+        binding.mRecyclerView.setAdapter(challengeAdapter);
         if (map.get("like") != null) {
             if (map.get("like").equals("")) {
-                llSearchR.setVisibility(View.INVISIBLE);
+                binding.llSearchR.setVisibility(View.INVISIBLE);
             } else {
-                llSearchR.setVisibility(View.VISIBLE);
-                tvSearchR.setText('"' + (String) map.get("like") + '"');
+                binding.llSearchR.setVisibility(View.VISIBLE);
+                binding.tvSearchR.setText('"' + (String) map.get("like") + '"');
             }
         } else {
-            llSearchR.setVisibility(View.INVISIBLE);
+            binding.llSearchR.setVisibility(View.INVISIBLE);
         }
         initScrollListener(); //무한스크롤
     }
@@ -240,7 +229,7 @@ public class fragment_challenge extends Fragment {
     //fbmodule에서 사용하는 함수 -> 검색한 데이터를 전달하여, 화면에 띄워준다. (비동기 처리)
     public void moduleUpdated(List<DocumentSnapshot> a) {
         if (isRefreshing) {
-            swipeRefreshLayout.setRefreshing(false);
+            binding.swiperefresh.setRefreshing(false);
             isRefreshing = false;
         }
         if (page == 1) {

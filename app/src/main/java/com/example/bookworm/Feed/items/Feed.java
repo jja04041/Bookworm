@@ -14,7 +14,7 @@ public class Feed {
     private int userRating; //책볼레 사용자 평점
     private String feedText=null; //피드의 내용
     private String date=null; //현재 날짜
-    private int likeCount;//좋아요 수
+    private long likeCount;//좋아요 수
     private UserInfo Creator=null; //작성자 정보
     private ArrayList<String> label=null; //라벨 목록
 
@@ -24,13 +24,13 @@ public class Feed {
     public Feed() {
         this.book=new Book(null);
         this.Creator=new UserInfo();
-        likeCount=0;
     }
     public void setData(Map data){
         this.feedID=(String)data.get("FeedID");
         this.book.setBook((Map)data.get("book"));
         this.Creator.add((Map)data.get("UserInfo"));
         this.label=(ArrayList<String>) data.get("label");
+        this.likeCount=(long) data.get("likeCount");
         if(data.get("imgurl")!=null) this.imgurl=(String) data.get("imgurl");
         this.feedText=(String) data.get("feedText");
         this.date=(String) data.get("date");
@@ -60,7 +60,7 @@ public class Feed {
         return date;
     }
 
-    public int getLikeCount() {
+    public long getLikeCount() {
         return likeCount;
     }
 
