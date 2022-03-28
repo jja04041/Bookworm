@@ -35,9 +35,6 @@ public class UserInfo implements Serializable {
     //private static Vector<String> wormimgvec = new Vector<String>();
 
 
-    // genre index의 1번 = enum_wormtype의 공포 2번은 추리 .... 이하 동문
-    // 가장 최댓값을 가진 index를 벌레의 종류로 설정할 계획
-    // 가장 최댓값의 index의 번호에 따라 최고 선호 장르를 설정합니다.
     private Vector<Integer> genre = new Vector<Integer>();
 
 

@@ -64,42 +64,8 @@ public class fragment_bookworm extends Fragment {
         userinfo = new PersonalD(current_context).getUserInfo(); //저장된 UserInfo값을 가져온다.
 
         set_wormtype(userinfo);
-        //setBookworm(userinfo);
-
-
-        iv_bookworm.setImageResource(userinfo.getWormvec().get(0));
-
     }
 
-
-//
-//    private void setBookworm(UserInfo userinfo) {
-//
-//        int path = R.drawable.bw_default;
-//
-//        userinfo.getWormvec().set(0, userinfo.getWormtype().value());
-//
-//
-//        switch (userinfo.getWormvec().get(0))
-//        {
-//            case 0:
-//                path = R.drawable.bw_default;
-//                break;
-//            case 1:
-//                path = R.drawable.bw_horror;
-//                break;
-//            case 2:
-//                path = R.drawable.bw_detective;
-//                break;
-//            case 3:
-//                path = R.drawable.ex_romance;
-//                break;
-//            default:
-//                break;
-//        }
-//
-//        // userinfo.getWormimgvec().set(0, Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + path).toString());
-//    }
 
 
     // userinfo의 genre 배열의 어떤 인덱스(장르)가 가장 큰 값을 가지고 있는지 찾은 후
@@ -119,18 +85,16 @@ public class fragment_bookworm extends Fragment {
         {
             case 0:
                 userinfo.setWormtype(enum_wormtype.디폴트);
-                userinfo.getWormvec().set(0, userinfo.getWormtype().value());
-                iv_bookworm.setImageResource(R.drawable.bw_default);
+                userinfo.getWormvec().set(0, R.drawable.bw_default);
                 break;
             case 1:
                 userinfo.setWormtype(enum_wormtype.공포);
-                userinfo.getWormvec().set(0, userinfo.getWormtype().value());
-                iv_bookworm.setImageResource(R.drawable.bw_horror);
+                userinfo.getWormvec().set(0, R.drawable.bw_horror);
+                int i = R.drawable.bw_horror;
                 break;
             case 2:
                 userinfo.setWormtype(enum_wormtype.추리);
-                userinfo.getWormvec().set(0, userinfo.getWormtype().value());
-                iv_bookworm.setImageResource(R.drawable.bw_detective);
+                userinfo.getWormvec().set(0, R.drawable.bw_detective);
                 break;
             case 3:
 //                userinfo.setWormtype(enum_wormtype.로맨스);
@@ -140,6 +104,7 @@ public class fragment_bookworm extends Fragment {
             default:
                 break;
         }
+        iv_bookworm.setImageResource(userinfo.getWormvec().get(0));
     }
 
 
