@@ -23,6 +23,7 @@ public class UserInfo implements Serializable {
     private String email; // 로그인한 이메일
     private String platform;
     private String token;
+    private ArrayList<String> likedPost;
     private static enum_wormtype wormtype = enum_wormtype.디폴트;
 
     private static int enum_size = enum_wormtype.enumsize.value();
@@ -92,6 +93,8 @@ public class UserInfo implements Serializable {
         this.wormvec=new Vector<>((ArrayList<Integer>)document.get("wormvec"));
 //        this.wormtype=enum_wormtype.a;
         this.genre=new Vector<>((ArrayList<Integer>) document.get("genre"));
+        if ((ArrayList<String>) document.get("likedPost")!=null) this.likedPost=(ArrayList<String>) document.get("likedPost");
+        else this.likedPost=new ArrayList<>();
     }
 
     public String getProfileimg() {
@@ -129,6 +132,14 @@ public class UserInfo implements Serializable {
         this.genre.set(idx, unboxint);
 
         new PersonalD(context).saveUserInfo(this);
+    }
+
+    public void setLikedPost(ArrayList<String> likedPost) {
+        this.likedPost = likedPost;
+    }
+
+    public ArrayList<String> getLikedPost() {
+        return likedPost;
     }
 
     public Vector<Integer> getWormvec() {

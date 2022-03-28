@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         // 초기화면 설정
         fragments[0] = new fragment_feed();
         fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.container, fragments[0]).commitAllowingStateLoss();
+        fragmentManager.beginTransaction().replace(R.id.container, fragments[0],"0").commitAllowingStateLoss();
 
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom);

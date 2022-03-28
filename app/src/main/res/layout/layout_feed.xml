@@ -52,11 +52,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
+        android:id="@+id/llbook"
         android:background="@drawable/feed_bottom_top_border"
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/ivThumb"
+            android:id="@+id/feedBookThumb"
             android:layout_width="80dp"
             android:layout_height="118dp"
             android:layout_marginEnd="10dp"
@@ -67,7 +68,7 @@
             android:layout_height="88dp">
 
             <TextView
-                android:id="@+id/feedtvTitle"
+                android:id="@+id/feedBookTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
@@ -87,7 +88,7 @@
                     android:text="저자 : " />
 
                 <TextView
-                    android:id="@+id/tvAuthor"
+                    android:id="@+id/feedBookAuthor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
@@ -103,7 +104,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/ivImage"
+        android:id="@+id/feedImage"
         android:layout_width="360dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -113,16 +114,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:id="@+id/lllabel"
         android:orientation="horizontal">
         <!--여기 라벨 처리좀 부탁....-->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
-            android:background="@drawable/label_design"
-            android:backgroundTint="#0F000000"
-            android:text="#재미있어요" />
-
     </LinearLayout>
 
     <TextView
@@ -154,14 +148,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
+            android:id="@+id/lllike"
             android:orientation="horizontal">
 
-            <ImageView
+            <Button
                 android:id="@+id/ivLike"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="start"
-                android:src="@drawable/icon_like" />
+                android:background="@drawable/icon_like" />
 
             <TextView
                 android:id="@+id/tvLike"
