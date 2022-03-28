@@ -1,5 +1,6 @@
 package com.example.bookworm.fragments;
 
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,6 +30,8 @@ public class fragment_profile extends Fragment {
     ImageView imgProfile;
     Context current_context;
     FBModule fbModule;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
