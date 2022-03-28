@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.ScrollView;
@@ -29,6 +30,7 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
     ImageView iv_selectedItem;
     final int textViewCount = 8;
     String itemId;
+    Button btnBack;
     int textViewID[] = {R.id.tvResTitle, R.id.tvResAuthor, R.id.tvLink, R.id.tvResPublisher, R.id.tvResDescription, R.id.tvResPriceSales, R.id.tvResPriceStandard, R.id.tvResRatingscore};
     String getContent[] = {"title", "author", "link", "publisher", "description", "priceSales", "priceStandard", "customerReviewRank"};
     TextView[] textViews = new TextView[textViewCount];
@@ -44,6 +46,7 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
         itemId = intent.getExtras().getString("itemid");
         iv_selectedItem = findViewById(R.id.iv_selectedItem);
         tvViewMore = findViewById(R.id.tvViewMore);
+        btnBack = findViewById(R.id.btnBack);
         customerReviewRank = findViewById(R.id.customerReviewRank);
         for (int i = 0; i < textViewCount; i++) {
             textViews[i] = findViewById(textViewID[i]);
@@ -58,6 +61,14 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 ScrParents.requestDisallowInterceptTouchEvent(true);
                 return false;
+            }
+        });
+
+        //뒤로가기 버튼
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }

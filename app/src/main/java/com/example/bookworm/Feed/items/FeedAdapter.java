@@ -147,7 +147,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             //작성자 UserInfo
             UserInfo user = item.getCreator();
             binding.tvNickname.setText(user.getUsername());
-            Glide.with(itemView).load(user.getProfileimg()).into(binding.ivProfileImage);
+            Glide.with(itemView).load(user.getProfileimg()).circleCrop().into(binding.ivProfileImage);
             //피드 내용
 
             binding.tvLike.setText(String.valueOf(item.getLikeCount()));
