@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -42,27 +43,14 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     Boolean restricted = false;
     Context context;
     Dialog customDialog;
-    ArrayList<Feed> FeedList;
+
 
     //생성자를 만든다.
-    public ItemViewHolder(@NonNull View itemView, Context context,ArrayList<Feed> list) {
+    public ItemViewHolder(@NonNull View itemView, Context context) {
         super(itemView);
         binding = LayoutFeedBinding.bind(itemView);
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int position = getAdapterPosition();
-                FeedList=list;
-                //리스너 인터페이스 구현
-//                if (position != RecyclerView.NO_POSITION) {
-//                    if (listener != null) {
-////                            listener.onItemClick(ItemViewHolder.this, view, position);
-////                            notifyItemChanged(position);
-//                    }
-//                }
-            }
-        });
         this.context=context;
+
         nowUser = new PersonalD(context).getUserInfo();
     }
 
@@ -105,6 +93,18 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 controlLike(item,binding);
             }
         });
+        customDialog = new Dialog(context);       // Dialog 초기화
+        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
+        customDialog.setContentView(R.layout.custom_dialog_comment);
+
+        //댓글창을 클릭했을때
+        binding.llComments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showcustomDialog(item.getFeedID());
+            }
+        });
+        //이미지 뷰 정리
         if (item.getImgurl() != null)
             Glide.with(itemView).load(item.getImgurl()).into(binding.feedImage); //프로필 사진 보여줌
         else binding.feedImage.setVisibility(View.INVISIBLE);
@@ -180,11 +180,11 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public void showcustomDialog(int position) {
+    public void showcustomDialog(String feedId) {
         customDialog.show(); // 다이얼로그 띄우기
 //        EditText edtComment = customDialog.findViewById(R.id.edtComment);
         TextView tvCommentCount = customDialog.findViewById(R.id.tvCommentCount);
-        tvCommentCount.setText(FeedList.get(position).getFeedID());
+        tvCommentCount.setText(feedId);
 //        edtComment.setText(FeedList.get(position).getFeedID());
 
     }
