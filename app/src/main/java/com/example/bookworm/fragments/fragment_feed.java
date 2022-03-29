@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
@@ -20,10 +21,11 @@ public class fragment_feed extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
 
         //ImageView profileimg = (ImageView) view.findViewById(R.id.img_profile);
-        imgCreate=(ImageView)view.findViewById(R.id.img_createfeed);
+        imgCreate = view.findViewById(R.id.img_createfeed);
 
         //Glide.with(this).load(R.drawable.profile_img).circleCrop().into(profileimg);
 
@@ -31,11 +33,10 @@ public class fragment_feed extends Fragment {
         imgCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getContext(),subActivity_Feed_Create.class);
+                Intent intent = new Intent(getContext(), subActivity_Feed_Create.class);
                 startActivity(intent);
             }
         });
-
 
 
         // Inflate the layout for this fragment

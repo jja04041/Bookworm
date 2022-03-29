@@ -35,6 +35,10 @@ public class Challenge implements Serializable {
         }
     }
 
+    public void setCurrentPart(ArrayList<String> currentPart) {
+        CurrentPart = currentPart;
+    }
+
     public String getBookId() {
         return bookId;
     }

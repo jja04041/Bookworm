@@ -14,6 +14,8 @@ public class frag_functions {
 
 
     public void show_fragment(Fragment[] fragments, FragmentManager fragmentManager, int idx) {
+
+
         for (int i = 0; i < 5; i++) {
             if (i == idx) {
                 if (fragments[i] == null) {
@@ -36,11 +38,23 @@ public class frag_functions {
                     }
 
                     fragmentManager.beginTransaction().add(R.id.container, fragments[i], String.valueOf(i)).commitAllowingStateLoss();
-                } else
+
+                }
+                else
                     fragmentManager.beginTransaction().show(fragments[i]).commitAllowingStateLoss();
-            } else {
-                if (fragments[i] != null)
-                    fragmentManager.beginTransaction().hide(fragments[i]).commitAllowingStateLoss();
+            }
+            else {
+                if (fragments[i] != null) {
+                    if(i == 2 || i == 4)
+                    {
+                        fragmentManager.beginTransaction().remove(fragments[i]).commitAllowingStateLoss();
+                        fragments[i] = null;
+                    }
+
+                    else
+                        fragmentManager.beginTransaction().hide(fragments[i]).commitAllowingStateLoss();
+                }
+
             }
             fragmentManager.executePendingTransactions();
         }
