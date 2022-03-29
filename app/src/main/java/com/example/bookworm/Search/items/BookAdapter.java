@@ -2,7 +2,6 @@ package com.example.bookworm.Search.items;
 
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +36,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             View view = inflater.inflate(R.layout.search_recyclerview_item, parent, false);
             return new ItemViewHolder(view, listener);
         } else {
-            View view = inflater.inflate(R.layout.search_item_loading, parent, false);
+            View view = inflater.inflate(R.layout.layout_item_loading, parent, false);
             return new LoadingViewHolder(view);
         }
     }
@@ -56,8 +55,6 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         } else if (holder instanceof LoadingViewHolder) {
             showLoadingView((LoadingViewHolder) holder, safePosition);
         }
-
-
     }
     @Override
     public int getItemCount() {

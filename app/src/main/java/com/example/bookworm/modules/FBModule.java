@@ -93,11 +93,8 @@ public class FBModule {
             //유저정보 불러오기
             if (idx == 0) {
                 //장르를 업데이트
-
-                //userinfo = (UserInfo)document.getData().get("UserInfo");
-
                 if (map.get("userinfo_genre") != null) {
-                    document.getReference().update("UserInfo", map.get("userinfo_genre"));
+                    document.getReference().update("UserInfo.genre", map.get("userinfo_genre"));
                 }
                 //회원인 경우, 로그인 처리
                 else {
@@ -123,7 +120,6 @@ public class FBModule {
                             ((subactivity_challenge_challengeinfo) context).setParticipating((ArrayList<String>) document.get("CurrentParticipation"));
                             break;
                     }
-
                 }
                 //챌린지 중복 조회
                 else Toast.makeText(context, "이미 존재하는 챌린지명 입니다", Toast.LENGTH_SHORT).show();

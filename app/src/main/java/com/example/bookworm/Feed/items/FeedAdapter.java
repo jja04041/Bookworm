@@ -1,4 +1,4 @@
-package com.example.bookworm.Challenge.items;
+package com.example.bookworm.Feed.items;
 
 
 import android.content.Context;
@@ -11,18 +11,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
+import com.example.bookworm.databinding.FragmentFeedBinding;
 
 import java.util.ArrayList;
 
-public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnChallengeItemClickListener {
-    ArrayList<Challenge> ChallengeList;
+public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnFeedItemClickListener {
+    ArrayList<Feed> FeedList;
     Context context;
-    OnChallengeItemClickListener listener;
+    OnFeedItemClickListener listener;
 
-    public ChallengeAdapter(ArrayList<Challenge> data, Context c) {
-        ChallengeList = data;
+    public FeedAdapter(ArrayList<Feed> data, Context c) {
+        FeedList = data;
         context = c;
     }
 
@@ -32,7 +32,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         if (viewType == 0) {
-            View view = inflater.inflate(R.layout.layout_challenge_item, parent, false);
+            View view = inflater.inflate(R.layout.layout_feed, parent, false);
             return new ItemViewHolder(view, listener);
         } else {
             View view = inflater.inflate(R.layout.layout_item_loading, parent, false);
@@ -40,7 +40,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    public void setListener(OnChallengeItemClickListener listener) {
+    public void setListener(OnFeedItemClickListener listener) {
         this.listener = listener;
     }
 
@@ -49,7 +49,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         int safePosition=holder.getAdapterPosition();
         if (holder instanceof ItemViewHolder) {
-            Challenge item = ChallengeList.get(safePosition);
+            Feed item = FeedList.get(safePosition);
             ((ItemViewHolder) holder).setItem(item);
         } else if (holder instanceof LoadingViewHolder) {
             showLoadingView((LoadingViewHolder) holder, safePosition);
@@ -57,11 +57,11 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
     @Override
     public int getItemCount() {
-        return ChallengeList.size();
+        return FeedList.size();
     }
 
-    public void addItem(Challenge item) {
-        ChallengeList.add(item);
+    public void addItem(Feed item) {
+        FeedList.add(item);
     }
 
 
@@ -87,31 +87,27 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
     public int getItemViewType(int pos) {
-        if (ChallengeList.get(pos).getTitle() != null) return 0;
+        if (FeedList.get(pos).getFeedID() != null) return 0;
         else return 1;
     }
 
     public void deleteLoading() {
-        ChallengeList.remove(ChallengeList.size() - 1);
+        FeedList.remove(FeedList.size() - 1);
         // 로딩이 완료되면 프로그레스바를 지움
     }
 
     //뷰홀더 클래스 부분
     public class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView tvBookTitle, tvCTitle, tvChallengeStartDate, tvChallengeEndDate,tvPerson;
+        TextView tvBookTitle, tvCTitle, tvFeedStartDate, tvFeedEndDate,tvPerson;
         ImageView ivThumb;
+        FragmentFeedBinding binding;
 
         //생성자를 만든다.
-        public ItemViewHolder(@NonNull View itemView, final OnChallengeItemClickListener listener) {
+        public ItemViewHolder(@NonNull View itemView, final OnFeedItemClickListener listener) {
             super(itemView);
             //findViewById를 통해 View와 연결
-            tvBookTitle = itemView.findViewById(R.id.tvBookTitle);
-            tvCTitle = itemView.findViewById(R.id.tvCtitle);
-            ivThumb = itemView.findViewById(R.id.ivThumb);
-            tvChallengeStartDate = itemView.findViewById(R.id.tvChallengeStartDate);
-            tvChallengeEndDate = itemView.findViewById(R.id.tvChallengeEndDateDate);
-            tvPerson=itemView.findViewById(R.id.tvPerson);
             //아이템 선택 시 리스너
+            binding=FragmentFeedBinding.bind(itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -129,13 +125,8 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         }
         //아이템을 세팅하는 메소드
-        public void setItem(Challenge item) {
-            tvCTitle.setText(item.getTitle());
-            tvChallengeStartDate.setText(item.getStartDate().substring(5));
-            tvChallengeEndDate.setText(item.getEndDate().substring(5));
-            tvPerson.setText(String.valueOf(item.getCurrentPart().size()));
-            tvBookTitle.setText(item.getBookTitle());
-            Glide.with(itemView).load(item.getBookThumb()).into(ivThumb); //책 썸네일 설정
+        public void setItem(Feed item) {
+
         }
     }
 }
