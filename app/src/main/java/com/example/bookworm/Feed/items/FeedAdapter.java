@@ -15,10 +15,9 @@ import com.example.bookworm.R;
 
 import java.util.ArrayList;
 
-public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnFeedItemClickListener {
+public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     ArrayList<Feed> FeedList;
     Context context;
-    OnFeedItemClickListener listener;
 
     public FeedAdapter(ArrayList<Feed> data, Context c) {
         FeedList = data;
@@ -34,11 +33,11 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             //이미지가 없는 피드
             case 0:
                 view = inflater.inflate(R.layout.layout_feed_no_image, parent, false);
-                return new ItemNoImgViewHolder(view, listener, context,FeedList);
+                return new ItemNoImgViewHolder(view, context, FeedList);
             //이미지가 있는 피드
             case 1:
                 view = inflater.inflate(R.layout.layout_feed, parent, false);
-                return new ItemViewHolder(view, listener, context,FeedList);
+                return new ItemViewHolder(view, context, FeedList);
             //로딩바
             case 2:
                 view = inflater.inflate(R.layout.layout_item_loading, parent, false);
@@ -47,9 +46,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         return null;
     }
 
-    public void setListener(OnFeedItemClickListener listener) {
-        this.listener = listener;
-    }
+//    public void setListener(OnFeedItemClickListener listener) {
+//        this.listener = listener;
+//    }
 
     //Arraylist에 있는 아이템을 뷰 홀더에 바인딩 하는 메소드
     @Override
@@ -58,12 +57,10 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         if (holder instanceof ItemViewHolder) {
             Feed item = FeedList.get(safePosition);
             ((ItemViewHolder) holder).setItem(item);
-        }
-        else if(holder instanceof  ItemNoImgViewHolder){
+        } else if (holder instanceof ItemNoImgViewHolder) {
             Feed item = FeedList.get(safePosition);
             ((ItemNoImgViewHolder) holder).setItem(item);
-        }
-        else if (holder instanceof LoadingViewHolder) {
+        } else if (holder instanceof LoadingViewHolder) {
             showLoadingView((LoadingViewHolder) holder, safePosition);
         }
     }
@@ -74,16 +71,16 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
 
-    public void onItemClick(ItemViewHolder holder, View view, int position) {
-        if (listener != null) {
-            listener.onItemClick(holder, view, position);
-        }
-    }
-
-    @Override
-    public void onItemClick(ItemNoImgViewHolder holder, View view, int position) {
-
-    }
+//    public void onItemClick(ItemViewHolder holder, View view, int position) {
+//        if (listener != null) {
+//            listener.onItemClick(holder, view, position);
+//        }
+//    }
+//
+//    @Override
+//    public void onItemClick(ItemNoImgViewHolder holder, View view, int position) {
+//
+//    }
 
     //로딩바 클래스
     private class LoadingViewHolder extends RecyclerView.ViewHolder {
@@ -97,7 +94,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
     public int getItemViewType(int pos) {
-        if (FeedList.get(pos).getFeedID() != null&&FeedList.get(pos).getImgurl() == null) return 0;
+        if (FeedList.get(pos).getFeedID() != null && FeedList.get(pos).getImgurl() == null)
+            return 0;
         else if (FeedList.get(pos).getFeedID() != null) return 1;
         else return 2;
     }
