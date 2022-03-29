@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Feed.items.Feed;
-import com.example.bookworm.Feed.items.OnFeedItemClickListener;
 import com.example.bookworm.Feed.likeCounter;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;

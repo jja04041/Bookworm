@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import com.example.bookworm.Feed.ViewHolders.ItemNoImgViewHolder;
 import com.example.bookworm.Feed.ViewHolders.ItemViewHolder;
-import com.example.bookworm.Feed.items.OnFeedItemClickListener;
 import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.Feed.items.FeedAdapter;
 import com.example.bookworm.databinding.FragmentFeedBinding;
@@ -100,16 +99,7 @@ public class fragment_feed extends Fragment {
     private void initAdapter() {
         feedAdapter = new FeedAdapter(feedList, getContext());
         //어댑터 리스너
-        feedAdapter.setListener(new OnFeedItemClickListener() {
-            @Override
-            public void onItemClick(ItemViewHolder holder, View view, int position) {
 
-            }
-            @Override
-            public void onItemClick(ItemNoImgViewHolder holder, View view, int position) {
-
-            }
-        });
     }
 
     //리사이클러뷰 스크롤 초기화
