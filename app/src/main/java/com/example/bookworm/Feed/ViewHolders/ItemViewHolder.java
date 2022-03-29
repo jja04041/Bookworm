@@ -72,8 +72,20 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         //작성자 UserInfo
         UserInfo user = item.getCreator();
         binding.tvNickname.setText(user.getUsername());
-        Glide.with(itemView).load(user.getProfileimg()).into(binding.ivProfileImage);
+        Glide.with(itemView).load(user.getProfileimg()).circleCrop().into(binding.ivProfileImage);
         //피드 내용
+
+        customDialog = new Dialog(context);       // Dialog 초기화
+        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
+        customDialog.setContentView(R.layout.custom_dialog_comment);
+
+        //댓글창을 클릭했을때
+        binding.llComments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showcustomDialog(item.getFeedID());
+            }
+        });
 
         binding.tvLike.setText(String.valueOf(item.getLikeCount()));
 
@@ -106,7 +118,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         });
         //이미지 뷰 정리
         if (item.getImgurl() != null)
-            Glide.with(itemView).load(item.getImgurl()).into(binding.feedImage); //프로필 사진 보여줌
+            Glide.with(itemView).load(item.getImgurl()).into(binding.feedImage); //피드 사진 보여줌
         else binding.feedImage.setVisibility(View.INVISIBLE);
         binding.tvFeedtext.setText(item.getFeedText());
         setLabel(item.getLabel()); //라벨 세팅
