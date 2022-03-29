@@ -48,8 +48,26 @@ public class activity_achievement extends AppCompatActivity {
         }
 
         private void getData(int iData) {
-                ItemData itemData = new ItemData(iData, "디폴트");
+
+                String wormname = "디폴트";
+
+                switch(iData)
+                {
+                        case R.drawable.bw_default:
+                                wormname = "디폴트";
+                                break;
+                        case R.drawable.bw_horror:
+                                wormname = "공포";
+                                break;
+                        case R.drawable.bw_detective:
+                                wormname = "추리";
+                                break;
+
+                }
+
+                ItemData itemData = new ItemData(iData, wormname);
                 adapter.addItem(itemData);
+
         }
 
 
@@ -62,7 +80,5 @@ public class activity_achievement extends AppCompatActivity {
 
                         }
                 }
-
-
         }
 }

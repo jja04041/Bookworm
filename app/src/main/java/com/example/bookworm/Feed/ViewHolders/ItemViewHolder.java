@@ -1,5 +1,6 @@
 package com.example.bookworm.Feed.ViewHolders;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -8,10 +9,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.bookworm.Feed.items.Comment;
 import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.Feed.likeCounter;
 import com.example.bookworm.R;
@@ -27,8 +31,10 @@ import com.example.bookworm.Search.subActivity.search_fragment_subActivity_resul
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.databinding.LayoutFeedBinding;
 import com.example.bookworm.databinding.LayoutFeedNoImageBinding;
+import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.personalD.PersonalD;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -43,19 +49,23 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     Boolean restricted = false;
     Context context;
     Dialog customDialog;
-
+    FBModule fbModule;
+    Comment comment;
+    String FeedID;
 
     //생성자를 만든다.
     public ItemViewHolder(@NonNull View itemView, Context context) {
         super(itemView);
         binding = LayoutFeedBinding.bind(itemView);
-        this.context=context;
+        this.context = context;
 
         nowUser = new PersonalD(context).getUserInfo();
     }
 
     //아이템을 세팅하는 메소드
     public void setItem(Feed item) {
+
+
         //피드에 삽입한 책
         Book book = item.getBook();
         binding.feedBookAuthor.setText(book.getAuthor());
@@ -83,7 +93,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         binding.llComments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showcustomDialog(item.getFeedID());
+                showcustomDialog(item);
             }
         });
 
@@ -102,7 +112,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         binding.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                controlLike(item,binding);
+                controlLike(item, binding);
             }
         });
         customDialog = new Dialog(context);       // Dialog 초기화
@@ -113,7 +123,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         binding.llComments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showcustomDialog(item.getFeedID());
+                showcustomDialog(item);
             }
         });
         //이미지 뷰 정리
@@ -127,17 +137,16 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     private void controlLike(Feed item, Object bind) {
         LayoutFeedNoImageBinding binding;
         LayoutFeedBinding binding1;
-        Button btnLike=null;
-        TextView tvLike=null;
+        Button btnLike = null;
+        TextView tvLike = null;
         if (bind instanceof LayoutFeedBinding) {
             binding1 = (LayoutFeedBinding) bind;
-            btnLike=binding1.btnLike;
-            tvLike=binding1.tvLike;
-        }
-        else if (bind instanceof LayoutFeedNoImageBinding) {
+            btnLike = binding1.btnLike;
+            tvLike = binding1.tvLike;
+        } else if (bind instanceof LayoutFeedNoImageBinding) {
             binding = (LayoutFeedNoImageBinding) bind;
-            btnLike=binding.btnLike;
-            tvLike=binding.tvLike;
+            btnLike = binding.btnLike;
+            tvLike = binding.tvLike;
         }
 
         if (limit < 5) {
@@ -192,14 +201,41 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public void showcustomDialog(String feedId) {
+    public void showcustomDialog(Feed item) {
         customDialog.show(); // 다이얼로그 띄우기
-//        EditText edtComment = customDialog.findViewById(R.id.edtComment);
-        TextView tvCommentCount = customDialog.findViewById(R.id.tvCommentCount);
-        tvCommentCount.setText(feedId);
-//        edtComment.setText(FeedList.get(position).getFeedID());
 
+        fbModule = new FBModule(context);
+
+        EditText edtComment = customDialog.findViewById(R.id.edtComment);
+        TextView tvCommentCount = customDialog.findViewById(R.id.tvCommentCount);
+        tvCommentCount.setText(item.getFeedID());
+
+
+        Button btnWriteComment = customDialog.findViewById(R.id.btnWriteComment);
+
+
+        btnWriteComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HashMap<String, Object> map = new HashMap<>();
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String formatTime = dateFormat.format(System.currentTimeMillis());
+
+                //유저정보, 댓글내용, 작성시간
+                comment = new Comment(nowUser,edtComment.getText().toString(),formatTime);
+
+                FeedID = item.getFeedID();
+
+                map.put("Comment", comment); //댓글 내용
+                map.put("FeedID", FeedID); //피드ID
+
+                fbModule.readData(3, map, FeedID);
+                customDialog.dismiss();
+            }
+        });
     }
+
     //라벨을 동적으로 생성
     private void setLabel(ArrayList<String> label) {
         for (int i = 0; i < label.size(); i++) {

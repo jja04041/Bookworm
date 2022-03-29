@@ -37,7 +37,7 @@ import java.util.Map;
 
 
 public class FBModule {
-    String location[] = {"users", "feed", "challenge"}; //각 함수에서 전달받은 인덱스에 맞는 값을 뽑아냄.
+    String location[] = {"users", "feed", "challenge", "comment"}; //각 함수에서 전달받은 인덱스에 맞는 값을 뽑아냄.
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     Context context;
     private int LIMIT ;
@@ -199,13 +199,18 @@ public class FBModule {
                 break;
 
             case 1: //피드 작성
-                UserInfo userInfo1 = new UserInfo();
-                userInfo1 = (UserInfo) data.get("UserInfo");
+//                UserInfo userInfo1 = new UserInfo();
+//                userInfo1 = (UserInfo) data.get("UserInfo");
                 db.collection(location[idx]).document((String) data.get("FeedID")).set(data);
                 break;
 
             case 2://챌린지 생성
                 db.collection(location[idx]).document((String) data.get("strChallengeName")).set(data);
+                break;
+
+            case 3://댓글 작성
+//                String FeedID = data.get("FeedID");
+                db.collection(location[idx]).document((String) data.get("FeedID")).set(data);
                 break;
         }
     }
