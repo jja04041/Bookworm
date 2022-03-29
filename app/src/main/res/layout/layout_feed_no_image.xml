@@ -103,12 +103,6 @@
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/feedImage"
-        android:layout_width="360dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_baseline_image_24" />
 
     <LinearLayout
         android:layout_width="match_parent"

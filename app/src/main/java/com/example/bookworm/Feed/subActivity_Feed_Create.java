@@ -507,6 +507,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             if (imgUrl != null) map.put("imgurl", imgUrl); //이미지 url
 
             fbModule.readData(1, map, FeedID);
+            setResult(Activity.RESULT_OK);
             finish();
         }
     }
@@ -516,7 +517,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         //피드 생성화면에 존재하는 라벨
         TextView feedCreateLabel[] = new TextView[5];
         int[] feedCreateLabelID = {R.id.tvlabel1, R.id.tvlabel2, R.id.tvlabel3, R.id.tvlabel4, R.id.tvlabel5,};
-
         //라벨 리스트에 현재 선택된 라벨들을 추가
         for (int i = 0; i < feedCreateLabel.length; i++) {
             feedCreateLabel[i] = findViewById(feedCreateLabelID[i]);

@@ -1,40 +1,41 @@
 package com.example.bookworm.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
+import com.example.bookworm.Feed.ViewHolders.ItemNoImgViewHolder;
+import com.example.bookworm.Feed.ViewHolders.ItemViewHolder;
 import com.example.bookworm.Feed.items.OnFeedItemClickListener;
 import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.Feed.items.FeedAdapter;
 import com.example.bookworm.databinding.FragmentFeedBinding;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.bookworm.Feed.subActivity_Feed_Create;
-import com.example.bookworm.R;
+import com.example.bookworm.databinding.LayoutTopbarBinding;
 import com.example.bookworm.modules.FBModule;
-import com.example.bookworm.modules.personalD.PersonalD;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class fragment_feed extends Fragment {
-    ImageView imgCreate;
     FragmentFeedBinding binding;
     FeedAdapter feedAdapter;
-    private final int LIMIT = 5;
+    private final int LIMIT = 10;
     ArrayList<Feed> feedList;
     private DocumentSnapshot lastVisible; //마지막에 가져온 값 부터 추가로 가져올 수 있도록 함.
     private Map map;
@@ -43,6 +44,13 @@ public class fragment_feed extends Fragment {
     //canLoad:더 로딩이 가능한지 확인하는 변수[자료의 끝을 판별한다.]
     private Boolean isRefreshing = false, isLoading = false, canLoad = true;
     private int page = 1;
+    ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    pageRefresh();
+                }
+            });
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,19 +59,25 @@ public class fragment_feed extends Fragment {
         binding = FragmentFeedBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         fbModule = new FBModule(getContext());
-        fbModule.setLIMIT(LIMIT);
+        fbModule.setLIMIT(LIMIT); //한번에 보여줄 피드의 최대치를 설정
         //Create New Feed
-        imgCreate = view.findViewById(R.id.img_createfeed);
-        imgCreate.setOnClickListener(new View.OnClickListener() {
+        LayoutTopbarBinding.bind(binding.getRoot()).imgCreatefeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), subActivity_Feed_Create.class);
-                startActivity(intent);
+                startActivityResult.launch(intent);
+            }
+        });
+        //스와이프하여 새로고침
+        binding.swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                pageRefresh();
+                isRefreshing = true;
             }
         });
         //피드 초기 호출
         pageRefresh();
-
 
         // Inflate the layout for this fragment
         return view;
@@ -88,7 +102,11 @@ public class fragment_feed extends Fragment {
         //어댑터 리스너
         feedAdapter.setListener(new OnFeedItemClickListener() {
             @Override
-            public void onItemClick(FeedAdapter.ItemViewHolder holder, View view, int position) {
+            public void onItemClick(ItemViewHolder holder, View view, int position) {
+
+            }
+            @Override
+            public void onItemClick(ItemNoImgViewHolder holder, View view, int position) {
 
             }
         });
@@ -139,7 +157,6 @@ public class fragment_feed extends Fragment {
         isLoading = false;
         fbModule.readData(1, map, null);
 
-
     }
 
     //피드 초기화
@@ -153,9 +170,10 @@ public class fragment_feed extends Fragment {
 
     //fb모듈을 통해 전달받은 값을 세팅
     public void moduleUpdated(List<DocumentSnapshot> a) {
-//        if (isRefreshing) {
-//            isRefreshing = false;
-//        }
+        if (isRefreshing) {
+            binding.swiperefresh.setRefreshing(false);
+            isRefreshing = false;
+        }
 //        if (page == 1) {
 //            isLoading = false;
 //            feedList = new ArrayList<>(); //챌린지를 담는 리스트 생성
