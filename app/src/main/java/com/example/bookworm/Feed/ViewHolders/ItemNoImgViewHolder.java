@@ -2,6 +2,7 @@
 package com.example.bookworm.Feed.ViewHolders;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,7 +11,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -45,11 +48,14 @@ public class ItemNoImgViewHolder extends RecyclerView.ViewHolder {
     int limit = 0;
     Boolean restricted = false;
     Context context;
+    Dialog customDialog;
+    ArrayList<Feed> FeedList;
 
     //생성자를 만든다.
-    public ItemNoImgViewHolder(@NonNull View itemView, final OnFeedItemClickListener listener, Context context) {
+    public ItemNoImgViewHolder(@NonNull View itemView, final OnFeedItemClickListener listener, Context context,ArrayList<Feed> list) {
         super(itemView);
         binding = LayoutFeedNoImageBinding.bind(itemView);
+        FeedList=list;
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,14 +63,13 @@ public class ItemNoImgViewHolder extends RecyclerView.ViewHolder {
                 //리스너 인터페이스 구현
                 if (position != RecyclerView.NO_POSITION) {
                     if (listener != null) {
-//                            listener.onItemClick(ItemViewHolder.this, view, position);
-//                            notifyItemChanged(position);
                     }
                 }
             }
         });
         this.context = context;
         nowUser = new PersonalD(context).getUserInfo();
+
     }
 
     //아이템을 세팅하는 메소드
@@ -87,6 +92,19 @@ public class ItemNoImgViewHolder extends RecyclerView.ViewHolder {
         binding.tvNickname.setText(user.getUsername());
         Glide.with(itemView).load(user.getProfileimg()).into(binding.ivProfileImage);
         //피드 내용
+        customDialog = new
+
+                Dialog(context);       // Dialog 초기화
+        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
+        customDialog.setContentView(R.layout.custom_dialog_comment);
+
+        //댓글창을 클릭했을때
+        binding.llComments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showcustomDialog(getAdapterPosition());
+            }
+        });
 
         binding.tvLike.setText(String.valueOf(item.getLikeCount()));
 
@@ -100,7 +118,7 @@ public class ItemNoImgViewHolder extends RecyclerView.ViewHolder {
             liked = false;
         }
         //좋아요 표시 관리
-        binding.lllike.setOnClickListener(new View.OnClickListener() {
+        binding.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 controlLike(item, binding);
@@ -109,7 +127,15 @@ public class ItemNoImgViewHolder extends RecyclerView.ViewHolder {
         binding.tvFeedtext.setText(item.getFeedText());
         setLabel(item.getLabel()); //라벨 세팅
     }
+    //댓글창 다이얼로그 띄우기
+    public void showcustomDialog(int position) {
+        customDialog.show(); // 다이얼로그 띄우기
+//        EditText edtComment = customDialog.findViewById(R.id.edtComment);
+        TextView tvCommentCount = customDialog.findViewById(R.id.tvCommentCount);
+        tvCommentCount.setText(FeedList.get(position).getFeedID());
+//        edtComment.setText(FeedList.get(position).getFeedID());
 
+    }
     private void controlLike(Feed item, Object bind) {
         LayoutFeedNoImageBinding binding;
         LayoutFeedBinding binding1;
@@ -178,9 +204,11 @@ public class ItemNoImgViewHolder extends RecyclerView.ViewHolder {
     }
 
 
+
+
     //라벨을 동적으로 생성
     private void setLabel(ArrayList<String> label) {
-        if (label!=null) {
+        if (label != null) {
             for (int i = 0; i < label.size(); i++) {
                 //뷰 생성
                 TextView tv = new TextView(context);

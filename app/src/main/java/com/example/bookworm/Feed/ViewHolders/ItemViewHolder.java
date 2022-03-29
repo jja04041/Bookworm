@@ -1,6 +1,7 @@
 package com.example.bookworm.Feed.ViewHolders;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -41,14 +42,18 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     int limit = 0;
     Boolean restricted = false;
     Context context;
+    Dialog customDialog;
+    ArrayList<Feed> FeedList;
+
     //생성자를 만든다.
-    public ItemViewHolder(@NonNull View itemView, final OnFeedItemClickListener listener, Context context) {
+    public ItemViewHolder(@NonNull View itemView, final OnFeedItemClickListener listener, Context context,ArrayList<Feed> list) {
         super(itemView);
         binding = LayoutFeedBinding.bind(itemView);
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int position = getAdapterPosition();
+                FeedList=list;
                 //리스너 인터페이스 구현
                 if (position != RecyclerView.NO_POSITION) {
                     if (listener != null) {
@@ -95,7 +100,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             liked = false;
         }
         //좋아요 표시 관리
-        binding.lllike.setOnClickListener(new View.OnClickListener() {
+        binding.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 controlLike(item,binding);
@@ -176,7 +181,14 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
+    public void showcustomDialog(int position) {
+        customDialog.show(); // 다이얼로그 띄우기
+//        EditText edtComment = customDialog.findViewById(R.id.edtComment);
+        TextView tvCommentCount = customDialog.findViewById(R.id.tvCommentCount);
+        tvCommentCount.setText(FeedList.get(position).getFeedID());
+//        edtComment.setText(FeedList.get(position).getFeedID());
 
+    }
     //라벨을 동적으로 생성
     private void setLabel(ArrayList<String> label) {
         for (int i = 0; i < label.size(); i++) {
