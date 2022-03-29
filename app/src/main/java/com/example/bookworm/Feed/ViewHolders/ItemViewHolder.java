@@ -46,7 +46,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     ArrayList<Feed> FeedList;
 
     //생성자를 만든다.
-    public ItemViewHolder(@NonNull View itemView, final OnFeedItemClickListener listener, Context context,ArrayList<Feed> list) {
+    public ItemViewHolder(@NonNull View itemView, Context context,ArrayList<Feed> list) {
         super(itemView);
         binding = LayoutFeedBinding.bind(itemView);
         itemView.setOnClickListener(new View.OnClickListener() {
@@ -55,12 +55,12 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 int position = getAdapterPosition();
                 FeedList=list;
                 //리스너 인터페이스 구현
-                if (position != RecyclerView.NO_POSITION) {
-                    if (listener != null) {
-//                            listener.onItemClick(ItemViewHolder.this, view, position);
-//                            notifyItemChanged(position);
-                    }
-                }
+//                if (position != RecyclerView.NO_POSITION) {
+//                    if (listener != null) {
+////                            listener.onItemClick(ItemViewHolder.this, view, position);
+////                            notifyItemChanged(position);
+//                    }
+//                }
             }
         });
         this.context=context;
