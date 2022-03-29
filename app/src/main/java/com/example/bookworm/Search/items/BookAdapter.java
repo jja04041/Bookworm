@@ -29,7 +29,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     OnBookItemClickListener listener;
 
     public BookAdapter(ArrayList<Book> data, Context c) {
-        BookList = data;
+        BookList=data;
         context = c;
     }
 

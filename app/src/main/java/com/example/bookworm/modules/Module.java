@@ -82,7 +82,7 @@ public class Module {
 
                 if (response.isSuccessful() && response.body() != null) {
                     if (idx == 3) {
-                        ((subActivity_Feed_Create)context).feedUpload(url + response.body());
+                        ((subActivity_Feed_Create) context).feedUpload(url + response.body());
                     } else {
                         try {
                             JSONObject json = new JSONObject(response.body());
@@ -112,7 +112,8 @@ public class Module {
                 break;
             case 1: //추천 책(카테고리 별)
                 JSONArray jsonArray = json.getJSONArray("item");
-                ((fragment_search) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("1")).updateRecom(jsonArray);
+                if (jsonArray != null)
+                    ((fragment_search) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("1")).updateRecom(jsonArray);
                 break;
             case 2: //책 상세 내용
                 JSONObject jsonObject = json.getJSONArray("item").getJSONObject(0);

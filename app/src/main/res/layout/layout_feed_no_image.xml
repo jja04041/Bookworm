@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="15dp"
+    android:layout_marginTop="10dp"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -49,10 +49,10 @@
     </FrameLayout>
 
     <LinearLayout
-        android:id="@+id/llbook"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
+        android:id="@+id/llbook"
         android:background="@drawable/feed_bottom_top_border"
         android:orientation="horizontal">
 
@@ -103,18 +103,12 @@
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/feedImage"
-        android:layout_width="360dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_baseline_image_24" />
 
     <LinearLayout
-        android:id="@+id/lllabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:id="@+id/lllabel"
         android:orientation="horizontal">
         <!--여기 라벨 처리좀 부탁....-->
     </LinearLayout>
@@ -124,7 +118,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="@drawable/textview_design"
+        android:background="@drawable/square_button"
         android:ellipsize="end"
         android:maxLines="3"
         android:padding="5dp"
@@ -145,10 +139,10 @@
         android:layout_marginBottom="10dp">
 
         <LinearLayout
-            android:id="@+id/lllike"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
+            android:id="@+id/lllike"
             android:orientation="horizontal">
 
             <Button
@@ -163,6 +157,7 @@
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
+                android:text="123"
                 android:textColor="@color/black" />
 
         </LinearLayout>

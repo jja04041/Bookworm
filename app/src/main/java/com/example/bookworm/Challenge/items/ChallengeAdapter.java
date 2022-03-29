@@ -27,7 +27,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     OnChallengeItemClickListener listener;
 
     public ChallengeAdapter(ArrayList<Challenge> data, Context c) {
-        ChallengeList = data;
+        ChallengeList=data;
         context = c;
     }
 

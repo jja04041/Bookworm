@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.bookworm.Challenge.subActivity.subactivity_challenge_challengeinfo;
+import com.example.bookworm.Feed.likeCounter;
 import com.example.bookworm.Login.activity_login;
 import com.example.bookworm.MainActivity;
 import com.example.bookworm.ProfileSettingActivity;
@@ -38,7 +39,7 @@ import java.util.Map;
 public class FBModule {
     String location[] = {"users", "feed", "challenge"}; //각 함수에서 전달받은 인덱스에 맞는 값을 뽑아냄.
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    Context context = null;
+    Context context;
     private int LIMIT ;
     Task task = null;
     CollectionReference collectionReference;
@@ -111,11 +112,6 @@ public class FBModule {
                 if (map.get("userinfo_genre") != null) {
                     document.getReference().update("UserInfo.genre", map.get("userinfo_genre"));
                 }
-                //좋아요 누른 게시물을 서버의 UserInfo에 추가/삭제
-                else if (map.get("nowUser")!=null){
-                    UserInfo user=(UserInfo) map.get("nowUser");
-                    document.getReference().update("UserInfo.likedPost",user.getLikedPost());
-                }
                 //회원인 경우, 로그인 처리
                 else {
                     UserInfo userInfo = new UserInfo();
@@ -124,11 +120,6 @@ public class FBModule {
                 }
             }
             //피드 관련
-            if (idx ==1){
-                //피드 좋아요 추가/삭제
-                document.getReference().update("likeCount", map.get("likeCount"));
-                readData(0,map,(String)((UserInfo) map.get("nowUser")).getToken());
-            }
             //챌린지 관련
             if (idx == 2) {
                 //챌린지 참여용
@@ -210,8 +201,6 @@ public class FBModule {
             case 1: //피드 작성
                 UserInfo userInfo1 = new UserInfo();
                 userInfo1 = (UserInfo) data.get("UserInfo");
-
-
                 db.collection(location[idx]).document((String) data.get("FeedID")).set(data);
                 break;
 
