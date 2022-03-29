@@ -51,7 +51,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
     //뷰홀더가 만들어질때 작동하는 메서드
     //화면을 인플레이트하고 인플레이트된 화면을 리턴한다.
-
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = null;
@@ -59,11 +58,11 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             //이미지가 없는 피드
             case 0:
                 view = inflater.inflate(R.layout.layout_feed_no_image, parent, false);
-                return new ItemNoImgViewHolder(view, listener, context);
+                return new ItemNoImgViewHolder(view, listener, context,FeedList);
             //이미지가 있는 피드
             case 1:
                 view = inflater.inflate(R.layout.layout_feed, parent, false);
-                return new ItemViewHolder(view, listener, context);
+                return new ItemViewHolder(view, listener, context,FeedList);
             //로딩바
             case 2:
                 view = inflater.inflate(R.layout.layout_item_loading, parent, false);
