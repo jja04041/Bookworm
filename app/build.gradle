@@ -100,5 +100,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     //ucrop(이미지 자르기)
     implementation 'com.github.yalantis:ucrop:2.2.6'
+    //spinkit
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 
 }

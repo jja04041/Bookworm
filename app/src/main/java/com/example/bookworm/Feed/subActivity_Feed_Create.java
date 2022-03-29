@@ -91,7 +91,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     Dialog customDialog;
     String FeedID;
     Book selected_book; //선택한 책 객체
-    int label = 0;
     //라벨은 알럿 다이어그램을 통해 입력을 받고, 선택한 값으로 라벨이 지정됨 => 구현 예정
 
     //사용자가 선택한 어플로 이어서 사진을 선택할 수 있게 함.
@@ -146,7 +145,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 
         //tvlabel1.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#55ff0000"))); //자바로 BackgroundTint 설정
 
-        fbModule = new FBModule(null);
 
         current_context = this;
         fbModule = new FBModule(current_context);
@@ -330,7 +328,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
                 Map map = new HashMap();
                 map.put("rqbody", body);
                 map.put("rqname", name);
-                imgurl = "http://132.226.234.108:3000";
+                imgurl = getString(R.string.serverUrl); //이미지 서버의 주소
                 module = new Module(current_context, imgurl, map);
                 module.connect(3);
 
@@ -505,9 +503,11 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             map.put("label", labelAdd(labelList)); //라벨 리스트
             map.put("date", formatTime); //현재 시간 millis로
             map.put("FeedID", FeedID); //피드 아이디
+            map.put("likeCount", 0);
             if (imgUrl != null) map.put("imgurl", imgUrl); //이미지 url
 
             fbModule.readData(1, map, FeedID);
+            setResult(Activity.RESULT_OK);
             finish();
         }
     }
@@ -517,7 +517,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         //피드 생성화면에 존재하는 라벨
         TextView feedCreateLabel[] = new TextView[5];
         int[] feedCreateLabelID = {R.id.tvlabel1, R.id.tvlabel2, R.id.tvlabel3, R.id.tvlabel4, R.id.tvlabel5,};
-
         //라벨 리스트에 현재 선택된 라벨들을 추가
         for (int i = 0; i < feedCreateLabel.length; i++) {
             feedCreateLabel[i] = findViewById(feedCreateLabelID[i]);

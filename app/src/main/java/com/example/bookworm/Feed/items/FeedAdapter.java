@@ -5,21 +5,19 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bookworm.Feed.ViewHolders.ItemNoImgViewHolder;
+import com.example.bookworm.Feed.ViewHolders.ItemViewHolder;
 import com.example.bookworm.R;
-import com.example.bookworm.databinding.FragmentFeedBinding;
 
 import java.util.ArrayList;
 
-public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnFeedItemClickListener {
+public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     ArrayList<Feed> FeedList;
     Context context;
-    OnFeedItemClickListener listener;
 
     public FeedAdapter(ArrayList<Feed> data, Context c) {
         FeedList = data;
@@ -28,51 +26,61 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
     //뷰홀더가 만들어질때 작동하는 메서드
     //화면을 인플레이트하고 인플레이트된 화면을 리턴한다.
-
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        if (viewType == 0) {
-            View view = inflater.inflate(R.layout.layout_feed, parent, false);
-            return new ItemViewHolder(view, listener);
-        } else {
-            View view = inflater.inflate(R.layout.layout_item_loading, parent, false);
-            return new LoadingViewHolder(view);
+        View view = null;
+        switch (viewType) {
+            //이미지가 없는 피드
+            case 0:
+                view = inflater.inflate(R.layout.layout_feed_no_image, parent, false);
+                return new ItemNoImgViewHolder(view, context, FeedList);
+            //이미지가 있는 피드
+            case 1:
+                view = inflater.inflate(R.layout.layout_feed, parent, false);
+                return new ItemViewHolder(view, context, FeedList);
+            //로딩바
+            case 2:
+                view = inflater.inflate(R.layout.layout_item_loading, parent, false);
+                return new LoadingViewHolder(view);
         }
+        return null;
     }
 
-    public void setListener(OnFeedItemClickListener listener) {
-        this.listener = listener;
-    }
+//    public void setListener(OnFeedItemClickListener listener) {
+//        this.listener = listener;
+//    }
 
     //Arraylist에 있는 아이템을 뷰 홀더에 바인딩 하는 메소드
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        int safePosition=holder.getAdapterPosition();
+        int safePosition = holder.getAdapterPosition();
         if (holder instanceof ItemViewHolder) {
             Feed item = FeedList.get(safePosition);
             ((ItemViewHolder) holder).setItem(item);
+        } else if (holder instanceof ItemNoImgViewHolder) {
+            Feed item = FeedList.get(safePosition);
+            ((ItemNoImgViewHolder) holder).setItem(item);
         } else if (holder instanceof LoadingViewHolder) {
             showLoadingView((LoadingViewHolder) holder, safePosition);
         }
     }
+
     @Override
     public int getItemCount() {
         return FeedList.size();
     }
 
-    public void addItem(Feed item) {
-        FeedList.add(item);
-    }
 
-
-
+//    public void onItemClick(ItemViewHolder holder, View view, int position) {
+//        if (listener != null) {
+//            listener.onItemClick(holder, view, position);
+//        }
+//    }
+//
 //    @Override
-//    //아이템 선택 시 보여줄 화면 구성 => 아마 인텐트로 넘기지 않을까?
-    public void onItemClick(ItemViewHolder holder, View view, int position) {
-        if (listener != null) {
-            listener.onItemClick(holder, view, position);
-        }
-    }
+//    public void onItemClick(ItemNoImgViewHolder holder, View view, int position) {
+//
+//    }
 
     //로딩바 클래스
     private class LoadingViewHolder extends RecyclerView.ViewHolder {
@@ -85,10 +93,11 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         //
     }
 
-
     public int getItemViewType(int pos) {
-        if (FeedList.get(pos).getFeedID() != null) return 0;
-        else return 1;
+        if (FeedList.get(pos).getFeedID() != null && FeedList.get(pos).getImgurl() == null)
+            return 0;
+        else if (FeedList.get(pos).getFeedID() != null) return 1;
+        else return 2;
     }
 
     public void deleteLoading() {
@@ -97,36 +106,5 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
     //뷰홀더 클래스 부분
-    public class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView tvBookTitle, tvCTitle, tvFeedStartDate, tvFeedEndDate,tvPerson;
-        ImageView ivThumb;
-        FragmentFeedBinding binding;
 
-        //생성자를 만든다.
-        public ItemViewHolder(@NonNull View itemView, final OnFeedItemClickListener listener) {
-            super(itemView);
-            //findViewById를 통해 View와 연결
-            //아이템 선택 시 리스너
-            binding=FragmentFeedBinding.bind(itemView);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int position = getAdapterPosition();
-                    //리스너 인터페이스 구현
-                    if (position != RecyclerView.NO_POSITION) {
-                        if (listener != null) {
-                            listener.onItemClick(ItemViewHolder.this, view, position);
-                            notifyItemChanged(position);
-                        }
-                    }
-                }
-            });
-
-
-        }
-        //아이템을 세팅하는 메소드
-        public void setItem(Feed item) {
-
-        }
-    }
 }

@@ -13,6 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
+import com.example.bookworm.databinding.LayoutItemLoadingBinding;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.Circle;
+import com.github.ybq.android.spinkit.style.FadingCircle;
+import com.github.ybq.android.spinkit.style.ThreeBounce;
 
 import java.util.ArrayList;
 
@@ -22,7 +27,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     OnChallengeItemClickListener listener;
 
     public ChallengeAdapter(ArrayList<Challenge> data, Context c) {
-        ChallengeList = data;
+        ChallengeList=data;
         context = c;
     }
 
@@ -82,7 +87,11 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private void showLoadingView(LoadingViewHolder viewHolder, int position) {
-        //
+        LayoutItemLoadingBinding binding=LayoutItemLoadingBinding.bind(viewHolder.itemView);
+        Sprite Circle=new Circle();
+        Circle.setAnimationDelay(0);
+        binding.progressBar.setIndeterminateDrawable(Circle);
+
     }
 
 
