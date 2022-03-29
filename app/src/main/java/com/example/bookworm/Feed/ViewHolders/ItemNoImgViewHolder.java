@@ -49,13 +49,12 @@ public class ItemNoImgViewHolder extends RecyclerView.ViewHolder {
     Boolean restricted = false;
     Context context;
     Dialog customDialog;
-    ArrayList<Feed> FeedList;
 
     //생성자를 만든다.
-    public ItemNoImgViewHolder(@NonNull View itemView,Context context,ArrayList<Feed> list) {
+    public ItemNoImgViewHolder(@NonNull View itemView, Context context) {
         super(itemView);
         binding = LayoutFeedNoImageBinding.bind(itemView);
-        FeedList=list;
+
 //        itemView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -102,7 +101,7 @@ public class ItemNoImgViewHolder extends RecyclerView.ViewHolder {
         binding.llComments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showcustomDialog(getAdapterPosition());
+                showcustomDialog(item.getFeedID());
             }
         });
 
@@ -127,15 +126,17 @@ public class ItemNoImgViewHolder extends RecyclerView.ViewHolder {
         binding.tvFeedtext.setText(item.getFeedText());
         setLabel(item.getLabel()); //라벨 세팅
     }
+
     //댓글창 다이얼로그 띄우기
-    public void showcustomDialog(int position) {
+    public void showcustomDialog(String feedId) {
         customDialog.show(); // 다이얼로그 띄우기
 //        EditText edtComment = customDialog.findViewById(R.id.edtComment);
         TextView tvCommentCount = customDialog.findViewById(R.id.tvCommentCount);
-        tvCommentCount.setText(FeedList.get(position).getFeedID());
+        tvCommentCount.setText(feedId);
 //        edtComment.setText(FeedList.get(position).getFeedID());
 
     }
+
     private void controlLike(Feed item, Object bind) {
         LayoutFeedNoImageBinding binding;
         LayoutFeedBinding binding1;
@@ -202,8 +203,6 @@ public class ItemNoImgViewHolder extends RecyclerView.ViewHolder {
             }
         }
     }
-
-
 
 
     //라벨을 동적으로 생성
