@@ -5,25 +5,6 @@ const router = express.Router();
 module.exports = router;
 var imgPath = "";
 var Path = "";
-require('dotenv').config({
-  path: path.join(__dirname, '.env')
-});
-const {
-  OAuth2Client
-} = require('google-auth-library');
-const requestMeUrl = 'https://kapi.kakao.com/v2/user/me';
-const request = require('request-promise');
-module.exports = router;
-const {
-  initializeApp,
-  cert
-} = require('firebase-admin/app');
-const firebaseAdmin = require('firebase-admin');
-
-const serviceAccount = require(path.join(__dirname, 'bookworm-f6973-firebase-adminsdk-lzs4b-a45e20e976.json'));
-initializeApp({
-  credential: cert(serviceAccount)
-});
 
 
 //for image 
@@ -93,3 +74,28 @@ router.use('/getimage/:data', (req, res) => {
 router.get("/", (req, res) => {
   res.send("hello,World!");
 });
+
+// router.get("/token", async(req, res) => {
+//   const {OAuth2Client} = require('google-auth-library');
+//   const CLIENT_ID=process.env.CLIENT_ID;
+//   const token=req.query.token;
+// const client = new OAuth2Client(CLIENT_ID);
+// async function verify() {
+//   const ticket = await client.verifyIdToken({
+//       idToken: token,
+//       audience: CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
+//       // Or, if multiple clients access the backend:
+//       //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+//   });
+//   const payload = ticket.getPayload();
+//   const userid = payload['sub'];
+//   // If request specified a G Suite domain:
+//   // const domain = payload['hd'];
+// }
+// verify().catch(console.error);
+// const url=`https://oauth2.googleapis.com/tokeninfo?id_token=${token}`;
+// request.get(url,(req,res)=>{
+//   console.log(req);
+//   console.log(res.body);
+// })
+// });

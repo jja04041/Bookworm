@@ -3,6 +3,7 @@ package com.example.bookworm.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,7 @@ import java.util.Map;
 public class fragment_feed extends Fragment {
     FragmentFeedBinding binding;
     FeedAdapter feedAdapter;
-    private final int LIMIT = 10;
+    private final int LIMIT =5;
     ArrayList<Feed> feedList;
     private DocumentSnapshot lastVisible; //마지막에 가져온 값 부터 추가로 가져올 수 있도록 함.
     private Map map;
@@ -56,6 +57,7 @@ public class fragment_feed extends Fragment {
 
         binding = FragmentFeedBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
+        binding.recyclerView.setNestedScrollingEnabled(false);
         fbModule = new FBModule(getContext());
         fbModule.setLIMIT(LIMIT); //한번에 보여줄 피드의 최대치를 설정
         //Create New Feed
@@ -158,6 +160,7 @@ public class fragment_feed extends Fragment {
 
     //fb모듈을 통해 전달받은 값을 세팅
     public void moduleUpdated(List<DocumentSnapshot> a) {
+        ArrayList<Feed> added=new ArrayList();
         if (isRefreshing) {
             binding.swiperefresh.setRefreshing(false);
             isRefreshing = false;
@@ -173,8 +176,8 @@ public class fragment_feed extends Fragment {
                 Feed feed = new Feed();
                 feed.setData(data);
                 feed.getFeedID();
-
                 feedList.add(feed);
+                added.add(feed);
             }
             //가져온 값의 마지막 snapshot부터 이어서 가져올 수 있도록 하기 위함.
             lastVisible = a.get(a.size() - 1);
@@ -190,7 +193,10 @@ public class fragment_feed extends Fragment {
         if (canLoad == false) {
             isLoading = true;
             if (page > 1)
-                feedAdapter.notifyDataSetChanged(); //이미 불러온 데이터가 있는 경우엔 가져온 데이터 만큼의 범위를 늘려준다.
+            {
+                feedAdapter.addList(added);
+                feedAdapter.notifyItemRangeChanged(0,feedList.size()-1); //이미 불러온 데이터가 있는 경우엔 가져온 데이터 만큼의 범위를 늘려준다.
+            }
             else { //없는 경우엔 새로운 어댑터에 데이터를 담아서 띄워준다.
                 initAdapter(); //어댑터 초기화
                 initRecyclerView(); //리사이클러뷰에 띄워주기
@@ -199,9 +205,11 @@ public class fragment_feed extends Fragment {
         //더 불러올 데이터가 있는 경우
         else {
             feedList.add(new Feed()); //로딩바 표시를 위한 빈 값
+            added.add(new Feed());
             if (page > 1) {
                 isLoading = false;
-                feedAdapter.notifyItemRangeChanged(0, feedList.size() - 1, null); //데이터 범위 변경
+                feedAdapter.addList(added);
+                feedAdapter.notifyItemRangeChanged(0,feedList.size()-1);//데이터 범위 변경
             } else {
                 initAdapter();//어댑터 초기화
                 initRecyclerView(); //리사이클러뷰에 띄워주기

@@ -11,7 +11,6 @@ import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,14 +19,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Feed.items.Feed;
-import com.example.bookworm.Feed.items.OnFeedItemClickListener;
 import com.example.bookworm.Feed.likeCounter;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_result;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.databinding.LayoutFeedBinding;
-import com.example.bookworm.databinding.LayoutFeedNoImageBinding;
 import com.example.bookworm.modules.personalD.PersonalD;
 
 import java.util.ArrayList;
@@ -50,8 +47,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     public ItemViewHolder(@NonNull View itemView, Context context) {
         super(itemView);
         binding = LayoutFeedBinding.bind(itemView);
-        this.context=context;
-
+        this.context = context;
         nowUser = new PersonalD(context).getUserInfo();
     }
 
@@ -91,7 +87,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         binding.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                controlLike(item,binding);
+                controlLike(item);
             }
         });
         customDialog = new Dialog(context);       // Dialog 초기화
@@ -106,55 +102,50 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             }
         });
         //이미지 뷰 정리
-        if (item.getImgurl() != null)
-            Glide.with(itemView).load(item.getImgurl()).into(binding.feedImage); //프로필 사진 보여줌
-        else binding.feedImage.setVisibility(View.INVISIBLE);
+        if (item.getImgurl() != null) {
+            Glide.with(itemView).load(item.getImgurl()).override(360, 360).into(binding.feedImage);
+            binding.feedImage.setAdjustViewBounds(true);
+        }
         binding.tvFeedtext.setText(item.getFeedText());
         setLabel(item.getLabel()); //라벨 세팅
     }
 
-    private void controlLike(Feed item, Object bind) {
-        LayoutFeedNoImageBinding binding;
-        LayoutFeedBinding binding1;
-        Button btnLike=null;
-        TextView tvLike=null;
-        if (bind instanceof LayoutFeedBinding) {
-            binding1 = (LayoutFeedBinding) bind;
-            btnLike=binding1.btnLike;
-            tvLike=binding1.tvLike;
+    public void setVisibillity(Boolean check) {
+        if (check) binding.feedImage.setVisibility(View.VISIBLE);
+        else {
+            binding.feedImage.setImageResource(0);
+            binding.feedImage.setVisibility(View.INVISIBLE);
+            binding.feedImage.setAdjustViewBounds(false);
         }
-        else if (bind instanceof LayoutFeedNoImageBinding) {
-            binding = (LayoutFeedNoImageBinding) bind;
-            btnLike=binding.btnLike;
-            tvLike=binding.tvLike;
-        }
+    }
 
+    private void controlLike(Feed item) {
         if (limit < 5) {
             limit += 1;
             nowUser = new PersonalD(context).getUserInfo();
             strings = nowUser.getLikedPost();
             Map map = new HashMap();
-            Integer likeCount = Integer.parseInt(tvLike.getText().toString());
+            Integer likeCount = Integer.parseInt(binding.tvLike.getText().toString());
 
-            if ((String) btnLike.getTag() == "depressed") {
+            if ((String) binding.btnLike.getTag() == "depressed") {
                 //현재 좋아요를 누르지 않은 상태
                 likeCount += 1;
                 liked = true;
-                btnLike.setTag("pressed");
+                binding.btnLike.setTag("pressed");
                 strings.add(item.getFeedID());
-                btnLike.setBackground(context.getDrawable(R.drawable.icon_like_red));
+                binding.btnLike.setBackground(context.getDrawable(R.drawable.icon_like_red));
             } else {
                 //현재 좋아요를 누른 상태
                 likeCount -= 1;
                 liked = false;
-                btnLike.setTag("depressed");
+                binding.btnLike.setTag("depressed");
                 strings.removeAll(Arrays.asList(item.getFeedID()));
                 strings.remove(item.getFeedID());
-                btnLike.setBackground(context.getDrawable(R.drawable.icon_like));
+                binding.btnLike.setBackground(context.getDrawable(R.drawable.icon_like));
             }
             nowUser.setLikedPost(strings);
             map.put("nowUser", nowUser);
-            tvLike.setText(String.valueOf(likeCount));
+            binding.tvLike.setText(String.valueOf(likeCount));
             map.put("liked", liked);
             new PersonalD(context).saveUserInfo(nowUser);
             new likeCounter().updateCounter(map, item.getFeedID());
@@ -189,9 +180,13 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 //        edtComment.setText(FeedList.get(position).getFeedID());
 
     }
+
+
     //라벨을 동적으로 생성
     private void setLabel(ArrayList<String> label) {
-        for (int i = 0; i < label.size(); i++) {
+        binding.lllabel.removeAllViews();
+        int idx = label.indexOf("");
+        for (int i = 0; i < idx; i++) {
             //뷰 생성
             TextView tv = new TextView(context);
             tv.setText(label.get(i)); //라벨에 텍스트 삽입
