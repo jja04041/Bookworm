@@ -2,6 +2,9 @@ const express = require('express'); //express를 사용하기 위함.
 const multer = require('multer'); //이미지 업/다운로드를 위함.
 const fs = require('fs');
 const router = express.Router();
+const {
+  createFirebaseToken
+} = require("../module/firebase/getToken")
 module.exports = router;
 var imgPath = "";
 var Path = "";
@@ -69,6 +72,28 @@ router.use('/getimage/:data', (req, res) => {
     });
     res.end(data); // Send the file data to the browser.
   });
+});
+
+
+//토큰 관리 
+router.get("/token", (req, res) => {
+  const token = req.query.token;
+  const platform = req.query.platform;
+  if (!token) return res.status(400).send({
+      error: 'There is no token.'
+    })
+    .send({
+      message: 'Access token is a required parameter.'
+    });
+
+  console.log(`Verifying Kakao token: ${token}`);
+  //토큰 생성 
+  if (platform == "kakao") {
+    createFirebaseToken(token,platform).then((firebaseToken) => {
+      console.log(`Returning firebase token to user: ${firebaseToken}`);
+      console.log(firebaseToken);
+    });
+  }
 });
 
 router.get("/", (req, res) => {

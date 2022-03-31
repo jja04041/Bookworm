@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
+import com.example.bookworm.databinding.SubactivitySearchFragmentResultBinding;
 import com.example.bookworm.modules.Module;
 
 import org.json.JSONArray;
@@ -34,8 +35,6 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
     TextView[] textViews = new TextView[textViewCount];
     TextView tvViewMore;
     RatingBar customerReviewRank;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

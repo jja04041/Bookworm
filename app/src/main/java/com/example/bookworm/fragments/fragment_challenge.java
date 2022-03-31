@@ -32,6 +32,7 @@ import com.example.bookworm.Challenge.subActivity.subactivity_challenge_challeng
 import com.example.bookworm.Challenge.subActivity.subactivity_challenge_createchallenge;
 import com.example.bookworm.Challenge.items.ChallengeAdapter;
 import com.example.bookworm.Challenge.items.OnChallengeItemClickListener;
+import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.User.UserInfo;
@@ -262,8 +263,9 @@ public class fragment_challenge extends Fragment {
             //만약 더이상 불러오지 못 할 경우
             if (canLoad == false) {
                 isLoading = true;
-                if (page > 1)
-                    challengeAdapter.notifyDataSetChanged(); //이미 불러온 데이터가 있는 경우엔 가져온 데이터 만큼의 범위를 늘려준다.
+                if (page > 1) {
+                    challengeAdapter.notifyItemRangeChanged(0,challengeList.size()-1);
+                }//이미 불러온 데이터가 있는 경우엔 가져온 데이터 만큼의 범위를 늘려준다.
                 else { //없는 경우엔 새로운 어댑터에 데이터를 담아서 띄워준다.
                     initAdapter(); //어댑터 초기화
                     initRecyclerView(); //리사이클러뷰에 띄워주기
@@ -274,7 +276,7 @@ public class fragment_challenge extends Fragment {
                 challengeList.add(new Challenge(null)); //로딩바 표시를 위한 빈 값
                 if (page > 1) {
                     isLoading = false;
-                    challengeAdapter.notifyItemRangeChanged(0, challengeList.size() - 1, null); //데이터 범위 변경
+                    challengeAdapter.notifyItemRangeChanged(0,challengeList.size()-1);
                 } else {
                     initAdapter();//어댑터 초기화
                     initRecyclerView(); //리사이클러뷰에 띄워주기

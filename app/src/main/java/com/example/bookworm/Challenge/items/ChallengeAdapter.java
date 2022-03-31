@@ -27,7 +27,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     OnChallengeItemClickListener listener;
 
     public ChallengeAdapter(ArrayList<Challenge> data, Context c) {
-        ChallengeList=data;
+        ChallengeList = data;
         context = c;
     }
 
@@ -52,7 +52,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     //Arraylist에 있는 아이템을 뷰 홀더에 바인딩 하는 메소드
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        int safePosition=holder.getAdapterPosition();
+        int safePosition = holder.getAdapterPosition();
         if (holder instanceof ItemViewHolder) {
             Challenge item = ChallengeList.get(safePosition);
             ((ItemViewHolder) holder).setItem(item);
@@ -60,6 +60,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             showLoadingView((LoadingViewHolder) holder, safePosition);
         }
     }
+
     @Override
     public int getItemCount() {
         return ChallengeList.size();
@@ -71,7 +72,8 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
 
-//    @Override
+
+    //    @Override
 //    //아이템 선택 시 보여줄 화면 구성 => 아마 인텐트로 넘기지 않을까?
     public void onItemClick(ItemViewHolder holder, View view, int position) {
         if (listener != null) {
@@ -87,8 +89,8 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private void showLoadingView(LoadingViewHolder viewHolder, int position) {
-        LayoutItemLoadingBinding binding=LayoutItemLoadingBinding.bind(viewHolder.itemView);
-        Sprite Circle=new Circle();
+        LayoutItemLoadingBinding binding = LayoutItemLoadingBinding.bind(viewHolder.itemView);
+        Sprite Circle = new Circle();
         Circle.setAnimationDelay(0);
         binding.progressBar.setIndeterminateDrawable(Circle);
 
@@ -107,7 +109,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     //뷰홀더 클래스 부분
     public class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView tvBookTitle, tvCTitle, tvChallengeStartDate, tvChallengeEndDate,tvPerson;
+        TextView tvBookTitle, tvCTitle, tvChallengeStartDate, tvChallengeEndDate, tvPerson;
         ImageView ivThumb;
 
         //생성자를 만든다.
@@ -119,7 +121,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ivThumb = itemView.findViewById(R.id.ivThumb);
             tvChallengeStartDate = itemView.findViewById(R.id.tvChallengeStartDate);
             tvChallengeEndDate = itemView.findViewById(R.id.tvChallengeEndDateDate);
-            tvPerson=itemView.findViewById(R.id.tvPerson);
+            tvPerson = itemView.findViewById(R.id.tvPerson);
             //아이템 선택 시 리스너
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -137,6 +139,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
         }
+
         //아이템을 세팅하는 메소드
         public void setItem(Challenge item) {
             tvCTitle.setText(item.getTitle());

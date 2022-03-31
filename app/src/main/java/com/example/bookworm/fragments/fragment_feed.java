@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 
 import com.example.bookworm.Feed.items.Feed;
@@ -76,6 +77,7 @@ public class fragment_feed extends Fragment {
                 isRefreshing = true;
             }
         });
+        binding.recyclerView.setItemViewCacheSize(3);
         //피드 초기 호출
         pageRefresh();
 
@@ -99,7 +101,6 @@ public class fragment_feed extends Fragment {
 
     private void initAdapter() {
         feedAdapter = new FeedAdapter(feedList, getContext());
-
     }
 
     //리사이클러뷰 스크롤 초기화
@@ -160,43 +161,45 @@ public class fragment_feed extends Fragment {
 
     //fb모듈을 통해 전달받은 값을 세팅
     public void moduleUpdated(List<DocumentSnapshot> a) {
-        ArrayList<Feed> added=new ArrayList();
+        int beforeSize=feedList.size();
         if (isRefreshing) {
             binding.swiperefresh.setRefreshing(false);
             isRefreshing = false;
         }
-//        if (page == 1) {
-//            isLoading = false;
-//            feedList = new ArrayList<>(); //챌린지를 담는 리스트 생성
-//        }
-//        //가져온 데이터를 for문을 이용하여, feed리스트에 차곡차곡 담는다.
-        try {
-            for (DocumentSnapshot snapshot : a) {
-                Map data = snapshot.getData();
-                Feed feed = new Feed();
-                feed.setData(data);
-                feed.getFeedID();
-                feedList.add(feed);
-                added.add(feed);
-            }
-            //가져온 값의 마지막 snapshot부터 이어서 가져올 수 있도록 하기 위함.
-            lastVisible = a.get(a.size() - 1);
-            //리사이클러뷰에서 튕김현상이 발생하여 넣어준 코드
-            //현재 불러오는 값의 크기(a.size())가 페이징 제한 값(LIMIT)보다 작은 경우 => 더이상 불러오지 않게 함.
-            if (a.size() < LIMIT) {
+        if (page == 1) {
+            isLoading = false;
+            feedList = new ArrayList<>(); //챌린지를 담는 리스트 생성
+        }
+        if (a == null ) {
+            feedList = new ArrayList<>(); //챌린지를 담는 리스트 생성
+            initAdapter();
+            initFeed();
+            Toast.makeText(getContext(), "화면에 표시할 포스트가 없습니다.", Toast.LENGTH_SHORT).show();
+        } else {
+            //가져온 데이터를 for문을 이용하여, feed리스트에 차곡차곡 담는다.
+            try {
+                for (DocumentSnapshot snapshot : a) {
+                    Map data = snapshot.getData();
+                    Feed feed = new Feed();
+                    feed.setData(data);
+                    feed.getFeedID();
+                    feedList.add(feed);
+                }
+                //가져온 값의 마지막 snapshot부터 이어서 가져올 수 있도록 하기 위함.
+                lastVisible = a.get(a.size() - 1);
+                //리사이클러뷰에서 튕김현상이 발생하여 넣어준 코드
+                //현재 불러오는 값의 크기(a.size())가 페이징 제한 값(LIMIT)보다 작은 경우 => 더이상 불러오지 않게 함.
+                if (a.size() < LIMIT) {
+                    canLoad = false;
+                }
+            } catch (NullPointerException e) {
                 canLoad = false;
             }
-        } catch (NullPointerException e) {
-            canLoad = false;
         }
         //만약 더이상 불러오지 못 할 경우
         if (canLoad == false) {
             isLoading = true;
-            if (page > 1)
-            {
-                feedAdapter.addList(added);
-                feedAdapter.notifyItemRangeChanged(0,feedList.size()-1); //이미 불러온 데이터가 있는 경우엔 가져온 데이터 만큼의 범위를 늘려준다.
-            }
+            if (page > 1)feedAdapter.notifyItemRangeChanged(beforeSize-1,feedList.size()-beforeSize); //이미 불러온 데이터가 있는 경우엔 가져온 데이터 만큼의 범위를 늘려준다.
             else { //없는 경우엔 새로운 어댑터에 데이터를 담아서 띄워준다.
                 initAdapter(); //어댑터 초기화
                 initRecyclerView(); //리사이클러뷰에 띄워주기
@@ -205,11 +208,9 @@ public class fragment_feed extends Fragment {
         //더 불러올 데이터가 있는 경우
         else {
             feedList.add(new Feed()); //로딩바 표시를 위한 빈 값
-            added.add(new Feed());
             if (page > 1) {
                 isLoading = false;
-                feedAdapter.addList(added);
-                feedAdapter.notifyItemRangeChanged(0,feedList.size()-1);//데이터 범위 변경
+                feedAdapter.notifyItemRangeChanged(beforeSize-1,feedList.size()-beforeSize);//데이터 범위 변경
             } else {
                 initAdapter();//어댑터 초기화
                 initRecyclerView(); //리사이클러뷰에 띄워주기

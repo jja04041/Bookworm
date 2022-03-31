@@ -76,11 +76,9 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
         if (nowUser.getLikedPost().contains(item.getFeedID())) {
             binding.btnLike.setBackground(context.getDrawable(R.drawable.icon_like_red));
-            binding.btnLike.setTag("pressed");
             liked = true;
         } else {
             binding.btnLike.setBackground(context.getDrawable(R.drawable.icon_like));
-            binding.btnLike.setTag("depressed");
             liked = false;
         }
         //좋아요 표시 관리
@@ -103,8 +101,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         });
         //이미지 뷰 정리
         if (item.getImgurl() != null) {
-            Glide.with(itemView).load(item.getImgurl()).override(360, 360).into(binding.feedImage);
-            binding.feedImage.setAdjustViewBounds(true);
+            Glide.with(itemView).load(item.getImgurl()).into(binding.feedImage);
         }
         binding.tvFeedtext.setText(item.getFeedText());
         setLabel(item.getLabel()); //라벨 세팅
@@ -115,7 +112,6 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         else {
             binding.feedImage.setImageResource(0);
             binding.feedImage.setVisibility(View.INVISIBLE);
-            binding.feedImage.setAdjustViewBounds(false);
         }
     }
 
@@ -127,18 +123,16 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             Map map = new HashMap();
             Integer likeCount = Integer.parseInt(binding.tvLike.getText().toString());
 
-            if ((String) binding.btnLike.getTag() == "depressed") {
+            if (!liked) {
                 //현재 좋아요를 누르지 않은 상태
                 likeCount += 1;
                 liked = true;
-                binding.btnLike.setTag("pressed");
                 strings.add(item.getFeedID());
                 binding.btnLike.setBackground(context.getDrawable(R.drawable.icon_like_red));
             } else {
                 //현재 좋아요를 누른 상태
                 likeCount -= 1;
                 liked = false;
-                binding.btnLike.setTag("depressed");
                 strings.removeAll(Arrays.asList(item.getFeedID()));
                 strings.remove(item.getFeedID());
                 binding.btnLike.setBackground(context.getDrawable(R.drawable.icon_like));
@@ -174,17 +168,16 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
     public void showcustomDialog(String feedId) {
         customDialog.show(); // 다이얼로그 띄우기
-//        EditText edtComment = customDialog.findViewById(R.id.edtComment);
         TextView tvCommentCount = customDialog.findViewById(R.id.tvCommentCount);
         tvCommentCount.setText(feedId);
-//        edtComment.setText(FeedList.get(position).getFeedID());
+
 
     }
 
 
     //라벨을 동적으로 생성
     private void setLabel(ArrayList<String> label) {
-        binding.lllabel.removeAllViews();
+        binding.lllabel.removeAllViews(); //기존에 설정된 값을 초기화 시켜줌.
         int idx = label.indexOf("");
         for (int i = 0; i < idx; i++) {
             //뷰 생성

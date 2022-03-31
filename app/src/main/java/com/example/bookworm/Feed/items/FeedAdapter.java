@@ -20,8 +20,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Context context;
 
     public FeedAdapter(ArrayList<Feed> data, Context c) {
-        FeedList = new ArrayList();
-        FeedList.addAll(data);
+        FeedList = data;
         context = c;
     }
 
@@ -83,9 +82,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return FeedList.size();
     }
 
-    public void addList(ArrayList<Feed> list) {
-        FeedList.addAll(list);
-    }
 
     //로딩바 클래스
     private class LoadingViewHolder extends RecyclerView.ViewHolder {
