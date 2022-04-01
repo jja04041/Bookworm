@@ -205,7 +205,7 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
     public void moduleUpdated(JSONArray jsonArray) throws JSONException {
         page = module.getPage();
         count = module.getCount();
-
+        int beforeSize=bookList.size();
         if (page == 1) {
             check = count;
             Log.d("cje",String.valueOf(check));
@@ -233,8 +233,7 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
 
             if (page != 1 && page < 20) {
                 isLoading = false;
-                bookAdapter.notifyDataSetChanged();
-//                bookAdapter.notifyItemRangeChanged(0, bookList.size() - 1, null);
+                bookAdapter.notifyItemRangeChanged(beforeSize, bookList.size() -beforeSize);
             } else {
                 bookAdapter = new BookAdapter(bookList, this);
                 bookAdapter.setListener(new OnBookItemClickListener() {

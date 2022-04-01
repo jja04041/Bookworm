@@ -2,6 +2,7 @@ package com.example.bookworm.Feed.items;
 
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.bookworm.Feed.ViewHolders.ItemNoImgViewHolder;
 import com.example.bookworm.Feed.ViewHolders.ItemViewHolder;
 import com.example.bookworm.R;
 
@@ -30,10 +30,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = null;
         switch (viewType) {
-            //이미지가 없는 피드
-            case 0:
-                view = inflater.inflate(R.layout.layout_feed_no_image, parent, false);
-                return new ItemNoImgViewHolder(view, context);
             //이미지가 있는 피드
             case 1:
                 view = inflater.inflate(R.layout.layout_feed, parent, false);
@@ -46,20 +42,36 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return null;
     }
 
-//    public void setListener(OnFeedItemClickListener listener) {
-//        this.listener = listener;
-//    }
-
     //Arraylist에 있는 아이템을 뷰 홀더에 바인딩 하는 메소드
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         int safePosition = holder.getAdapterPosition();
         if (holder instanceof ItemViewHolder) {
             Feed item = FeedList.get(safePosition);
+            if (item.getImgurl() != null) {
+                ((ItemViewHolder) holder).setVisibillity(true);
+            } else {
+                ((ItemViewHolder) holder).setVisibillity(false);
+            }
             ((ItemViewHolder) holder).setItem(item);
-        } else if (holder instanceof ItemNoImgViewHolder) {
+        } else if (holder instanceof LoadingViewHolder) {
+            showLoadingView((LoadingViewHolder) holder, safePosition);
+        }
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+        super.onViewRecycled(holder);
+        int safePosition = holder.getAdapterPosition();
+        if (holder instanceof ItemViewHolder) {
             Feed item = FeedList.get(safePosition);
-            ((ItemNoImgViewHolder) holder).setItem(item);
+            if (item.getImgurl() != null) {
+                Log.d(safePosition+"위치",item.getImgurl() );
+                ((ItemViewHolder) holder).setVisibillity(true);
+            } else {
+                ((ItemViewHolder) holder).setVisibillity(false);
+            }
+            ((ItemViewHolder) holder).setItem(item);
         } else if (holder instanceof LoadingViewHolder) {
             showLoadingView((LoadingViewHolder) holder, safePosition);
         }
@@ -83,9 +95,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public int getItemViewType(int pos) {
-        if (FeedList.get(pos).getFeedID() != null && FeedList.get(pos).getImgurl() == null)
-            return 0;
-        else if (FeedList.get(pos).getFeedID() != null) return 1;
+        if (FeedList.get(pos).getFeedID() != null) return 1;
         else return 2;
     }
 
