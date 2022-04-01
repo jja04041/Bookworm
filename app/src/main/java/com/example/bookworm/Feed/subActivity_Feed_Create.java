@@ -309,7 +309,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     //서버에 이미지 업로드
     private void upload() {
 
-        FeedID = userInfo.getToken() + "_" + String.valueOf(System.currentTimeMillis()); //사용자 토큰 + 현재 시각을 FeedID로 설정
+        FeedID = String.valueOf(System.currentTimeMillis()) + "_" + userInfo.getToken(); //현재 시각 + 사용자 토큰을 FeedID로 설정
 
         if (uploaded != null) {
             try {
