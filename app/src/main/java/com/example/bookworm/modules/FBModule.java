@@ -10,7 +10,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.bookworm.Challenge.subActivity.subactivity_challenge_challengeinfo;
-import com.example.bookworm.Feed.likeCounter;
 import com.example.bookworm.Login.activity_login;
 import com.example.bookworm.MainActivity;
 import com.example.bookworm.ProfileSettingActivity;
@@ -27,12 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 
@@ -108,10 +102,13 @@ public class FBModule {
         if (document.exists()) {
             //유저정보 불러오기
             if (idx == 0) {
-                //장르를 업데이트
-                if (map.get("userinfo_genre") != null) {
-                    document.getReference().update("UserInfo.genre", map.get("userinfo_genre"));
-                }
+                // 장르 업데이트
+                if (map.get("userinfo_genre") != null) { document.getReference().update("UserInfo.genre", map.get("userinfo_genre")); }
+                // 업적 업데이트
+                else if (map.get("userinfo_achievementmap") != null) {  document.getReference().update("UserInfo.achievementmap", map.get("userinfo_achievementmap")); }
+                // 인벤토리 업데이트
+                else if (map.get("userinfo_wormvec") != null){ document.getReference().update("UserInfo.wormvec", map.get("userinfo_wormvec")); }
+
                 //회원인 경우, 로그인 처리
                 else {
                     UserInfo userInfo = new UserInfo();

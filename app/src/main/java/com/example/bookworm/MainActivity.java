@@ -1,16 +1,12 @@
 package com.example.bookworm;
 
 
-import android.Manifest;
-import android.content.pm.PackageManager;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -18,9 +14,9 @@ import com.example.bookworm.fragments.fragment_feed;
 import com.example.bookworm.fragments.functions.frag_functions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity {
+
+    public static Dialog achievedialog;
 
     Fragment fragment_feed, fragment_search, fragment_bookworm, fragment_challenge, fragment_profile;
     Fragment[] fragments = {fragment_feed, fragment_search, fragment_bookworm, fragment_challenge, fragment_profile};
