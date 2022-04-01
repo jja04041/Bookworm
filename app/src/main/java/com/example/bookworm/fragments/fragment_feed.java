@@ -199,7 +199,7 @@ public class fragment_feed extends Fragment {
         //만약 더이상 불러오지 못 할 경우
         if (canLoad == false) {
             isLoading = true;
-            if (page > 1)feedAdapter.notifyItemRangeChanged(beforeSize-1,feedList.size()-beforeSize); //이미 불러온 데이터가 있는 경우엔 가져온 데이터 만큼의 범위를 늘려준다.
+            if (page > 1)feedAdapter.notifyItemRangeChanged(beforeSize,feedList.size()-beforeSize); //이미 불러온 데이터가 있는 경우엔 가져온 데이터 만큼의 범위를 늘려준다.
             else { //없는 경우엔 새로운 어댑터에 데이터를 담아서 띄워준다.
                 initAdapter(); //어댑터 초기화
                 initRecyclerView(); //리사이클러뷰에 띄워주기
@@ -210,7 +210,7 @@ public class fragment_feed extends Fragment {
             feedList.add(new Feed()); //로딩바 표시를 위한 빈 값
             if (page > 1) {
                 isLoading = false;
-                feedAdapter.notifyItemRangeChanged(beforeSize-1,feedList.size()-beforeSize);//데이터 범위 변경
+                feedAdapter.notifyItemRangeChanged(beforeSize,feedList.size()-beforeSize);//데이터 범위 변경
             } else {
                 initAdapter();//어댑터 초기화
                 initRecyclerView(); //리사이클러뷰에 띄워주기

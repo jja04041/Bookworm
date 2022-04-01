@@ -229,6 +229,7 @@ public class fragment_challenge extends Fragment {
 
     //fbmodule에서 사용하는 함수 -> 검색한 데이터를 전달하여, 화면에 띄워준다. (비동기 처리)
     public void moduleUpdated(List<DocumentSnapshot> a) {
+        int beforesize = 0;
         if (isRefreshing) {
             binding.swiperefresh.setRefreshing(false);
             isRefreshing = false;
@@ -237,6 +238,7 @@ public class fragment_challenge extends Fragment {
             isLoading = false;
             challengeList = new ArrayList<>(); //챌린지를 담는 리스트 생성
         }
+        beforesize=challengeList.size();
         if (a == null && lastVisible == null) {
             challengeList = new ArrayList<>(); //챌린지를 담는 리스트 생성
             initAdapter();
@@ -264,7 +266,7 @@ public class fragment_challenge extends Fragment {
             if (canLoad == false) {
                 isLoading = true;
                 if (page > 1) {
-                    challengeAdapter.notifyItemRangeChanged(0,challengeList.size()-1);
+                    challengeAdapter.notifyItemRangeChanged(beforesize,challengeList.size()-beforesize);
                 }//이미 불러온 데이터가 있는 경우엔 가져온 데이터 만큼의 범위를 늘려준다.
                 else { //없는 경우엔 새로운 어댑터에 데이터를 담아서 띄워준다.
                     initAdapter(); //어댑터 초기화
@@ -276,7 +278,7 @@ public class fragment_challenge extends Fragment {
                 challengeList.add(new Challenge(null)); //로딩바 표시를 위한 빈 값
                 if (page > 1) {
                     isLoading = false;
-                    challengeAdapter.notifyItemRangeChanged(0,challengeList.size()-1);
+                    challengeAdapter.notifyItemRangeChanged(beforesize,challengeList.size()-beforesize);
                 } else {
                     initAdapter();//어댑터 초기화
                     initRecyclerView(); //리사이클러뷰에 띄워주기

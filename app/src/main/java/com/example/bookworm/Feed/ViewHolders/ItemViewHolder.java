@@ -74,10 +74,14 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
         binding.tvLike.setText(String.valueOf(item.getLikeCount()));
 
+        try{
         if (nowUser.getLikedPost().contains(item.getFeedID())) {
             binding.btnLike.setBackground(context.getDrawable(R.drawable.icon_like_red));
             liked = true;
         } else {
+            binding.btnLike.setBackground(context.getDrawable(R.drawable.icon_like));
+            liked = false;
+        }}catch (NullPointerException e){
             binding.btnLike.setBackground(context.getDrawable(R.drawable.icon_like));
             liked = false;
         }
