@@ -58,7 +58,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             showLoadingView((LoadingViewHolder) holder, safePosition);
         }
     }
-
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);

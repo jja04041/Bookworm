@@ -34,7 +34,7 @@ import java.util.Map;
 
 public class fragment_feed extends Fragment {
     FragmentFeedBinding binding;
-    FeedAdapter feedAdapter;
+    public FeedAdapter feedAdapter;
     private final int LIMIT =5;
     ArrayList<Feed> feedList;
     private DocumentSnapshot lastVisible; //마지막에 가져온 값 부터 추가로 가져올 수 있도록 함.

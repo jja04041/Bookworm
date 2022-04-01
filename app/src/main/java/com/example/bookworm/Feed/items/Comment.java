@@ -2,9 +2,12 @@ package com.example.bookworm.Feed.items;
 
 import com.example.bookworm.User.UserInfo;
 
+import java.text.SimpleDateFormat;
 import java.util.Map;
 
 public class Comment {
+    //댓글 ID
+    private String CommentID;
     //유저 정보
     private String userToken;
     private String userName;
@@ -13,14 +16,22 @@ public class Comment {
     private String contents;
     //생성된 시각
     private String madeDate;
-    public Comment(UserInfo userInfo, String contents, String madeDate){
+
+    public Comment(UserInfo userInfo, String contents, Long madeDate) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        this.CommentID = madeDate + "_" + userInfo.getToken();
         this.userToken = userInfo.getToken();
         this.userName = userInfo.getUsername();
         this.userThumb = userInfo.getProfileimg();
         this.contents = contents;
-        this.madeDate = madeDate;
+        this.madeDate = dateFormat.format(madeDate);
     }
-    public void setData(Map data){
+
+    public String getCommentID() {
+        return CommentID;
+    }
+
+    public void setData(Map data) {
 
     }
 

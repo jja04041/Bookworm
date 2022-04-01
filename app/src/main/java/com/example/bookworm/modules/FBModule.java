@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.bookworm.Challenge.subActivity.subactivity_challenge_challengeinfo;
+import com.example.bookworm.Feed.items.Comment;
 import com.example.bookworm.Feed.likeCounter;
 import com.example.bookworm.Login.activity_login;
 import com.example.bookworm.MainActivity;
@@ -32,15 +33,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
 public class FBModule {
-    String location[] = {"users", "feed", "challenge", "comment"}; //각 함수에서 전달받은 인덱스에 맞는 값을 뽑아냄.
+    String location[] = {"users", "feed", "challenge"}; //각 함수에서 전달받은 인덱스에 맞는 값을 뽑아냄.
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     Context context;
-    private int LIMIT ;
+    private int LIMIT =10;
     Task task = null;
     CollectionReference collectionReference;
 
@@ -58,14 +60,18 @@ public class FBModule {
         //해당 정보가 있는지 확인(회원 여부 확인)
         //회원정보 검색,챌린지 중복 조회 등 , 토큰: 챌린지(챌린지 명) , 회원정보 검색(회원토큰값)
         if (token != null) task = collectionReference.document(token).get();
-            //피드 표시(토큰
+            //피드 표시(토큰)
         else if (idx == 1) {
             //map객체: 팔로워 목록
-            query = query.orderBy("FeedID");
+            if(map.get("FeedID")!=null){
+                query=collectionReference.document((String)map.get("FeedID")).collection("comments");
+            }
+
             if (map.get("lastVisible") != null) {
                 DocumentSnapshot snapshot = (DocumentSnapshot) map.get("lastVisible");
                 query = query.startAfter(snapshot);
             }
+
             query=query.limit(LIMIT);
             task = query.get();
         }
@@ -119,7 +125,11 @@ public class FBModule {
                     ((activity_login) context).signIn(Boolean.FALSE, userInfo);
                 }
             }
+
             //피드 관련
+            if(idx==1){
+                db.collection(location[idx]).document((String) map.get("FeedID")).collection("comments").document(((Comment)map.get("comment")).getCommentID()).set(map);
+            }
             //챌린지 관련
             if (idx == 2) {
                 //챌린지 참여용
@@ -167,6 +177,7 @@ public class FBModule {
             //피드 조회
             if (idx==1){
                 ff = ((fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
+
                 ff.moduleUpdated(null); //빈값을 반환하여, 찾는 값이 없음을 사용자에게 알림.
             }
             if (idx == 2) {
@@ -175,8 +186,10 @@ public class FBModule {
             }
         } else {
             if (idx==1){
+
+
                 ff = ((fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
-                ff.moduleUpdated(querySnapshot.getDocuments()); //빈값을 반환하여, 찾는 값이 없음을 사용자에게 알림.
+                ff.moduleUpdated(querySnapshot.getDocuments()); //찾은 피드 목록을 반환
             }
             if (idx == 2) {
                 //챌린지 검색
@@ -199,9 +212,8 @@ public class FBModule {
                 break;
 
             case 1: //피드 작성
-//                UserInfo userInfo1 = new UserInfo();
-//                userInfo1 = (UserInfo) data.get("UserInfo");
                 db.collection(location[idx]).document((String) data.get("FeedID")).set(data);
+
                 break;
 
             case 2://챌린지 생성

@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Feed.items.Comment;
 import com.example.bookworm.Feed.items.Feed;
+import com.example.bookworm.Feed.items.customDialog;
 import com.example.bookworm.Feed.likeCounter;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
@@ -47,10 +48,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     int limit = 0;
     Boolean restricted = false;
     Context context;
-    Dialog customDialog;
-    FBModule fbModule;
-    Comment comment;
-    String FeedID;
+    customDialog dialog;
 
     //생성자를 만든다.
     public ItemViewHolder(@NonNull View itemView, Context context) {
@@ -81,28 +79,27 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         Glide.with(itemView).load(user.getProfileimg()).circleCrop().into(binding.ivProfileImage);
         //피드 내용
 
-        customDialog = new Dialog(context);       // Dialog 초기화
-        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
-        customDialog.setContentView(R.layout.custom_dialog_comment);
-
+        dialog=new customDialog(context);
+        dialog.setView(0);
         //댓글창을 클릭했을때
         binding.llComments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showcustomDialog(item);
+                dialog.showcustomDialog(item,nowUser);
             }
         });
-
+        //좋아요 수 세팅
         binding.tvLike.setText(String.valueOf(item.getLikeCount()));
 
-        try{
-        if (nowUser.getLikedPost().contains(item.getFeedID())) {
-            binding.btnLike.setBackground(context.getDrawable(R.drawable.icon_like_red));
-            liked = true;
-        } else {
-            binding.btnLike.setBackground(context.getDrawable(R.drawable.icon_like));
-            liked = false;
-        }}catch (NullPointerException e){
+        try {
+            if (nowUser.getLikedPost().contains(item.getFeedID())) {
+                binding.btnLike.setBackground(context.getDrawable(R.drawable.icon_like_red));
+                liked = true;
+            } else {
+                binding.btnLike.setBackground(context.getDrawable(R.drawable.icon_like));
+                liked = false;
+            }
+        } catch (NullPointerException e) {
             binding.btnLike.setBackground(context.getDrawable(R.drawable.icon_like));
             liked = false;
         }
@@ -111,17 +108,6 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View view) {
                 controlLike(item);
-            }
-        });
-        customDialog = new Dialog(context);       // Dialog 초기화
-        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
-        customDialog.setContentView(R.layout.custom_dialog_comment);
-
-        //댓글창을 클릭했을때
-        binding.llComments.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showcustomDialog(item);
             }
         });
         //이미지 뷰 정리
@@ -189,41 +175,6 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 }, 10000);
             }
         }
-    }
-
-    public void showcustomDialog(Feed item) {
-        customDialog.show(); // 다이얼로그 띄우기
-
-        fbModule = new FBModule(context);
-
-        EditText edtComment = customDialog.findViewById(R.id.edtComment);
-        TextView tvCommentCount = customDialog.findViewById(R.id.tvCommentCount);
-        tvCommentCount.setText(item.getFeedID());
-
-
-        Button btnWriteComment = customDialog.findViewById(R.id.btnWriteComment);
-
-
-        btnWriteComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                HashMap<String, Object> map = new HashMap<>();
-
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String formatTime = dateFormat.format(System.currentTimeMillis());
-
-                //유저정보, 댓글내용, 작성시간
-                comment = new Comment(nowUser,edtComment.getText().toString(),formatTime);
-
-                FeedID = item.getFeedID();
-
-                map.put("Comment", comment); //댓글 내용
-                map.put("FeedID", FeedID); //피드ID
-
-                fbModule.readData(3, map, FeedID);
-                customDialog.dismiss();
-            }
-        });
     }
 
     //라벨을 동적으로 생성

@@ -42,6 +42,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.example.bookworm.Feed.items.Comment;
 import com.example.bookworm.MainActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
@@ -503,6 +504,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             map.put("label", labelAdd(labelList)); //라벨 리스트
             map.put("date", formatTime); //현재 시간 millis로
             map.put("FeedID", FeedID); //피드 아이디
+            map.put("comments",new ArrayList<Comment>());
             map.put("likeCount", 0);
             if (imgUrl != null) map.put("imgurl", imgUrl); //이미지 url
 
