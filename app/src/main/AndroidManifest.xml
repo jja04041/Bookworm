@@ -18,6 +18,9 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".subactivity_comment"
+            android:exported="false" />
+        <activity
             android:name=".Achievement.activity_achievement"
             android:exported="false"
             android:label="@string/title_activity_achievement"
