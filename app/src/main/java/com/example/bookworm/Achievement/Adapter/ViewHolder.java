@@ -16,6 +16,7 @@ import com.example.bookworm.R;
 public class ViewHolder extends  RecyclerView.ViewHolder {
 
     TextView title;
+    // 샘플 iv와 tap시 나오는 큰 iv
     ImageView iv_1,iv_2;
     LinearLayout linearlayout;
 
@@ -42,6 +43,8 @@ public class ViewHolder extends  RecyclerView.ViewHolder {
         title.setText(itemData.getTitle());
         iv_1.setImageResource(itemData.getImage());
         iv_2.setImageResource(itemData.getImage());
+
+        // 현재 item이 선택되어있는지 여부를 changeVisibility의 인자로 넣습니다.
         changeVisibility(selectedItems.get(position));
     }
 

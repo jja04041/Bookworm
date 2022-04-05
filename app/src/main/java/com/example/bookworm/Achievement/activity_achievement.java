@@ -16,69 +16,76 @@ import com.example.bookworm.modules.personalD.PersonalD;
 
 public class activity_achievement extends AppCompatActivity {
 
-        protected Context current_context;
-        protected FBModule fbModule;
-        protected UserInfo userinfo;
-        protected RecyclerViewAdapter adapter;
+    private Context context;
+    private FBModule fbModule;
+    private UserInfo userinfo;
+    private RecyclerViewAdapter adapter;
 
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-                super.onCreate(savedInstanceState);
-                setContentView(R.layout.activity_achievement);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_achievement);
 
 
-                current_context = this;
-                fbModule = new FBModule(current_context);
-                userinfo = new PersonalD(current_context).getUserInfo(); //저장된 UserInfo값을 가져온다.
+        context = this;
+        fbModule = new FBModule(context);
+        userinfo = new PersonalD(context).getUserInfo();
 
-                init();
-                CheckAchievement();
-        }
 
-        private void init() {
-                RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-                recyclerView.setLayoutManager(linearLayoutManager);
 
-                adapter = new RecyclerViewAdapter();
-                recyclerView.setAdapter(adapter);
+        init();
+        ShowView();
+    }
 
-        }
+    private void init() {
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
-        private void getData(int iData) {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
-                String wormname = "디폴트";
+        adapter = new RecyclerViewAdapter();
+        recyclerView.setAdapter(adapter);
 
-                switch(iData)
-                {
-                        case R.drawable.bw_default:
-                                wormname = "디폴트";
-                                break;
-                        case R.drawable.bw_horror:
-                                wormname = "공포";
-                                break;
-                        case R.drawable.bw_detective:
-                                wormname = "추리";
-                                break;
+    }
 
-                }
+    private void getData(int iData) {
 
-                ItemData itemData = new ItemData(iData, wormname);
-                adapter.addItem(itemData);
+        String wormname = "디폴트";
+
+        switch(iData)
+        {
+            case R.drawable.bw_default:
+                wormname = "디폴트";
+                break;
+            case R.drawable.bw_horror:
+                wormname = "공포";
+                break;
+            case R.drawable.bw_detective:
+                wormname = "추리";
+                break;
 
         }
 
+        ItemData itemData = new ItemData(iData, wormname);
+        adapter.addItem(itemData);
 
-        public void CheckAchievement() {
-                int size = userinfo.getWormvec().size();
+    }
 
-                for (int i = 0; i < size; ++i) {
-                        if (null != userinfo.getWormvec().get(i)) {
-                                getData(userinfo.getWormvec().get(i));
 
-                        }
-                }
+    public void ShowView ()
+    {
+        int size = userinfo.getWormvec().size();
+
+        for (int i = 0; i < size; ++i) {
+            if (null != userinfo.getWormvec().get(i)) {
+                getData(userinfo.getWormvec().get(i));
+
+            }
         }
+    }
+
+
+
 }

@@ -110,10 +110,13 @@ public class FBModule {
         if (document.exists()) {
             //유저정보 불러오기
             if (idx == 0) {
-                //장르를 업데이트
-                if (map.get("userinfo_genre") != null) {
-                    document.getReference().update("UserInfo.genre", map.get("userinfo_genre"));
-                }
+                // 장르 업데이트
+                if (map.get("userinfo_genre") != null) { document.getReference().update("UserInfo.genre", map.get("userinfo_genre")); }
+                // 업적 업데이트
+                else if (map.get("userinfo_achievementmap") != null) {  document.getReference().update("UserInfo.achievementmap", map.get("userinfo_achievementmap")); }
+                // 인벤토리 업데이트
+                else if (map.get("userinfo_wormvec") != null){ document.getReference().update("UserInfo.wormvec", map.get("userinfo_wormvec")); }
+
                 //회원인 경우, 로그인 처리
                 else {
                     UserInfo userInfo = new UserInfo();
