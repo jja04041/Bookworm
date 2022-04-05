@@ -32,9 +32,9 @@ public class UserInfo implements Serializable {
 
 
     // 업적 달성시 이 벡터에 책볼레 drawble id값을 추가합니다.
-    private Vector<Integer> wormvec;
-    private HashMap<String, Boolean> achievementmap;
-    private Vector<Integer> genre;
+    private Vector<Integer> wormvec = new Vector<>();
+    private HashMap<String, Boolean> achievementmap = new HashMap<>();
+    private Vector<Integer> genre = new Vector<>();
 
 
 

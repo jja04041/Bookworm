@@ -145,7 +145,7 @@ public class fragment_feed extends Fragment {
 //        map.put("followers",Arrays.asList(followers));
         if (map.get("lastVisible") != null) map.remove("lastVisible");
         feedList = new ArrayList<>(); //챌린지를 담는 리스트 생성
-        isLoading = false;
+        isLoading = true;
         fbModule.readData(1, map, null);
 
     }
