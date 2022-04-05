@@ -3,16 +3,17 @@ package com.example.bookworm.Feed.items;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.User.UserInfo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class Feed {
+public class Feed implements Serializable {
     private Book book=null; // 선택한 책
     //라벨 Array 추가
     private String feedID=null; //피드 ID
     private String imgurl=null; //업로드 이미지 url
     private int userRating; //책볼레 사용자 평점
-    private ArrayList<Comment> comments; //사용자 댓글
+    private long comments; //사용자 댓글 수
     private String feedText=null; //피드의 내용
     private String date=null; //현재 날짜
     private long likeCount;//좋아요 수
@@ -31,7 +32,7 @@ public class Feed {
         this.book.setBook((Map)data.get("book"));
         this.Creator.add((Map)data.get("UserInfo"));
         this.label=(ArrayList<String>) data.get("label");
-        this.comments=(ArrayList<Comment>) data.get("comments");
+        this.comments=(long) data.get("commentsCount");
         this.likeCount=(long) data.get("likeCount");
         if(data.get("imgurl")!=null) this.imgurl=(String) data.get("imgurl");
         this.feedText=(String) data.get("feedText");
@@ -56,6 +57,10 @@ public class Feed {
 
     public String getFeedText() {
         return feedText;
+    }
+
+    public long getComments() {
+        return comments;
     }
 
     public String getDate() {
