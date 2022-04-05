@@ -22,9 +22,10 @@ public class likeCounter {
         db = FirebaseFirestore.getInstance();
     }
 
-    public void updateCounter( Map map, String token) {
-        final DocumentReference ref = db.collection("feed").document(token);
+    public void updateCounter( Map map, String feedID) {
+        final DocumentReference ref = db.collection("feed").document(feedID);
         final DocumentReference ref2 = db.collection("users").document(((UserInfo) map.get("nowUser")).getToken());
+
         db.runTransaction(new Transaction.Function<Void>() {
             @Override
             public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {

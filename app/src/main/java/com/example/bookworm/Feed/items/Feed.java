@@ -12,6 +12,7 @@ public class Feed {
     private String feedID=null; //피드 ID
     private String imgurl=null; //업로드 이미지 url
     private int userRating; //책볼레 사용자 평점
+    private ArrayList<Comment> comments; //사용자 댓글
     private String feedText=null; //피드의 내용
     private String date=null; //현재 날짜
     private long likeCount;//좋아요 수
@@ -30,6 +31,7 @@ public class Feed {
         this.book.setBook((Map)data.get("book"));
         this.Creator.add((Map)data.get("UserInfo"));
         this.label=(ArrayList<String>) data.get("label");
+        this.comments=(ArrayList<Comment>) data.get("comments");
         this.likeCount=(long) data.get("likeCount");
         if(data.get("imgurl")!=null) this.imgurl=(String) data.get("imgurl");
         this.feedText=(String) data.get("feedText");

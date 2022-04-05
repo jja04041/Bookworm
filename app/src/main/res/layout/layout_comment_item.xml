@@ -30,6 +30,14 @@
             android:textSize="15dp"
             android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="##/## ##:##"/>
+
+
     </LinearLayout>
 
     <TextView
@@ -38,10 +46,5 @@
         android:layout_height="wrap_content"
         android:textColor="#CC000000"
         android:text="@string/lorem"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="##/## ##:##"/>
 
 </LinearLayout>

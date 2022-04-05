@@ -3,10 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:background="@color/white"
-    android:orientation="vertical">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".subactivity_comment">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -44,15 +43,16 @@
             android:layout_height="40dp"
             android:layout_gravity="center_vertical|end"
             android:layout_marginEnd="10dp"
-            android:src="@drawable/ic_baseline_menu_24" />
+            android:backgroundTint="#000000"
+            android:src="@drawable/ic_baseline_more_horiz_24" />
 
     </FrameLayout>
 
     <LinearLayout
+        android:id="@+id/llbook"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:id="@+id/llbook"
         android:background="@drawable/feed_bottom_top_border"
         android:orientation="horizontal">
 
@@ -103,12 +103,18 @@
 
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/feedImage"
+        android:layout_width="360dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/ic_baseline_image_24" />
 
     <LinearLayout
+        android:id="@+id/lllabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:id="@+id/lllabel"
         android:orientation="horizontal">
         <!--여기 라벨 처리좀 부탁....-->
     </LinearLayout>
@@ -118,74 +124,115 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="@drawable/square_button"
-        android:ellipsize="end"
-        android:maxLines="3"
+        android:background="@drawable/textview_design"
         android:padding="5dp"
         android:text="@string/lorem" />
 
-    <TextView
-        android:id="@+id/tvViewMore"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="더보기"
-        android:textStyle="bold"
-        android:visibility="gone" />
+        android:layout_marginHorizontal="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="댓글  "
+            android:textColor="#000000"
+            android:textSize="17dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvCommentCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="##"
+            android:textColor="#000000"
+            android:textSize="17dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="개"
+            android:textColor="#000000"
+            android:textSize="17dp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!--            <include layout="@layout/layout_comment_item" />-->
+            <!--            <include layout="@layout/layout_comment_item" />-->
+            <!--            <include layout="@layout/layout_comment_item" />-->
+            <!--            <include layout="@layout/layout_comment_item" />-->
+            <!--            <include layout="@layout/layout_comment_item" />-->
+            <!--            <include layout="@layout/layout_comment_item" />-->
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/mRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            <TextView
+                android:id="@+id/tvFirstComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="첫 번째 댓글을 남겨보세요.\n(댓글 없을때만 visible 처리)"
+                android:textSize="20dp"
+                android:visibility="invisible" />
+
+        </FrameLayout>
+
+
+    </ScrollView>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/writing_comment"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/edtComment"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:id="@+id/lllike"
-            android:orientation="horizontal">
+            android:layout_gravity="center_vertical"
+            android:background="#00000000"
+            android:hint="댓글을 입력하세요."
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="3dp"
+            android:textSize="15dp" />
 
-            <Button
-                android:id="@+id/btnLike"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="start"
-                android:background="@drawable/icon_like" />
-
-            <TextView
-                android:id="@+id/tvLike"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:text="123"
-                android:textColor="@color/black" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/llComments"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="start"
-                android:src="@drawable/icon_reply" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:text="0개"
-                android:textColor="@color/black"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
+        <Button
+            android:id="@+id/btnWriteComment"
+            android:layout_width="33dp"
+            android:layout_height="33dp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/ic_round_near_me_24"
+            android:backgroundTint="#000000"/>
 
     </FrameLayout>
+
 
 </LinearLayout>

@@ -42,6 +42,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.example.bookworm.Feed.items.Comment;
 import com.example.bookworm.MainActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
@@ -308,7 +309,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     //서버에 이미지 업로드
     private void upload() {
 
-        FeedID = userInfo.getToken() + "_" + String.valueOf(System.currentTimeMillis()); //사용자 토큰 + 현재 시각을 FeedID로 설정
+        FeedID = String.valueOf(System.currentTimeMillis()) + "_" + userInfo.getToken(); //현재 시각 + 사용자 토큰을 FeedID로 설정
 
         if (uploaded != null) {
             try {
@@ -503,6 +504,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             map.put("label", labelAdd(labelList)); //라벨 리스트
             map.put("date", formatTime); //현재 시간 millis로
             map.put("FeedID", FeedID); //피드 아이디
+            map.put("comments",new ArrayList<Comment>());
             map.put("likeCount", 0);
             if (imgUrl != null) map.put("imgurl", imgUrl); //이미지 url
 

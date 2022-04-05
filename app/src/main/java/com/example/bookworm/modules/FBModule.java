@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.bookworm.Challenge.subActivity.subactivity_challenge_challengeinfo;
+import com.example.bookworm.Feed.likeCounter;
 import com.example.bookworm.Login.activity_login;
 import com.example.bookworm.MainActivity;
 import com.example.bookworm.ProfileSettingActivity;
@@ -26,7 +27,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 
@@ -52,10 +58,13 @@ public class FBModule {
         //해당 정보가 있는지 확인(회원 여부 확인)
         //회원정보 검색,챌린지 중복 조회 등 , 토큰: 챌린지(챌린지 명) , 회원정보 검색(회원토큰값)
         if (token != null) task = collectionReference.document(token).get();
-            //피드 표시(토큰
+            //피드 표시(토큰)
         else if (idx == 1) {
             //map객체: 팔로워 목록
-            query = query.orderBy("FeedID");
+            if(map.get("FeedID")!=null){
+                query=collectionReference.document((String)map.get("FeedID")).collection("comments");
+            }
+
             if (map.get("lastVisible") != null) {
                 DocumentSnapshot snapshot = (DocumentSnapshot) map.get("lastVisible");
                 query = query.startAfter(snapshot);
@@ -116,7 +125,11 @@ public class FBModule {
                     ((activity_login) context).signIn(Boolean.FALSE, userInfo);
                 }
             }
+
             //피드 관련
+            if(idx==1){
+                db.collection(location[idx]).document((String) map.get("FeedID")).collection("comments").document(((Comment)map.get("comment")).getCommentID()).set(map);
+            }
             //챌린지 관련
             if (idx == 2) {
                 //챌린지 참여용

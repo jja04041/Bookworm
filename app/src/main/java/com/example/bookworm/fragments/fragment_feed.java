@@ -3,12 +3,13 @@ package com.example.bookworm.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.example.bookworm.Feed.ViewHolders.ItemNoImgViewHolder;
-import com.example.bookworm.Feed.ViewHolders.ItemViewHolder;
+
 import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.Feed.items.FeedAdapter;
 import com.example.bookworm.databinding.FragmentFeedBinding;
@@ -33,8 +34,8 @@ import java.util.Map;
 
 public class fragment_feed extends Fragment {
     FragmentFeedBinding binding;
-    FeedAdapter feedAdapter;
-    private final int LIMIT = 10;
+    public FeedAdapter feedAdapter;
+    private final int LIMIT =5;
     ArrayList<Feed> feedList;
     private DocumentSnapshot lastVisible; //마지막에 가져온 값 부터 추가로 가져올 수 있도록 함.
     private Map map;
@@ -57,6 +58,7 @@ public class fragment_feed extends Fragment {
 
         binding = FragmentFeedBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
+        binding.recyclerView.setNestedScrollingEnabled(false);
         fbModule = new FBModule(getContext());
         fbModule.setLIMIT(LIMIT); //한번에 보여줄 피드의 최대치를 설정
         //Create New Feed
@@ -75,6 +77,7 @@ public class fragment_feed extends Fragment {
                 isRefreshing = true;
             }
         });
+        binding.recyclerView.setItemViewCacheSize(3);
         //피드 초기 호출
         pageRefresh();
 
@@ -98,8 +101,6 @@ public class fragment_feed extends Fragment {
 
     private void initAdapter() {
         feedAdapter = new FeedAdapter(feedList, getContext());
-        //어댑터 리스너
-
     }
 
     //리사이클러뷰 스크롤 초기화
@@ -160,39 +161,45 @@ public class fragment_feed extends Fragment {
 
     //fb모듈을 통해 전달받은 값을 세팅
     public void moduleUpdated(List<DocumentSnapshot> a) {
+        int beforeSize=feedList.size();
         if (isRefreshing) {
             binding.swiperefresh.setRefreshing(false);
             isRefreshing = false;
         }
-//        if (page == 1) {
-//            isLoading = false;
-//            feedList = new ArrayList<>(); //챌린지를 담는 리스트 생성
-//        }
-//        //가져온 데이터를 for문을 이용하여, feed리스트에 차곡차곡 담는다.
-        try {
-            for (DocumentSnapshot snapshot : a) {
-                Map data = snapshot.getData();
-                Feed feed = new Feed();
-                feed.setData(data);
-                feed.getFeedID();
-
-                feedList.add(feed);
-            }
-            //가져온 값의 마지막 snapshot부터 이어서 가져올 수 있도록 하기 위함.
-            lastVisible = a.get(a.size() - 1);
-            //리사이클러뷰에서 튕김현상이 발생하여 넣어준 코드
-            //현재 불러오는 값의 크기(a.size())가 페이징 제한 값(LIMIT)보다 작은 경우 => 더이상 불러오지 않게 함.
-            if (a.size() < LIMIT) {
+        if (page == 1) {
+            isLoading = false;
+            feedList = new ArrayList<>(); //챌린지를 담는 리스트 생성
+        }
+        if (a == null ) {
+            feedList = new ArrayList<>(); //챌린지를 담는 리스트 생성
+            initAdapter();
+            initFeed();
+            Toast.makeText(getContext(), "화면에 표시할 포스트가 없습니다.", Toast.LENGTH_SHORT).show();
+        } else {
+            //가져온 데이터를 for문을 이용하여, feed리스트에 차곡차곡 담는다.
+            try {
+                for (DocumentSnapshot snapshot : a) {
+                    Map data = snapshot.getData();
+                    Feed feed = new Feed();
+                    feed.setData(data);
+                    feed.getFeedID();
+                    feedList.add(feed);
+                }
+                //가져온 값의 마지막 snapshot부터 이어서 가져올 수 있도록 하기 위함.
+                lastVisible = a.get(a.size() - 1);
+                //리사이클러뷰에서 튕김현상이 발생하여 넣어준 코드
+                //현재 불러오는 값의 크기(a.size())가 페이징 제한 값(LIMIT)보다 작은 경우 => 더이상 불러오지 않게 함.
+                if (a.size() < LIMIT) {
+                    canLoad = false;
+                }
+            } catch (NullPointerException e) {
                 canLoad = false;
             }
-        } catch (NullPointerException e) {
-            canLoad = false;
         }
         //만약 더이상 불러오지 못 할 경우
         if (canLoad == false) {
             isLoading = true;
-            if (page > 1)
-                feedAdapter.notifyDataSetChanged(); //이미 불러온 데이터가 있는 경우엔 가져온 데이터 만큼의 범위를 늘려준다.
+            if (page > 1)feedAdapter.notifyItemRangeChanged(beforeSize,feedList.size()-beforeSize); //이미 불러온 데이터가 있는 경우엔 가져온 데이터 만큼의 범위를 늘려준다.
             else { //없는 경우엔 새로운 어댑터에 데이터를 담아서 띄워준다.
                 initAdapter(); //어댑터 초기화
                 initRecyclerView(); //리사이클러뷰에 띄워주기
@@ -203,7 +210,7 @@ public class fragment_feed extends Fragment {
             feedList.add(new Feed()); //로딩바 표시를 위한 빈 값
             if (page > 1) {
                 isLoading = false;
-                feedAdapter.notifyItemRangeChanged(0, feedList.size() - 1, null); //데이터 범위 변경
+                feedAdapter.notifyItemRangeChanged(beforeSize,feedList.size()-beforeSize);//데이터 범위 변경
             } else {
                 initAdapter();//어댑터 초기화
                 initRecyclerView(); //리사이클러뷰에 띄워주기
