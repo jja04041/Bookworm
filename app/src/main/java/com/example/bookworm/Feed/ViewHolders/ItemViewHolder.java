@@ -1,20 +1,14 @@
 package com.example.bookworm.Feed.ViewHolders;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,19 +16,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.bookworm.Feed.items.Comment;
 import com.example.bookworm.Feed.items.Feed;
-import com.example.bookworm.Feed.items.customDialog;
 import com.example.bookworm.Feed.likeCounter;
+import com.example.bookworm.Feed.Comments.subactivity_comment;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_result;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.databinding.LayoutFeedBinding;
-import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.personalD.PersonalD;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -79,15 +70,16 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         Glide.with(itemView).load(user.getProfileimg()).circleCrop().into(binding.ivProfileImage);
         //피드 내용
 
-        dialog=new customDialog(context);
-        dialog.setView(0);
         //댓글창을 클릭했을때
         binding.llComments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.showcustomDialog(item,nowUser);
+                Intent intent = new Intent(context, subactivity_comment.class);
+                intent.putExtra("item", item);
+                context.startActivity(intent);
             }
         });
+        binding.tvCommentCount.setText(String.valueOf(item.getComments())); //댓글 수 세팅
         //좋아요 수 세팅
         binding.tvLike.setText(String.valueOf(item.getLikeCount()));
 
@@ -116,6 +108,8 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         }
         binding.tvFeedtext.setText(item.getFeedText());
         setLabel(item.getLabel()); //라벨 세팅
+
+
     }
 
     public void setVisibillity(Boolean check) {

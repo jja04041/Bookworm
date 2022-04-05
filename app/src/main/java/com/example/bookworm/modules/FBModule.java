@@ -10,8 +10,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.bookworm.Challenge.subActivity.subactivity_challenge_challengeinfo;
-import com.example.bookworm.Feed.items.Comment;
-import com.example.bookworm.Feed.likeCounter;
+import com.example.bookworm.Feed.Comments.Comment;
+import com.example.bookworm.Feed.Comments.subactivity_comment;
 import com.example.bookworm.Login.activity_login;
 import com.example.bookworm.MainActivity;
 import com.example.bookworm.ProfileSettingActivity;
@@ -28,13 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -42,7 +36,7 @@ public class FBModule {
     String location[] = {"users", "feed", "challenge"}; //각 함수에서 전달받은 인덱스에 맞는 값을 뽑아냄.
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     Context context;
-    private int LIMIT =10;
+    private int LIMIT = 10;
     Task task = null;
     CollectionReference collectionReference;
 
@@ -50,9 +44,11 @@ public class FBModule {
     public FBModule(Context context) {
         this.context = context;
     }
-    public void setLIMIT(int LIMIT){
-        this.LIMIT=LIMIT;
+
+    public void setLIMIT(int LIMIT) {
+        this.LIMIT = LIMIT;
     }
+
     //데이터 읽기
     public void readData(int idx, Map map, String token) {
         collectionReference = db.collection(location[idx]);
@@ -63,8 +59,8 @@ public class FBModule {
             //피드 표시(토큰)
         else if (idx == 1) {
             //map객체: 팔로워 목록
-            if(map.get("FeedID")!=null){
-                query=collectionReference.document((String)map.get("FeedID")).collection("comments");
+            if (map.get("FeedID") != null) {
+                query = collectionReference.document((String) map.get("FeedID")).collection("comments").orderBy("commentID", Query.Direction.DESCENDING);
             }
 
             if (map.get("lastVisible") != null) {
@@ -72,7 +68,7 @@ public class FBModule {
                 query = query.startAfter(snapshot);
             }
 
-            query=query.limit(LIMIT);
+            query = query.limit(LIMIT);
             task = query.get();
         }
         //챌린지 검색
@@ -127,8 +123,8 @@ public class FBModule {
             }
 
             //피드 관련
-            if(idx==1){
-                db.collection(location[idx]).document((String) map.get("FeedID")).collection("comments").document(((Comment)map.get("comment")).getCommentID()).set(map);
+            if (idx == 1) {
+                db.collection(location[idx]).document((String) map.get("FeedID")).collection("comments").document(((Comment) map.get("comment")).getCommentID()).set(map);
             }
             //챌린지 관련
             if (idx == 2) {
@@ -175,21 +171,24 @@ public class FBModule {
         fragment_feed ff;
         if (querySnapshot.isEmpty()) {
             //피드 조회
-            if (idx==1){
-                ff = ((fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
-
-                ff.moduleUpdated(null); //빈값을 반환하여, 찾는 값이 없음을 사용자에게 알림.
+            if (idx == 1) {
+                if (map.get("FeedID") != null) ((subactivity_comment)context).moduleUpdated(null);
+                else {
+                    ff = ((fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
+                    ff.moduleUpdated(null); //찾은 피드 목록을 반환
+                }
             }
             if (idx == 2) {
-                    fc = ((fragment_challenge) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("3"));
-                    fc.moduleUpdated(null); //빈값을 반환하여, 찾는 값이 없음을 사용자에게 알림.
+                fc = ((fragment_challenge) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("3"));
+                fc.moduleUpdated(null); //빈값을 반환하여, 찾는 값이 없음을 사용자에게 알림.
             }
         } else {
-            if (idx==1){
-
-
-                ff = ((fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
-                ff.moduleUpdated(querySnapshot.getDocuments()); //찾은 피드 목록을 반환
+            if (idx == 1) {
+                if (map.get("FeedID") != null) ((subactivity_comment)context).moduleUpdated(querySnapshot.getDocuments());
+                else {
+                    ff = ((fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
+                    ff.moduleUpdated(querySnapshot.getDocuments()); //찾은 피드 목록을 반환
+                }
             }
             if (idx == 2) {
                 //챌린지 검색
@@ -218,11 +217,6 @@ public class FBModule {
 
             case 2://챌린지 생성
                 db.collection(location[idx]).document((String) data.get("strChallengeName")).set(data);
-                break;
-
-            case 3://댓글 작성
-//                String FeedID = data.get("FeedID");
-                db.collection(location[idx]).document((String) data.get("FeedID")).set(data);
                 break;
         }
     }

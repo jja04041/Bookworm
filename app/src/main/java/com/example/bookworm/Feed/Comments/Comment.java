@@ -1,4 +1,4 @@
-package com.example.bookworm.Feed.items;
+package com.example.bookworm.Feed.Comments;
 
 import com.example.bookworm.User.UserInfo;
 
@@ -17,7 +17,11 @@ public class Comment {
     //생성된 시각
     private String madeDate;
 
-    public Comment(UserInfo userInfo, String contents, Long madeDate) {
+    public Comment() {
+
+    }
+
+    public void getData(UserInfo userInfo, String contents, Long madeDate) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         this.CommentID = madeDate + "_" + userInfo.getToken();
         this.userToken = userInfo.getToken();
@@ -32,6 +36,12 @@ public class Comment {
     }
 
     public void setData(Map data) {
+        this.CommentID = (String) data.get("commentID");
+        this.contents = (String) data.get("contents");
+        this.madeDate = (String) data.get("madeDate");
+        this.userName = (String) data.get("userName");
+        this.userThumb = (String) data.get("userThumb");
+        this.userToken = (String) data.get("userToken");
 
     }
 
