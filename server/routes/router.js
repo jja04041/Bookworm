@@ -2,12 +2,26 @@ const express = require('express'); //express를 사용하기 위함.
 const multer = require('multer'); //이미지 업/다운로드를 위함.
 const fs = require('fs');
 const router = express.Router();
-const {
-  createFirebaseToken
-} = require("../module/firebase/getToken")
+// const {
+//   createFirebaseToken
+// } = require("../module/firebase/getToken")
 module.exports = router;
 var imgPath = "";
 var Path = "";
+const {
+  initializeApp,
+  cert
+} = require('firebase-admin/app');
+const serviceAccount = require('./bookworm-f6973-firebase-adminsdk-lzs4b-a45e20e976.json');
+const {
+  getFirestore,
+  Timestamp,
+  FieldValue
+} = require('firebase-admin/firestore');
+initializeApp({
+  credential: cert(serviceAccount)
+});
+const db = getFirestore();
 
 
 //for image 
@@ -89,16 +103,33 @@ router.get("/token", (req, res) => {
   console.log(`Verifying Kakao token: ${token}`);
   //토큰 생성 
   if (platform == "kakao") {
-    createFirebaseToken(token,platform).then((firebaseToken) => {
+    createFirebaseToken(token, platform).then((firebaseToken) => {
       console.log(`Returning firebase token to user: ${firebaseToken}`);
       console.log(firebaseToken);
     });
   }
 });
 
-router.get("/", (req, res) => {
-  res.send("hello,World!");
+router.get("/",(req,res)=>{
+  res.send("helloworld~");
 });
+router.get("/:token", async (req, res) => {
+  var value = req.params.token;
+  checkID(value).then((token) => {
+    res.send(token);
+  });
+});
+
+async function checkID(token) {
+  var ID = token;
+  var find=false;
+  const snapshot = await db.collection('users').get();
+  snapshot.forEach((doc) => {
+    console.log(doc.id,ID,doc.id==ID);
+    if (doc.id==ID) find=true;
+  });
+  return find;
+};
 
 // router.get("/token", async(req, res) => {
 //   const {OAuth2Client} = require('google-auth-library');

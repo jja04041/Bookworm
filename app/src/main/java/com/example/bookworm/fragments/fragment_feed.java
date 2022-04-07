@@ -44,7 +44,7 @@ public class fragment_feed extends Fragment {
     //canLoad:더 로딩이 가능한지 확인하는 변수[자료의 끝을 판별한다.]
     private Boolean isRefreshing = false, isLoading = false, canLoad = true;
     private int page = 1;
-    ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
+    public ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == Activity.RESULT_OK) {
@@ -182,7 +182,7 @@ public class fragment_feed extends Fragment {
                     Map data = snapshot.getData();
                     Feed feed = new Feed();
                     feed.setData(data);
-                    feed.getFeedID();
+//                    feed.getFeedID();
                     feedList.add(feed);
                 }
                 //가져온 값의 마지막 snapshot부터 이어서 가져올 수 있도록 하기 위함.

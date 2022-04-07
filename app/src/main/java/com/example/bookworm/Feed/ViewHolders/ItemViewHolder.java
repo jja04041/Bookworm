@@ -19,11 +19,14 @@ import com.bumptech.glide.Glide;
 import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.Feed.likeCounter;
 import com.example.bookworm.Feed.Comments.subactivity_comment;
+import com.example.bookworm.MainActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_result;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.databinding.LayoutFeedBinding;
+import com.example.bookworm.fragments.fragment_challenge;
+import com.example.bookworm.fragments.fragment_feed;
 import com.example.bookworm.modules.personalD.PersonalD;
 
 import java.util.ArrayList;
@@ -73,9 +76,13 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         binding.llComments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                int position= getAdapterPosition();
+//                fragment_feed  ff = ((fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
+//                ff.startActivityResult.launch(intent);
+//                intent.putExtra("pos",position);
                 Intent intent = new Intent(context, subactivity_comment.class);
                 intent.putExtra("item", item);
-                context.startActivity(intent);
+               context.startActivity(intent);
             }
         });
         binding.tvCommentCount.setText(String.valueOf(item.getComments())); //댓글 수 세팅

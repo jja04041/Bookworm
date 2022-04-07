@@ -27,7 +27,6 @@ public class UserInfo implements Serializable {
     private String              token;
     private ArrayList<String>   likedPost;
     private static enum_wormtype wormtype = enum_wormtype.디폴트;
-
     private static int enum_size = enum_wormtype.enumsize.value();
 
 
@@ -65,6 +64,7 @@ public class UserInfo implements Serializable {
     }
 
     public void Initbookworm() {
+        genre=new Vector<>();
         genre.setSize(enum_size);
 
 

@@ -26,24 +26,34 @@ public class commentsCounter  {
         db = FirebaseFirestore.getInstance();
     }
 
-    public void updateCounter(Map map, Context context, String feedID) {
+    public void addCounter(Map map, Context context, String feedID) {
+       initialize(map,context,feedID,1);
+    }
+    public void removeCounter(Map map, Context context, String feedID){
+        initialize(map,context,feedID,-1);
+    }
+
+    public void initialize(Map map, Context context, String feedID,int count){
         final DocumentReference ref = db.collection("feed").document(feedID);
         Comment comment=(Comment) map.get("comment");
         final DocumentReference ref2 = ref.collection("comments").document(comment.getCommentID());
-        final DocumentSnapshot[] lastV = new DocumentSnapshot[1];
+//        final DocumentSnapshot[] lastV = new DocumentSnapshot[1];
 
 
         db.runTransaction(new Transaction.Function<Void>() {
             @Override
             public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
-                transaction.update(ref,"commentsCount", FieldValue.increment(1)).set(ref2,comment);
+                transaction.update(ref,"commentsCount", FieldValue.increment(count));
+                if (count==1){
+                    transaction.set(ref2,comment);
+                }else transaction.delete(ref2);
                 return null;
             }
         }).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d("Success", "Transaction success!");
-                ((subactivity_comment)context).setLastVisible(lastV[0]);
+//                ((subactivity_comment)context).setLastVisible(lastV[0]);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -51,6 +61,8 @@ public class commentsCounter  {
                 Log.w("Failed", "Transaction failure.", e);
             }
         });
+
     }
+
 
 }

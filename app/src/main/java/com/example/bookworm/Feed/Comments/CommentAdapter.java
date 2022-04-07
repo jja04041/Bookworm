@@ -11,17 +11,21 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.R;
+import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.databinding.LayoutCommentItemBinding;
+import com.example.bookworm.databinding.LayoutCommentSummaryBinding;
 
 import java.util.ArrayList;
 
 public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    ArrayList<Comment> commentList;
+    ArrayList commentList;
     Context context;
 
-    public CommentAdapter(ArrayList<Comment> data, Context c) {
-        commentList = data;
+    public CommentAdapter(ArrayList data, Context c) {
+        commentList =new ArrayList();
+        commentList.addAll(data);
         context = c;
     }
 
@@ -31,6 +35,9 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = null;
         switch (viewType) {
+            case 0:
+                view=inflater.inflate(R.layout.layout_comment_summary,parent,false);
+                return new SummaryViewHolder(view,context);
             //댓글 뷰
             case 1:
                 view = inflater.inflate(R.layout.layout_comment_item, parent, false);
@@ -48,19 +55,26 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         int safePosition = holder.getAdapterPosition();
         if (holder instanceof ItemViewHolder) {
-            Comment item = commentList.get(safePosition);
+            Comment item = (Comment)commentList.get(safePosition);
             ((ItemViewHolder) holder).setItem(item);
         } else if (holder instanceof CommentAdapter.LoadingViewHolder) {
             showLoadingView((CommentAdapter.LoadingViewHolder) holder, safePosition);
+        }else if(holder instanceof SummaryViewHolder){
+            Feed item =(Feed) commentList.get(safePosition);
+            ((SummaryViewHolder)holder).setItem(item);
         }
     }
+
 
     @Override
     public int getItemCount() {
         return commentList.size();
     }
 
-
+    public void setData(ArrayList data){
+        commentList.clear();
+        commentList.addAll(data);
+    }
     //로딩바 클래스
     private class LoadingViewHolder extends RecyclerView.ViewHolder {
         public LoadingViewHolder(@NonNull View itemView) {
@@ -73,14 +87,14 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public int getItemViewType(int pos) {
-        if (commentList.get(pos).getCommentID() != null) return 1;
+        if(commentList.get(pos) instanceof Feed){
+            return 0;
+        }
+        else if (((Comment)commentList.get(pos)).getCommentID() != null) return 1;
         else return 2;
     }
 
-    public void deleteLoading() {
-        commentList.remove(commentList.size() - 1);
-        // 로딩이 완료되면 프로그레스바를 지움
-    }
+
     //뷰홀더 클래스 부분
     public class ItemViewHolder extends RecyclerView.ViewHolder {
         LayoutCommentItemBinding binding;
@@ -99,4 +113,5 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             binding.tvDate.setText(item.getMadeDate());
         }
     }
+
 }
