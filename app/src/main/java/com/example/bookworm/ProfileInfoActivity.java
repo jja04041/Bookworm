@@ -28,6 +28,7 @@ public class ProfileInfoActivity extends AppCompatActivity {
                 if (tvfollow.isSelected()) {
                     tvfollow.setSelected(false);
                     tvfollow.setText("팔로우");
+
                 } else {
                     tvfollow.setSelected(true);
                     tvfollow.setText("팔로잉");

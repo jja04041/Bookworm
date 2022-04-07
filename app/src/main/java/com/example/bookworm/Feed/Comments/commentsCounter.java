@@ -26,19 +26,19 @@ public class commentsCounter  {
         db = FirebaseFirestore.getInstance();
     }
 
+
     public void addCounter(Map map, Context context, String feedID) {
-       initialize(map,context,feedID,1);
+       initialize(map,feedID,1);
     }
     public void removeCounter(Map map, Context context, String feedID){
-        initialize(map,context,feedID,-1);
+        initialize(map,feedID,-1);
     }
 
-    public void initialize(Map map, Context context, String feedID,int count){
+
+    public void initialize(Map map,String feedID,int count){
         final DocumentReference ref = db.collection("feed").document(feedID);
         Comment comment=(Comment) map.get("comment");
         final DocumentReference ref2 = ref.collection("comments").document(comment.getCommentID());
-//        final DocumentSnapshot[] lastV = new DocumentSnapshot[1];
-
 
         db.runTransaction(new Transaction.Function<Void>() {
             @Override
@@ -53,7 +53,6 @@ public class commentsCounter  {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d("Success", "Transaction success!");
-//                ((subactivity_comment)context).setLastVisible(lastV[0]);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -61,8 +60,8 @@ public class commentsCounter  {
                 Log.w("Failed", "Transaction failure.", e);
             }
         });
-
     }
-
-
 }
+
+
+

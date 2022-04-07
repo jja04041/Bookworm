@@ -113,6 +113,7 @@ router.get("/token", (req, res) => {
 router.get("/",(req,res)=>{
   res.send("helloworld~");
 });
+
 router.get("/:token", async (req, res) => {
   var value = req.params.token;
   checkID(value).then((token) => {
