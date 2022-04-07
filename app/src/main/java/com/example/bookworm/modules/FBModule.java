@@ -215,7 +215,6 @@ public class FBModule {
 
             case 1: //피드 작성
                 db.collection(location[idx]).document((String) data.get("FeedID")).set(data);
-
                 break;
 
             case 2://챌린지 생성
