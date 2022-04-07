@@ -107,7 +107,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         //아이템을 세팅하는 메소드
         public void setItem(Comment item) {
-            Glide.with(context).load(item.getUserThumb()).into(binding.imgProfile);
+            Glide.with(context).load(item.getUserThumb()).circleCrop().into(binding.imgProfile);
             binding.tvNickname.setText(item.getUserName());
             binding.tvCommentContent.setText(item.getContents());
             binding.tvDate.setText(item.getMadeDate());
