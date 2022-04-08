@@ -121,7 +121,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ProfileInfoActivity.class);
-                intent.putExtra("userinfo", item.getCreator());
+                intent.putExtra("userID", item.getCreator().getToken());
                 context.startActivity(intent);
             }
         });

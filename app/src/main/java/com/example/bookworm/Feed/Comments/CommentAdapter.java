@@ -1,6 +1,7 @@
 package com.example.bookworm.Feed.Comments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Feed.items.Feed;
+import com.example.bookworm.ProfileInfoActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.databinding.LayoutCommentItemBinding;
@@ -111,6 +113,14 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             binding.tvNickname.setText(item.getUserName());
             binding.tvCommentContent.setText(item.getContents());
             binding.tvDate.setText(item.getMadeDate());
+            binding.llProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, ProfileInfoActivity.class);
+                    intent.putExtra("userID", item.getUserToken());
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 

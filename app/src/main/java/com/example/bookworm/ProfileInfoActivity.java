@@ -1,5 +1,6 @@
 package com.example.bookworm;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -14,13 +15,23 @@ import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.User.followCounter;
 import com.example.bookworm.databinding.ActivityProfileInfoBinding;
+import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.personalD.PersonalD;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Map;
 
 public class ProfileInfoActivity extends AppCompatActivity {
 
     ActivityProfileInfoBinding binding;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     UserInfo userInfo, nowUser; //타인 userInfo, 현재 사용자 nowUser
     Context context;
+    String userID = "2091385654";
     followCounter followCounter = new followCounter();
 
     //자신이나 타인의 프로필을 클릭했을때 나오는 화면
@@ -32,22 +43,18 @@ public class ProfileInfoActivity extends AppCompatActivity {
 
         context = this;
 
-        //작성자 UserInfo
-        userInfo = (UserInfo) getIntent().getSerializableExtra("userinfo");
-        binding.tvNickname.setText(userInfo.getUsername());
-        Glide.with(this).load(userInfo.getProfileimg()).circleCrop().into(binding.ivProfileImage);
+        //일단 안보였다가 파이어베이스에서 값을 모두 받아오면 보여주는게 UX면에서 좋을거같음
+        binding.tvNickname.setVisibility(View.INVISIBLE);
+        binding.ivProfileImage.setVisibility(View.INVISIBLE);
+        binding.tvFollow.setVisibility(View.INVISIBLE);
+
+        //작성자 UserInfo (userID를 사용해 파이어베이스에서 받아옴)
+        userID = getIntent().getStringExtra("userID");
+        userInfo = new UserInfo();
+        setUserInfo(userInfo, userID);
 
         //현재 사용자 UserInfo
         nowUser = new PersonalD(this).getUserInfo();
-
-        //지금 팔로우중인지 판단하고 팔로우 버튼 상태를 변경
-        followCounter.isfollow(userInfo, nowUser, context);
-
-        //내 프로필 화면이라면 팔로우 버튼 안보이게
-        if (userInfo.getToken().equals(nowUser.getToken())) {
-            binding.tvFollow.setVisibility(View.GONE);
-        }
-
 
         //팔로우 버튼을 클릭했을때 버튼 모양, 상태 변경
         binding.tvFollow.setOnClickListener(new View.OnClickListener() {
@@ -74,15 +81,56 @@ public class ProfileInfoActivity extends AppCompatActivity {
         });
     }
 
+    //이미 팔로잉 중
     public void isFollowingTrue() {
         binding.tvFollow.setSelected(true);
         binding.tvFollow.setText("팔로잉");
         Log.d("TAG", "로그값");
     }
 
+    //팔로잉 중이 아님
     public void isFollowingFalse() {
         binding.tvFollow.setSelected(false);
         binding.tvFollow.setText("팔로우");
         Log.d("TAG", "로그값2");
+    }
+
+    //usedID만으로 파이어베이스에서 UserInfo 가져와서 세팅하기
+    public void setUserInfo(UserInfo UserInfo, String userID) {
+        DocumentReference docRef = db.collection("users").document(userID);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        UserInfo.add((Map) document.get("UserInfo"));
+                        setUI();
+                    } else {
+                        Log.d("TAG", "No such document");
+                    }
+                } else {
+                    Log.d("TAG", "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
+    //UI설정
+    public void setUI() {
+        binding.tvNickname.setText(userInfo.getUsername()); //닉네임 설정
+        binding.tvNickname.setVisibility(View.VISIBLE);
+
+        Glide.with(this).load(userInfo.getProfileimg()).circleCrop().into(binding.ivProfileImage); //프로필이미지 설정
+        binding.ivProfileImage.setVisibility(View.VISIBLE);
+
+        //지금 팔로우중인지 판단하고 팔로우 버튼 상태를 변경
+        followCounter.isfollow(userInfo, nowUser, context);
+        binding.tvFollow.setVisibility(View.VISIBLE);
+
+        //내 프로필 화면이라면 팔로우 버튼 안보이게
+        if (userInfo.getToken().equals(nowUser.getToken())) {
+            binding.tvFollow.setVisibility(View.GONE);
+        }
     }
 }
