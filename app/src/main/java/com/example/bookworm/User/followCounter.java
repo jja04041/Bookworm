@@ -6,9 +6,13 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.bookworm.Feed.Comments.Comment;
+import com.example.bookworm.ProfileInfoActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -29,6 +33,28 @@ public class followCounter {
 
     public void unfollow(UserInfo userInfo, UserInfo nowuserInfo, Context context) {
         initialize(userInfo, nowuserInfo, -1);
+    }
+
+    //팔로우중인지 판단
+    public void isfollow(UserInfo userInfo, UserInfo nowuserInfo, Context context) {
+        DocumentReference Myref = db.collection("users").document(nowuserInfo.getToken());
+        DocumentReference refFollowing = Myref.collection("following").document(userInfo.getToken());
+        refFollowing.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        ((ProfileInfoActivity) context).isFollowingTrue();
+                    } else {
+                        ((ProfileInfoActivity) context).isFollowingFalse();
+                    }
+                } else {
+                    Log.d("TAG", "get failed with ", task.getException());
+                }
+            }
+        });
+
     }
 
 
