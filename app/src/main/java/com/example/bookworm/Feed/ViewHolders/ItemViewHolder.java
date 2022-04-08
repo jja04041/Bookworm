@@ -20,6 +20,7 @@ import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.Feed.likeCounter;
 import com.example.bookworm.Feed.Comments.subactivity_comment;
 import com.example.bookworm.MainActivity;
+import com.example.bookworm.ProfileInfoActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_result;
@@ -114,6 +115,16 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         }
         binding.tvFeedtext.setText(item.getFeedText());
         setLabel(item.getLabel()); //라벨 세팅
+
+        //프로필을 눌렀을때 그 사람의 프로필 정보 화면으로 이동
+        binding.llProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ProfileInfoActivity.class);
+                intent.putExtra("userinfo", item.getCreator());
+                context.startActivity(intent);
+            }
+        });
 
 
     }
