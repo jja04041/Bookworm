@@ -42,7 +42,6 @@ public class Achievement extends activity_achievement {
 
 
         map.put("userinfo_achievementmap", userinfo.getAchievementmap());
-        fbModule.readData(0, map, userinfo.getToken());
         map.put("userinfo_wormvec", userinfo.getWormvec());
         fbModule.readData(0, map, userinfo.getToken());
 
@@ -60,7 +59,7 @@ public class Achievement extends activity_achievement {
         HashMap<String, Object> map = new HashMap<>();
 
         if (userinfo.getGenre().get(enum_wormtype.공포.value()) == 10
-        || true == userinfo.getAchievementmap().get("공포왕")) {
+        && false == userinfo.getAchievementmap().get("공포왕")) {
 
             ExecuteFB(R.drawable.bw_horror, "공포왕");
 

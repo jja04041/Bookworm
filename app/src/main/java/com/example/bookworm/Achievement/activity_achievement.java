@@ -27,17 +27,14 @@ public class activity_achievement extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_achievement);
 
-
         context = this;
         fbModule = new FBModule(context);
         userinfo = new PersonalD(context).getUserInfo();
 
-
-
-
         init();
         ShowView();
     }
+
 
     private void init() {
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
@@ -47,7 +44,6 @@ public class activity_achievement extends AppCompatActivity {
 
         adapter = new RecyclerViewAdapter();
         recyclerView.setAdapter(adapter);
-
     }
 
     private void getData(int iData) {
@@ -68,7 +64,7 @@ public class activity_achievement extends AppCompatActivity {
 
         }
 
-        ItemData itemData = new ItemData(iData, wormname);
+        ItemData itemData = new ItemData(iData, wormname, context);
         adapter.addItem(itemData);
 
     }
@@ -85,7 +81,4 @@ public class activity_achievement extends AppCompatActivity {
             }
         }
     }
-
-
-
 }
