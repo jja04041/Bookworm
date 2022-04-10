@@ -112,11 +112,14 @@ public class FBModule {
             if (idx == 0) {
                 // 장르 업데이트
                 if (map.get("userinfo_genre") != null) { document.getReference().update("UserInfo.genre", map.get("userinfo_genre")); }
-                // 업적 업데이트
-                else if (map.get("userinfo_achievementmap") != null) {  document.getReference().update("UserInfo.achievementmap", map.get("userinfo_achievementmap")); }
-                // 인벤토리 업데이트
-                else if (map.get("userinfo_wormvec") != null){ document.getReference().update("UserInfo.wormvec", map.get("userinfo_wormvec")); }
-
+                // 업적, 인벤토리 업데이트
+                else if (map.get("userinfo_achievementmap") != null && map.get("userinfo_wormvec") != null) {
+                    document.getReference().update("UserInfo.achievementmap", map.get("userinfo_achievementmap"));
+                    document.getReference().update("UserInfo.wormvec", map.get("userinfo_wormvec"));
+                }
+                else if (map.get("userinfo_wormtype") != null){
+                    document.getReference().update("UserInfo.wormtype", map.get("userinfo_wormtype"));
+                }
                 //회원인 경우, 로그인 처리
                 else {
                     UserInfo userInfo = new UserInfo();

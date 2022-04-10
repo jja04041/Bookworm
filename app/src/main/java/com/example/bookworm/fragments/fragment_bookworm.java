@@ -37,6 +37,8 @@ public class fragment_bookworm extends Fragment {
         View view = inflater.inflate(R.layout.fragment_bookworm, container, false);
 
         iv_bookworm = view.findViewById(R.id.iv_bookworm);
+
+
         btn_Achievement = view.findViewById(R.id.btn_achievement);
 
         btn_Achievement.setOnClickListener(new View.OnClickListener() {
@@ -55,17 +57,11 @@ public class fragment_bookworm extends Fragment {
     public void onResume() {
         super.onResume();
 
-
         current_context = getActivity();
         fbModule = new FBModule(current_context);
-        userinfo = new PersonalD(current_context).getUserInfo(); //저장된 UserInfo값을 가져온다.
+        userinfo = new PersonalD(current_context).getUserInfo();
 
-    }
+        iv_bookworm.setImageResource(userinfo.getWormtype());
 
-
-
-    private void set_wormtype(UserInfo userinfo) {
-
-        // 인벤토리에서 선택한 벌레로 책볼레 프레그먼트에 보여줄 생각
     }
 }
