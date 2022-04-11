@@ -64,7 +64,7 @@ const upload = multer({
 router.post('/upload', upload.single('upload'), (req, res) => {
   try {
     res.status(200).send(imgPath);
-
+    console.log("이미지가 업로드 되었습니다");
   } catch (err) {
 
     console.dir(err.stack);

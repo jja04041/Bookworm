@@ -2,10 +2,11 @@ package com.example.bookworm.Feed.Comments;
 
 import com.example.bookworm.User.UserInfo;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Map;
 
-public class Comment {
+public class Comment implements Serializable {
     //댓글 ID
     private String CommentID;
     //유저 정보
