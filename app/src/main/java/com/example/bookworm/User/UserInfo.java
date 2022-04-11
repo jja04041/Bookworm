@@ -28,6 +28,9 @@ public class UserInfo implements Serializable {
     private ArrayList<String>   likedPost;
     private int wormtype = R.drawable.bw_default;
 
+    private int                 followerCounts;
+    private int                 followingCounts;
+
     private final int enum_size = enum_wormtype.enumsize.value();
 
 
@@ -96,6 +99,9 @@ public class UserInfo implements Serializable {
         this.platform = (String) document.get("platform");
         this.wormtype =Integer.parseInt(String.valueOf(document.get("wormtype")));
 
+        this.followerCounts = Integer.parseInt(String.valueOf(document.get("followerCounts")));
+        this.followingCounts = Integer.parseInt(String.valueOf(document.get("followingCounts")));
+
         this.wormvec = new Vector<>((ArrayList<Integer>)document.get("wormvec"));
         this.genre = new Vector<>((ArrayList<Integer>) document.get("genre"));
         this.achievementmap = new HashMap<>((HashMap<String, Boolean>)document.get("achievementmap"));
@@ -126,6 +132,14 @@ public class UserInfo implements Serializable {
 
     public void setWormtype(int wormtype) {
         this.wormtype = wormtype;
+    }
+
+    public int getFollowerCounts() {
+        return followerCounts;
+    }
+
+    public int getFollowingCounts() {
+        return followingCounts;
     }
 
     public Vector<Integer> getGenre() {
