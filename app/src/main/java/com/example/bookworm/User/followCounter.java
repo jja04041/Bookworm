@@ -67,8 +67,8 @@ public class followCounter {
         db.runTransaction(new Transaction.Function<Void>() {
             @Override
             public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
-                transaction.update(ref, "followerCounts", FieldValue.increment(count));
-                transaction.update(Myref, "followingCounts", FieldValue.increment(count));
+                transaction.update(ref, "UserInfo.followerCounts", FieldValue.increment(count));
+                transaction.update(Myref, "UserInfo.followingCounts", FieldValue.increment(count));
                 if (count == 1) {
                     transaction.set(refFollower, nowuserInfo);
                     transaction.set(refFollowing, userInfo);
