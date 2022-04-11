@@ -22,7 +22,8 @@ import java.util.Map;
 
 public class followCounter {
     FirebaseFirestore db;
-
+    Long current;//현재 팔로워 수
+    Context context;
     public followCounter() {
         db = FirebaseFirestore.getInstance();
     }
@@ -37,6 +38,7 @@ public class followCounter {
 
     //팔로우중인지 판단
     public void isfollow(UserInfo userInfo, UserInfo nowuserInfo, Context context) {
+        this.context=context;
         DocumentReference Myref = db.collection("users").document(nowuserInfo.getToken());
         DocumentReference refFollowing = Myref.collection("following").document(userInfo.getToken());
         refFollowing.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -67,8 +69,10 @@ public class followCounter {
         db.runTransaction(new Transaction.Function<Void>() {
             @Override
             public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
-                transaction.update(ref, "followerCounts", FieldValue.increment(count));
-                transaction.update(Myref, "followingCounts", FieldValue.increment(count));
+                current=transaction.get(ref).getLong("UserInfo.followerCounts");
+                current+=count;
+                transaction.update(ref, "UserInfo.followerCounts",current);
+                transaction.update(Myref, "UserInfo.followingCounts", FieldValue.increment(count));
                 if (count == 1) {
                     transaction.set(refFollower, nowuserInfo);
                     transaction.set(refFollowing, userInfo);
@@ -81,6 +85,7 @@ public class followCounter {
         }).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+                ((ProfileInfoActivity)context).setFollowerCnt(current);
                 Log.d("Success", "Transaction success!");
             }
         }).addOnFailureListener(new OnFailureListener() {

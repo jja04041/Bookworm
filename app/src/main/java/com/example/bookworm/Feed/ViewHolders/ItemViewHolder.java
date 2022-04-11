@@ -94,8 +94,9 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View view) {
                 String userComment=binding.edtComment.getText().toString();
-                Count++;
-                if(userComment!="" && userComment!=null){
+
+                if(!userComment.equals("")&&!userComment.equals(null)){
+                    Count++;
                    setComment(addComment(item.getFeedID()));
                 }
             }
