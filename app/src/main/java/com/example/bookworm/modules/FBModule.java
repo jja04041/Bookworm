@@ -29,6 +29,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -111,11 +112,17 @@ public class FBModule {
             //유저정보 불러오기
             if (idx == 0) {
                 // 장르 업데이트
-                if (map.get("userinfo_genre") != null) { document.getReference().update("UserInfo.genre", map.get("userinfo_genre")); }
+                if (map.get("userinfo_genre") != null) {
+                    document.getReference().update("UserInfo.genre", map.get("userinfo_genre"));
+                }
                 // 업적 업데이트
-                else if (map.get("userinfo_achievementmap") != null) {  document.getReference().update("UserInfo.achievementmap", map.get("userinfo_achievementmap")); }
+                else if (map.get("userinfo_achievementmap") != null) {
+                    document.getReference().update("UserInfo.achievementmap", map.get("userinfo_achievementmap"));
+                }
                 // 인벤토리 업데이트
-                else if (map.get("userinfo_wormvec") != null){ document.getReference().update("UserInfo.wormvec", map.get("userinfo_wormvec")); }
+                else if (map.get("userinfo_wormvec") != null) {
+                    document.getReference().update("UserInfo.wormvec", map.get("userinfo_wormvec"));
+                }
 
                 //회원인 경우, 로그인 처리
                 else {
@@ -175,10 +182,11 @@ public class FBModule {
         if (querySnapshot.isEmpty()) {
             //피드 조회
             if (idx == 1) {
-                if (map.get("FeedID") != null) ((subactivity_comment)context).moduleUpdated(null);
-                else {
+                if (map.get("FeedID") != null) {
+                    ((subactivity_comment) context).moduleUpdated(null);
+                } else {
                     ff = ((fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
-                    ff.moduleUpdated(null); //찾은 피드 목록을 반환
+                    ff.moduleUpdated(null,null); //찾은 피드 목록을 반환
                 }
             }
             if (idx == 2) {
@@ -187,10 +195,27 @@ public class FBModule {
             }
         } else {
             if (idx == 1) {
-                if (map.get("FeedID") != null) ((subactivity_comment)context).moduleUpdated(querySnapshot.getDocuments());
-                else {
+                if (map.get("FeedID") != null) {
+                    ((subactivity_comment) context).moduleUpdated(querySnapshot.getDocuments());
+                } else {
                     ff = ((fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
-                    ff.moduleUpdated(querySnapshot.getDocuments()); //찾은 피드 목록을 반환
+                    List<DocumentSnapshot> documents = querySnapshot.getDocuments();
+                    ArrayList<DocumentSnapshot> data = new ArrayList<>();
+                    final int[] count = {0};
+                    for (DocumentSnapshot document : documents) {
+                        document.getReference().collection("comments").limit(1).orderBy("commentID", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                count[0]++;
+                                List<DocumentSnapshot> shot=task.getResult().getDocuments();
+                                if(shot.size()>0)  data.add(shot.get(0));
+                                else data.add(null);
+                                if (count[0]== documents.size()){
+                                    ff.moduleUpdated(documents,data); //찾은 피드 목록을 반환
+                                }
+                            }
+                        });
+                    }
                 }
             }
             if (idx == 2) {

@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.bookworm.Feed.Comments.Comment;
+import com.example.bookworm.Feed.Comments.commentsCounter;
 import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.Feed.likeCounter;
 import com.example.bookworm.Feed.Comments.subactivity_comment;
@@ -34,6 +37,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+//피드의 뷰홀더
 public class ItemViewHolder extends RecyclerView.ViewHolder {
     LayoutFeedBinding binding;
     UserInfo nowUser;
@@ -42,7 +46,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     int limit = 0;
     Boolean restricted = false;
     Context context;
-
+    long Count=0;
     //생성자를 만든다.
     public ItemViewHolder(@NonNull View itemView, Context context) {
         super(itemView);
@@ -72,20 +76,30 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         Glide.with(itemView).load(user.getProfileimg()).circleCrop().into(binding.ivProfileImage);
         //피드 내용
 
+        //댓글 창 세팅
+        Count=item.getCommentCount();
+        setComment(item.getComment());
         //댓글창을 클릭했을때
         binding.llComments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                int position= getAdapterPosition();
-//                fragment_feed  ff = ((fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
-//                ff.startActivityResult.launch(intent);
-//                intent.putExtra("pos",position);
                 Intent intent = new Intent(context, subactivity_comment.class);
                 intent.putExtra("item", item);
                context.startActivity(intent);
             }
         });
-        binding.tvCommentCount.setText(String.valueOf(item.getComments())); //댓글 수 세팅
+        //댓글 빠르게 달기
+        binding.btnWriteComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String userComment=binding.edtComment.getText().toString();
+                Count++;
+                if(userComment!="" && userComment!=null){
+                   setComment(addComment(item.getFeedID()));
+                }
+            }
+        });
+        binding.tvCommentCount.setText(String.valueOf(item.getCommentCount())); //댓글 수 세팅
         //좋아요 수 세팅
         binding.tvLike.setText(String.valueOf(item.getLikeCount()));
 
@@ -117,7 +131,21 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
 
     }
-
+    private Comment addComment(String FeedID) {
+        Map<String, Object> data = new HashMap<>();
+        //유저정보, 댓글내용, 작성시간
+        Comment comment = new Comment();
+        comment.getData(nowUser, binding.edtComment.getText().toString(), System.currentTimeMillis());
+        data.put("comment", comment);
+        //입력한 댓글 화면에 표시하기
+        new commentsCounter().addCounter(data, context, FeedID);
+        //키보드 내리기
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(binding.edtComment.getWindowToken(), 0);
+        binding.edtComment.clearFocus();
+        binding.edtComment.setText(null);
+        return comment;
+    }
     public void setVisibillity(Boolean check) {
         if (check) binding.feedImage.setVisibility(View.VISIBLE);
         else {
@@ -177,6 +205,24 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
+    public void setComment(Comment comment){
+        if (comment!=null) {
+            setViewV(true);
+            binding.tvCommentCount.setText(String.valueOf(Count));
+            binding.tvCommentContent.setText(comment.getContents());
+            binding.tvCommentNickname.setText(comment.getUserName());
+            binding.tvCommentDate.setText(comment.getMadeDate());
+            Glide.with(binding.getRoot()).load(comment.getUserThumb()).circleCrop().into(binding.ivCommentProfileImage);
+        }else setViewV(false);
+
+    }
+    public void setViewV(Boolean bool){
+        int value = bool?View.VISIBLE:View.GONE;
+        binding.tvCommentDate.setVisibility(value);
+        binding.tvCommentNickname.setVisibility(value);
+        binding.tvCommentContent.setVisibility(value);
+        binding.ivCommentProfileImage.setVisibility(value);
+    }
     //라벨을 동적으로 생성
     private void setLabel(ArrayList<String> label) {
         binding.lllabel.removeAllViews(); //기존에 설정된 값을 초기화 시켜줌.

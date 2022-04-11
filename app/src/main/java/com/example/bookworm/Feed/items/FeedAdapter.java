@@ -14,13 +14,15 @@ import com.example.bookworm.Feed.ViewHolders.ItemViewHolder;
 import com.example.bookworm.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     ArrayList<Feed> FeedList;
     Context context;
 
     public FeedAdapter(ArrayList<Feed> data, Context c) {
-        FeedList = data;
+        FeedList = new ArrayList<>();
+        FeedList.addAll(data);
         context = c;
     }
 
@@ -66,12 +68,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (holder instanceof ItemViewHolder) {
             Feed item = FeedList.get(safePosition);
             if (item.getImgurl() != null) {
-                Log.d(safePosition+"위치",item.getImgurl() );
+                Log.d(safePosition + "위치", item.getImgurl());
                 ((ItemViewHolder) holder).setVisibillity(true);
-            } else {
-                ((ItemViewHolder) holder).setVisibillity(false);
-            }
-            ((ItemViewHolder) holder).setItem(item);
+            } else ((ItemViewHolder) holder).setVisibillity(false);
         } else if (holder instanceof LoadingViewHolder) {
             showLoadingView((LoadingViewHolder) holder, safePosition);
         }
@@ -98,10 +97,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (FeedList.get(pos).getFeedID() != null) return 1;
         else return 2;
     }
-
-    public void deleteLoading() {
-        FeedList.remove(FeedList.size() - 1);
-        // 로딩이 완료되면 프로그레스바를 지움
+    public void setData(ArrayList data){
+        FeedList.clear();
+        FeedList.addAll(data);
     }
 
 }
