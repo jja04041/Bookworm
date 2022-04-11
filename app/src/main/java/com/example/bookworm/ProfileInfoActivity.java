@@ -132,5 +132,9 @@ public class ProfileInfoActivity extends AppCompatActivity {
         if (userInfo.getToken().equals(nowUser.getToken())) {
             binding.tvFollow.setVisibility(View.GONE);
         }
+        binding.tvFollowCount.setText(String.valueOf(userInfo.getFollowerCounts()));
+    }
+    public void setFollowerCnt(Long count){
+        binding.tvFollowCount.setText(String.valueOf(count));
     }
 }

@@ -145,21 +145,26 @@ public class subactivity_comment extends AppCompatActivity {
 
     private void addComment() {
         Map<String, Object> data = new HashMap<>();
-        //유저정보, 댓글내용, 작성시간
-        Comment comment = new Comment();
-        comment.getData(nowUser, binding.edtComment.getText().toString(), System.currentTimeMillis());
-        data.put("comment", comment);
-        //입력한 댓글 화면에 표시하기
-        ArrayList a = new ArrayList(commentList);
-        a.add(1, comment);
-        replaceItem(a);
-        new commentsCounter().addCounter(data, context, item.getFeedID());
-        //키보드 내리기
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(binding.edtComment.getWindowToken(), 0);
-        binding.edtComment.clearFocus();
-        binding.edtComment.setText(null);
-        binding.mRecyclerView.smoothScrollToPosition(0); //맨 위로 포커스를 이동 (본인 댓글 확인을 위함)
+        String string= binding.edtComment.getText().toString();
+
+        if(!string.equals("")&&!string.equals(null)) {
+            //유저정보, 댓글내용, 작성시간
+            Comment comment = new Comment();
+            comment.getData(nowUser, string, System.currentTimeMillis());
+            data.put("comment", comment);
+            //입력한 댓글 화면에 표시하기
+            ArrayList a = new ArrayList(commentList);
+            a.add(1, comment);
+            replaceItem(a);
+            new commentsCounter().addCounter(data, context, item.getFeedID());
+
+            //키보드 내리기
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(binding.edtComment.getWindowToken(), 0);
+            binding.edtComment.clearFocus();
+            binding.edtComment.setText(null);
+            binding.mRecyclerView.smoothScrollToPosition(0); //맨 위로 포커스를 이동 (본인 댓글 확인을 위함)
+        }
     }
 
     public class CommentDeleteCallback extends ItemTouchHelper.SimpleCallback {
