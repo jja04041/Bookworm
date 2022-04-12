@@ -1,39 +1,63 @@
 package com.example.bookworm.Feed.items;
 
+import com.example.bookworm.Feed.Comments.Comment;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.User.UserInfo;
+import com.google.firebase.firestore.Exclude;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class Feed {
-    private Book book=null; // 선택한 책
+public class Feed implements Serializable {
+    private Book book = null; // 선택한 책
     //라벨 Array 추가
-    private String feedID=null; //피드 ID
-    private String imgurl=null; //업로드 이미지 url
+    private String feedID = null; //피드 ID
+    private String imgurl = null; //업로드 이미지 url
     private int userRating; //책볼레 사용자 평점
-    private String feedText=null; //피드의 내용
-    private String date=null; //현재 날짜
+    private long commentCount; //사용자 댓글 수
+    private String feedText = null; //피드의 내용
+    private String date = null; //현재 날짜
     private long likeCount;//좋아요 수
-    private UserInfo Creator=null; //작성자 정보
-    private ArrayList<String> label=null; //라벨 목록
+    private UserInfo Creator = null; //작성자 정보
+    private ArrayList<String> label = null; //라벨 목록
+    @Exclude
+    private Comment comment=null; //최상단의 댓글을 가져옴 -> 서버에 업로드 시엔 이 필드를 제외함. (Exclude Annotation 이용)
 
 
     //comment: 작성자 데이터, 작성한 댓글 내용  {"usertoken":20200, "data": "안녕하세요"} => Comment 객체  => Arraylist<Comment> =[ Comment들 ];
     // 한 피드의 댓글 목록  [{"usertoken":20200, "data": "안녕하세요", add:[{ }]},{"usertoken":20100, "data": "안녕하세요"}]
     public Feed() {
-        this.book=new Book(null);
-        this.Creator=new UserInfo();
+        this.book = new Book(null);
+        this.Creator = new UserInfo();
     }
-    public void setData(Map data){
-        this.feedID=(String)data.get("FeedID");
-        this.book.setBook((Map)data.get("book"));
-        this.Creator.add((Map)data.get("UserInfo"));
-        this.label=(ArrayList<String>) data.get("label");
-        this.likeCount=(long) data.get("likeCount");
-        if(data.get("imgurl")!=null) this.imgurl=(String) data.get("imgurl");
-        this.feedText=(String) data.get("feedText");
-        this.date=(String) data.get("date");
+
+    public void setData(Map Adata, Map Bdata) {
+        setFeedData(Adata);
+        setFeedTopComment(Bdata);
+    }
+
+    private void setFeedData(Map data) {
+        this.feedID = (String) data.get("FeedID");
+        this.book.setBook((Map) data.get("book"));
+        this.Creator.add((Map) data.get("UserInfo"));
+        this.label = (ArrayList<String>) data.get("label");
+        this.commentCount = (long) data.get("commentsCount");
+        this.likeCount = (long) data.get("likeCount");
+        if (data.get("imgurl") != null) this.imgurl = (String) data.get("imgurl");
+        this.feedText = (String) data.get("feedText");
+        this.date = (String) data.get("date");
+    }
+
+    private void setFeedTopComment(Map data) {
+        if (data!=null) {
+            this.comment = new Comment();
+            comment.setData(data);
+        }
+    }
+
+    public Comment getComment() {
+        return comment;
     }
 
     public Book getBook() {
@@ -54,6 +78,10 @@ public class Feed {
 
     public String getFeedText() {
         return feedText;
+    }
+
+    public long getCommentCount() {
+        return commentCount;
     }
 
     public String getDate() {

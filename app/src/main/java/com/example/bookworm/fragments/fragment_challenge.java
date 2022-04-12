@@ -32,6 +32,7 @@ import com.example.bookworm.Challenge.subActivity.subactivity_challenge_challeng
 import com.example.bookworm.Challenge.subActivity.subactivity_challenge_createchallenge;
 import com.example.bookworm.Challenge.items.ChallengeAdapter;
 import com.example.bookworm.Challenge.items.OnChallengeItemClickListener;
+import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.User.UserInfo;
@@ -228,6 +229,7 @@ public class fragment_challenge extends Fragment {
 
     //fbmodule에서 사용하는 함수 -> 검색한 데이터를 전달하여, 화면에 띄워준다. (비동기 처리)
     public void moduleUpdated(List<DocumentSnapshot> a) {
+        int beforesize = 0;
         if (isRefreshing) {
             binding.swiperefresh.setRefreshing(false);
             isRefreshing = false;
@@ -236,6 +238,7 @@ public class fragment_challenge extends Fragment {
             isLoading = false;
             challengeList = new ArrayList<>(); //챌린지를 담는 리스트 생성
         }
+        beforesize=challengeList.size();
         if (a == null && lastVisible == null) {
             challengeList = new ArrayList<>(); //챌린지를 담는 리스트 생성
             initAdapter();
@@ -262,8 +265,9 @@ public class fragment_challenge extends Fragment {
             //만약 더이상 불러오지 못 할 경우
             if (canLoad == false) {
                 isLoading = true;
-                if (page > 1)
-                    challengeAdapter.notifyDataSetChanged(); //이미 불러온 데이터가 있는 경우엔 가져온 데이터 만큼의 범위를 늘려준다.
+                if (page > 1) {
+                    challengeAdapter.notifyItemRangeChanged(beforesize,challengeList.size()-beforesize);
+                }//이미 불러온 데이터가 있는 경우엔 가져온 데이터 만큼의 범위를 늘려준다.
                 else { //없는 경우엔 새로운 어댑터에 데이터를 담아서 띄워준다.
                     initAdapter(); //어댑터 초기화
                     initRecyclerView(); //리사이클러뷰에 띄워주기
@@ -274,7 +278,7 @@ public class fragment_challenge extends Fragment {
                 challengeList.add(new Challenge(null)); //로딩바 표시를 위한 빈 값
                 if (page > 1) {
                     isLoading = false;
-                    challengeAdapter.notifyItemRangeChanged(0, challengeList.size() - 1, null); //데이터 범위 변경
+                    challengeAdapter.notifyItemRangeChanged(beforesize,challengeList.size()-beforesize);
                 } else {
                     initAdapter();//어댑터 초기화
                     initRecyclerView(); //리사이클러뷰에 띄워주기

@@ -18,7 +18,6 @@ public class LoadingActivity extends activity_login {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
-
         Handler mHander = new Handler();
         mHander.postDelayed(new Runnable() {
             @Override

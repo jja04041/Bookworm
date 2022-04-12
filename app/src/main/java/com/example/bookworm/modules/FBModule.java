@@ -10,7 +10,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.bookworm.Challenge.subActivity.subactivity_challenge_challengeinfo;
-import com.example.bookworm.Feed.likeCounter;
+import com.example.bookworm.Feed.Comments.Comment;
+import com.example.bookworm.Feed.Comments.subactivity_comment;
 import com.example.bookworm.Login.activity_login;
 import com.example.bookworm.MainActivity;
 import com.example.bookworm.ProfileSettingActivity;
@@ -27,11 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +37,7 @@ public class FBModule {
     String location[] = {"users", "feed", "challenge"}; //각 함수에서 전달받은 인덱스에 맞는 값을 뽑아냄.
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     Context context;
-    private int LIMIT ;
+    private int LIMIT = 10;
     Task task = null;
     CollectionReference collectionReference;
 
@@ -48,9 +45,11 @@ public class FBModule {
     public FBModule(Context context) {
         this.context = context;
     }
-    public void setLIMIT(int LIMIT){
-        this.LIMIT=LIMIT;
+
+    public void setLIMIT(int LIMIT) {
+        this.LIMIT = LIMIT;
     }
+
     //데이터 읽기
     public void readData(int idx, Map map, String token) {
         collectionReference = db.collection(location[idx]);
@@ -58,15 +57,19 @@ public class FBModule {
         //해당 정보가 있는지 확인(회원 여부 확인)
         //회원정보 검색,챌린지 중복 조회 등 , 토큰: 챌린지(챌린지 명) , 회원정보 검색(회원토큰값)
         if (token != null) task = collectionReference.document(token).get();
-            //피드 표시(토큰
+            //피드 표시(토큰)
         else if (idx == 1) {
             //map객체: 팔로워 목록
-            query = query.orderBy("FeedID");
+            if (map.get("FeedID") != null) {
+                query = collectionReference.document((String) map.get("FeedID")).collection("comments").orderBy("commentID", Query.Direction.DESCENDING);
+            }
+
             if (map.get("lastVisible") != null) {
                 DocumentSnapshot snapshot = (DocumentSnapshot) map.get("lastVisible");
                 query = query.startAfter(snapshot);
             }
-            query=query.limit(LIMIT);
+
+            query = query.limit(LIMIT);
             task = query.get();
         }
         //챌린지 검색
@@ -108,9 +111,15 @@ public class FBModule {
         if (document.exists()) {
             //유저정보 불러오기
             if (idx == 0) {
-                //장르를 업데이트
-                if (map.get("userinfo_genre") != null) {
-                    document.getReference().update("UserInfo.genre", map.get("userinfo_genre"));
+                // 장르 업데이트
+                if (map.get("userinfo_genre") != null) { document.getReference().update("UserInfo.genre", map.get("userinfo_genre")); }
+                // 업적, 인벤토리 업데이트
+                else if (map.get("userinfo_achievementmap") != null && map.get("userinfo_wormvec") != null) {
+                    document.getReference().update("UserInfo.achievementmap", map.get("userinfo_achievementmap"));
+                    document.getReference().update("UserInfo.wormvec", map.get("userinfo_wormvec"));
+                }
+                else if (map.get("userinfo_wormtype") != null){
+                    document.getReference().update("UserInfo.wormtype", map.get("userinfo_wormtype"));
                 }
                 //회원인 경우, 로그인 처리
                 else {
@@ -119,7 +128,11 @@ public class FBModule {
                     ((activity_login) context).signIn(Boolean.FALSE, userInfo);
                 }
             }
+
             //피드 관련
+            if (idx == 1) {
+                db.collection(location[idx]).document((String) map.get("FeedID")).collection("comments").document(((Comment) map.get("comment")).getCommentID()).set(map);
+            }
             //챌린지 관련
             if (idx == 2) {
                 //챌린지 참여용
@@ -165,18 +178,42 @@ public class FBModule {
         fragment_feed ff;
         if (querySnapshot.isEmpty()) {
             //피드 조회
-            if (idx==1){
-                ff = ((fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
-                ff.moduleUpdated(null); //빈값을 반환하여, 찾는 값이 없음을 사용자에게 알림.
+            if (idx == 1) {
+                if (map.get("FeedID") != null) {
+                    ((subactivity_comment) context).moduleUpdated(null);
+                } else {
+                    ff = ((fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
+                    ff.moduleUpdated(null,null); //찾은 피드 목록을 반환
+                }
             }
             if (idx == 2) {
-                    fc = ((fragment_challenge) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("3"));
-                    fc.moduleUpdated(null); //빈값을 반환하여, 찾는 값이 없음을 사용자에게 알림.
+                fc = ((fragment_challenge) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("3"));
+                fc.moduleUpdated(null); //빈값을 반환하여, 찾는 값이 없음을 사용자에게 알림.
             }
         } else {
-            if (idx==1){
-                ff = ((fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
-                ff.moduleUpdated(querySnapshot.getDocuments()); //빈값을 반환하여, 찾는 값이 없음을 사용자에게 알림.
+            if (idx == 1) {
+                if (map.get("FeedID") != null) {
+                    ((subactivity_comment) context).moduleUpdated(querySnapshot.getDocuments());
+                } else {
+                    ff = ((fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
+                    List<DocumentSnapshot> documents = querySnapshot.getDocuments();
+                    ArrayList<DocumentSnapshot> data = new ArrayList<>();
+                    final int[] count = {0};
+                    for (DocumentSnapshot document : documents) {
+                        document.getReference().collection("comments").limit(1).orderBy("commentID", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                count[0]++;
+                                List<DocumentSnapshot> shot=task.getResult().getDocuments();
+                                if(shot.size()>0)  data.add(shot.get(0));
+                                else data.add(null);
+                                if (count[0]== documents.size()){
+                                    ff.moduleUpdated(documents,data); //찾은 피드 목록을 반환
+                                }
+                            }
+                        });
+                    }
+                }
             }
             if (idx == 2) {
                 //챌린지 검색
@@ -199,8 +236,6 @@ public class FBModule {
                 break;
 
             case 1: //피드 작성
-                UserInfo userInfo1 = new UserInfo();
-                userInfo1 = (UserInfo) data.get("UserInfo");
                 db.collection(location[idx]).document((String) data.get("FeedID")).set(data);
                 break;
 

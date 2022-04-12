@@ -2,28 +2,26 @@ const express = require('express'); //express를 사용하기 위함.
 const multer = require('multer'); //이미지 업/다운로드를 위함.
 const fs = require('fs');
 const router = express.Router();
+// const {
+//   createFirebaseToken
+// } = require("../module/firebase/getToken")
 module.exports = router;
 var imgPath = "";
 var Path = "";
-require('dotenv').config({
-  path: path.join(__dirname, '.env')
-});
-const {
-  OAuth2Client
-} = require('google-auth-library');
-const requestMeUrl = 'https://kapi.kakao.com/v2/user/me';
-const request = require('request-promise');
-module.exports = router;
 const {
   initializeApp,
   cert
 } = require('firebase-admin/app');
-const firebaseAdmin = require('firebase-admin');
-
-const serviceAccount = require(path.join(__dirname, 'bookworm-f6973-firebase-adminsdk-lzs4b-a45e20e976.json'));
+const serviceAccount = require('./bookworm-f6973-firebase-adminsdk-lzs4b-a45e20e976.json');
+const {
+  getFirestore,
+  Timestamp,
+  FieldValue
+} = require('firebase-admin/firestore');
 initializeApp({
   credential: cert(serviceAccount)
 });
+const db = getFirestore();
 
 
 //for image 
@@ -66,7 +64,7 @@ const upload = multer({
 router.post('/upload', upload.single('upload'), (req, res) => {
   try {
     res.status(200).send(imgPath);
-
+    console.log("이미지가 업로드 되었습니다");
   } catch (err) {
 
     console.dir(err.stack);
@@ -90,6 +88,71 @@ router.use('/getimage/:data', (req, res) => {
   });
 });
 
-router.get("/", (req, res) => {
-  res.send("hello,World!");
+
+//토큰 관리 
+router.get("/token", (req, res) => {
+  const token = req.query.token;
+  const platform = req.query.platform;
+  if (!token) return res.status(400).send({
+      error: 'There is no token.'
+    })
+    .send({
+      message: 'Access token is a required parameter.'
+    });
+
+  console.log(`Verifying Kakao token: ${token}`);
+  //토큰 생성 
+  if (platform == "kakao") {
+    createFirebaseToken(token, platform).then((firebaseToken) => {
+      console.log(`Returning firebase token to user: ${firebaseToken}`);
+      console.log(firebaseToken);
+    });
+  }
 });
+
+router.get("/",(req,res)=>{
+  res.send("helloworld~");
+});
+
+router.get("/:token", async (req, res) => {
+  var value = req.params.token;
+  checkID(value).then((token) => {
+    res.send(token);
+  });
+});
+
+async function checkID(token) {
+  var ID = token;
+  var find=false;
+  const snapshot = await db.collection('users').get();
+  snapshot.forEach((doc) => {
+    console.log(doc.id,ID,doc.id==ID);
+    if (doc.id==ID) find=true;
+  });
+  return find;
+};
+
+// router.get("/token", async(req, res) => {
+//   const {OAuth2Client} = require('google-auth-library');
+//   const CLIENT_ID=process.env.CLIENT_ID;
+//   const token=req.query.token;
+// const client = new OAuth2Client(CLIENT_ID);
+// async function verify() {
+//   const ticket = await client.verifyIdToken({
+//       idToken: token,
+//       audience: CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
+//       // Or, if multiple clients access the backend:
+//       //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+//   });
+//   const payload = ticket.getPayload();
+//   const userid = payload['sub'];
+//   // If request specified a G Suite domain:
+//   // const domain = payload['hd'];
+// }
+// verify().catch(console.error);
+// const url=`https://oauth2.googleapis.com/tokeninfo?id_token=${token}`;
+// request.get(url,(req,res)=>{
+//   console.log(req);
+//   console.log(res.body);
+// })
+// });

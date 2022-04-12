@@ -1,7 +1,6 @@
 package com.example.bookworm.Feed.ViewHolders;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,7 +9,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,14 +17,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.bookworm.Feed.Comments.Comment;
+import com.example.bookworm.Feed.Comments.commentsCounter;
 import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.Feed.likeCounter;
+import com.example.bookworm.Feed.Comments.subactivity_comment;
+import com.example.bookworm.MainActivity;
+import com.example.bookworm.ProfileInfoActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_result;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.databinding.LayoutFeedBinding;
-import com.example.bookworm.databinding.LayoutFeedNoImageBinding;
+import com.example.bookworm.fragments.fragment_challenge;
+import com.example.bookworm.fragments.fragment_feed;
 import com.example.bookworm.modules.personalD.PersonalD;
 
 import java.util.ArrayList;
@@ -33,6 +38,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+//피드의 뷰홀더
 public class ItemViewHolder extends RecyclerView.ViewHolder {
     LayoutFeedBinding binding;
     UserInfo nowUser;
@@ -41,28 +47,12 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     int limit = 0;
     Boolean restricted = false;
     Context context;
-    Dialog customDialog;
-    ArrayList<Feed> FeedList;
-
+    long Count=0;
     //생성자를 만든다.
-    public ItemViewHolder(@NonNull View itemView, Context context,ArrayList<Feed> list) {
+    public ItemViewHolder(@NonNull View itemView, Context context) {
         super(itemView);
         binding = LayoutFeedBinding.bind(itemView);
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int position = getAdapterPosition();
-                FeedList=list;
-                //리스너 인터페이스 구현
-//                if (position != RecyclerView.NO_POSITION) {
-//                    if (listener != null) {
-////                            listener.onItemClick(ItemViewHolder.this, view, position);
-////                            notifyItemChanged(position);
-//                    }
-//                }
-            }
-        });
-        this.context=context;
+        this.context = context;
         nowUser = new PersonalD(context).getUserInfo();
     }
 
@@ -84,76 +74,123 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         //작성자 UserInfo
         UserInfo user = item.getCreator();
         binding.tvNickname.setText(user.getUsername());
-        Glide.with(itemView).load(user.getProfileimg()).into(binding.ivProfileImage);
+        Glide.with(itemView).load(user.getProfileimg()).circleCrop().into(binding.ivProfileImage);
         //피드 내용
 
+        //댓글 창 세팅
+        Count=item.getCommentCount();
+        setComment(item.getComment());
+        //댓글창을 클릭했을때
+        binding.llComments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, subactivity_comment.class);
+                intent.putExtra("item", item);
+               context.startActivity(intent);
+            }
+        });
+        //댓글 빠르게 달기
+        binding.btnWriteComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String userComment=binding.edtComment.getText().toString();
+
+                if(!userComment.equals("")&&!userComment.equals(null)){
+                    Count++;
+                   setComment(addComment(item.getFeedID()));
+                }
+            }
+        });
+        binding.tvCommentCount.setText(String.valueOf(item.getCommentCount())); //댓글 수 세팅
+        //좋아요 수 세팅
         binding.tvLike.setText(String.valueOf(item.getLikeCount()));
 
-        if (nowUser.getLikedPost().contains(item.getFeedID())) {
-            binding.btnLike.setBackground(context.getDrawable(R.drawable.icon_like_red));
-            binding.btnLike.setTag("pressed");
-            liked = true;
-        } else {
+        try {
+            if (nowUser.getLikedPost().contains(item.getFeedID())) {
+                binding.btnLike.setBackground(context.getDrawable(R.drawable.icon_like_red));
+                liked = true;
+            } else {
+                binding.btnLike.setBackground(context.getDrawable(R.drawable.icon_like));
+                liked = false;
+            }
+        } catch (NullPointerException e) {
             binding.btnLike.setBackground(context.getDrawable(R.drawable.icon_like));
-            binding.btnLike.setTag("depressed");
             liked = false;
         }
         //좋아요 표시 관리
         binding.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                controlLike(item,binding);
+                controlLike(item);
             }
         });
-        if (item.getImgurl() != null)
-            Glide.with(itemView).load(item.getImgurl()).into(binding.feedImage); //프로필 사진 보여줌
-        else binding.feedImage.setVisibility(View.INVISIBLE);
+        //이미지 뷰 정리
+        if (item.getImgurl() != null) {
+            Glide.with(itemView).load(item.getImgurl()).into(binding.feedImage);
+        }
         binding.tvFeedtext.setText(item.getFeedText());
         setLabel(item.getLabel()); //라벨 세팅
+
+        //프로필을 눌렀을때 그 사람의 프로필 정보 화면으로 이동
+        binding.llProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ProfileInfoActivity.class);
+                intent.putExtra("userID", item.getCreator().getToken());
+                context.startActivity(intent);
+            }
+        });
+
+
+    }
+    private Comment addComment(String FeedID) {
+        Map<String, Object> data = new HashMap<>();
+        //유저정보, 댓글내용, 작성시간
+        Comment comment = new Comment();
+        comment.getData(nowUser, binding.edtComment.getText().toString(), System.currentTimeMillis());
+        data.put("comment", comment);
+        //입력한 댓글 화면에 표시하기
+        new commentsCounter().addCounter(data, context, FeedID);
+        //키보드 내리기
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(binding.edtComment.getWindowToken(), 0);
+        binding.edtComment.clearFocus();
+        binding.edtComment.setText(null);
+        return comment;
+    }
+    public void setVisibillity(Boolean check) {
+        if (check) binding.feedImage.setVisibility(View.VISIBLE);
+        else {
+            binding.feedImage.setImageResource(0);
+            binding.feedImage.setVisibility(View.INVISIBLE);
+        }
     }
 
-    private void controlLike(Feed item, Object bind) {
-        LayoutFeedNoImageBinding binding;
-        LayoutFeedBinding binding1;
-        Button btnLike=null;
-        TextView tvLike=null;
-        if (bind instanceof LayoutFeedBinding) {
-            binding1 = (LayoutFeedBinding) bind;
-            btnLike=binding1.btnLike;
-            tvLike=binding1.tvLike;
-        }
-        else if (bind instanceof LayoutFeedNoImageBinding) {
-            binding = (LayoutFeedNoImageBinding) bind;
-            btnLike=binding.btnLike;
-            tvLike=binding.tvLike;
-        }
-
+    private void controlLike(Feed item) {
         if (limit < 5) {
             limit += 1;
             nowUser = new PersonalD(context).getUserInfo();
             strings = nowUser.getLikedPost();
             Map map = new HashMap();
-            Integer likeCount = Integer.parseInt(tvLike.getText().toString());
+            Integer likeCount = Integer.parseInt(binding.tvLike.getText().toString());
 
-            if ((String) btnLike.getTag() == "depressed") {
+            if (!liked) {
                 //현재 좋아요를 누르지 않은 상태
                 likeCount += 1;
                 liked = true;
-                btnLike.setTag("pressed");
                 strings.add(item.getFeedID());
-                btnLike.setBackground(context.getDrawable(R.drawable.icon_like_red));
+                binding.btnLike.setBackground(context.getDrawable(R.drawable.icon_like_red));
             } else {
                 //현재 좋아요를 누른 상태
                 likeCount -= 1;
                 liked = false;
-                btnLike.setTag("depressed");
                 strings.removeAll(Arrays.asList(item.getFeedID()));
                 strings.remove(item.getFeedID());
-                btnLike.setBackground(context.getDrawable(R.drawable.icon_like));
+                binding.btnLike.setBackground(context.getDrawable(R.drawable.icon_like));
             }
             nowUser.setLikedPost(strings);
             map.put("nowUser", nowUser);
-            tvLike.setText(String.valueOf(likeCount));
+            binding.tvLike.setText(String.valueOf(likeCount));
             map.put("liked", liked);
             new PersonalD(context).saveUserInfo(nowUser);
             new likeCounter().updateCounter(map, item.getFeedID());
@@ -180,17 +217,29 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public void showcustomDialog(int position) {
-        customDialog.show(); // 다이얼로그 띄우기
-//        EditText edtComment = customDialog.findViewById(R.id.edtComment);
-        TextView tvCommentCount = customDialog.findViewById(R.id.tvCommentCount);
-        tvCommentCount.setText(FeedList.get(position).getFeedID());
-//        edtComment.setText(FeedList.get(position).getFeedID());
+    public void setComment(Comment comment){
+        if (comment!=null) {
+            setViewV(true);
+            binding.tvCommentCount.setText(String.valueOf(Count));
+            binding.tvCommentContent.setText(comment.getContents());
+            binding.tvCommentNickname.setText(comment.getUserName());
+            binding.tvCommentDate.setText(comment.getMadeDate());
+            Glide.with(binding.getRoot()).load(comment.getUserThumb()).circleCrop().into(binding.ivCommentProfileImage);
+        }else setViewV(false);
 
+    }
+    public void setViewV(Boolean bool){
+        int value = bool?View.VISIBLE:View.GONE;
+        binding.tvCommentDate.setVisibility(value);
+        binding.tvCommentNickname.setVisibility(value);
+        binding.tvCommentContent.setVisibility(value);
+        binding.ivCommentProfileImage.setVisibility(value);
     }
     //라벨을 동적으로 생성
     private void setLabel(ArrayList<String> label) {
-        for (int i = 0; i < label.size(); i++) {
+        binding.lllabel.removeAllViews(); //기존에 설정된 값을 초기화 시켜줌.
+        int idx = label.indexOf("");
+        for (int i = 0; i < idx; i++) {
             //뷰 생성
             TextView tv = new TextView(context);
             tv.setText(label.get(i)); //라벨에 텍스트 삽입

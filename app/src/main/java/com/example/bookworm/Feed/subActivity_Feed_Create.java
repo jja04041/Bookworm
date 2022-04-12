@@ -5,44 +5,27 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.provider.Settings;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
 import android.view.Window;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
-import com.example.bookworm.MainActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_main;
@@ -58,19 +41,14 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
-import org.w3c.dom.Text;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -308,7 +286,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     //서버에 이미지 업로드
     private void upload() {
 
-        FeedID = userInfo.getToken() + "_" + String.valueOf(System.currentTimeMillis()); //사용자 토큰 + 현재 시각을 FeedID로 설정
+        FeedID = String.valueOf(System.currentTimeMillis()) + "_" + userInfo.getToken(); //현재 시각 + 사용자 토큰을 FeedID로 설정
 
         if (uploaded != null) {
             try {
@@ -503,6 +481,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             map.put("label", labelAdd(labelList)); //라벨 리스트
             map.put("date", formatTime); //현재 시간 millis로
             map.put("FeedID", FeedID); //피드 아이디
+            map.put("commentsCount",0);
             map.put("likeCount", 0);
             if (imgUrl != null) map.put("imgurl", imgUrl); //이미지 url
 

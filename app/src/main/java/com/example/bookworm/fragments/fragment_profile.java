@@ -7,17 +7,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.bookworm.Achievement.Achievement;
 import com.example.bookworm.ProfileSettingActivity;
-import com.example.bookworm.R;
 import com.example.bookworm.User.FollowerActivity;
 import com.example.bookworm.User.UserInfo;
-import com.example.bookworm.databinding.FragmentFeedBinding;
 import com.example.bookworm.databinding.FragmentProfileBinding;
 import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.personalD.PersonalD;
@@ -26,10 +23,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class fragment_profile extends Fragment {
-    UserInfo userInfo;
-    FragmentProfileBinding binding;
-    Context current_context;
-    FBModule fbModule;
+
+    private UserInfo userinfo;
+    private Achievement achievement;
+
+    private FragmentProfileBinding binding;
+    private Context current_context;
+    private FBModule fbModule;
 
 
 
@@ -41,7 +41,8 @@ public class fragment_profile extends Fragment {
 
         current_context = getActivity();
         fbModule = new FBModule(current_context);
-        userInfo = new PersonalD(current_context).getUserInfo(); //저장된 UserInfo값을 가져온다.
+        userinfo = new PersonalD(current_context).getUserInfo(); //저장된 UserInfo값을 가져온다.
+        achievement = new Achievement(current_context, fbModule, userinfo);
 
         binding.btnSetting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,7 +92,7 @@ public class fragment_profile extends Fragment {
             }
         });
 
-        Glide.with(this).load(userInfo.getProfileimg()).circleCrop().into(binding.imgFragProfileProfile); //프로필사진 로딩후 삽입.
+        Glide.with(this).load(userinfo.getProfileimg()).circleCrop().into(binding.imgFragProfileProfile); //프로필사진 로딩후 삽입.
 
         return view;
     }
@@ -106,10 +107,12 @@ public class fragment_profile extends Fragment {
     //장르를 세팅하는 함수
     private void setGenre(int idx) {
         //로컬에서 업데이트
-        userInfo.setGenre(idx, current_context);
+        userinfo.setGenre(idx, current_context);
         //로컬 값 변경이후, 서버에 업데이트
         Map map = new HashMap();
-        map.put("userinfo_genre", userInfo.getGenre());
-        fbModule.readData(0, map, userInfo.getToken());
+        map.put("userinfo_genre", userinfo.getGenre());
+        fbModule.readData(0, map, userinfo.getToken());
+
+        achievement.CompleteAchievement(userinfo, current_context);
     }
 }

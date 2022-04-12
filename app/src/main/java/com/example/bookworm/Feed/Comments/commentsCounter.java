@@ -1,53 +1,67 @@
-package com.example.bookworm.Feed;
+package com.example.bookworm.Feed.Comments;
 
 import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.Feed.Comments.Comment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Transaction;
 
 import java.util.Map;
 
-public class likeCounter {
+
+
+public class commentsCounter  {
     FirebaseFirestore db;
-    public likeCounter() {
+    public commentsCounter() {
         db = FirebaseFirestore.getInstance();
     }
 
-    public void updateCounter( Map map, String feedID) {
+
+    public void addCounter(Map map, Context context, String feedID) {
+       initialize(map,feedID,1);
+    }
+    public void removeCounter(Map map, Context context, String feedID){
+        initialize(map,feedID,-1);
+    }
+
+
+    public void initialize(Map map,String feedID,int count){
         final DocumentReference ref = db.collection("feed").document(feedID);
-        final DocumentReference ref2 = db.collection("users").document(((UserInfo) map.get("nowUser")).getToken());
+        Comment comment=(Comment) map.get("comment");
+        final DocumentReference ref2 = ref.collection("comments").document(comment.getCommentID());
 
         db.runTransaction(new Transaction.Function<Void>() {
             @Override
             public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
-                DocumentSnapshot snapshot =transaction.get(ref);
-                long likecount = snapshot.getLong("likeCount");
-                if ((Boolean) map.get("liked")) likecount += 1;
-                else likecount -= 1;
-                transaction.update(ref, "likeCount", likecount).update(ref2, "UserInfo.likedPost", ((UserInfo) map.get("nowUser")).getLikedPost());
+                transaction.update(ref,"commentsCount", FieldValue.increment(count));
+                if (count==1){
+                    transaction.set(ref2,comment);
+                }else transaction.delete(ref2);
                 return null;
             }
         }).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d("Success", "Transaction success!");
-
             }
         }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("Failed", "Transaction failure.", e);
-                    }
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("Failed", "Transaction failure.", e);
+            }
         });
     }
-
 }
+
+
+

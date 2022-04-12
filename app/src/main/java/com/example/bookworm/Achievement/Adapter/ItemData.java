@@ -1,12 +1,16 @@
 package com.example.bookworm.Achievement.Adapter;
 
+import android.content.Context;
+
 public class ItemData {
     int image;
     String title;
+    Context context;
 
-    public ItemData(int image, String title){
+    public ItemData(int image, String title, Context context){
         this.image = image;
         this.title = title;
+        this.context = context;
     }
 
     public int getImage() {
