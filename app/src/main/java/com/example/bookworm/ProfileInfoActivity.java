@@ -32,7 +32,7 @@ public class ProfileInfoActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     UserInfo userInfo, nowUser; //타인 userInfo, 현재 사용자 nowUser
     Context context;
-    String userID = "2091385654";
+    String userID;
     followCounter followCounter = new followCounter();
 
     //자신이나 타인의 프로필을 클릭했을때 나오는 화면
