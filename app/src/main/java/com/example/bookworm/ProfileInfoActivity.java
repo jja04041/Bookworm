@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -44,9 +45,14 @@ public class ProfileInfoActivity extends AppCompatActivity {
         context = this;
 
         //일단 안보였다가 파이어베이스에서 값을 모두 받아오면 보여주는게 UX면에서 좋을거같음
-        binding.tvNickname.setVisibility(View.INVISIBLE);
-        binding.ivProfileImage.setVisibility(View.INVISIBLE);
-        binding.tvFollow.setVisibility(View.INVISIBLE);
+//        binding.tvNickname.setVisibility(View.INVISIBLE);
+//        binding.ivProfileImage.setVisibility(View.INVISIBLE);
+//        binding.tvFollow.setVisibility(View.INVISIBLE);
+
+        //shimmer 적용을 위해 기존 뷰는 일단 안보이게, shimmer는 보이게
+        binding.llResult.setVisibility(View.GONE);
+        binding.SFLoading.startShimmer();
+        binding.SFLoading.setVisibility(View.VISIBLE);
 
         //작성자 UserInfo (userID를 사용해 파이어베이스에서 받아옴)
         userID = getIntent().getStringExtra("userID");
@@ -133,8 +139,16 @@ public class ProfileInfoActivity extends AppCompatActivity {
             binding.tvFollow.setVisibility(View.GONE);
         }
         binding.tvFollowCount.setText(String.valueOf(userInfo.getFollowerCounts()));
+
+        //shimmer 적용 끝내고 shimmer는 안보이게, 기존 뷰는 보이게
+        binding.llResult.setVisibility(View.VISIBLE);
+        binding.SFLoading.stopShimmer();
+        binding.SFLoading.setVisibility(View.GONE);
     }
-    public void setFollowerCnt(Long count){
+
+    public void setFollowerCnt(Long count) {
         binding.tvFollowCount.setText(String.valueOf(count));
     }
+
+
 }
