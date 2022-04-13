@@ -7,10 +7,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,6 +33,7 @@ import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.databinding.LayoutFeedBinding;
 import com.example.bookworm.fragments.fragment_challenge;
 import com.example.bookworm.fragments.fragment_feed;
+import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.personalD.PersonalD;
 
 import java.util.ArrayList;
@@ -47,6 +50,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     int limit = 0;
     Boolean restricted = false;
     Context context;
+    FBModule fbModule = new FBModule(context);
     long Count=0;
     //생성자를 만든다.
     public ItemViewHolder(@NonNull View itemView, Context context) {
@@ -86,6 +90,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View view) {
                 Intent intent = new Intent(context, subactivity_comment.class);
                 intent.putExtra("item", item);
+                intent.putExtra("position", getAdapterPosition());
                context.startActivity(intent);
             }
         });
@@ -141,7 +146,37 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
+        binding.ivFeedMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenu popup= new PopupMenu(context.getApplicationContext(), view);
+                popup.getMenuInflater().inflate(R.menu.feed_menu, popup.getMenu());
 
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        switch (menuItem.getItemId()){
+                            case R.id.menu_modify:
+                                break;
+
+                            case R.id.menu_delete:
+                                fbModule.deleteData(1,item.getFeedID());//서버에서 데이터 삭제
+                                fragment_feed ff = ((fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
+                                int position = getAdapterPosition();
+                                ArrayList<Feed> oldFeed = new ArrayList<>(ff.feedList);
+                                oldFeed.remove(position);
+                                ff.replaceItem(oldFeed);
+                                break;
+
+                                //https://stackoverflow.com/questions/31367599/how-to-update-recyclerview-adapter-data
+                                //https://stackoverflow.com/questions/40584424/simple-android-recyclerview-example/40584425#40584425
+                        }
+                        return false;
+                    }
+                });
+                popup.show();
+            }
+        });
     }
     private Comment addComment(String FeedID) {
         Map<String, Object> data = new HashMap<>();
@@ -250,5 +285,9 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             tv.setLayoutParams(params); //설정값 뷰에 저장
             binding.lllabel.addView(tv); //레이아웃에 뷰 세팅
         }
+    }
+
+    public static void showMenu(){
+
     }
 }

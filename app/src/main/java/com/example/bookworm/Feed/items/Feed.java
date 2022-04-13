@@ -23,6 +23,8 @@ public class Feed implements Serializable {
     private ArrayList<String> label = null; //라벨 목록
     @Exclude
     private Comment comment=null; //최상단의 댓글을 가져옴 -> 서버에 업로드 시엔 이 필드를 제외함. (Exclude Annotation 이용)
+    @Exclude
+    private int position; //피드 수정,삭제시 리사이클러뷰의 포지션을 가져올때 사용
 
 
     //comment: 작성자 데이터, 작성한 댓글 내용  {"usertoken":20200, "data": "안녕하세요"} => Comment 객체  => Arraylist<Comment> =[ Comment들 ];
@@ -98,5 +100,13 @@ public class Feed implements Serializable {
 
     public ArrayList<String> getLabel() {
         return label;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

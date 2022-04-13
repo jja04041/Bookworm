@@ -253,7 +253,11 @@ public class FBModule {
         task.addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                successDelete(idx);
+                if(idx==0){ //회원탈퇴일 경우
+                    successDelete(idx);
+                } else if (idx==1){ //피드삭제의 경우
+
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -262,6 +266,7 @@ public class FBModule {
             }
         });
     }
+
 
 
     private void successDelete(int idx) {

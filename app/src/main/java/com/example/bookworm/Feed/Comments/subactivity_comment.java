@@ -37,6 +37,7 @@ public class subactivity_comment extends AppCompatActivity {
     UserInfo nowUser;//현재 사용자 계정
     final int LIMIT = 10;
     int page = 1;
+    int position;
     FBModule fbModule;
     private Map map;
     CommentAdapter commentAdapter;
@@ -52,6 +53,7 @@ public class subactivity_comment extends AppCompatActivity {
         setContentView(binding.getRoot());
         context = this;
         item = (Feed) getIntent().getSerializableExtra("item");
+        position = (Integer) getIntent().getSerializableExtra("position");
         nowUser = new PersonalD(this).getUserInfo();
         fbModule = new FBModule(context);
         setItems();
@@ -78,6 +80,7 @@ public class subactivity_comment extends AppCompatActivity {
         canLoad = false;
         lastVisible = null;
         commentList = new ArrayList(); //댓글을 담는 리스트 생성
+        item.setPosition(position);
         commentList.add(item);
     }
 
