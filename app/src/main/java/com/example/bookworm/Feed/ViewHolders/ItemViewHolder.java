@@ -76,9 +76,9 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             }
         });
         //작성자 UserInfo
-        UserInfo user = item.getCreator();
-        binding.tvNickname.setText(user.getUsername());
-        Glide.with(itemView).load(user.getProfileimg()).circleCrop().into(binding.ivProfileImage);
+        UserInfo userInfo = item.getCreator();
+        binding.tvNickname.setText(userInfo.getUsername());
+        Glide.with(itemView).load(userInfo.getProfileimg()).circleCrop().into(binding.ivProfileImage);
         //피드 내용
 
         //댓글 창 세팅
@@ -151,6 +151,12 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View view) {
                 PopupMenu popup= new PopupMenu(context.getApplicationContext(), view);
                 popup.getMenuInflater().inflate(R.menu.feed_menu, popup.getMenu());
+
+                //내가 쓴 피드일 경우에만 수정,삭제 버튼이 보이게
+                if (!nowUser.getToken().equals(userInfo.getToken())){
+                    popup.getMenu().findItem(R.id.menu_modify).setVisible(false);
+                    popup.getMenu().findItem(R.id.menu_delete).setVisible(false);
+                }
 
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override

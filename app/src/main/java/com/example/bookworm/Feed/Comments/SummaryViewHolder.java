@@ -24,6 +24,7 @@ import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.databinding.LayoutCommentSummaryBinding;
 import com.example.bookworm.fragments.fragment_feed;
 import com.example.bookworm.modules.FBModule;
+import com.example.bookworm.modules.personalD.PersonalD;
 
 import java.util.ArrayList;
 
@@ -45,9 +46,11 @@ public class SummaryViewHolder extends RecyclerView.ViewHolder {
         Glide.with(context).load(book.getImg_url()).into(binding.feedBookThumb);
         binding.feedBookAuthor.setText(book.getAuthor());
         //프로필 표시
-        UserInfo nowUser=item.getCreator();
-        Glide.with(context).load(nowUser.getProfileimg()).circleCrop().into(binding.ivProfileImage);
-        binding.tvNickname.setText(nowUser.getUsername());
+        UserInfo userInfo=item.getCreator();
+        Glide.with(context).load(userInfo.getProfileimg()).circleCrop().into(binding.ivProfileImage);
+        binding.tvNickname.setText(userInfo.getUsername());
+        //현재 로그인중인 유저
+        UserInfo nowUser = new PersonalD(context).getUserInfo();
         //피드 요약
         binding.tvFeedtext.setText(item.getFeedText());
         if (item.getImgurl() != "")
@@ -56,7 +59,7 @@ public class SummaryViewHolder extends RecyclerView.ViewHolder {
         setLabel(item.getLabel());
         //댓글 표시
 
-        fragment_feed ff = ((fragment_feed) ((MainActivity) fragment_feed.mContext).getSupportFragmentManager().findFragmentByTag("0"));
+//        fragment_feed ff = ((fragment_feed) ((MainActivity) fragment_feed.mContext).getSupportFragmentManager().findFragmentByTag("0"));
 
         //메뉴바
         binding.ivFeedMenu.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +67,12 @@ public class SummaryViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View view) {
                 PopupMenu popup= new PopupMenu(fragment_feed.mContext, view);
                 popup.getMenuInflater().inflate(R.menu.feed_menu, popup.getMenu());
+
+                //내가 쓴 피드일 경우에만 수정,삭제 버튼이 보이게
+                if (!nowUser.getToken().equals(userInfo.getToken())){
+                    popup.getMenu().findItem(R.id.menu_modify).setVisible(false);
+                    popup.getMenu().findItem(R.id.menu_delete).setVisible(false);
+                }
 
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
