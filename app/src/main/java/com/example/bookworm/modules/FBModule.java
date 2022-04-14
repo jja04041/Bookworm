@@ -113,13 +113,14 @@ public class FBModule {
             //유저정보 불러오기
             if (idx == 0) {
                 // 장르 업데이트
-                if (map.get("userinfo_genre") != null) { document.getReference().update("UserInfo.genre", map.get("userinfo_genre")); }
+                if (map.get("userinfo_genre") != null) {
+                    document.getReference().update("UserInfo.genre", map.get("userinfo_genre"));
+                }
                 // 업적, 인벤토리 업데이트
                 else if (map.get("bookworm_achievementmap") != null && map.get("bookworm_wormvec") != null) {
                     document.getReference().update("BookWorm.achievementmap", map.get("bookworm_achievementmap"));
                     document.getReference().update("BookWorm.wormvec", map.get("bookworm_wormvec"));
-                }
-                else if (map.get("bookworm_wormtype") != null){
+                } else if (map.get("bookworm_wormtype") != null) {
                     document.getReference().update("BookWorm.wormtype", map.get("bookworm_wormtype"));
                 }
                 //회원인 경우, 로그인 처리
@@ -127,7 +128,7 @@ public class FBModule {
                     UserInfo userInfo = new UserInfo();
                     BookWorm bookworm = new BookWorm();
                     userInfo.add((Map) document.get("UserInfo"));
-                    bookworm.add((Map)document.get("BookWorm"));
+                    bookworm.add((Map) document.get("BookWorm"));
 
                     ((activity_login) context).signIn(Boolean.FALSE, userInfo, bookworm);
                 }
@@ -187,7 +188,7 @@ public class FBModule {
                     ((subactivity_comment) context).moduleUpdated(null);
                 } else {
                     ff = ((fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
-                    ff.moduleUpdated(null,null); //찾은 피드 목록을 반환
+                    ff.moduleUpdated(null, null); //찾은 피드 목록을 반환
                 }
             }
             if (idx == 2) {
@@ -208,11 +209,11 @@ public class FBModule {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 count[0]++;
-                                List<DocumentSnapshot> shot=task.getResult().getDocuments();
-                                if(shot.size()>0)  data.add(shot.get(0));
+                                List<DocumentSnapshot> shot = task.getResult().getDocuments();
+                                if (shot.size() > 0) data.add(shot.get(0));
                                 else data.add(null);
-                                if (count[0]== documents.size()){
-                                    ff.moduleUpdated(documents,data); //찾은 피드 목록을 반환
+                                if (count[0] == documents.size()) {
+                                    ff.moduleUpdated(documents, data); //찾은 피드 목록을 반환
                                 }
                             }
                         });
@@ -265,9 +266,9 @@ public class FBModule {
         task.addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                if(idx==0){ //회원탈퇴일 경우
+                if (idx == 0) { //회원탈퇴일 경우
                     successDelete(idx);
-                } else if (idx==1){ //피드삭제의 경우
+                } else if (idx == 1) { //피드삭제의 경우
 
                 }
             }
@@ -280,13 +281,17 @@ public class FBModule {
     }
 
 
-
     private void successDelete(int idx) {
         switch (idx) {
             case 0:
                 (((ProfileSettingActivity) context)).moveToLogin();
                 break;
         }
+    }
+
+    public void modifyDate(int idx, Map map) {
+
+
     }
 
 }

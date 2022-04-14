@@ -55,6 +55,13 @@ public class fragment_feed extends Fragment {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     pageRefresh();
                 }
+                if (result.getResultCode() == 26) {
+                    ArrayList newList = new ArrayList(feedList);
+                    Feed item = (Feed) result.getData().getSerializableExtra("modifiedFeed");
+                    newList.remove(item.getPosition());
+                    newList.add(item.getPosition(),item);
+                    replaceItem(newList);
+                }
             });
 
     @Override

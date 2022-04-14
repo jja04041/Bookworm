@@ -1,5 +1,7 @@
 package com.example.bookworm.Feed.Comments;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DiffUtil;
@@ -11,6 +13,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -18,9 +21,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Feed.items.Feed;
+import com.example.bookworm.MainActivity;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.databinding.SubactivityCommentBinding;
+import com.example.bookworm.fragments.fragment_feed;
 import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.personalD.PersonalD;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -45,6 +50,27 @@ public class subactivity_comment extends AppCompatActivity {
     private Boolean isLoading = false, canLoad = true;
     DocumentSnapshot lastVisible = null;
 
+    public ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == 26) {
+                    ArrayList newList = new ArrayList(commentAdapter.commentList);
+                    Feed item = (Feed) result.getData().getSerializableExtra("modifiedFeed");
+                    newList.remove(0);
+                    newList.add(0, item);
+                    replaceItem(newList);
+//                    ((fragment_feed) ((MainActivity) fragment_feed.mContext).getSupportFragmentManager().findFragmentByTag("0")).startActivityResult.launch(getIntent());
+//                    Intent intent = getIntent();
+//                    setResult(20, intent);
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +90,13 @@ public class subactivity_comment extends AppCompatActivity {
                 addComment();
             }
         });
+    }
+
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        setItems();
     }
 
     private void setItems() {
@@ -144,9 +177,9 @@ public class subactivity_comment extends AppCompatActivity {
 
     private void addComment() {
         Map<String, Object> data = new HashMap<>();
-        String string= binding.edtComment.getText().toString();
+        String string = binding.edtComment.getText().toString();
 
-        if(!string.equals("")&&!string.equals(null)) {
+        if (!string.equals("") && !string.equals(null)) {
             //유저정보, 댓글내용, 작성시간
             Comment comment = new Comment();
             comment.getData(nowUser, string, System.currentTimeMillis());
@@ -165,7 +198,6 @@ public class subactivity_comment extends AppCompatActivity {
             binding.mRecyclerView.smoothScrollToPosition(0); //맨 위로 포커스를 이동 (본인 댓글 확인을 위함)
         }
     }
-
 
 
     private void loadData() {

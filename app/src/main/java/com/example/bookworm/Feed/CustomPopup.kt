@@ -1,6 +1,7 @@
 package com.example.bookworm.Feed
 
 import android.content.Context
+import android.content.Intent
 import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
@@ -31,8 +32,22 @@ class CustomPopup(context: Context?, anchor: View?) : PopupMenu(context, anchor)
             var ff: fragment_feed? = (context2 as MainActivity).supportFragmentManager.findFragmentByTag("0") as fragment_feed?
             var oldList: ArrayList<Feed>? = ArrayList(ff!!.feedList)
             when (p0?.itemId) {
-                R.id.menu_modify ->
+                R.id.menu_modify -> {
+                    //현재 화면이 댓글 화면이라면
+                    if (context is subactivity_comment) {
+                        var intent: Intent? = Intent(context, subActivity_Feed_Modify::class.java)
+                        intent?.putExtra("Feed",item)
+                        (context as (subactivity_comment)).startActivityResult.launch(intent)
+                    }
+                    //현재 화면이 피드 화면이라면
+                    else {
+                        var intent: Intent? = Intent(context, subActivity_Feed_Modify::class.java)
+                        intent?.putExtra("Feed",item)
+                        ff.startActivityResult.launch(intent)//이렇게 하면 피드에서 값 세팅은 될지 모르겠지만,,,
+
+                    }
                     return true
+                }
                 R.id.menu_delete -> {
                     fbModule!!.deleteData(1, item!!.feedID) //삭제
                     oldList?.removeAt(pos)

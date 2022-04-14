@@ -47,7 +47,7 @@ public class SummaryViewHolder extends RecyclerView.ViewHolder {
         Glide.with(context).load(book.getImg_url()).into(binding.feedBookThumb);
         binding.feedBookAuthor.setText(book.getAuthor());
         //프로필 표시
-        UserInfo userInfo=item.getCreator();
+        UserInfo userInfo = item.getCreator();
         Glide.with(context).load(userInfo.getProfileimg()).circleCrop().into(binding.ivProfileImage);
         binding.tvNickname.setText(userInfo.getUsername());
         //현재 로그인중인 유저
@@ -64,8 +64,8 @@ public class SummaryViewHolder extends RecyclerView.ViewHolder {
         binding.ivFeedMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CustomPopup popup1=new CustomPopup(context ,view);
-                popup1.setItems(fragment_feed.mContext,fbModule,item);
+                CustomPopup popup1 = new CustomPopup(context, view);
+                popup1.setItems(fragment_feed.mContext, fbModule, item);
                 popup1.setVisible(nowUser.getToken().equals(userInfo.getToken()));
                 popup1.setOnMenuItemClickListener(popup1);
                 popup1.show();

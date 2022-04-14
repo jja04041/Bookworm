@@ -41,8 +41,16 @@ public class Feed implements Serializable {
 
     private void setFeedData(Map data) {
         this.feedID = (String) data.get("FeedID");
-        this.book.setBook((Map) data.get("book"));
-        this.Creator.add((Map) data.get("UserInfo"));
+        if(data.get("book") instanceof Map){
+            this.book.setBook((Map) data.get("book"));
+        }else{
+            this.book = (Book) data.get("book");//피드 수정일경우 맵객체가 아닌 북객체가 들어오기 때문
+        }
+        if(data.get("UserInfo") instanceof Map){
+            this.Creator.add((Map) data.get("UserInfo"));
+        }else {
+            this.Creator = (UserInfo) data.get("UserInfo");
+        }
         this.label = (ArrayList<String>) data.get("label");
         this.commentCount = (long) data.get("commentsCount");
         this.likeCount = (long) data.get("likeCount");
