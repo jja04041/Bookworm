@@ -66,6 +66,7 @@ public class SummaryViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View view) {
                 CustomPopup popup1=new CustomPopup(context ,view);
                 popup1.setItems(fragment_feed.mContext,fbModule,item);
+                popup1.setVisible(nowUser.getToken().equals(userInfo.getToken()));
                 popup1.setOnMenuItemClickListener(popup1);
                 popup1.show();
             }

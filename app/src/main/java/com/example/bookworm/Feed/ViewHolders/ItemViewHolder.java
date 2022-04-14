@@ -150,10 +150,12 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         binding.ivFeedMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 item.setPosition(getAdapterPosition());
                 CustomPopup popup1 = new CustomPopup(context, view);
                 popup1.setItems(context, fbModule, item);
                 popup1.setOnMenuItemClickListener(popup1);
+                popup1.setVisible(nowUser.getToken().equals(userInfo.getToken()));
                 popup1.show();
             }
         });

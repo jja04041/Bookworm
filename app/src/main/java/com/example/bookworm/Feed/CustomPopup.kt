@@ -16,19 +16,20 @@ class CustomPopup(context: Context?, anchor: View?) : PopupMenu(context, anchor)
     var context2: Context? = null //
     var fbModule: FBModule? = null
     var layout: Int = R.menu.feed_menu
-    var item: Feed?=null
+    var item: Feed? = null
 
-    fun setItems(context: Context,fbModule: FBModule,feed :Feed) {
+    fun setItems(context: Context, fbModule: FBModule, feed: Feed) {
         this.fbModule = fbModule
-        this.context2=context
-        this.item=feed
+        this.context2 = context
+        this.item = feed
         this.menuInflater.inflate(layout, this.menu) //레이아웃에 inflate
     }
+
     override fun onMenuItemClick(p0: MenuItem?): Boolean {
         if (layout == R.menu.feed_menu) {
-            var pos:Int=item!!.position
-            var ff: fragment_feed?= (context2 as MainActivity).supportFragmentManager.findFragmentByTag("0") as fragment_feed?
-            var oldList:ArrayList<Feed>?=ArrayList(ff!!.feedList)
+            var pos: Int = item!!.position
+            var ff: fragment_feed? = (context2 as MainActivity).supportFragmentManager.findFragmentByTag("0") as fragment_feed?
+            var oldList: ArrayList<Feed>? = ArrayList(ff!!.feedList)
             when (p0?.itemId) {
                 R.id.menu_modify ->
                     return true
@@ -36,12 +37,18 @@ class CustomPopup(context: Context?, anchor: View?) : PopupMenu(context, anchor)
                     fbModule!!.deleteData(1, item!!.feedID) //삭제
                     oldList?.removeAt(pos)
                     ff.replaceItem(oldList)
-                    if(context is subactivity_comment) (context as subactivity_comment).finish()
+                    //만약 댓글을 모아보는 액티비티(subactivity_comment)에 있는 경우, 해당 액티비티를 종료
+                    if (context is subactivity_comment) (context as subactivity_comment).finish()
                 }
                 else -> return true
             }
         }
         return false;
+    }
+
+    fun setVisible(boolean: Boolean) {
+        this.menu.findItem(R.id.menu_delete).setVisible(boolean)
+        this.menu.findItem(R.id.menu_modify).setVisible(boolean)
     }
 
 

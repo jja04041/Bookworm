@@ -44,7 +44,6 @@ public class subactivity_comment extends AppCompatActivity {
     ArrayList commentList;
     private Boolean isLoading = false, canLoad = true;
     DocumentSnapshot lastVisible = null;
-    CommentDeleteCallback deleteCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,9 +126,6 @@ public class subactivity_comment extends AppCompatActivity {
     //리사이클러뷰를 초기화
     private void initRecyclerView() {
         binding.mRecyclerView.setAdapter(commentAdapter);
-        deleteCallback = new CommentDeleteCallback();
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(deleteCallback);
-        itemTouchHelper.attachToRecyclerView(binding.mRecyclerView);
         initScrollListener(); //무한스크롤
     }
 
@@ -170,51 +166,7 @@ public class subactivity_comment extends AppCompatActivity {
         }
     }
 
-    public class CommentDeleteCallback extends ItemTouchHelper.SimpleCallback {
-        public CommentDeleteCallback() {
-            super(0, ItemTouchHelper.END);
 
-        }
-
-        @Override
-        public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-            return 0;
-        }
-
-        @Override
-        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-            return false;
-        }
-
-        @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            int position = viewHolder.getAdapterPosition();
-            if (!(viewHolder instanceof SummaryViewHolder)) {
-                new AlertDialog.Builder(context)
-                        .setMessage("댓글을 삭제하시겠습니까? ")
-                        .setPositiveButton("네", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                ArrayList arr = new ArrayList(commentList);
-                                Comment comment = (Comment) arr.get(position);
-                                Map map = new HashMap();
-                                map.put("comment", comment);
-                                new commentsCounter().removeCounter(map, context, item.getFeedID());
-                                arr.remove(position);
-                                replaceItem(arr);
-                            }
-                        })
-                        .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).show();
-
-            }
-        }
-    }
 
     private void loadData() {
         map = new HashMap();
