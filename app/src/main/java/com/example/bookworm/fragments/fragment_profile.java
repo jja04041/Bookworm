@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Achievement.Achievement;
+import com.example.bookworm.Bw.BookWorm;
 import com.example.bookworm.ProfileSettingActivity;
 import com.example.bookworm.User.FollowerActivity;
 import com.example.bookworm.User.UserInfo;
@@ -25,6 +26,7 @@ import java.util.Map;
 public class fragment_profile extends Fragment {
 
     private UserInfo userinfo;
+    private BookWorm bookworm;
     private Achievement achievement;
 
     private FragmentProfileBinding binding;
@@ -42,7 +44,9 @@ public class fragment_profile extends Fragment {
         current_context = getActivity();
         fbModule = new FBModule(current_context);
         userinfo = new PersonalD(current_context).getUserInfo(); //저장된 UserInfo값을 가져온다.
-        achievement = new Achievement(current_context, fbModule, userinfo);
+        bookworm = new PersonalD(current_context).getBookworm();
+
+        achievement = new Achievement(current_context, fbModule, userinfo, bookworm);
 
         binding.btnSetting.setOnClickListener(new View.OnClickListener() {
             @Override

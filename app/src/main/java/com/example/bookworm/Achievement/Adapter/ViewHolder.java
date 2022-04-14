@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookworm.Achievement.Listener.OnViewHolderItemClickListener;
+import com.example.bookworm.Bw.BookWorm;
 import com.example.bookworm.R;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.modules.FBModule;
@@ -28,6 +29,7 @@ public class ViewHolder extends  RecyclerView.ViewHolder  {
     Button btnsetworm;
     LinearLayout linearlayout;
     UserInfo userinfo;
+    BookWorm bookworm;
     FBModule fbModule;
 
     OnViewHolderItemClickListener onViewHolderItemClickListener;
@@ -57,7 +59,7 @@ public class ViewHolder extends  RecyclerView.ViewHolder  {
         iv_1.setImageResource(itemData.getImage());
         iv_2.setImageResource(itemData.getImage());
 
-        userinfo = new PersonalD(itemData.context).getUserInfo();
+        bookworm = new PersonalD(itemData.context).getBookworm();
 
         btnsetworm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,12 +67,12 @@ public class ViewHolder extends  RecyclerView.ViewHolder  {
 
                 HashMap<String, Object> map = new HashMap<>();
 
-                userinfo.setWormtype(itemData.image);
+                bookworm.setWormtype(itemData.image);
                 fbModule = new FBModule(itemData.context);
 
-                map.put("userinfo_wormtype", userinfo.getWormtype());
-                fbModule.readData(0, map, userinfo.getToken());
-                new PersonalD(itemData.context).saveUserInfo(userinfo);
+                map.put("bookworm_wormtype", bookworm.getWormtype());
+                fbModule.readData(0, map, bookworm.getToken());
+                new PersonalD(itemData.context).saveBookworm(bookworm);
                 ((Activity)itemData.context).finish();
 
 
