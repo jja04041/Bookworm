@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Feed.Comments.Comment;
 import com.example.bookworm.Feed.Comments.commentsCounter;
-import com.example.bookworm.Feed.CustomPopup;
 import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.Feed.likeCounter;
 import com.example.bookworm.Feed.Comments.subactivity_comment;
@@ -77,9 +76,9 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             }
         });
         //작성자 UserInfo
-        UserInfo user = item.getCreator();
-        binding.tvNickname.setText(user.getUsername());
-        Glide.with(itemView).load(user.getProfileimg()).circleCrop().into(binding.ivProfileImage);
+        UserInfo userInfo = item.getCreator();
+        binding.tvNickname.setText(userInfo.getUsername());
+        Glide.with(itemView).load(userInfo.getProfileimg()).circleCrop().into(binding.ivProfileImage);
         //피드 내용
 
         //댓글 창 세팅

@@ -1,7 +1,9 @@
 package com.example.bookworm.Feed.Comments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.bookworm.Feed.CustomPopup;
 import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.MainActivity;
 import com.example.bookworm.ProfileModifyActivity;
@@ -44,9 +45,11 @@ public class SummaryViewHolder extends RecyclerView.ViewHolder {
         Glide.with(context).load(book.getImg_url()).into(binding.feedBookThumb);
         binding.feedBookAuthor.setText(book.getAuthor());
         //프로필 표시
-        UserInfo nowUser=item.getCreator();
-        Glide.with(context).load(nowUser.getProfileimg()).circleCrop().into(binding.ivProfileImage);
-        binding.tvNickname.setText(nowUser.getUsername());
+        UserInfo userInfo=item.getCreator();
+        Glide.with(context).load(userInfo.getProfileimg()).circleCrop().into(binding.ivProfileImage);
+        binding.tvNickname.setText(userInfo.getUsername());
+        //현재 로그인중인 유저
+        UserInfo nowUser = new PersonalD(context).getUserInfo();
         //피드 요약
         binding.tvFeedtext.setText(item.getFeedText());
         if (item.getImgurl() != "")
