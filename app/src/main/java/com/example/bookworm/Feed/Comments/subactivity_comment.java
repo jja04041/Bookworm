@@ -54,14 +54,16 @@ public class subactivity_comment extends AppCompatActivity {
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == 26) {
-                    ArrayList newList = new ArrayList(commentAdapter.commentList);
+                    ArrayList newList = new ArrayList(commentList);
                     Feed item = (Feed) result.getData().getSerializableExtra("modifiedFeed");
                     newList.remove(0);
                     newList.add(0, item);
                     replaceItem(newList);
-//                    ((fragment_feed) ((MainActivity) fragment_feed.mContext).getSupportFragmentManager().findFragmentByTag("0")).startActivityResult.launch(getIntent());
-//                    Intent intent = getIntent();
-//                    setResult(20, intent);
+                    fragment_feed ff=((fragment_feed) ((MainActivity) fragment_feed.mContext).getSupportFragmentManager().findFragmentByTag("0"));
+                    ArrayList list= new ArrayList(ff.feedList);
+                    list.remove(item.getPosition());
+                    list.add(item.getPosition(),item);
+                    ff.replaceItem(list);
                 }
             });
 
@@ -76,10 +78,10 @@ public class subactivity_comment extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = SubactivityCommentBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        context = this;
         item = (Feed) getIntent().getSerializableExtra("item");
         position = (Integer) getIntent().getSerializableExtra("position");
         nowUser = new PersonalD(this).getUserInfo();
+        context=this;
         fbModule = new FBModule(context);
         setItems();
         binding.mRecyclerView.setNestedScrollingEnabled(false);
@@ -92,16 +94,8 @@ public class subactivity_comment extends AppCompatActivity {
         });
     }
 
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        setItems();
-    }
-
     private void setItems() {
         initComment();
-
         loadData();
     }
 
@@ -221,8 +215,10 @@ public class subactivity_comment extends AppCompatActivity {
         } else {
             if (page == 1) {
                 isLoading = false;
-                commentList = new ArrayList(); //챌린지를 담는 리스트 생성
-                commentList.add(item);
+                if(commentList.size()<1) {
+                    commentList = new ArrayList(); //챌린지를 담는 리스트 생성
+                    commentList.add(item);
+                }
             }
             //가져온 데이터를 for문을 이용하여, feed리스트에 차곡차곡 담는다.
             try {

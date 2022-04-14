@@ -37,7 +37,7 @@ public class SummaryViewHolder extends RecyclerView.ViewHolder {
     public SummaryViewHolder(@NonNull View itemView, Context context) {
         super(itemView);
         binding = LayoutCommentSummaryBinding.bind(itemView);
-        this.context = context;
+        this.context = context; //subComment의 context  =>
     }
 
     public void setItem(Feed item) {
