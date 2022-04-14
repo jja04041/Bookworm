@@ -114,6 +114,8 @@ router.get("/",(req,res)=>{
   res.send("helloworld~");
 });
 
+
+//가입이 되어있는지 확인 
 router.get("/:token", async (req, res) => {
   var value = req.params.token;
   checkID(value).then((token) => {
@@ -126,7 +128,6 @@ async function checkID(token) {
   var find=false;
   const snapshot = await db.collection('users').get();
   snapshot.forEach((doc) => {
-    console.log(doc.id,ID,doc.id==ID);
     if (doc.id==ID) find=true;
   });
   return find;

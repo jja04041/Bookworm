@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Feed.Comments.Comment;
 import com.example.bookworm.Feed.Comments.commentsCounter;
+import com.example.bookworm.Feed.CustomPopup;
 import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.Feed.likeCounter;
 import com.example.bookworm.Feed.Comments.subactivity_comment;
@@ -149,35 +150,15 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         binding.ivFeedMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PopupMenu popup= new PopupMenu(context.getApplicationContext(), view);
-                popup.getMenuInflater().inflate(R.menu.feed_menu, popup.getMenu());
-
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        switch (menuItem.getItemId()){
-                            case R.id.menu_modify:
-                                break;
-
-                            case R.id.menu_delete:
-                                fbModule.deleteData(1,item.getFeedID());//서버에서 데이터 삭제
-                                fragment_feed ff = ((fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
-                                int position = getAdapterPosition();
-                                ArrayList<Feed> oldFeed = new ArrayList<>(ff.feedList);
-                                oldFeed.remove(position);
-                                ff.replaceItem(oldFeed);
-                                break;
-
-                                //https://stackoverflow.com/questions/31367599/how-to-update-recyclerview-adapter-data
-                                //https://stackoverflow.com/questions/40584424/simple-android-recyclerview-example/40584425#40584425
-                        }
-                        return false;
-                    }
-                });
-                popup.show();
+                item.setPosition(getAdapterPosition());
+                CustomPopup popup1 = new CustomPopup(context, view);
+                popup1.setItems(context, fbModule, item);
+                popup1.setOnMenuItemClickListener(popup1);
+                popup1.show();
             }
         });
     }
+
     private Comment addComment(String FeedID) {
         Map<String, Object> data = new HashMap<>();
         //유저정보, 댓글내용, 작성시간

@@ -29,6 +29,7 @@ import com.example.bookworm.Feed.subActivity_Feed_Create;
 import com.example.bookworm.databinding.LayoutTopbarBinding;
 import com.example.bookworm.modules.FBModule;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firestore.v1.Precondition;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +41,7 @@ public class fragment_feed extends Fragment {
     public FeedAdapter feedAdapter;
     private final int LIMIT = 5;
     public ArrayList<Feed> feedList;
-    public static Context mContext;
+    public  static Context mContext;
     private DocumentSnapshot lastVisible; //마지막에 가져온 값 부터 추가로 가져올 수 있도록 함.
     private Map map;
     private FBModule fbModule;

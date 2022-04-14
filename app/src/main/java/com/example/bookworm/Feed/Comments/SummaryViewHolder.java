@@ -1,9 +1,7 @@
 package com.example.bookworm.Feed.Comments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.bookworm.Feed.CustomPopup;
 import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.MainActivity;
 import com.example.bookworm.ProfileModifyActivity;
@@ -56,36 +55,14 @@ public class SummaryViewHolder extends RecyclerView.ViewHolder {
         setLabel(item.getLabel());
         //댓글 표시
 
-        fragment_feed ff = ((fragment_feed) ((MainActivity) fragment_feed.mContext).getSupportFragmentManager().findFragmentByTag("0"));
-
         //메뉴바
         binding.ivFeedMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PopupMenu popup= new PopupMenu(fragment_feed.mContext, view);
-                popup.getMenuInflater().inflate(R.menu.feed_menu, popup.getMenu());
-
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        switch (menuItem.getItemId()){
-                            case R.id.menu_modify:
-                                break;
-
-                            case R.id.menu_delete:
-                                fbModule.deleteData(1,item.getFeedID());
-                                fragment_feed ff = ((fragment_feed) ((MainActivity) fragment_feed.mContext).getSupportFragmentManager().findFragmentByTag("0"));
-                                int position = item.getPosition();
-                                ArrayList<Feed> oldFeed = new ArrayList<>(ff.feedList);
-                                oldFeed.remove(position);
-                                ff.replaceItem(oldFeed);
-                                ((subactivity_comment)context).finish();
-                                break;
-                        }
-                        return false;
-                    }
-                });
-                popup.show();
+                CustomPopup popup1=new CustomPopup(context ,view);
+                popup1.setItems(fragment_feed.mContext,fbModule,item);
+                popup1.setOnMenuItemClickListener(popup1);
+                popup1.show();
             }
         });
     }

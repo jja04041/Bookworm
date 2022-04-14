@@ -13,11 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Feed.items.Feed;
+import com.example.bookworm.MainActivity;
 import com.example.bookworm.ProfileInfoActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.databinding.LayoutCommentItemBinding;
 import com.example.bookworm.databinding.LayoutCommentSummaryBinding;
+import com.example.bookworm.fragments.fragment_feed;
 
 import java.util.ArrayList;
 
