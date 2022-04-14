@@ -22,7 +22,7 @@ class CustomPopup(context: Context?, anchor: View?) : PopupMenu(context, anchor)
         this.fbModule = fbModule
         this.context2=context
         this.item=feed
-        this.menuInflater.inflate(layout, this.menu)
+        this.menuInflater.inflate(layout, this.menu) //레이아웃에 inflate
     }
     override fun onMenuItemClick(p0: MenuItem?): Boolean {
         if (layout == R.menu.feed_menu) {
@@ -36,7 +36,7 @@ class CustomPopup(context: Context?, anchor: View?) : PopupMenu(context, anchor)
                     fbModule!!.deleteData(1, item!!.feedID) //삭제
                     oldList?.removeAt(pos)
                     ff.replaceItem(oldList)
-                    if(context is subactivity_comment ) (context as subactivity_comment).finish()
+                    if(context is subactivity_comment) (context as subactivity_comment).finish()
                 }
                 else -> return true
             }
