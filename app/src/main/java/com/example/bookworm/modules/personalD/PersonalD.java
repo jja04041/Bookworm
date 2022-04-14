@@ -26,6 +26,15 @@ public class PersonalD {
         editor.commit();
     }
 
+    public void saveBookworm(BookWorm bookworm){
+        SharedPreferences pref = context.getSharedPreferences("bookworm", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        Gson gson = new Gson();
+        String strbookworm = gson.toJson(bookworm, BookWorm.class);
+        editor.putString("key_bookworm", strbookworm);
+        editor.commit();
+    }
+
     //데이터 출력을 위해서
     public UserInfo getUserInfo(){
         SharedPreferences pref = context.getSharedPreferences("user", MODE_PRIVATE);
@@ -38,6 +47,19 @@ public class PersonalD {
         } catch (JSONException e) {
         }
         return userInfo;
+    }
+
+    public BookWorm getBookworm(){
+        SharedPreferences pref = context.getSharedPreferences("bookworm", MODE_PRIVATE);
+        Gson gson = new GsonBuilder().create();
+        String key_bookworm = pref.getString("key_bookworm", null);
+        BookWorm bookWorm=null;
+        try {
+            JSONObject json = new JSONObject(key_bookworm);
+            bookWorm = gson.fromJson(json.toString(), BookWorm.class);
+        } catch (JSONException e) {
+        }
+        return bookWorm;
     }
 
 }
