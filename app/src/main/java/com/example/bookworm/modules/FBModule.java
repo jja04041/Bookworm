@@ -202,7 +202,7 @@ public class FBModule {
                 } else {
                     ff = ((fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
                     List<DocumentSnapshot> documents = querySnapshot.getDocuments();
-                    ArrayList<DocumentSnapshot> data = new ArrayList<>();
+                    ArrayList<DocumentSnapshot> data = new ArrayList<>(documents);
                     final int[] count = {0};
                     for (DocumentSnapshot document : documents) {
                         document.getReference().collection("comments").limit(1).orderBy("commentID", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -210,8 +210,10 @@ public class FBModule {
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 count[0]++;
                                 List<DocumentSnapshot> shot = task.getResult().getDocuments();
-                                if (shot.size() > 0) data.add(shot.get(0));
-                                else data.add(null);
+                                int pos = documents.indexOf(document); //for문으로 돌린 문서에 맞는 위치에 데이터를 세팅할 수 있도록 하기 위하여 위치값을 미리 가진다.
+                                //해당 위치에 데이터를 세팅한다.
+                                if (shot.size() > 0) data.set(pos, shot.get(0));
+                                else data.set(pos, null);
                                 if (count[0] == documents.size()) {
                                     ff.moduleUpdated(documents, data); //찾은 피드 목록을 반환
                                 }
