@@ -1,5 +1,6 @@
 package com.example.bookworm.User;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,12 +17,15 @@ public class FollowerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_follower);
-
+        Intent intent=getIntent();
+        String token = intent.getStringExtra("token");
+        int selected= intent.getIntExtra("page",0);
         viewPager = findViewById(R.id.viewpager);
-        ViewpagerAdapter adapter = new ViewpagerAdapter(getSupportFragmentManager());
+        ViewpagerAdapter adapter = new ViewpagerAdapter(getSupportFragmentManager(),token);
         viewPager.setAdapter(adapter);
 
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.getTabAt(selected).select();
     }
 }

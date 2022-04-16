@@ -25,6 +25,7 @@ import com.example.bookworm.Challenge.items.Challenge;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.databinding.SubactivityChallengeChallengeinfoBinding;
 import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.personalD.PersonalD;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -47,11 +48,7 @@ import java.util.Map;
 
 public class subactivity_challenge_challengeinfo extends AppCompatActivity {
     UserInfo userInfo;
-    Button btn_back, btn_join;
-    TextView tv_bookname, tv_challenge_end, tv_Dday, tv_challenge_current, tv_challenge_max, tv_end_date, tv_creator, tv_current_participants, tv_challenge_description;
-    FrameLayout board;
-    ProgressBar progressBar;
-    ImageView Thumbnail;
+    SubactivityChallengeChallengeinfoBinding binding;
     Challenge challenge;
     Context mContext;
     private Map sendMap;
@@ -60,13 +57,13 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.subactivity_challenge_challengeinfo);
-
+        binding=SubactivityChallengeChallengeinfoBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         ActivityInit(); //변수 초기화
         UpdateUI(); // 화면 갱신
 
         //챌린지 참여 버튼을 눌렀을 때
-        btn_join.setOnClickListener(new View.OnClickListener() {
+        binding.btnChallengeJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 checkChallenge();
@@ -74,7 +71,7 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
         });
 
         //원래 화면으로 돌아갈 때 새로고침함.
-        btn_back.setOnClickListener(new View.OnClickListener() {
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setResult(Activity.RESULT_OK);
@@ -93,55 +90,39 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
 
     //변수 초기화
     private void ActivityInit() {
-        btn_back = findViewById(R.id.btnBack);
-        btn_join = findViewById(R.id.btn_challenge_join); // 챌린지 참여 버튼
-        Thumbnail = findViewById(R.id.ivThumbnail); // 썸네일
-        tv_challenge_end = findViewById(R.id.tv_challenge_end); // ~~~~에 종료됨
-        tv_Dday = findViewById(R.id.Dday); // #일 남음
-        tv_challenge_current = findViewById(R.id.tv_Current_participants); // 현재 참여자 #/#
-        tv_challenge_max = findViewById(R.id.tv_max_participants); // 최대 참여자 #/#
-        tv_bookname = findViewById(R.id.tv_challengeinfo_bookname); // 책 제목
-        tv_end_date = findViewById(R.id.tv_challengeinfo_end); // 마감일
-        tv_current_participants = findViewById(R.id.tv_challengeinfo_Current_participants); // 참여자 ##명
-        tv_creator = findViewById(R.id.tv_challengeinfo_creator); // 생성자 닉네임
-        tv_challenge_description = findViewById(R.id.tv_challenge_Description); // 챌린지 설명
-        progressBar = findViewById(R.id.progress); // 현재 인원 프로그레스 바
         mContext = this;
-        board = findViewById(R.id.FL_board); // 인증게시판
         fbModule = new FBModule(mContext);
         sendMap = new HashMap();//fb모듈에 전달할 맵 값
         Intent intent = getIntent();
         //넘겨받은 값 챌린지 객체에 넣음
         challenge = (Challenge) intent.getSerializableExtra("challengeInfo");
         userInfo = new PersonalD(mContext).getUserInfo(); //저장된 UserInfo값을 가져온다.
-
-
     }
 
     //화면 갱신
     private void UpdateUI() {
         //책 썸네일 설정
-        Glide.with(this).load(challenge.getBookThumb()).into(Thumbnail);
-        tv_challenge_end.setText(challenge.getEndDate());
-        tv_Dday.setText(countdday(challenge.getEndDate()));
-        tv_challenge_current.setText(String.valueOf(challenge.getCurrentPart().size())); // 받아온 ArrayList 의 길이를 넣음 (현재 참여 인원 수 )
-        tv_challenge_max.setText(String.valueOf(challenge.getMaxPart()));
-        tv_end_date.setText(challenge.getEndDate());
-        tv_current_participants.setText(String.valueOf(challenge.getCurrentPart().size()));
-        tv_creator.setText(challenge.getMaster());
-        tv_challenge_description.setText(challenge.getChallengeDescription());
+        Glide.with(this).load(challenge.getBookThumb()).into(binding.ivThumbnail);
+        binding.tvChallengeEnd.setText(challenge.getEndDate());
+        binding.tvDday.setText(countdday(challenge.getEndDate()));
+        binding.tvChallengeinfoCurrentParticipants.setText(String.valueOf(challenge.getCurrentPart().size())); // 받아온 ArrayList 의 길이를 넣음 (현재 참여 인원 수 )
+        binding.tvMaxParticipants.setText(String.valueOf(challenge.getMaxPart()));
+        binding.tvChallengeinfoEnd.setText(challenge.getEndDate());
+        binding.tvCurrentParticipants.setText(String.valueOf(challenge.getCurrentPart().size()));
+        binding.tvChallengeinfoCreator.setText(challenge.getMaster());
+        binding.tvChallengeDescription.setText(challenge.getChallengeDescription());
 
-        tv_bookname.setText(challenge.getBookTitle()); // 책 제목
-        tv_bookname.setSingleLine(true);    // 한줄로 표시하기
-        tv_bookname.setEllipsize(TextUtils.TruncateAt.MARQUEE); // 흐르게 만들기
-        tv_bookname.setSelected(true);      // 선택하기
+        binding.tvChallengeinfoBookname.setText(challenge.getBookTitle()); // 책 제목
+        binding.tvChallengeinfoBookname.setSingleLine(true);    // 한줄로 표시하기
+        binding.tvChallengeinfoBookname.setEllipsize(TextUtils.TruncateAt.MARQUEE); // 흐르게 만들기
+        binding.tvChallengeinfoBookname.setSelected(true);      // 선택하기
 
-        progressBar.setProgress(challenge.getCurrentPart().size());//현재인원 설정
-        progressBar.setMax(Integer.parseInt(String.valueOf(challenge.getMaxPart()))); //최대인원 설정
+        binding.progress.setProgress(challenge.getCurrentPart().size());//현재인원 설정
+        binding.progress.setMax(Integer.parseInt(String.valueOf(challenge.getMaxPart()))); //최대인원 설정
 
-        if (tv_Dday.getText() == "종료된 챌린지입니다.") {
-            btn_join.setEnabled(false); // 종료된 챌린지는 참여 버튼 비활성화
-            btn_join.setText("이미 종료된 챌린지입니다.");
+        if (binding.tvDday.getText() == "종료된 챌린지입니다.") {
+            binding.btnChallengeJoin.setEnabled(false); // 종료된 챌린지는 참여 버튼 비활성화
+            binding.btnChallengeJoin.setText("이미 종료된 챌린지입니다.");
         } else {
             //사용자가 이 챌린지에 참여중인지 여부를 판단해서 챌린지 참여 버튼을 활성/비활성 함.
             sendMap.put("check", 0); //fb모듈 함수 중 successRead()에서 분기하기 위함.
@@ -152,7 +133,7 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
     //D-day 계산
     public String countdday(String EndDate) {
         try {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
             Calendar todaCal = Calendar.getInstance(); //오늘날짜 가져오기
             Calendar ddayCal = Calendar.getInstance(); //오늘날짜를 가져와 변경시킴
@@ -204,10 +185,10 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
 
     public void setParticipating(ArrayList<String> CurrentParticipation) {
         //현재 인원 프로그레스 바 설정
-        progressBar.setProgress(CurrentParticipation.size());
-        progressBar.setMax(Integer.parseInt(String.valueOf(challenge.getMaxPart()))); //최대인원 설정
-        tv_challenge_current.setText(String.valueOf(CurrentParticipation.size())); // 프로그레스 바 상단의 현재 참여자 #/#명 설정
-        tv_current_participants.setText(String.valueOf(CurrentParticipation.size())); // 챌린지 상세 정보의 참여자 #명 설정
+        binding.progress.setProgress(CurrentParticipation.size());
+        binding.progress.setMax(Integer.parseInt(String.valueOf(challenge.getMaxPart()))); //최대인원 설정
+        binding.tvCurrentParticipants.setText(String.valueOf(CurrentParticipation.size())); // 프로그레스 바 상단의 현재 참여자 #/#명 설정
+        binding.tvChallengeinfoCurrentParticipants.setText(String.valueOf(CurrentParticipation.size())); // 챌린지 상세 정보의 참여자 #명 설정
         //인원이 가득찬 경우 정원이 찬 챌린지임을 알림 .
         if (challenge.getMaxPart() <= CurrentParticipation.size()) {
             //해당 챌린지가 내가 참여한 챌린지인 경우
@@ -252,12 +233,12 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
 
     //정원이 가득찬 경우 세팅
     private void partFull() {
-        btn_join.setEnabled(false);
-        btn_join.setText("정원이 초과된 챌린지입니다.");
+        binding.btnChallengeJoin.setEnabled(false);
+        binding.btnChallengeJoin.setText("정원이 초과된 챌린지입니다.");
     }
     //참여한 경우 세팅
     private void partJoin() {
-        btn_join.setEnabled(false); //이미 사용자의 토큰이 있다면 (이미 참여한 챌린지라면) 챌린지 참여 버튼 비활성화
-        btn_join.setText("참여중인 챌린지입니다.");
+        binding.btnChallengeJoin.setEnabled(false); //이미 사용자의 토큰이 있다면 (이미 참여한 챌린지라면) 챌린지 참여 버튼 비활성화
+        binding.btnChallengeJoin.setText("참여중인 챌린지입니다.");
     }
 }

@@ -1,18 +1,18 @@
 package com.example.bookworm.User;
 
 import android.content.Context;
-import android.net.Uri;
 import android.util.Log;
 
 import com.example.bookworm.Bw.enum_wormtype;
-import com.example.bookworm.R;
 import com.example.bookworm.modules.personalD.PersonalD;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.firestore.Exclude;
 import com.kakao.usermgmt.response.model.Profile;
 import com.kakao.usermgmt.response.model.UserAccount;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
@@ -20,31 +20,40 @@ import java.util.Vector;
 
 public class UserInfo implements Serializable {
 
-    private String profileimg; // 회원가입시 프로필사진
-    private String username; // 회원가입시 닉네임
-    private String email; // 로그인한 이메일
-    private String platform;
-    private String token;
-    private static enum_wormtype wormtype = enum_wormtype.디폴트;
-
-    private static int enum_size = enum_wormtype.enumsize.value();
+    private String              profileimg; // 회원가입시 프로필사진
+    private String              username; // 회원가입시 닉네임
+    private String              email; // 로그인한 이메일
+    private String              platform;
+    private String              token;
+    private ArrayList<String>   likedPost;
 
 
-    // wormtype을 년별로 저장할 책볼레타입 리스트
-    private static Vector<Integer> wormvec = new Vector<Integer>();
+    private int                 followerCounts;
+    private int                 followingCounts;
 
-    // 이미지 슬라이더의 함수에 사용할 책볼레 이미지 경로 벡터
-    private static Vector<String> wormimgvec = new Vector<String>();
+    private final int enum_size = enum_wormtype.enumsize.value();
+    private HashMap<String, Integer> genre = new HashMap();
+    @Exclude
+    private boolean followed = false;
+
+//    private BookWorm bookworm;
 
 
-    // genre index의 1번 = enum_wormtype의 공포 2번은 추리 .... 이하 동문
-    // 가장 최댓값을 가진 index를 벌레의 종류로 설정할 계획
-    // 가장 최댓값의 index의 번호에 따라 최고 선호 장르를 설정합니다.
-    private Vector<Integer> genre = new Vector<Integer>();
+
+
 
 
     public UserInfo() {
+//        bookworm = new BookWorm();
+//        bookworm.Initbookworm();
+    }
 
+    public boolean isFollowed() {
+        return followed;
+    }
+
+    public void setFollowed(boolean followed) {
+        this.followed = followed;
     }
 
     public void add(UserAccount kakaoAccount) {
@@ -68,21 +77,9 @@ public class UserInfo implements Serializable {
         this.platform = "Google";
     }
 
-    public void Initbookworm() {
-        genre.setSize(enum_size);
-
-        for (int i = 0; i < enum_size; ++i) {
-            genre.set(i, 0);
-        }
-        wormtype = enum_wormtype.디폴트;
-        wormvec = new Vector<Integer>();
-        wormimgvec = new Vector<String>();
-
-        // 가입년도
-        this.wormtype = enum_wormtype.디폴트;
-        this.wormvec.add(wormtype.value());
-        // 이미지 슬라이더 함수를 사용하기 위해 int 경로인 drawble을 string으로 변환해준다
-        this.wormimgvec.add(Uri.parse("android.resource://" + R.class.getPackage().getName() + "/" + R.drawable.ex_default).toString());
+    public void InitGenre() {
+        genre.put("공포", 0);
+        genre.put("추리", 0);
     }
 
     //파이어베이스에서 값을 가져옴
@@ -92,10 +89,14 @@ public class UserInfo implements Serializable {
         this.profileimg = (String) document.get("profileimg");
         this.token = (String) document.get("token");
         this.platform = (String) document.get("platform");
-        this.wormimgvec=new Vector<>((ArrayList<String>) document.get("wormimgvec"));
-        this.wormvec=new Vector<>((ArrayList<Integer>)document.get("wormvec"));
-//        this.wormtype=enum_wormtype.a;
-        this.genre=new Vector<>((ArrayList<Integer>) document.get("genre"));
+
+        this.followerCounts = Integer.parseInt(String.valueOf(document.get("followerCounts")));
+        this.followingCounts = Integer.parseInt(String.valueOf(document.get("followingCounts")));
+
+        this.genre = new HashMap<String, Integer>((Map) document.get("genre"));
+
+        if ((ArrayList<String>) document.get("likedPost")!=null) this.likedPost=(ArrayList<String>) document.get("likedPost");
+        else this.likedPost=new ArrayList<>();
     }
 
     public String getProfileimg() {
@@ -114,33 +115,40 @@ public class UserInfo implements Serializable {
         return platform;
     }
 
-    public enum_wormtype getWormtype() {
-        return wormtype;
+
+    public int getFollowerCounts() {
+        return followerCounts;
     }
 
-    public void setWormtype(enum_wormtype wormtype) {
-        this.wormtype = wormtype;
+    public int getFollowingCounts() {
+        return followingCounts;
     }
 
-    public Vector<Integer> getGenre() {
+    public HashMap<String, Integer> getGenre() {
         return genre;
     }
 
-    public void setGenre(int idx, Context context) {
-        int unboxint = (this.genre.get(idx));
+
+
+    public void setGenre(String categoryname, Context context) {
+
+        String abd = categoryname;
+
+        // a>b1/b2>c>d
+        int unboxint = genre.get("추리");
         unboxint++;
 
-        this.genre.set(idx, unboxint);
+        this.genre.replace("추리", unboxint);
 
         new PersonalD(context).saveUserInfo(this);
     }
 
-    public Vector<Integer> getWormvec() {
-        return wormvec;
+    public void setLikedPost(ArrayList<String> likedPost) {
+        this.likedPost = likedPost;
     }
 
-    public Vector<String> getWormimgvec() {
-        return wormimgvec;
+    public ArrayList<String> getLikedPost() {
+        return likedPost;
     }
 
     public void setToken(String token) {
@@ -152,7 +160,13 @@ public class UserInfo implements Serializable {
     }
 
 
-
-
+//
+//    public BookWorm getBookworm() {
+//        return bookworm;
+//    }
+//
+//    public void setBookworm(BookWorm bookworm) {
+//        this.bookworm = bookworm;
+//    }
 
 }

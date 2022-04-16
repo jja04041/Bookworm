@@ -1,30 +1,28 @@
-var express = require('express'); //express를 사용하기 위함.
-const path = require('path');
+const express = require('express'); //express를 사용하기 위함.
 const multer = require('multer'); //이미지 업/다운로드를 위함.
 const fs = require('fs');
-var router = express.Router();
-
+const router = express.Router();
+// const {
+//   createFirebaseToken
+// } = require("../module/firebase/getToken")
+module.exports = router;
 var imgPath = "";
 var Path = "";
-require('dotenv').config({
-  path: path.join(__dirname, '.env')
-});
-const {
-  OAuth2Client
-} = require('google-auth-library');
-const requestMeUrl = 'https://kapi.kakao.com/v2/user/me';
-const request = require('request-promise');
-module.exports = router;
 const {
   initializeApp,
   cert
 } = require('firebase-admin/app');
-const firebaseAdmin = require('firebase-admin');
-
-const serviceAccount = require(path.join(__dirname, 'bookworm-f6973-firebase-adminsdk-lzs4b-a45e20e976.json'));
+const serviceAccount = require('./bookworm-f6973-firebase-adminsdk-lzs4b-a45e20e976.json');
+const {
+  getFirestore,
+  Timestamp,
+  FieldValue
+} = require('firebase-admin/firestore');
 initializeApp({
   credential: cert(serviceAccount)
 });
+const db = getFirestore();
+
 
 //for image 
 var _storage = multer.diskStorage({
@@ -55,18 +53,18 @@ var _storage = multer.diskStorage({
       imgPath = "/getimage/" + imgfile;
     }
 
-    cb(null, imgfile);
+    cb(null, imgfile); //콜백을 통해 파일명을 설정
   }
 });
 const upload = multer({
   storage: _storage
 }); // 미들웨어 생성
 
-
+//이미지 업로드 수신 => 서버에 저장 후, 이미지 경로 리턴 
 router.post('/upload', upload.single('upload'), (req, res) => {
   try {
     res.status(200).send(imgPath);
-
+    console.log("이미지가 업로드 되었습니다");
   } catch (err) {
 
     console.dir(err.stack);
@@ -74,9 +72,11 @@ router.post('/upload', upload.single('upload'), (req, res) => {
 
 });
 
-router.use('/getimage/:data',(req,res)=>{
 
-  const dataPath ="./feed/"+req.params.data ;  
+//이미지를 다운로드 받을 때(피드 이미지 )
+router.use('/getimage/:data', (req, res) => {
+
+  const dataPath = "./feed/" + req.params.data;
   fs.readFile(dataPath, function (err, data) {
     if (err) {
       return res.status(404).end();
@@ -87,83 +87,12 @@ router.use('/getimage/:data',(req,res)=>{
     res.end(data); // Send the file data to the browser.
   });
 });
-//for firebase
-//커스텀 토큰 생성 
-
-function createFirebaseToken(kakaoAccessToken) {
-  return requestMe(kakaoAccessToken).then((response) => {
-    const body = JSON.parse(response);
-    console.log(body);
-    const userId = `kakao:${body.id}`;
-    if (!userId) {
-      return res.status(404)
-        .send({
-          message: 'There was no user with the given access token.'
-        });
-    }
-    let nickname = null;
-    let profileImage = null;
-    if (body.properties) {
-      nickname = body.properties.nickname;
-      profileImage = body.properties.profile_image;
-    }
-    return updateOrCreateUser(userId, body.kaccount_email, nickname,
-      profileImage);
-  }).then((userRecord) => {
-    const userId = userRecord.uid;
-    console.log(`creating a custom firebase token based on uid ${userId}`);
-    return firebaseAdmin.auth().createCustomToken(userId, {
-      provider: 'KAKAO'
-    });
-  })
-};
-
-function updateOrCreateUser(userId, email, displayName, photoURL) {
-  console.log('updating or creating a firebase user');
-  const updateParams = {
-    provider: 'KAKAO',
-    displayName: displayName,
-  };
-  if (displayName) {
-    updateParams['displayName'] = displayName;
-  } else {
-    updateParams['displayName'] = email;
-  }
-  if (photoURL) {
-    updateParams['photoURL'] = photoURL;
-  }
-  console.log(updateParams);
-  return firebaseAdmin.auth().updateUser(userId, updateParams)
-    .catch((error) => {
-      if (error.code === 'auth/user-not-found') {
-        updateParams['uid'] = userId;
-        if (email) {
-          updateParams['email'] = email;
-        }
-        return firebaseAdmin.auth().createUser(updateParams);
-      }
-      throw error;
-    });
-};
-
-function requestMe(kakaoAccessToken) {
-  var toss = 'Bearer ' + kakaoAccessToken;
-  console.log('Requesting user profile from Kakao API server.');
-  console.log("token " + toss);
-  return request({
-    method: 'GET',
-    headers: {
-      'Authorization': toss,
-      'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
-    },
-    url: requestMeUrl,
-  });
-
-};
 
 
+//토큰 관리 
 router.get("/token", (req, res) => {
   const token = req.query.token;
+  const platform = req.query.platform;
   if (!token) return res.status(400).send({
       error: 'There is no token.'
     })
@@ -172,16 +101,38 @@ router.get("/token", (req, res) => {
     });
 
   console.log(`Verifying Kakao token: ${token}`);
+  //토큰 생성 
+  if (platform == "kakao") {
+    createFirebaseToken(token, platform).then((firebaseToken) => {
+      console.log(`Returning firebase token to user: ${firebaseToken}`);
+      console.log(firebaseToken);
+    });
+  }
+});
 
-  createFirebaseToken(token).then((firebaseToken) => {
-    console.log(`Returning firebase token to user: ${firebaseToken}`);
-    console.log(firebaseToken);
+router.get("/",(req,res)=>{
+  res.send("helloworld~");
+});
+
+
+//가입이 되어있는지 확인 
+router.get("/:token", async (req, res) => {
+  var value = req.params.token;
+  checkID(value).then((token) => {
+    res.send(token);
   });
 });
 
-router.get("/", (req, res) => {
-  res.send("hello,World!");
-});
+async function checkID(token) {
+  var ID = token;
+  var find=false;
+  const snapshot = await db.collection('users').get();
+  snapshot.forEach((doc) => {
+    if (doc.id==ID) find=true;
+  });
+  return find;
+};
+
 // router.get("/token", async(req, res) => {
 //   const {OAuth2Client} = require('google-auth-library');
 //   const CLIENT_ID=process.env.CLIENT_ID;

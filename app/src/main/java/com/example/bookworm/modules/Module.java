@@ -81,8 +81,9 @@ public class Module {
             public void onResponse(Call<String> call, Response<String> response) {
 
                 if (response.isSuccessful() && response.body() != null) {
+                    Log.d("책 정보 : ", response.body());
                     if (idx == 3) {
-                        ((subActivity_Feed_Create)context).feedUpload(url + response.body());
+                        ((subActivity_Feed_Create) context).feedUpload(url + response.body());
                     } else {
                         try {
                             JSONObject json = new JSONObject(response.body());
@@ -106,13 +107,14 @@ public class Module {
 
     //결과를 보여주는 곳
     private void parseResult(int idx, JSONObject json) throws JSONException, InterruptedException {
-        switch (idx) {
+        switch (idx ) {
             case 0://검색 결과 표시
                 setResult(json);
                 break;
             case 1: //추천 책(카테고리 별)
                 JSONArray jsonArray = json.getJSONArray("item");
-                ((fragment_search) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("1")).updateRecom(jsonArray);
+                if (jsonArray != null)
+                    ((fragment_search) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("1")).updateRecom(jsonArray);
                 break;
             case 2: //책 상세 내용
                 JSONObject jsonObject = json.getJSONArray("item").getJSONObject(0);

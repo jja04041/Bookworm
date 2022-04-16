@@ -5,48 +5,32 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.provider.Settings;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
 import android.view.Window;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
-import com.example.bookworm.MainActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_main;
 import com.example.bookworm.User.UserInfo;
+
 import com.example.bookworm.databinding.SubactivityFeedCreateBinding;
 import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.Module;
@@ -57,19 +41,14 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
-import org.w3c.dom.Text;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -90,7 +69,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     Dialog customDialog;
     String FeedID;
     Book selected_book; //선택한 책 객체
-    int label = 0;
     //라벨은 알럿 다이어그램을 통해 입력을 받고, 선택한 값으로 라벨이 지정됨 => 구현 예정
 
     //사용자가 선택한 어플로 이어서 사진을 선택할 수 있게 함.
@@ -122,6 +100,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
                     Intent intent = result.getData();
                     this.selected_book = (Book) intent.getSerializableExtra("data");
                     binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목만 세팅한다.
+
                     //Glide.with(this).load(selected_book.getImg_url()).into(Thumbnail); //책 표지 로딩후 삽입.
                 }
             });
@@ -145,7 +124,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 
         //tvlabel1.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#55ff0000"))); //자바로 BackgroundTint 설정
 
-        fbModule = new FBModule(null);
 
         current_context = this;
         fbModule = new FBModule(current_context);
@@ -309,7 +287,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     //서버에 이미지 업로드
     private void upload() {
 
-        FeedID = userInfo.getToken() + "_" + String.valueOf(System.currentTimeMillis()); //사용자 토큰 + 현재 시각을 FeedID로 설정
+        FeedID = String.valueOf(System.currentTimeMillis()) + "_" + userInfo.getToken(); //현재 시각 + 사용자 토큰을 FeedID로 설정
 
         if (uploaded != null) {
             try {
@@ -329,7 +307,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
                 Map map = new HashMap();
                 map.put("rqbody", body);
                 map.put("rqname", name);
-                imgurl = "http://132.226.234.108:3000";
+                imgurl = getString(R.string.serverUrl); //이미지 서버의 주소
                 module = new Module(current_context, imgurl, map);
                 module.connect(3);
 
@@ -493,6 +471,8 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         } else { //필수 입력사항이 입력돼있다면 작성한 내용을 파이어베이스에 업로드
             HashMap<String, Object> map = new HashMap<>();
 
+
+
             ArrayList<String> labelList = new ArrayList<String>(); //선택한 라벨 목록을 담을 리스트
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -504,9 +484,19 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             map.put("label", labelAdd(labelList)); //라벨 리스트
             map.put("date", formatTime); //현재 시간 millis로
             map.put("FeedID", FeedID); //피드 아이디
+            map.put("commentsCount",0);
+            map.put("likeCount", 0);
             if (imgUrl != null) map.put("imgurl", imgUrl); //이미지 url
 
             fbModule.readData(1, map, FeedID);
+
+            // 장르 처리
+            HashMap<String, Object> savegenremap = new HashMap<>();
+
+            userInfo.setGenre(selected_book.getCategoryname(), current_context);
+            savegenremap.put("userinfo_genre", userInfo.getGenre());
+            fbModule.readData(0, savegenremap, userInfo.getToken());
+            setResult(Activity.RESULT_OK);
             finish();
         }
     }
@@ -516,7 +506,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         //피드 생성화면에 존재하는 라벨
         TextView feedCreateLabel[] = new TextView[5];
         int[] feedCreateLabelID = {R.id.tvlabel1, R.id.tvlabel2, R.id.tvlabel3, R.id.tvlabel4, R.id.tvlabel5,};
-
         //라벨 리스트에 현재 선택된 라벨들을 추가
         for (int i = 0; i < feedCreateLabel.length; i++) {
             feedCreateLabel[i] = findViewById(feedCreateLabelID[i]);
