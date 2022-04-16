@@ -3,7 +3,6 @@ package com.example.bookworm.User;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.bookworm.Bw.enum_wormtype;
 import com.example.bookworm.modules.personalD.PersonalD;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.kakao.usermgmt.response.model.Profile;
@@ -11,8 +10,8 @@ import com.kakao.usermgmt.response.model.UserAccount;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 
 // import io.reactivex.Observer;
 
@@ -29,9 +28,9 @@ public class UserInfo implements Serializable {
     private int                 followerCounts;
     private int                 followingCounts;
 
-    private final int enum_size = enum_wormtype.enumsize.value();
 
-    private Vector<Integer> genre = new Vector<>();
+
+    private HashMap<String, Integer> genre = new HashMap<>();
 //    private BookWorm bookworm;
 
 
@@ -66,11 +65,9 @@ public class UserInfo implements Serializable {
     }
 
     public void InitGenre() {
-        genre.setSize(enum_size);
+        genre.put("공포", 0);
+        genre.put("추리", 0);
 
-        for (int i = 0; i < enum_size; ++i) {
-            genre.set(i, 0);
-        }
     }
 
     //파이어베이스에서 값을 가져옴
@@ -84,7 +81,7 @@ public class UserInfo implements Serializable {
         this.followerCounts = Integer.parseInt(String.valueOf(document.get("followerCounts")));
         this.followingCounts = Integer.parseInt(String.valueOf(document.get("followingCounts")));
 
-        this.genre = new Vector<>((ArrayList<Integer>) document.get("genre"));
+        this.genre = new HashMap<String, Integer>((HashMap<String, Integer>) document.get("genre"));
 
         if ((ArrayList<String>) document.get("likedPost")!=null) this.likedPost=(ArrayList<String>) document.get("likedPost");
         else this.likedPost=new ArrayList<>();
@@ -115,15 +112,21 @@ public class UserInfo implements Serializable {
         return followingCounts;
     }
 
-    public Vector<Integer> getGenre() {
+    public HashMap<String, Integer> getGenre() {
         return genre;
     }
 
-    public void setGenre(int idx, Context context) {
-        int unboxint = (this.genre.get(idx));
+
+
+    public void setGenre(String categoryname, Context context) {
+
+        String abd = categoryname;
+
+        // a>b1/b2>c>d
+        int unboxint = (this.genre.get("추리"));
         unboxint++;
 
-        this.genre.set(idx, unboxint);
+        this.genre.replace("추리", unboxint);
 
         new PersonalD(context).saveUserInfo(this);
     }

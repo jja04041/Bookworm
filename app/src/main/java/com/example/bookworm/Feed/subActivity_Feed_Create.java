@@ -100,6 +100,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
                     Intent intent = result.getData();
                     this.selected_book = (Book) intent.getSerializableExtra("data");
                     binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목만 세팅한다.
+
                     //Glide.with(this).load(selected_book.getImg_url()).into(Thumbnail); //책 표지 로딩후 삽입.
                 }
             });
@@ -470,6 +471,8 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         } else { //필수 입력사항이 입력돼있다면 작성한 내용을 파이어베이스에 업로드
             HashMap<String, Object> map = new HashMap<>();
 
+
+
             ArrayList<String> labelList = new ArrayList<String>(); //선택한 라벨 목록을 담을 리스트
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -486,6 +489,13 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             if (imgUrl != null) map.put("imgurl", imgUrl); //이미지 url
 
             fbModule.readData(1, map, FeedID);
+
+            // 장르 처리
+            HashMap<String, Object> savegenremap = new HashMap<>();
+
+            userInfo.setGenre(selected_book.getCategoryname(), current_context);
+            savegenremap.put("userinfo_genre", userInfo.getGenre());
+            fbModule.readData(0, savegenremap, userInfo.getToken());
             setResult(Activity.RESULT_OK);
             finish();
         }

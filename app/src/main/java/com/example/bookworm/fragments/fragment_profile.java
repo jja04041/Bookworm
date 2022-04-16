@@ -77,22 +77,16 @@ public class fragment_profile extends Fragment {
 
         // 지워도댐
 
-        binding.btnD.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setGenre(0);
-            }
-        });
         binding.btnH.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setGenre(1);
+                setGenre("공포");
             }
         });
         binding.btnDe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setGenre(2);
+                setGenre("추리");
             }
         });
 
@@ -109,9 +103,9 @@ public class fragment_profile extends Fragment {
 
     }
     //장르를 세팅하는 함수
-    private void setGenre(int idx) {
+    private void setGenre(String key) {
         //로컬에서 업데이트
-        userinfo.setGenre(idx, current_context);
+        userinfo.setGenre(key, current_context);
         //로컬 값 변경이후, 서버에 업데이트
         Map map = new HashMap();
         map.put("userinfo_genre", userinfo.getGenre());

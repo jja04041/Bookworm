@@ -3,7 +3,6 @@ package com.example.bookworm.Achievement;
 import android.content.Context;
 
 import com.example.bookworm.Bw.BookWorm;
-import com.example.bookworm.Bw.enum_wormtype;
 import com.example.bookworm.R;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.modules.FBModule;
@@ -62,13 +61,13 @@ public class Achievement extends activity_achievement {
 
         HashMap<String, Object> map = new HashMap<>();
 
-        if (userinfo.getGenre().get(enum_wormtype.공포.value()) == 10
+        if (userinfo.getGenre().get("공포") == 10
         && false == bookworm.getAchievementmap().get("공포왕")) {
 
             ExecuteFB(R.drawable.bw_horror, "공포왕");
 
         }
-        else if (userinfo.getGenre().get(enum_wormtype.추리.value()) == 10
+        else if (userinfo.getGenre().get("추리") == 10
                 && false == bookworm.getAchievementmap().get("추리왕")) {
 
             ExecuteFB(R.drawable.bw_detective, "추리왕");
