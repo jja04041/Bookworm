@@ -76,7 +76,7 @@ class FollowerAdapter(data: ArrayList<UserInfo>?, val context: Context,val nowUs
         var binding = LayoutUserItemBinding.bind(itemView)
         var v = false
         fun setItem(item: UserInfo?) {
-            Glide.with(context!!).load(item!!.profileimg).into(binding.ivProfileImg)
+            Glide.with(context!!).load(item!!.profileimg).circleCrop().into(binding.ivProfileImg)
             binding.tvProfileID.setText(item.username)
             if (item.isFollowed) following()
             else unfollowing()

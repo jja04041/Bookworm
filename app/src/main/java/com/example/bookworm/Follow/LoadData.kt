@@ -6,9 +6,9 @@ import com.google.firebase.firestore.*
 
 //팔로우 하는 사람 또는 팔로워의 데이터를 가져온다
 class LoadData(val view: Contract.View, val isfollewer: Boolean,val nowUserInfo: UserInfo) : LoadInfoCallback, Contract.Presenter {
-    public val LIMIT:Long = 2//최대 50명씩 불러오도록 함
+    public val LIMIT:Long = 10//최대 10명씩 불러오도록 함
     var token: String? = null
-    var lastVisible: DocumentSnapshot? = null //이어서 가져오는 경우 필요함
+    var lastVisible: String? = null //이어서 가져오는 경우 필요함
     var reference: CollectionReference? =null
     var query: Query? =null
 
@@ -17,8 +17,9 @@ class LoadData(val view: Contract.View, val isfollewer: Boolean,val nowUserInfo:
         this.token = token
          reference = FirebaseFirestore.getInstance().collection("users")
                 .document(token!!).collection(if (isfollewer) "follower" else "following")
-        query = reference!!.orderBy("username").limit(LIMIT)
-        if(lastVisible!=null)query=query!!.startAt(lastVisible)
+        query = reference!!.orderBy("token")
+        if(lastVisible!=null)query=query!!.startAfter(lastVisible)
+        query=query!!.limit(LIMIT)
         query!!.get().addOnCompleteListener(
                 {
                     if (it.isSuccessful) {
@@ -47,7 +48,7 @@ class LoadData(val view: Contract.View, val isfollewer: Boolean,val nowUserInfo:
                 followerList.add(userInfo)
             }
             //현재 가장 마지막 데이터를 저장해두어, 다음에 조회시 이어서 받아 올 수 있도록 함.
-            lastVisible=result.get(result.size-1)
+            lastVisible=followerList.get(followerList.size-1).token
             //팔로잉 여부를 확인하는 쿼리 만들기
             var myref=FirebaseFirestore.getInstance().collection("users")
                     .document(nowUserInfo.token).collection("following")

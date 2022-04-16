@@ -98,30 +98,24 @@ class fragment_profile_follower(val token:String) : Fragment(),Contract.View{
 
     //데이터를 세팅
     override fun showInfo(info: ArrayList<UserInfo>?) {
-        var newList:ArrayList<UserInfo> ?= null
-        if(page==1){
-            isLoading = false
-            userList= ArrayList()
-        }
-        if(info == null){
+        var newList: ArrayList<UserInfo> = ArrayList()
+        if (info == null) {
             //팔로워가 없는 경우
-            canLoad=false
-            if(newList ==null) newList=ArrayList()
-            if(page>1)isLoading = true
+            canLoad = false //더이상 로드하지 않음
+            if (page > 1) newList.addAll(userList!!)
         }
         //가져온 데이터를 새롭게 담는다
-        else{
-            newList= ArrayList(userList)
+        else {
+            newList.addAll(userList!!)
             newList.addAll(info) //가져온 데이터 담기
-            if(info.size<loadData!!.LIMIT) canLoad=false
+            if (info.size < loadData!!.LIMIT) canLoad = false
         }
 
-        if(!canLoad){
+        if (!canLoad) {
             isLoading = true
             replaceItem(newList)
-        }
-        else{
-            isLoading=false
+        } else {
+            isLoading = false
             newList.add(UserInfo()) //로딩바 표시를 위한 빈 값
             replaceItem(newList)
             page++ //로딩을 다하면 그 다음 페이지로 넘어간다
