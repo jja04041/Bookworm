@@ -62,6 +62,8 @@ public class fragment_profile extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), FollowerActivity.class);
+                intent.putExtra("token",userinfo.getToken());
+                intent.putExtra("page",0);
                 startActivity(intent);
             }
         });
@@ -71,6 +73,8 @@ public class fragment_profile extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), FollowerActivity.class);
+                intent.putExtra("token",userinfo.getToken());
+                intent.putExtra("page",1);
                 startActivity(intent);
             }
         });

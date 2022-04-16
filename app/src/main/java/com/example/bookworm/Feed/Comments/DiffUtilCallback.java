@@ -33,10 +33,11 @@ public class DiffUtilCallback extends DiffUtil.Callback {
         if (oldItem instanceof Comment && newItem instanceof Comment) {
             return ((Comment) oldItem).getCommentID() == ((Comment) newItem).getCommentID();
         } else if (oldItem instanceof Feed && newItem instanceof Feed) {
-            return ((Feed) oldItem).getFeedID() == ((Feed)newItem).getFeedID();
-        } else if (oldItem instanceof UserInfo && newItem instanceof UserInfo)
-        {return  ((UserInfo) oldItem).getToken() == ((UserInfo)newItem).getToken();}
-        return oldItem==newItem;
+            return ((Feed) oldItem).getFeedID() == ((Feed) newItem).getFeedID();
+        } else if (oldItem instanceof UserInfo && newItem instanceof UserInfo) {
+            return ((UserInfo) oldItem).getToken() == ((UserInfo) newItem).getToken();
+        }
+        return oldItem == newItem;
     }
 
     @Override

@@ -85,7 +85,7 @@ public class followCounter {
         }).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                ((ProfileInfoActivity)context).setFollowerCnt(current);
+                if (context instanceof ProfileInfoActivity) ((ProfileInfoActivity)context).setFollowerCnt(current);
                 Log.d("Success", "Transaction success!");
             }
         }).addOnFailureListener(new OnFailureListener() {
