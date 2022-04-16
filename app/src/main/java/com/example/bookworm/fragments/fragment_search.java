@@ -2,19 +2,16 @@ package com.example.bookworm.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.bookworm.R;
-//import com.example.bookworm.modules.module_search;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.items.BookAdapter;
 import com.example.bookworm.Search.items.OnBookItemClickListener;
@@ -30,6 +27,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+//import com.example.bookworm.modules.module_search;
 //탐색 탭
 
 public class fragment_search extends Fragment {
@@ -78,7 +77,7 @@ public class fragment_search extends Fragment {
         //책 입력
         for (int i = 0; i < json.length(); i++) {
             JSONObject obj = json.getJSONObject(i);
-            Book book = new Book(obj.getString("title"), obj.getString("description"), obj.getString("publisher"), obj.getString("author"), obj.getString("cover"), obj.getString("itemId"));
+            Book book = new Book(obj.getString("title"), obj.getString("categoryName") ,obj.getString("description"), obj.getString("publisher"), obj.getString("author"), obj.getString("cover"), obj.getString("itemId"));
             bookList.add(book);
         }
         RecomBookAdapter bookAdapter = new RecomBookAdapter(bookList, getContext());

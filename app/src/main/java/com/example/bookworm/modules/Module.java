@@ -1,16 +1,11 @@
 package com.example.bookworm.modules;
 
-import android.app.Activity;
 import android.content.Context;
-
 import android.util.Log;
 import android.widget.Toast;
 
-
 import com.example.bookworm.Feed.subActivity_Feed_Create;
 import com.example.bookworm.MainActivity;
-import com.example.bookworm.R;
-import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_main;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_result;
 import com.example.bookworm.fragments.fragment_search;
@@ -20,7 +15,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 import okhttp3.MultipartBody;
@@ -81,6 +75,7 @@ public class Module {
             public void onResponse(Call<String> call, Response<String> response) {
 
                 if (response.isSuccessful() && response.body() != null) {
+                    Log.d("책 정보 : ", response.body());
                     if (idx == 3) {
                         ((subActivity_Feed_Create) context).feedUpload(url + response.body());
                     } else {
@@ -106,7 +101,7 @@ public class Module {
 
     //결과를 보여주는 곳
     private void parseResult(int idx, JSONObject json) throws JSONException, InterruptedException {
-        switch (idx) {
+        switch (idx ) {
             case 0://검색 결과 표시
                 setResult(json);
                 break;
