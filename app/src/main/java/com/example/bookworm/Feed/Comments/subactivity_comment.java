@@ -1,5 +1,7 @@
 package com.example.bookworm.Feed.Comments;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DiffUtil;
@@ -11,6 +13,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -18,9 +21,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Feed.items.Feed;
+import com.example.bookworm.MainActivity;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.databinding.SubactivityCommentBinding;
+import com.example.bookworm.fragments.fragment_feed;
 import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.personalD.PersonalD;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -37,22 +42,46 @@ public class subactivity_comment extends AppCompatActivity {
     UserInfo nowUser;//현재 사용자 계정
     final int LIMIT = 10;
     int page = 1;
+    int position;
     FBModule fbModule;
     private Map map;
     CommentAdapter commentAdapter;
     ArrayList commentList;
     private Boolean isLoading = false, canLoad = true;
     DocumentSnapshot lastVisible = null;
-    CommentDeleteCallback deleteCallback;
+
+    public ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == 26) {
+                    ArrayList newList = new ArrayList(commentList);
+                    Feed item = (Feed) result.getData().getSerializableExtra("modifiedFeed");
+                    newList.remove(0);
+                    newList.add(0, item);
+                    replaceItem(newList);
+                    fragment_feed ff=((fragment_feed) ((MainActivity) fragment_feed.mContext).getSupportFragmentManager().findFragmentByTag("0"));
+                    ArrayList list= new ArrayList(ff.feedList);
+                    list.remove(item.getPosition());
+                    list.add(item.getPosition(),item);
+                    ff.replaceItem(list);
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = SubactivityCommentBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        context = this;
         item = (Feed) getIntent().getSerializableExtra("item");
+        position = (Integer) getIntent().getSerializableExtra("position");
         nowUser = new PersonalD(this).getUserInfo();
+        context=this;
         fbModule = new FBModule(context);
         setItems();
         binding.mRecyclerView.setNestedScrollingEnabled(false);
@@ -67,7 +96,6 @@ public class subactivity_comment extends AppCompatActivity {
 
     private void setItems() {
         initComment();
-
         loadData();
     }
 
@@ -78,6 +106,7 @@ public class subactivity_comment extends AppCompatActivity {
         canLoad = false;
         lastVisible = null;
         commentList = new ArrayList(); //댓글을 담는 리스트 생성
+        item.setPosition(position);
         commentList.add(item);
     }
 
@@ -124,9 +153,6 @@ public class subactivity_comment extends AppCompatActivity {
     //리사이클러뷰를 초기화
     private void initRecyclerView() {
         binding.mRecyclerView.setAdapter(commentAdapter);
-        deleteCallback = new CommentDeleteCallback();
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(deleteCallback);
-        itemTouchHelper.attachToRecyclerView(binding.mRecyclerView);
         initScrollListener(); //무한스크롤
     }
 
@@ -145,9 +171,9 @@ public class subactivity_comment extends AppCompatActivity {
 
     private void addComment() {
         Map<String, Object> data = new HashMap<>();
-        String string= binding.edtComment.getText().toString();
+        String string = binding.edtComment.getText().toString();
 
-        if(!string.equals("")&&!string.equals(null)) {
+        if (!string.equals("") && !string.equals(null)) {
             //유저정보, 댓글내용, 작성시간
             Comment comment = new Comment();
             comment.getData(nowUser, string, System.currentTimeMillis());
@@ -167,51 +193,6 @@ public class subactivity_comment extends AppCompatActivity {
         }
     }
 
-    public class CommentDeleteCallback extends ItemTouchHelper.SimpleCallback {
-        public CommentDeleteCallback() {
-            super(0, ItemTouchHelper.END);
-
-        }
-
-        @Override
-        public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-            return 0;
-        }
-
-        @Override
-        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-            return false;
-        }
-
-        @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            int position = viewHolder.getAdapterPosition();
-            if (!(viewHolder instanceof SummaryViewHolder)) {
-                new AlertDialog.Builder(context)
-                        .setMessage("댓글을 삭제하시겠습니까? ")
-                        .setPositiveButton("네", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                ArrayList arr = new ArrayList(commentList);
-                                Comment comment = (Comment) arr.get(position);
-                                Map map = new HashMap();
-                                map.put("comment", comment);
-                                new commentsCounter().removeCounter(map, context, item.getFeedID());
-                                arr.remove(position);
-                                replaceItem(arr);
-                            }
-                        })
-                        .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).show();
-
-            }
-        }
-    }
 
     private void loadData() {
         map = new HashMap();
@@ -234,8 +215,10 @@ public class subactivity_comment extends AppCompatActivity {
         } else {
             if (page == 1) {
                 isLoading = false;
-                commentList = new ArrayList(); //챌린지를 담는 리스트 생성
-                commentList.add(item);
+                if(commentList.size()<1) {
+                    commentList = new ArrayList(); //챌린지를 담는 리스트 생성
+                    commentList.add(item);
+                }
             }
             //가져온 데이터를 for문을 이용하여, feed리스트에 차곡차곡 담는다.
             try {

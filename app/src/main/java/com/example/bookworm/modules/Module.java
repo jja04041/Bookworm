@@ -81,6 +81,7 @@ public class Module {
             public void onResponse(Call<String> call, Response<String> response) {
 
                 if (response.isSuccessful() && response.body() != null) {
+                    Log.d("책 정보 : ", response.body());
                     if (idx == 3) {
                         ((subActivity_Feed_Create) context).feedUpload(url + response.body());
                     } else {
@@ -106,7 +107,7 @@ public class Module {
 
     //결과를 보여주는 곳
     private void parseResult(int idx, JSONObject json) throws JSONException, InterruptedException {
-        switch (idx) {
+        switch (idx ) {
             case 0://검색 결과 표시
                 setResult(json);
                 break;

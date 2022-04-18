@@ -1,6 +1,7 @@
 package com.example.bookworm.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +29,7 @@ import com.example.bookworm.Feed.subActivity_Feed_Create;
 import com.example.bookworm.databinding.LayoutTopbarBinding;
 import com.example.bookworm.modules.FBModule;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firestore.v1.Precondition;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +40,8 @@ public class fragment_feed extends Fragment {
     FragmentFeedBinding binding;
     public FeedAdapter feedAdapter;
     private final int LIMIT = 5;
-    ArrayList<Feed> feedList;
+    public ArrayList<Feed> feedList;
+    public  static Context mContext;
     private DocumentSnapshot lastVisible; //마지막에 가져온 값 부터 추가로 가져올 수 있도록 함.
     private Map map;
     private FBModule fbModule;
@@ -52,11 +55,19 @@ public class fragment_feed extends Fragment {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     pageRefresh();
                 }
+                if (result.getResultCode() == 26) {
+                    ArrayList newList = new ArrayList(feedList);
+                    Feed item = (Feed) result.getData().getSerializableExtra("modifiedFeed");
+                    newList.remove(item.getPosition());
+                    newList.add(item.getPosition(),item);
+                    replaceItem(newList);
+                }
             });
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        mContext = getContext();
 
         binding = FragmentFeedBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
@@ -168,7 +179,7 @@ public class fragment_feed extends Fragment {
         replaceItem(arr); //데이터가 삭제됨을 알림.
     }
 
-    private void replaceItem(ArrayList newthings) {
+    public void replaceItem(ArrayList newthings) {
         DiffUtilCallback callback = new DiffUtilCallback(feedList, newthings);
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(callback, true);
         feedList.clear();

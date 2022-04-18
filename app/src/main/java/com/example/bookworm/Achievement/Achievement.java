@@ -2,7 +2,7 @@ package com.example.bookworm.Achievement;
 
 import android.content.Context;
 
-import com.example.bookworm.Bw.enum_wormtype;
+import com.example.bookworm.Bw.BookWorm;
 import com.example.bookworm.R;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.modules.FBModule;
@@ -15,15 +15,17 @@ public class Achievement extends activity_achievement {
     Context context;
     FBModule fbModule;
     UserInfo userinfo;
+    BookWorm bookworm;
     CustomDialog customDialog;
 
-    public Achievement (Context context, FBModule fbModule, UserInfo userinfo)
+    public Achievement (Context context, FBModule fbModule, UserInfo userinfo, BookWorm bookworm)
     {
         // 어떤곳에서든 업적 달성할 수 있도록 context와 fbmodule받음
 
         this.context = context;
         this.fbModule = fbModule;
         this.userinfo = userinfo;
+        this.bookworm = bookworm;
     }
 
 
@@ -37,15 +39,16 @@ public class Achievement extends activity_achievement {
 
         HashMap<String, Object> map = new HashMap<>();
 
-        userinfo.getWormvec().add(_drawblepath);
-        userinfo.getAchievementmap().put(_key, true);
+        bookworm.getWormvec().add(_drawblepath);
+        bookworm.getAchievementmap().put(_key, true);
 
 
-        map.put("userinfo_achievementmap", userinfo.getAchievementmap());
-        map.put("userinfo_wormvec", userinfo.getWormvec());
-        fbModule.readData(0, map, userinfo.getToken());
+        map.put("bookworm_achievementmap", bookworm.getAchievementmap());
+        map.put("bookworm_wormvec", bookworm.getWormvec());
 
-        new PersonalD(context).saveUserInfo(userinfo);
+        fbModule.readData(0, map, bookworm.getToken());
+
+        new PersonalD(context).saveBookworm(bookworm);
     }
 
 
@@ -58,14 +61,14 @@ public class Achievement extends activity_achievement {
 
         HashMap<String, Object> map = new HashMap<>();
 
-        if (userinfo.getGenre().get(enum_wormtype.공포.value()) == 10
-        && false == userinfo.getAchievementmap().get("공포왕")) {
+        if (userinfo.getGenre().get("공포") == 10
+        && false == bookworm.getAchievementmap().get("공포왕")) {
 
             ExecuteFB(R.drawable.bw_horror, "공포왕");
 
         }
-        else if (userinfo.getGenre().get(enum_wormtype.추리.value()) == 10
-                && false == userinfo.getAchievementmap().get("추리왕")) {
+        else if (userinfo.getGenre().get("추리") == 10
+                && false == bookworm.getAchievementmap().get("추리왕")) {
 
             ExecuteFB(R.drawable.bw_detective, "추리왕");
         }

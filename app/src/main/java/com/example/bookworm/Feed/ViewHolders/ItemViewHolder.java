@@ -7,10 +7,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Feed.Comments.Comment;
 import com.example.bookworm.Feed.Comments.commentsCounter;
+import com.example.bookworm.Feed.CustomPopup;
 import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.Feed.likeCounter;
 import com.example.bookworm.Feed.Comments.subactivity_comment;
@@ -31,6 +34,7 @@ import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.databinding.LayoutFeedBinding;
 import com.example.bookworm.fragments.fragment_challenge;
 import com.example.bookworm.fragments.fragment_feed;
+import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.personalD.PersonalD;
 
 import java.util.ArrayList;
@@ -47,6 +51,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     int limit = 0;
     Boolean restricted = false;
     Context context;
+    FBModule fbModule = new FBModule(context);
     long Count=0;
     //생성자를 만든다.
     public ItemViewHolder(@NonNull View itemView, Context context) {
@@ -72,9 +77,9 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             }
         });
         //작성자 UserInfo
-        UserInfo user = item.getCreator();
-        binding.tvNickname.setText(user.getUsername());
-        Glide.with(itemView).load(user.getProfileimg()).circleCrop().into(binding.ivProfileImage);
+        UserInfo userInfo = item.getCreator();
+        binding.tvNickname.setText(userInfo.getUsername());
+        Glide.with(itemView).load(userInfo.getProfileimg()).circleCrop().into(binding.ivProfileImage);
         //피드 내용
 
         //댓글 창 세팅
@@ -86,6 +91,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View view) {
                 Intent intent = new Intent(context, subactivity_comment.class);
                 intent.putExtra("item", item);
+                intent.putExtra("position", getAdapterPosition());
                context.startActivity(intent);
             }
         });
@@ -141,8 +147,19 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
-
+        binding.ivFeedMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                item.setPosition(getAdapterPosition());
+                CustomPopup popup1 = new CustomPopup(context, view);
+                popup1.setItems(context, fbModule, item);
+                popup1.setOnMenuItemClickListener(popup1);
+                popup1.setVisible(nowUser.getToken().equals(userInfo.getToken()));
+                popup1.show();
+            }
+        });
     }
+
     private Comment addComment(String FeedID) {
         Map<String, Object> data = new HashMap<>();
         //유저정보, 댓글내용, 작성시간
@@ -250,5 +267,9 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             tv.setLayoutParams(params); //설정값 뷰에 저장
             binding.lllabel.addView(tv); //레이아웃에 뷰 세팅
         }
+    }
+
+    public static void showMenu(){
+
     }
 }

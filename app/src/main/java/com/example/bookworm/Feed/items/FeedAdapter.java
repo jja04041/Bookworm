@@ -61,20 +61,20 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    @Override
-    public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
-        super.onViewRecycled(holder);
-        int safePosition = holder.getAdapterPosition();
-        if (holder instanceof ItemViewHolder) {
-            Feed item = FeedList.get(safePosition);
-            if (item.getImgurl() != null) {
-                Log.d(safePosition + "위치", item.getImgurl());
-                ((ItemViewHolder) holder).setVisibillity(true);
-            } else ((ItemViewHolder) holder).setVisibillity(false);
-        } else if (holder instanceof LoadingViewHolder) {
-            showLoadingView((LoadingViewHolder) holder, safePosition);
-        }
-    }
+//    @Override
+//    public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+//        super.onViewRecycled(holder);
+//        int safePosition = holder.getAdapterPosition();
+//        if (holder instanceof ItemViewHolder) {
+//            Feed item = FeedList.get(safePosition);
+//            if (item.getImgurl() != null) {
+//                Log.d(safePosition + "위치", item.getImgurl());
+//                ((ItemViewHolder) holder).setVisibillity(true);
+//            } else ((ItemViewHolder) holder).setVisibillity(false);
+//        } else if (holder instanceof LoadingViewHolder) {
+//            showLoadingView((LoadingViewHolder) holder, safePosition);
+//        }
+//    }
 
     @Override
     public int getItemCount() {

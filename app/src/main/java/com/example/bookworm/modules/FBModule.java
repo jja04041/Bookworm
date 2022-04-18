@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.bookworm.Bw.BookWorm;
 import com.example.bookworm.Challenge.subActivity.subactivity_challenge_challengeinfo;
 import com.example.bookworm.Feed.Comments.Comment;
 import com.example.bookworm.Feed.Comments.subactivity_comment;
@@ -112,20 +113,24 @@ public class FBModule {
             //유저정보 불러오기
             if (idx == 0) {
                 // 장르 업데이트
-                if (map.get("userinfo_genre") != null) { document.getReference().update("UserInfo.genre", map.get("userinfo_genre")); }
-                // 업적, 인벤토리 업데이트
-                else if (map.get("userinfo_achievementmap") != null && map.get("userinfo_wormvec") != null) {
-                    document.getReference().update("UserInfo.achievementmap", map.get("userinfo_achievementmap"));
-                    document.getReference().update("UserInfo.wormvec", map.get("userinfo_wormvec"));
+                if (map.get("userinfo_genre") != null) {
+                    document.getReference().update("UserInfo.genre", map.get("userinfo_genre"));
                 }
-                else if (map.get("userinfo_wormtype") != null){
-                    document.getReference().update("UserInfo.wormtype", map.get("userinfo_wormtype"));
+                // 업적, 인벤토리 업데이트
+                else if (map.get("bookworm_achievementmap") != null && map.get("bookworm_wormvec") != null) {
+                    document.getReference().update("BookWorm.achievementmap", map.get("bookworm_achievementmap"));
+                    document.getReference().update("BookWorm.wormvec", map.get("bookworm_wormvec"));
+                } else if (map.get("bookworm_wormtype") != null) {
+                    document.getReference().update("BookWorm.wormtype", map.get("bookworm_wormtype"));
                 }
                 //회원인 경우, 로그인 처리
                 else {
                     UserInfo userInfo = new UserInfo();
+                    BookWorm bookworm = new BookWorm();
                     userInfo.add((Map) document.get("UserInfo"));
-                    ((activity_login) context).signIn(Boolean.FALSE, userInfo);
+                    bookworm.add((Map) document.get("BookWorm"));
+
+                    ((activity_login) context).signIn(Boolean.FALSE, userInfo, bookworm);
                 }
             }
 
@@ -183,7 +188,7 @@ public class FBModule {
                     ((subactivity_comment) context).moduleUpdated(null);
                 } else {
                     ff = ((fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
-                    ff.moduleUpdated(null,null); //찾은 피드 목록을 반환
+                    ff.moduleUpdated(null, null); //찾은 피드 목록을 반환
                 }
             }
             if (idx == 2) {
@@ -197,18 +202,20 @@ public class FBModule {
                 } else {
                     ff = ((fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
                     List<DocumentSnapshot> documents = querySnapshot.getDocuments();
-                    ArrayList<DocumentSnapshot> data = new ArrayList<>();
+                    ArrayList<DocumentSnapshot> data = new ArrayList<>(documents);
                     final int[] count = {0};
                     for (DocumentSnapshot document : documents) {
                         document.getReference().collection("comments").limit(1).orderBy("commentID", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 count[0]++;
-                                List<DocumentSnapshot> shot=task.getResult().getDocuments();
-                                if(shot.size()>0)  data.add(shot.get(0));
-                                else data.add(null);
-                                if (count[0]== documents.size()){
-                                    ff.moduleUpdated(documents,data); //찾은 피드 목록을 반환
+                                List<DocumentSnapshot> shot = task.getResult().getDocuments();
+                                int pos = documents.indexOf(document); //for문으로 돌린 문서에 맞는 위치에 데이터를 세팅할 수 있도록 하기 위하여 위치값을 미리 가진다.
+                                //해당 위치에 데이터를 세팅한다.
+                                if (shot.size() > 0) data.set(pos, shot.get(0));
+                                else data.set(pos, null);
+                                if (count[0] == documents.size()) {
+                                    ff.moduleUpdated(documents, data); //찾은 피드 목록을 반환
                                 }
                             }
                         });
@@ -228,11 +235,19 @@ public class FBModule {
         switch (idx) {
             case 0://회원가입
                 UserInfo userInfo = (UserInfo) (data.get("UserInfo"));
-                userInfo.Initbookworm();
+                userInfo.InitGenre();
 
                 data.put("UserInfo", userInfo);
+                // db.collection(location[idx]).document(userInfo.getToken()).set(data);
+
+                // bookworm 필드 추가
+                BookWorm bookworm = new BookWorm();
+                // user의 토큰 수령
+                bookworm.setToken(userInfo.getToken());
+                data.put("BookWorm", bookworm);
                 db.collection(location[idx]).document(userInfo.getToken()).set(data);
-                ((activity_login) context).signIn(Boolean.TRUE, userInfo); //회원이 아닌 경우
+
+                ((activity_login) context).signIn(Boolean.TRUE, userInfo, bookworm); //회원이 아닌 경우
                 break;
 
             case 1: //피드 작성
@@ -253,7 +268,11 @@ public class FBModule {
         task.addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                successDelete(idx);
+                if (idx == 0) { //회원탈퇴일 경우
+                    successDelete(idx);
+                } else if (idx == 1) { //피드삭제의 경우
+
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -270,6 +289,11 @@ public class FBModule {
                 (((ProfileSettingActivity) context)).moveToLogin();
                 break;
         }
+    }
+
+    public void modifyDate(int idx, Map map) {
+
+
     }
 
 }

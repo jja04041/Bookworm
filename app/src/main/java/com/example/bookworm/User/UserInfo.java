@@ -4,9 +4,9 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.bookworm.Bw.enum_wormtype;
-import com.example.bookworm.R;
 import com.example.bookworm.modules.personalD.PersonalD;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.firestore.Exclude;
 import com.kakao.usermgmt.response.model.Profile;
 import com.kakao.usermgmt.response.model.UserAccount;
 
@@ -26,24 +26,34 @@ public class UserInfo implements Serializable {
     private String              platform;
     private String              token;
     private ArrayList<String>   likedPost;
-    private int wormtype = R.drawable.bw_default;
+
 
     private int                 followerCounts;
     private int                 followingCounts;
 
     private final int enum_size = enum_wormtype.enumsize.value();
+    private HashMap<String, Integer> genre = new HashMap();
+    @Exclude
+    private boolean followed = false;
+
+//    private BookWorm bookworm;
 
 
-    // 업적 달성시 이 벡터에 책볼레 drawble id값을 추가합니다.
-    private Vector<Integer> wormvec = new Vector<>();
-    private HashMap<String, Boolean> achievementmap = new HashMap<>();
-    private Vector<Integer> genre = new Vector<>();
 
 
 
 
     public UserInfo() {
+//        bookworm = new BookWorm();
+//        bookworm.Initbookworm();
+    }
 
+    public boolean isFollowed() {
+        return followed;
+    }
+
+    public void setFollowed(boolean followed) {
+        this.followed = followed;
     }
 
     public void add(UserAccount kakaoAccount) {
@@ -67,27 +77,9 @@ public class UserInfo implements Serializable {
         this.platform = "Google";
     }
 
-    public void Initbookworm() {
-        genre.setSize(enum_size);
-
-
-        for (int i = 0; i < enum_size; ++i) {
-            genre.set(i, 0);
-        }
-
-        this.wormtype = R.drawable.bw_default;
-        this.wormvec.add(R.drawable.bw_default);
-        InitAchievemap();
-
-    }
-
-    public void InitAchievemap()
-    {
-        this.achievementmap.put("디폴트", true);
-        this.achievementmap.put("공포왕", false);
-        this.achievementmap.put("추리왕", false);
-        this.achievementmap.put("로맨스왕", false);
-        this.achievementmap.put("피드왕", false);
+    public void InitGenre() {
+        genre.put("공포", 0);
+        genre.put("추리", 0);
     }
 
     //파이어베이스에서 값을 가져옴
@@ -97,14 +89,11 @@ public class UserInfo implements Serializable {
         this.profileimg = (String) document.get("profileimg");
         this.token = (String) document.get("token");
         this.platform = (String) document.get("platform");
-        this.wormtype =Integer.parseInt(String.valueOf(document.get("wormtype")));
 
         this.followerCounts = Integer.parseInt(String.valueOf(document.get("followerCounts")));
         this.followingCounts = Integer.parseInt(String.valueOf(document.get("followingCounts")));
 
-        this.wormvec = new Vector<>((ArrayList<Integer>)document.get("wormvec"));
-        this.genre = new Vector<>((ArrayList<Integer>) document.get("genre"));
-        this.achievementmap = new HashMap<>((HashMap<String, Boolean>)document.get("achievementmap"));
+        this.genre = new HashMap<String, Integer>((Map) document.get("genre"));
 
         if ((ArrayList<String>) document.get("likedPost")!=null) this.likedPost=(ArrayList<String>) document.get("likedPost");
         else this.likedPost=new ArrayList<>();
@@ -126,13 +115,6 @@ public class UserInfo implements Serializable {
         return platform;
     }
 
-    public int getWormtype() {
-        return wormtype;
-    }
-
-    public void setWormtype(int wormtype) {
-        this.wormtype = wormtype;
-    }
 
     public int getFollowerCounts() {
         return followerCounts;
@@ -142,15 +124,21 @@ public class UserInfo implements Serializable {
         return followingCounts;
     }
 
-    public Vector<Integer> getGenre() {
+    public HashMap<String, Integer> getGenre() {
         return genre;
     }
 
-    public void setGenre(int idx, Context context) {
-        int unboxint = (this.genre.get(idx));
+
+
+    public void setGenre(String categoryname, Context context) {
+
+        String abd = categoryname;
+
+        // a>b1/b2>c>d
+        int unboxint = genre.get("추리");
         unboxint++;
 
-        this.genre.set(idx, unboxint);
+        this.genre.replace("추리", unboxint);
 
         new PersonalD(context).saveUserInfo(this);
     }
@@ -163,14 +151,6 @@ public class UserInfo implements Serializable {
         return likedPost;
     }
 
-    public Vector<Integer> getWormvec() {
-        return wormvec;
-    }
-
-//    public Vector<String> getWormimgvec() {
-//        return wormimgvec;
-//    }
-
     public void setToken(String token) {
         this.token = token;
     }
@@ -180,16 +160,13 @@ public class UserInfo implements Serializable {
     }
 
 
-    public HashMap<String, Boolean> getAchievementmap() {
-        return achievementmap;
-    }
-
-    public void setAchievementmap(HashMap<String, Boolean> achievementmap) {
-        this.achievementmap = achievementmap;
-    }
-
-
-
-
+//
+//    public BookWorm getBookworm() {
+//        return bookworm;
+//    }
+//
+//    public void setBookworm(BookWorm bookworm) {
+//        this.bookworm = bookworm;
+//    }
 
 }

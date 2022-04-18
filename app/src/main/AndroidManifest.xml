@@ -18,6 +18,9 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Feed.subActivity_Feed_Modify"
+            android:exported="false" />
+        <activity
             android:name=".Feed.Comments.subactivity_comment"
             android:exported="false" />
         <activity

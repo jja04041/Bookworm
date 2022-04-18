@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import androidx.fragment.app.Fragment;
 
 import com.example.bookworm.Achievement.activity_achievement;
+import com.example.bookworm.Bw.BookWorm;
 import com.example.bookworm.R;
 import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.modules.FBModule;
@@ -23,6 +24,7 @@ public class fragment_bookworm extends Fragment {
     private Button btn_Achievement;
 
     private UserInfo userinfo;
+    private BookWorm bookworm;
 
     public static Context current_context;
     private FBModule fbModule;
@@ -60,8 +62,9 @@ public class fragment_bookworm extends Fragment {
         current_context = getActivity();
         fbModule = new FBModule(current_context);
         userinfo = new PersonalD(current_context).getUserInfo();
+        bookworm = new PersonalD(current_context).getBookworm();
 
-        iv_bookworm.setImageResource(userinfo.getWormtype());
+        iv_bookworm.setImageResource(bookworm.getWormtype());
 
     }
 }

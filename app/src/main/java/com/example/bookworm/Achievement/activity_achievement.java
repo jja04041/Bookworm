@@ -9,16 +9,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookworm.Achievement.Adapter.ItemData;
 import com.example.bookworm.Achievement.Adapter.RecyclerViewAdapter;
+import com.example.bookworm.Bw.BookWorm;
 import com.example.bookworm.R;
-import com.example.bookworm.User.UserInfo;
-import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.personalD.PersonalD;
 
 public class activity_achievement extends AppCompatActivity {
 
     private Context context;
-    private FBModule fbModule;
-    private UserInfo userinfo;
+    private BookWorm bookworm;
     private RecyclerViewAdapter adapter;
 
 
@@ -28,8 +26,8 @@ public class activity_achievement extends AppCompatActivity {
         setContentView(R.layout.activity_achievement);
 
         context = this;
-        fbModule = new FBModule(context);
-        userinfo = new PersonalD(context).getUserInfo();
+        bookworm = new PersonalD(context).getBookworm();
+
 
         init();
         ShowView();
@@ -72,11 +70,11 @@ public class activity_achievement extends AppCompatActivity {
 
     public void ShowView ()
     {
-        int size = userinfo.getWormvec().size();
+        int size = bookworm.getWormvec().size();
 
         for (int i = 0; i < size; ++i) {
-            if (null != userinfo.getWormvec().get(i)) {
-                getData(userinfo.getWormvec().get(i));
+            if (null != bookworm.getWormvec().get(i)) {
+                getData(bookworm.getWormvec().get(i));
 
             }
         }

@@ -3,22 +3,19 @@ package com.example.bookworm.Login;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Switch;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.bookworm.Bw.BookWorm;
 import com.example.bookworm.MainActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.User.UserInfo;
@@ -28,9 +25,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.Scopes;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,6 +43,7 @@ public class activity_login extends Activity {
     private FBModule fbModule;
     protected GoogleSignInAccount gsa;
     UserInfo userInfo;
+    BookWorm bookworm;
     public static GoogleSignInClient gsi;
     Boolean isLogined=Boolean.FALSE;
     private int RC_SIGN_IN = 123;
@@ -167,16 +162,17 @@ public class activity_login extends Activity {
     }
 
     //로그인 함수
-    public void signIn(Boolean ResultCode, UserInfo fbUserInfo) {
-        if (ResultCode) move(fbUserInfo);//회원이 아닌 경우
-        else move(fbUserInfo); //회원인 경우
+    public void signIn(Boolean ResultCode, UserInfo fbUserInfo, BookWorm bookworm) {
+        if (ResultCode) move(fbUserInfo, bookworm);//회원이 아닌 경우
+        else move(fbUserInfo, bookworm); //회원인 경우
     }
 
     //화면 이동 => 메인 액티비티로
-    public void move(UserInfo userInfo) {
+    public void move(UserInfo userInfo, BookWorm bookworm) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         new PersonalD(this).saveUserInfo(userInfo); //값 저장
+        new PersonalD(this).saveBookworm(bookworm);
         startActivity(intent);
         this.finish();
     }

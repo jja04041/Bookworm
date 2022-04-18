@@ -26,12 +26,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_main;
 import com.example.bookworm.User.UserInfo;
 
 import com.example.bookworm.databinding.SubactivityFeedCreateBinding;
+import com.example.bookworm.databinding.SubactivityFeedModifyBinding;
 import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.Module;
 import com.example.bookworm.modules.personalD.PersonalD;
@@ -56,10 +58,10 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class subActivity_Feed_Create extends AppCompatActivity {
+public class subActivity_Feed_Modify extends AppCompatActivity {
 
 
-    private SubactivityFeedCreateBinding binding;
+    private SubactivityFeedModifyBinding binding;
     FBModule fbModule;
     UserInfo userInfo;
     Context current_context;
@@ -68,6 +70,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     String imgurl = null;
     Dialog customDialog;
     String FeedID;
+    Feed feed;
     Book selected_book; //선택한 책 객체
     //라벨은 알럿 다이어그램을 통해 입력을 받고, 선택한 값으로 라벨이 지정됨 => 구현 예정
 
@@ -100,7 +103,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
                     Intent intent = result.getData();
                     this.selected_book = (Book) intent.getSerializableExtra("data");
                     binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목만 세팅한다.
-
                     //Glide.with(this).load(selected_book.getImg_url()).into(Thumbnail); //책 표지 로딩후 삽입.
                 }
             });
@@ -108,7 +110,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = SubactivityFeedCreateBinding.inflate(getLayoutInflater());
+        binding = SubactivityFeedModifyBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         //피드 생성화면에 존재하는 라벨
@@ -119,6 +121,28 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         for (int i = 0; i < feedCreateLabel.length; i++) {
             feedCreateLabel[i] = findViewById(feedCreateLabelID[i]);
             feedCreateLabel[i].setVisibility(View.INVISIBLE);
+        }
+
+        binding.btnImageUpload.setVisibility(View.INVISIBLE); //피드 수정 화면에서는 사진 수정 불가능
+
+        feed = (Feed) getIntent().getSerializableExtra("Feed");
+        this.selected_book = feed.getBook();
+        binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목 세팅한다.
+        binding.edtFeedText.setText(feed.getFeedText()); //피드 내용 세팅
+        Glide.with(this).load(feed.getImgurl()).into(binding.ivpicture); //피드 사진 세팅(수정 불가)
+
+        ArrayList<String> modifyLabel; //수정화면의 라벨 세팅
+        modifyLabel = feed.getLabel();
+
+        //라벨 리스트를 받아와서 삽입해놓음
+        for (int i = 0; i < modifyLabel.size(); i++) {
+            if (modifyLabel.get(i).equals("")) {
+                feedCreateLabel[i].setVisibility(View.INVISIBLE);
+            } else {
+                feedCreateLabel[i].setVisibility(View.VISIBLE);
+                feedCreateLabel[i].setText(modifyLabel.get(i));
+                binding.tvlabelHint.setVisibility(View.INVISIBLE);
+            }
         }
 
 
@@ -133,7 +157,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         Glide.with(this).load(userInfo.getProfileimg()).circleCrop().into(binding.ivProfileImage); //프로필사진 로딩후 삽입.
         binding.tvNickname.setText(userInfo.getUsername());
 
-        customDialog = new Dialog(subActivity_Feed_Create.this);       // Dialog 초기화
+        customDialog = new Dialog(subActivity_Feed_Modify.this);       // Dialog 초기화
         customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         customDialog.setContentView(R.layout.custom_dialog_label);
 
@@ -236,7 +260,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     }
 
     private void launchCameraIntent() {
-        Intent intent = new Intent(subActivity_Feed_Create.this, ImagePicker.class);
+        Intent intent = new Intent(subActivity_Feed_Modify.this, ImagePicker.class);
         intent.putExtra(ImagePicker.INTENT_IMAGE_PICKER_OPTION, ImagePicker.REQUEST_IMAGE_CAPTURE);
 
         // setting aspect ratio
@@ -252,7 +276,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     }
 
     private void launchGalleryIntent() {
-        Intent intent = new Intent(subActivity_Feed_Create.this, ImagePicker.class);
+        Intent intent = new Intent(subActivity_Feed_Modify.this, ImagePicker.class);
         intent.putExtra(ImagePicker.INTENT_IMAGE_PICKER_OPTION, ImagePicker.REQUEST_GALLERY_IMAGE);
 
         // setting aspect ratio
@@ -263,7 +287,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     }
 
     private void showSettingsDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(subActivity_Feed_Create.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(subActivity_Feed_Modify.this);
         builder.setTitle(getString(R.string.dialog_permission_title));
         builder.setMessage(getString(R.string.dialog_permission_message));
         builder.setPositiveButton(getString(R.string.go_to_settings), (dialog, which) -> {
@@ -471,8 +495,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         } else { //필수 입력사항이 입력돼있다면 작성한 내용을 파이어베이스에 업로드
             HashMap<String, Object> map = new HashMap<>();
 
-
-
             ArrayList<String> labelList = new ArrayList<String>(); //선택한 라벨 목록을 담을 리스트
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -482,21 +504,19 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             map.put("book", selected_book); //책 정보
             map.put("feedText", binding.edtFeedText.getText().toString()); //피드 내용
             map.put("label", labelAdd(labelList)); //라벨 리스트
-            map.put("date", formatTime); //현재 시간 millis로
-            map.put("FeedID", FeedID); //피드 아이디
-            map.put("commentsCount",0);
-            map.put("likeCount", 0);
-            if (imgUrl != null) map.put("imgurl", imgUrl); //이미지 url
+            map.put("date", feed.getDate()); //현재 시간 millis로
+            map.put("FeedID", feed.getFeedID()); //피드 아이디
+            map.put("commentsCount", feed.getCommentCount());
+            map.put("likeCount", feed.getLikeCount());
+            if (feed.getImgurl() != null) map.put("imgurl", feed.getImgurl()); //이미지 url
+
+            feed.setData(map, null);
+            Intent intent = new Intent();
+            intent.putExtra("modifiedFeed", feed);
 
             fbModule.readData(1, map, FeedID);
+            setResult(26, intent);
 
-            // 장르 처리
-            HashMap<String, Object> savegenremap = new HashMap<>();
-
-            userInfo.setGenre(selected_book.getCategoryname(), current_context);
-            savegenremap.put("userinfo_genre", userInfo.getGenre());
-            fbModule.readData(0, savegenremap, userInfo.getToken());
-            setResult(Activity.RESULT_OK);
             finish();
         }
     }

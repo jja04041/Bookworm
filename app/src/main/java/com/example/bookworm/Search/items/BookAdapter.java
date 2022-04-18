@@ -140,7 +140,6 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 }
             });
             //북 클래스의 각 아이템을 세팅하는 메소드
-
         }
 
         public void setItem(Book item) {

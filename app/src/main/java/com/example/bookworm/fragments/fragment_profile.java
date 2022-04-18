@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Achievement.Achievement;
+import com.example.bookworm.Bw.BookWorm;
 import com.example.bookworm.ProfileSettingActivity;
 import com.example.bookworm.User.FollowerActivity;
 import com.example.bookworm.User.UserInfo;
@@ -25,6 +26,7 @@ import java.util.Map;
 public class fragment_profile extends Fragment {
 
     private UserInfo userinfo;
+    private BookWorm bookworm;
     private Achievement achievement;
 
     private FragmentProfileBinding binding;
@@ -42,7 +44,9 @@ public class fragment_profile extends Fragment {
         current_context = getActivity();
         fbModule = new FBModule(current_context);
         userinfo = new PersonalD(current_context).getUserInfo(); //저장된 UserInfo값을 가져온다.
-        achievement = new Achievement(current_context, fbModule, userinfo);
+        bookworm = new PersonalD(current_context).getBookworm();
+
+        achievement = new Achievement(current_context, fbModule, userinfo, bookworm);
 
         binding.btnSetting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,6 +62,8 @@ public class fragment_profile extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), FollowerActivity.class);
+                intent.putExtra("token",userinfo.getToken());
+                intent.putExtra("page",0);
                 startActivity(intent);
             }
         });
@@ -67,28 +73,24 @@ public class fragment_profile extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), FollowerActivity.class);
+                intent.putExtra("token",userinfo.getToken());
+                intent.putExtra("page",1);
                 startActivity(intent);
             }
         });
 
         // 지워도댐
 
-        binding.btnD.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setGenre(0);
-            }
-        });
         binding.btnH.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setGenre(1);
+                setGenre("공포");
             }
         });
         binding.btnDe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setGenre(2);
+                setGenre("추리");
             }
         });
 
@@ -105,9 +107,9 @@ public class fragment_profile extends Fragment {
 
     }
     //장르를 세팅하는 함수
-    private void setGenre(int idx) {
+    private void setGenre(String key) {
         //로컬에서 업데이트
-        userinfo.setGenre(idx, current_context);
+        userinfo.setGenre(key, current_context);
         //로컬 값 변경이후, 서버에 업데이트
         Map map = new HashMap();
         map.put("userinfo_genre", userinfo.getGenre());

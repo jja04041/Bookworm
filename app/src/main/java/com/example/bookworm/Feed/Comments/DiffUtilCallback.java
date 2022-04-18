@@ -3,6 +3,7 @@ package com.example.bookworm.Feed.Comments;
 import androidx.recyclerview.widget.DiffUtil;
 
 import com.example.bookworm.Feed.items.Feed;
+import com.example.bookworm.User.UserInfo;
 
 import java.util.ArrayList;
 
@@ -32,9 +33,11 @@ public class DiffUtilCallback extends DiffUtil.Callback {
         if (oldItem instanceof Comment && newItem instanceof Comment) {
             return ((Comment) oldItem).getCommentID() == ((Comment) newItem).getCommentID();
         } else if (oldItem instanceof Feed && newItem instanceof Feed) {
-            return ((Feed) oldItem).getFeedID() == ((Feed)newItem).getFeedID();
+            return ((Feed) oldItem).getFeedID() == ((Feed) newItem).getFeedID();
+        } else if (oldItem instanceof UserInfo && newItem instanceof UserInfo) {
+            return ((UserInfo) oldItem).getToken() == ((UserInfo) newItem).getToken();
         }
-        return oldItem==newItem;
+        return oldItem == newItem;
     }
 
     @Override
