@@ -46,7 +46,7 @@ public class subactivity_comment extends AppCompatActivity {
     FBModule fbModule;
     private Map map;
     CommentAdapter commentAdapter;
-    ArrayList commentList;
+    public ArrayList commentList;
     private Boolean isLoading = false, canLoad = true;
     DocumentSnapshot lastVisible = null;
 
@@ -160,7 +160,7 @@ public class subactivity_comment extends AppCompatActivity {
         commentAdapter = new CommentAdapter(commentList, context);
     }
 
-    private void replaceItem(ArrayList newthings) {
+    public void replaceItem(ArrayList newthings) {
         DiffUtilCallback callback = new DiffUtilCallback(commentList, newthings);
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(callback, true);
         commentList.clear();

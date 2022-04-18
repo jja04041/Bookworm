@@ -284,6 +284,25 @@ public class FBModule {
         });
     }
 
+    //comment삭제를 위한 함수
+    public void deleteData(int idx, String token, String commentToken) {
+        collectionReference = db.collection(location[idx]).document(token).collection("comments");
+        //task 결정
+        task = collectionReference.document(commentToken).delete();
+        //task 실행
+        task.addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("오류", "Error deleting " + location[idx], e);
+            }
+        });
+    }
+
 
     private void successDelete(int idx) {
         switch (idx) {
