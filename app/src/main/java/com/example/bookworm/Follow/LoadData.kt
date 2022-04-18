@@ -4,9 +4,9 @@ import android.util.Log
 import com.example.bookworm.User.UserInfo
 import com.google.firebase.firestore.*
 
-//팔로우 하는 사람 또는 팔로워의 데이터를 가져온다
+//팔로우 하는 사람 또는 팔로워의 데이터를 가져오고, 뷰에게 값을 전달한다.
 class LoadData(val view: Contract.View, val isfollewer: Boolean,val nowUserInfo: UserInfo) : LoadInfoCallback, Contract.Presenter {
-    public val LIMIT:Long = 10//최대 10명씩 불러오도록 함
+    val LIMIT:Long = 10//최대 10명씩 불러오도록 함
     var token: String? = null
     var lastVisible: String? = null //이어서 가져오는 경우 필요함
     var reference: CollectionReference? =null

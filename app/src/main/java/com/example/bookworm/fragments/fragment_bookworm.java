@@ -29,9 +29,6 @@ public class fragment_bookworm extends Fragment {
     public static Context current_context;
     private FBModule fbModule;
 
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

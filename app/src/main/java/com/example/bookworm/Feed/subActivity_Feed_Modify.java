@@ -60,7 +60,7 @@ import okhttp3.RequestBody;
 
 public class subActivity_Feed_Modify extends AppCompatActivity {
 
-
+    public static int MODIFY_OK=26;
     private SubactivityFeedModifyBinding binding;
     FBModule fbModule;
     UserInfo userInfo;
@@ -515,7 +515,7 @@ public class subActivity_Feed_Modify extends AppCompatActivity {
             intent.putExtra("modifiedFeed", feed);
 
             fbModule.readData(1, map, FeedID);
-            setResult(26, intent);
+            setResult(MODIFY_OK, intent);
 
             finish();
         }

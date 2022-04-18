@@ -1,6 +1,7 @@
 package com.example.bookworm.Follow
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.bumptech.glide.Glide
 import com.example.bookworm.Feed.ViewHolders.ItemViewHolder
+import com.example.bookworm.MainActivity
+import com.example.bookworm.ProfileInfoActivity
 import com.example.bookworm.R
+import com.example.bookworm.User.FollowerActivity
 import com.example.bookworm.User.UserInfo
 import com.example.bookworm.User.followCounter
 import com.example.bookworm.databinding.LayoutUserItemBinding
@@ -71,7 +75,7 @@ class FollowerAdapter(data: ArrayList<UserInfo>?, val context: Context,val nowUs
         //
     }
 
-    class ItemViewHolder(itemView: View, context: Context?,val nowUserInfo: UserInfo) : RecyclerView.ViewHolder(itemView) {
+    class ItemViewHolder(val itemView: View, context: Context?,val nowUserInfo: UserInfo) : RecyclerView.ViewHolder(itemView) {
         var context = context//전달된 context
         var binding = LayoutUserItemBinding.bind(itemView)
         var v = false
@@ -89,6 +93,11 @@ class FollowerAdapter(data: ArrayList<UserInfo>?, val context: Context,val nowUs
                     followCounter().follow(item,nowUserInfo,context)
                     following()
                 }
+            })
+            itemView.setOnClickListener({
+                var intent = Intent(context,ProfileInfoActivity::class.java)
+                intent.putExtra("userID",item.token)
+                (context as FollowerActivity).startActivity(intent)
             })
         }
         fun following() {
