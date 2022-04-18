@@ -1,6 +1,5 @@
 package com.example.bookworm.modules;
 
-import android.app.Activity;
 import android.content.Context;
 
 import android.util.Log;
@@ -8,9 +7,7 @@ import android.widget.Toast;
 
 
 import com.example.bookworm.Feed.subActivity_Feed_Create;
-import com.example.bookworm.MainActivity;
-import com.example.bookworm.R;
-import com.example.bookworm.Search.items.Book;
+import com.example.bookworm.Core.MainActivity;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_main;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_result;
 import com.example.bookworm.fragments.fragment_search;
@@ -20,7 +17,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 import okhttp3.MultipartBody;

@@ -4,20 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.bookworm.Feed.items.Feed;
-import com.example.bookworm.User.UserInfo;
-import com.example.bookworm.User.followCounter;
+import com.example.bookworm.Follow.View.FollowerActivity;
+import com.example.bookworm.Core.UserData.UserInfo;
+import com.example.bookworm.Follow.Modules.followCounter;
 import com.example.bookworm.databinding.ActivityProfileInfoBinding;
-import com.example.bookworm.modules.FBModule;
-import com.example.bookworm.modules.personalD.PersonalD;
+import com.example.bookworm.Core.UserData.PersonalD;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -84,6 +81,18 @@ public class ProfileInfoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 finish();
             }
+        });
+        binding.btnFollower.setOnClickListener((view)-> {
+            Intent intent=new Intent(context, FollowerActivity.class);
+            intent.putExtra("token",userInfo.getToken());
+            intent.putExtra("page",0);
+            context.startActivity(intent);
+        });
+        binding.btnFollowing.setOnClickListener((view)-> {
+            Intent intent=new Intent(context, FollowerActivity.class);
+            intent.putExtra("token",userInfo.getToken());
+            intent.putExtra("page",1);
+            context.startActivity(intent);
         });
     }
 

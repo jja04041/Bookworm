@@ -1,11 +1,10 @@
 package com.example.bookworm.Feed;
 
-import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.Core.UserData.UserInfo;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;

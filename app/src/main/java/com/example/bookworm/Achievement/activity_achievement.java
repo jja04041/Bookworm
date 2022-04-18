@@ -11,7 +11,7 @@ import com.example.bookworm.Achievement.Adapter.ItemData;
 import com.example.bookworm.Achievement.Adapter.RecyclerViewAdapter;
 import com.example.bookworm.Bw.BookWorm;
 import com.example.bookworm.R;
-import com.example.bookworm.modules.personalD.PersonalD;
+import com.example.bookworm.Core.UserData.PersonalD;
 
 public class activity_achievement extends AppCompatActivity {
 

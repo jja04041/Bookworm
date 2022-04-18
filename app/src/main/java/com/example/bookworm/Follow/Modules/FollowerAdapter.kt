@@ -1,20 +1,16 @@
-package com.example.bookworm.Follow
+package com.example.bookworm.Follow.Modules
 
 import android.content.Context
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
-import com.bumptech.glide.Glide
-import com.example.bookworm.Feed.ViewHolders.ItemViewHolder
+import com.example.bookworm.Follow.View.FollowerViewHolder
 import com.example.bookworm.R
-import com.example.bookworm.User.UserInfo
-import com.example.bookworm.User.followCounter
-import com.example.bookworm.databinding.LayoutUserItemBinding
+import com.example.bookworm.Core.UserData.UserInfo
 
-class FollowerAdapter(data: ArrayList<UserInfo>?, val context: Context,val nowUserInfo: UserInfo) : Adapter<RecyclerView.ViewHolder>() {
+class FollowerAdapter(data: ArrayList<UserInfo>?, val context: Context, val nowUserInfo: UserInfo) : Adapter<RecyclerView.ViewHolder>() {
     var UserList: ArrayList<UserInfo> = ArrayList()
     init{
         if(data!=null) UserList.addAll(data)
@@ -27,7 +23,7 @@ class FollowerAdapter(data: ArrayList<UserInfo>?, val context: Context,val nowUs
         when (viewType) {
             1 -> {
                 view = inflater.inflate(R.layout.layout_user_item, parent, false)
-                return ItemViewHolder(view, context,nowUserInfo)
+                return FollowerViewHolder(view, context,nowUserInfo)
             }
             else -> {
                 view = inflater.inflate(R.layout.layout_item_loading, parent, false)
@@ -42,7 +38,7 @@ class FollowerAdapter(data: ArrayList<UserInfo>?, val context: Context,val nowUs
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         var position = holder.adapterPosition
         holder.apply {
-            if (holder is ItemViewHolder) {
+            if (holder is FollowerViewHolder) {
                 var userInfo = UserList!!.get(position)
                 holder.setItem(userInfo)
             } else if (holder is LoadingViewHolder) {
@@ -71,36 +67,4 @@ class FollowerAdapter(data: ArrayList<UserInfo>?, val context: Context,val nowUs
         //
     }
 
-    class ItemViewHolder(itemView: View, context: Context?,val nowUserInfo: UserInfo) : RecyclerView.ViewHolder(itemView) {
-        var context = context//전달된 context
-        var binding = LayoutUserItemBinding.bind(itemView)
-        var v = false
-        fun setItem(item: UserInfo?) {
-            Glide.with(context!!).load(item!!.profileimg).circleCrop().into(binding.ivProfileImg)
-            binding.tvProfileID.setText(item.username)
-            if (item.isFollowed) following()
-            else unfollowing()
-            binding.btnFollow.setOnClickListener({
-                if (v) {
-                    followCounter().unfollow(item,nowUserInfo,context)
-                    unfollowing()
-                }
-                else {
-                    followCounter().follow(item,nowUserInfo,context)
-                    following()
-                }
-            })
-        }
-        fun following() {
-            binding.btnFollow.setBackgroundColor(Color.BLUE)
-            binding.btnFollow.setText("팔로잉")
-            v = true
-        }
-        fun unfollowing() {
-            binding.btnFollow.setBackgroundColor(Color.RED)
-            binding.btnFollow.setText("팔로우")
-            v = false
-        }
-
-    }
 }

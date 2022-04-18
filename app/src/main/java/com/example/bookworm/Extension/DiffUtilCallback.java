@@ -1,9 +1,10 @@
-package com.example.bookworm.Feed.Comments;
+package com.example.bookworm.Extension;
 
 import androidx.recyclerview.widget.DiffUtil;
 
+import com.example.bookworm.Feed.Comments.Comment;
 import com.example.bookworm.Feed.items.Feed;
-import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.Core.UserData.UserInfo;
 
 import java.util.ArrayList;
 

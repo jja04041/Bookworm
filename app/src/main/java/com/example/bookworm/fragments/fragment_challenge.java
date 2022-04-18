@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +11,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,19 +28,13 @@ import com.example.bookworm.Challenge.subActivity.subactivity_challenge_challeng
 import com.example.bookworm.Challenge.subActivity.subactivity_challenge_createchallenge;
 import com.example.bookworm.Challenge.items.ChallengeAdapter;
 import com.example.bookworm.Challenge.items.OnChallengeItemClickListener;
-import com.example.bookworm.Feed.items.Feed;
-import com.example.bookworm.R;
-import com.example.bookworm.Search.items.Book;
-import com.example.bookworm.User.UserInfo;
 import com.example.bookworm.databinding.FragmentChallengeBinding;
 import com.example.bookworm.modules.FBModule;
-import com.example.bookworm.modules.personalD.PersonalD;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 
 import java.util.ArrayList;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

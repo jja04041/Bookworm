@@ -29,12 +29,12 @@ import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_main;
-import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.Core.UserData.UserInfo;
 
 import com.example.bookworm.databinding.SubactivityFeedCreateBinding;
 import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.Module;
-import com.example.bookworm.modules.personalD.PersonalD;
+import com.example.bookworm.Core.UserData.PersonalD;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -58,7 +58,7 @@ import okhttp3.RequestBody;
 
 public class subActivity_Feed_Create extends AppCompatActivity {
 
-
+    public static int CREATE_OK = 30;
     private SubactivityFeedCreateBinding binding;
     FBModule fbModule;
     UserInfo userInfo;
@@ -69,7 +69,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     Dialog customDialog;
     String FeedID;
     Book selected_book; //선택한 책 객체
-    //라벨은 알럿 다이어그램을 통해 입력을 받고, 선택한 값으로 라벨이 지정됨 => 구현 예정
 
     //사용자가 선택한 어플로 이어서 사진을 선택할 수 있게 함.
     ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
@@ -496,7 +495,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             userInfo.setGenre(selected_book.getCategoryname(), current_context);
             savegenremap.put("userinfo_genre", userInfo.getGenre());
             fbModule.readData(0, savegenremap, userInfo.getToken());
-            setResult(Activity.RESULT_OK);
+            setResult(CREATE_OK);
             finish();
         }
     }

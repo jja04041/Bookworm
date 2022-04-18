@@ -2,7 +2,7 @@ package com.example.bookworm.Feed.items;
 
 import com.example.bookworm.Feed.Comments.Comment;
 import com.example.bookworm.Search.items.Book;
-import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.Core.UserData.UserInfo;
 import com.google.firebase.firestore.Exclude;
 
 import java.io.Serializable;

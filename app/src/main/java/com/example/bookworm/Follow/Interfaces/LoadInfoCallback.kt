@@ -1,11 +1,10 @@
-package com.example.bookworm.Follow
+package com.example.bookworm.Follow.Interfaces
 
-import com.example.bookworm.User.UserInfo
+import com.example.bookworm.Core.UserData.UserInfo
 import com.google.firebase.firestore.QuerySnapshot
 
 
 interface LoadInfoCallback {
-//    fun onInfoLoaded(info: QuerySnapshot)
     fun isFollowed(info:QuerySnapshot)
     fun onCheckedInfoLoaded(info: QuerySnapshot,userList:ArrayList<UserInfo>)
     fun onDataNotAvailable()

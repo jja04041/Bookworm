@@ -1,4 +1,4 @@
-package com.example.bookworm.Follow
+package com.example.bookworm.Follow.View
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,49 +8,58 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bookworm.Feed.Comments.DiffUtilCallback
-import com.example.bookworm.User.UserInfo
-import com.example.bookworm.databinding.FragmentProfileFollowerBinding
-import com.example.bookworm.modules.personalD.PersonalD
-import com.google.firebase.firestore.DocumentSnapshot
+import com.example.bookworm.Extension.DiffUtilCallback
+import com.example.bookworm.Follow.Interfaces.Contract
+import com.example.bookworm.Follow.Modules.FollowerAdapter
+import com.example.bookworm.Follow.Modules.LoadData
+import com.example.bookworm.Core.UserData.UserInfo
+import com.example.bookworm.Core.UserData.PersonalD
+import com.example.bookworm.databinding.FragmentFollowListBinding
 
-class fragment_profile_follower(val token:String) : Fragment(),Contract.View{
-    var binding: FragmentProfileFollowerBinding? = null
-    private var followerAdapter:FollowerAdapter?=null
-    private var userList:ArrayList<UserInfo>?=null
+//팔로워, 팔로잉 탭의 틀을 가지고 있는 클래스 => 팔로워 탭과 팔로잉 탭의 구분은 isFollower변수로 체크한다.
+//뷰는 가져온 데이터를 화면에 표시만 하는 역할을 한다
+class FragmentFollowList(val token:String,val isfollower:Int) : Fragment(), Contract.View {
+    var binding: FragmentFollowListBinding? = null
+    private var followerAdapter: FollowerAdapter? = null
+    private var userList: ArrayList<UserInfo>? = null
 
     //Paging 처리를 위해서
-    var page=0
-    var canLoad=true //더 불러올 수 있는 지
-    var isLoading: Boolean=false
-    var loadData:LoadData?=null
-    var nowUser:UserInfo?=null //현재 사용자의 토큰
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        initValues()
+    var page = 0
+    var canLoad = true //더 불러올 수 있는 지
+    var isLoading: Boolean = false
+    var loadData: LoadData? = null
+    var nowUser: UserInfo? = null //현재 사용자의 토큰
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        initValues();
         loadData!!.getData(token) //초기 데이터를 불러옴
-        return binding!!.root
+        return  binding!!.root
     }
 
+    //프레그먼트 종료시 메모리에서 바인딩을 해제
+    override fun onDestroy() {
+        super.onDestroy()
+        binding=null
+    }
     //초기화
-    fun initValues(){
-        page=1;isLoading=false; canLoad = true
-        binding = FragmentProfileFollowerBinding.inflate(layoutInflater)
-        userList= ArrayList()
-        nowUser= PersonalD(context).userInfo as UserInfo
-        loadData=LoadData(this,true,nowUser as UserInfo) //값을 가져오는 모듈 초기화
+    fun initValues() {
+        page = 1;isLoading = false; canLoad = true
+        binding = FragmentFollowListBinding.inflate(layoutInflater)
+        userList = ArrayList()
+        nowUser = PersonalD(context).userInfo as UserInfo
+        loadData = LoadData(this, isfollower, nowUser as UserInfo) //값을 가져오는 모듈 초기화
         initAdapter()
     }
 
-    //액티비티 종료시
-    override fun onDestroy() {
-        super.onDestroy()
-        binding=null //메모리에서 바인딩 해제
-    }
 
     //아이템의 길이가 변경될 때 어답터에게 알림
     fun replaceItem(newthings: ArrayList<UserInfo>) {
-        val callback = DiffUtilCallback(userList, newthings)
+        val callback =
+            DiffUtilCallback(userList, newthings)
         val diffResult = DiffUtil.calculateDiff(callback, true)
         userList!!.clear()
         userList!!.addAll(newthings)
@@ -59,22 +68,24 @@ class fragment_profile_follower(val token:String) : Fragment(),Contract.View{
     }
 
     //어댑터 초기화
-    private fun initAdapter(){
-        followerAdapter= context?.let { FollowerAdapter(userList, it,nowUser as UserInfo) }
-        binding!!.recyclerView.adapter=followerAdapter
-        binding!!.recyclerView.layoutManager=LinearLayoutManager(context)
+    private fun initAdapter() {
+        followerAdapter = context?.let { FollowerAdapter(userList, it, nowUser as UserInfo) }
+        binding!!.recyclerView.adapter = followerAdapter
+        binding!!.recyclerView.layoutManager = LinearLayoutManager(context)
         initScrollListener()
     }
+
     //리사이클러뷰 스크롤 초기화
     private fun initScrollListener() {
         binding!!.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager?
-                val lastVisibleItemPosition = layoutManager!!.findLastCompletelyVisibleItemPosition()
+                val lastVisibleItemPosition =
+                    layoutManager!!.findLastCompletelyVisibleItemPosition()
                 if (!isLoading) {
                     try {
-                        if (layoutManager != null && lastVisibleItemPosition ==  followerAdapter!!.itemCount- 1) {
+                        if (layoutManager != null && lastVisibleItemPosition == followerAdapter!!.itemCount - 1) {
                             deleteLoading()
                             //다음 데이터를 조회한다.
                             loadData!!.getData(token)
@@ -108,6 +119,7 @@ class fragment_profile_follower(val token:String) : Fragment(),Contract.View{
         else {
             newList.addAll(userList!!)
             newList.addAll(info) //가져온 데이터 담기
+            //만약 가져온 데이터가 최대치보다 작다면 => 더 가져올 데이터가 없음을 의미
             if (info.size < loadData!!.LIMIT) canLoad = false
         }
 
@@ -121,4 +133,7 @@ class fragment_profile_follower(val token:String) : Fragment(),Contract.View{
             page++ //로딩을 다하면 그 다음 페이지로 넘어간다
         }
     }
+
+
+
 }

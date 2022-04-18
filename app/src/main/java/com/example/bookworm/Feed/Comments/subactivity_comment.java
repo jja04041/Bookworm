@@ -5,29 +5,23 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import com.example.bookworm.Extension.DiffUtilCallback;
 import com.example.bookworm.Feed.items.Feed;
-import com.example.bookworm.MainActivity;
-import com.example.bookworm.Search.items.Book;
-import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.Core.MainActivity;
+import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.databinding.SubactivityCommentBinding;
 import com.example.bookworm.fragments.fragment_feed;
 import com.example.bookworm.modules.FBModule;
-import com.example.bookworm.modules.personalD.PersonalD;
+import com.example.bookworm.Core.UserData.PersonalD;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
@@ -46,7 +40,7 @@ public class subactivity_comment extends AppCompatActivity {
     FBModule fbModule;
     private Map map;
     CommentAdapter commentAdapter;
-    ArrayList commentList;
+    public ArrayList commentList;
     private Boolean isLoading = false, canLoad = true;
     DocumentSnapshot lastVisible = null;
 
@@ -160,7 +154,7 @@ public class subactivity_comment extends AppCompatActivity {
         commentAdapter = new CommentAdapter(commentList, context);
     }
 
-    private void replaceItem(ArrayList newthings) {
+    public void replaceItem(ArrayList newthings) {
         DiffUtilCallback callback = new DiffUtilCallback(commentList, newthings);
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(callback, true);
         commentList.clear();
@@ -182,7 +176,7 @@ public class subactivity_comment extends AppCompatActivity {
             ArrayList a = new ArrayList(commentList);
             a.add(1, comment);
             replaceItem(a);
-            new commentsCounter().addCounter(data, context, item.getFeedID());
+            new CommentsCounter().addCounter(data, context, item.getFeedID());
 
             //키보드 내리기
             InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);

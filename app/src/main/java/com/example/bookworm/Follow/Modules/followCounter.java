@@ -1,11 +1,11 @@
-package com.example.bookworm.User;
+package com.example.bookworm.Follow.Modules;
 
 import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.bookworm.Feed.Comments.Comment;
+import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.ProfileInfoActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -17,8 +17,6 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Transaction;
-
-import java.util.Map;
 
 public class followCounter {
     FirebaseFirestore db;

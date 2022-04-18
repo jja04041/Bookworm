@@ -13,10 +13,10 @@ import com.example.bookworm.Bw.BookWorm;
 import com.example.bookworm.Challenge.subActivity.subactivity_challenge_challengeinfo;
 import com.example.bookworm.Feed.Comments.Comment;
 import com.example.bookworm.Feed.Comments.subactivity_comment;
-import com.example.bookworm.Login.activity_login;
-import com.example.bookworm.MainActivity;
+import com.example.bookworm.Core.Login.activity_login;
+import com.example.bookworm.Core.MainActivity;
 import com.example.bookworm.ProfileSettingActivity;
-import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.fragments.fragment_challenge;
 import com.example.bookworm.fragments.fragment_feed;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -63,6 +63,8 @@ public class FBModule {
             //map객체: 팔로워 목록
             if (map.get("FeedID") != null) {
                 query = collectionReference.document((String) map.get("FeedID")).collection("comments").orderBy("commentID", Query.Direction.DESCENDING);
+            }else{
+                query=collectionReference.orderBy("date", Query.Direction.DESCENDING);
             }
 
             if (map.get("lastVisible") != null) {
@@ -273,6 +275,25 @@ public class FBModule {
                 } else if (idx == 1) { //피드삭제의 경우
 
                 }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("오류", "Error deleting " + location[idx], e);
+            }
+        });
+    }
+
+    //comment삭제를 위한 함수
+    public void deleteData(int idx, String token, String commentToken) {
+        collectionReference = db.collection(location[idx]).document(token).collection("comments");
+        //task 결정
+        task = collectionReference.document(commentToken).delete();
+        //task 실행
+        task.addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

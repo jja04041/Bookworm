@@ -8,46 +8,60 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/llProfile"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/imgProfile"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/profile" />
-
-            <TextView
-                android:id="@+id/tvNickname"
+            <LinearLayout
+                android:id="@+id/llProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginHorizontal="10dp"
-                android:text="이름"
-                android:textColor="#000000"
-                android:textSize="15dp"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imgProfile"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/profile" />
+
+                <TextView
+                    android:id="@+id/tvNickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginHorizontal="10dp"
+                    android:text="이름"
+                    android:textColor="#000000"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="##/## ##:##" />
+
 
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/ivFeedMenu"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_vertical|end"
+            android:backgroundTint="#000000"
+            android:src="@drawable/ic_baseline_more_horiz_24" />
 
-        <TextView
-            android:id="@+id/tvDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="##/## ##:##" />
-
-
-    </LinearLayout>
+    </FrameLayout>
 
     <TextView
         android:id="@+id/tvCommentContent"
