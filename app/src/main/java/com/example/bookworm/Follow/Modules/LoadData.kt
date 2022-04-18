@@ -1,12 +1,15 @@
-package com.example.bookworm.Follow
+package com.example.bookworm.Follow.Modules
 
 import android.util.Log
-import com.example.bookworm.User.UserInfo
+import com.example.bookworm.Follow.Interfaces.Contract
+import com.example.bookworm.Follow.Interfaces.LoadInfoCallback
+import com.example.bookworm.Core.UserData.UserInfo
 import com.google.firebase.firestore.*
 
 //팔로우 하는 사람 또는 팔로워의 데이터를 가져오고, 뷰에게 값을 전달한다.
-class LoadData(val view: Contract.View, val isfollewer: Boolean,val nowUserInfo: UserInfo) : LoadInfoCallback, Contract.Presenter {
-    val LIMIT:Long = 10//최대 10명씩 불러오도록 함
+class LoadData(val view: Contract.View, val isfollewer: Int, val nowUserInfo: UserInfo) : LoadInfoCallback,
+    Contract.Presenter {
+    val LIMIT:Long = 10 //최대 10명씩 불러오도록 함
     var token: String? = null
     var lastVisible: String? = null //이어서 가져오는 경우 필요함
     var reference: CollectionReference? =null
@@ -16,7 +19,7 @@ class LoadData(val view: Contract.View, val isfollewer: Boolean,val nowUserInfo:
     fun getData(token: String) {
         this.token = token
          reference = FirebaseFirestore.getInstance().collection("users")
-                .document(token!!).collection(if (isfollewer) "follower" else "following")
+                .document(token!!).collection(if (isfollewer==0) "follower" else "following")
         query = reference!!.orderBy("token")
         if(lastVisible!=null)query=query!!.startAfter(lastVisible)
         query=query!!.limit(LIMIT)
@@ -69,7 +72,7 @@ class LoadData(val view: Contract.View, val isfollewer: Boolean,val nowUserInfo:
         val idList: ArrayList<String> = ArrayList()
         for (doc: DocumentSnapshot in result) idList.add(doc.id)
 
-        for (i in 0..userList.size-1) {
+        for (i in userList.indices) {
             var user = userList.get(i)
             if (idList.contains(user.token)) {
                 user.setFollowed(true)

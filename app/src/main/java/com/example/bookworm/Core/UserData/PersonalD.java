@@ -1,12 +1,11 @@
 //SharedPreference를 좀 더 편하게 사용하기 위함
-package com.example.bookworm.modules.personalD;
+package com.example.bookworm.Core.UserData;
 
 import static android.content.Context.MODE_PRIVATE;
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.bookworm.Bw.BookWorm;
-import com.example.bookworm.User.UserInfo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.json.JSONException;

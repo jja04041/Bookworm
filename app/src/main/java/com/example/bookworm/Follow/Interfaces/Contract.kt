@@ -1,6 +1,6 @@
-package com.example.bookworm.Follow
+package com.example.bookworm.Follow.Interfaces
 
-import com.example.bookworm.User.UserInfo
+import com.example.bookworm.Core.UserData.UserInfo
 
 /*
 ********************************************

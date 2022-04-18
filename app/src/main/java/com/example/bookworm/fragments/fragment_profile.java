@@ -14,11 +14,11 @@ import com.bumptech.glide.Glide;
 import com.example.bookworm.Achievement.Achievement;
 import com.example.bookworm.Bw.BookWorm;
 import com.example.bookworm.ProfileSettingActivity;
-import com.example.bookworm.User.FollowerActivity;
-import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.Follow.View.FollowerActivity;
+import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.databinding.FragmentProfileBinding;
 import com.example.bookworm.modules.FBModule;
-import com.example.bookworm.modules.personalD.PersonalD;
+import com.example.bookworm.Core.UserData.PersonalD;
 
 import java.util.HashMap;
 import java.util.Map;

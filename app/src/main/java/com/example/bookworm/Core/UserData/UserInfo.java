@@ -1,10 +1,10 @@
-package com.example.bookworm.User;
+package com.example.bookworm.Core.UserData;
 
 import android.content.Context;
 import android.util.Log;
 
 import com.example.bookworm.Bw.enum_wormtype;
-import com.example.bookworm.modules.personalD.PersonalD;
+import com.example.bookworm.Core.UserData.PersonalD;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.firestore.Exclude;
 import com.kakao.usermgmt.response.model.Profile;
@@ -14,7 +14,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 
 // import io.reactivex.Observer;
 

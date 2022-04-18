@@ -1,6 +1,6 @@
 package com.example.bookworm.Feed.Comments;
 
-import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.Core.UserData.UserInfo;
 import com.google.firebase.firestore.Exclude;
 
 import java.io.Serializable;

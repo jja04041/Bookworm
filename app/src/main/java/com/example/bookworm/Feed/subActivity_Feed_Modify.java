@@ -30,13 +30,12 @@ import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_main;
-import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.Core.UserData.UserInfo;
 
-import com.example.bookworm.databinding.SubactivityFeedCreateBinding;
 import com.example.bookworm.databinding.SubactivityFeedModifyBinding;
 import com.example.bookworm.modules.FBModule;
 import com.example.bookworm.modules.Module;
-import com.example.bookworm.modules.personalD.PersonalD;
+import com.example.bookworm.Core.UserData.PersonalD;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -215,7 +214,7 @@ public class subActivity_Feed_Modify extends AppCompatActivity {
             public void onClick(View view) {
 
                 new AlertDialog.Builder(current_context)
-                        .setMessage("피드를 업로드하시겠습니까?")
+                        .setMessage("피드를 수정하시겠습니까?")
                         .setPositiveButton("네", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {

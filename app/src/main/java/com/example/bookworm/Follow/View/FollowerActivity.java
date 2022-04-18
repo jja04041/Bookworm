@@ -1,4 +1,4 @@
-package com.example.bookworm.User;
+package com.example.bookworm.Follow.View;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.bookworm.Follow.Modules.FollowPagerAdapter;
 import com.example.bookworm.R;
 import com.google.android.material.tabs.TabLayout;
 
@@ -21,7 +22,7 @@ public class FollowerActivity extends AppCompatActivity {
         String token = intent.getStringExtra("token");
         int selected= intent.getIntExtra("page",0);
         viewPager = findViewById(R.id.viewpager);
-        ViewpagerAdapter adapter = new ViewpagerAdapter(getSupportFragmentManager(),token);
+        FollowPagerAdapter adapter = new FollowPagerAdapter(getSupportFragmentManager(),token);
         viewPager.setAdapter(adapter);
 
         TabLayout tabLayout = findViewById(R.id.tab_layout);

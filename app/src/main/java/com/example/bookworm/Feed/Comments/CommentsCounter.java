@@ -20,9 +20,9 @@ import java.util.Map;
 
 
 
-public class commentsCounter  {
+public class CommentsCounter {
     FirebaseFirestore db;
-    public commentsCounter() {
+    public CommentsCounter() {
         db = FirebaseFirestore.getInstance();
     }
 

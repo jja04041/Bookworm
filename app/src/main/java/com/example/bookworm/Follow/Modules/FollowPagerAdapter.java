@@ -1,25 +1,23 @@
-package com.example.bookworm.User;
+package com.example.bookworm.Follow.Modules;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.example.bookworm.Follow.fragment_profile_follower;
-import com.example.bookworm.Follow.fragment_profile_following;
-
+import com.example.bookworm.Follow.View.FragmentFollowList;
 import java.util.ArrayList;
 
-public class ViewpagerAdapter extends FragmentPagerAdapter {
+public class FollowPagerAdapter extends FragmentPagerAdapter {
 
     private ArrayList<Fragment> arrayList = new ArrayList<>();
     private ArrayList<String> name = new ArrayList<>();
 
-    public ViewpagerAdapter(@NonNull FragmentManager fm,String token)
+    public FollowPagerAdapter(@NonNull FragmentManager fm, String token)
     {
         super(fm);
-        arrayList.add(new fragment_profile_follower(token));
-        arrayList.add(new fragment_profile_following(token));
+        arrayList.add(new FragmentFollowList(token,0));
+        arrayList.add(new FragmentFollowList(token,1));
 
         name.add("팔로워 탭");
         name.add("팔로잉 탭");

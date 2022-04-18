@@ -8,22 +8,18 @@ import android.view.ViewGroup;
 
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Feed.CustomPopup;
 import com.example.bookworm.Feed.items.Feed;
-import com.example.bookworm.MainActivity;
 import com.example.bookworm.ProfileInfoActivity;
 import com.example.bookworm.R;
-import com.example.bookworm.Search.items.Book;
-import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.databinding.LayoutCommentItemBinding;
-import com.example.bookworm.databinding.LayoutCommentSummaryBinding;
 import com.example.bookworm.fragments.fragment_feed;
 import com.example.bookworm.modules.FBModule;
-import com.example.bookworm.modules.personalD.PersonalD;
+import com.example.bookworm.Core.UserData.PersonalD;
 
 import java.util.ArrayList;
 

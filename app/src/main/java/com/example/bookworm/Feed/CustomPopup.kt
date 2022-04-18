@@ -4,14 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.view.MenuItem
 import android.view.View
-import android.widget.Adapter
 import android.widget.PopupMenu
 import com.example.bookworm.Feed.Comments.Comment
-import com.example.bookworm.Feed.Comments.CommentAdapter
-import com.example.bookworm.Feed.Comments.commentsCounter
+import com.example.bookworm.Feed.Comments.CommentsCounter
 import com.example.bookworm.Feed.Comments.subactivity_comment
 import com.example.bookworm.Feed.items.Feed
-import com.example.bookworm.MainActivity
+import com.example.bookworm.Core.MainActivity
 import com.example.bookworm.R
 import com.example.bookworm.fragments.fragment_feed
 import com.example.bookworm.modules.FBModule
@@ -83,7 +81,8 @@ class CustomPopup(context: Context?, anchor: View?) : PopupMenu(context, anchor)
                     fbModule!!.deleteData(1, item!!.feedID, commentitem!!.commentID) //삭제
                     val data = HashMap<String, Comment>()
                     data.put("comment", commentitem!!)
-                    commentsCounter().removeCounter(data, context, item!!.feedID)
+                    CommentsCounter()
+                        .removeCounter(data, context, item!!.feedID)
 
                     oldList?.removeAt(pos)
                     (context as (subactivity_comment)).replaceItem(oldList)

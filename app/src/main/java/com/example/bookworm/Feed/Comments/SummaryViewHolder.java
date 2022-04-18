@@ -1,14 +1,10 @@
 package com.example.bookworm.Feed.Comments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,15 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Feed.CustomPopup;
 import com.example.bookworm.Feed.items.Feed;
-import com.example.bookworm.MainActivity;
-import com.example.bookworm.ProfileModifyActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
-import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.databinding.LayoutCommentSummaryBinding;
 import com.example.bookworm.fragments.fragment_feed;
 import com.example.bookworm.modules.FBModule;
-import com.example.bookworm.modules.personalD.PersonalD;
+import com.example.bookworm.Core.UserData.PersonalD;
 
 import java.util.ArrayList;
 

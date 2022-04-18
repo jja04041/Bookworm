@@ -1,6 +1,6 @@
 package com.example.bookworm;
 
-import static com.example.bookworm.Login.activity_login.gsi;
+import static com.example.bookworm.Core.Login.activity_login.gsi;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -14,8 +14,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.bookworm.Login.activity_login;
-import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.Core.Login.activity_login;
+import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.modules.FBModule;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

@@ -1,21 +1,25 @@
-package com.example.bookworm.Follow
+package com.example.bookworm.Follow.View
 
-import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bookworm.Feed.Comments.DiffUtilCallback
-import com.example.bookworm.User.UserInfo
-import com.example.bookworm.databinding.FragmentProfileFollowerBinding
-import com.example.bookworm.modules.personalD.PersonalD
+import com.example.bookworm.Extension.DiffUtilCallback
+import com.example.bookworm.Follow.Interfaces.Contract
+import com.example.bookworm.Follow.Modules.FollowerAdapter
+import com.example.bookworm.Follow.Modules.LoadData
+import com.example.bookworm.Core.UserData.UserInfo
+import com.example.bookworm.Core.UserData.PersonalD
+import com.example.bookworm.databinding.FragmentFollowListBinding
 
 //팔로워, 팔로잉 탭의 틀을 가지고 있는 클래스 => 팔로워 탭과 팔로잉 탭의 구분은 isFollower변수로 체크한다.
 //뷰는 가져온 데이터를 화면에 표시만 하는 역할을 한다
-class FollowerFrame(val token: String, val context: Context?, val layoutInflater: LayoutInflater,val isfollower:Boolean) :
-    Contract.View {
-    var binding: FragmentProfileFollowerBinding? = null
+class FragmentFollowList(val token:String,val isfollower:Int) : Fragment(), Contract.View {
+    var binding: FragmentFollowListBinding? = null
     private var followerAdapter: FollowerAdapter? = null
     private var userList: ArrayList<UserInfo>? = null
 
@@ -26,17 +30,25 @@ class FollowerFrame(val token: String, val context: Context?, val layoutInflater
     var loadData: LoadData? = null
     var nowUser: UserInfo? = null //현재 사용자의 토큰
 
-    //객체 생성 시
-    init {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         initValues();
         loadData!!.getData(token) //초기 데이터를 불러옴
+        return  binding!!.root
     }
 
-
+    //프레그먼트 종료시 메모리에서 바인딩을 해제
+    override fun onDestroy() {
+        super.onDestroy()
+        binding=null
+    }
     //초기화
     fun initValues() {
         page = 1;isLoading = false; canLoad = true
-        binding = FragmentProfileFollowerBinding.inflate(layoutInflater)
+        binding = FragmentFollowListBinding.inflate(layoutInflater)
         userList = ArrayList()
         nowUser = PersonalD(context).userInfo as UserInfo
         loadData = LoadData(this, isfollower, nowUser as UserInfo) //값을 가져오는 모듈 초기화
@@ -46,7 +58,8 @@ class FollowerFrame(val token: String, val context: Context?, val layoutInflater
 
     //아이템의 길이가 변경될 때 어답터에게 알림
     fun replaceItem(newthings: ArrayList<UserInfo>) {
-        val callback = DiffUtilCallback(userList, newthings)
+        val callback =
+            DiffUtilCallback(userList, newthings)
         val diffResult = DiffUtil.calculateDiff(callback, true)
         userList!!.clear()
         userList!!.addAll(newthings)
@@ -121,11 +134,6 @@ class FollowerFrame(val token: String, val context: Context?, val layoutInflater
         }
     }
 
-    //뷰를 반환
-    fun getView(): View = binding!!.root
 
-    //메모리에서 바인딩을 해제하는 메소드
-    fun setBindingNull() {
-        binding = null
-    }
+
 }

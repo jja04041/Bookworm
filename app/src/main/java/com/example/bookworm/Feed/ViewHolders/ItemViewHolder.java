@@ -7,12 +7,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,22 +18,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Feed.Comments.Comment;
-import com.example.bookworm.Feed.Comments.commentsCounter;
+import com.example.bookworm.Feed.Comments.CommentsCounter;
 import com.example.bookworm.Feed.CustomPopup;
 import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.Feed.likeCounter;
 import com.example.bookworm.Feed.Comments.subactivity_comment;
-import com.example.bookworm.MainActivity;
 import com.example.bookworm.ProfileInfoActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_result;
-import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.databinding.LayoutFeedBinding;
-import com.example.bookworm.fragments.fragment_challenge;
-import com.example.bookworm.fragments.fragment_feed;
 import com.example.bookworm.modules.FBModule;
-import com.example.bookworm.modules.personalD.PersonalD;
+import com.example.bookworm.Core.UserData.PersonalD;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -167,7 +162,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         comment.getData(nowUser, binding.edtComment.getText().toString(), System.currentTimeMillis());
         data.put("comment", comment);
         //입력한 댓글 화면에 표시하기
-        new commentsCounter().addCounter(data, context, FeedID);
+        new CommentsCounter().addCounter(data, context, FeedID);
         //키보드 내리기
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(binding.edtComment.getWindowToken(), 0);

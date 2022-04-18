@@ -1,17 +1,15 @@
 package com.example.bookworm.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 
-import com.example.bookworm.Feed.Comments.DiffUtilCallback;
+import com.example.bookworm.Extension.DiffUtilCallback;
 import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.Feed.items.FeedAdapter;
 import com.example.bookworm.Feed.subActivity_Feed_Modify;
@@ -30,7 +28,6 @@ import com.example.bookworm.Feed.subActivity_Feed_Create;
 import com.example.bookworm.databinding.LayoutTopbarBinding;
 import com.example.bookworm.modules.FBModule;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firestore.v1.Precondition;
 
 import java.util.ArrayList;
 import java.util.HashMap;
