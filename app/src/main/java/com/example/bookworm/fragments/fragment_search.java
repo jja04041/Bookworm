@@ -7,15 +7,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookworm.R;
 //import com.example.bookworm.modules.module_search;
@@ -25,7 +20,7 @@ import com.example.bookworm.Search.items.OnBookItemClickListener;
 import com.example.bookworm.Search.items.RecomBookAdapter;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_main;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_result;
-import com.example.bookworm.modules.Module;
+import com.example.bookworm.Core.Internet.Module;
 
 import org.json.JSONArray;
 import org.json.JSONException;

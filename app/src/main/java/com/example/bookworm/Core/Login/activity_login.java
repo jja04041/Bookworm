@@ -19,7 +19,7 @@ import com.example.bookworm.Bw.BookWorm;
 import com.example.bookworm.Core.MainActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.Core.UserData.UserInfo;
-import com.example.bookworm.modules.FBModule;
+import com.example.bookworm.Core.Internet.FBModule;
 import com.example.bookworm.Core.UserData.PersonalD;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;

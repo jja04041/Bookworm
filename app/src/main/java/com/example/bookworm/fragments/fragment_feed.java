@@ -26,7 +26,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.bookworm.Feed.subActivity_Feed_Create;
 import com.example.bookworm.databinding.LayoutTopbarBinding;
-import com.example.bookworm.modules.FBModule;
+import com.example.bookworm.Core.Internet.FBModule;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;

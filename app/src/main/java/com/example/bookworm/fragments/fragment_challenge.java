@@ -29,7 +29,7 @@ import com.example.bookworm.Challenge.subActivity.subactivity_challenge_createch
 import com.example.bookworm.Challenge.items.ChallengeAdapter;
 import com.example.bookworm.Challenge.items.OnChallengeItemClickListener;
 import com.example.bookworm.databinding.FragmentChallengeBinding;
-import com.example.bookworm.modules.FBModule;
+import com.example.bookworm.Core.Internet.FBModule;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 

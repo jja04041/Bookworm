@@ -12,7 +12,7 @@ import com.example.bookworm.Feed.items.Feed
 import com.example.bookworm.Core.MainActivity
 import com.example.bookworm.R
 import com.example.bookworm.fragments.fragment_feed
-import com.example.bookworm.modules.FBModule
+import com.example.bookworm.Core.Internet.FBModule
 
 class CustomPopup(context: Context?, anchor: View?) : PopupMenu(context, anchor),
     PopupMenu.OnMenuItemClickListener {

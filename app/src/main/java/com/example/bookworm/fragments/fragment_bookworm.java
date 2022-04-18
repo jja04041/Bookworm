@@ -15,7 +15,7 @@ import com.example.bookworm.Achievement.activity_achievement;
 import com.example.bookworm.Bw.BookWorm;
 import com.example.bookworm.R;
 import com.example.bookworm.Core.UserData.UserInfo;
-import com.example.bookworm.modules.FBModule;
+import com.example.bookworm.Core.Internet.FBModule;
 import com.example.bookworm.Core.UserData.PersonalD;
 
 public class fragment_bookworm extends Fragment {

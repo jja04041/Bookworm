@@ -32,8 +32,8 @@ import com.example.bookworm.Search.subActivity.search_fragment_subActivity_main;
 import com.example.bookworm.Core.UserData.UserInfo;
 
 import com.example.bookworm.databinding.SubactivityFeedCreateBinding;
-import com.example.bookworm.modules.FBModule;
-import com.example.bookworm.modules.Module;
+import com.example.bookworm.Core.Internet.FBModule;
+import com.example.bookworm.Core.Internet.Module;
 import com.example.bookworm.Core.UserData.PersonalD;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;

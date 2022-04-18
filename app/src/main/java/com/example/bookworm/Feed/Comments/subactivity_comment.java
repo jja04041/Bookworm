@@ -20,7 +20,7 @@ import com.example.bookworm.Core.MainActivity;
 import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.databinding.SubactivityCommentBinding;
 import com.example.bookworm.fragments.fragment_feed;
-import com.example.bookworm.modules.FBModule;
+import com.example.bookworm.Core.Internet.FBModule;
 import com.example.bookworm.Core.UserData.PersonalD;
 import com.google.firebase.firestore.DocumentSnapshot;
 

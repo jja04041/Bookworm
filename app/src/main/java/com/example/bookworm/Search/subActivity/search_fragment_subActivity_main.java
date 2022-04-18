@@ -27,7 +27,7 @@ import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.items.BookAdapter;
 import com.example.bookworm.Search.items.OnBookItemClickListener;
 import com.example.bookworm.Search.items.RecomBookAdapter;
-import com.example.bookworm.modules.Module;
+import com.example.bookworm.Core.Internet.Module;
 
 import org.json.JSONArray;
 import org.json.JSONException;

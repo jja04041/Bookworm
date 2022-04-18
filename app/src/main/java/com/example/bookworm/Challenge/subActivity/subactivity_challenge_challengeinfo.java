@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide;
 import com.example.bookworm.Challenge.items.Challenge;
 import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.databinding.SubactivityChallengeChallengeinfoBinding;
-import com.example.bookworm.modules.FBModule;
+import com.example.bookworm.Core.Internet.FBModule;
 import com.example.bookworm.Core.UserData.PersonalD;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;

@@ -1,4 +1,4 @@
-package com.example.bookworm.modules;
+package com.example.bookworm.Core.Internet;
 
 import android.content.Context;
 
@@ -11,7 +11,7 @@ import com.example.bookworm.Core.MainActivity;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_main;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_result;
 import com.example.bookworm.fragments.fragment_search;
-import com.example.bookworm.modules.Interface.GetDataInterface;
+import com.example.bookworm.Core.Internet.Interface.GetDataInterface;
 
 import org.json.JSONArray;
 import org.json.JSONException;

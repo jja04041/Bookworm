@@ -1,4 +1,4 @@
-package com.example.bookworm.modules;
+package com.example.bookworm.Core.Internet;
 
 import android.app.Activity;
 import android.app.Dialog;

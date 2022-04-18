@@ -17,10 +17,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
-import com.example.bookworm.databinding.SubactivitySearchFragmentResultBinding;
-import com.example.bookworm.modules.Module;
+import com.example.bookworm.Core.Internet.Module;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
