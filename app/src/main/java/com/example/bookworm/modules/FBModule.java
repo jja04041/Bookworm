@@ -63,6 +63,8 @@ public class FBModule {
             //map객체: 팔로워 목록
             if (map.get("FeedID") != null) {
                 query = collectionReference.document((String) map.get("FeedID")).collection("comments").orderBy("commentID", Query.Direction.DESCENDING);
+            }else{
+                query=collectionReference.orderBy("date", Query.Direction.DESCENDING);
             }
 
             if (map.get("lastVisible") != null) {

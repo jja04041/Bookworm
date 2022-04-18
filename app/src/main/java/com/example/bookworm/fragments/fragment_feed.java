@@ -52,7 +52,7 @@ public class fragment_feed extends Fragment {
     public ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
+                if (result.getResultCode() == subActivity_Feed_Create.CREATE_OK) {
                     pageRefresh();
                 }
                 if (result.getResultCode() == 26) {
