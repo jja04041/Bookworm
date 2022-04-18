@@ -115,39 +115,39 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/feed_bottom_top_border"
-                android:orientation="horizontal">
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:background="@drawable/feed_bottom_top_border"-->
+<!--                android:orientation="horizontal">-->
 
-                <LinearLayout
-                    android:layout_width="80dp"
-                    android:layout_height="50dp"
-                    android:layout_marginHorizontal="10dp"
-                    android:gravity="center"
-                    android:orientation="vertical">
+<!--                <LinearLayout-->
+<!--                    android:layout_width="80dp"-->
+<!--                    android:layout_height="50dp"-->
+<!--                    android:layout_marginHorizontal="10dp"-->
+<!--                    android:gravity="center"-->
+<!--                    android:orientation="vertical">-->
 
-                    <!-- 이부분 너무 딱딱한데 평가하기라는 텍스트 말고 다른 참신한거 없나.. 그림같은? 레이팅바도 마찬가지 -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="평가하기"
-                        android:textSize="18dp"
-                        android:textStyle="bold" />
+<!--                    &lt;!&ndash; 이부분 너무 딱딱한데 평가하기라는 텍스트 말고 다른 참신한거 없나.. 그림같은? 레이팅바도 마찬가지 &ndash;&gt;-->
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="평가하기"-->
+<!--                        android:textSize="18dp"-->
+<!--                        android:textStyle="bold" />-->
 
-                </LinearLayout>
+<!--                </LinearLayout>-->
 
-                <RatingBar
-                    style="@style/Widget.AppCompat.RatingBar.Indicator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center_vertical|end"
-                    android:isIndicator="false"
-                    android:numStars="5"
-                    android:stepSize="0.5" />
+<!--                <RatingBar-->
+<!--                    style="@style/Widget.AppCompat.RatingBar.Indicator"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="40dp"-->
+<!--                    android:layout_gravity="center_vertical|end"-->
+<!--                    android:isIndicator="false"-->
+<!--                    android:numStars="5"-->
+<!--                    android:stepSize="0.5" />-->
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
 
 
             <ImageView
