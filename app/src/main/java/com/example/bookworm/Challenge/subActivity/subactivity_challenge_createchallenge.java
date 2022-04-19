@@ -28,6 +28,7 @@ import com.example.bookworm.databinding.SubactivityChallengeCreatechallengeBindi
 import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.Core.Internet.FBModule;
 import com.example.bookworm.Core.UserData.PersonalD;
+import com.example.bookworm.databinding.SubactivityFeedCreateBinding;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -65,7 +66,8 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.subactivity_challenge_createchallenge);
+        binding = SubactivityChallengeCreatechallengeBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         btn_search = findViewById(R.id.btn_createchallenge_search);
         btn_dupli = findViewById(R.id.btn_createchallenge_duplicheck);

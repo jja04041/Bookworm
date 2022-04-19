@@ -119,6 +119,7 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
             sendMap.put("check", 0); //fb모듈 함수 중 successRead()에서 분기하기 위함.
             fbModule.readData(2, sendMap, challenge.getTitle());
         }
+
     }
 
     //D-day 계산

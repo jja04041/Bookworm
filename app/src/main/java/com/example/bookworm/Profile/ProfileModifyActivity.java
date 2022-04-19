@@ -13,6 +13,8 @@ import com.bumptech.glide.Glide;
 import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.databinding.ActivityProfileModifyBinding;
 import com.example.bookworm.R;
+import com.example.bookworm.databinding.SubactivityChallengeCreatechallengeBinding;
+import com.example.bookworm.databinding.SubactivityFeedCreateBinding;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -32,7 +34,8 @@ public class ProfileModifyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_modify);
+        binding = ActivityProfileModifyBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         btnBack = findViewById(R.id.btnBack);
         ivProfileImage = findViewById(R.id.ivProfileImage);

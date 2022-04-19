@@ -18,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
 import com.example.bookworm.Core.Internet.Module;
+import com.example.bookworm.databinding.SubactivityChallengeChallengeinfoBinding;
+import com.example.bookworm.databinding.SubactivitySearchFragmentResultBinding;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,7 +41,8 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.subactivity_search_fragment_result);
+        binding= SubactivitySearchFragmentResultBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         Intent intent = getIntent();
         itemId = intent.getExtras().getString("itemid");
         iv_selectedItem = findViewById(R.id.iv_selectedItem);
