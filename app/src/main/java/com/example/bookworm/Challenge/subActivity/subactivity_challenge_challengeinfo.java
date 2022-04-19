@@ -1,7 +1,5 @@
 package com.example.bookworm.Challenge.subActivity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -12,8 +10,11 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Challenge.items.Challenge;
+import com.example.bookworm.Core.UserData.PersonalD;
 import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.databinding.SubactivityChallengeChallengeinfoBinding;
 import com.example.bookworm.Core.Internet.FBModule;
@@ -42,6 +43,11 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
         ActivityInit(); //변수 초기화
         UpdateUI(); // 화면 갱신
 
+        //shimmer 적용을 위해 기존 뷰는 일단 안보이게, shimmer는 보이게
+        binding.llChallinfo.setVisibility(View.GONE);
+        binding.SFLChallinfo.startShimmer();
+        binding.SFLChallinfo.setVisibility(View.VISIBLE);
+
         //챌린지 참여 버튼을 눌렀을 때
         binding.btnChallengeJoin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,6 +64,11 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
                 finish();
             }
         });
+
+        //shimmer 적용 끝내고 shimmer는 안보이게, 기존 뷰는 보이게
+        binding.llChallinfo.setVisibility(View.VISIBLE);
+        binding.SFLChallinfo.stopShimmer();
+        binding.SFLChallinfo.setVisibility(View.GONE);
     }
 
     //뒤로가기 키를 누를 떄에도 반응할 수 있도록 함.
