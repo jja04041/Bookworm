@@ -82,18 +82,18 @@ public class ProfileInfoActivity extends AppCompatActivity {
                 finish();
             }
         });
-        binding.btnFollower.setOnClickListener((view)-> {
-            Intent intent=new Intent(context, FollowerActivity.class);
-            intent.putExtra("token",userInfo.getToken());
-            intent.putExtra("page",0);
-            context.startActivity(intent);
-        });
-        binding.btnFollowing.setOnClickListener((view)-> {
-            Intent intent=new Intent(context, FollowerActivity.class);
-            intent.putExtra("token",userInfo.getToken());
-            intent.putExtra("page",1);
-            context.startActivity(intent);
-        });
+//        binding.btnFollower.setOnClickListener((view)-> {
+//            Intent intent=new Intent(context, FollowerActivity.class);
+//            intent.putExtra("token",userInfo.getToken());
+//            intent.putExtra("page",0);
+//            context.startActivity(intent);
+//        });
+//        binding.btnFollowing.setOnClickListener((view)-> {
+//            Intent intent=new Intent(context, FollowerActivity.class);
+//            intent.putExtra("token",userInfo.getToken());
+//            intent.putExtra("page",1);
+//            context.startActivity(intent);
+//        });
     }
 
     //이미 팔로잉 중

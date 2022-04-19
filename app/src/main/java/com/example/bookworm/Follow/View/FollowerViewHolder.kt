@@ -42,7 +42,7 @@ class FollowerViewHolder(val itemView: View, context: Context?, val nowUserInfo:
         })
     }
     fun following() {
-        binding.btnFollow.setBackgroundColor(Color.BLUE)
+        binding.btnFollow.setBackgroundColor(Color.BLUE) //버튼의 색상을 파란색으로 수정
         binding.btnFollow.setText("팔로잉")
         v = true
     }
