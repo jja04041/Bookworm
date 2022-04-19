@@ -1,4 +1,4 @@
-package com.example.bookworm;
+package com.example.bookworm.Profile;
 
 import static com.example.bookworm.Core.Login.activity_login.gsi;
 
@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.bookworm.Core.Login.activity_login;
 import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.Core.Internet.FBModule;
+import com.example.bookworm.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.kakao.auth.Session;

@@ -18,7 +18,7 @@ import com.example.bookworm.databinding.FragmentFollowListBinding
 
 //팔로워, 팔로잉 탭의 틀을 가지고 있는 클래스 => 팔로워 탭과 팔로잉 탭의 구분은 isFollower변수로 체크한다.
 //뷰는 가져온 데이터를 화면에 표시만 하는 역할을 한다
-class FragmentFollowList(val token:String,val isfollower:Int) : Fragment(), Contract.View {
+class FragmentFollowList(val token: String, val isfollower: Int) : Fragment(), Contract.View {
     var binding: FragmentFollowListBinding? = null
     private var followerAdapter: FollowerAdapter? = null
     private var userList: ArrayList<UserInfo>? = null
@@ -37,14 +37,15 @@ class FragmentFollowList(val token:String,val isfollower:Int) : Fragment(), Cont
     ): View? {
         initValues();
         loadData!!.getData(token) //초기 데이터를 불러옴
-        return  binding!!.root
+        return binding!!.root
     }
 
     //프레그먼트 종료시 메모리에서 바인딩을 해제
     override fun onDestroy() {
+        binding = null
         super.onDestroy()
-        binding=null
     }
+
     //초기화
     fun initValues() {
         page = 1;isLoading = false; canLoad = true
@@ -133,7 +134,6 @@ class FragmentFollowList(val token:String,val isfollower:Int) : Fragment(), Cont
             page++ //로딩을 다하면 그 다음 페이지로 넘어간다
         }
     }
-
 
 
 }

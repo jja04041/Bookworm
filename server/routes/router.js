@@ -75,7 +75,6 @@ router.post('/upload', upload.single('upload'), (req, res) => {
 
 //이미지를 다운로드 받을 때(피드 이미지 )
 router.use('/getimage/:data', (req, res) => {
-
   const dataPath = "./feed/" + req.params.data;
   fs.readFile(dataPath, function (err, data) {
     if (err) {
@@ -114,6 +113,9 @@ router.get("/",(req,res)=>{
   res.send("helloworld~");
 });
 
+
+//피드 삭제 시 이미지 삭제 
+router.post("/")
 
 //가입이 되어있는지 확인 
 router.get("/:token", async (req, res) => {

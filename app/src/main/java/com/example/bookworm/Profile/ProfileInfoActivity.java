@@ -1,4 +1,4 @@
-package com.example.bookworm;
+package com.example.bookworm.Profile;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

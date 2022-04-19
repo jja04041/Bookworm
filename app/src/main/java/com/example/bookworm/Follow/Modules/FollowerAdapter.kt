@@ -30,8 +30,6 @@ class FollowerAdapter(data: ArrayList<UserInfo>?, val context: Context, val nowU
                 return LoadingViewHolder(view)
             }
         }
-
-
     }
 
     //Arraylist에 있는 아이템을 뷰 홀더에 바인딩 하는 메소드

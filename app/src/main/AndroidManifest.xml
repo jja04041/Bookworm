@@ -32,7 +32,7 @@
             android:name=".Feed.ImagePicker"
             android:exported="false" />
         <activity
-            android:name=".ProfileInfoActivity"
+            android:name=".Profile.ProfileInfoActivity"
             android:exported="false" />
         <activity
             android:name=".Follow.View.FollowerActivity"
@@ -67,10 +67,10 @@
             android:name=".JoinActivity"
             android:exported="false" /> <!-- 회원 정보 수정 -->
         <activity
-            android:name=".ProfileModifyActivity"
+            android:name=".Profile.ProfileModifyActivity"
             android:exported="false" /> <!-- 회원 정보 수정 -->
         <activity
-            android:name=".ProfileSettingActivity"
+            android:name=".Profile.ProfileSettingActivity"
             android:exported="false" /> <!-- 회원 설정 -->
         <activity
             android:name=".Core.MainActivity"

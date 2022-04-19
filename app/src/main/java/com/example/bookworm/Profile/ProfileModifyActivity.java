@@ -1,4 +1,4 @@
-package com.example.bookworm;
+package com.example.bookworm.Profile;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Core.UserData.UserInfo;
+import com.example.bookworm.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

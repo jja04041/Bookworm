@@ -23,7 +23,7 @@ import com.example.bookworm.Feed.CustomPopup;
 import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.Feed.likeCounter;
 import com.example.bookworm.Feed.Comments.subactivity_comment;
-import com.example.bookworm.ProfileInfoActivity;
+import com.example.bookworm.Profile.ProfileInfoActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_result;

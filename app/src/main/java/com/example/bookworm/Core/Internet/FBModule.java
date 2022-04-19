@@ -15,7 +15,7 @@ import com.example.bookworm.Feed.Comments.Comment;
 import com.example.bookworm.Feed.Comments.subactivity_comment;
 import com.example.bookworm.Core.Login.activity_login;
 import com.example.bookworm.Core.MainActivity;
-import com.example.bookworm.ProfileSettingActivity;
+import com.example.bookworm.Profile.ProfileSettingActivity;
 import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.fragments.fragment_challenge;
 import com.example.bookworm.fragments.fragment_feed;
