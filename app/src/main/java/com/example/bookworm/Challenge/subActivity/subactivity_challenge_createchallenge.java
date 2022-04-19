@@ -14,18 +14,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.bookworm.Core.UserData.PersonalD;
+import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_main;
-import com.example.bookworm.Core.UserData.UserInfo;
+import com.example.bookworm.databinding.SubactivityChallengeCreatechallengeBinding;
 import com.example.bookworm.modules.FBModule;
-import com.example.bookworm.Core.UserData.PersonalD;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public class subactivity_challenge_createchallenge extends AppCompatActivity {
+    SubactivityChallengeCreatechallengeBinding binding;
     UserInfo userInfo;
     Button btn_search, btn_dupli, btn_back;
     TextView tv_bookname, tv_challenge_start, tv_challenge_end;
@@ -86,6 +87,11 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity {
         fbModule = new FBModule(mContext);
 
         userInfo = new PersonalD(mContext).getUserInfo(); //저장된 UserInfo값을 가져온다.
+
+        //shimmer 적용을 위해 기존 뷰는 일단 안보이게, shimmer는 보이게
+        binding.llChallcreate.setVisibility(View.GONE);
+        binding.SFLChallcreate.startShimmer();
+        binding.SFLChallcreate.setVisibility(View.VISIBLE);
 
 
         //챌린지 시작일에 오늘 날짜가 나오게 함
@@ -160,6 +166,11 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity {
             }
         });
 
+        //shimmer 적용 끝내고 shimmer는 안보이게, 기존 뷰는 보이게
+        binding.llChallcreate.setVisibility(View.VISIBLE);
+        binding.SFLChallcreate.stopShimmer();
+        binding.SFLChallcreate.setVisibility(View.GONE);
+
     }
 
     @Override
@@ -219,6 +230,8 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity {
             //파이어베이스에 해당 챌린지명이 등록돼있지 않다면
 
             fbModule.readData(2, map, strChallengeName);
+
+            
 
 
         }
