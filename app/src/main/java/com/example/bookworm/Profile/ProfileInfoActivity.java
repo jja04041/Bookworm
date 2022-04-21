@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
+import com.example.bookworm.Core.Observer.EventListener;
 import com.example.bookworm.Follow.View.FollowerActivity;
 import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.Follow.Modules.followCounter;
@@ -21,9 +22,11 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
-public class ProfileInfoActivity extends AppCompatActivity {
+public class ProfileInfoActivity extends AppCompatActivity{
 
     ActivityProfileInfoBinding binding;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -31,6 +34,7 @@ public class ProfileInfoActivity extends AppCompatActivity {
     Context context;
     String userID;
     followCounter followCounter = new followCounter();
+    Boolean cache;
 
     //자신이나 타인의 프로필을 클릭했을때 나오는 화면
     @Override
@@ -40,7 +44,6 @@ public class ProfileInfoActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         context = this;
-
         //일단 안보였다가 파이어베이스에서 값을 모두 받아오면 보여주는게 UX면에서 좋을거같음
 //        binding.tvNickname.setVisibility(View.INVISIBLE);
 //        binding.ivProfileImage.setVisibility(View.INVISIBLE);
@@ -59,6 +62,7 @@ public class ProfileInfoActivity extends AppCompatActivity {
         //현재 사용자 UserInfo
         nowUser = new PersonalD(this).getUserInfo();
 
+        //
         //팔로우 버튼을 클릭했을때 버튼 모양, 상태 변경
         binding.tvFollow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,11 +80,16 @@ public class ProfileInfoActivity extends AppCompatActivity {
         });
 
         //뒤로가기
-        binding.btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
+        binding.btnBack.setOnClickListener(view -> {
+            if(cache!=binding.tvFollow.isSelected()&&getIntent().getExtras().containsKey("pos")) {
+                int pos=getIntent().getIntExtra("pos",-1);
+                Intent intent=new Intent();
+                intent.putExtra("pos",pos);
+                if(!cache&&binding.tvFollow.isSelected()) intent.putExtra("userInfo",userInfo);
+                setResult(100,intent);
             }
+            finish();
+
         });
 //        binding.btnFollower.setOnClickListener((view)-> {
 //            Intent intent=new Intent(context, FollowerActivity.class);
@@ -98,6 +107,7 @@ public class ProfileInfoActivity extends AppCompatActivity {
 
     //이미 팔로잉 중
     public void isFollowingTrue() {
+        cache=true;
         binding.tvFollow.setSelected(true);
         binding.tvFollow.setText("팔로잉");
         Log.d("TAG", "로그값");
@@ -105,6 +115,7 @@ public class ProfileInfoActivity extends AppCompatActivity {
 
     //팔로잉 중이 아님
     public void isFollowingFalse() {
+        cache=false;
         binding.tvFollow.setSelected(false);
         binding.tvFollow.setText("팔로우");
         Log.d("TAG", "로그값2");

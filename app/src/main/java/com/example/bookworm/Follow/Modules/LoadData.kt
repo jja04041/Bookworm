@@ -19,7 +19,7 @@ class LoadData(val view: Contract.View, val isfollewer: Int, val nowUserInfo: Us
     fun getData(token: String) {
         this.token = token
          reference = FirebaseFirestore.getInstance().collection("users")
-                .document(token!!).collection(if (isfollewer==0) "follower" else "following")
+                .document(token!!).collection(if (isfollewer==1) "follower" else "following")
         query = reference!!.orderBy("token")
         if(lastVisible!=null)query=query!!.startAfter(lastVisible)
         query=query!!.limit(LIMIT)

@@ -16,8 +16,8 @@ public class FollowPagerAdapter extends FragmentPagerAdapter {
     public FollowPagerAdapter(@NonNull FragmentManager fm, String token)
     {
         super(fm);
-        arrayList.add(new FragmentFollowList(token,0));
-        arrayList.add(new FragmentFollowList(token,1));
+        arrayList.add(new FragmentFollowList(token,1)); //팔로워탭
+        arrayList.add(new FragmentFollowList(token,0)); //팔로잉탭
 
         name.add("팔로워 탭");
         name.add("팔로잉 탭");
@@ -42,4 +42,5 @@ public class FollowPagerAdapter extends FragmentPagerAdapter {
     {
         return arrayList.size();
     }
+
 }

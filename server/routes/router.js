@@ -24,6 +24,12 @@ initializeApp({
 const db = getFirestore();
 
 
+//홈 화면 
+router.get("/", (req, res) => {
+  res.send("helloworld~");
+});
+
+
 //for image 
 var _storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -87,6 +93,32 @@ router.use('/getimage/:data', (req, res) => {
   });
 });
 
+//피드 삭제 시 이미지 삭제 
+router.post("/deleteImg", (req, res) => {
+  const fileName = req.body.feedId+".jpg";
+  const userToken = req.body.userToken;
+  const filePath = "./feed/" + fileName;
+
+  //회원만 삭제할 수 있도록 함. 
+  if (req.body.feedId.split('_')[1] == userToken) {
+    //파일이 있는지 여부를 먼저 확인 
+    fs.access(filePath, fs.constants.F_OK, (err) => {
+      if (err) {
+        console.log(`${fileName}은/는 삭제할 수 없는 파일입니다`);
+        return res.sendStatus(504);
+      }
+      //파일 삭제 진행 
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.log(err);
+          return res.sendStatus(504);
+        }
+        console.log(`${fileName} 을/를 정상적으로 삭제했습니다`);
+        return res.sendStatus(200);
+      })
+    })
+  }else return res.sendStatus(401); //유저 토큰과 일치 하지 않은 경우 401에러 표시 
+})
 
 //토큰 관리 
 router.get("/token", (req, res) => {
@@ -109,13 +141,7 @@ router.get("/token", (req, res) => {
   }
 });
 
-router.get("/",(req,res)=>{
-  res.send("helloworld~");
-});
 
-
-//피드 삭제 시 이미지 삭제 
-router.post("/")
 
 //가입이 되어있는지 확인 
 router.get("/:token", async (req, res) => {
@@ -127,35 +153,11 @@ router.get("/:token", async (req, res) => {
 
 async function checkID(token) {
   var ID = token;
-  var find=false;
+  var find = false;
   const snapshot = await db.collection('users').get();
   snapshot.forEach((doc) => {
-    if (doc.id==ID) find=true;
+    if (doc.id == ID) find = true;
   });
   return find;
 };
-
-// router.get("/token", async(req, res) => {
-//   const {OAuth2Client} = require('google-auth-library');
-//   const CLIENT_ID=process.env.CLIENT_ID;
-//   const token=req.query.token;
-// const client = new OAuth2Client(CLIENT_ID);
-// async function verify() {
-//   const ticket = await client.verifyIdToken({
-//       idToken: token,
-//       audience: CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
-//       // Or, if multiple clients access the backend:
-//       //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
-//   });
-//   const payload = ticket.getPayload();
-//   const userid = payload['sub'];
-//   // If request specified a G Suite domain:
-//   // const domain = payload['hd'];
-// }
-// verify().catch(console.error);
-// const url=`https://oauth2.googleapis.com/tokeninfo?id_token=${token}`;
-// request.get(url,(req,res)=>{
-//   console.log(req);
-//   console.log(res.body);
-// })
-// });
+ 
