@@ -19,6 +19,7 @@ import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.databinding.SubactivityChallengeChallengeinfoBinding;
 import com.example.bookworm.Core.Internet.FBModule;
 import com.example.bookworm.Core.UserData.PersonalD;
+import com.example.bookworm.subactivity_challenge_board;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 
@@ -62,6 +63,15 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
             public void onClick(View view) {
                 setResult(Activity.RESULT_OK);
                 finish();
+            }
+        });
+
+        binding.FLBoard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, subactivity_challenge_board.class);
+                intent.putExtra("challenge", challenge);
+                mContext.startActivity(intent);
             }
         });
 
