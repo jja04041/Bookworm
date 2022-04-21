@@ -1,9 +1,14 @@
 package com.example.bookworm.Follow.View
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,7 +27,6 @@ class FragmentFollowList(val token: String, val isfollower: Int) : Fragment(), C
     var binding: FragmentFollowListBinding? = null
     private var followerAdapter: FollowerAdapter? = null
     private var userList: ArrayList<UserInfo>? = null
-
     //Paging 처리를 위해서
     var page = 0
     var canLoad = true //더 불러올 수 있는 지

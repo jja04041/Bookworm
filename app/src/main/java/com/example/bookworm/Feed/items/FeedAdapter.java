@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookworm.Feed.ViewHolders.ItemViewHolder;
+import com.example.bookworm.Feed.ViewHolders.TestVIewHolder;
 import com.example.bookworm.R;
 
 import java.util.ArrayList;
@@ -34,8 +35,10 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         switch (viewType) {
             //이미지가 있는 피드
             case 1:
-                view = inflater.inflate(R.layout.layout_feed, parent, false);
-                return new ItemViewHolder(view, context);
+//                view = inflater.inflate(R.layout.layout_feed, parent, false);
+//                return new ItemViewHolder(view, context);
+                view = inflater.inflate(R.layout.fragment_feed_item, parent, false);
+                return new TestVIewHolder(view, context);
             //로딩바
             case 2:
                 view = inflater.inflate(R.layout.layout_item_loading, parent, false);
@@ -48,14 +51,24 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         int safePosition = holder.getAdapterPosition();
-        if (holder instanceof ItemViewHolder) {
+//        if (holder instanceof ItemViewHolder)
+//        {
+//            Feed item = FeedList.get(safePosition);
+//            if (item.getImgurl() != null) {
+//                ((ItemViewHolder) holder).setVisibillity(true);
+//            } else {
+//                ((ItemViewHolder) holder).setVisibillity(false);
+//            }
+//            ((ItemViewHolder) holder).setItem(item);
+        if (holder instanceof TestVIewHolder)
+        {
             Feed item = FeedList.get(safePosition);
             if (item.getImgurl() != null) {
-                ((ItemViewHolder) holder).setVisibillity(true);
+                ((TestVIewHolder) holder).setVisibillity(true);
             } else {
-                ((ItemViewHolder) holder).setVisibillity(false);
+                ((TestVIewHolder) holder).setVisibillity(false);
             }
-            ((ItemViewHolder) holder).setItem(item);
+            ((TestVIewHolder) holder).setItem(item);
         } else if (holder instanceof LoadingViewHolder) {
             showLoadingView((LoadingViewHolder) holder, safePosition);
         }

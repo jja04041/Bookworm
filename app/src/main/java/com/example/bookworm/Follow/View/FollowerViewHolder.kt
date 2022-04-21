@@ -4,18 +4,22 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.view.View
+
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.bookworm.Profile.ProfileInfoActivity
+import com.example.bookworm.Core.Observer.EventListener
 import com.example.bookworm.Core.UserData.UserInfo
+
 import com.example.bookworm.Follow.Modules.followCounter
+import com.example.bookworm.Profile.ProfileInfoActivity
 import com.example.bookworm.databinding.LayoutUserItemBinding
 
 class FollowerViewHolder(val itemView: View, context: Context?, val nowUserInfo: UserInfo):
-    RecyclerView.ViewHolder(itemView) {
+    RecyclerView.ViewHolder(itemView),EventListener{
     var context = context//전달된 context
     var binding = LayoutUserItemBinding.bind(itemView)
     var v = false
+
     fun setItem(item: UserInfo?) {
         Glide.with(context!!).load(item!!.profileimg).circleCrop().into(binding.ivProfileImg)
         binding.tvProfileID.setText(item.username)
@@ -38,6 +42,7 @@ class FollowerViewHolder(val itemView: View, context: Context?, val nowUserInfo:
         itemView.setOnClickListener({
             var intent = Intent(context, ProfileInfoActivity::class.java)
             intent.putExtra("userID",item.token)
+            intent.putExtra("pos",adapterPosition)
             (context as FollowerActivity).startActivity(intent)
         })
     }
@@ -51,5 +56,10 @@ class FollowerViewHolder(val itemView: View, context: Context?, val nowUserInfo:
         binding.btnFollow.setText("팔로우")
         v = false
     }
+
+    override fun onEvent(boolean: Boolean) {
+        TODO("Not yet implemented")
+    }
+
 
 }
