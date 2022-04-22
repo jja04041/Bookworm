@@ -80,10 +80,12 @@ class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolde
 
         //댓글창을 클릭했을때
         binding!!.llComments.setOnClickListener({
-            val intent = Intent(context, subactivity_comment::class.java)
-            intent.putExtra("item", item)
-            intent.putExtra("position", getAdapterPosition())
-            context!!.startActivity(intent)
+            if(binding!!.tvCommentNickname.visibility!=View.GONE) {
+                val intent = Intent(context, subactivity_comment::class.java)
+                intent.putExtra("item", item)
+                intent.putExtra("position", getAdapterPosition())
+                context!!.startActivity(intent)
+            }
         })
         //댓글 아이콘을 눌렀을 때
         binding!!.btnComment.setOnClickListener({
