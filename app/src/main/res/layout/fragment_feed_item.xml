@@ -160,20 +160,22 @@
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="30dp"
                 android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore"
-                android:textSize="18dp" />
+                android:textSize="15dp" />
 
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="25dp"
-                android:layout_gravity="end"
-                android:layout_margin="5dp"
+                android:layout_gravity="bottom|end"
+                android:layout_marginHorizontal="5dp"
+                android:layout_margin="10dp"
                 android:src="@drawable/quote" />
 
             <LinearLayout
                 android:id="@+id/lllabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
@@ -191,6 +193,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/lllike"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -200,6 +203,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="start"
+                    android:clickable="true"
                     android:layout_marginHorizontal="10dp"
                     android:background="@drawable/icon_like" />
 
