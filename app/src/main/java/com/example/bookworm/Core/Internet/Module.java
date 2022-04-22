@@ -66,10 +66,13 @@ public class Module {
             case 2://개별 도서 검색
                 call = mainInterface.getItem(querys);
                 break;
-            case 3:
+            case 3://피드 이미지 업로드
                 RequestBody name = (RequestBody) query.get("rqname");
                 MultipartBody.Part body = (MultipartBody.Part) query.get("rqbody");
                 call = mainInterface.postImage(body, name);
+                break;
+            case 4://피드 이미지 삭제
+                break;
         }
 
         call.enqueue(new Callback<String>() {

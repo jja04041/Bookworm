@@ -80,10 +80,12 @@ class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolde
 
         //댓글창을 클릭했을때
         binding!!.llComments.setOnClickListener({
-            val intent = Intent(context, subactivity_comment::class.java)
-            intent.putExtra("item", item)
-            intent.putExtra("position", getAdapterPosition())
-            context!!.startActivity(intent)
+            if(binding!!.tvCommentNickname.visibility!=View.GONE) {
+                val intent = Intent(context, subactivity_comment::class.java)
+                intent.putExtra("item", item)
+                intent.putExtra("position", getAdapterPosition())
+                context!!.startActivity(intent)
+            }
         })
         //댓글 아이콘을 눌렀을 때
         binding!!.btnComment.setOnClickListener({
@@ -116,13 +118,17 @@ class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolde
             false
         }
         //좋아요 표시 관리
-        binding!!.btnLike.setOnClickListener({ controlLike(item) })
+//        binding!!.btnLike.setOnClickListener({ controlLike(item) })
+//        binding!!.tvLike.setOnClickListener({ controlLike(item) })
+        binding!!.lllike.setOnClickListener({controlLike(item)})
         //이미지 뷰 정리
         if (item.imgurl != null) {
             Glide.with(itemView).load(item.imgurl).into(binding!!.feedImage)
         }
         binding!!.tvFeedtext.setText(item.feedText)
-        setLabel(item.label) //라벨 세팅
+        //라벨 세팅
+        if(!item.label.get(0).equals("")) setLabel(item.label)
+        else binding!!.lllabel.visibility=View.GONE
 
         //프로필을 눌렀을때 그 사람의 프로필 정보 화면으로 이동
         binding!!.llProfile.setOnClickListener(View.OnClickListener {
@@ -227,6 +233,7 @@ class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolde
 
     fun setViewV(bool: Boolean) {
         val value = if (bool) View.VISIBLE else View.GONE
+        binding!!.llCommentInfo.visibility=value
         binding!!.tvCommentDate.setVisibility(value)
         binding!!.tvCommentNickname.setVisibility(value)
         binding!!.tvCommentContent.setVisibility(value)

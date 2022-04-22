@@ -1,18 +1,23 @@
 package com.example.bookworm.fragments;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 
+import com.example.bookworm.Core.MainActivity;
 import com.example.bookworm.Extension.DiffUtilCallback;
 import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.Feed.items.FeedAdapter;
 import com.example.bookworm.Feed.subActivity_Feed_Modify;
+import com.example.bookworm.R;
 import com.example.bookworm.databinding.FragmentFeedBinding;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -25,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.bookworm.Feed.subActivity_Feed_Create;
+import com.example.bookworm.databinding.FragmentFeedItemBinding;
 import com.example.bookworm.databinding.LayoutTopbarBinding;
 import com.example.bookworm.Core.Internet.FBModule;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -36,12 +42,14 @@ import java.util.Map;
 
 public class fragment_feed extends Fragment {
     FragmentFeedBinding binding;
+    FragmentFeedItemBinding fbinding;
     public FeedAdapter feedAdapter;
     private final int LIMIT = 5;
     public ArrayList<Feed> feedList;
     public static Context mContext;
     private DocumentSnapshot lastVisible; //마지막에 가져온 값 부터 추가로 가져올 수 있도록 함.
     private Map map;
+    View view;
     private FBModule fbModule;
     //isLoading:스크롤을 당겨서 추가로 로딩 중인지 여부를 확인하는 변수
     //canLoad:더 로딩이 가능한지 확인하는 변수[자료의 끝을 판별한다.]
@@ -62,6 +70,12 @@ public class fragment_feed extends Fragment {
                     binding.recyclerView.smoothScrollToPosition(item.getPosition());
                 }
             });
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        InputMethodManager imm = (InputMethodManager) mContext.getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.findViewById(R.id.edtComment).getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        super.onHiddenChanged(hidden);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,7 +83,7 @@ public class fragment_feed extends Fragment {
         mContext = getContext();
 
         binding = FragmentFeedBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
+        view = binding.getRoot();
         binding.recyclerView.setNestedScrollingEnabled(false);
         fbModule = new FBModule(getContext());
         fbModule.setLIMIT(LIMIT); //한번에 보여줄 피드의 최대치를 설정
@@ -162,7 +176,7 @@ public class fragment_feed extends Fragment {
         page = 1;
         canLoad = true;
         lastVisible = null;
-        feedList=new ArrayList<>();
+        feedList = new ArrayList<>();
         initAdapter();
     }
 

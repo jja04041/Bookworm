@@ -13,6 +13,7 @@ import com.example.bookworm.Core.MainActivity
 import com.example.bookworm.R
 import com.example.bookworm.fragments.fragment_feed
 import com.example.bookworm.Core.Internet.FBModule
+import com.example.bookworm.Core.Internet.Module
 
 class CustomPopup(context: Context?, anchor: View?) : PopupMenu(context, anchor),
     PopupMenu.OnMenuItemClickListener {
@@ -65,6 +66,11 @@ class CustomPopup(context: Context?, anchor: View?) : PopupMenu(context, anchor)
                 }
                 R.id.menu_delete -> {
                     fbModule!!.deleteData(1, item!!.feedID) //삭제
+                    if (!item!!.imgurl.equals(null)) {
+                        var map=HashMap<Any,Any>()
+                        var url=""
+                        Module(context,url,map).connect(4)
+                    }
                     oldList?.removeAt(pos)
                     ff.replaceItem(oldList)
                     //만약 댓글을 모아보는 액티비티(subactivity_comment)에 있는 경우, 해당 액티비티를 종료
