@@ -81,18 +81,7 @@ public class fragment_profile extends Fragment {
 
         // 지워도댐
 
-        binding.btnH.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setGenre("공포");
-            }
-        });
-        binding.btnDe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setGenre("추리");
-            }
-        });
+
 
         Glide.with(this).load(userinfo.getProfileimg()).circleCrop().into(binding.imgFragProfileProfile); //프로필사진 로딩후 삽입.
 

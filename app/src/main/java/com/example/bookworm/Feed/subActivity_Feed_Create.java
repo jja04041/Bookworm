@@ -26,6 +26,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.example.bookworm.Achievement.Achievement;
+import com.example.bookworm.Bw.BookWorm;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_main;
@@ -495,6 +497,12 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             userInfo.setGenre(selected_book.getCategoryname(), current_context);
             savegenremap.put("userinfo_genre", userInfo.getGenre());
             fbModule.readData(0, savegenremap, userInfo.getToken());
+
+            BookWorm bookworm = new PersonalD(current_context).getBookworm();
+            Achievement achievement = new Achievement(current_context, fbModule, userInfo, bookworm);
+            achievement.CompleteAchievement(userInfo, current_context);
+
+            new PersonalD(current_context).saveUserInfo(userInfo);
             setResult(CREATE_OK);
             finish();
         }

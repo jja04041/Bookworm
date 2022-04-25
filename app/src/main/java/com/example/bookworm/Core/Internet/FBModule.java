@@ -119,11 +119,15 @@ public class FBModule {
                     document.getReference().update("UserInfo.genre", map.get("userinfo_genre"));
                 }
                 // 업적, 인벤토리 업데이트
-                else if (map.get("bookworm_achievementmap") != null && map.get("bookworm_wormvec") != null) {
+                else if (map.get("bookworm_achievementmap") != null && map.get("bookworm_wormvec") != null ) {
                     document.getReference().update("BookWorm.achievementmap", map.get("bookworm_achievementmap"));
                     document.getReference().update("BookWorm.wormvec", map.get("bookworm_wormvec"));
+                    // wormtype update
                 } else if (map.get("bookworm_wormtype") != null) {
                     document.getReference().update("BookWorm.wormtype", map.get("bookworm_wormtype"));
+                    // bg update
+                } else if (map.get("bookworm_bgtype") != null) {
+                    document.getReference().update("BookWorm.bgtype", map.get("bookworm_bgtype"));
                 }
                 //회원인 경우, 로그인 처리
                 else {
