@@ -67,10 +67,19 @@ public class ViewHolder extends  RecyclerView.ViewHolder  {
 
                 HashMap<String, Object> map = new HashMap<>();
 
-                bookworm.setWormtype(itemData.image);
-                fbModule = new FBModule(itemData.context);
+                // bookworm 세팅
+                if(0 == itemData.getType()) {
+                    bookworm.setWormtype(itemData.image);
+                    fbModule = new FBModule(itemData.context);
+                    map.put("bookworm_wormtype", bookworm.getWormtype());
+                }
+                // bg 세팅
+                if(1 == itemData.getType()) {
+                    bookworm.setBgtype(itemData.image);
+                    fbModule = new FBModule(itemData.context);
+                    map.put("bookworm_bgtype", bookworm.getBgtype());
+                }
 
-                map.put("bookworm_wormtype", bookworm.getWormtype());
                 fbModule.readData(0, map, bookworm.getToken());
                 new PersonalD(itemData.context).saveBookworm(bookworm);
                 ((Activity)itemData.context).finish();
