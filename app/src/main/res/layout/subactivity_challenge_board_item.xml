@@ -58,8 +58,8 @@
         android:background="@drawable/bg_rounded"
         android:elevation="10dp"
         android:orientation="horizontal"
-        android:visibility="gone"
-        android:paddingHorizontal="10dp">
+        android:paddingHorizontal="10dp"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/feedBookThumb"
@@ -343,9 +343,4 @@
             </FrameLayout>
         </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:background="@drawable/bg_feed_gradient" />
 </LinearLayout>
