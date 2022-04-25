@@ -11,7 +11,6 @@
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_challenge.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_datepicker.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_feed.xml" value="0.25364583333333335" />
-        <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_first.xml" value="0.19610507246376813" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_profile.xml" value="0.176" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/recyclerview_item.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/subactivity_challenge_createchallenge.xml" value="0.25364583333333335" />
@@ -134,6 +133,7 @@
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/selector_selected.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/shimmer_subactivity_challenge_challengeinfo.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/subactivity_challenge_board.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/subactivity_challenge_board_create.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/subactivity_challenge_board_item.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/subactivity_challenge_challengeinfo.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/subactivity_challenge_createchallenge.xml" value="0.36614583333333334" />
@@ -153,8 +153,5 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
-  </component>
-  <component name="SuppressKotlinCodeStyleNotification">
-    <option name="disableForAll" value="true" />
   </component>
 </project>

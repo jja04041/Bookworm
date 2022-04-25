@@ -82,6 +82,12 @@
             android:rotation="180" />
     </LinearLayout>
 
+    <Button
+        android:id="@+id/btn_create_challenge_board"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="임시로 해놓은 인증글 작성 버튼"/>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
