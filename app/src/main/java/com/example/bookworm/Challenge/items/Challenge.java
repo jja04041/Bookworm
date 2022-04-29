@@ -8,9 +8,9 @@ import java.util.Map;
 
 public class Challenge implements Serializable {
     private Book book; // Book 객체 자체를 사용
-    private String bookId; //챌린지에서 사용하는 도서의 Id값
-    private String bookThumb; //책 썸네일
-    private String bookTitle; //책 이름
+//    private String bookId; //챌린지에서 사용하는 도서의 Id값
+//    private String bookThumb; //책 썸네일
+//    private String bookTitle; //책 이름
     private String StartDate; //챌린지 시작일
     private String EndDate; // 챌린지 마감일
     private String Title; //챌린지 명
@@ -22,15 +22,17 @@ public class Challenge implements Serializable {
     private String ChallengeDescription; //챌린지 설명
 
     public Challenge(Map data) {
+        book = new Book(null);
         if (data!=null) {
+            book.setBook((Map) data.get("Book"));
             CurrentPart = (ArrayList<String>) data.get("CurrentParticipation");
             MaxPart = (Long) data.get("MaxParticipation");
-            bookId = (String) data.get("BookId");
+            //bookId = (String) data.get("BookId");
             StartDate = (String) data.get("challengeStartDate");
             EndDate = (String) data.get("ChallengeEndDate");
             Title = (String) data.get("strChallengeName");
-            bookTitle = (String) data.get("bookname");
-            bookThumb = (String) data.get("thumbnailURL");
+            //bookTitle = (String) data.get("bookname");
+            //bookThumb = (String) data.get("thumbnailURL");
             masterThumb=(String) data.get("Profileimg");
             masterToken = (String) data.get("masterToken");
             master=(String)data.get("Username");
@@ -42,16 +44,20 @@ public class Challenge implements Serializable {
         CurrentPart = currentPart;
     }
 
-    public String getBookId() {
-        return bookId;
-    }
+//    public String getBookId() {
+//        return bookId;
+//    }
+//
+//    public String getBookThumb() {
+//        return bookThumb;
+//    }
+//
+//    public String getBookTitle() {
+//        return bookTitle;
+//    }
 
-    public String getBookThumb() {
-        return bookThumb;
-    }
-
-    public String getBookTitle() {
-        return bookTitle;
+    public Book getBook() {
+        return book;
     }
 
     public String getStartDate() {

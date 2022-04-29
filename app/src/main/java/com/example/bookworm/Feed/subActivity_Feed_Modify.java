@@ -135,6 +135,14 @@ public class subActivity_Feed_Modify extends AppCompatActivity implements UserCo
         ArrayList<String> modifyLabel; //수정화면의 라벨 세팅
         modifyLabel = feed.getLabel();
 
+        //뒤로가기
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         //라벨 리스트를 받아와서 삽입해놓음
         for (int i = 0; i < modifyLabel.size(); i++) {
             if (modifyLabel.get(i).equals("")) {
@@ -154,6 +162,8 @@ public class subActivity_Feed_Modify extends AppCompatActivity implements UserCo
         fbModule = new FBModule(current_context);
         userInfo = new PersonalD(current_context).getUserInfo(); //저장된 UserInfo값을 가져온다.
 
+        Glide.with(this).load(userInfo.getProfileimg()).circleCrop().into(binding.ivProfileImage); //프로필사진 로딩후 삽입.
+        binding.tvNickname.setText(userInfo.getUsername());
 
         customDialog = new Dialog(subActivity_Feed_Modify.this);       // Dialog 초기화
         customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거

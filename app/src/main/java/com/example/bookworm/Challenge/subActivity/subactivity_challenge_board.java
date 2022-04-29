@@ -34,14 +34,14 @@ public class subactivity_challenge_board extends AppCompatActivity {
         challenge = (Challenge) intent.getSerializableExtra("challenge");
 
 //        Book book = item.getBook();
-//        binding.feedBookAuthor.setText(challenge.get);
-        Glide.with(this).load(challenge.getBookThumb()).into(binding.feedBookThumb); //책 썸네일 설정
-        binding.feedBookTitle.setText(challenge.getBookTitle());
+        binding.feedBookAuthor.setText(challenge.getBook().getAuthor());
+        Glide.with(this).load(challenge.getBook().getImg_url()).into(binding.feedBookThumb); //책 썸네일 설정
+        binding.feedBookTitle.setText(challenge.getBook().getTitle());
         binding.llbook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, search_fragment_subActivity_result.class);
-                intent.putExtra("itemid", challenge.getBookId());
+                intent.putExtra("itemid", challenge.getBook().getItemId());
                 context.startActivity(intent);
             }
         });

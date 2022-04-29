@@ -140,6 +140,13 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         customDialog.setContentView(R.layout.custom_dialog_label);
 
+        //뒤로가기
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         //이미지 업로드 버튼
         binding.btnImageUpload.setOnClickListener(new View.OnClickListener() {
