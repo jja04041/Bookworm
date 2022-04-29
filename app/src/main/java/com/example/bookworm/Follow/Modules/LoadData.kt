@@ -1,4 +1,4 @@
-package com.example.bookworm.Follow.Modules
+package com.example.bookworm.Follow
 
 import android.util.Log
 import com.example.bookworm.Follow.Interfaces.Contract
@@ -18,7 +18,7 @@ class LoadData(val view: Contract.View, val isfollewer: Int, val nowUserInfo: Us
     //데이터를 가져오는 부분
     fun getData(token: String) {
         this.token = token
-         reference = FirebaseFirestore.getInstance().collection("users")
+        reference = FirebaseFirestore.getInstance().collection("users")
                 .document(token!!).collection(if (isfollewer==1) "follower" else "following")
         query = reference!!.orderBy("token")
         if(lastVisible!=null)query=query!!.startAfter(lastVisible)
@@ -72,7 +72,7 @@ class LoadData(val view: Contract.View, val isfollewer: Int, val nowUserInfo: Us
         val idList: ArrayList<String> = ArrayList()
         for (doc: DocumentSnapshot in result) idList.add(doc.id)
 
-        for (i in userList.indices) {
+        for (i in 0..userList.size-1) {
             var user = userList.get(i)
             if (idList.contains(user.token)) {
                 user.setFollowed(true)

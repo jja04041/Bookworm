@@ -21,7 +21,9 @@ import com.example.bookworm.Core.UserData.PersonalD;
 public class fragment_bookworm extends Fragment {
 
     private ImageView iv_bookworm;
+    private ImageView iv_bg;
     private Button btn_Achievement;
+    private Button btn_Achievement_bg;
 
     private UserInfo userinfo;
     private BookWorm bookworm;
@@ -36,15 +38,29 @@ public class fragment_bookworm extends Fragment {
         View view = inflater.inflate(R.layout.fragment_bookworm, container, false);
 
         iv_bookworm = view.findViewById(R.id.iv_bookworm);
-
+        iv_bg = view.findViewById(R.id.iv_bg);
 
         btn_Achievement = view.findViewById(R.id.btn_achievement);
+        btn_Achievement_bg = view.findViewById(R.id.btn_achievement_bg);
 
+        btn_Achievement_bg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                Intent intent = new Intent(current_context, activity_achievement.class);
+                // 1이면 activity achievement에서  bookworm 보여주게
+                intent.putExtra("type", 1);
+
+                startActivity(intent);
+            }
+        });
         btn_Achievement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
                 Intent intent = new Intent(current_context, activity_achievement.class);
+                // 1이면 activity achievement에서  bg 보여주게
+                intent.putExtra("type", 0  );
                 startActivity(intent);
             }
         });
@@ -62,6 +78,7 @@ public class fragment_bookworm extends Fragment {
         bookworm = new PersonalD(current_context).getBookworm();
 
         iv_bookworm.setImageResource(bookworm.getWormtype());
+        iv_bg.setImageResource(bookworm.getBgtype());
 
     }
 }

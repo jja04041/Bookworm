@@ -7,16 +7,20 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.bookworm.Achievement.Achievement;
+import com.example.bookworm.Bw.BookWorm;
 import com.example.bookworm.Feed.Comments.Comment;
 import com.example.bookworm.Feed.Comments.CommentsCounter;
 import com.example.bookworm.Feed.CustomPopup;
@@ -162,7 +166,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         comment.getData(nowUser, binding.edtComment.getText().toString(), System.currentTimeMillis());
         data.put("comment", comment);
         //입력한 댓글 화면에 표시하기
-        new CommentsCounter().addCounter(data, context, FeedID);
+        new commentsCounter().addCounter(data, context, FeedID);
         //키보드 내리기
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(binding.edtComment.getWindowToken(), 0);
@@ -206,6 +210,10 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             map.put("liked", liked);
             new PersonalD(context).saveUserInfo(nowUser);
             new likeCounter().updateCounter(map, item.getFeedID());
+
+            BookWorm bookworm = new PersonalD(context).getBookworm();
+            Achievement achievement = new Achievement(context, fbModule, nowUser, bookworm);
+            achievement.CompleteAchievement(nowUser, context);
         } else {
             new AlertDialog.Builder(context)
                     .setMessage("커뮤니티 활동 보호를 위해 잠시 후에 다시 시도해주세요")

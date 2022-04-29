@@ -22,9 +22,11 @@ public class BookWorm {
 
     // 업적 달성시 이 벡터에 책볼레 drawble id값을 추가합니다.
     private int wormtype = R.drawable.bw_default;
-
-
     private Vector<Integer> wormvec = new Vector<>();
+
+    private int bgtype = R.drawable.bg_default;
+    private Vector<Integer> bgvec = new Vector<>();
+
     private HashMap<String, Boolean> achievementmap = new HashMap<>();
 
 
@@ -32,7 +34,10 @@ public class BookWorm {
     public BookWorm() {
         this.wormtype = R.drawable.bw_default;
         this.wormvec.add(R.drawable.bw_default);
-        InitAchievemap();
+        this.bgtype = R.drawable.bg_default;
+        this.bgvec.add(R.drawable.bg_default);
+
+        this.achievementmap.put("디폴트", true);
     }
 
 
@@ -41,21 +46,16 @@ public class BookWorm {
         this.token = (String) document.get("token");
         this.wormtype =Integer.parseInt(String.valueOf(document.get("wormtype")));
         this.wormvec = new Vector<>((ArrayList<Integer>)document.get("wormvec"));
+
+        this.bgtype =Integer.parseInt(String.valueOf(document.get("bgtype")));
+        this.bgvec = new Vector<>((ArrayList<Integer>)document.get("bgvec"));
+
+
         this.achievementmap = new HashMap<>((HashMap<String, Boolean>)document.get("achievementmap"));
     }
 
 
-
-    public void InitAchievemap()
-    {
-        this.achievementmap.put("디폴트", true);
-        this.achievementmap.put("공포왕", false);
-        this.achievementmap.put("추리왕", false);
-        this.achievementmap.put("로맨스왕", false);
-        this.achievementmap.put("피드왕", false);
-    }
-
-
+    // 볼레
     public Vector<Integer> getWormvec() {
         return wormvec;
     }
@@ -71,6 +71,17 @@ public class BookWorm {
     public void setWormtype(int wormtype) {
         this.wormtype = wormtype;
     }
+
+
+    // 배경
+    public int getBgtype() { return bgtype; }
+
+    public void setBgtype(int bgtype) { this.bgtype = bgtype; }
+
+    public Vector<Integer> getBgvec() { return bgvec; }
+
+    public void setBgvec(Vector<Integer> bgvec) { this.bgvec = bgvec; }
+
 
     public HashMap<String, Boolean> getAchievementmap() {
         return achievementmap;
