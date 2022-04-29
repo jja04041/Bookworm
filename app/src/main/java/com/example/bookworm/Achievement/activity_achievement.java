@@ -1,6 +1,7 @@
 package com.example.bookworm.Achievement;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,23 +12,25 @@ import com.example.bookworm.Achievement.Adapter.ItemData;
 import com.example.bookworm.Achievement.Adapter.RecyclerViewAdapter;
 import com.example.bookworm.Bw.BookWorm;
 import com.example.bookworm.R;
-import com.example.bookworm.modules.personalD.PersonalD;
+import com.example.bookworm.Core.UserData.PersonalD;
 
 public class activity_achievement extends AppCompatActivity {
 
     private Context context;
     private BookWorm bookworm;
     private RecyclerViewAdapter adapter;
-
+    private int achievetype;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_achievement);
 
+        Intent intent = getIntent();
+        achievetype = intent.getIntExtra("type", 0);
+
         context = this;
         bookworm = new PersonalD(context).getBookworm();
-
 
         init();
         ShowView();
@@ -60,9 +63,21 @@ public class activity_achievement extends AppCompatActivity {
                 wormname = "추리";
                 break;
 
+
+
+
+
+
+
+
+
+            // 배경
+            case R.drawable.bg_default:
+                wormname = "배경";
+                break;
         }
 
-        ItemData itemData = new ItemData(iData, wormname, context);
+        ItemData itemData = new ItemData(iData, achievetype ,wormname, context);
         adapter.addItem(itemData);
 
     }
@@ -70,13 +85,20 @@ public class activity_achievement extends AppCompatActivity {
 
     public void ShowView ()
     {
-        int size = bookworm.getWormvec().size();
+        int size =  0;
 
-        for (int i = 0; i < size; ++i) {
-            if (null != bookworm.getWormvec().get(i)) {
+        if (achievetype == 0){
+        size = bookworm.getWormvec().size();
+        for (int i = 0; i < size; ++i)
+            if (null != bookworm.getWormvec().get(i))
                 getData(bookworm.getWormvec().get(i));
+        }
 
-            }
+        else if (achievetype == 1){
+            size = bookworm.getBgvec().size();
+            for (int i = 0; i < size; ++i)
+                if (null != bookworm.getBgvec().get(i))
+                    getData(bookworm.getBgvec().get(i));
         }
     }
 }

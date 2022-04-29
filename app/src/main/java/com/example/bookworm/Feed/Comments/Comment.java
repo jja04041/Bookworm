@@ -1,6 +1,7 @@
 package com.example.bookworm.Feed.Comments;
 
-import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.Core.UserData.UserInfo;
+import com.google.firebase.firestore.Exclude;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -18,16 +19,17 @@ public class Comment implements Serializable {
     //생성된 시각
     private String madeDate;
 
+    @Exclude
+    private int position; //댓글 삭제시 리사이클러뷰의 포지션을 가져올때 사용
+
     public Comment() {
 
     }
 
-    public void getData(UserInfo userInfo, String contents, Long madeDate) {
+    public void getData(String userToken, String contents, Long madeDate) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        this.CommentID = madeDate + "_" + userInfo.getToken();
-        this.userToken = userInfo.getToken();
-        this.userName = userInfo.getUsername();
-        this.userThumb = userInfo.getProfileimg();
+        this.CommentID = madeDate + "_" + userToken;
+        this.userToken = userToken;
         this.contents = contents;
         this.madeDate = dateFormat.format(madeDate);
     }
@@ -40,10 +42,7 @@ public class Comment implements Serializable {
         this.CommentID = (String) data.get("commentID");
         this.contents = (String) data.get("contents");
         this.madeDate = (String) data.get("madeDate");
-        this.userName = (String) data.get("userName");
-        this.userThumb = (String) data.get("userThumb");
         this.userToken = (String) data.get("userToken");
-
     }
 
     public String getUserToken() {
@@ -66,4 +65,11 @@ public class Comment implements Serializable {
         return madeDate;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
 }

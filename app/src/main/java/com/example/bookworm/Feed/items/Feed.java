@@ -2,7 +2,7 @@ package com.example.bookworm.Feed.items;
 
 import com.example.bookworm.Feed.Comments.Comment;
 import com.example.bookworm.Search.items.Book;
-import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.Core.UserData.UserInfo;
 import com.google.firebase.firestore.Exclude;
 
 import java.io.Serializable;
@@ -14,12 +14,12 @@ public class Feed implements Serializable {
     //라벨 Array 추가
     private String feedID = null; //피드 ID
     private String imgurl = null; //업로드 이미지 url
-    private int userRating; //책볼레 사용자 평점
     private long commentCount; //사용자 댓글 수
     private String feedText = null; //피드의 내용
     private String date = null; //현재 날짜
     private long likeCount;//좋아요 수
     private UserInfo Creator = null; //작성자 정보
+    private String userToken=null;
     private ArrayList<String> label = null; //라벨 목록
     @Exclude
     private Comment comment=null; //최상단의 댓글을 가져옴 -> 서버에 업로드 시엔 이 필드를 제외함. (Exclude Annotation 이용)
@@ -46,11 +46,7 @@ public class Feed implements Serializable {
         }else{
             this.book = (Book) data.get("book");//피드 수정일경우 맵객체가 아닌 북객체가 들어오기 때문
         }
-        if(data.get("UserInfo") instanceof Map){
-            this.Creator.add((Map) data.get("UserInfo"));
-        }else {
-            this.Creator = (UserInfo) data.get("UserInfo");
-        }
+        this.userToken=(String)data.get("UserToken");
         this.label = (ArrayList<String>) data.get("label");
         this.commentCount = (long) data.get("commentsCount");
         this.likeCount = (long) data.get("likeCount");
@@ -82,10 +78,6 @@ public class Feed implements Serializable {
         return imgurl;
     }
 
-    public int getUserRating() {
-        return userRating;
-    }
-
     public String getFeedText() {
         return feedText;
     }
@@ -102,8 +94,8 @@ public class Feed implements Serializable {
         return likeCount;
     }
 
-    public UserInfo getCreator() {
-        return Creator;
+    public String getUserToken() {
+        return userToken;
     }
 
     public ArrayList<String> getLabel() {
