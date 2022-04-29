@@ -312,6 +312,25 @@ public class FBModule {
         });
     }
 
+    //챌린지 인증게시판 업로드를 위한 함수
+    public void uploadChallengeBoard(int idx, String token, String FeedID, Map data) {
+        collectionReference = db.collection(location[idx]).document(token).collection("feed");
+        //task 결정
+        task = collectionReference.document(FeedID).set(data);
+        //task 실행
+        task.addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("오류", "Error deleting " + location[idx], e);
+            }
+        });
+    }
+
 
     private void successDelete(int idx) {
         switch (idx) {

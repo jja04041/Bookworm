@@ -24,7 +24,7 @@ public class Challenge implements Serializable {
     public Challenge(Map data) {
         book = new Book(null);
         if (data!=null) {
-            book.setBook((Map) data.get("Book"));
+            book.setBook((Map) data.get("book"));
             CurrentPart = (ArrayList<String>) data.get("CurrentParticipation");
             MaxPart = (Long) data.get("MaxParticipation");
             //bookId = (String) data.get("BookId");

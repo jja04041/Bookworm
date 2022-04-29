@@ -19,7 +19,6 @@ public class subactivity_challenge_board extends AppCompatActivity {
     SubactivityChallengeBoardBinding binding;
     Context context;
     Challenge challenge;
-    Book book;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
