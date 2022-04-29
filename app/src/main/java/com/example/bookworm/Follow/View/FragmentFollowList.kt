@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.bookworm.Extension.DiffUtilCallback
 import com.example.bookworm.Follow.Interfaces.Contract
 import com.example.bookworm.Follow.Modules.FollowerAdapter
-import com.example.bookworm.Follow.Modules.LoadData
 import com.example.bookworm.Core.UserData.UserInfo
 import com.example.bookworm.Core.UserData.PersonalD
+import com.example.bookworm.Follow.LoadData
 import com.example.bookworm.databinding.FragmentFollowListBinding
 
 //팔로워, 팔로잉 탭의 틀을 가지고 있는 클래스 => 팔로워 탭과 팔로잉 탭의 구분은 isFollower변수로 체크한다.

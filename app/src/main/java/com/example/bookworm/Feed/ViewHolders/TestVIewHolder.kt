@@ -17,6 +17,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target
 import com.example.bookworm.Core.Internet.FBModule
 import com.example.bookworm.Core.MainActivity
+import com.example.bookworm.Core.UserData.Interface.UserContract
+import com.example.bookworm.Core.UserData.Modules.LoadUser
 import com.example.bookworm.Core.UserData.PersonalD
 import com.example.bookworm.Core.UserData.UserInfo
 import com.example.bookworm.Feed.Comments.Comment
@@ -32,7 +34,8 @@ import com.example.bookworm.databinding.FragmentFeedItemBinding
 import java.util.*
 import kotlin.collections.HashMap
 
-class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolder(itemView) {
+class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolder(itemView),
+    UserContract.View {
     var binding: FragmentFeedItemBinding? = null
     var nowUser: UserInfo? = null
     var strings: ArrayList<String>? = null
@@ -42,12 +45,15 @@ class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolde
     var context: Context? = null
     var fbModule = FBModule(context)
     var Count: Long = 0
-
+    var loadUser1: LoadUser? = null
+    var loadUser2: LoadUser? = null
     //생성자를 만든다.
     init {
         binding = FragmentFeedItemBinding.bind(itemView)
         this.context = context
-        nowUser = PersonalD(context).userInfo
+        nowUser = PersonalD(context).userInfo //현재 사용자
+        loadUser1= LoadUser(this)
+        loadUser2= LoadUser(this)
     }
 
     //아이템을 세팅하는 메소드
@@ -64,10 +70,7 @@ class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolde
             context!!.startActivity(intent)
         })
         //작성자 UserInfo
-        val userInfo = item.creator
-        binding!!.tvNickname.setText(userInfo.username)
-        Glide.with(itemView).load(userInfo.profileimg).circleCrop()
-            .into(binding!!.ivProfileImage)
+        loadUser1!!.getData(item.userToken, false)
         //피드 내용
 
         //댓글 창 세팅
@@ -80,7 +83,7 @@ class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolde
 
         //댓글창을 클릭했을때
         binding!!.llComments.setOnClickListener({
-            if(binding!!.tvCommentNickname.visibility!=View.GONE) {
+            if (binding!!.tvCommentNickname.visibility != View.GONE) {
                 val intent = Intent(context, subactivity_comment::class.java)
                 intent.putExtra("item", item)
                 intent.putExtra("position", getAdapterPosition())
@@ -118,22 +121,21 @@ class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolde
             false
         }
         //좋아요 표시 관리
-//        binding!!.btnLike.setOnClickListener({ controlLike(item) })
-//        binding!!.tvLike.setOnClickListener({ controlLike(item) })
-        binding!!.lllike.setOnClickListener({controlLike(item)})
+
+        binding!!.lllike.setOnClickListener({ controlLike(item) })
         //이미지 뷰 정리
         if (item.imgurl != null) {
             Glide.with(itemView).load(item.imgurl).into(binding!!.feedImage)
         }
         binding!!.tvFeedtext.setText(item.feedText)
         //라벨 세팅
-        if(!item.label.get(0).equals("")) setLabel(item.label)
-        else binding!!.lllabel.visibility=View.GONE
+        if (!item.label.get(0).equals("")) setLabel(item.label)
+        else binding!!.lllabel.visibility = View.GONE
 
         //프로필을 눌렀을때 그 사람의 프로필 정보 화면으로 이동
         binding!!.llProfile.setOnClickListener(View.OnClickListener {
             val intent = Intent(context, ProfileInfoActivity::class.java)
-            intent.putExtra("userID", item.creator.token)
+            intent.putExtra("userID", item.userToken)
             context!!.startActivity(intent)
         })
         binding!!.btnFeedMenu.setOnClickListener(View.OnClickListener { view ->
@@ -141,7 +143,7 @@ class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolde
             val popup1 = CustomPopup(context, view)
             popup1.setItems(context!!, fbModule, item)
             popup1.setOnMenuItemClickListener(popup1)
-            popup1.setVisible(nowUser!!.token == userInfo.token)
+            popup1.setVisible(nowUser!!.token == item.userToken)
             popup1.show()
         })
     }
@@ -151,7 +153,7 @@ class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolde
         //유저정보, 댓글내용, 작성시간
         val comment = Comment()
         comment.getData(
-            nowUser,
+            nowUser!!.token,
             binding!!.edtComment.getText().toString(),
             System.currentTimeMillis()
         )
@@ -224,16 +226,15 @@ class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolde
             setViewV(true)
             binding!!.tvCommentCount.setText(Count.toString())
             binding!!.tvCommentContent.setText(comment.contents)
-            binding!!.tvCommentNickname.setText(comment.userName)
+            loadUser2!!.getData(comment.userToken, true)
             binding!!.tvCommentDate.setText(comment.madeDate)
-            Glide.with(binding!!.getRoot()).load(comment.userThumb).circleCrop()
-                .into(binding!!.ivCommentProfileImage)
+
         } else setViewV(false)
     }
 
     fun setViewV(bool: Boolean) {
         val value = if (bool) View.VISIBLE else View.GONE
-        binding!!.llCommentInfo.visibility=value
+        binding!!.llCommentInfo.visibility = value
         binding!!.tvCommentDate.setVisibility(value)
         binding!!.tvCommentNickname.setVisibility(value)
         binding!!.tvCommentContent.setVisibility(value)
@@ -261,5 +262,17 @@ class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolde
         }
     }
 
-    fun showMenu() {}
+    override fun showProfile(userInfo: UserInfo, bool: Boolean?) {
+
+        if (bool==false) {
+            binding!!.tvNickname.setText(userInfo.username)
+            Glide.with(itemView).load(userInfo.profileimg).circleCrop()
+                .into(binding!!.ivProfileImage)
+        } else if (bool==true) {
+            binding!!.tvCommentNickname.setText(userInfo.username)
+            Glide.with(binding!!.getRoot()).load(userInfo.profileimg).circleCrop()
+                .into(binding!!.ivCommentProfileImage)
+        }
+    }
+
 }

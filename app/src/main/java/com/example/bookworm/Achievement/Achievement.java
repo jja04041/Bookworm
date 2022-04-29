@@ -63,25 +63,20 @@ public class Achievement extends activity_achievement {
 
         HashMap<String, Object> map = new HashMap<>();
 
-        if (userinfo.getGenre().get("과학") == 10) {
-            if(null == bookworm.getAchievementmap().get("과학")) {
-                ExecuteFB(R.drawable.bw_horror, "과학왕", 0);
-            }
-        }
-        else if (userinfo.getGenre().get("수필") == 10) {
-            if(null == bookworm.getAchievementmap().get("수필")) {
-                ExecuteFB(R.drawable.bw_detective, "수필왕", 0);
-            }
-        }
 
-
-
-
-
-
+//        if (userinfo.getGenre().get("과학") == 10) {
+//            if(null == bookworm.getAchievementmap().get("과학")) {
+//                ExecuteFB(R.drawable.bw_horror, "과학왕", 0);
+//            }
+//        }
+//        else if (userinfo.getGenre().get("수필") == 10) {
+//            if(null == bookworm.getAchievementmap().get("수필")) {
+//                ExecuteFB(R.drawable.bw_detective, "수필왕", 0);
+//            }
+//        }
 
         // 배경
-        else if (userinfo.getLikedPost().size() == 2) {
+         if (userinfo.getLikedPost().size() == 2) {
             if(null == bookworm.getAchievementmap().get("하트배경")) {
                 ExecuteFB(R.drawable.bg_heart, "하트배경", 1);
             }

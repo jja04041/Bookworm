@@ -3,12 +3,13 @@ package com.example.bookworm.Core.UserData;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.bookworm.Bw.enum_wormtype;
 import com.example.bookworm.Core.UserData.PersonalD;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.firestore.Exclude;
 import com.kakao.usermgmt.response.model.Profile;
 import com.kakao.usermgmt.response.model.UserAccount;
+
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -43,7 +44,6 @@ public class UserInfo implements Serializable {
     private int followerCounts;
     private int followingCounts;
 
-    private final int enum_size = enum_wormtype.enumsize.value();
     private HashMap<String, Integer> genre = new HashMap();
     @Exclude
     private boolean followed = false;
@@ -117,6 +117,10 @@ public class UserInfo implements Serializable {
         return email;
     }
 
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     public String getPlatform() {
         return platform;
     }
@@ -174,6 +178,8 @@ public class UserInfo implements Serializable {
         }
     }
 }
+
+
 
 //
 //    public BookWorm getBookworm() {

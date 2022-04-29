@@ -10,8 +10,6 @@ import android.util.Log;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
-import com.example.bookworm.Core.Observer.EventListener;
-import com.example.bookworm.Follow.View.FollowerActivity;
 import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.Follow.Modules.followCounter;
 import com.example.bookworm.databinding.ActivityProfileInfoBinding;
@@ -22,8 +20,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.Map;
 
 public class ProfileInfoActivity extends AppCompatActivity{

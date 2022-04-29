@@ -26,12 +26,10 @@ public class Comment implements Serializable {
 
     }
 
-    public void getData(UserInfo userInfo, String contents, Long madeDate) {
+    public void getData(String userToken, String contents, Long madeDate) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        this.CommentID = madeDate + "_" + userInfo.getToken();
-        this.userToken = userInfo.getToken();
-        this.userName = userInfo.getUsername();
-        this.userThumb = userInfo.getProfileimg();
+        this.CommentID = madeDate + "_" + userToken;
+        this.userToken = userToken;
         this.contents = contents;
         this.madeDate = dateFormat.format(madeDate);
     }
@@ -44,10 +42,7 @@ public class Comment implements Serializable {
         this.CommentID = (String) data.get("commentID");
         this.contents = (String) data.get("contents");
         this.madeDate = (String) data.get("madeDate");
-        this.userName = (String) data.get("userName");
-        this.userThumb = (String) data.get("userThumb");
         this.userToken = (String) data.get("userToken");
-
     }
 
     public String getUserToken() {

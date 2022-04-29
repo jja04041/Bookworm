@@ -16,11 +16,14 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Achievement.Achievement;
 import com.example.bookworm.Bw.BookWorm;
+import com.example.bookworm.Core.UserData.Interface.UserContract;
+import com.example.bookworm.Core.UserData.Modules.LoadUser;
 import com.example.bookworm.Feed.Comments.Comment;
 import com.example.bookworm.Feed.Comments.CommentsCounter;
 import com.example.bookworm.Feed.CustomPopup;
@@ -42,7 +45,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 //피드의 뷰홀더
-public class ItemViewHolder extends RecyclerView.ViewHolder {
+public class ItemViewHolder extends RecyclerView.ViewHolder implements UserContract.View {
     LayoutFeedBinding binding;
     UserInfo nowUser;
     ArrayList<String> strings;
@@ -52,6 +55,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     Context context;
     FBModule fbModule = new FBModule(context);
     long Count=0;
+    LoadUser user=null;
     //생성자를 만든다.
     public ItemViewHolder(@NonNull View itemView, Context context) {
         super(itemView);
@@ -76,9 +80,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             }
         });
         //작성자 UserInfo
-        UserInfo userInfo = item.getCreator();
-        binding.tvNickname.setText(userInfo.getUsername());
-        Glide.with(itemView).load(userInfo.getProfileimg()).circleCrop().into(binding.ivProfileImage);
+        user = new LoadUser(this);
         //피드 내용
 
         //댓글 창 세팅
@@ -141,7 +143,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ProfileInfoActivity.class);
-                intent.putExtra("userID", item.getCreator().getToken());
+                intent.putExtra("userID", item.getUserToken());
                 context.startActivity(intent);
             }
         });
@@ -153,7 +155,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
                 CustomPopup popup1 = new CustomPopup(context, view);
                 popup1.setItems(context, fbModule, item);
                 popup1.setOnMenuItemClickListener(popup1);
-                popup1.setVisible(nowUser.getToken().equals(userInfo.getToken()));
+                popup1.setVisible(nowUser.getToken().equals(item.getUserToken()));
                 popup1.show();
             }
         });
@@ -163,10 +165,10 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         Map<String, Object> data = new HashMap<>();
         //유저정보, 댓글내용, 작성시간
         Comment comment = new Comment();
-        comment.getData(nowUser, binding.edtComment.getText().toString(), System.currentTimeMillis());
+        comment.getData(nowUser.getToken(), binding.edtComment.getText().toString(), System.currentTimeMillis());
         data.put("comment", comment);
         //입력한 댓글 화면에 표시하기
-        new commentsCounter().addCounter(data, context, FeedID);
+        new CommentsCounter().addCounter(data, context, FeedID);
         //키보드 내리기
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(binding.edtComment.getWindowToken(), 0);
@@ -274,5 +276,18 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
     public static void showMenu(){
 
+    }
+
+    @Override
+    public void showProfile(@NonNull UserInfo userInfo, @Nullable Boolean aBoolean) {
+        if (aBoolean == null) {
+            binding.tvNickname.setText(userInfo.getUsername());
+            Glide.with(itemView).load(userInfo.getProfileimg()).circleCrop()
+                    .into(binding.ivProfileImage);
+        } else {
+            binding.tvCommentNickname.setText(userInfo.getUsername());
+            Glide.with(binding.getRoot()).load(userInfo.getProfileimg()).circleCrop()
+                    .into(binding.ivCommentProfileImage);
+        }
     }
 }

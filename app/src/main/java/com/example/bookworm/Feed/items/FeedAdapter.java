@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.bookworm.Feed.ViewHolders.ItemViewHolder;
+//import com.example.bookworm.Feed.ViewHolders.ItemViewHolder;
 import com.example.bookworm.Feed.ViewHolders.TestVIewHolder;
 import com.example.bookworm.R;
 
@@ -31,7 +31,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     //화면을 인플레이트하고 인플레이트된 화면을 리턴한다.
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = null;
+        View view;
         switch (viewType) {
             //이미지가 있는 피드
             case 1:
@@ -73,21 +73,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             showLoadingView((LoadingViewHolder) holder, safePosition);
         }
     }
-
-//    @Override
-//    public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
-//        super.onViewRecycled(holder);
-//        int safePosition = holder.getAdapterPosition();
-//        if (holder instanceof ItemViewHolder) {
-//            Feed item = FeedList.get(safePosition);
-//            if (item.getImgurl() != null) {
-//                Log.d(safePosition + "위치", item.getImgurl());
-//                ((ItemViewHolder) holder).setVisibillity(true);
-//            } else ((ItemViewHolder) holder).setVisibillity(false);
-//        } else if (holder instanceof LoadingViewHolder) {
-//            showLoadingView((LoadingViewHolder) holder, safePosition);
-//        }
-//    }
 
     @Override
     public int getItemCount() {
