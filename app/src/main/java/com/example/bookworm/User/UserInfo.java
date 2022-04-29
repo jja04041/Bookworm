@@ -3,7 +3,6 @@ package com.example.bookworm.User;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.bookworm.Bw.enum_wormtype;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.firestore.Exclude;
 import com.kakao.usermgmt.response.model.Profile;
@@ -42,7 +41,6 @@ public class UserInfo implements Serializable {
     private int followerCounts;
     private int followingCounts;
 
-    private final int enum_size = enum_wormtype.enumsize.value();
     private HashMap<String, Integer> genre = new HashMap();
     @Exclude
     private boolean followed = false;
@@ -77,11 +75,6 @@ public class UserInfo implements Serializable {
         this.platform = "Google";
     }
 
-    public void InitGenre() {
-        genre.put("공포", 0);
-        genre.put("추리", 0);
-
-    }
 
     //파이어베이스에서 값을 가져옴
     public void add(Map document) {

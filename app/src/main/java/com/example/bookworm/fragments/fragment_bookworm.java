@@ -63,7 +63,7 @@ public class fragment_bookworm extends Fragment {
             {
                 Intent intent = new Intent(current_context, activity_achievement.class);
                 // 1이면 activity achievement에서  bg 보여주게
-                intent.putExtra("type", 0);
+                intent.putExtra("type", 0  );
                 startActivity(intent);
             }
         });

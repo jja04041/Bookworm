@@ -36,7 +36,8 @@ public class BookWorm {
         this.wormvec.add(R.drawable.bw_default);
         this.bgtype = R.drawable.bg_default;
         this.bgvec.add(R.drawable.bg_default);
-        InitAchievemap();
+
+        this.achievementmap.put("디폴트", true);
     }
 
 
@@ -45,18 +46,12 @@ public class BookWorm {
         this.token = (String) document.get("token");
         this.wormtype =Integer.parseInt(String.valueOf(document.get("wormtype")));
         this.wormvec = new Vector<>((ArrayList<Integer>)document.get("wormvec"));
+
+        this.bgtype =Integer.parseInt(String.valueOf(document.get("bgtype")));
+        this.bgvec = new Vector<>((ArrayList<Integer>)document.get("bgvec"));
+
+
         this.achievementmap = new HashMap<>((HashMap<String, Boolean>)document.get("achievementmap"));
-    }
-
-
-
-    public void InitAchievemap()
-    {
-        this.achievementmap.put("디폴트", true);
-        this.achievementmap.put("공포왕", false);
-        this.achievementmap.put("추리왕", false);
-        this.achievementmap.put("로맨스왕", false);
-        this.achievementmap.put("피드왕", false);
     }
 
 
