@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class Challenge implements Serializable {
-    private Book book; // Book 객체 자체를 업로드
+    private Book book; // Book 객체 자체를 사용
     private String bookId; //챌린지에서 사용하는 도서의 Id값
     private String bookThumb; //책 썸네일
     private String bookTitle; //책 이름
