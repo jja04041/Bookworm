@@ -7,11 +7,13 @@
         <entry key="..\:/Bookworm/app/src/main/res/layout/activity_follower.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/activity_profile_info.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/activity_profile_setting.xml" value="0.25364583333333335" />
+        <entry key="..\:/Bookworm/app/src/main/res/layout/custom_dialog_achievement.xml" value="0.13177083333333334" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_bookworm.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_challenge.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_datepicker.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_feed.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_profile.xml" value="0.176" />
+        <entry key="..\:/Bookworm/app/src/main/res/layout/item_slider.xml" value="0.13177083333333334" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/recyclerview_item.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/subactivity_challenge_createchallenge.xml" value="0.25364583333333335" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/bottom_icon_color.xml" value="0.11" />
@@ -20,6 +22,7 @@
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/feed_label.xml" value="0.268" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/ic_baseline_chevron_right_24.xml" value="0.11" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/ic_baseline_image_24.xml" value="0.1" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/ic_baseline_more_vert_24.xml" value="0.268" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/ic_baseline_people_alt_24.xml" value="0.11" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/ic_launcher_background.xml" value="0.11" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/label_design.xml" value="0.1875" />
@@ -35,6 +38,8 @@
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/custom_dialog_label.xml" value="0.30055579307396324" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_challenge.xml" value="0.33" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_feed.xml" value="0.21614583333333334" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_feed_item.xml" value="0.30055579307396324" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_first.xml" value="0.30055579307396324" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_profile.xml" value="0.22" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_profile_follower.xml" value="0.25" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_profile_follwing.xml" value="0.25885416666666666" />

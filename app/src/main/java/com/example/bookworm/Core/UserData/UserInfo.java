@@ -3,12 +3,13 @@ package com.example.bookworm.Core.UserData;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.bookworm.Bw.enum_wormtype;
 import com.example.bookworm.Core.UserData.PersonalD;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.firestore.Exclude;
 import com.kakao.usermgmt.response.model.Profile;
 import com.kakao.usermgmt.response.model.UserAccount;
+
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -43,11 +44,17 @@ public class UserInfo implements Serializable {
     private int followerCounts;
     private int followingCounts;
 
-    private final int enum_size = enum_wormtype.enumsize.value();
     private HashMap<String, Integer> genre = new HashMap();
     @Exclude
     private boolean followed = false;
 
+//    private BookWorm bookworm;
+
+
+    public UserInfo() {
+//        bookworm = new BookWorm();
+//        bookworm.Initbookworm();
+    }
 
     public boolean isFollowed() {
         return followed;
@@ -78,11 +85,6 @@ public class UserInfo implements Serializable {
         this.platform = "Google";
     }
 
-    public void InitGenre() {
-        genre.put("공포", 0);
-        genre.put("추리", 0);
-
-    }
 
     //파이어베이스에서 값을 가져옴
     public void add(Map document) {
@@ -115,9 +117,14 @@ public class UserInfo implements Serializable {
         return email;
     }
 
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     public String getPlatform() {
         return platform;
     }
+
 
     public int getFollowerCounts() {
         return followerCounts;
@@ -131,9 +138,9 @@ public class UserInfo implements Serializable {
         return genre;
     }
 
-    public String getToken() { return token; }
-
-    public void setToken(String token) { this.token = token; }
+    public String getToken() {
+        return token;
+    }
 
     public void setGenre(String categoryname, Context context) {
 
@@ -143,38 +150,42 @@ public class UserInfo implements Serializable {
 
         String category = tokenizer.nextToken();
 
-        if(category.equals("자기계발") || category.equals("에세이") || category.equals("예술/대중문화") || category.equals("달력/기타")){
+        if (category.equals("자기계발") || category.equals("에세이") || category.equals("예술/대중문화") || category.equals("달력/기타")) {
             category = "자기계발";
-        }
-        else if( category.equals("소설/시/희곡") || category.equals("장르소설")){
+        } else if (category.equals("소설/시/희곡") || category.equals("장르소설")) {
             category = "수필";
-        }
-        else if(category.equals("어린이") || category.equals("유아") || category.equals("청소년") || category.equals("전집/중고전집") || category.equals("좋은부모")){
+        } else if (category.equals("어린이") || category.equals("유아") || category.equals("청소년") || category.equals("전집/중고전집") || category.equals("좋은부모")) {
             category = "육아";
-        }
-        else if(category.equals("사회과학") || category.equals("경제경영")){
+        } else if (category.equals("사회과학") || category.equals("경제경영")) {
             category = "사회";
-        }
-        else if(category.equals("종교/역학") || category.equals("인문학")){
+        } else if (category.equals("종교/역학") || category.equals("인문학")) {
             category = "인문";
-        }
-        else if(category.equals("가정/요리/뷰티") || category.equals("건강/취미/레저") || category.equals("여행")){
+        } else if (category.equals("가정/요리/뷰티") || category.equals("건강/취미/레저") || category.equals("여행")) {
             category = "생활";
-        }
-        else if(category.equals("외국어") || category.equals("대학교재") || category.equals("초중고참고서") || category.equals("수험서/자격증")
-        || category.equals("공무원 수험서") || category.equals("컴퓨터/모바일")){
+        } else if (category.equals("외국어") || category.equals("대학교재") || category.equals("초중고참고서") || category.equals("수험서/자격증")
+                || category.equals("공무원 수험서") || category.equals("컴퓨터/모바일")) {
             category = "공부";
         }
 
         int unboxint = 0;
 
-        if(null == this.genre.get(category)){
+        if (null == this.genre.get(category)) {
             this.genre.put(category, 1);
-        }
-        else{
+        } else {
             unboxint = (this.genre.get(category));
             unboxint++;
             this.genre.replace(category, unboxint);
         }
     }
 }
+
+
+
+//
+//    public BookWorm getBookworm() {
+//        return bookworm;
+//    }
+//
+//    public void setBookworm(BookWorm bookworm) {
+//        this.bookworm = bookworm;
+//    }

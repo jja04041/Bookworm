@@ -7,7 +7,7 @@ import android.view.View
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.bookworm.Core.Observer.EventListener
+
 import com.example.bookworm.Core.UserData.UserInfo
 
 import com.example.bookworm.Follow.Modules.followCounter
@@ -15,7 +15,7 @@ import com.example.bookworm.Profile.ProfileInfoActivity
 import com.example.bookworm.databinding.LayoutUserItemBinding
 
 class FollowerViewHolder(val itemView: View, context: Context?, val nowUserInfo: UserInfo):
-    RecyclerView.ViewHolder(itemView),EventListener{
+    RecyclerView.ViewHolder(itemView){
     var context = context//전달된 context
     var binding = LayoutUserItemBinding.bind(itemView)
     var v = false
@@ -55,10 +55,6 @@ class FollowerViewHolder(val itemView: View, context: Context?, val nowUserInfo:
         binding.btnFollow.setBackgroundColor(Color.RED)
         binding.btnFollow.setText("팔로우")
         v = false
-    }
-
-    override fun onEvent(boolean: Boolean) {
-        TODO("Not yet implemented")
     }
 
 

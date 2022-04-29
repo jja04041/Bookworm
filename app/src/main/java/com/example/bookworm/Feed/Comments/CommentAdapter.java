@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.bookworm.Core.UserData.Interface.UserContract;
+import com.example.bookworm.Core.UserData.Modules.LoadUser;
 import com.example.bookworm.Feed.CustomPopup;
 import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.Profile.ProfileInfoActivity;
@@ -100,21 +102,21 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 
     //뷰홀더 클래스 부분
-    public class ItemViewHolder extends RecyclerView.ViewHolder {
+    public class ItemViewHolder extends RecyclerView.ViewHolder implements UserContract.View {
         LayoutCommentItemBinding binding;
-
+        LoadUser user;
         //생성자를 만든다.
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             binding = LayoutCommentItemBinding.bind(itemView);
+            user=new LoadUser(this);
         }
 
         //아이템을 세팅하는 메소드
         public void setItem(Comment item) {
             Feed feed = ((subactivity_comment) context).item;
             UserInfo nowUser = new PersonalD(context).getUserInfo();
-            Glide.with(context).load(item.getUserThumb()).circleCrop().into(binding.imgProfile);
-            binding.tvNickname.setText(item.getUserName());
+            user.getData(item.getUserToken(),null);
             binding.tvCommentContent.setText(item.getContents());
             binding.tvDate.setText(item.getMadeDate());
             binding.llProfile.setOnClickListener(new View.OnClickListener() {
@@ -125,7 +127,6 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     context.startActivity(intent);
                 }
             });
-
             binding.ivFeedMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -137,6 +138,12 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     popup1.show();
                 }
             });
+        }
+
+        @Override
+        public void showProfile(@NonNull UserInfo userInfo,@NonNull Boolean bool) {
+            Glide.with(context).load(userInfo.getProfileimg()).circleCrop().into(binding.imgProfile);
+            binding.tvNickname.setText(userInfo.getUsername());
         }
     }
 

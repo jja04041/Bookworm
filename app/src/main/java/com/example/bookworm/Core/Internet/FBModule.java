@@ -119,9 +119,15 @@ public class FBModule {
                     document.getReference().update("UserInfo.genre", map.get("userinfo_genre"));
                 }
                 // 업적, 인벤토리 업데이트
-                else if (map.get("bookworm_achievementmap") != null && map.get("bookworm_wormvec") != null ) {
-                    document.getReference().update("BookWorm.achievementmap", map.get("bookworm_achievementmap"));
-                    document.getReference().update("BookWorm.wormvec", map.get("bookworm_wormvec"));
+                else if (map.get("bookworm_achievementmap") != null  ) {
+                    if(map.get("bookworm_wormvec") != null) {
+                        document.getReference().update("BookWorm.achievementmap", map.get("bookworm_achievementmap"));
+                        document.getReference().update("BookWorm.wormvec", map.get("bookworm_wormvec"));
+                    }
+                    else if(map.get("bookworm_bgvec") != null) {
+                        document.getReference().update("BookWorm.achievementmap", map.get("bookworm_achievementmap"));
+                        document.getReference().update("BookWorm.bgvec", map.get("bookworm_bgvec"));
+                    }
                     // wormtype update
                 } else if (map.get("bookworm_wormtype") != null) {
                     document.getReference().update("BookWorm.wormtype", map.get("bookworm_wormtype"));
@@ -241,7 +247,6 @@ public class FBModule {
         switch (idx) {
             case 0://회원가입
                 UserInfo userInfo = (UserInfo) (data.get("UserInfo"));
-                userInfo.InitGenre();
 
                 data.put("UserInfo", userInfo);
                 // db.collection(location[idx]).document(userInfo.getToken()).set(data);

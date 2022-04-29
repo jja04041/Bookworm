@@ -55,7 +55,7 @@ public class fragment_profile extends Fragment {
                 startActivity(intent);
             }
         });
-
+    binding.tvUserName.setText(userinfo.getUsername());
 
         //팔로워액티비티 실행하기
         binding.btnFollower.setOnClickListener(new View.OnClickListener() {

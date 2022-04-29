@@ -170,7 +170,7 @@ public class subactivity_comment extends AppCompatActivity {
         if (!string.equals("") && !string.equals(null)) {
             //유저정보, 댓글내용, 작성시간
             Comment comment = new Comment();
-            comment.getData(nowUser, string, System.currentTimeMillis());
+            comment.getData(nowUser.getToken(), string, System.currentTimeMillis());
             data.put("comment", comment);
             //입력한 댓글 화면에 표시하기
             ArrayList a = new ArrayList(commentList);

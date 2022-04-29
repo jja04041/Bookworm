@@ -46,7 +46,7 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginHorizontal="5dp"
-            android:background="@drawable/ic_baseline_more_vert_24"
+            android:background="@drawable/icon_menu_vert"
             android:backgroundTint="#000000" />
     </LinearLayout>
 
@@ -203,7 +203,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="start"
-                    android:clickable="true"
+                    android:clickable="false"
                     android:layout_marginHorizontal="10dp"
                     android:background="@drawable/icon_like" />
 

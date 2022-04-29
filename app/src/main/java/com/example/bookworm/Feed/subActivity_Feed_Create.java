@@ -26,7 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
-import com.example.bookworm.Achievement.Achievement;
+import com.example.bookworm.Achievement.*;
 import com.example.bookworm.Bw.BookWorm;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
@@ -60,7 +60,7 @@ import okhttp3.RequestBody;
 
 public class subActivity_Feed_Create extends AppCompatActivity {
 
-    public static int CREATE_OK = 30;
+
     private SubactivityFeedCreateBinding binding;
     FBModule fbModule;
     UserInfo userInfo;
@@ -71,6 +71,8 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     Dialog customDialog;
     String FeedID;
     Book selected_book; //선택한 책 객체
+    public static int CREATE_OK=30;
+    //라벨은 알럿 다이어그램을 통해 입력을 받고, 선택한 값으로 라벨이 지정됨 => 구현 예정
 
     //사용자가 선택한 어플로 이어서 사진을 선택할 수 있게 함.
     ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
@@ -479,7 +481,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String formatTime = dateFormat.format(System.currentTimeMillis());
 
-            map.put("UserInfo", userInfo); //유저 정보
+            map.put("UserToken", userInfo.getToken()); //유저 정보
             map.put("book", selected_book); //책 정보
             map.put("feedText", binding.edtFeedText.getText().toString()); //피드 내용
             map.put("label", labelAdd(labelList)); //라벨 리스트
@@ -503,7 +505,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             achievement.CompleteAchievement(userInfo, current_context);
 
             new PersonalD(current_context).saveUserInfo(userInfo);
-            setResult(CREATE_OK);
+            setResult(Activity.RESULT_OK);
             finish();
         }
     }

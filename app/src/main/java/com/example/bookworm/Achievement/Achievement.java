@@ -29,7 +29,7 @@ public class Achievement extends activity_achievement {
     }
 
 
-    private void ExecuteFB(int _drawblepath, String _key) {
+    private void ExecuteFB(int _drawblepath, String _key, int type) {
         // 업적 달성하면 FB에 정보를 줍니다.
 
 
@@ -39,38 +39,52 @@ public class Achievement extends activity_achievement {
 
         HashMap<String, Object> map = new HashMap<>();
 
-        bookworm.getWormvec().add(_drawblepath);
-        bookworm.getAchievementmap().put(_key, true);
-
-
-        map.put("bookworm_achievementmap", bookworm.getAchievementmap());
-        map.put("bookworm_wormvec", bookworm.getWormvec());
+        // 볼레보상
+        if(type == 0) {
+            bookworm.getWormvec().add(_drawblepath);
+            bookworm.getAchievementmap().put(_key, true);
+            map.put("bookworm_achievementmap", bookworm.getAchievementmap());
+            map.put("bookworm_wormvec", bookworm.getWormvec());
+        }
+        // 배경 보상
+        else if(type == 1) {
+            bookworm.getBgvec().add(_drawblepath);
+            bookworm.getAchievementmap().put(_key, true);
+            map.put("bookworm_achievementmap", bookworm.getAchievementmap());
+            map.put("bookworm_bgvec", bookworm.getBgvec());
+        }
 
         fbModule.readData(0, map, bookworm.getToken());
-
         new PersonalD(context).saveBookworm(bookworm);
     }
 
-
-    public void CheckAchievement(UserInfo userinfo) {
-
-        // 업적을 달성했는지 체크할 필요가 있을지도 모르니 보류
-    }
 
     public void CompleteAchievement(UserInfo userinfo, Context context) {
 
         HashMap<String, Object> map = new HashMap<>();
 
-        if (userinfo.getGenre().get("공포") == 10
-        && false == bookworm.getAchievementmap().get("공포왕")) {
 
-            ExecuteFB(R.drawable.bw_horror, "공포왕");
+//        if (userinfo.getGenre().get("과학") == 10) {
+//            if(null == bookworm.getAchievementmap().get("과학")) {
+//                ExecuteFB(R.drawable.bw_horror, "과학왕", 0);
+//            }
+//        }
+//        else if (userinfo.getGenre().get("수필") == 10) {
+//            if(null == bookworm.getAchievementmap().get("수필")) {
+//                ExecuteFB(R.drawable.bw_detective, "수필왕", 0);
+//            }
+//        }
 
+        // 배경
+         if (userinfo.getLikedPost().size() == 2) {
+            if(null == bookworm.getAchievementmap().get("하트배경")) {
+                ExecuteFB(R.drawable.bg_heart, "하트배경", 1);
+            }
         }
-        else if (userinfo.getGenre().get("추리") == 10
-                && false == bookworm.getAchievementmap().get("추리왕")) {
-
-            ExecuteFB(R.drawable.bw_detective, "추리왕");
+        else if (userinfo.getLikedPost().size() == 3) {
+            if(null == bookworm.getAchievementmap().get("가나다")) {
+                ExecuteFB(R.drawable.bg_heart, "가나다", 1);
+            }
         }
     }
 }
