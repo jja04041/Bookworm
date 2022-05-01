@@ -18,6 +18,9 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Challenge.subActivity.subactivity_challenge_board_comment"
+            android:exported="false" />
+        <activity
             android:name=".Challenge.subActivity.subactivity_challenge_board_create"
             android:exported="false" />
         <activity
