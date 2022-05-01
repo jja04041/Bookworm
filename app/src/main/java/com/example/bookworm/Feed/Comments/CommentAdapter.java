@@ -167,17 +167,17 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 long duration = dateNow.getTime() - dateCreated.getTime();//시간차이 mills
 
                 if (duration / 1000 / 60 == 0) {
-                    dateDuration = "방금 전";
+                    dateDuration = "방금";
                 } else if (duration / 1000 / 60 <= 59) {
-                    dateDuration = String.valueOf(duration / 1000 / 60) + "분 전";
+                    dateDuration = String.valueOf(duration / 1000 / 60) + "분";
                 } else if (duration / 1000 / 60 / 60 <= 23) {
-                    dateDuration = String.valueOf(duration / 1000 / 60 / 60) + "시간 전";
+                    dateDuration = String.valueOf(duration / 1000 / 60 / 60) + "시간";
                 } else if (duration / 1000 / 60 / 60 / 24 <= 29) {
-                    dateDuration = String.valueOf(duration / 1000 / 60 / 60 / 24) + "일 전";
+                    dateDuration = String.valueOf(duration / 1000 / 60 / 60 / 24) + "일";
                 } else if (duration / 1000 / 60 / 60 / 24 / 30 <= 12) {
-                    dateDuration = String.valueOf(duration / 1000 / 60 / 60 / 24 / 30) + "개월 전";
+                    dateDuration = String.valueOf(duration / 1000 / 60 / 60 / 24 / 30) + "개월";
                 } else {
-                    dateDuration = String.valueOf(duration / 1000 / 60 / 60 / 24 / 30 / 12) + "년 전";
+                    dateDuration = String.valueOf(duration / 1000 / 60 / 60 / 24 / 30 / 12) + "년";
                 }
 
             } catch (ParseException e) {

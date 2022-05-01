@@ -287,17 +287,17 @@ class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolde
             val dateCreated = dateFormat.parse(createdTime)
             val duration = dateNow.time - dateCreated.time //시간차이 mills
             if (duration / 1000 / 60 == 0L) {
-                dateDuration = "방금 전"
+                dateDuration = "방금"
             } else if (duration / 1000 / 60 <= 59) {
-                dateDuration = (duration / 1000 / 60).toString() + "분 전"
+                dateDuration = (duration / 1000 / 60).toString() + "분"
             } else if (duration / 1000 / 60 / 60 <= 23) {
-                dateDuration = (duration / 1000 / 60 / 60).toString() + "시간 전"
+                dateDuration = (duration / 1000 / 60 / 60).toString() + "시간"
             } else if (duration / 1000 / 60 / 60 / 24 <= 29) {
-                dateDuration = (duration / 1000 / 60 / 60 / 24).toString() + "일 전"
+                dateDuration = (duration / 1000 / 60 / 60 / 24).toString() + "일"
             } else if (duration / 1000 / 60 / 60 / 24 / 30 <= 12) {
-                dateDuration = (duration / 1000 / 60 / 60 / 24 / 30).toString() + "개월 전"
+                dateDuration = (duration / 1000 / 60 / 60 / 24 / 30).toString() + "개월"
             } else {
-                dateDuration = (duration / 1000 / 60 / 60 / 24 / 30 / 12).toString() + "년 전"
+                dateDuration = (duration / 1000 / 60 / 60 / 24 / 30 / 12).toString() + "년"
             }
         } catch (e: ParseException) {
             e.printStackTrace()
