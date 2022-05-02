@@ -1,6 +1,7 @@
 package com.example.bookworm.Challenge.Board;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.content.Context;
 import android.content.Intent;
@@ -45,6 +46,7 @@ public class subactivity_challenge_board extends AppCompatActivity {
         context = this;
         boardFB = new BoardFB(context);
 
+
         Intent intent = getIntent();
         //넘겨받은 값 챌린지 객체에 넣음
         challenge = (Challenge) intent.getSerializableExtra("challenge");
@@ -73,7 +75,6 @@ public class subactivity_challenge_board extends AppCompatActivity {
         });
 
         boardFB.getData(map, challenge.getTitle());
-
     }
 
     private void setItems() {
@@ -99,6 +100,16 @@ public class subactivity_challenge_board extends AppCompatActivity {
         } catch (NullPointerException e) {
             canLoad = false;
         }
+        initRecyclerView();
+    }
+
+    //리사이클러뷰 초기화
+    public void initRecyclerView() {
+        BoardAdapter boardAdapter = new BoardAdapter(boardList, context);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false);
+        binding.mRecyclerView.setLayoutManager(gridLayoutManager);
+        binding.mRecyclerView.setAdapter(boardAdapter);
+//        initScrollListener(); //무한스크롤
     }
 
 }
