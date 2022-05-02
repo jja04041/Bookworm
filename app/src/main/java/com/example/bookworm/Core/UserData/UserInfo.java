@@ -56,6 +56,11 @@ public class UserInfo implements Serializable {
 //        bookworm.Initbookworm();
     }
 
+    public void setFollowingCounts(int followingCounts) {
+        this.followingCounts = followingCounts;
+    }
+
+
     public boolean isFollowed() {
         return followed;
     }

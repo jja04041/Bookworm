@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
@@ -33,7 +34,7 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolder(itemView),
+class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolder(itemView),
     UserContract.View {
     var binding: FragmentFeedItemBinding? = null
     var nowUser: UserInfo? = null
@@ -52,8 +53,9 @@ class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolde
         binding = FragmentFeedItemBinding.bind(itemView)
         this.context = context
         nowUser = PersonalD(context).userInfo //현재 사용자
-        loadUser1= LoadUser(this)
-        loadUser2= LoadUser(this)
+        //사용자의 프로필 정보를 로드할 생성자를 만든다.
+        loadUser1= LoadUser(this) //피드의 프로필
+        loadUser2= LoadUser(this) //최근 댓글의 프로필
     }
 
     //아이템을 세팅하는 메소드
@@ -158,6 +160,7 @@ class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolde
             System.currentTimeMillis()
         )
         data["comment"] = comment
+
         //입력한 댓글 화면에 표시하기
         if (binding!!.llCommentInfo.visibility == View.GONE) binding!!.llCommentInfo.visibility =
             View.VISIBLE
@@ -170,6 +173,7 @@ class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolde
         return comment
     }
 
+    //이미지가 있을 때만, 이미지 뷰를 활성화 함.
     fun setVisibillity(check: Boolean) {
         if (check) binding!!.feedImage.setVisibility(View.VISIBLE) else {
             binding!!.feedImage.setImageResource(0)
@@ -177,6 +181,7 @@ class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolde
         }
     }
 
+    //좋아요를 관리하는 메소드
     private fun controlLike(item: Feed) {
         if (limit < 5) {
             limit += 1
@@ -221,6 +226,7 @@ class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolde
         }
     }
 
+    //댓글을 화면에 세팅하는 메소드
     fun setComment(comment: Comment?) {
         if (comment != null) {
             setViewV(true)
@@ -235,6 +241,7 @@ class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolde
         } else setViewV(false)
     }
 
+    //뷰를 보여주는 메소드(Visibility 조정)
     fun setViewV(bool: Boolean) {
         val value = if (bool) View.VISIBLE else View.GONE
         binding!!.llCommentInfo.visibility = value
@@ -253,7 +260,6 @@ class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolde
             val tv = TextView(context)
             tv.text = label[i] //라벨에 텍스트 삽입
             tv.background = context!!.getDrawable(R.drawable.label_design) //디자인 적용
-//            tv.setBackgroundColor(Color.parseColor("#0F000000")) //배경색 적용
             tv.setBackgroundColor((context as MainActivity).getColor(R.color.subcolor_2)) //배경색 적용
             val params = LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -265,16 +271,23 @@ class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolde
         }
     }
 
+
+    //사용자의 프로필을 보여주는 메소드
+    // (UserContract.View 인터페이스의 메소드를 오버라이딩함)
     override fun showProfile(userInfo: UserInfo, bool: Boolean?) {
 
-        if (bool==false) {
-            binding!!.tvNickname.setText(userInfo.username)
-            Glide.with(itemView).load(userInfo.profileimg).circleCrop()
-                .into(binding!!.ivProfileImage)
-        } else if (bool==true) {
-            binding!!.tvCommentNickname.setText(userInfo.username)
-            Glide.with(binding!!.getRoot()).load(userInfo.profileimg).circleCrop()
-                .into(binding!!.ivCommentProfileImage)
+        try {
+            if (bool == false) {
+                binding!!.tvNickname.setText(userInfo.username)
+                Glide.with(itemView).load(userInfo.profileimg).circleCrop()
+                    .into(binding!!.ivProfileImage)
+            } else if (bool == true) {
+                binding!!.tvCommentNickname.setText(userInfo.username)
+                Glide.with(binding!!.getRoot()).load(userInfo.profileimg).circleCrop()
+                    .into(binding!!.ivCommentProfileImage)
+            }
+        }catch (e: IllegalArgumentException){
+            Log.e("Glide Error","itemView가 Null인 상태입니다.")
         }
     }
 

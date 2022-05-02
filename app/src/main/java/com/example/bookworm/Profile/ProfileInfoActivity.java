@@ -30,7 +30,7 @@ public class ProfileInfoActivity extends AppCompatActivity{
     UserInfo userInfo, nowUser; //타인 userInfo, 현재 사용자 nowUser
     Context context;
     String userID;
-    followCounter followCounter = new followCounter();
+    followCounter followCounter = new followCounter(null,-1);
     Boolean cache;
 
     //자신이나 타인의 프로필을 클릭했을때 나오는 화면

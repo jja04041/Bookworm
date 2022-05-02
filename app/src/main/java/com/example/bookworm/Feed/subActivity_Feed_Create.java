@@ -512,7 +512,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             achievement.CompleteAchievement(userInfo, current_context);
 
             new PersonalD(current_context).saveUserInfo(userInfo);
-            setResult(Activity.RESULT_OK);
+            setResult(CREATE_OK);
             finish();
         }
     }

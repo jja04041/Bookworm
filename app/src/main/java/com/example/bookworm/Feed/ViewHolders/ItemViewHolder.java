@@ -244,9 +244,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder implements UserContr
             setViewV(true);
             binding.tvCommentCount.setText(String.valueOf(Count));
             binding.tvCommentContent.setText(comment.getContents());
-            binding.tvCommentNickname.setText(comment.getUserName());
             binding.tvCommentDate.setText(comment.getMadeDate());
-            Glide.with(binding.getRoot()).load(comment.getUserThumb()).circleCrop().into(binding.ivCommentProfileImage);
         }else setViewV(false);
 
     }
@@ -272,10 +270,6 @@ public class ItemViewHolder extends RecyclerView.ViewHolder implements UserContr
             tv.setLayoutParams(params); //설정값 뷰에 저장
             binding.lllabel.addView(tv); //레이아웃에 뷰 세팅
         }
-    }
-
-    public static void showMenu(){
-
     }
 
     @Override
