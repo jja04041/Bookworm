@@ -1,7 +1,5 @@
 package com.example.bookworm.Search.subActivity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -15,12 +13,14 @@ import android.widget.RatingBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
+import com.example.bookworm.Core.Internet.Module;
+import com.example.bookworm.databinding.SubactivityChallengeChallengeinfoBinding;
 import com.example.bookworm.databinding.SubactivitySearchFragmentResultBinding;
-import com.example.bookworm.modules.Module;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class search_fragment_subActivity_result extends AppCompatActivity {
+    SubactivitySearchFragmentResultBinding binding;
     ImageView iv_selectedItem;
     final int textViewCount = 8;
     String itemId;
@@ -40,7 +41,8 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.subactivity_search_fragment_result);
+        binding= SubactivitySearchFragmentResultBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         Intent intent = getIntent();
         itemId = intent.getExtras().getString("itemid");
         iv_selectedItem = findViewById(R.id.iv_selectedItem);
@@ -54,7 +56,14 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
 
         ScrollView ScrParents = (ScrollView) findViewById(R.id.ScrParents);
         ScrollView ScrChild = (ScrollView) findViewById(R.id.ScrChild);
-//제목,저자,출판사가 나오는 스크롤뷰를 터치해도 부모 스크롤뷰가 반응하지 않게 함
+
+        //shimmer 적용을 위해 기존 뷰는 일단 안보이게, shimmer는 보이게
+        binding.llSearch.setVisibility(View.GONE);
+        binding.SFLSearch.startShimmer();
+        binding.SFLSearch.setVisibility(View.VISIBLE);
+
+
+        //제목,저자,출판사가 나오는 스크롤뷰를 터치해도 부모 스크롤뷰가 반응하지 않게 함
         ScrChild.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -70,6 +79,12 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
                 finish();
             }
         });
+
+        //shimmer 적용 끝내고 shimmer는 안보이게, 기존 뷰는 보이게
+        binding.llSearch.setVisibility(View.VISIBLE);
+        binding.SFLSearch.stopShimmer();
+        binding.SFLSearch.setVisibility(View.GONE);
+
     }
 
     private void setItem() {

@@ -31,12 +31,12 @@ import com.example.bookworm.Bw.BookWorm;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_main;
-import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.Core.UserData.UserInfo;
 
 import com.example.bookworm.databinding.SubactivityFeedCreateBinding;
-import com.example.bookworm.modules.FBModule;
-import com.example.bookworm.modules.Module;
-import com.example.bookworm.modules.personalD.PersonalD;
+import com.example.bookworm.Core.Internet.FBModule;
+import com.example.bookworm.Core.Internet.Module;
+import com.example.bookworm.Core.UserData.PersonalD;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -71,6 +71,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     Dialog customDialog;
     String FeedID;
     Book selected_book; //선택한 책 객체
+    public static int CREATE_OK=30;
     //라벨은 알럿 다이어그램을 통해 입력을 받고, 선택한 값으로 라벨이 지정됨 => 구현 예정
 
     //사용자가 선택한 어플로 이어서 사진을 선택할 수 있게 함.
@@ -139,6 +140,13 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // 타이틀 제거
         customDialog.setContentView(R.layout.custom_dialog_label);
 
+        //뒤로가기
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         //이미지 업로드 버튼
         binding.btnImageUpload.setOnClickListener(new View.OnClickListener() {
@@ -480,7 +488,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String formatTime = dateFormat.format(System.currentTimeMillis());
 
-            map.put("UserInfo", userInfo); //유저 정보
+            map.put("UserToken", userInfo.getToken()); //유저 정보
             map.put("book", selected_book); //책 정보
             map.put("feedText", binding.edtFeedText.getText().toString()); //피드 내용
             map.put("label", labelAdd(labelList)); //라벨 리스트

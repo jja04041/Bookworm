@@ -8,6 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="maincolor">#A3CCA3</color>
+    <color name="subcolor_1">#A3A3CC</color>
+    <color name="subcolor_2">#CCCCA3</color>
     <color name="select">#CCA3B8</color>
     <color name="brown">#A52A2A</color>
     <color name="bottombackground">#66CD66</color>

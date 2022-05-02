@@ -22,21 +22,22 @@ import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.example.bookworm.Core.UserData.Interface.UserContract;
 import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_main;
-import com.example.bookworm.User.UserInfo;
+import com.example.bookworm.Core.UserData.UserInfo;
 
-import com.example.bookworm.databinding.SubactivityFeedCreateBinding;
 import com.example.bookworm.databinding.SubactivityFeedModifyBinding;
-import com.example.bookworm.modules.FBModule;
-import com.example.bookworm.modules.Module;
-import com.example.bookworm.modules.personalD.PersonalD;
+import com.example.bookworm.Core.Internet.FBModule;
+import com.example.bookworm.Core.Internet.Module;
+import com.example.bookworm.Core.UserData.PersonalD;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -58,9 +59,9 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class subActivity_Feed_Modify extends AppCompatActivity {
+public class subActivity_Feed_Modify extends AppCompatActivity implements UserContract.View {
 
-
+    public static int MODIFY_OK = 26;
     private SubactivityFeedModifyBinding binding;
     FBModule fbModule;
     UserInfo userInfo;
@@ -134,6 +135,14 @@ public class subActivity_Feed_Modify extends AppCompatActivity {
         ArrayList<String> modifyLabel; //수정화면의 라벨 세팅
         modifyLabel = feed.getLabel();
 
+        //뒤로가기
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         //라벨 리스트를 받아와서 삽입해놓음
         for (int i = 0; i < modifyLabel.size(); i++) {
             if (modifyLabel.get(i).equals("")) {
@@ -152,7 +161,6 @@ public class subActivity_Feed_Modify extends AppCompatActivity {
         current_context = this;
         fbModule = new FBModule(current_context);
         userInfo = new PersonalD(current_context).getUserInfo(); //저장된 UserInfo값을 가져온다.
-
 
         Glide.with(this).load(userInfo.getProfileimg()).circleCrop().into(binding.ivProfileImage); //프로필사진 로딩후 삽입.
         binding.tvNickname.setText(userInfo.getUsername());
@@ -215,21 +223,13 @@ public class subActivity_Feed_Modify extends AppCompatActivity {
             public void onClick(View view) {
 
                 new AlertDialog.Builder(current_context)
-                        .setMessage("피드를 업로드하시겠습니까?")
-                        .setPositiveButton("네", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                        upload();
-                                    }
+                        .setMessage("피드를 수정하시겠습니까?")
+                        .setPositiveButton("네", (dialog, which) -> {
+                                    dialog.dismiss();
+                                    upload();
                                 }
                         )
-                        .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                }
+                        .setNegativeButton("아니요", (dialog, which) -> dialog.dismiss()
                         ).show();
             }
         });
@@ -385,9 +385,7 @@ public class subActivity_Feed_Modify extends AppCompatActivity {
         }
 
         //추천 라벨 선택시 선택되면서 배경색 변경
-        for (
-                int i = 0;
-                i < Recommend.length; i++) {
+        for (int i = 0; i < Recommend.length; i++) {
             final int index = i;
             Recommend[index] = customDialog.findViewById(RecommendID[index]);
             Recommend[index].setOnClickListener(new View.OnClickListener() {
@@ -500,7 +498,7 @@ public class subActivity_Feed_Modify extends AppCompatActivity {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String formatTime = dateFormat.format(System.currentTimeMillis());
 
-            map.put("UserInfo", userInfo); //유저 정보
+            map.put("UserToken",userInfo.getToken()); //사용자 토큰
             map.put("book", selected_book); //책 정보
             map.put("feedText", binding.edtFeedText.getText().toString()); //피드 내용
             map.put("label", labelAdd(labelList)); //라벨 리스트
@@ -515,7 +513,7 @@ public class subActivity_Feed_Modify extends AppCompatActivity {
             intent.putExtra("modifiedFeed", feed);
 
             fbModule.readData(1, map, FeedID);
-            setResult(26, intent);
+            setResult(MODIFY_OK, intent);
 
             finish();
         }
@@ -534,4 +532,8 @@ public class subActivity_Feed_Modify extends AppCompatActivity {
         return label;
     }
 
+    @Override
+    public void showProfile(@NonNull UserInfo userInfo,@NonNull Boolean bool) {
+
+    }
 }

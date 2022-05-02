@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0F000000"
     android:orientation="vertical"
     tools:context="com.example.bookworm.fragments.fragment_feed">
 
@@ -14,7 +13,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <include layout="@layout/layout_topbar" />
+        <include layout="@layout/fragment_feed_topbar" />
     </LinearLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

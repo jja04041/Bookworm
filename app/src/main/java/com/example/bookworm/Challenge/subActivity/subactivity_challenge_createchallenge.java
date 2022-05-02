@@ -1,43 +1,35 @@
 package com.example.bookworm.Challenge.subActivity;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.example.bookworm.MainActivity;
+import com.example.bookworm.Core.UserData.PersonalD;
+import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.R;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_main;
-import com.example.bookworm.User.UserInfo;
-import com.example.bookworm.modules.FBModule;
-import com.example.bookworm.modules.personalD.PersonalD;
+import com.example.bookworm.databinding.SubactivityChallengeCreatechallengeBinding;
+import com.example.bookworm.Core.UserData.UserInfo;
+import com.example.bookworm.Core.Internet.FBModule;
+import com.example.bookworm.Core.UserData.PersonalD;
+import com.example.bookworm.databinding.SubactivityFeedCreateBinding;
 
-import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -47,8 +39,9 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public class subactivity_challenge_createchallenge extends AppCompatActivity {
+    SubactivityChallengeCreatechallengeBinding binding;
     UserInfo userInfo;
-    Button btn_search, btn_dupli, btn_back;
+    Button btn_search, btn_back;
     TextView tv_bookname, tv_challenge_start, tv_challenge_end;
     EditText et_challenge_date, et_challenge_name, et_challenge_max, et_challenge_info;
     Button btn_confirm, btn_start_challenge;
@@ -73,10 +66,10 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.subactivity_challenge_createchallenge);
+        binding = SubactivityChallengeCreatechallengeBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         btn_search = findViewById(R.id.btn_createchallenge_search);
-        btn_dupli = findViewById(R.id.btn_createchallenge_duplicheck);
         btn_start_challenge = findViewById(R.id.btn_start_challenge);
         btn_back = findViewById(R.id.btnBack);
         tv_bookname = findViewById(R.id.tv_createchallenge_bookname);
@@ -97,6 +90,11 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity {
         fbModule = new FBModule(mContext);
 
         userInfo = new PersonalD(mContext).getUserInfo(); //저장된 UserInfo값을 가져온다.
+
+        //shimmer 적용을 위해 기존 뷰는 일단 안보이게, shimmer는 보이게
+        binding.llChallcreate.setVisibility(View.GONE);
+        binding.SFLChallcreate.startShimmer();
+        binding.SFLChallcreate.setVisibility(View.VISIBLE);
 
 
         //챌린지 시작일에 오늘 날짜가 나오게 함
@@ -171,6 +169,11 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity {
             }
         });
 
+        //shimmer 적용 끝내고 shimmer는 안보이게, 기존 뷰는 보이게
+        binding.llChallcreate.setVisibility(View.VISIBLE);
+        binding.SFLChallcreate.stopShimmer();
+        binding.SFLChallcreate.setVisibility(View.GONE);
+
     }
 
     @Override
@@ -216,9 +219,10 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity {
             map.put("Profileimg", userInfo.getProfileimg()); //프로필 이미지
             map.put("Username", userInfo.getUsername()); //닉네임
             map.put("masterToken", userInfo.getToken()); //토큰
-            map.put("thumbnailURL", selected_book.getImg_url()); //책 썸네일
-            map.put("bookname", strBookname); //책 이름
-            map.put("BookId", selected_book.getItemId()); //책 ID
+            map.put("book", selected_book);
+//            map.put("thumbnailURL", selected_book.getImg_url()); //책 썸네일
+//            map.put("bookname", strBookname); //책 이름
+//            map.put("BookId", selected_book.getItemId()); //책 ID
             map.put("strChallengeName", strChallengeName); //챌린지 명
             map.put("challengeInfo", strChallengeInfo); //챌린지 설명
             map.put("challengeStartDate", strChallengeStartDate); //챌린지 시작일
@@ -230,6 +234,8 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity {
             //파이어베이스에 해당 챌린지명이 등록돼있지 않다면
 
             fbModule.readData(2, map, strChallengeName);
+
+
 
 
         }
