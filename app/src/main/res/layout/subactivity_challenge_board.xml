@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#0f000000"
     android:orientation="vertical"
-    tools:context=".Challenge.subActivity.subactivity_challenge_board">
+    tools:context=".Challenge.Board.subactivity_challenge_board">
 
     <LinearLayout
         android:id="@+id/llbook"

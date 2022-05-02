@@ -5,7 +5,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.bookworm.Core.UserData.PersonalD;
 import com.example.bookworm.Core.UserData.UserInfo;
+import com.example.bookworm.Follow.Interfaces.PagerInterface;
 import com.example.bookworm.Profile.ProfileInfoActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -22,15 +24,21 @@ public class followCounter {
     FirebaseFirestore db;
     Long current;//현재 팔로워 수
     Context context;
-    public followCounter() {
+    PagerInterface.PageAdapter adapter;
+    int isFollower;
+    public followCounter(PagerInterface.PageAdapter adapter,int isFollower) {
         db = FirebaseFirestore.getInstance();
+        this.adapter=adapter;
+        this.isFollower=isFollower;
     }
 
     public void follow(UserInfo userInfo, UserInfo nowuserInfo, Context context) {
+        this.context=context;
         initialize(userInfo, nowuserInfo, 1);
     }
 
     public void unfollow(UserInfo userInfo, UserInfo nowuserInfo, Context context) {
+        this.context=context;
         initialize(userInfo, nowuserInfo, -1);
     }
 
@@ -84,6 +92,9 @@ public class followCounter {
             @Override
             public void onSuccess(Void aVoid) {
                 if (context instanceof ProfileInfoActivity) ((ProfileInfoActivity)context).setFollowerCnt(current);
+                nowuserInfo.setFollowingCounts(current.intValue());
+                new PersonalD(context).saveUserInfo(nowuserInfo);
+                if(adapter!=null)adapter.UpdateTapName(nowuserInfo.getFollowingCounts()+"팔로잉",isFollower);
                 Log.d("Success", "Transaction success!");
             }
         }).addOnFailureListener(new OnFailureListener() {

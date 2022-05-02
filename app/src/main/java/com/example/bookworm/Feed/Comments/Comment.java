@@ -12,8 +12,6 @@ public class Comment implements Serializable {
     private String CommentID;
     //유저 정보
     private String userToken;
-    private String userName;
-    private String userThumb;
     //댓글 내용
     private String contents;
     //생성된 시각
@@ -47,14 +45,6 @@ public class Comment implements Serializable {
 
     public String getUserToken() {
         return userToken;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getUserThumb() {
-        return userThumb;
     }
 
     public String getContents() {

@@ -1,4 +1,4 @@
-package com.example.bookworm.Challenge.subActivity;
+package com.example.bookworm.Challenge.Board;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,10 +9,13 @@ import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Challenge.items.Challenge;
+import com.example.bookworm.Challenge.subActivity.subactivity_challenge_board_create;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_result;
 import com.example.bookworm.databinding.SubactivityChallengeBoardBinding;
 import com.example.bookworm.databinding.SubactivityFeedCreateBinding;
+
+//인증 게시판
 
 public class subactivity_challenge_board extends AppCompatActivity {
 

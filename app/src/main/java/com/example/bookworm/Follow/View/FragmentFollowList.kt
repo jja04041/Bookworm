@@ -1,32 +1,28 @@
 package com.example.bookworm.Follow.View
 
-import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bookworm.Extension.DiffUtilCallback
 import com.example.bookworm.Follow.Interfaces.Contract
-import com.example.bookworm.Follow.Modules.FollowerAdapter
 import com.example.bookworm.Core.UserData.UserInfo
 import com.example.bookworm.Core.UserData.PersonalD
+import com.example.bookworm.Follow.Interfaces.PagerInterface
 import com.example.bookworm.Follow.LoadData
+import com.example.bookworm.Follow.Modules.FollowItemAdapter
 import com.example.bookworm.databinding.FragmentFollowListBinding
 
 //팔로워, 팔로잉 탭의 틀을 가지고 있는 클래스 => 팔로워 탭과 팔로잉 탭의 구분은 isFollower변수로 체크한다.
 //뷰는 가져온 데이터를 화면에 표시만 하는 역할을 한다
-class FragmentFollowList(val token: String, val isfollower: Int) : Fragment(), Contract.View {
+class FragmentFollowList(val token: String, val isfollower: Int,val pager:PagerInterface.PageAdapter) : Fragment(), Contract.View {
     var binding: FragmentFollowListBinding? = null
-    private var followerAdapter: FollowerAdapter? = null
-    private var userList: ArrayList<UserInfo>? = null
+    private var followerAdapter: FollowItemAdapter? = null
+    private lateinit var userList: ArrayList<UserInfo>
+
     //Paging 처리를 위해서
     var page = 0
     var canLoad = true //더 불러올 수 있는 지
@@ -39,11 +35,19 @@ class FragmentFollowList(val token: String, val isfollower: Int) : Fragment(), C
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        initValues();
-        loadData!!.getData(token) //초기 데이터를 불러옴
+        nowUser = PersonalD(context).userInfo as UserInfo
+        loadData = LoadData(this, isfollower, nowUser as UserInfo) //값을 가져오는 모듈 초기화
+        init();
         return binding!!.root
     }
 
+
+    override fun onResume() {
+        initValues()
+        loadData!!.getData(token) //초기 데이터를 불러옴
+        Log.d("데이터 보여줌","ㅇㅇ")
+        super.onResume()
+    }
     //프레그먼트 종료시 메모리에서 바인딩을 해제
     override fun onDestroy() {
         binding = null
@@ -51,30 +55,21 @@ class FragmentFollowList(val token: String, val isfollower: Int) : Fragment(), C
     }
 
     //초기화
-    fun initValues() {
-        page = 1;isLoading = false; canLoad = true
+    fun init() {
         binding = FragmentFollowListBinding.inflate(layoutInflater)
-        userList = ArrayList()
-        nowUser = PersonalD(context).userInfo as UserInfo
-        loadData = LoadData(this, isfollower, nowUser as UserInfo) //값을 가져오는 모듈 초기화
+        initValues()
         initAdapter()
     }
-
-
-    //아이템의 길이가 변경될 때 어답터에게 알림
-    fun replaceItem(newthings: ArrayList<UserInfo>) {
-        val callback =
-            DiffUtilCallback(userList, newthings)
-        val diffResult = DiffUtil.calculateDiff(callback, true)
-        userList!!.clear()
-        userList!!.addAll(newthings)
-        followerAdapter!!.setData(userList)
-        diffResult.dispatchUpdatesTo(followerAdapter!!)
+    fun initValues(){
+        loadData!!.lastVisible=null
+        page = 1;isLoading = false; canLoad = true
+        userList = ArrayList()
     }
 
     //어댑터 초기화
     private fun initAdapter() {
-        followerAdapter = context?.let { FollowerAdapter(userList, it, nowUser as UserInfo) }
+
+        followerAdapter = context?.let { FollowItemAdapter(it, nowUser as UserInfo,isfollower,pager) }
         binding!!.recyclerView.adapter = followerAdapter
         binding!!.recyclerView.layoutManager = LinearLayoutManager(context)
         initScrollListener()
@@ -106,38 +101,34 @@ class FragmentFollowList(val token: String, val isfollower: Int) : Fragment(), C
 
     // 로딩이 완료되면 프로그레스바를 지움
     fun deleteLoading() {
-        val arr: ArrayList<UserInfo> = ArrayList(userList)
-        arr.removeAt(arr.size - 1)
-        replaceItem(arr) //데이터가 삭제됨을 알림.
+        userList!!.removeAt(userList.size - 1)
+        followerAdapter!!.submitList(userList.toList())
     }
 
 
     //데이터를 세팅
     override fun showInfo(info: ArrayList<UserInfo>?) {
-        var newList: ArrayList<UserInfo> = ArrayList()
+        //팔로워가 없는 경우
         if (info == null) {
-            //팔로워가 없는 경우
-            canLoad = false //더이상 로드하지 않음
-            if (page > 1) newList.addAll(userList!!)
-        }
+            canLoad = false
+        } //더이상 로드하지 않음
         //가져온 데이터를 새롭게 담는다
         else {
-            newList.addAll(userList!!)
-            newList.addAll(info) //가져온 데이터 담기
+            userList!!.addAll(info)
             //만약 가져온 데이터가 최대치보다 작다면 => 더 가져올 데이터가 없음을 의미
             if (info.size < loadData!!.LIMIT) canLoad = false
         }
-
         if (!canLoad) {
             isLoading = true
-            replaceItem(newList)
+            followerAdapter!!.submitList(userList.toList())
         } else {
             isLoading = false
-            newList.add(UserInfo()) //로딩바 표시를 위한 빈 값
-            replaceItem(newList)
+            userList!!.add(UserInfo())
+            followerAdapter!!.submitList(userList.toList())
             page++ //로딩을 다하면 그 다음 페이지로 넘어간다
         }
     }
+
 
 
 }

@@ -22,7 +22,7 @@ public class FollowerActivity extends AppCompatActivity {
         String token = intent.getStringExtra("token");
         int selected= intent.getIntExtra("page",0);
         viewPager = findViewById(R.id.viewpager);
-        FollowPagerAdapter adapter = new FollowPagerAdapter(getSupportFragmentManager(),token);
+        FollowPagerAdapter adapter = new FollowPagerAdapter(this,getSupportFragmentManager(),token);
         viewPager.setAdapter(adapter);
 
         TabLayout tabLayout = findViewById(R.id.tab_layout);

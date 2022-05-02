@@ -103,10 +103,14 @@ dependencies {
     implementation 'com.github.yalantis:ucrop:2.2.6'
     //spinkit
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
+
     // shimmer 스켈레톤 UI
     implementation "com.facebook.shimmer:shimmer:0.5.0"
     implementation "androidx.core:core-ktx:+"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
+    //ViewBindingPropertyDelegate
+    //프레그먼트 종료시마다 destroyView에서 바인딩을 해제해줘야 하는 수고를 덜 수 있음
+    implementation 'com.github.kirich1409:viewbindingpropertydelegate-noreflection:1.5.3'
 }
 

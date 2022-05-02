@@ -59,7 +59,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class subActivity_Feed_Modify extends AppCompatActivity implements UserContract.View {
+public class subActivity_Feed_Modify extends AppCompatActivity{
 
     public static int MODIFY_OK = 26;
     private SubactivityFeedModifyBinding binding;
@@ -131,6 +131,10 @@ public class subActivity_Feed_Modify extends AppCompatActivity implements UserCo
         binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목 세팅한다.
         binding.edtFeedText.setText(feed.getFeedText()); //피드 내용 세팅
         Glide.with(this).load(feed.getImgurl()).into(binding.ivpicture); //피드 사진 세팅(수정 불가)
+
+        //프로필 세팅
+
+
 
         ArrayList<String> modifyLabel; //수정화면의 라벨 세팅
         modifyLabel = feed.getLabel();
@@ -511,7 +515,6 @@ public class subActivity_Feed_Modify extends AppCompatActivity implements UserCo
             feed.setData(map, null);
             Intent intent = new Intent();
             intent.putExtra("modifiedFeed", feed);
-
             fbModule.readData(1, map, FeedID);
             setResult(MODIFY_OK, intent);
 
@@ -530,10 +533,5 @@ public class subActivity_Feed_Modify extends AppCompatActivity implements UserCo
             label.add(feedCreateLabel[i].getText().toString());
         }
         return label;
-    }
-
-    @Override
-    public void showProfile(@NonNull UserInfo userInfo,@NonNull Boolean bool) {
-
     }
 }
