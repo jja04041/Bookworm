@@ -31,16 +31,12 @@ public class ProfileModifyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_modify);
+        binding = ActivityProfileModifyBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         btnBack = findViewById(R.id.btnBack);
         ivProfileImage = findViewById(R.id.ivProfileImage);
         Nickname = findViewById(R.id.tvNickname);
-
-        //shimmer 적용을 위해 기존 뷰는 일단 안보이게, shimmer는 보이게
-        binding.llModify.setVisibility(View.GONE);
-        binding.SFLModify.startShimmer();
-        binding.SFLModify.setVisibility(View.VISIBLE);
 
 
         Glide.with(this).load(strProfile).circleCrop().into(ivProfileImage); //프로필사진 로딩후 삽입.
@@ -70,10 +66,6 @@ public class ProfileModifyActivity extends AppCompatActivity {
             }
         });
 
-        //shimmer 적용 끝내고 shimmer는 안보이게, 기존 뷰는 보이게
-        binding.llModify.setVisibility(View.VISIBLE);
-        binding.SFLModify.stopShimmer();
-        binding.SFLModify.setVisibility(View.GONE);
 
     }
 }

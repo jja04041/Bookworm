@@ -63,7 +63,9 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.subactivity_challenge_createchallenge);
+        binding = SubactivityChallengeCreatechallengeBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
 
         btn_search = findViewById(R.id.btn_createchallenge_search);
         btn_dupli = findViewById(R.id.btn_createchallenge_duplicheck);
@@ -87,11 +89,6 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity {
         fbModule = new FBModule(mContext);
 
         userInfo = new PersonalD(mContext).getUserInfo(); //저장된 UserInfo값을 가져온다.
-
-        //shimmer 적용을 위해 기존 뷰는 일단 안보이게, shimmer는 보이게
-        binding.llChallcreate.setVisibility(View.GONE);
-        binding.SFLChallcreate.startShimmer();
-        binding.SFLChallcreate.setVisibility(View.VISIBLE);
 
 
         //챌린지 시작일에 오늘 날짜가 나오게 함
@@ -165,11 +162,6 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity {
                 finish();
             }
         });
-
-        //shimmer 적용 끝내고 shimmer는 안보이게, 기존 뷰는 보이게
-        binding.llChallcreate.setVisibility(View.VISIBLE);
-        binding.SFLChallcreate.stopShimmer();
-        binding.SFLChallcreate.setVisibility(View.GONE);
 
     }
 

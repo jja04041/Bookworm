@@ -40,7 +40,8 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.subactivity_search_fragment_result);
+        binding = SubactivitySearchFragmentResultBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         Intent intent = getIntent();
         itemId = intent.getExtras().getString("itemid");
         iv_selectedItem = findViewById(R.id.iv_selectedItem);
