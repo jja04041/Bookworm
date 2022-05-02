@@ -41,7 +41,7 @@ import java.util.Locale;
 public class subactivity_challenge_createchallenge extends AppCompatActivity {
     SubactivityChallengeCreatechallengeBinding binding;
     UserInfo userInfo;
-    Button btn_search, btn_dupli, btn_back;
+    Button btn_search, btn_back;
     TextView tv_bookname, tv_challenge_start, tv_challenge_end;
     EditText et_challenge_date, et_challenge_name, et_challenge_max, et_challenge_info;
     Button btn_confirm, btn_start_challenge;
@@ -70,7 +70,6 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         btn_search = findViewById(R.id.btn_createchallenge_search);
-        btn_dupli = findViewById(R.id.btn_createchallenge_duplicheck);
         btn_start_challenge = findViewById(R.id.btn_start_challenge);
         btn_back = findViewById(R.id.btnBack);
         tv_bookname = findViewById(R.id.tv_createchallenge_bookname);
@@ -220,9 +219,10 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity {
             map.put("Profileimg", userInfo.getProfileimg()); //프로필 이미지
             map.put("Username", userInfo.getUsername()); //닉네임
             map.put("masterToken", userInfo.getToken()); //토큰
-            map.put("thumbnailURL", selected_book.getImg_url()); //책 썸네일
-            map.put("bookname", strBookname); //책 이름
-            map.put("BookId", selected_book.getItemId()); //책 ID
+            map.put("book", selected_book);
+//            map.put("thumbnailURL", selected_book.getImg_url()); //책 썸네일
+//            map.put("bookname", strBookname); //책 이름
+//            map.put("BookId", selected_book.getItemId()); //책 ID
             map.put("strChallengeName", strChallengeName); //챌린지 명
             map.put("challengeInfo", strChallengeInfo); //챌린지 설명
             map.put("challengeStartDate", strChallengeStartDate); //챌린지 시작일

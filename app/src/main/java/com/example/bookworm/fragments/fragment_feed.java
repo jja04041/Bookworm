@@ -31,8 +31,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.bookworm.Feed.subActivity_Feed_Create;
 import com.example.bookworm.databinding.FragmentFeedItemBinding;
-import com.example.bookworm.databinding.LayoutTopbarBinding;
 import com.example.bookworm.Core.Internet.FBModule;
+import com.example.bookworm.databinding.FragmentFeedTopbarBinding;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
@@ -88,7 +88,7 @@ public class fragment_feed extends Fragment {
         fbModule = new FBModule(getContext());
         fbModule.setLIMIT(LIMIT); //한번에 보여줄 피드의 최대치를 설정
         //Create New Feed
-        LayoutTopbarBinding.bind(binding.getRoot()).imgCreatefeed.setOnClickListener(new View.OnClickListener() {
+        FragmentFeedTopbarBinding.bind(binding.getRoot()).imgCreatefeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), subActivity_Feed_Create.class);

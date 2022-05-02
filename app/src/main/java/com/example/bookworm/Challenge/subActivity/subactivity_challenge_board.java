@@ -1,4 +1,4 @@
-package com.example.bookworm;
+package com.example.bookworm.Challenge.subActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,7 +19,6 @@ public class subactivity_challenge_board extends AppCompatActivity {
     SubactivityChallengeBoardBinding binding;
     Context context;
     Challenge challenge;
-    Book book;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,14 +33,24 @@ public class subactivity_challenge_board extends AppCompatActivity {
         challenge = (Challenge) intent.getSerializableExtra("challenge");
 
 //        Book book = item.getBook();
-//        binding.feedBookAuthor.setText(challenge.get);
-        Glide.with(this).load(challenge.getBookThumb()).into(binding.feedBookThumb); //책 썸네일 설정
-        binding.feedBookTitle.setText(challenge.getBookTitle());
+        binding.feedBookAuthor.setText(challenge.getBook().getAuthor());
+        Glide.with(this).load(challenge.getBook().getImg_url()).into(binding.feedBookThumb); //책 썸네일 설정
+        binding.feedBookTitle.setText(challenge.getBook().getTitle());
         binding.llbook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, search_fragment_subActivity_result.class);
-                intent.putExtra("itemid", challenge.getBookId());
+                intent.putExtra("itemid", challenge.getBook().getItemId());
+                context.startActivity(intent);
+            }
+        });
+
+        //인증글 작성 버튼
+        binding.btnCreateChallengeBoard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, subactivity_challenge_board_create.class);
+                intent.putExtra("challenge", challenge);
                 context.startActivity(intent);
             }
         });

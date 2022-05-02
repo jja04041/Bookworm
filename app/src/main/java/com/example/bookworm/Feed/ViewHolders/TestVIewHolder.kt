@@ -3,8 +3,6 @@ package com.example.bookworm.Feed.ViewHolders
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
 import android.view.View
@@ -14,7 +12,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.Target
 import com.example.bookworm.Core.Internet.FBModule
 import com.example.bookworm.Core.MainActivity
 import com.example.bookworm.Core.UserData.Interface.UserContract
@@ -31,8 +28,10 @@ import com.example.bookworm.Profile.ProfileInfoActivity
 import com.example.bookworm.R
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_result
 import com.example.bookworm.databinding.FragmentFeedItemBinding
+import java.text.DateFormat
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.HashMap
 
 class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolder(itemView),
     UserContract.View {
@@ -47,6 +46,7 @@ class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolde
     var Count: Long = 0
     var loadUser1: LoadUser? = null
     var loadUser2: LoadUser? = null
+    var dateDuration: String? = null
     //생성자를 만든다.
     init {
         binding = FragmentFeedItemBinding.bind(itemView)
@@ -227,7 +227,10 @@ class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolde
             binding!!.tvCommentCount.setText(Count.toString())
             binding!!.tvCommentContent.setText(comment.contents)
             loadUser2!!.getData(comment.userToken, true)
-            binding!!.tvCommentDate.setText(comment.madeDate)
+
+            getDateDuration(comment.madeDate)
+
+            binding!!.tvCommentDate.setText(dateDuration)
 
         } else setViewV(false)
     }
@@ -272,6 +275,32 @@ class TestVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolde
             binding!!.tvCommentNickname.setText(userInfo.username)
             Glide.with(binding!!.getRoot()).load(userInfo.profileimg).circleCrop()
                 .into(binding!!.ivCommentProfileImage)
+        }
+    }
+
+    //시간차 구하기 n분 전, n시간 전 등등
+    fun getDateDuration(createdTime: String?) {
+        val now = System.currentTimeMillis()
+        val dateNow = Date(now) //현재시각
+        val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        try {
+            val dateCreated = dateFormat.parse(createdTime)
+            val duration = dateNow.time - dateCreated.time //시간차이 mills
+            if (duration / 1000 / 60 == 0L) {
+                dateDuration = "방금"
+            } else if (duration / 1000 / 60 <= 59) {
+                dateDuration = (duration / 1000 / 60).toString() + "분"
+            } else if (duration / 1000 / 60 / 60 <= 23) {
+                dateDuration = (duration / 1000 / 60 / 60).toString() + "시간"
+            } else if (duration / 1000 / 60 / 60 / 24 <= 29) {
+                dateDuration = (duration / 1000 / 60 / 60 / 24).toString() + "일"
+            } else if (duration / 1000 / 60 / 60 / 24 / 30 <= 12) {
+                dateDuration = (duration / 1000 / 60 / 60 / 24 / 30).toString() + "개월"
+            } else {
+                dateDuration = (duration / 1000 / 60 / 60 / 24 / 30 / 12).toString() + "년"
+            }
+        } catch (e: ParseException) {
+            e.printStackTrace()
         }
     }
 

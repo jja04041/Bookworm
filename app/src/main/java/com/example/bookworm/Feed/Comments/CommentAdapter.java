@@ -23,12 +23,17 @@ import com.example.bookworm.fragments.fragment_feed;
 import com.example.bookworm.Core.Internet.FBModule;
 import com.example.bookworm.Core.UserData.PersonalD;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     ArrayList commentList;
     Context context;
     FBModule fbModule = new FBModule(context);
+    String dateDuration; //작성시간 n분, n시간, 등 으로 표시
 
     public CommentAdapter(ArrayList data, Context c) {
         commentList = new ArrayList();
@@ -82,6 +87,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         commentList.clear();
         commentList.addAll(data);
     }
+
     //로딩바 클래스
     private class LoadingViewHolder extends RecyclerView.ViewHolder {
         public LoadingViewHolder(@NonNull View itemView) {
@@ -105,20 +111,24 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public class ItemViewHolder extends RecyclerView.ViewHolder implements UserContract.View {
         LayoutCommentItemBinding binding;
         LoadUser user;
+
         //생성자를 만든다.
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             binding = LayoutCommentItemBinding.bind(itemView);
-            user=new LoadUser(this);
+            user = new LoadUser(this);
         }
 
         //아이템을 세팅하는 메소드
         public void setItem(Comment item) {
             Feed feed = ((subactivity_comment) context).item;
             UserInfo nowUser = new PersonalD(context).getUserInfo();
-            user.getData(item.getUserToken(),null);
+            user.getData(item.getUserToken(), null);
             binding.tvCommentContent.setText(item.getContents());
-            binding.tvDate.setText(item.getMadeDate());
+
+            getDateDuration(item.getMadeDate());
+
+            binding.tvDate.setText(dateDuration);
             binding.llProfile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -141,9 +151,38 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         @Override
-        public void showProfile(@NonNull UserInfo userInfo,@NonNull Boolean bool) {
+        public void showProfile(@NonNull UserInfo userInfo, @NonNull Boolean bool) {
             Glide.with(context).load(userInfo.getProfileimg()).circleCrop().into(binding.imgProfile);
             binding.tvNickname.setText(userInfo.getUsername());
+        }
+
+        //시간차 구하기 n분 전, n시간 전 등등
+        public void getDateDuration(String createdTime) {
+            long now = System.currentTimeMillis();
+            Date dateNow = new Date(now);//현재시각
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            try {
+                Date dateCreated = dateFormat.parse(createdTime);
+                long duration = dateNow.getTime() - dateCreated.getTime();//시간차이 mills
+
+                if (duration / 1000 / 60 == 0) {
+                    dateDuration = "방금";
+                } else if (duration / 1000 / 60 <= 59) {
+                    dateDuration = String.valueOf(duration / 1000 / 60) + "분";
+                } else if (duration / 1000 / 60 / 60 <= 23) {
+                    dateDuration = String.valueOf(duration / 1000 / 60 / 60) + "시간";
+                } else if (duration / 1000 / 60 / 60 / 24 <= 29) {
+                    dateDuration = String.valueOf(duration / 1000 / 60 / 60 / 24) + "일";
+                } else if (duration / 1000 / 60 / 60 / 24 / 30 <= 12) {
+                    dateDuration = String.valueOf(duration / 1000 / 60 / 60 / 24 / 30) + "개월";
+                } else {
+                    dateDuration = String.valueOf(duration / 1000 / 60 / 60 / 24 / 30 / 12) + "년";
+                }
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
     }
 

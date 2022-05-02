@@ -146,8 +146,8 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             tvChallengeStartDate.setText(item.getStartDate().substring(5));
             tvChallengeEndDate.setText(item.getEndDate().substring(5));
             tvPerson.setText(String.valueOf(item.getCurrentPart().size()));
-            tvBookTitle.setText(item.getBookTitle());
-            Glide.with(itemView).load(item.getBookThumb()).into(ivThumb); //책 썸네일 설정
+            tvBookTitle.setText(item.getBook().getTitle());
+            Glide.with(itemView).load(item.getBook().getImg_url()).into(ivThumb); //책 썸네일 설정
         }
     }
 }

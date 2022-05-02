@@ -15,7 +15,7 @@ public class Book implements Serializable {
 
 
     public Book(String... strings) {
-        if (strings!=null) {
+        if (strings != null) {
             this.title = strings[0];
             this.categoryname = strings[1];
             this.content = strings[2];
@@ -26,14 +26,14 @@ public class Book implements Serializable {
         }
     }
 
-    public void setBook(Map map){
-        this.title=(String) map.get("title");
-        this.categoryname=(String) map.get("categoryname");
-        this.content=(String) map.get("content");
-        this.img_url=(String) map.get("img_url");
-        this.publisher=(String) map.get("publisher");
-        this.author=(String) map.get("author");
-        this.itemId=(String) map.get("itemId");
+    public void setBook(Map map) {
+        this.title = (String) map.get("title");
+        this.categoryname = (String) map.get("categoryname");
+        this.content = (String) map.get("content");
+        this.img_url = (String) map.get("img_url");
+        this.publisher = (String) map.get("publisher");
+        this.author = (String) map.get("author");
+        this.itemId = (String) map.get("itemId");
     }
 
     public String getImg_url() {
@@ -60,9 +60,13 @@ public class Book implements Serializable {
         return content;
     }
 
-    public String getCategoryname() { return categoryname; }
+    public String getCategoryname() {
+        return categoryname;
+    }
 
-    public void setCategoryname(String categoryname) { this.categoryname = categoryname; }
+    public void setCategoryname(String categoryname) {
+        this.categoryname = categoryname;
+    }
 
 
 }

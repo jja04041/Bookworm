@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="20dp"
+    android:layout_marginBottom="12dp"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -55,11 +54,12 @@
         android:id="@+id/llbook"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
+        android:layout_margin="5dp"
         android:background="@drawable/bg_rounded"
         android:elevation="10dp"
         android:orientation="horizontal"
-        android:paddingHorizontal="10dp">
+        android:paddingHorizontal="10dp"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/feedBookThumb"
@@ -138,7 +138,7 @@
             android:src="@drawable/ic_baseline_image_24"
             android:visibility="gone" />
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"
@@ -151,24 +151,21 @@
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_margin="5dp"
+                android:layout_margin="10dp"
                 android:src="@drawable/left_quote" />
 
             <TextView
                 android:id="@+id/tvFeedtext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginVertical="10dp"
-                android:layout_marginHorizontal="30dp"
+                android:layout_marginHorizontal="20dp"
                 android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore"
-                android:textSize="15dp" />
+                android:textSize="18dp" />
 
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="25dp"
-                android:layout_gravity="bottom|end"
-                android:layout_marginHorizontal="5dp"
+                android:layout_gravity="end"
                 android:layout_margin="5dp"
                 android:src="@drawable/quote" />
 
@@ -176,24 +173,23 @@
                 android:id="@+id/lllabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
             </LinearLayout>
 
 
-        </FrameLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"
+            android:layout_marginBottom="5dp"
             android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/lllike"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -203,7 +199,6 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="start"
-                    android:clickable="false"
                     android:layout_marginHorizontal="10dp"
                     android:background="@drawable/icon_like" />
 
@@ -239,121 +234,113 @@
         </LinearLayout>
 
         <LinearLayout
-            android:background="@drawable/llcomment_stroke"
+            android:id="@+id/llComments"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:orientation="vertical"
+            android:paddingHorizontal="5dp">
 
             <LinearLayout
-                android:layout_marginTop="5dp"
-                android:id="@+id/llComments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:orientation="vertical"
-                android:paddingHorizontal="5dp">
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:paddingHorizontal="10dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/ivCommentProfileImage"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/profile" />
+
+                <TextView
+                    android:id="@+id/tvCommentNickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginHorizontal="10dp"
+                    android:text="닉네임"
+                    android:textColor="#000000"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvCommentDate"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="10dp">
+                    android:layout_weight="3"
+                    android:text="##/## ##:##" />
 
-                    <ImageView
-                        android:id="@+id/ivCommentProfileImage"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/profile" />
+                <LinearLayout
+                    android:id="@+id/llCommentInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|end"
+                    android:layout_weight="1">
 
                     <TextView
-                        android:id="@+id/tvCommentNickname"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginHorizontal="10dp"
-                        android:text="닉네임"
-                        android:textColor="#000000"
-                        android:textSize="15dp"
+                        android:text="댓글 "
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:id="@+id/tvCommentCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="##"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tvCommentDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="3"
-                        android:text="##/## ##:##" />
+                        android:text="개 더보기..."
+                        android:textStyle="bold" />
 
-                    <LinearLayout
-                        android:id="@+id/llCommentInfo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center|end"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="댓글 "
-                            android:textStyle="bold" />
-
-
-                        <TextView
-                            android:id="@+id/tvCommentCount"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="##"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="개 더보기..."
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
                 </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tvCommentContent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore"
-                    android:textColor="#CC000000" />
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="10dp"
-                    android:background="@drawable/writing_comment"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <EditText
-                        android:id="@+id/edtComment"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:background="#00000000"
-                        android:hint="댓글을 입력하세요."
-                        android:paddingHorizontal="10dp"
-                        android:paddingVertical="3dp"
-                        android:textSize="15dp" />
-
-                    <Button
-                        android:id="@+id/btnWriteComment"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="end|center_vertical"
-                        android:layout_marginEnd="5dp"
-                        android:background="@drawable/ic_round_near_me_24"
-                        android:backgroundTint="#000000"
-                        android:elevation="20dp"
-                        android:padding="5dp" />
-
-                </FrameLayout>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvCommentContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore"
+                android:textColor="#CC000000" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:background="@drawable/writing_comment"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/edtComment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="#00000000"
+                    android:hint="댓글을 입력하세요."
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="3dp"
+                    android:textSize="15dp" />
+
+                <Button
+                    android:id="@+id/btnWriteComment"
+                    android:layout_width="33dp"
+                    android:layout_height="33dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/ic_round_near_me_24"
+                    android:backgroundTint="#000000"
+                    android:elevation="20dp" />
+
+            </FrameLayout>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
