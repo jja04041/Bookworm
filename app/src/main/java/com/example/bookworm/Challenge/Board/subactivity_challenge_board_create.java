@@ -299,7 +299,7 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
             map.put("boardText", binding.edtFeedText.getText().toString()); //피드 내용
             //map.put("label", labelAdd(labelList)); //라벨 리스트
             map.put("date", formatTime); //현재 시간 millis로
-            map.put("BoardID", BoardID); //인증글 아이디
+            map.put("boardID", BoardID); //인증글 아이디
             map.put("commentsCount",0);
             map.put("likeCount", 0);
             if (imgUrl != null) map.put("imgurl", imgUrl); //이미지 url

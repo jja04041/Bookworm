@@ -15,19 +15,19 @@ public class Board implements Serializable {
     private long likeCount; //좋아요 수
     private long commentCount; //사용자 댓글 수
 
-    public Board() {
-        book = new Book(null);
-    }
 
-    public void setData(Map data) {
-        this.boardID = (String) data.get("boardID");
-        if (data.get("imgurl") != null) this.imgurl = (String) data.get("imgurl");
-        this.boardText = (String) data.get("boardText");
-        this.date = (String) data.get("date");
-        this.userToken = (String) data.get("UserToken");
-        this.book.setBook((Map) data.get("book"));
-        this.likeCount = (long) data.get("likeCount");
-        this.commentCount = (long) data.get("commentsCount");
+    public Board(Map data) {
+        book = new Book(null);
+        if (data!=null) {
+            this.boardID = (String) data.get("boardID");
+            if (data.get("imgurl") != null) this.imgurl = (String) data.get("imgurl");
+            this.boardText = (String) data.get("boardText");
+            this.date = (String) data.get("date");
+            this.userToken = (String) data.get("UserToken");
+            this.book.setBook((Map) data.get("book"));
+            this.likeCount = (long) data.get("likeCount");
+            this.commentCount = (long) data.get("commentsCount");
+        }
     }
 
     public String getBoardID() {
