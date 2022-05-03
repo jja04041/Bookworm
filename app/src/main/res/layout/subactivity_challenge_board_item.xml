@@ -27,8 +27,24 @@
                     android:layout_height="120dp"
                     android:layout_gravity="center_horizontal"
                     android:background="#FFFFFF"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/bookimg_sample" />
+                    android:scaleType="fitXY" />
+
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:background="#77000000" />
+
+                <TextView
+                    android:id="@+id/tvBoardText"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center"
+                    android:ellipsize="end"
+                    android:maxLines="5"
+                    android:text="@string/lorem"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="13dp" />
 
             </FrameLayout>
 

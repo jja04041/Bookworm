@@ -66,6 +66,9 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:29.0.4')
     implementation 'com.google.firebase:firebase-analytics'
 
+    // FCM
+    implementation 'com.google.firebase:firebase-messaging:21.1.0'
+
 
     // 카카오 SDK 모듈 설정
     implementation group: 'com.kakao.sdk', name: 'usermgmt', version: '1.30.7' // 카카오 로그인

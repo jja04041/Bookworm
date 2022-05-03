@@ -1,4 +1,4 @@
-package com.example.bookworm.BottomMenu.Feed
+package com.example.bookworm.Feed
 
 import android.content.Context
 import android.content.Intent
@@ -12,6 +12,8 @@ import com.example.bookworm.BottomMenu.Feed.items.Feed
 import com.example.bookworm.Core.MainActivity
 import com.example.bookworm.R
 import com.example.bookworm.Core.Internet.FBModule
+import com.example.bookworm.fragments.fragment_feed
+import com.example.bookworm.Core.Internet.*;
 
 class CustomPopup(context: Context?, anchor: View?) : PopupMenu(context, anchor),
     PopupMenu.OnMenuItemClickListener {
