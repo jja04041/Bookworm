@@ -46,6 +46,7 @@ public class subactivity_challenge_board extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         context = this;
+        boardFB = new BoardFB(context);
 
         Intent intent = getIntent();
         //넘겨받은 값 챌린지 객체에 넣음
@@ -101,6 +102,7 @@ public class subactivity_challenge_board extends AppCompatActivity {
             canLoad = false;
         }
         initRecyclerView();
+        isEmptyBoard(false);
     }
 
     //리사이클러뷰 초기화
@@ -110,6 +112,16 @@ public class subactivity_challenge_board extends AppCompatActivity {
         binding.mRecyclerView.setLayoutManager(gridLayoutManager);
         binding.mRecyclerView.setAdapter(boardAdapter);
 //        initScrollListener(); //무한스크롤
+    }
+
+    public void isEmptyBoard(boolean bool){
+        if (bool){
+            binding.swiperefresh.setVisibility(View.GONE);
+            binding.llEmptyBoard.setVisibility(View.VISIBLE);
+        }else {
+            binding.swiperefresh.setVisibility(View.VISIBLE);
+            binding.llEmptyBoard.setVisibility(View.GONE);
+        }
     }
 
 }

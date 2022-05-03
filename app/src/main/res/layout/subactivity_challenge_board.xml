@@ -243,4 +243,22 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <LinearLayout
+        android:id="@+id/llEmptyBoard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:text="인증글이 없습니다.\n가장 먼저 인증해보세요!"
+            android:textSize="15dp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
 </LinearLayout>

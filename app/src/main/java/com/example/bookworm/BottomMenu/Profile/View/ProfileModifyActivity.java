@@ -23,9 +23,6 @@ public class ProfileModifyActivity extends AppCompatActivity {
         binding = ActivityProfileModifyBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        //shimmer 적용을 위해 기존 뷰는 일단 안보이게, shimmer는 보이게
-        showShimmer(true);
-
         NowUser = new PersonalD(this).getUserInfo();
         binding.tvNickname.setText(NowUser.getUsername());
         Glide.with(this).load(NowUser.getProfileimg()).circleCrop().into(binding.ivProfileImage); //프로필사진 로딩후 삽입.
@@ -45,24 +42,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
             }
         });
 
-
-        //shimmer 적용 끝내고 shimmer는 안보이게, 기존 뷰는 보이게
-        showShimmer(false);
-
     }
 
-
-    //shimmer을 켜고 끄고 하는 메소드
-    private void showShimmer(Boolean bool) {
-        if (bool) {
-            binding.llModify.setVisibility(View.GONE);
-            binding.SFLModify.startShimmer();
-            binding.SFLModify.setVisibility(View.VISIBLE);
-        } else {
-            binding.llModify.setVisibility(View.VISIBLE);
-            binding.SFLModify.stopShimmer();
-            binding.SFLModify.setVisibility(View.GONE);
-        }
-    }
 
 }

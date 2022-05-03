@@ -18,7 +18,11 @@ import com.example.bookworm.databinding.FragmentFollowListBinding
 
 //팔로워, 팔로잉 탭의 틀을 가지고 있는 클래스 => 팔로워 탭과 팔로잉 탭의 구분은 isFollower변수로 체크한다.
 //뷰는 가져온 데이터를 화면에 표시만 하는 역할을 한다
-class FragmentFollowList(val token: String, val isfollower: Int,val pager:PagerInterface.PageAdapter) : Fragment(), Contract.View {
+class FragmentFollowList(
+    val token: String,
+    val isfollower: Int,
+    val pager: PagerInterface.PageAdapter
+) : Fragment(), Contract.View {
     var binding: FragmentFollowListBinding? = null
     private var followerAdapter: FollowItemAdapter? = null
     private lateinit var userList: ArrayList<UserInfo>
@@ -37,7 +41,11 @@ class FragmentFollowList(val token: String, val isfollower: Int,val pager:PagerI
     ): View? {
         nowUser = PersonalD(context).userInfo as UserInfo
         loadData = LoadData(this, isfollower, nowUser as UserInfo) //값을 가져오는 모듈 초기화
+
         init();
+
+        showShimmer(true)
+
         return binding!!.root
     }
 
@@ -45,9 +53,10 @@ class FragmentFollowList(val token: String, val isfollower: Int,val pager:PagerI
     override fun onResume() {
         initValues()
         loadData!!.getData(token) //초기 데이터를 불러옴
-        Log.d("데이터 보여줌","ㅇㅇ")
+        Log.d("데이터 보여줌", "ㅇㅇ")
         super.onResume()
     }
+
     //프레그먼트 종료시 메모리에서 바인딩을 해제
     override fun onDestroy() {
         binding = null
@@ -60,8 +69,9 @@ class FragmentFollowList(val token: String, val isfollower: Int,val pager:PagerI
         initValues()
         initAdapter()
     }
-    fun initValues(){
-        loadData!!.lastVisible=null
+
+    fun initValues() {
+        loadData!!.lastVisible = null
         page = 1;isLoading = false; canLoad = true
         userList = ArrayList()
     }
@@ -69,7 +79,8 @@ class FragmentFollowList(val token: String, val isfollower: Int,val pager:PagerI
     //어댑터 초기화
     private fun initAdapter() {
 
-        followerAdapter = context?.let { FollowItemAdapter(it, nowUser as UserInfo,isfollower,pager) }
+        followerAdapter =
+            context?.let { FollowItemAdapter(it, nowUser as UserInfo, isfollower, pager) }
         binding!!.recyclerView.adapter = followerAdapter
         binding!!.recyclerView.layoutManager = LinearLayoutManager(context)
         initScrollListener()
@@ -127,8 +138,20 @@ class FragmentFollowList(val token: String, val isfollower: Int,val pager:PagerI
             followerAdapter!!.submitList(userList.toList())
             page++ //로딩을 다하면 그 다음 페이지로 넘어간다
         }
+        showShimmer(false)
     }
 
-
+    //shimmer을 켜고 끄고 하는 메소드
+    private fun showShimmer(bool: Boolean) {
+        if (bool) {
+            binding!!.llFollow.setVisibility(View.GONE)
+            binding!!.SFLFollower.startShimmer()
+            binding!!.SFLFollower.setVisibility(View.VISIBLE)
+        } else {
+            binding!!.llFollow.setVisibility(View.VISIBLE)
+            binding!!.SFLFollower.stopShimmer()
+            binding!!.SFLFollower.setVisibility(View.GONE)
+        }
+    }
 
 }

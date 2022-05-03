@@ -82,6 +82,8 @@ public class subactivity_comment extends AppCompatActivity {
         setItems();
         binding.mRecyclerView.setNestedScrollingEnabled(false);
 
+        showShimmer(true);
+
         binding.btnWriteComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -258,6 +260,19 @@ public class subactivity_comment extends AppCompatActivity {
                 initRecyclerView(); //리사이클러뷰에 띄워주기
             }
             page++; //로딩을 다하면 그다음 페이지로 넘어간다.
+        }
+        showShimmer(false);
+    }
+    //shimmer을 켜고 끄고 하는 메소드
+    private void showShimmer(Boolean bool) {
+        if (bool) {
+            binding.llComment.setVisibility(View.GONE);
+            binding.SFLComment.startShimmer();
+            binding.SFLComment.setVisibility(View.VISIBLE);
+        } else {
+            binding.llComment.setVisibility(View.VISIBLE);
+            binding.SFLComment.stopShimmer();
+            binding.SFLComment.setVisibility(View.GONE);
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.bookworm.fragments;
+package com.example.bookworm.BottomMenu.Search;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.example.bookworm.R;
+//import com.example.bookworm.modules.module_search;
 import com.example.bookworm.BottomMenu.Search.items.Book;
 import com.example.bookworm.BottomMenu.Search.items.BookAdapter;
 import com.example.bookworm.BottomMenu.Search.items.OnBookItemClickListener;
@@ -43,29 +44,30 @@ public class fragment_search extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_search, container, false);
-        edtSearchBtn = v.findViewById(R.id.edtSearchBtn);
-        favRecyclerView = v.findViewById(R.id.favRecyclerView);
-        edtSearchBtn.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        binding = FragmentSearchBinding.inflate(getLayoutInflater());
+
+        showShimmer(true);
+
+        binding.edtSearchBtn.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b == true) {
                     Intent intent = new Intent(getActivity(), search_fragment_subActivity_main.class);
                     startActivity(intent);
-                    edtSearchBtn.clearFocus();
+                    binding.edtSearchBtn.clearFocus();
                 }
             }
         });
 
-        //shimmer 적용 끝내고 shimmer는 안보이게, 기존 뷰는 보이게
-        binding.llSearchbook.setVisibility(View.VISIBLE);
-        binding.SFLSearchbook.stopShimmer();
-        binding.SFLSearchbook.setVisibility(View.GONE);
-
-
         setItems();
 
-        return v;
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        binding = null;
+        super.onDestroyView();
     }
 
     private void setItems() {
@@ -83,11 +85,11 @@ public class fragment_search extends Fragment {
     }
 
     public void updateRecom(JSONArray json) throws JSONException {
-        ArrayList<Book> bookList=new ArrayList<>();
+        ArrayList<Book> bookList = new ArrayList<>();
         //책 입력
         for (int i = 0; i < json.length(); i++) {
             JSONObject obj = json.getJSONObject(i);
-            Book book = new Book(obj.getString("title"), obj.getString("categoryName") ,obj.getString("description"), obj.getString("publisher"), obj.getString("author"), obj.getString("cover"), obj.getString("itemId"));
+            Book book = new Book(obj.getString("title"), obj.getString("categoryName"), obj.getString("description"), obj.getString("publisher"), obj.getString("author"), obj.getString("cover"), obj.getString("itemId"));
             bookList.add(book);
         }
         RecomBookAdapter bookAdapter = new RecomBookAdapter(bookList, getContext());
@@ -96,6 +98,7 @@ public class fragment_search extends Fragment {
             public void onItemClick(BookAdapter.ItemViewHolder holder, View view, int position) {
 
             }
+
             @Override
             public void onItemClick(RecomBookAdapter.ItemViewHolder holder, View view, int position) {
                 Intent intent = new Intent(getContext(), search_fragment_subActivity_result.class);
@@ -103,8 +106,22 @@ public class fragment_search extends Fragment {
                 startActivity(intent);
             }
         });
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 1,GridLayoutManager.HORIZONTAL, false);
-        favRecyclerView.setLayoutManager(gridLayoutManager);//그리드 뷰로 보이게 함.
-        favRecyclerView.setAdapter(bookAdapter);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 1, GridLayoutManager.HORIZONTAL, false);
+        binding.favRecyclerView.setLayoutManager(gridLayoutManager);//그리드 뷰로 보이게 함.
+        binding.favRecyclerView.setAdapter(bookAdapter);
+        showShimmer(false);
+    }
+
+    //shimmer을 켜고 끄고 하는 메소드
+    private void showShimmer(Boolean bool) {
+        if (bool) {
+            binding.llSearchbook.setVisibility(View.GONE);
+            binding.SFLSearchbook.startShimmer();
+            binding.SFLSearchbook.setVisibility(View.VISIBLE);
+        } else {
+            binding.llSearchbook.setVisibility(View.VISIBLE);
+            binding.SFLSearchbook.stopShimmer();
+            binding.SFLSearchbook.setVisibility(View.GONE);
+        }
     }
 }

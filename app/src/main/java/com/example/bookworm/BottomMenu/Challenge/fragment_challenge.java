@@ -69,22 +69,13 @@ public class fragment_challenge extends Fragment {
         binding = FragmentChallengeBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
 
-        //shimmer 적용을 위해 기존 뷰는 일단 안보이게, shimmer는 보이게
-        binding.llChallenge.setVisibility(View.GONE);
-        binding.SFLChallenge.startShimmer();
-        binding.SFLChallenge.setVisibility(View.VISIBLE);
-
+        showShimmer(true);
 
         //fbmodule을 이용하여 자료를 가져옴
         fbModule = new FBModule(getActivity());//파이어베이스를 통해서 챌린지를 가져와야함.
         fbModule.setLIMIT(LIMIT);
         map = new HashMap();
         fbModule.readData(2, map, null); //검색한 데이터를 조회
-
-        //shimmer 적용 끝내고 shimmer는 안보이게, 기존 뷰는 보이게
-        binding.llChallenge.setVisibility(View.VISIBLE);
-        binding.SFLChallenge.stopShimmer();
-        binding.SFLChallenge.setVisibility(View.GONE);
 
 
         //리스너 설정
@@ -121,6 +112,7 @@ public class fragment_challenge extends Fragment {
 
         return view;
     }
+
     //뷰보다 프레그먼트의 생명주기가 길어서, 메모리 누수 발생가능
     //누수 방지를 위해 뷰가 Destroy될 때, binding값을 nullify 함.
     @Override
@@ -241,7 +233,7 @@ public class fragment_challenge extends Fragment {
             isLoading = false;
             challengeList = new ArrayList<>(); //챌린지를 담는 리스트 생성
         }
-        beforesize=challengeList.size();
+        beforesize = challengeList.size();
         if (a == null && lastVisible == null) {
             challengeList = new ArrayList<>(); //챌린지를 담는 리스트 생성
             initAdapter();
@@ -269,7 +261,7 @@ public class fragment_challenge extends Fragment {
             if (canLoad == false) {
                 isLoading = true;
                 if (page > 1) {
-                    challengeAdapter.notifyItemRangeChanged(beforesize,challengeList.size()-beforesize);
+                    challengeAdapter.notifyItemRangeChanged(beforesize, challengeList.size() - beforesize);
                 }//이미 불러온 데이터가 있는 경우엔 가져온 데이터 만큼의 범위를 늘려준다.
                 else { //없는 경우엔 새로운 어댑터에 데이터를 담아서 띄워준다.
                     initAdapter(); //어댑터 초기화
@@ -281,13 +273,27 @@ public class fragment_challenge extends Fragment {
                 challengeList.add(new Challenge(null)); //로딩바 표시를 위한 빈 값
                 if (page > 1) {
                     isLoading = false;
-                    challengeAdapter.notifyItemRangeChanged(beforesize,challengeList.size()-beforesize);
+                    challengeAdapter.notifyItemRangeChanged(beforesize, challengeList.size() - beforesize);
                 } else {
                     initAdapter();//어댑터 초기화
                     initRecyclerView(); //리사이클러뷰에 띄워주기
                 }
                 page++; //로딩을 다하면 그다음 페이지로 넘어간다.
             }
+        }
+        showShimmer(false);
+    }
+
+    //shimmer을 켜고 끄고 하는 메소드
+    private void showShimmer(Boolean bool) {
+        if (bool) {
+            binding.llChallenge.setVisibility(View.GONE);
+            binding.SFLChallenge.startShimmer();
+            binding.SFLChallenge.setVisibility(View.VISIBLE);
+        } else {
+            binding.llChallenge.setVisibility(View.VISIBLE);
+            binding.SFLChallenge.stopShimmer();
+            binding.SFLChallenge.setVisibility(View.GONE);
         }
     }
 
