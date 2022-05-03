@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:orientation="vertical"
-    tools:context=".Challenge.Board.subactivity_challenge_board_create">
+    tools:context=".BottomMenu.Challenge.Board.subactivity_challenge_board_create">
 
     <ScrollView
         android:layout_width="match_parent"

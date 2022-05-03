@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white"
-    tools:context=".Feed.Comments.subactivity_comment">
+    tools:context=".BottomMenu.Feed.Comments.subactivity_comment">
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/SFLComment"

@@ -3,11 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/activity_profile_modify.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_feed.xml" value="0.18697916666666667" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_feed_item.xml" value="0.18697916666666667" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/layout_challenge_item.xml" value="0.35" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_challenge_board.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_challenge_board_item.xml" value="0.36614583333333334" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_challenge_createchallenge.xml" value="0.1875" />
       </map>
     </option>
   </component>

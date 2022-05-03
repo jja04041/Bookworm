@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookworm.Achievement.Adapter.ItemData;
 import com.example.bookworm.Achievement.Adapter.RecyclerViewAdapter;
-import com.example.bookworm.Bw.BookWorm;
+import com.example.bookworm.BottomMenu.Bookworm.BookWorm;
 import com.example.bookworm.R;
 import com.example.bookworm.Core.UserData.PersonalD;
 
