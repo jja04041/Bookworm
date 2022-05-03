@@ -11,8 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.bookworm.R;
-import com.example.bookworm.fragments.fragment_feed;
-import com.example.bookworm.fragments.functions.frag_functions;
+import com.example.bookworm.BottomMenu.Feed.fragment_feed;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     FragmentManager fragmentManager;
 
-    frag_functions frag_functions = new frag_functions();
+    MoveFragment MoveFragment = new MoveFragment();
 
 
     @Override
@@ -49,27 +48,27 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.tab_feed:
-                                frag_functions.show_fragment(fragments, fragmentManager, 0);
+                                MoveFragment.show_fragment(fragments, fragmentManager, 0);
                                 return true;
 
 
                             case R.id.tab_search:
-                                frag_functions.show_fragment(fragments, fragmentManager, 1);
+                                MoveFragment.show_fragment(fragments, fragmentManager, 1);
                                 return true;
 
 
                             case R.id.tab_bookworm:
-                                frag_functions.show_fragment(fragments, fragmentManager, 2);
+                                MoveFragment.show_fragment(fragments, fragmentManager, 2);
                                 return true;
 
 
                             case R.id.tab_challenge:
-                                frag_functions.show_fragment(fragments, fragmentManager, 3);
+                                MoveFragment.show_fragment(fragments, fragmentManager, 3);
                                 return true;
 
 
                             case R.id.tab_profile:
-                                frag_functions.show_fragment(fragments, fragmentManager, 4);
+                                MoveFragment.show_fragment(fragments, fragmentManager, 4);
                                 return true;
                         }
 

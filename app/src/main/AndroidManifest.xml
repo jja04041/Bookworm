@@ -18,19 +18,19 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".Challenge.Board.subactivity_challenge_board_comment"
+            android:name=".BottomMenu.Challenge.Board.subactivity_challenge_board_comment"
             android:exported="false" />
         <activity
-            android:name=".Challenge.subActivity.subactivity_challenge_board_create"
+            android:name=".BottomMenu.Challenge.subActivity.subactivity_challenge_board_create"
             android:exported="false" />
         <activity
-            android:name=".Challenge.Board.subactivity_challenge_board"
+            android:name=".BottomMenu.Challenge.Board.subactivity_challenge_board"
             android:exported="false" />
         <activity
-            android:name=".Feed.subActivity_Feed_Modify"
+            android:name="com.example.bookworm.BottomMenu.Feed.subActivity_Feed_Modify"
             android:exported="false" />
         <activity
-            android:name=".Feed.Comments.subactivity_comment"
+            android:name="com.example.bookworm.BottomMenu.Feed.Comments.subactivity_comment"
             android:exported="false" />
         <activity
             android:name=".Achievement.activity_achievement"
@@ -38,35 +38,35 @@
             android:label="@string/title_activity_achievement"
             android:theme="@style/NoActionBar" />
         <activity
-            android:name=".Feed.ImagePicker"
+            android:name="com.example.bookworm.BottomMenu.Feed.ImagePicker"
             android:exported="false" />
         <activity
-            android:name=".Profile.ProfileInfoActivity"
+            android:name=".BottomMenu.Profile.View.ProfileInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".Follow.View.FollowerActivity"
+            android:name="com.example.bookworm.Extension.Follow.View.FollowerActivity"
             android:exported="false" /> <!-- 카카오 계정 연동을 위한 AppKey -->
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakaoKey" /> <!-- SubActivities -->
         <activity
-            android:name=".Feed.subActivity_Feed_Create"
+            android:name="com.example.bookworm.BottomMenu.Feed.subActivity_Feed_Create"
             android:exported="false"
             android:parentActivityName=".Core.MainActivity" />
         <activity
-            android:name=".Search.subActivity.search_fragment_subActivity_result"
+            android:name=".BottomMenu.Search.subActivity.search_fragment_subActivity_result"
             android:exported="false"
-            android:parentActivityName=".Search.subActivity.search_fragment_subActivity_main" />
+            android:parentActivityName=".BottomMenu.Search.subActivity.search_fragment_subActivity_main" />
         <activity
-            android:name=".Search.subActivity.search_fragment_subActivity_main"
-            android:exported="false"
-            android:parentActivityName=".Core.MainActivity" />
-        <activity
-            android:name=".Challenge.subActivity.subactivity_challenge_challengeinfo"
+            android:name=".BottomMenu.Search.subActivity.search_fragment_subActivity_main"
             android:exported="false"
             android:parentActivityName=".Core.MainActivity" />
         <activity
-            android:name=".Challenge.subActivity.subactivity_challenge_createchallenge"
+            android:name=".BottomMenu.Challenge.subActivity.subactivity_challenge_challengeinfo"
+            android:exported="false"
+            android:parentActivityName=".Core.MainActivity" />
+        <activity
+            android:name=".BottomMenu.Challenge.subActivity.subactivity_challenge_createchallenge"
             android:exported="false"
             android:parentActivityName=".Core.MainActivity" /> <!-- Main Activities -->
         <activity
@@ -76,10 +76,10 @@
             android:name=".JoinActivity"
             android:exported="false" /> <!-- 회원 정보 수정 -->
         <activity
-            android:name=".Profile.ProfileModifyActivity"
+            android:name=".BottomMenu.Profile.View.ProfileModifyActivity"
             android:exported="false" /> <!-- 회원 정보 수정 -->
         <activity
-            android:name=".Profile.ProfileSettingActivity"
+            android:name=".BottomMenu.Profile.View.ProfileSettingActivity"
             android:exported="false" /> <!-- 회원 설정 -->
         <activity
             android:name=".Core.MainActivity"

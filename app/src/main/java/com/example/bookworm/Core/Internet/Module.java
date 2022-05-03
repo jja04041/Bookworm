@@ -6,11 +6,11 @@ import android.util.Log;
 import android.widget.Toast;
 
 
-import com.example.bookworm.Feed.subActivity_Feed_Create;
+import com.example.bookworm.BottomMenu.Feed.subActivity_Feed_Create;
 import com.example.bookworm.Core.MainActivity;
-import com.example.bookworm.Search.subActivity.search_fragment_subActivity_main;
-import com.example.bookworm.Search.subActivity.search_fragment_subActivity_result;
-import com.example.bookworm.fragments.fragment_search;
+import com.example.bookworm.BottomMenu.Search.subActivity.search_fragment_subActivity_main;
+import com.example.bookworm.BottomMenu.Search.subActivity.search_fragment_subActivity_result;
+import com.example.bookworm.BottomMenu.Search.fragment_search;
 import com.example.bookworm.Core.Internet.Interface.GetDataInterface;
 
 import org.json.JSONArray;

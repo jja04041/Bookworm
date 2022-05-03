@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookworm.Achievement.Listener.OnViewHolderItemClickListener;
-import com.example.bookworm.Bw.BookWorm;
+import com.example.bookworm.BottomMenu.Bookworm.BookWorm;
 import com.example.bookworm.R;
 import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.Core.Internet.FBModule;
