@@ -32,6 +32,7 @@ public class Feed implements Serializable {
     public Feed() {
         this.book = new Book(null);
         this.Creator = new UserInfo();
+
     }
 
     public void setData(Map Adata, Map Bdata) {

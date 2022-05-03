@@ -38,6 +38,7 @@ public class BookWorm {
         this.bgvec.add(R.drawable.bg_default);
 
         this.achievementmap.put("디폴트", true);
+
     }
 
 
