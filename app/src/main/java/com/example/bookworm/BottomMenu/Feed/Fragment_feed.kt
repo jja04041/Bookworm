@@ -2,28 +2,25 @@
 package com.example.bookworm.BottomMenu.Feed
 
 import android.content.Context
-import com.example.bookworm.BottomMenu.Feed.items.FeedAdapter
-import com.example.bookworm.BottomMenu.Feed.items.Feed
-import com.google.firebase.firestore.DocumentSnapshot
-import com.example.bookworm.Core.Internet.FBModule
 import android.content.Intent
-import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
-import com.example.bookworm.R
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.bookworm.BottomMenu.Feed.items.Feed
+import com.example.bookworm.BottomMenu.Feed.items.FeedAdapter
+import com.example.bookworm.Core.Internet.FBModule
+import com.example.bookworm.R
 import com.example.bookworm.databinding.FragmentFeedBinding
 import com.example.bookworm.databinding.FragmentFeedTopbarBinding
-import java.lang.NullPointerException
-import java.util.ArrayList
-import java.util.HashMap
+import com.google.firebase.firestore.DocumentSnapshot
 
 class fragment_feed : Fragment() {
     var binding: FragmentFeedBinding? = null
@@ -74,6 +71,8 @@ class fragment_feed : Fragment() {
         binding = FragmentFeedBinding.inflate(layoutInflater)
         binding!!.recyclerView.isNestedScrollingEnabled = false
 
+        showShimmer(true)//시머 on
+
         //Create New Feed
         FragmentFeedTopbarBinding.bind(binding!!.root).imgCreatefeed.setOnClickListener {
             val intent = Intent(context, subActivity_Feed_Create::class.java)
@@ -90,6 +89,7 @@ class fragment_feed : Fragment() {
         binding!!.recyclerView.setItemViewCacheSize(3)
         //피드 초기 호출
         pageRefresh()
+
 
         // Inflate the layout for this fragment
         return mView
@@ -153,6 +153,7 @@ class fragment_feed : Fragment() {
         feedList = ArrayList() //챌린지를 담는 리스트 생성
         isLoading = true
         fbModule!!.readData(1, map, null)
+        showShimmer(true)
     }
 
     //피드 초기화
@@ -210,6 +211,19 @@ class fragment_feed : Fragment() {
             feedAdapter!!.submitList(feedList.toList())
             page++ //로딩을 다하면 그다음 페이지로 넘어간다.
         }
+        showShimmer(false)
     }
 
+    //shimmer을 켜고 끄고 하는 메소드
+    private fun showShimmer(bool: Boolean) {
+        if (bool) {
+            binding!!.llFeed.setVisibility(View.GONE)
+            binding!!.SFLFeed.startShimmer()
+            binding!!.SFLFeed.setVisibility(View.VISIBLE)
+        } else {
+            binding!!.llFeed.setVisibility(View.VISIBLE)
+            binding!!.SFLFeed.stopShimmer()
+            binding!!.SFLFeed.setVisibility(View.GONE)
+        }
+    }
 }
