@@ -45,6 +45,8 @@ public class subactivity_challenge_board extends AppCompatActivity {
         binding = SubactivityChallengeBoardBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        showShimmer(true);
+
         context = this;
         boardFB = new BoardFB(context);
 
@@ -103,6 +105,7 @@ public class subactivity_challenge_board extends AppCompatActivity {
         }
         initRecyclerView();
         isEmptyBoard(false);
+        showShimmer(false);
     }
 
     //리사이클러뷰 초기화
@@ -114,13 +117,27 @@ public class subactivity_challenge_board extends AppCompatActivity {
 //        initScrollListener(); //무한스크롤
     }
 
-    public void isEmptyBoard(boolean bool){
-        if (bool){
+    public void isEmptyBoard(boolean bool) {
+        showShimmer(false);//시머 종료
+        if (bool) {
             binding.swiperefresh.setVisibility(View.GONE);
             binding.llEmptyBoard.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             binding.swiperefresh.setVisibility(View.VISIBLE);
             binding.llEmptyBoard.setVisibility(View.GONE);
+        }
+    }
+
+    //shimmer을 켜고 끄고 하는 메소드
+    private void showShimmer(Boolean bool) {
+        if (bool) {
+            binding.llBoard.setVisibility(View.GONE);
+            binding.SFLBoard.startShimmer();
+            binding.SFLBoard.setVisibility(View.VISIBLE);
+        } else {
+            binding.llBoard.setVisibility(View.VISIBLE);
+            binding.SFLBoard.stopShimmer();
+            binding.SFLBoard.setVisibility(View.GONE);
         }
     }
 

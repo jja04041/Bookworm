@@ -195,7 +195,6 @@
 
         </FrameLayout>
 
-
     </FrameLayout>
 
     <LinearLayout
@@ -226,38 +225,53 @@
         android:layout_height="2.5dp"
         android:background="@color/black" />
 
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swiperefresh"
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/SFLBoard"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:padding="6.5dp">
+        android:layout_height="match_parent">
 
+        <include layout="@layout/shimmer_subactivity_challenge_board" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/mRecyclerView"
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <LinearLayout
+        android:id="@+id/llBoard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swiperefresh"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            android:padding="6.5dp">
 
-    <LinearLayout
-        android:id="@+id/llEmptyBoard"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:gravity="center_horizontal">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/mRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:gravity="center"
-            android:text="인증글이 없습니다.\n가장 먼저 인증해보세요!"
-            android:textSize="15dp"
-            android:visibility="gone" />
+        <LinearLayout
+            android:id="@+id/llEmptyBoard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:gravity="center_horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:gravity="center"
+                android:text="인증글이 없습니다.\n가장 먼저 인증해보세요!"
+                android:textSize="15dp" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
