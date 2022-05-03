@@ -8,13 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-
-import com.example.bookworm.Extension.DiffUtilCallback;
-import com.example.bookworm.Feed.items.Feed;
-import com.example.bookworm.Feed.items.FeedAdapter;
-import com.example.bookworm.Feed.subActivity_Feed_Modify;
-import com.example.bookworm.databinding.FragmentFeedBinding;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -24,7 +17,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.bookworm.Extension.DiffUtilCallback;
+import com.example.bookworm.Feed.items.Feed;
+import com.example.bookworm.Feed.items.FeedAdapter;
 import com.example.bookworm.Feed.subActivity_Feed_Create;
+import com.example.bookworm.Feed.subActivity_Feed_Modify;
+import com.example.bookworm.databinding.FragmentFeedBinding;
 import com.example.bookworm.databinding.LayoutTopbarBinding;
 import com.example.bookworm.modules.FBModule;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -74,6 +72,13 @@ public class fragment_feed extends Fragment {
         fbModule = new FBModule(getContext());
         fbModule.setLIMIT(LIMIT); //한번에 보여줄 피드의 최대치를 설정
         //Create New Feed
+
+        //shimmer 적용을 위해 기존 뷰는 일단 안보이게, shimmer는 보이게
+        binding.llFeed.setVisibility(View.GONE);
+        binding.SFLFeed.startShimmer();
+        binding.SFLFeed.setVisibility(View.VISIBLE);
+
+
         LayoutTopbarBinding.bind(binding.getRoot()).imgCreatefeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,6 +94,12 @@ public class fragment_feed extends Fragment {
                 isRefreshing = true;
             }
         });
+
+        //shimmer 적용 끝내고 shimmer는 안보이게, 기존 뷰는 보이게
+        binding.llFeed.setVisibility(View.VISIBLE);
+        binding.SFLFeed.stopShimmer();
+        binding.SFLFeed.setVisibility(View.GONE);
+
         binding.recyclerView.setItemViewCacheSize(3);
         //피드 초기 호출
         pageRefresh();

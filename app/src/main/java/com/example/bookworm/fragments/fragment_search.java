@@ -2,12 +2,6 @@ package com.example.bookworm.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +12,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookworm.R;
-//import com.example.bookworm.modules.module_search;
 import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.Search.items.BookAdapter;
 import com.example.bookworm.Search.items.OnBookItemClickListener;
 import com.example.bookworm.Search.items.RecomBookAdapter;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_main;
 import com.example.bookworm.Search.subActivity.search_fragment_subActivity_result;
+import com.example.bookworm.databinding.FragmentSearchBinding;
 import com.example.bookworm.modules.Module;
 
 import org.json.JSONArray;
@@ -36,12 +30,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 //import com.example.bookworm.modules.module_search;
+
+//import com.example.bookworm.modules.module_search;
 //탐색 탭
 
 public class fragment_search extends Fragment {
     EditText edtSearchBtn;
     RecyclerView favRecyclerView;
     Module favmodule;
+    FragmentSearchBinding binding;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,6 +47,14 @@ public class fragment_search extends Fragment {
         View v = inflater.inflate(R.layout.fragment_search, container, false);
         edtSearchBtn = v.findViewById(R.id.edtSearchBtn);
         favRecyclerView = v.findViewById(R.id.favRecyclerView);
+        binding = FragmentSearchBinding.inflate(getLayoutInflater());
+
+        //shimmer 적용을 위해 기존 뷰는 일단 안보이게, shimmer는 보이게
+        binding.llSearchbook.setVisibility(View.GONE);
+        binding.SFLSearchbook.startShimmer();
+        binding.SFLSearchbook.setVisibility(View.VISIBLE);
+
+
         edtSearchBtn.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -60,9 +66,16 @@ public class fragment_search extends Fragment {
             }
         });
 
+        //shimmer 적용 끝내고 shimmer는 안보이게, 기존 뷰는 보이게
+        binding.llSearchbook.setVisibility(View.VISIBLE);
+        binding.SFLSearchbook.stopShimmer();
+        binding.SFLSearchbook.setVisibility(View.GONE);
+
+
         setItems();
 
         return v;
+
     }
 
     private void setItems() {
