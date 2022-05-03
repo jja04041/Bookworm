@@ -1,6 +1,7 @@
 package com.example.bookworm.Feed.Comments;
 
 import com.example.bookworm.Core.UserData.UserInfo;
+import com.example.bookworm.databinding.SubactivityCommentBinding;
 import com.google.firebase.firestore.Exclude;
 
 import java.io.Serializable;
@@ -16,6 +17,8 @@ public class Comment implements Serializable {
     private String contents;
     //생성된 시각
     private String madeDate;
+
+    SubactivityCommentBinding binding;
 
     @Exclude
     private int position; //댓글 삭제시 리사이클러뷰의 포지션을 가져올때 사용

@@ -68,11 +68,24 @@ public class fragment_challenge extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentChallengeBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
+
+        //shimmer 적용을 위해 기존 뷰는 일단 안보이게, shimmer는 보이게
+        binding.llChallenge.setVisibility(View.GONE);
+        binding.SFLChallenge.startShimmer();
+        binding.SFLChallenge.setVisibility(View.VISIBLE);
+
+
         //fbmodule을 이용하여 자료를 가져옴
         fbModule = new FBModule(getActivity());//파이어베이스를 통해서 챌린지를 가져와야함.
         fbModule.setLIMIT(LIMIT);
         map = new HashMap();
         fbModule.readData(2, map, null); //검색한 데이터를 조회
+
+        //shimmer 적용 끝내고 shimmer는 안보이게, 기존 뷰는 보이게
+        binding.llChallenge.setVisibility(View.VISIBLE);
+        binding.SFLChallenge.stopShimmer();
+        binding.SFLChallenge.setVisibility(View.GONE);
+
 
         //리스너 설정
         binding.swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
