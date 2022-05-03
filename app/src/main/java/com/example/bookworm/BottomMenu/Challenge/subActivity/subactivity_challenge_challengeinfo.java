@@ -13,8 +13,9 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.example.bookworm.BottomMenu.Challenge.Board.subactivity_challenge_board;
+
 import com.example.bookworm.BottomMenu.Challenge.items.Challenge;
+import com.example.bookworm.BottomMenu.Challenge.Board.subactivity_challenge_board;
 import com.example.bookworm.Core.UserData.PersonalD;
 import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.Core.Internet.FBModule;

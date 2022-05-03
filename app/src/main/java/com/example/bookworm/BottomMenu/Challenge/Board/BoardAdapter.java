@@ -14,8 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookworm.BottomMenu.Feed.items.Feed;
 import com.bumptech.glide.Glide;
-import com.example.bookworm.Challenge.items.Challenge;
-import com.example.bookworm.Challenge.items.ChallengeAdapter;
 import com.example.bookworm.Core.Internet.FBModule;
 import com.example.bookworm.R;
 import com.example.bookworm.databinding.SubactivityChallengeBoardItemBinding;
@@ -52,7 +50,6 @@ public class BoardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     }
 
-    class BoardDiffCallback extends DiffUtil.ItemCallback<Feed>{
 
     @Override
     public int getItemCount() {

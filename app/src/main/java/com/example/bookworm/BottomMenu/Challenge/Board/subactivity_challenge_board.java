@@ -1,4 +1,4 @@
-package com.example.bookworm.Challenge.Board;
+package com.example.bookworm.BottomMenu.Challenge.Board;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -9,9 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
-import com.example.bookworm.BottomMenu.Challenge.Board.Board;
-import com.example.bookworm.BottomMenu.Challenge.Board.BoardAdapter;
-import com.example.bookworm.BottomMenu.Challenge.Board.BoardFB;
+
 import com.example.bookworm.BottomMenu.Challenge.items.Challenge;
 import com.example.bookworm.BottomMenu.Challenge.subActivity.subactivity_challenge_board_create;
 import com.example.bookworm.BottomMenu.Search.subActivity.search_fragment_subActivity_result;

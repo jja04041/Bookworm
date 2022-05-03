@@ -1,4 +1,4 @@
-package com.example.bookworm.Challenge.Board;
+package com.example.bookworm.BottomMenu.Challenge.Board;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -22,15 +22,16 @@ import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Achievement.Achievement;
-import com.example.bookworm.Bw.BookWorm;
-import com.example.bookworm.Challenge.items.Challenge;
+import com.example.bookworm.BottomMenu.Bookworm.BookWorm;
+import com.example.bookworm.BottomMenu.Challenge.items.Challenge;
+import com.example.bookworm.BottomMenu.Feed.ImagePicker;
+import com.example.bookworm.BottomMenu.Search.items.Book;
+
 import com.example.bookworm.Core.Internet.FBModule;
 import com.example.bookworm.Core.Internet.Module;
 import com.example.bookworm.Core.UserData.PersonalD;
 import com.example.bookworm.Core.UserData.UserInfo;
-import com.example.bookworm.Feed.ImagePicker;
 import com.example.bookworm.R;
-import com.example.bookworm.Search.items.Book;
 import com.example.bookworm.databinding.SubactivityChallengeBoardCreateBinding;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;

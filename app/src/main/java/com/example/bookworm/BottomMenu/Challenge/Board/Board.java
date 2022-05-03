@@ -1,6 +1,8 @@
-package com.example.bookworm.Challenge.Board;
+package com.example.bookworm.BottomMenu.Challenge.Board;
 
-import com.example.bookworm.Search.items.Book;
+
+
+import com.example.bookworm.BottomMenu.Search.items.Book;
 
 import java.io.Serializable;
 import java.util.Map;

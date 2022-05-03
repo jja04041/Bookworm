@@ -1,4 +1,4 @@
-package com.example.bookworm.Challenge.Board;
+package com.example.bookworm.BottomMenu.Challenge.Board;
 
 import android.content.Context;
 
