@@ -45,7 +45,8 @@ class CustomPopup(context: Context?, anchor: View?) : PopupMenu(context, anchor)
             var pos: Int = item!!.position
             var ff: fragment_feed? =
                 (context2 as MainActivity).supportFragmentManager.findFragmentByTag("0") as fragment_feed?
-            var oldList: ArrayList<Feed>? = ArrayList(ff!!.feedList)
+            var oldList: ArrayList<Feed?> = ArrayList()
+            oldList!!.addAll(ff!!.feedList)
             when (p0?.itemId) {
                 R.id.menu_modify -> {
                     //현재 화면이 댓글 화면이라면
@@ -65,13 +66,8 @@ class CustomPopup(context: Context?, anchor: View?) : PopupMenu(context, anchor)
                 }
                 R.id.menu_delete -> {
                     fbModule!!.deleteData(1, item!!.feedID) //삭제
-//                    if (!item!!.imgurl.equals(null)) {
-//                        var map=HashMap<Any,Any>()
-//                        var url=""
-//                        Module(context,url,map).connect(4)
-//                    }
                     oldList?.removeAt(pos)
-                    ff.replaceItem(oldList)
+                    ff.feedAdapter!!.submitList(oldList)
                     //만약 댓글을 모아보는 액티비티(subactivity_comment)에 있는 경우, 해당 액티비티를 종료
                     if (context is subactivity_comment) (context as subactivity_comment).finish()
                 }

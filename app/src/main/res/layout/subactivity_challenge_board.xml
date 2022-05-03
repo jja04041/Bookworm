@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#0f000000"
     android:orientation="vertical"
-    tools:context=".Challenge.subActivity.subactivity_challenge_board">
+    tools:context=".Challenge.Board.subactivity_challenge_board">
 
     <LinearLayout
         android:id="@+id/llbook"
@@ -232,11 +232,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:paddingHorizontal="6.5dp">
+        android:padding="6.5dp">
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+            android:id="@+id/mRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"

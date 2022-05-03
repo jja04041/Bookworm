@@ -5,7 +5,7 @@ import com.google.firebase.firestore.QuerySnapshot
 
 
 interface LoadInfoCallback {
-    fun isFollowed(info:QuerySnapshot)
+    fun isFollowed(info:QuerySnapshot?)
     fun onCheckedInfoLoaded(info: QuerySnapshot,userList:ArrayList<UserInfo>)
     fun onDataNotAvailable()
 }

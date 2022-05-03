@@ -10,7 +10,8 @@ import com.example.bookworm.Follow.View.FollowerViewHolder
 import com.example.bookworm.R
 import com.example.bookworm.Core.UserData.UserInfo
 
-class FollowerAdapter(data: ArrayList<UserInfo>?, val context: Context, val nowUserInfo: UserInfo) : Adapter<RecyclerView.ViewHolder>() {
+class FollowerAdapter(data: ArrayList<UserInfo>?, val context: Context, val nowUserInfo: UserInfo)
+    : Adapter<RecyclerView.ViewHolder>() {
     var UserList: ArrayList<UserInfo> = ArrayList()
     init{
         if(data!=null) UserList.addAll(data)
@@ -23,7 +24,7 @@ class FollowerAdapter(data: ArrayList<UserInfo>?, val context: Context, val nowU
         when (viewType) {
             1 -> {
                 view = inflater.inflate(R.layout.layout_user_item, parent, false)
-                return FollowerViewHolder(view, context,nowUserInfo)
+                return FollowerViewHolder(view, context,nowUserInfo,-1,null)
             }
             else -> {
                 view = inflater.inflate(R.layout.layout_item_loading, parent, false)

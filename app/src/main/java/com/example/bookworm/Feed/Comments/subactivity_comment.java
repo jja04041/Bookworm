@@ -18,6 +18,7 @@ import com.example.bookworm.Extension.DiffUtilCallback;
 import com.example.bookworm.Feed.items.Feed;
 import com.example.bookworm.Core.MainActivity;
 import com.example.bookworm.Core.UserData.UserInfo;
+import com.example.bookworm.Feed.subActivity_Feed_Modify;
 import com.example.bookworm.databinding.SubactivityCommentBinding;
 import com.example.bookworm.fragments.fragment_feed;
 import com.example.bookworm.Core.Internet.FBModule;
@@ -47,17 +48,18 @@ public class subactivity_comment extends AppCompatActivity {
     public ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if (result.getResultCode() == 26) {
+                if (result.getResultCode() == subActivity_Feed_Modify.MODIFY_OK) {
                     ArrayList newList = new ArrayList(commentList);
                     Feed item = (Feed) result.getData().getSerializableExtra("modifiedFeed");
                     newList.remove(0);
                     newList.add(0, item);
                     replaceItem(newList);
+                    //피드에서도 수정 내역을 반영
                     fragment_feed ff=((fragment_feed) ((MainActivity) fragment_feed.mContext).getSupportFragmentManager().findFragmentByTag("0"));
                     ArrayList list= new ArrayList(ff.feedList);
                     list.remove(item.getPosition());
                     list.add(item.getPosition(),item);
-                    ff.replaceItem(list);
+                    ff.getFeedAdapter().submitList(list);
                 }
             });
 
