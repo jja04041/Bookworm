@@ -1,4 +1,4 @@
-package com.example.bookworm.modules;
+package com.example.bookworm.Core.Internet;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -245,7 +245,6 @@ public class FBModule {
         switch (idx) {
             case 0://회원가입
                 UserInfo userInfo = (UserInfo) (data.get("UserInfo"));
-                userInfo.InitGenre();
 
                 data.put("UserInfo", userInfo);
                 // db.collection(location[idx]).document(userInfo.getToken()).set(data);

@@ -1,8 +1,11 @@
 package com.example.bookworm.Core;
 
 
+import static android.content.ContentValues.TAG;
+
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -13,7 +16,10 @@ import androidx.fragment.app.FragmentManager;
 import com.example.bookworm.R;
 import com.example.bookworm.fragments.fragment_feed;
 import com.example.bookworm.fragments.functions.frag_functions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
     frag_functions frag_functions = new frag_functions();
 
+    String FCMToken;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +43,23 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        String token = task.getResult();
+
+                        FCMToken = token;
+                        // Log and toast
+                    }
+
+                });
 
         // 초기화면 설정
         fragments[0] = new fragment_feed();
