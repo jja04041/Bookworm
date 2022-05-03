@@ -7,15 +7,6 @@
     android:orientation="vertical"
     tools:context="com.example.bookworm.BottomMenu.Challenge.fragment_challenge">
 
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/SFLChallcreate"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <include layout="@layout/shimmer_subactivity_challenge_createchallenge" />
-
-    </com.facebook.shimmer.ShimmerFrameLayout>
-
     <LinearLayout
         android:id="@+id/llChallcreate"
         android:layout_width="match_parent"

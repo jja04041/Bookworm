@@ -1,4 +1,4 @@
-package com.example.bookworm.BottomMenu.Search;
+package com.example.bookworm.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.example.bookworm.R;
-//import com.example.bookworm.modules.module_search;
 import com.example.bookworm.BottomMenu.Search.items.Book;
 import com.example.bookworm.BottomMenu.Search.items.BookAdapter;
 import com.example.bookworm.BottomMenu.Search.items.OnBookItemClickListener;
@@ -21,6 +20,7 @@ import com.example.bookworm.BottomMenu.Search.items.RecomBookAdapter;
 import com.example.bookworm.BottomMenu.Search.subActivity.search_fragment_subActivity_main;
 import com.example.bookworm.BottomMenu.Search.subActivity.search_fragment_subActivity_result;
 import com.example.bookworm.Core.Internet.Module;
+import com.example.bookworm.databinding.FragmentSearchBinding;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +37,8 @@ public class fragment_search extends Fragment {
     EditText edtSearchBtn;
     RecyclerView favRecyclerView;
     Module favmodule;
+    FragmentSearchBinding binding;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,6 +56,12 @@ public class fragment_search extends Fragment {
                 }
             }
         });
+
+        //shimmer 적용 끝내고 shimmer는 안보이게, 기존 뷰는 보이게
+        binding.llSearchbook.setVisibility(View.VISIBLE);
+        binding.SFLSearchbook.stopShimmer();
+        binding.SFLSearchbook.setVisibility(View.GONE);
+
 
         setItems();
 
