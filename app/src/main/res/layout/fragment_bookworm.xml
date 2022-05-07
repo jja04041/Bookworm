@@ -29,19 +29,134 @@
 
     </LinearLayout>
 
-    <FrameLayout android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/iv_bg"/>
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-        <ImageView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:id="@+id/iv_bookworm"/>
-    </FrameLayout>
+            android:orientation="vertical"
+            android:layout_weight="1">
 
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/iv_bg"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:id="@+id/iv_bookworm"/>
+
+             </FrameLayout>
+
+
+
+            <TextView
+                android:id="@+id/tv_bookworm_bookcount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="읽은 권 수"
+                android:textSize="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="----------------"
+                android:textSize="20dp"/>
+
+
+
+
+            <TextView
+                android:id="@+id/tv_bookworm_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="자기계발 : "
+                android:textSize="20dp"/>
+
+            <TextView
+                android:id="@+id/tv_bookworm_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="소설 : "
+                android:textSize="20dp"/>
+
+            <TextView
+                android:id="@+id/tv_bookworm_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="육아 : "
+                android:textSize="20dp"/>
+
+            <TextView
+                android:id="@+id/tv_bookworm_4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="어린이 : "
+                android:textSize="20dp"/>
+
+            <TextView
+                android:id="@+id/tv_bookworm_5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="청소년 : "
+                android:textSize="20dp"/>
+
+            <TextView
+                android:id="@+id/tv_bookworm_6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="사회 : "
+                android:textSize="20dp"/>
+
+            <TextView
+                android:id="@+id/tv_bookworm_7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="과학 : "
+                android:textSize="20dp"/>
+
+            <TextView
+                android:id="@+id/tv_bookworm_8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="인문 : "
+                android:textSize="20dp"/>
+
+            <TextView
+                android:id="@+id/tv_bookworm_9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="생활 : "
+                android:textSize="20dp"/>
+
+            <TextView
+                android:id="@+id/tv_bookworm_10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="공부 : "
+                android:textSize="20dp"/>
+
+            <TextView
+                android:id="@+id/tv_bookworm_11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="만화 : "
+                android:textSize="20dp"/>
+
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
+
+
+
+
+

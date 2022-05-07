@@ -501,17 +501,28 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             fbModule.readData(1, map, FeedID);
 
             // 장르 처리
-            HashMap<String, Object> savegenremap = new HashMap<>();
+            HashMap<String, Object> AfterCreatemap = new HashMap<>();
+            HashMap<String, Object> countmap = new HashMap<>();
+
 
             userInfo.setGenre(selected_book.getCategoryname(), current_context);
-            savegenremap.put("userinfo_genre", userInfo.getGenre());
-            fbModule.readData(0, savegenremap, userInfo.getToken());
+            AfterCreatemap.put("userinfo_genre", userInfo.getGenre());
+            fbModule.readData(0, AfterCreatemap, userInfo.getToken());
 
             BookWorm bookworm = new PersonalD(current_context).getBookworm();
+            int count = bookworm.getReadcount();
+            ++count;
+            bookworm.setReadcount(count);
+
+            countmap.put("bookworm_readcount", bookworm.getReadcount());
+            fbModule.readData(0, countmap, bookworm.getToken());
+
+
             Achievement achievement = new Achievement(current_context, fbModule, userInfo, bookworm);
             achievement.CompleteAchievement(userInfo, current_context);
 
             new PersonalD(current_context).saveUserInfo(userInfo);
+            new PersonalD(current_context).saveBookworm(bookworm);
             setResult(CREATE_OK);
             finish();
         }
@@ -531,3 +542,4 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     }
 
 }
+

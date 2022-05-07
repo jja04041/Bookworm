@@ -3,13 +3,10 @@ package com.example.bookworm.Core.UserData;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.bookworm.Core.UserData.PersonalD;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.firestore.Exclude;
 import com.kakao.usermgmt.response.model.Profile;
 import com.kakao.usermgmt.response.model.UserAccount;
-
-import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -155,17 +152,19 @@ public class UserInfo implements Serializable {
 
         String category = tokenizer.nextToken();
 
-        if (category.equals("자기계발") || category.equals("에세이") || category.equals("예술/대중문화") || category.equals("달력/기타")) {
+        if (category.equals("자기계발") || category.equals("에세이") || category.equals("예술/대중문화")) {
             category = "자기계발";
-        } else if (category.equals("소설/시/희곡") || category.equals("장르소설")) {
-            category = "수필";
-        } else if (category.equals("어린이") || category.equals("유아") || category.equals("청소년") || category.equals("전집/중고전집") || category.equals("좋은부모")) {
+        } else if (category.equals("소설/시/희곡") || category.equals("장르소설")  || category.equals("전집/중고전집")) {
+            category = "소설";
+        } else if (category.equals("좋은부모")) {
             category = "육아";
         } else if (category.equals("사회과학") || category.equals("경제경영")) {
             category = "사회";
-        } else if (category.equals("종교/역학") || category.equals("인문학")) {
+        } else if (category.equals("어린이") || category.equals("유아")) {
+            category = "어린이";
+        } else if (category.equals("종교/역학") || category.equals("인문학")  || category.equals("역사")  || category.equals("고전")) {
             category = "인문";
-        } else if (category.equals("가정/요리/뷰티") || category.equals("건강/취미/레저") || category.equals("여행")) {
+        } else if (category.equals("가정/요리/뷰티") || category.equals("건강/취미/레저") || category.equals("여행") || category.equals("잡지") || category.equals("달력/기타")) {
             category = "생활";
         } else if (category.equals("외국어") || category.equals("대학교재") || category.equals("초중고참고서") || category.equals("수험서/자격증")
                 || category.equals("공무원 수험서") || category.equals("컴퓨터/모바일")) {
