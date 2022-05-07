@@ -7,7 +7,7 @@ import android.widget.Toast;
 
 
 import com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Create;
-import com.example.bookworm.core.MainActivity;
+import com.example.bookworm.appLaunch.views.MainActivity;
 import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_main;
 import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_result;
 import com.example.bookworm.bottomMenu.search.fragment_search;

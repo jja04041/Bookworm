@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.Feed.viewHolders;
+package com.example.bookworm.bottomMenu.Feed.views;
 
 import android.app.AlertDialog;
 import android.content.Context;

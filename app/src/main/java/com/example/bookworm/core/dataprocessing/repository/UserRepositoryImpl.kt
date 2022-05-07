@@ -3,6 +3,7 @@ package com.example.bookworm.core.dataprocessing.repository
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import com.example.bookworm.bottomMenu.bookworm.BookWorm
 import com.example.bookworm.core.userdata.UserInfo
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
@@ -22,7 +23,8 @@ import org.json.JSONObject
 //데이터를 외부에서 가져오는 역할만 한다.
 class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
     val db = FirebaseFirestore.getInstance() //파이어스토어와 연결
-    var pref: SharedPreferences //sharedPreference과 연결
+    var userPref: SharedPreferences //shareduserPreference과 연결
+    var bwPref:SharedPreferences
     var collectionReference = db.collection("users")
 
     val gson = Gson()
@@ -30,13 +32,14 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
 
     //초기화
     init {
-        pref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
+        userPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
+        bwPref= context.getSharedPreferences("bookworm", Context.MODE_PRIVATE)
     }
 
     //사용자 가져오기 => token이 null인 경우 현재 사용자 데이터 가져옴
     suspend override fun getUser(token: String?): UserInfo? {
         //로컬에서 해당 토큰 확인
-        var user = pref.getString("key_user", null)
+        var user = userPref.getString("key_user", null)
         val json = JSONObject(user)
         var userInfo = gson.fromJson(json.toString(), UserInfo::class.java)
 
@@ -76,9 +79,11 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
 
 
     //사용자 생성과 동시에 파이어 베이스에 등록
-    suspend override fun createUser(user: UserInfo) {
-        saveInLocal(user)
-        saveInFB(user)
+    suspend override fun createUser(user: UserInfo):Boolean {
+        val bookworm = BookWorm()
+        bookworm.token = user.token
+        saveInLocal(user,bookworm)
+        return saveInFB(user,bookworm)
     }
 
 
@@ -151,31 +156,35 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
 
     //사용자 정보 저장
     //로컬에 저장
-    suspend private fun saveInLocal(user: UserInfo) {
-        var editor = pref.edit()
+    private fun saveInLocal(user: UserInfo,bookworm: BookWorm) {
+        var editor = userPref.edit()
         var userInfo = gson.toJson(user, UserInfo::class.java)
         editor.putString("key_user", userInfo)
         editor.apply() //생성 완료
+        //Bookworm 저장
+        editor = bwPref.edit()
+        val strbookworm = gson.toJson(bookworm, BookWorm::class.java)
+        editor.putString("key_bookworm", strbookworm)
+        editor.commit()
     }
 
+
+
     //파이어스토어에 저장
-    private suspend fun saveInFB(user: UserInfo) {
-        collectionReference.document(user.token)
-            .set(user)
-            .addOnSuccessListener {
-                Log.d("사용자 등록 성공", "파이어스토어 서버에 사용자가 등록되었습니다.");
-            }.addOnFailureListener {
-                Log.e("사용자 등록 실패", "파이어스토어 서버에 사용자가 등록되지 않았습니다.");
-            }.await()
+    private suspend fun saveInFB(user: UserInfo,bookworm:BookWorm) : Boolean{
+        var map = mapOf("BookWorm" to bookworm,"UserInfo" to user)
+        collectionReference.document(user.token).set(map)
+            .await()
+        return true
     }
 
     //사용자 정보 업데이트
     private fun updateInLocal(user: UserInfo) {
-        val editor = pref.edit()
+        val editor = userPref.edit()
         val userinfo = gson.toJson(user, UserInfo::class.java)
         editor.putString("key_user", userinfo)
         editor.apply()
-        Log.d("nowUser", pref.getString("key_user", null)!!)
+        Log.d("nowUser", userPref.getString("key_user", null)!!)
     }
 
     private suspend fun updateInFB(user: UserInfo) {

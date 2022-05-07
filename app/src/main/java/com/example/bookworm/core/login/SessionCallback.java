@@ -82,7 +82,7 @@ public class SessionCallback implements ISessionCallback {
                             UserInfo userinfo = new UserInfo();
                             userinfo.add(kakaoAccount);
                             userinfo.setToken(id);
-                            ((activity_login)activity_login.mContext).signUp(userinfo, id);
+                            ((LoginActivity) LoginActivity.mContext).signUp(userinfo);
                         } else {
                             Log.i("KAKAO_API", "onSuccess: kakaoAccount null");
                         }

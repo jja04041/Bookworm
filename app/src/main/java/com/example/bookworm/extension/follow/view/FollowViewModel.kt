@@ -21,12 +21,12 @@ class FollowViewModel(val context: Context) : ViewModel(){
     var lastVisibleUser: String? = null
     val repo = UserRepositoryImpl(context)
 
-
     class Factory(val context: Context):ViewModelProvider.Factory{
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return FollowViewModel(context) as T
         }
     }
+
     //사용자가 팔로우중인지 확인하는 메소드
     suspend fun isFollowNow(userInfo: UserInfo) = repo.isFollowNow(userInfo)
 

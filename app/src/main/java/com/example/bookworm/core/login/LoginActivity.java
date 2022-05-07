@@ -1,6 +1,5 @@
 package com.example.bookworm.core.login;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -12,11 +11,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.bookworm.appLaunch.modules.MainViewModel;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
-import com.example.bookworm.core.MainActivity;
+import com.example.bookworm.appLaunch.views.MainActivity;
 import com.example.bookworm.R;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.core.internet.FBModule;
@@ -25,7 +27,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kakao.auth.AuthType;
@@ -34,7 +35,7 @@ import com.kakao.auth.Session;
 import java.util.HashMap;
 import java.util.Map;
 
-public class activity_login extends Activity {
+public class LoginActivity extends AppCompatActivity {
 
     protected SessionCallback sessionCallback = new SessionCallback();
     private static final String TAG = "MainActivity";
@@ -45,9 +46,9 @@ public class activity_login extends Activity {
     UserInfo userInfo;
     BookWorm bookworm;
     public static GoogleSignInClient gsi;
-    Boolean isLogined=Boolean.FALSE;
+    Boolean isLogined = Boolean.FALSE;
     private int RC_SIGN_IN = 123;
-
+    private MainViewModel mv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +56,9 @@ public class activity_login extends Activity {
         setContentView(R.layout.activity_login);
         mContext = this;
         fbModule = new FBModule(mContext);
-        isLogined=Boolean.FALSE; //카카오 이중로그인 방지
+        isLogined = Boolean.FALSE; //카카오 이중로그인 방지
         mAuth = FirebaseAuth.getInstance();
+        mv = new ViewModelProvider(this, new MainViewModel.Factory(this)).get(MainViewModel.class);
         ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (activeNetwork != null) {
@@ -89,7 +91,7 @@ public class activity_login extends Activity {
                 .build();
         gsi = GoogleSignIn.getClient(this, gso);
 
-        gsa = GoogleSignIn.getLastSignedInAccount(activity_login.this);
+        gsa = GoogleSignIn.getLastSignedInAccount(LoginActivity.this);
 
 
         // 구글 자동 로그인
@@ -109,7 +111,7 @@ public class activity_login extends Activity {
 
         // 카카오
         // 이미 로그인되어있고 세션이 살아있는 경우에만 작동
-        if (Session.getCurrentSession().checkAndImplicitOpen() && isLogined==Boolean.TRUE) {
+        if (Session.getCurrentSession().checkAndImplicitOpen() && isLogined == Boolean.TRUE) {
             Log.d(TAG, "onClick: 로그인 세션살아있음");
             // 카카오 자동 로그인
             sessionCallback.requestMe();
@@ -120,8 +122,8 @@ public class activity_login extends Activity {
             @Override
             public void onClick(View v) {
                 // 카카오 로그인 시도 (창이 뜬다.)
-                session.open(AuthType.KAKAO_LOGIN_ALL, activity_login.this);
-                isLogined=Boolean.TRUE;
+                session.open(AuthType.KAKAO_LOGIN_ALL, LoginActivity.this);
+                isLogined = Boolean.TRUE;
             }
         });
     }
@@ -146,47 +148,65 @@ public class activity_login extends Activity {
         //구글 로그인시도시
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            task.addOnCompleteListener(new OnCompleteListener<GoogleSignInAccount>() {
-                @Override
-                public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
-                    //회원의 정보를 가져옴
-                    GoogleSignInAccount account = task.getResult();
-                    //회원가입 여부를 확인.
-                    userInfo = new UserInfo();
-                    userInfo.add(account);
-                    userInfo.setToken(account.getId());
-                    signUp(userInfo, account.getId());
-                }
+            task.addOnCompleteListener(task1 -> {
+                //회원의 정보를 가져옴
+                GoogleSignInAccount account = task1.getResult();
+                //회원가입 여부를 확인.
+                userInfo = new UserInfo();
+                userInfo.add(account);
+                userInfo.setToken(account.getId());
+                signUp(userInfo);
             });
         }
     }
 
-    //로그인 함수
-    public void signIn(Boolean ResultCode, UserInfo fbUserInfo, BookWorm bookworm) {
-        if (ResultCode) move(fbUserInfo, bookworm);//회원이 아닌 경우
-        else move(fbUserInfo, bookworm); //회원인 경우
-    }
+//    //로그인 함수
+//    public void signIn(Boolean ResultCode, UserInfo fbUserInfo, BookWorm bookworm) {
+//        if (ResultCode) move(fbUserInfo, bookworm);//회원이 아닌 경우
+//        else move(fbUserInfo, bookworm); //회원인 경우
+//    }
 
-    //화면 이동 => 메인 액티비티로
-    public void move(UserInfo userInfo, BookWorm bookworm) {
+//    //화면 이동 => 메인 액티비티로
+//    public void move(UserInfo userInfo, BookWorm bookworm) {
+//        Intent intent = new Intent(this, MainActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+////        new PersonalD(this).saveUserInfo(userInfo); //값 저장
+////        new PersonalD(this).saveBookworm(bookworm);
+//        startActivity(intent);
+//        this.finish();
+//    }
+
+    //메인액티비티로 이동
+    public void move() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        new PersonalD(this).saveUserInfo(userInfo); //값 저장
-        new PersonalD(this).saveBookworm(bookworm);
         startActivity(intent);
         this.finish();
     }
 
 
     //회원가입 함수
-    public void signUp(UserInfo userInfo, String idtoken) {
-        if (null != idtoken && null != userInfo.getUsername()) {
-            Map map = new HashMap();
-            map.put("UserInfo", userInfo);
-            fbModule.readData(0, map, idtoken);
-        } else {
-            Log.d("function signup", "nono token ");
-        }
+    public void signUp(UserInfo userInfo) {
+        mv.getUser(userInfo.getToken()); //회원 여부 확인을 위한 회원정보 조회
+        mv.getUserInfo().observe(this, it -> {
+            if (null != userInfo.getUsername()) {
+                //회원인 경우
+                if (it != null) move();
+                //회원이 아닌 경우
+                else {
+                    //사용자 생성
+                    mv.createUser(userInfo);
+                    //액티비티 이동
+                    mv.getData().observe(this, et -> {
+                        if (et) move();
+                    });
+                }
+
+            } else {
+                Log.d("function signup", "nono token ");
+            }
+        });
+
     }
 
     // 구글 로그인 메소드

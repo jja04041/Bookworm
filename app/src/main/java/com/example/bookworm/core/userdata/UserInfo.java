@@ -23,8 +23,7 @@ public class UserInfo implements Serializable {
     private String email; // 로그인한 이메일
     private String platform;
 
-    @Exclude
-    private boolean isMainUser = false;
+    @Exclude private boolean isMainUser = false;
 
 
     private String token;
@@ -44,8 +43,7 @@ public class UserInfo implements Serializable {
     private int followingCounts;
 
     private HashMap<String, Integer> genre = new HashMap();
-    @Exclude
-    private boolean followed = false;
+    @Exclude private boolean followed = false;
 
 //    private BookWorm bookworm;
 

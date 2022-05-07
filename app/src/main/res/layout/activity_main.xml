@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:viewBindingIgnore="true"
     android:orientation="vertical"
-    tools:context=".core.MainActivity">
+    tools:context=".appLaunch.views.MainActivity">
 
     <FrameLayout
         android:id="@+id/container"

@@ -11,7 +11,7 @@ import com.example.bookworm.bottomMenu.Feed.comments.subactivity_comment
 import com.example.bookworm.bottomMenu.Feed.Fragment_feed
 import com.example.bookworm.bottomMenu.Feed.items.Feed
 import com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Modify
-import com.example.bookworm.core.MainActivity
+import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.R
 import com.example.bookworm.core.internet.FBModule
 

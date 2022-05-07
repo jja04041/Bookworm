@@ -9,7 +9,7 @@ import android.view.View
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.bookworm.R
-import com.example.bookworm.bottomMenu.Feed.viewHolders.FeedItemVIewHolder
+import com.example.bookworm.bottomMenu.Feed.views.FeedItemVIewHolder
 
 class FeedAdapter( c: Context) :
     ListAdapter<Feed, RecyclerView.ViewHolder>(MyDiffCallback){

@@ -1,4 +1,4 @@
-package com.example.bookworm.core;
+package com.example.bookworm.appLaunch.views;
 
 
 import static android.content.ContentValues.TAG;
@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.bookworm.R;
+import com.example.bookworm.core.MoveFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.example.bookworm.bottomMenu.Feed.Fragment_feed;
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     FragmentManager fragmentManager;
 
-    MoveFragment MoveFragment = new MoveFragment();
+    com.example.bookworm.core.MoveFragment MoveFragment = new MoveFragment();
 
     String FCMToken;
 

@@ -1,6 +1,6 @@
 package com.example.bookworm.bottomMenu.profile.views;
 
-import static com.example.bookworm.core.login.activity_login.gsi;
+import static com.example.bookworm.core.login.LoginActivity.gsi;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -14,7 +14,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
-import com.example.bookworm.core.login.activity_login;
+import com.example.bookworm.core.login.LoginActivity;
 import com.example.bookworm.core.userdata.PersonalD;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.core.internet.FBModule;
@@ -73,7 +73,7 @@ public class ProfileSettingActivity extends AppCompatActivity {
                         if(Session.getCurrentSession().checkAndImplicitOpen()){
                             Session.getCurrentSession().clearCallbacks();
                         }
-                        Intent intent = new Intent(current_context, activity_login.class);
+                        Intent intent = new Intent(current_context, LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     }
@@ -113,7 +113,7 @@ public class ProfileSettingActivity extends AppCompatActivity {
 
     //로그인 액티비티로 이동
     public void moveToLogin() {
-        Intent intent = new Intent(current_context, activity_login.class);
+        Intent intent = new Intent(current_context, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         this.finish();

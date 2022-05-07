@@ -13,8 +13,8 @@ import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.challenge.subactivity.subactivity_challenge_challengeinfo;
 import com.example.bookworm.bottomMenu.Feed.comments.Comment;
 import com.example.bookworm.bottomMenu.Feed.comments.subactivity_comment;
-import com.example.bookworm.core.login.activity_login;
-import com.example.bookworm.core.MainActivity;
+import com.example.bookworm.core.login.LoginActivity;
+import com.example.bookworm.appLaunch.views.MainActivity;
 import com.example.bookworm.bottomMenu.profile.views.ProfileSettingActivity;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.bottomMenu.challenge.fragment_challenge;
@@ -140,7 +140,7 @@ public class FBModule {
                     userInfo.add((Map) document.get("UserInfo"));
                     bookworm.add((Map) document.get("BookWorm"));
 
-                    ((activity_login) context).signIn(Boolean.FALSE, userInfo, bookworm);
+//                    ((LoginActivity) context).signIn(Boolean.FALSE, userInfo, bookworm);
                 }
             }
 
@@ -243,21 +243,21 @@ public class FBModule {
 
     public void saveData(int idx, Map data) {
         switch (idx) {
-            case 0://회원가입
-                UserInfo userInfo = (UserInfo) (data.get("UserInfo"));
-
-                data.put("UserInfo", userInfo);
-                // db.collection(location[idx]).document(userInfo.getToken()).set(data);
-
-                // bookworm 필드 추가
-                BookWorm bookworm = new BookWorm();
-                // user의 토큰 수령
-                bookworm.setToken(userInfo.getToken());
-                data.put("BookWorm", bookworm);
-                db.collection(location[idx]).document(userInfo.getToken()).set(data);
-
-                ((activity_login) context).signIn(Boolean.TRUE, userInfo, bookworm); //회원이 아닌 경우
-                break;
+//            case 0://회원가입
+//                UserInfo userInfo = (UserInfo) (data.get("UserInfo"));
+//
+//                data.put("UserInfo", userInfo);
+//                // db.collection(location[idx]).document(userInfo.getToken()).set(data);
+//
+//                // bookworm 필드 추가
+//                BookWorm bookworm = new BookWorm();
+//                // user의 토큰 수령
+//                bookworm.setToken(userInfo.getToken());
+//                data.put("BookWorm", bookworm);
+//                db.collection(location[idx]).document(userInfo.getToken()).set(data);
+//
+////                ((LoginActivity) context).signIn(Boolean.TRUE, userInfo, bookworm); //회원이 아닌 경우
+//                break;
 
             case 1: //피드 작성
                 db.collection(location[idx]).document((String) data.get("FeedID")).set(data);

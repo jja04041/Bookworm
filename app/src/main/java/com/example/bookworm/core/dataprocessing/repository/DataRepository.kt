@@ -18,7 +18,7 @@ interface DataRepository {
             lastVisible: String?
         ) : ArrayList<String>//사용자의 정보를 가져옴
         fun updateUser(user: UserInfo) //User 갱신 => 프로필 수정
-        suspend fun createUser(user: UserInfo) //사용자를 생성
+        suspend fun createUser(user: UserInfo) :Boolean //사용자를 생성
         fun deleteUser() //회원 탈퇴
     }
 
