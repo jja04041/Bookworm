@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.bookworm.BottomMenu.Challenge.fragment_challenge">
+    tools:context="com.example.bookworm.bottomMenu.challenge.fragment_challenge">
 
     <LinearLayout
         android:id="@+id/llChallcreate"

@@ -8,6 +8,13 @@ const router = express.Router();
 module.exports = router;
 var imgPath = "";
 var Path = "";
+
+//Path List
+const LocalFeedImgPath="./Image/feed/"
+const LocalProfileImgPath="./Image/profileimg/"
+
+
+//Initialize FirebaseApp
 const {
   initializeApp,
   cert
@@ -24,7 +31,9 @@ initializeApp({
 const db = getFirestore();
 
 
-//홈 화면 
+
+
+//Main
 router.get("/", (req, res) => {
   res.send("helloworld~");
 });
@@ -36,13 +45,13 @@ var _storage = multer.diskStorage({
     var arr = file.originalname.split('_');
 
     if (arr[0] == "feed") {
-      Path = "./feed";
+      Path = LocalFeedImgPath;
       if (!fs.existsSync(Path)) {
         fs.mkdirSync(Path);
       }
 
     } else {
-      Path = "./profileimg";
+      Path = LocalProfileImgPath;
       if (!fs.existsSync(Path)) {
         fs.mkdirSync(Path);
       }
@@ -53,9 +62,9 @@ var _storage = multer.diskStorage({
   filename: function (req, file, cb) {
     var arr = file.originalname.split('_');
     imgfile = `${arr[1]}_${arr[2]}`;
-    if (Path == "./profileimg") {
+    if (Path == LocalProfileImgPath) {
       imgPath = "/getprofileimg/" + imgfile;
-    } else if (Path == "./feed") {
+    } else if (Path ==LocalFeedImgPath) {
       imgPath = "/getimage/" + imgfile;
     }
 
@@ -81,7 +90,7 @@ router.post('/upload', upload.single('upload'), (req, res) => {
 
 //이미지를 다운로드 받을 때(피드 이미지 )
 router.use('/getimage/:data', (req, res) => {
-  const dataPath = "./feed/" + req.params.data;
+  const dataPath = LocalFeedImgPath + req.params.data; //피드 이미지 경로 숨기기 
   fs.readFile(dataPath, function (err, data) {
     if (err) {
       return res.status(404).end();
@@ -97,9 +106,8 @@ router.use('/getimage/:data', (req, res) => {
 router.post("/deleteImg", (req, res) => {
   const fileName = req.body.feedId+".jpg";
   const userToken = req.body.userToken;
-  const filePath = "./feed/" + fileName;
+  const filePath = LocalFeedImgPath + fileName;
 
-  //회원만 삭제할 수 있도록 함. 
   if (req.body.feedId.split('_')[1] == userToken) {
     //파일이 있는지 여부를 먼저 확인 
     fs.access(filePath, fs.constants.F_OK, (err) => {
@@ -119,7 +127,6 @@ router.post("/deleteImg", (req, res) => {
     })
   }else return res.sendStatus(401); //유저 토큰과 일치 하지 않은 경우 401에러 표시 
 })
-
 //토큰 관리 
 router.get("/token", (req, res) => {
   const token = req.query.token;
