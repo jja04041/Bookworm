@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:orientation="vertical"
-    tools:context=".BottomMenu.Feed.subActivity_Feed_Modify">
+    tools:context=".bottomMenu.Feed.subActivity_Feed_Modify">
 
     <ScrollView
         android:layout_width="match_parent"
