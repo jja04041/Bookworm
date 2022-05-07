@@ -3,12 +3,12 @@ package com.example.bookworm.Core;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.bookworm.BottomMenu.Search.fragment_search;
 import com.example.bookworm.R;
 import com.example.bookworm.BottomMenu.Bookworm.fragment_bookworm;
 import com.example.bookworm.BottomMenu.Challenge.fragment_challenge;
-import com.example.bookworm.BottomMenu.Feed.fragment_feed;
+import com.example.bookworm.BottomMenu.Feed.Fragment_feed;
 import com.example.bookworm.BottomMenu.Profile.fragment_profile;
-import com.example.bookworm.BottomMenu.Search.fragment_search;
 
 public class MoveFragment {
 
@@ -21,7 +21,7 @@ public class MoveFragment {
                 if (fragments[i] == null) {
                     switch (idx) {
                         case 0:
-                            fragments[i] = new fragment_feed();
+                            fragments[i] = new Fragment_feed();
                             break;
                         case 1:
                             fragments[i] = new fragment_search();
@@ -60,17 +60,4 @@ public class MoveFragment {
         }
     }
 
-//    public void show_fragment(Fragment fragments, FragmentManager fragmentManager, int fragment_value) {
-//
-//        if (fragments == null) {
-//            Log.d("KAKAO_API", "onSuccess:profile null ");
-//            fragmentManager.beginTransaction().add(R.id.container, fragments, String.valueOf(fragment_value)).commitAllowingStateLoss();
-//        } else
-//            fragmentManager.beginTransaction().show(fragments).commitAllowingStateLoss();
-//
-//        if(fragments !=null)
-//          fragmentManager.beginTransaction().hide(fragments).commitAllowingStateLoss();
-//
-//        fragmentManager.executePendingTransactions();
-//    }
 }

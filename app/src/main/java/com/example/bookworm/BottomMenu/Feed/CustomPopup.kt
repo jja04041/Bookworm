@@ -8,7 +8,7 @@ import android.widget.PopupMenu
 import com.example.bookworm.BottomMenu.Feed.Comments.Comment
 import com.example.bookworm.BottomMenu.Feed.Comments.CommentsCounter
 import com.example.bookworm.BottomMenu.Feed.Comments.subactivity_comment
-import com.example.bookworm.BottomMenu.Feed.fragment_feed
+import com.example.bookworm.BottomMenu.Feed.Fragment_feed
 import com.example.bookworm.BottomMenu.Feed.items.Feed
 import com.example.bookworm.BottomMenu.Feed.subActivity_Feed_Modify
 import com.example.bookworm.Core.MainActivity
@@ -45,8 +45,8 @@ class CustomPopup(context: Context?, anchor: View?) : PopupMenu(context, anchor)
     override fun onMenuItemClick(p0: MenuItem?): Boolean {
         if (layout == R.menu.feed_menu) { //피드의 메뉴 팝업
             var pos: Int = item!!.position
-            var ff: fragment_feed? =
-                (context2 as MainActivity).supportFragmentManager.findFragmentByTag("0") as fragment_feed?
+            var ff: Fragment_feed? =
+                (context2 as MainActivity).supportFragmentManager.findFragmentByTag("0") as Fragment_feed?
             var oldList: ArrayList<Feed?> = ArrayList()
             oldList!!.addAll(ff!!.feedList)
             when (p0?.itemId) {

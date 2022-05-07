@@ -22,8 +22,10 @@ import com.example.bookworm.Core.UserData.UserInfo
 import com.example.bookworm.BottomMenu.Feed.Comments.Comment
 import com.example.bookworm.BottomMenu.Feed.Comments.CommentsCounter
 import com.example.bookworm.BottomMenu.Feed.Comments.subactivity_comment
+import com.example.bookworm.BottomMenu.Feed.Fragment_feed
 import com.example.bookworm.BottomMenu.Feed.items.Feed
 import com.example.bookworm.BottomMenu.Feed.likeCounter
+import com.example.bookworm.BottomMenu.Profile.UserInfoViewModel
 import com.example.bookworm.BottomMenu.Profile.View.ProfileInfoActivity
 import com.example.bookworm.R
 import com.example.bookworm.BottomMenu.Search.subActivity.search_fragment_subActivity_result
@@ -73,6 +75,12 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
         })
         //작성자 UserInfo
         loadUser1!!.getData(item.userToken, false)
+//        var userInfo = UserInfoViewModel(context!!)
+//        userInfo.data.observe((context as MainActivity).viewLifecycleOwner, {
+//            showProfile(it,true)
+//        })
+
+
         //피드 내용
 
         //댓글 창 세팅
@@ -275,7 +283,6 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
     //사용자의 프로필을 보여주는 메소드
     // (UserContract.View 인터페이스의 메소드를 오버라이딩함)
     override fun showProfile(userInfo: UserInfo, bool: Boolean?) {
-
         try {
             if (bool == false) {
                 binding!!.tvNickname.setText(userInfo.username)

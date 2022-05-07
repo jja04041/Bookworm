@@ -18,7 +18,7 @@ import com.example.bookworm.Core.MainActivity;
 import com.example.bookworm.BottomMenu.Profile.View.ProfileSettingActivity;
 import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.BottomMenu.Challenge.fragment_challenge;
-import com.example.bookworm.BottomMenu.Feed.fragment_feed;
+import com.example.bookworm.BottomMenu.Feed.Fragment_feed;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -189,15 +189,15 @@ public class FBModule {
 
         //fragment_challenge에 있는 메소드를 사용하기 위함.
         fragment_challenge fc;
-        //fragment_feed에 있는 메소드를 사용하기 위함.
-        fragment_feed ff;
+        //Fragment_feed에 있는 메소드를 사용하기 위함.
+        Fragment_feed ff;
         if (querySnapshot.isEmpty()) {
             //피드 조회
             if (idx == 1) {
                 if (map.get("FeedID") != null) {
                     ((subactivity_comment) context).moduleUpdated(null);
                 } else {
-                    ff = ((fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
+                    ff = ((Fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
                     ff.moduleUpdated(null, null); //찾은 피드 목록을 반환
                 }
             }
@@ -210,7 +210,7 @@ public class FBModule {
                 if (map.get("FeedID") != null) {
                     ((subactivity_comment) context).moduleUpdated(querySnapshot.getDocuments());
                 } else {
-                    ff = ((fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
+                    ff = ((Fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
                     List<DocumentSnapshot> documents = querySnapshot.getDocuments();
                     ArrayList<DocumentSnapshot> data = new ArrayList<>(documents);
                     final int[] count = {0};

@@ -22,7 +22,7 @@ import com.example.bookworm.databinding.FragmentFeedBinding
 import com.example.bookworm.databinding.FragmentFeedTopbarBinding
 import com.google.firebase.firestore.DocumentSnapshot
 
-class fragment_feed : Fragment() {
+class Fragment_feed : Fragment() {
     var binding: FragmentFeedBinding? = null
 
     lateinit var feedAdapter: FeedAdapter
@@ -204,11 +204,11 @@ class fragment_feed : Fragment() {
         //만약 더이상 불러오지 못 할 경우
         if (!canLoad) {
             isLoading = true
-            feedAdapter!!.submitList(feedList.toList())
+            feedAdapter.submitList(feedList.toList())
         } else {
             isLoading = false
-            feedList!!.add(Feed()) //로딩바 표시를 위한 빈 값
-            feedAdapter!!.submitList(feedList.toList())
+            feedList.add(Feed()) //로딩바 표시를 위한 빈 값
+            feedAdapter.submitList(feedList.toList())
             page++ //로딩을 다하면 그다음 페이지로 넘어간다.
         }
         showShimmer(false)

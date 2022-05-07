@@ -3,13 +3,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/activity_follower.xml" value="0.14444444444444443" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/activity_profile_modify.xml" value="0.36614583333333334" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/activity_profile_setting.xml" value="0.22" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_feed.xml" value="0.18697916666666667" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_feed_item.xml" value="0.18697916666666667" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_feed_topbar.xml" value="0.25925925925925924" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_profile.xml" value="0.21" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/layout_challenge_item.xml" value="0.35" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/layout_comment_item.xml" value="0.1175925925925926" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/layout_comment_summary.xml" value="0.1175925925925926" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/shimmer_subactivity_challenge_createchallenge.xml" value="0.1875" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_challenge_board.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_challenge_board_item.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_challenge_createchallenge.xml" value="0.1875" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_comment.xml" value="0.22" />
       </map>
     </option>
   </component>

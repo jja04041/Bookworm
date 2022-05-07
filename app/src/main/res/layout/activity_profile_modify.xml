@@ -78,12 +78,14 @@
                 android:layout_marginBottom="40dp">
 
                 <EditText
+                    android:id="@+id/edtNewNickname"
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginLeft="20dp"
                     android:hint="변경할 닉네임을 입력해주세요"/>
                 <Button
+                    android:id="@+id/checkDuplicate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="중복 확인"/>

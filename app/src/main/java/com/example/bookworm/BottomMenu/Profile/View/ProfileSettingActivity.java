@@ -13,11 +13,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bookworm.BottomMenu.Profile.UserInfoViewModel;
 import com.example.bookworm.Core.Login.activity_login;
 import com.example.bookworm.Core.UserData.PersonalD;
 import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.Core.Internet.FBModule;
 import com.example.bookworm.R;
+import com.example.bookworm.databinding.ActivityProfileSettingBinding;
 import com.kakao.auth.Session;
 import com.kakao.network.ApiErrorCode;
 import com.kakao.network.ErrorResult;
@@ -28,43 +30,39 @@ import com.kakao.usermgmt.callback.UnLinkResponseCallback;
 public class ProfileSettingActivity extends AppCompatActivity {
 
     private UserInfo userInfo;
+    private ActivityProfileSettingBinding binding;
 
-    Button btnSignout, btnLogout, btnModify, btnBack;
+
     Context current_context;
-
+    UserInfoViewModel pv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_setting);
+        binding =ActivityProfileSettingBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        btnLogout = findViewById(R.id.btnLogout);
-        btnSignout = findViewById(R.id.btnSignout);
-        btnModify = findViewById(R.id.btnModify);
-        btnBack = findViewById(R.id.btnBack);
         current_context = this;
 
         userInfo=new PersonalD(current_context).getUserInfo();
         //설정 버튼
-        btnModify.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(current_context, ProfileModifyActivity.class);
-                //프로필 수정 화면으로 유저정보 넘겨주기
+        binding.btnModify.setOnClickListener(view -> {
+            Intent intent = new Intent(current_context, ProfileModifyActivity.class);
+            //프로필 수정 화면으로 유저정보 넘겨주기
 //                intent.putExtra("userinfo",userInfo);
-                startActivity(intent);
-            }
+            startActivity(intent);
         });
 
         //뒤로가기 버튼
-        btnBack.setOnClickListener(new View.OnClickListener() {
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
 
+
         //로그아웃 버튼
-        btnLogout.setOnClickListener(new Button.OnClickListener() {
+        binding.btnLogout.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(current_context, "정상적으로 로그아웃되었습니다.", Toast.LENGTH_SHORT).show();
@@ -84,7 +82,7 @@ public class ProfileSettingActivity extends AppCompatActivity {
             }
         });
         //회원탈퇴 버튼
-        btnSignout.setOnClickListener(new Button.OnClickListener() {
+        binding.btnSignout.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FBModule fbModule = new FBModule(current_context);

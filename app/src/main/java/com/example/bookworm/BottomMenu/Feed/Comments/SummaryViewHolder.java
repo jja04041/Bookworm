@@ -19,7 +19,7 @@ import com.example.bookworm.R;
 import com.example.bookworm.BottomMenu.Search.items.Book;
 import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.databinding.LayoutCommentSummaryBinding;
-import com.example.bookworm.BottomMenu.Feed.fragment_feed;
+import com.example.bookworm.BottomMenu.Feed.Fragment_feed;
 import com.example.bookworm.Core.Internet.FBModule;
 import com.example.bookworm.Core.UserData.PersonalD;
 
@@ -61,7 +61,7 @@ public class SummaryViewHolder extends RecyclerView.ViewHolder implements UserCo
             @Override
             public void onClick(View view) {
                 CustomPopup popup1 = new CustomPopup(context, view);
-                popup1.setItems(fragment_feed.mContext, fbModule, item);
+                popup1.setItems(Fragment_feed.mContext, fbModule, item);
                 popup1.setVisible(nowUser.getToken().equals(item.getUserToken()));
                 popup1.setOnMenuItemClickListener(popup1);
                 popup1.show();

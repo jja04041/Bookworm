@@ -20,7 +20,7 @@ import com.example.bookworm.Core.MainActivity;
 import com.example.bookworm.Core.UserData.UserInfo;
 import com.example.bookworm.BottomMenu.Feed.subActivity_Feed_Modify;
 import com.example.bookworm.databinding.SubactivityCommentBinding;
-import com.example.bookworm.BottomMenu.Feed.fragment_feed;
+import com.example.bookworm.BottomMenu.Feed.Fragment_feed;
 import com.example.bookworm.Core.Internet.FBModule;
 import com.example.bookworm.Core.UserData.PersonalD;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -55,7 +55,7 @@ public class subactivity_comment extends AppCompatActivity {
                     newList.add(0, item);
                     replaceItem(newList);
                     //피드에서도 수정 내역을 반영
-                    fragment_feed ff=((fragment_feed) ((MainActivity) fragment_feed.mContext).getSupportFragmentManager().findFragmentByTag("0"));
+                    Fragment_feed ff=((Fragment_feed) ((MainActivity) Fragment_feed.mContext).getSupportFragmentManager().findFragmentByTag("0"));
                     ArrayList list= new ArrayList(ff.feedList);
                     list.remove(item.getPosition());
                     list.add(item.getPosition(),item);

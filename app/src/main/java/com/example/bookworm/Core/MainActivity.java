@@ -16,7 +16,7 @@ import androidx.fragment.app.FragmentManager;
 import com.example.bookworm.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.example.bookworm.BottomMenu.Feed.fragment_feed;
+import com.example.bookworm.BottomMenu.Feed.Fragment_feed;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -24,8 +24,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static Dialog achievedialog;
 
-    Fragment fragment_feed, fragment_search, fragment_bookworm, fragment_challenge, fragment_profile;
-    Fragment[] fragments = {fragment_feed, fragment_search, fragment_bookworm, fragment_challenge, fragment_profile};
+    Fragment Fragment_feed, fragment_search, fragment_bookworm, fragment_challenge, fragment_profile;
+    Fragment[] fragments = {Fragment_feed, fragment_search, fragment_bookworm, fragment_challenge, fragment_profile};
     // 위험 권한을 부여할 권한 지정
 
     FragmentManager fragmentManager;
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         // 초기화면 설정
-        fragments[0] = new fragment_feed();
+        fragments[0] = new Fragment_feed();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.container, fragments[0],"0").commitAllowingStateLoss();
 
