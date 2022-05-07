@@ -27,13 +27,13 @@ public class subactivity_challenge_board extends AppCompatActivity {
 
     SubactivityChallengeBoardBinding binding;
     Context context;
-    BoardFB boardFB;
+    com.example.bookworm.bottomMenu.challenge.board.BoardFB boardFB;
     private Boolean canLoad = true; //더 로딩이 가능한지 확인하는 변수[자료의 끝을 판별한다.]
     private int page = 1;
     Challenge challenge;
     private final int LIMIT = 10;
-    private ArrayList<Board> boardList = null;
-    private BoardAdapter boardAdapter;
+    private ArrayList<com.example.bookworm.bottomMenu.challenge.board.Board> boardList = null;
+    private com.example.bookworm.bottomMenu.challenge.board.BoardAdapter boardAdapter;
     private Boolean isRefreshing = false;
     public boolean isLoading = false; //스크롤을 당겨서 추가로 로딩 중인지 여부를 확인하는 변수
     private DocumentSnapshot lastVisible;
@@ -48,7 +48,7 @@ public class subactivity_challenge_board extends AppCompatActivity {
         showShimmer(true);
 
         context = this;
-        boardFB = new BoardFB(context);
+        boardFB = new com.example.bookworm.bottomMenu.challenge.board.BoardFB(context);
 
         Intent intent = getIntent();
         //넘겨받은 값 챌린지 객체에 넣음
@@ -78,7 +78,25 @@ public class subactivity_challenge_board extends AppCompatActivity {
         });
 
         boardFB.getData(map, challenge.getTitle());
+
+
+
     }
+
+//    private void initAdapter() {
+//        BoardAdapter = new BoardAdapter(boardList, context);
+//        //어댑터 리스너
+//        BoardAdapter.setListener(new OnBoardItemClickListener() {
+//            @Override
+//            public void onItemClick(BoardAdapter.ItemViewHolder holder, View view, int position) {
+//                //닫힌 챌린지 인경우 표시할 코드 등을 입력해야함.
+//                //아이템 선택시 실행할 코드를 입력
+//                Intent intent = new Intent(context, subactivity_challenge_challengeinfo.class);
+//                intent.putExtra("boardInfo", boardList.get(position));
+//                startActivityResult.launch(intent);
+//            }
+//        });
+//    }
 
     private void setItems() {
 
@@ -90,7 +108,7 @@ public class subactivity_challenge_board extends AppCompatActivity {
         try {
             for (DocumentSnapshot snapshot : a) {
                 Map data = snapshot.getData();
-                Board board = new Board(data);
+                com.example.bookworm.bottomMenu.challenge.board.Board board = new com.example.bookworm.bottomMenu.challenge.board.Board(data);
                 boardList.add(board);
             }
             //가져온 값의 마지막 snapshot부터 이어서 가져올 수 있도록 하기 위함.
@@ -110,7 +128,7 @@ public class subactivity_challenge_board extends AppCompatActivity {
 
     //리사이클러뷰 초기화
     public void initRecyclerView() {
-        BoardAdapter boardAdapter = new BoardAdapter(boardList, context);
+        com.example.bookworm.bottomMenu.challenge.board.BoardAdapter boardAdapter = new com.example.bookworm.bottomMenu.challenge.board.BoardAdapter(boardList, context);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false);
         binding.mRecyclerView.setLayoutManager(gridLayoutManager);
         binding.mRecyclerView.setAdapter(boardAdapter);

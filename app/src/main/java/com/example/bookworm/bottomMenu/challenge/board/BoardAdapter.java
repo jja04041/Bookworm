@@ -2,12 +2,15 @@ package com.example.bookworm.bottomMenu.challenge.board;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -17,10 +20,11 @@ import com.example.bookworm.databinding.SubactivityChallengeBoardItemBinding;
 import java.util.ArrayList;
 
 
-public class BoardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class BoardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnBoardItemClickListener {
     ArrayList<Board> boardList;
     Context context;
     SubactivityChallengeBoardItemBinding binding;
+    OnBoardItemClickListener listener;
 
 //    public BoardAdapter(@NonNull BoardDiffCallback diffCallback) {
 //        super(diffCallback);
@@ -38,6 +42,10 @@ public class BoardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return new BoardAdapter.ItemViewHolder(view);
     }
 
+    public void setListener(OnBoardItemClickListener listener) {
+        this.listener = listener;
+    }
+
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         int safePosition = holder.getAdapterPosition();
@@ -52,11 +60,31 @@ public class BoardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return boardList.size();
     }
 
+    @Override
+    public void onItemClick(ItemViewHolder holder, View view, int position) {
+        if (listener != null) {
+            listener.onItemClick(holder, view, position);
+        }
+    }
+
     public class ItemViewHolder extends RecyclerView.ViewHolder {
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             binding = SubactivityChallengeBoardItemBinding.bind(itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    //리스너 인터페이스 구현
+                    if (position != RecyclerView.NO_POSITION) {
+                        if (listener != null) {
+                            listener.onItemClick(BoardAdapter.ItemViewHolder.this, view, position);
+                            notifyItemChanged(position);
+                        }
+                    }
+                }
+            });
         }
 
         public void setItem(Board item) {
