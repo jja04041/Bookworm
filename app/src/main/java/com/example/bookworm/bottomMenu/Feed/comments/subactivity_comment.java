@@ -82,7 +82,7 @@ public class subactivity_comment extends AppCompatActivity {
         setItems();
         binding.mRecyclerView.setNestedScrollingEnabled(false);
 
-        showShimmer(true);
+//        showShimmer(true);
 
         binding.btnWriteComment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -261,7 +261,7 @@ public class subactivity_comment extends AppCompatActivity {
             }
             page++; //로딩을 다하면 그다음 페이지로 넘어간다.
         }
-        showShimmer(false);
+//        showShimmer(false);
     }
     //shimmer을 켜고 끄고 하는 메소드
     private void showShimmer(Boolean bool) {

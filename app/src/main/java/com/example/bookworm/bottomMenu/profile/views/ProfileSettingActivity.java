@@ -13,12 +13,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
 import com.example.bookworm.core.login.LoginActivity;
 import com.example.bookworm.core.userdata.PersonalD;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.databinding.ActivityProfileSettingBinding;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.kakao.auth.Session;
 import com.kakao.network.ApiErrorCode;
 import com.kakao.network.ErrorResult;
@@ -65,19 +68,29 @@ public class ProfileSettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(current_context, "정상적으로 로그아웃되었습니다.", Toast.LENGTH_SHORT).show();
+                if(GoogleSignIn.getLastSignedInAccount(current_context)!=null)
+                {
+                    // Configure Google Sign In
+                    GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                            .requestIdToken(getString(R.string.server_client_id))
+                            .requestEmail()
+                            .build();
+                    gsi = GoogleSignIn.getClient(ProfileSettingActivity.this, gso);
+                    gsi.signOut();
+                }
+                else{
+                    UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
+                        @Override
+                        public void onCompleteLogout() {
+                            if(Session.getCurrentSession().checkAndImplicitOpen()){
+                                Session.getCurrentSession().clearCallbacks(); }
+                        }});
+                }
 
-                UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
-                    @Override
-                    public void onCompleteLogout() {
-                        gsi.signOut();
-                        if(Session.getCurrentSession().checkAndImplicitOpen()){
-                            Session.getCurrentSession().clearCallbacks();
-                        }
-                        Intent intent = new Intent(current_context, LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                    }
-                });
+                Intent intent = new Intent(current_context, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
             }
         });
         //회원탈퇴 버튼

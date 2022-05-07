@@ -52,35 +52,20 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        super.onCreate(savedInstanceState);
+
         mContext = this;
         fbModule = new FBModule(mContext);
         isLogined = Boolean.FALSE; //카카오 이중로그인 방지
         mAuth = FirebaseAuth.getInstance();
         mv = new ViewModelProvider(this, new MainViewModel.Factory(this)).get(MainViewModel.class);
-        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        if (activeNetwork != null) {
-            startLogin();
-        } else {
-            new AlertDialog.Builder(mContext)
-                    .setMessage("인터넷 접속 후 다시 시도해 주세요")
-                    .setPositiveButton("네트워크 설정", (dialog, which) -> {
-                        dialog.dismiss();
-                        startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
-                        finish();
-                    }).setNegativeButton("닫기", (dialogInterface, i) -> {
-                dialogInterface.dismiss();
-                finish();
-            }).show();
-        }
+        startLogin();
     }
 
     private void startLogin() {
         Session session = Session.getCurrentSession();
         session.addCallback(sessionCallback);
-
 
         // 구글
 
@@ -90,23 +75,17 @@ public class LoginActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
         gsi = GoogleSignIn.getClient(this, gso);
-
-        gsa = GoogleSignIn.getLastSignedInAccount(LoginActivity.this);
-
-
+        gsa = GoogleSignIn.getLastSignedInAccount(this);
         // 구글 자동 로그인
         if (gsa != null) {
             signInGoogle();
+            return;
         }
-
         ImageButton google_login_button = (ImageButton) findViewById(R.id.btn_login_google);
-
-        google_login_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signInGoogle();
-            }
-        });
+        google_login_button.setOnClickListener(it -> {
+                    signInGoogle();
+                }
+        );
 
 
         // 카카오
@@ -115,6 +94,7 @@ public class LoginActivity extends AppCompatActivity {
             Log.d(TAG, "onClick: 로그인 세션살아있음");
             // 카카오 자동 로그인
             sessionCallback.requestMe();
+            return;
         }
 
         ImageButton kakao_login_button = (ImageButton) findViewById(R.id.btn_login_kakao);
@@ -122,8 +102,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // 카카오 로그인 시도 (창이 뜬다.)
-                session.open(AuthType.KAKAO_LOGIN_ALL, LoginActivity.this);
-                isLogined = Boolean.TRUE;
+                if (!Session.getCurrentSession().checkAndImplicitOpen()) {
+                    session.open(AuthType.KAKAO_LOGIN_ALL, LoginActivity.this);
+                    isLogined = Boolean.TRUE;
+                }
             }
         });
     }
@@ -187,12 +169,12 @@ public class LoginActivity extends AppCompatActivity {
 
     //회원가입 함수
     public void signUp(UserInfo userInfo) {
-        mv.getUser(userInfo.getToken()); //회원 여부 확인을 위한 회원정보 조회
+        mv.getUser(userInfo.getToken(), true); //회원 여부 확인을 위한 회원정보 조회
         mv.getUserInfo().observe(this, it -> {
             if (null != userInfo.getUsername()) {
                 //회원인 경우
                 if (it != null) move();
-                //회원이 아닌 경우
+                    //회원이 아닌 경우
                 else {
                     //사용자 생성
                     mv.createUser(userInfo);
