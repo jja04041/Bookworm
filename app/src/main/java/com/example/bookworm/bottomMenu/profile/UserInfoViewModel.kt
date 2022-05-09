@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.bookworm.core.dataprocessing.repository.UserRepositoryImpl
 import com.example.bookworm.core.userdata.UserInfo
-import com.example.bookworm.extension.follow.view.FollowViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.*
 import java.util.*
@@ -34,9 +33,9 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
     }
 
     //사용자 가져오기
-    fun getUser(token: String?) {
+    fun getUser(token: String?,isFirst:Boolean) {
         viewModelScope.launch {
-            data.value = repo.getUser(token) //데이터 변경을 감지하면, 값이 업데이트 된다.
+            data.value = repo.getUser(token,isFirst) //데이터 변경을 감지하면, 값이 업데이트 된다.
         }
     }
 
@@ -80,7 +79,7 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
                 tokenList.get(tokenList.size - 1)   //마지막에 가져온 사용자 정보를 저장
             var tmpFollowList = ArrayList<UserInfo>()
             for (i in tokenList) {
-                tmpFollowList.add(repo.getUser(i)!!)
+                tmpFollowList.add(repo.getUser(i,false)!!)
             }
             tmpFollowList
         }

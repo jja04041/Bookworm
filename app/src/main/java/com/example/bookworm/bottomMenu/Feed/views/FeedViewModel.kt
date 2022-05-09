@@ -18,7 +18,7 @@ class FeedViewModel(val context: Context): ViewModel()  {
     val repo = UserRepositoryImpl(context)
     fun getUser(token: String?,liveData: MutableLiveData<UserInfo>) {
         viewModelScope.launch {
-            liveData.value = repo.getUser(token) //데이터 변경을 감지하면, 값이 업데이트 된다.
+            liveData.value = repo.getUser(token,false) //데이터 변경을 감지하면, 값이 업데이트 된다.
         }
     }
 

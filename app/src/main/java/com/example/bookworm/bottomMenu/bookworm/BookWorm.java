@@ -1,7 +1,7 @@
 package com.example.bookworm.bottomMenu.bookworm;
 
-import com.example.bookworm.BottomMenu.Search.items.Book;
 import com.example.bookworm.R;
+import com.example.bookworm.bottomMenu.search.items.Book;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +18,7 @@ public class BookWorm {
         this.token = token;
     }
 
-    private String              token;
+    private String token;
 
 
     // 업적 달성시 이 벡터에 책볼레 drawble id값을 추가합니다.
@@ -31,10 +31,8 @@ public class BookWorm {
     private HashMap<String, Boolean> achievementmap = new HashMap<>();
 
 
-
     private int readcount;
     private Vector<Book> readedbook = new Vector<>();
-
 
 
     public BookWorm() {
@@ -49,22 +47,21 @@ public class BookWorm {
     }
 
 
-
-    public void add(Map document){
+    public void add(Map document) {
         this.token = (String) document.get("token");
-        this.wormtype =Integer.parseInt(String.valueOf(document.get("wormtype")));
-        this.wormvec = new Vector<>((ArrayList<Integer>)document.get("wormvec"));
+        this.wormtype = Integer.parseInt(String.valueOf(document.get("wormtype")));
+        this.wormvec = new Vector<>((ArrayList<Integer>) document.get("wormvec"));
 
         this.bgtype = Integer.parseInt(String.valueOf(document.get("bgtype")));
-        this.bgvec = new Vector<>((ArrayList<Integer>)document.get("bgvec"));
+        this.bgvec = new Vector<>((ArrayList<Integer>) document.get("bgvec"));
 
 
-        this.achievementmap = new HashMap<>((HashMap<String, Boolean>)document.get("achievementmap"));
+        this.achievementmap = new HashMap<>((HashMap<String, Boolean>) document.get("achievementmap"));
 
         this.achievementmap.put("디폴트", true);
 
         this.readcount = Integer.parseInt(String.valueOf(document.get("readcount")));
-        this.readedbook = new Vector<>((ArrayList<Book>)document.get("readedbook"));
+        this.readedbook = new Vector<>((ArrayList<Book>) document.get("readedbook"));
 
     }
 
@@ -88,13 +85,21 @@ public class BookWorm {
 
 
     // 배경
-    public int getBgtype() { return bgtype; }
+    public int getBgtype() {
+        return bgtype;
+    }
 
-    public void setBgtype(int bgtype) { this.bgtype = bgtype; }
+    public void setBgtype(int bgtype) {
+        this.bgtype = bgtype;
+    }
 
-    public Vector<Integer> getBgvec() { return bgvec; }
+    public Vector<Integer> getBgvec() {
+        return bgvec;
+    }
 
-    public void setBgvec(Vector<Integer> bgvec) { this.bgvec = bgvec; }
+    public void setBgvec(Vector<Integer> bgvec) {
+        this.bgvec = bgvec;
+    }
 
 
     public HashMap<String, Boolean> getAchievementmap() {

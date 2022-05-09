@@ -1,6 +1,5 @@
 package com.example.bookworm.Core.UserData;
 
-import static android.content.ContentValues.TAG;
 
 import android.content.Context;
 import android.util.Log;
@@ -59,13 +58,14 @@ public class UserInfo implements Serializable {
 
     public UserInfo() {
 
+        likedPost = new ArrayList<>();
         // get fcm token
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
                     public void onComplete(@NonNull Task<String> task) {
                         if (!task.isSuccessful()) {
-                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                            Log.w("TAG", "Fetching FCM registration token failed", task.getException());
                             return;
                         }
                         // Get new FCM registration token

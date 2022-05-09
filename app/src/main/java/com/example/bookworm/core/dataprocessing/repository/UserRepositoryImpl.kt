@@ -37,14 +37,14 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
     }
 
     //사용자 가져오기 => token이 null인 경우 현재 사용자 데이터 가져옴
-    suspend override fun getUser(token: String?): UserInfo? {
+    suspend override fun getUser(token: String?,isFirst: Boolean): UserInfo? {
         //로컬에서 해당 토큰 확인
         var user = userPref.getString("key_user", null)
         val json = JSONObject(user)
         var userInfo = gson.fromJson(json.toString(), UserInfo::class.java)
 
         //현재 유저인 경우 바로 유저인포 넘겨줌
-        if (token == null || userInfo.token == token) {
+        if (token == null || userInfo.token == token && !isFirst) {
             userInfo.isMainUser = true
             return userInfo
         }
@@ -113,7 +113,7 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
 
     //사용자가 현재 팔로우 중인지 확인
     suspend fun isFollowNow(user: UserInfo) = CoroutineScope(Dispatchers.IO).async {
-        var localUser = getUser(null) //현재 유저의 정보를 가져옴
+        var localUser = getUser(null,false) //현재 유저의 정보를 가져옴
         //현재 유저의 팔로잉 목록에서 인자로 넘겨받은 유저의 토큰이 있는지 확인
         var query = collectionReference.document(localUser!!.token).collection("following")
             .whereEqualTo(FieldPath.documentId(), user.token)
@@ -123,6 +123,7 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
         }.await()
     }.await()
 
+    //팔로우 처리
     fun followProcessing(
         fromUserInfo: UserInfo,
         toUserInfo: UserInfo,
@@ -149,8 +150,6 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
                     .delete(toRefFollow)
             }
         }
-
-
     }
 //Private Method
 
@@ -161,6 +160,7 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
         var userInfo = gson.toJson(user, UserInfo::class.java)
         editor.putString("key_user", userInfo)
         editor.apply() //생성 완료
+
         //Bookworm 저장
         editor = bwPref.edit()
         val strbookworm = gson.toJson(bookworm, BookWorm::class.java)
@@ -187,6 +187,7 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
         Log.d("nowUser", userPref.getString("key_user", null)!!)
     }
 
+    //파이어 스토어에서 업데이트
     private suspend fun updateInFB(user: UserInfo) {
         collectionReference.document(user.token)
             .update("UserInfo", user)

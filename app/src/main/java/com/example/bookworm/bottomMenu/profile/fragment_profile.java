@@ -50,15 +50,13 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
                 startActivity(intent);
             }
         });
-        pv.getUser(null);
-
+        pv.getUser(null,false);
 
         //데이터 수정을 감지함
         pv.getData().observe(getViewLifecycleOwner(), userinfo -> {
             bookworm = new PersonalD(current_context).getBookworm();
             achievement = new Achievement(current_context, fbModule, userinfo, bookworm);
             binding.tvUserName.setText(userinfo.getUsername());
-
 
             binding.tvUserName.setOnClickListener(it->{
                 pv.getFollowerList(userinfo.getToken(),0);

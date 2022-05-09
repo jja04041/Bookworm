@@ -31,10 +31,10 @@ class FollowViewModel(val context: Context) : ViewModel(){
     suspend fun isFollowNow(userInfo: UserInfo) = repo.isFollowNow(userInfo)
 
     //사용자 가져오기
-    suspend fun getUser(token: String?) = repo.getUser(token)
+    suspend fun getUser(token: String?) = repo.getUser(token,false)
     fun WithoutSuspendgetUser(token: String?){
         viewModelScope.launch {
-            data.value = repo.getUser(token)
+            data.value = repo.getUser(token,false)
         }
     }
     /* 팔로우 목록 가져오기
@@ -51,7 +51,7 @@ class FollowViewModel(val context: Context) : ViewModel(){
             if (!tokenList.isEmpty()) lastVisibleUser =
                 tokenList.get(tokenList.size - 1)   //마지막에 가져온 사용자 정보를 저장
             var tmpFollowList = ArrayList<UserInfo>() //아직은 팔로우 여부를 체크하지 않은 User들의 정보가 들어감
-            for (i in tokenList) tmpFollowList.add(repo.getUser(i)!!)
+            for (i in tokenList) tmpFollowList.add(repo.getUser(i,false)!!)
             tmpFollowList
         }
         resultList = deferredFolowerList.await() //위 작업이 진행 된 후 결과값이 넘어옴
@@ -73,14 +73,14 @@ class FollowViewModel(val context: Context) : ViewModel(){
     //type : true 면 팔로우 , false 면 언팔로우
     suspend fun follow(toUserInfo: UserInfo, type: Boolean): UserInfo {
         var fromUserInfo = viewModelScope.async {
-            repo.getUser(null)
+            repo.getUser(null,false)
         }.await()!!
         repo.followProcessing(fromUserInfo, toUserInfo, type).await()
         val returnValue = viewModelScope.async {
             getUser(toUserInfo.token)
         }.await()
         //새로운 값으로 뷰페이지 업데이트
-        data.value = repo.getUser(null)
+        data.value = repo.getUser(null,false)
         return returnValue!!
     }
 }
