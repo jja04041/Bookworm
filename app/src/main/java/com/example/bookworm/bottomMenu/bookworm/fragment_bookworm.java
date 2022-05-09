@@ -12,13 +12,12 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.bookworm.notification.MyFirebaseMessagingService;
 import com.example.bookworm.R;
 import com.example.bookworm.achievement.activity_achievement;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.PersonalD;
 import com.example.bookworm.core.userdata.UserInfo;
-import com.google.firebase.database.FirebaseDatabase;
+import com.example.bookworm.notification.MyFirebaseMessagingService;
 
 public class fragment_bookworm extends Fragment {
 
@@ -37,7 +36,6 @@ public class fragment_bookworm extends Fragment {
             tv_bookworm8, tv_bookworm9, tv_bookworm10, tv_bookworm11;
 
     private MyFirebaseMessagingService myFirebaseMessagingService ;
-    private FirebaseDatabase mFirebaseDatabase;
 
     private UserInfo userinfo;
     private BookWorm bookworm;
@@ -51,8 +49,9 @@ public class fragment_bookworm extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_bookworm, container, false);
 
+        // 알림 보낼때 해놔야댐
         myFirebaseMessagingService = new MyFirebaseMessagingService();
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
+
 
         iv_bookworm = view.findViewById(R.id.iv_bookworm);
         iv_bg = view.findViewById(R.id.iv_bg);
