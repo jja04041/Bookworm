@@ -1,5 +1,6 @@
 package com.example.bookworm.bottomMenu.profile.views
 
+//import com.example.bookworm.Extension.Follow.Modules.followCounter
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -8,10 +9,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.bookworm.core.userdata.UserInfo
-//import com.example.bookworm.Extension.Follow.Modules.followCounter
-import com.example.bookworm.extension.follow.view.FollowViewModel
 import com.example.bookworm.databinding.ActivityProfileInfoBinding
-import kotlinx.coroutines.*
+import com.example.bookworm.extension.follow.view.FollowViewModel
+import com.example.bookworm.notification.MyFirebaseMessagingService
+import com.google.firebase.database.FirebaseDatabase
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class ProfileInfoActivity : AppCompatActivity() {
     lateinit var binding: ActivityProfileInfoBinding
@@ -22,12 +25,18 @@ class ProfileInfoActivity : AppCompatActivity() {
     lateinit var fv: FollowViewModel
     var cache: Boolean? = null
 
+    private var myFirebaseMessagingService: MyFirebaseMessagingService? = null
+    private var mFirebaseDatabase: FirebaseDatabase? = null
+
     //자신이나 타인의 프로필을 클릭했을때 나오는 화면
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
         fv = FollowViewModel(this)
+
+        myFirebaseMessagingService = MyFirebaseMessagingService()
+        mFirebaseDatabase = FirebaseDatabase.getInstance()
         //일단 안보였다가 파이어베이스에서 값을 모두 받아오면 보여주는게 UX면에서 좋을거같음
 //        binding.tvNickname.setVisibility(View.INVISIBLE);
 //        binding.ivProfileImage.setVisibility(View.INVISIBLE);
@@ -122,6 +131,7 @@ class ProfileInfoActivity : AppCompatActivity() {
                             .followerCounts.toLong()
                     )
                 }
+                myFirebaseMessagingService!!.sendPostToFCM(user!!.fcMtoken,  "님이 팔로우하였습니다")
             }
 
         }

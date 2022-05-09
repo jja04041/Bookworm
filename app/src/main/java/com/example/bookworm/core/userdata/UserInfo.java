@@ -115,7 +115,7 @@ public class UserInfo implements Serializable {
             this.likedPost = (ArrayList<String>) document.get("likedPost");
         else this.likedPost = new ArrayList<>();
 
-        this.FCMtoken = (String) document.get("FCMtoken");
+        this.FCMtoken = (String) document.get("fcmtoken");
     }
 
     public String getProfileimg() {

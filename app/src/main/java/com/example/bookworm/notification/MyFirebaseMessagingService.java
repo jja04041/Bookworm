@@ -72,7 +72,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationManager.notify(1, notification);
     }
 
-    public void sendPostToFCM(final String fcmtoken, final String message, FirebaseDatabase mFirebaseDatabase) {
+    public void sendPostToFCM(final String fcmtoken, final String message) {
 
         // honeycomb sdk 이상에서는 Main thread 에서 네트워킹을 실행할 수 없다 (Network On Main Thread exception 호출)
 
