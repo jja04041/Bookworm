@@ -24,6 +24,7 @@ public class fragment_bookworm extends Fragment {
     private ImageView iv_bg;
     private Button btn_Achievement;
     private Button btn_Achievement_bg;
+    private Button btn_sendpush;
 
     private TextView tv_bookcount;
 
@@ -33,6 +34,8 @@ public class fragment_bookworm extends Fragment {
     private TextView tv_bookworm1, tv_bookworm2, tv_bookworm3, tv_bookworm4, tv_bookworm5, tv_bookworm6, tv_bookworm7,
             tv_bookworm8, tv_bookworm9, tv_bookworm10, tv_bookworm11;
 
+    private MyFirebaseMessagingService MyFirebaseMessagingService;
+    private FirebaseDatabase mFirebaseDatabase;
 
     private UserInfo userinfo;
     private BookWorm bookworm;
@@ -46,11 +49,15 @@ public class fragment_bookworm extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_bookworm, container, false);
 
+        MyFirebaseMessagingService = new MyFirebaseMessagingService();
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+
         iv_bookworm = view.findViewById(R.id.iv_bookworm);
         iv_bg = view.findViewById(R.id.iv_bg);
 
         btn_Achievement = view.findViewById(R.id.btn_achievement);
         btn_Achievement_bg = view.findViewById(R.id.btn_achievement_bg);
+        btn_sendpush = view.findViewById(R.id.btn_sendpush);
 
         tv_bookcount = view.findViewById(R.id.tv_bookworm_bookcount);
 
@@ -65,6 +72,7 @@ public class fragment_bookworm extends Fragment {
         tv_bookworm9 = view.findViewById(R.id.tv_bookworm_9);
         tv_bookworm10 = view.findViewById(R.id.tv_bookworm_10);
         tv_bookworm11 = view.findViewById(R.id.tv_bookworm_11);
+
 
 
         btn_Achievement_bg.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +92,17 @@ public class fragment_bookworm extends Fragment {
                 // 1이면 activity achievement에서  bg 보여주게
                 intent.putExtra("type", 0);
                 startActivity(intent);
+            }
+        });
+
+        btn_sendpush.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                String fcmtoken = userinfo.getFCMtoken();
+
+                MyFirebaseMessagingService.sendPostToFCM(fcmtoken,"message", mFirebaseDatabase);
+
             }
         });
 
@@ -126,6 +145,13 @@ public class fragment_bookworm extends Fragment {
             tv_bookworm10.append(String.valueOf(userinfo.getGenre().get("공부")));
         if (userinfo.getGenre().get("만화") != null)
             tv_bookworm11.append(String.valueOf(userinfo.getGenre().get("만화")));
+
+        iv_bg.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+
+        iv_bg.setAdjustViewBounds(true);
+
+
+
 
 
     }

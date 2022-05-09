@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.Feed.views
+package com.example.bookworm.BottomMenu.Feed.ViewHolders
 
 import android.app.AlertDialog
 import android.content.Context
@@ -231,6 +231,11 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
             map["liked"] = liked
             PersonalD(context).saveUserInfo(nowUser)
             likeCounter().updateCounter(map, item.feedID)
+
+            val bookworm = PersonalD(context).bookworm
+            val achievement = Achievement(context, fbModule, nowUser, bookworm)
+            achievement.CompleteAchievement(nowUser, context)
+
         } else {
             AlertDialog.Builder(context)
                 .setMessage("커뮤니티 활동 보호를 위해 잠시 후에 다시 시도해주세요")
@@ -297,6 +302,7 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
     //사용자의 프로필을 보여주는 메소드
     // (UserContract.View 인터페이스의 메소드를 오버라이딩함)
     override fun showProfile(userInfo: UserInfo, bool: Boolean?) {
+
         try {
             if (bool == false) {
                 binding!!.tvNickname.setText(userInfo.username)
