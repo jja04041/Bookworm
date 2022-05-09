@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.Feed;
+package com.example.bookworm.BottomMenu.Feed;
 
 
 import android.Manifest;
@@ -26,17 +26,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
-import com.example.bookworm.achievement.*;
-import com.example.bookworm.bottomMenu.bookworm.BookWorm;
+import com.example.bookworm.Achievement.*;
+import com.example.bookworm.BottomMenu.Bookworm.BookWorm;
 import com.example.bookworm.R;
-import com.example.bookworm.bottomMenu.search.items.Book;
-import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_main;
-import com.example.bookworm.core.userdata.UserInfo;
+import com.example.bookworm.BottomMenu.Search.items.Book;
+import com.example.bookworm.BottomMenu.Search.subActivity.search_fragment_subActivity_main;
+import com.example.bookworm.Core.UserData.UserInfo;
 
-import com.example.bookworm.core.internet.FBModule;
-import com.example.bookworm.core.internet.Module;
-import com.example.bookworm.core.userdata.PersonalD;
 import com.example.bookworm.databinding.SubactivityFeedCreateBinding;
+import com.example.bookworm.Core.Internet.FBModule;
+import com.example.bookworm.Core.Internet.Module;
+import com.example.bookworm.Core.UserData.PersonalD;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -501,17 +501,28 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             fbModule.readData(1, map, FeedID);
 
             // 장르 처리
-//            HashMap<String, Object> savegenremap = new HashMap<>();
-//
-//            userInfo.setGenre(selected_book.getCategoryname(), current_context);
-//            savegenremap.put("userinfo_genre", userInfo.getGenre());
-//            fbModule.readData(0, savegenremap, userInfo.getToken());
-//
-//            BookWorm bookworm = new PersonalD(current_context).getBookworm();
-//            Achievement achievement = new Achievement(current_context, fbModule, userInfo, bookworm);
-//            achievement.CompleteAchievement(userInfo, current_context);
+            HashMap<String, Object> AfterCreatemap = new HashMap<>();
+            HashMap<String, Object> countmap = new HashMap<>();
+
+
+            userInfo.setGenre(selected_book.getCategoryname(), current_context);
+            AfterCreatemap.put("userinfo_genre", userInfo.getGenre());
+            fbModule.readData(0, AfterCreatemap, userInfo.getToken());
+
+            BookWorm bookworm = new PersonalD(current_context).getBookworm();
+            int count = bookworm.getReadcount();
+            ++count;
+            bookworm.setReadcount(count);
+
+            countmap.put("bookworm_readcount", bookworm.getReadcount());
+            fbModule.readData(0, countmap, bookworm.getToken());
+
+
+            Achievement achievement = new Achievement(current_context, fbModule, userInfo, bookworm);
+            achievement.CompleteAchievement(userInfo, current_context);
 
             new PersonalD(current_context).saveUserInfo(userInfo);
+            new PersonalD(current_context).saveBookworm(bookworm);
             setResult(CREATE_OK);
             finish();
         }
@@ -531,3 +542,4 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     }
 
 }
+
