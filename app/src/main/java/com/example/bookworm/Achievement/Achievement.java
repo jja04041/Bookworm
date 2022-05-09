@@ -75,16 +75,22 @@ public class Achievement extends activity_achievement {
 //            }
 //        }
 
-        // 배경
-         if (userinfo.getLikedPost().size() == 2) {
+        // 좋아요 업적
+        if(userinfo.getLikedPost() != null)
+        {         if (userinfo.getLikedPost().size() == 2) {
             if(null == bookworm.getAchievementmap().get("하트배경")) {
                 ExecuteFB(R.drawable.bg_heart, "하트배경", 1);
             }
         }
-        else if (userinfo.getLikedPost().size() == 3) {
-            if(null == bookworm.getAchievementmap().get("가나다")) {
-                ExecuteFB(R.drawable.bg_heart, "가나다", 1);
-            }
+
+
+
+
+
+
+
+
+
         }
     }
 }

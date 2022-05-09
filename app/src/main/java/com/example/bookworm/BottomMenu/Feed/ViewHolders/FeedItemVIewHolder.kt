@@ -13,21 +13,22 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.bookworm.Core.Internet.FBModule
-import com.example.bookworm.Core.MainActivity
-import com.example.bookworm.Core.UserData.Interface.UserContract
-import com.example.bookworm.Core.UserData.Modules.LoadUser
-import com.example.bookworm.Core.UserData.PersonalD
-import com.example.bookworm.Core.UserData.UserInfo
+import com.example.bookworm.Achievement.Achievement
 import com.example.bookworm.BottomMenu.Feed.Comments.Comment
 import com.example.bookworm.BottomMenu.Feed.Comments.CommentsCounter
 import com.example.bookworm.BottomMenu.Feed.Comments.subactivity_comment
 import com.example.bookworm.BottomMenu.Feed.items.Feed
 import com.example.bookworm.BottomMenu.Feed.likeCounter
 import com.example.bookworm.BottomMenu.Profile.View.ProfileInfoActivity
-import com.example.bookworm.R
 import com.example.bookworm.BottomMenu.Search.subActivity.search_fragment_subActivity_result
+import com.example.bookworm.Core.Internet.FBModule
+import com.example.bookworm.Core.MainActivity
+import com.example.bookworm.Core.UserData.Interface.UserContract
+import com.example.bookworm.Core.UserData.Modules.LoadUser
+import com.example.bookworm.Core.UserData.PersonalD
+import com.example.bookworm.Core.UserData.UserInfo
 import com.example.bookworm.Feed.CustomPopup
+import com.example.bookworm.R
 import com.example.bookworm.databinding.FragmentFeedItemBinding
 import java.text.DateFormat
 import java.text.ParseException
@@ -209,6 +210,11 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
             map["liked"] = liked
             PersonalD(context).saveUserInfo(nowUser)
             likeCounter().updateCounter(map, item.feedID)
+
+            val bookworm = PersonalD(context).bookworm
+            val achievement = Achievement(context, fbModule, nowUser, bookworm)
+            achievement.CompleteAchievement(nowUser, context)
+
         } else {
             AlertDialog.Builder(context)
                 .setMessage("커뮤니티 활동 보호를 위해 잠시 후에 다시 시도해주세요")

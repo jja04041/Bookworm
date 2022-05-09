@@ -215,6 +215,9 @@ public class ItemViewHolder extends RecyclerView.ViewHolder implements UserContr
             BookWorm bookworm = new PersonalD(context).getBookworm();
             Achievement achievement = new Achievement(context, fbModule, nowUser, bookworm);
             achievement.CompleteAchievement(nowUser, context);
+
+
+
         } else {
             new AlertDialog.Builder(context)
                     .setMessage("커뮤니티 활동 보호를 위해 잠시 후에 다시 시도해주세요")

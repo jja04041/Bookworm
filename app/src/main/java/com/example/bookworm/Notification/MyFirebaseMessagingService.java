@@ -3,7 +3,6 @@ package com.example.bookworm.Notification;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Context;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
@@ -11,14 +10,24 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.bookworm.R;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import org.json.JSONObject;
+
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     final String CHANNEL_ID = "ChannerID";
     final String CHANNEL_NAME = "ChannerName";
     final String CHANNEL_DESCRIPTION = "ChannerDescription";
+
+    private static final String FCM_MESSAGE_URL = "https://fcm.googleapis.com/fcm/send";
+    private static final String SERVER_KEY = "AAAAgMY8NzM:APA91bHQsklAUmUfvWkKcu-joUx_HcGTI5g4l_qQDRbfoBuMWi2OpjHh7zQBDU_rJaJpQc_wcD1qw9ADobR5s65lOtzduBPTAwDj4N_aNrF2NT_iOQOIRpUHWpUmvRFULH7wBwmHL6BP";
 
 
     // 클라우드 서버에 등록되면 호출
@@ -48,7 +57,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 notificationManager.createNotificationChannel(channel);
             }
             builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID);
-        }else {
+        } else {
             builder = new NotificationCompat.Builder(getApplicationContext());
         }
 
@@ -60,58 +69,47 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setSmallIcon(R.drawable.ic_launcher_background);
 
         Notification notification = builder.build();
-            notificationManager.notify(1, notification);
+        notificationManager.notify(1, notification);
     }
 
-    private void sendNotification(RemoteMessage remoteMessage) {
+    public void sendPostToFCM(final String fcmtoken, final String message, FirebaseDatabase mFirebaseDatabase) {
 
-        String title = remoteMessage.getData().get("title");
-        String message = remoteMessage.getData().get("message");
+        // honeycomb sdk 이상에서는 Main thread 에서 네트워킹을 실행할 수 없다 (Network On Main Thread exception 호출)
 
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                try {
 
-            String channel = "채널";
-            String channel_nm = "채널명";
+                    // json 형식으로  fmc 메시지 만들어준다
+                    JSONObject root = new JSONObject();
+                    JSONObject notification = new JSONObject();
+                    notification.put("body", message);
+                    notification.put("title", "BOOKWORM");
+                    root.put("notification", notification);
+                    root.put("to", fcmtoken);
+                    // FMC 메시지 생성 end
 
-            NotificationManager notichannel = (android.app.NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            NotificationChannel channelMessage = new NotificationChannel(channel, channel_nm,
-                    android.app.NotificationManager.IMPORTANCE_DEFAULT);
-            channelMessage.setDescription("채널에 대한 설명.");
-            channelMessage.enableLights(true);
-            channelMessage.enableVibration(true);
-            channelMessage.setShowBadge(false);
-            channelMessage.setVibrationPattern(new long[]{100, 200, 100, 200});
-            notichannel.createNotificationChannel(channelMessage);
+                    // url와 firebase serverkey로 네트워크 연결
+                    URL Url = new URL(FCM_MESSAGE_URL);
+                    HttpURLConnection conn = (HttpURLConnection) Url.openConnection();
+                    conn.setRequestMethod("POST");
+                    conn.setDoOutput(true);
+                    conn.setDoInput(true);
+                    conn.addRequestProperty("Authorization", "key=" + SERVER_KEY);
+                    conn.setRequestProperty("Accept", "application/json");
+                    conn.setRequestProperty("Content-type", "application/json");
+                    OutputStream os = conn.getOutputStream();
+                    os.write(root.toString().getBytes("utf-8"));
+                    os.flush();
+                    conn.getResponseCode();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
-            NotificationCompat.Builder notificationBuilder =
-                    new NotificationCompat.Builder(this, channel)
-                            .setSmallIcon(R.drawable.ic_launcher_background)
-                            .setContentTitle(title)
-                            .setContentText(message)
-                            .setChannelId(channel)
-                            .setAutoCancel(true)
-                            .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
-
-            NotificationManager notificationManager =
-                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-            notificationManager.notify(9999, notificationBuilder.build());
-
-        } else {
-            NotificationCompat.Builder notificationBuilder =
-                    new NotificationCompat.Builder(this, "")
-                            .setSmallIcon(R.drawable.ic_launcher_background)
-                            .setContentTitle(title)
-                            .setContentText(message)
-                            .setAutoCancel(true)
-                            .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
-
-            NotificationManager notificationManager =
-                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-            notificationManager.notify(9999, notificationBuilder.build());
-
-        }
+        thread.start();
     }
 }

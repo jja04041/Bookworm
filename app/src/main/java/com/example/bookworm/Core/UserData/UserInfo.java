@@ -1,10 +1,17 @@
 package com.example.bookworm.Core.UserData;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.Exclude;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.kakao.usermgmt.response.model.Profile;
 import com.kakao.usermgmt.response.model.UserAccount;
 
@@ -23,6 +30,8 @@ public class UserInfo implements Serializable {
     private String email; // 로그인한 이메일
     private String platform;
 
+
+    private String FCMtoken;
 
 
     private String token;
@@ -49,8 +58,22 @@ public class UserInfo implements Serializable {
 
 
     public UserInfo() {
-//        bookworm = new BookWorm();
-//        bookworm.Initbookworm();
+
+        // get fcm token
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+                        // Get new FCM registration token
+                        String token = task.getResult();
+
+                        FCMtoken = token;
+                    }
+                });
     }
 
     public void setFollowingCounts(int followingCounts) {
@@ -100,11 +123,13 @@ public class UserInfo implements Serializable {
         this.followingCounts = Integer.parseInt(String.valueOf(document.get("followingCounts")));
 
         this.genre = new HashMap<String, Integer>((HashMap<String, Integer>) document.get("genre"));
-        this.genre = new HashMap<String, Integer>((Map) document.get("genre"));
+        //this.genre = new HashMap<String, Integer>((Map) document.get("genre"));
 
         if ((ArrayList<String>) document.get("likedPost") != null)
             this.likedPost = (ArrayList<String>) document.get("likedPost");
         else this.likedPost = new ArrayList<>();
+
+        this.FCMtoken = (String) document.get("FCMtoken");
     }
 
     public String getProfileimg() {
@@ -181,6 +206,15 @@ public class UserInfo implements Serializable {
             this.genre.replace(category, unboxint);
         }
     }
+
+    public String getFCMtoken() {
+        return FCMtoken;
+    }
+
+    public void setFCMtoken(String FCMtoken) {
+        this.FCMtoken = FCMtoken;
+    }
+
 }
 
 
