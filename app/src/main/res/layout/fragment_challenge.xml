@@ -5,7 +5,7 @@
     android:id="@+id/swiperefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.bookworm.fragments.fragment_challenge">
+    tools:context="com.example.bookworm.bottomMenu.challenge.fragment_challenge">
 
 
     <LinearLayout
@@ -54,26 +54,26 @@
 
             <LinearLayout
                 android:id="@+id/llSearchR"
-                android:visibility="invisible"
-                android:layout_gravity="center"
-                android:orientation="vertical"
-                android:layout_weight="1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:visibility="invisible">
 
                 <TextView
-                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
                     android:text="다음에 대한 검색결과입니다" />
+
                 <TextView
                     android:id="@+id/tvSearchR"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text='" "'
-                    />
+                    android:text='" "' />
             </LinearLayout>
 
             <Button
@@ -85,11 +85,68 @@
 
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/mRecyclerView"
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/SFLChallenge"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <include layout="@layout/shimmer_layout_challenge_item" />
+
+                    <include layout="@layout/shimmer_layout_challenge_item" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <include layout="@layout/shimmer_layout_challenge_item" />
+
+                    <include layout="@layout/shimmer_layout_challenge_item" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <include layout="@layout/shimmer_layout_challenge_item" />
+
+                    <include layout="@layout/shimmer_layout_challenge_item" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <LinearLayout
+            android:id="@+id/llChallenge"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/mRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        </LinearLayout>
 
 
     </LinearLayout>

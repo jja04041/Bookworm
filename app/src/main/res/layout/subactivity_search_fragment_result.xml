@@ -4,17 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Search.subActivity.search_fragment_subActivity_result"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".bottomMenu.search.subactivity.search_fragment_subActivity_result">
 
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/SFLSearch"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/SFLSearch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <include layout="@layout/shimmer_subactivity_search_fragment_result" />
+        <include layout="@layout/shimmer_subactivity_search_fragment_result" />
 
-    </com.facebook.shimmer.ShimmerFrameLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
     <LinearLayout
         android:id="@+id/llSearch"
@@ -234,6 +234,11 @@
                         android:layout_marginLeft="4dp"
                         android:text="" />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="원" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -253,6 +258,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="4dp"
                         android:text="" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="원" />
                 </LinearLayout>
 
                 <LinearLayout

@@ -22,4 +22,8 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <string name="FCM_MESSAGE_URL">https://fcm.googleapis.com/fcm/send</string>
+    <string name="SERVER_KEY">AAAAgMY8NzM:APA91bHQsklAUmUfvWkKcu-joUx_HcGTI5g4l_qQDRbfoBuMWi2OpjHh7zQBDU_rJaJpQc_wcD1qw9ADobR5s65lOtzduBPTAwDj4N_aNrF2NT_iOQOIRpUHWpUmvRFULH7wBwmHL6BP</string>
+
 </resources>

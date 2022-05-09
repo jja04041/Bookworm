@@ -4,9 +4,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/SFLFollower"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/shimmer_layout_user_item" />
+
+            <include layout="@layout/shimmer_layout_user_item" />
+
+            <include layout="@layout/shimmer_layout_user_item" />
+
+            <include layout="@layout/shimmer_layout_user_item" />
+
+            <include layout="@layout/shimmer_layout_user_item" />
+
+            <include layout="@layout/shimmer_layout_user_item" />
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <LinearLayout
+        android:id="@+id/llFollow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
 
 </FrameLayout>

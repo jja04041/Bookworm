@@ -9,61 +9,81 @@
     android:background="@color/cardview_shadow_start_color"
     android:orientation="vertical">
 
-    <LinearLayout
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/SFLSearchbook"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:background="@color/white"
-        android:elevation="10dp">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="10dp"
-            android:src="@drawable/search" />
+        <include layout="@layout/shimmer_fragment_search" />
 
-        <EditText
-            android:id="@+id/edtSearchBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:hint="책 검색"
-            android:paddingLeft="10dp"
-            android:paddingTop="7dp" />
-    </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <LinearLayout
+        android:id="@+id/llSearchbook"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_margin="20dp"
+            android:background="@color/white"
+            android:elevation="10dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/search" />
+
+            <EditText
+                android:id="@+id/edtSearchBtn"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
-                android:text="인기도서"
-                android:layout_marginRight="230dp"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
-
-            <Button
-                android:text="더보기"
-                android:id="@+id/btnMore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:background="@android:color/transparent"
+                android:hint="책 검색"
+                android:paddingLeft="10dp"
+                android:paddingTop="7dp" />
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/favRecyclerView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            android:layout_margin="20dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="230dp"
+                    android:paddingBottom="10dp"
+                    android:text="인기도서"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btnMore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="더보기" />
+            </LinearLayout>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/favRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        </LinearLayout>
+
     </LinearLayout>
+
 </LinearLayout>

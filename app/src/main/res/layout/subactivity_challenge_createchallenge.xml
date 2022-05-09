@@ -5,22 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.bookworm.fragments.fragment_challenge">
-
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/SFLChallcreate"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <include layout="@layout/shimmer_subactivity_challenge_createchallenge" />
-
-    </com.facebook.shimmer.ShimmerFrameLayout>
+    tools:context="com.example.bookworm.bottomMenu.challenge.fragment_challenge">
 
     <LinearLayout
         android:id="@+id/llChallcreate"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -165,13 +157,6 @@
                     android:textColor="#000000"
                     android:textSize="15dp" />
 
-                <Button
-                    android:id="@+id/btn_createchallenge_duplicheck"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/icon_check" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -298,8 +283,6 @@
                     android:textAlignment="center"
                     android:textColor="#000000"
                     android:textSize="15dp" />
-
-
 
 
             </LinearLayout>

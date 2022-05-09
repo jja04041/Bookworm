@@ -4,19 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Profile.ProfileModifyActivity"
+    tools:context=".bottomMenu.profile.views.ProfileModifyActivity"
     android:orientation="vertical"
     >
-
-
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/SFLModify"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <include layout="@layout/shimmer_activity_profile_modify" />
-
-    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <LinearLayout
         android:id="@+id/llModify"
@@ -88,12 +78,14 @@
                 android:layout_marginBottom="40dp">
 
                 <EditText
+                    android:id="@+id/edtNewNickname"
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginLeft="20dp"
                     android:hint="변경할 닉네임을 입력해주세요"/>
                 <Button
+                    android:id="@+id/checkDuplicate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="중복 확인"/>

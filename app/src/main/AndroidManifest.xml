@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".Core.Login.GlobalApplication"
+        android:name=".core.login.GlobalApplication"
         android:allowBackup="true"
         android:icon="@drawable/appicon_bookworm"
         android:label="책볼레"
@@ -18,54 +18,57 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".Challenge.subActivity.subactivity_challenge_board_create"
+            android:name=".bottomMenu.challenge.board.subactivity_challenge_board_comment"
             android:exported="false" />
         <activity
-            android:name=".Challenge.subActivity.subactivity_challenge_board"
+            android:name=".bottomMenu.challenge.subactivity.subactivity_challenge_board_create"
             android:exported="false" />
         <activity
-            android:name=".Feed.subActivity_Feed_Modify"
+            android:name=".bottomMenu.challenge.board.subactivity_challenge_board"
             android:exported="false" />
         <activity
-            android:name=".Feed.Comments.subactivity_comment"
+            android:name="com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Modify"
             android:exported="false" />
         <activity
-            android:name=".Achievement.activity_achievement"
+            android:name="com.example.bookworm.bottomMenu.Feed.comments.subactivity_comment"
+            android:exported="false" />
+        <activity
+            android:name=".achievement.activity_achievement"
             android:exported="false"
             android:label="@string/title_activity_achievement"
             android:theme="@style/NoActionBar" />
         <activity
-            android:name=".Feed.ImagePicker"
+            android:name="com.example.bookworm.bottomMenu.Feed.ImagePicker"
             android:exported="false" />
         <activity
-            android:name=".Profile.ProfileInfoActivity"
+            android:name=".bottomMenu.profile.views.ProfileInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".Follow.View.FollowerActivity"
+            android:name="com.example.bookworm.extension.follow.view.FollowerActivity"
             android:exported="false" /> <!-- 카카오 계정 연동을 위한 AppKey -->
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakaoKey" /> <!-- SubActivities -->
         <activity
-            android:name=".Feed.subActivity_Feed_Create"
+            android:name="com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Create"
             android:exported="false"
-            android:parentActivityName=".Core.MainActivity" />
+            android:parentActivityName=".appLaunch.views.MainActivity" />
         <activity
-            android:name=".Search.subActivity.search_fragment_subActivity_result"
+            android:name=".bottomMenu.search.subactivity.search_fragment_subActivity_result"
             android:exported="false"
-            android:parentActivityName=".Search.subActivity.search_fragment_subActivity_main" />
+            android:parentActivityName=".bottomMenu.search.subactivity.search_fragment_subActivity_main" />
         <activity
-            android:name=".Search.subActivity.search_fragment_subActivity_main"
+            android:name=".bottomMenu.search.subactivity.search_fragment_subActivity_main"
             android:exported="false"
-            android:parentActivityName=".Core.MainActivity" />
+            android:parentActivityName=".appLaunch.views.MainActivity" />
         <activity
-            android:name=".Challenge.subActivity.subactivity_challenge_challengeinfo"
+            android:name=".bottomMenu.challenge.subactivity.subactivity_challenge_challengeinfo"
             android:exported="false"
-            android:parentActivityName=".Core.MainActivity" />
+            android:parentActivityName=".appLaunch.views.MainActivity" />
         <activity
-            android:name=".Challenge.subActivity.subactivity_challenge_createchallenge"
+            android:name=".bottomMenu.challenge.subactivity.subactivity_challenge_createchallenge"
             android:exported="false"
-            android:parentActivityName=".Core.MainActivity" /> <!-- Main Activities -->
+            android:parentActivityName=".appLaunch.views.MainActivity" /> <!-- Main Activities -->
         <activity
             android:name=".PreferActivity"
             android:exported="false" /> <!-- 선호장르 설정 -->
@@ -73,21 +76,23 @@
             android:name=".JoinActivity"
             android:exported="false" /> <!-- 회원 정보 수정 -->
         <activity
-            android:name=".Profile.ProfileModifyActivity"
+            android:name=".bottomMenu.profile.views.ProfileModifyActivity"
             android:exported="false" /> <!-- 회원 정보 수정 -->
         <activity
-            android:name=".Profile.ProfileSettingActivity"
+            android:name=".bottomMenu.profile.views.ProfileSettingActivity"
             android:exported="false" /> <!-- 회원 설정 -->
         <activity
-            android:name=".Core.MainActivity"
+            android:name=".appLaunch.views.MainActivity"
             android:exported="false" /> <!-- 메인 화면 -->
         <activity
-            android:name=".Core.Login.activity_login"
-            android:exported="false" /> <!-- 로그인 화면 -->
+            android:name=".core.login.LoginActivity"
+            android:exported="false"
+            /><!-- 로그인 화면 -->
         <activity
             android:name=".LoadingActivity"
             android:exported="true"> <!-- 로딩 화면 -->
             <intent-filter>
+
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -106,6 +111,16 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+
+        <service
+            android:name=".notification.MyFirebaseMessagingService"
+            android:stopWithTask="false"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
