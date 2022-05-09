@@ -5,12 +5,14 @@ import android.content.SharedPreferences
 import android.util.Log
 import com.example.bookworm.bottomMenu.bookworm.BookWorm
 import com.example.bookworm.core.userdata.UserInfo
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Transaction
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +26,7 @@ import org.json.JSONObject
 class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
     val db = FirebaseFirestore.getInstance() //파이어스토어와 연결
     var userPref: SharedPreferences //shareduserPreference과 연결
-    var bwPref:SharedPreferences
+    var bwPref: SharedPreferences
     var collectionReference = db.collection("users")
 
     val gson = Gson()
@@ -33,37 +35,34 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
     //초기화
     init {
         userPref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
-        bwPref= context.getSharedPreferences("bookworm", Context.MODE_PRIVATE)
+        bwPref = context.getSharedPreferences("bookworm", Context.MODE_PRIVATE)
     }
 
     //사용자 가져오기 => token이 null인 경우 현재 사용자 데이터 가져옴
-    suspend override fun getUser(token: String?,isFirst: Boolean): UserInfo? {
+    suspend override fun getUser(token: String?, isFirst: Boolean): UserInfo? {
         //로컬에서 해당 토큰 확인
         var user = userPref.getString("key_user", null)
-        val json = JSONObject(user)
-        var userInfo = gson.fromJson(json.toString(), UserInfo::class.java)
-
-        //현재 유저인 경우 바로 유저인포 넘겨줌
-        if (token == null || userInfo.token == token && !isFirst) {
-            userInfo.isMainUser = true
-            return userInfo
+        var userInfo = UserInfo()
+        if (user != null) {
+            val json = JSONObject(user)
+            var userInfo = gson.fromJson(json.toString(), UserInfo::class.java)
+            //현재 유저인 경우 바로 유저인포 넘겨줌
+            if (token == null || userInfo.token == token && !isFirst) {
+                userInfo.isMainUser = true
+                return userInfo
+            }
+            //로컬에 해당 토큰이 없는 경우, 서버에서 가져옴
+            else {
+                userInfo= token?.let { findInFB(it).await() }!!
+                return userInfo
+            }
         }
         //로컬에 해당 토큰이 없는 경우, 서버에서 가져옴
-        else
-            return try {
-                //초기화 ->
-                // 초기화가 안되면
-                // 현재 사용자의 결과값에 일부 수정이 이루어진 채로 값이 리턴되기 때문
-                userInfo = UserInfo()
-                var it = collectionReference
-                    .document(token!!)
-                    .get().await()
-                var map = it.get("UserInfo") as MutableMap<String, String>
-                userInfo.add(map)
-                userInfo //최종 return 값
-            } catch (e: FirebaseException) {
-                null
-            }
+        else {
+            userInfo= token?.let { findInFB(it).await() }!!
+            return userInfo
+        }
+
     }
 
 
@@ -79,11 +78,16 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
 
 
     //사용자 생성과 동시에 파이어 베이스에 등록
-    suspend override fun createUser(user: UserInfo):Boolean {
+    suspend override fun createUser(user: UserInfo): Boolean {
         val bookworm = BookWorm()
         bookworm.token = user.token
-        saveInLocal(user,bookworm)
-        return saveInFB(user,bookworm)
+        saveInLocal(user, bookworm)
+        // get fcm token
+        var a = FirebaseMessaging.getInstance().token.await()
+        user.setFCMtoken(a)
+
+
+        return saveInFB(user, bookworm)
     }
 
 
@@ -113,7 +117,7 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
 
     //사용자가 현재 팔로우 중인지 확인
     suspend fun isFollowNow(user: UserInfo) = CoroutineScope(Dispatchers.IO).async {
-        var localUser = getUser(null,false) //현재 유저의 정보를 가져옴
+        var localUser = getUser(null, false) //현재 유저의 정보를 가져옴
         //현재 유저의 팔로잉 목록에서 인자로 넘겨받은 유저의 토큰이 있는지 확인
         var query = collectionReference.document(localUser!!.token).collection("following")
             .whereEqualTo(FieldPath.documentId(), user.token)
@@ -143,6 +147,7 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
                 .update(toRef, "UserInfo.followerCounts", FieldValue.increment(count))
             fromUserInfo.followingCounts = current!!.toInt()
             updateInLocal(fromUserInfo)//새로 갱신된 데이터를 로컬과 서버 모두에 적용
+
             if (type) {
                 it.set(fromRefFollow, toUserInfo).set(toRefFollow, fromUserInfo)
             } else {
@@ -155,7 +160,7 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
 
     //사용자 정보 저장
     //로컬에 저장
-    private fun saveInLocal(user: UserInfo,bookworm: BookWorm) {
+    private fun saveInLocal(user: UserInfo, bookworm: BookWorm) {
         var editor = userPref.edit()
         var userInfo = gson.toJson(user, UserInfo::class.java)
         editor.putString("key_user", userInfo)
@@ -169,10 +174,9 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
     }
 
 
-
     //파이어스토어에 저장
-    private suspend fun saveInFB(user: UserInfo,bookworm:BookWorm) : Boolean{
-        var map = mapOf("BookWorm" to bookworm,"UserInfo" to user)
+    private suspend fun saveInFB(user: UserInfo, bookworm: BookWorm): Boolean {
+        var map = mapOf("BookWorm" to bookworm, "UserInfo" to user)
         collectionReference.document(user.token).set(map)
             .await()
         return true
@@ -199,4 +203,20 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
             .await()
     }
 
+    private fun findInFB(token: String) = CoroutineScope(Dispatchers.IO).async{
+        //초기화 ->
+        // 초기화가 안되면
+        // 현재 사용자의 결과값에 일부 수정이 이루어진 채로 값이 리턴되기 때문
+        var userInfo = UserInfo()
+        var it = collectionReference
+            .document(token!!)
+            .get().await()
+        try {
+            var map = it.get("UserInfo") as MutableMap<String, String>
+            userInfo.add(map)
+            userInfo//최종 return 값
+        } catch (e: FirebaseException) {
+            null
+        }
+    }
 }
