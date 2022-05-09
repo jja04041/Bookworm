@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
                         FCMToken = token;
                         // Log and toast
                     }
-
                 });
 
         // 초기화면 설정

@@ -143,6 +143,7 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
                 .update(toRef, "UserInfo.followerCounts", FieldValue.increment(count))
             fromUserInfo.followingCounts = current!!.toInt()
             updateInLocal(fromUserInfo)//새로 갱신된 데이터를 로컬과 서버 모두에 적용
+
             if (type) {
                 it.set(fromRefFollow, toUserInfo).set(toRefFollow, fromUserInfo)
             } else {
