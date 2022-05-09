@@ -92,12 +92,7 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
 
         //작성자 UserInfo
         pv.getUser(item.userToken,feedUserInfo)
-//        loadUser1!!.getData(item.userToken, false)
 
-//        var userInfo = UserInfoViewModel(context!!)
-//        userInfo.data.observe((context as MainActivity).viewLifecycleOwner, {
-//            showProfile(it,true)
-//        })
 
 
         //피드 내용

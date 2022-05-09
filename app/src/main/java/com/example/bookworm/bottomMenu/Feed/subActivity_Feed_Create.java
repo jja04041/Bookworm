@@ -500,8 +500,8 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             fbModule.readData(1, map, FeedID);
 
             // 장르 처리
-//            HashMap<String, Object> AfterCreatemap = new HashMap<>();
-//            HashMap<String, Object> countmap = new HashMap<>();
+//            HashMap<String, Object> AfterCreatemap = new HashMap<>(); //피드 만들면 장르 up
+//            HashMap<String, Object> countmap = new HashMap<>(); // 피드 만들면
 //
 //
 //            userInfo.setGenre(selected_book.getCategoryname(), current_context);

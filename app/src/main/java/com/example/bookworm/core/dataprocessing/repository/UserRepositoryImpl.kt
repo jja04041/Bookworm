@@ -123,6 +123,7 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
         }.await()
     }.await()
 
+    //팔로우 처리
     fun followProcessing(
         fromUserInfo: UserInfo,
         toUserInfo: UserInfo,
@@ -149,8 +150,6 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
                     .delete(toRefFollow)
             }
         }
-
-
     }
 //Private Method
 
@@ -161,6 +160,7 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
         var userInfo = gson.toJson(user, UserInfo::class.java)
         editor.putString("key_user", userInfo)
         editor.apply() //생성 완료
+
         //Bookworm 저장
         editor = bwPref.edit()
         val strbookworm = gson.toJson(bookworm, BookWorm::class.java)
@@ -187,6 +187,7 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
         Log.d("nowUser", userPref.getString("key_user", null)!!)
     }
 
+    //파이어 스토어에서 업데이트
     private suspend fun updateInFB(user: UserInfo) {
         collectionReference.document(user.token)
             .update("UserInfo", user)

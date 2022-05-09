@@ -23,9 +23,9 @@ class LoadUser(val view:UserContract.View):UserContract.Presenter {
     }
 
     override fun setProfile(document: DocumentSnapshot) {
-//        var map= document.data!!["UserInfo"] as Map<String?,Any?>
-//        var userData=UserInfo()
-//        userData.add(map)
-//        view.showProfile(userData,boolean)
+        var map= document.data!!["UserInfo"] as Map<String?,Any?>
+        var userData=UserInfo()
+        userData.add(map)
+        view.showProfile(userData,boolean)
     }
 }
