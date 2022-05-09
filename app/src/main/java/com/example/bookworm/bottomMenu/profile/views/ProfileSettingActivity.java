@@ -42,7 +42,12 @@ public class ProfileSettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding =ActivityProfileSettingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        // Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.server_client_id))
+                .requestEmail()
+                .build();
+        gsi = GoogleSignIn.getClient(ProfileSettingActivity.this, gso);
         current_context = this;
 
         userInfo=new PersonalD(current_context).getUserInfo();
@@ -70,12 +75,6 @@ public class ProfileSettingActivity extends AppCompatActivity {
                 Toast.makeText(current_context, "정상적으로 로그아웃되었습니다.", Toast.LENGTH_SHORT).show();
                 if(GoogleSignIn.getLastSignedInAccount(current_context)!=null)
                 {
-                    // Configure Google Sign In
-                    GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                            .requestIdToken(getString(R.string.server_client_id))
-                            .requestEmail()
-                            .build();
-                    gsi = GoogleSignIn.getClient(ProfileSettingActivity.this, gso);
                     gsi.signOut();
                 }
                 else{

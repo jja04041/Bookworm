@@ -3,10 +3,9 @@ package com.example.bookworm.core.login;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+
 import android.os.Bundle;
-import android.provider.Settings;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -162,23 +161,8 @@ public class LoginActivity extends AppCompatActivity {
                 if (it != null) move();
                     //회원이 아닌 경우
                 else {
-                    // get fcm token
-                    FirebaseMessaging.getInstance().getToken()
-                            .addOnCompleteListener(new OnCompleteListener<String>() {
-                                @Override
-                                public void onComplete(@NonNull Task<String> task) {
-                                    if (!task.isSuccessful()) {
-                                        Log.w("TAG", "Fetching FCM registration token failed", task.getException());
-                                        return;
-                                    }
-                                    // Get new FCM registration token
-                                    String token = task.getResult();
-                                    userInfo.setFCMtoken(token);
-                                }
-                            });
                     //사용자 생성
                     mv.createUser(userInfo);
-
                     //액티비티 이동
                     mv.getData().observe(this, et -> {
                         if (et) move();
