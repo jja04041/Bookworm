@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.Feed.views
+package com.example.bookworm.BottomMenu.Feed.ViewHolders
 
 import android.app.AlertDialog
 import android.content.Context
@@ -11,26 +11,24 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.bookworm.core.internet.FBModule
-import com.example.bookworm.appLaunch.views.MainActivity
-import com.example.bookworm.core.userdata.interfaces.UserContract
-
-import com.example.bookworm.core.userdata.PersonalD
-import com.example.bookworm.core.userdata.UserInfo
-import com.example.bookworm.bottomMenu.Feed.comments.Comment
-import com.example.bookworm.bottomMenu.Feed.comments.CommentsCounter
-import com.example.bookworm.bottomMenu.Feed.comments.subactivity_comment
-import com.example.bookworm.bottomMenu.Feed.items.Feed
-import com.example.bookworm.bottomMenu.Feed.likeCounter
-import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
-import com.example.bookworm.R
-import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_result
+import com.example.bookworm.Achievement.Achievement
+import com.example.bookworm.BottomMenu.Feed.Comments.Comment
+import com.example.bookworm.BottomMenu.Feed.Comments.CommentsCounter
+import com.example.bookworm.BottomMenu.Feed.Comments.subactivity_comment
+import com.example.bookworm.BottomMenu.Feed.items.Feed
+import com.example.bookworm.BottomMenu.Feed.likeCounter
+import com.example.bookworm.BottomMenu.Profile.View.ProfileInfoActivity
+import com.example.bookworm.BottomMenu.Search.subActivity.search_fragment_subActivity_result
+import com.example.bookworm.Core.Internet.FBModule
+import com.example.bookworm.Core.MainActivity
+import com.example.bookworm.Core.UserData.Interface.UserContract
+import com.example.bookworm.Core.UserData.Modules.LoadUser
+import com.example.bookworm.Core.UserData.PersonalD
+import com.example.bookworm.Core.UserData.UserInfo
 import com.example.bookworm.Feed.CustomPopup
-import com.example.bookworm.core.userdata.modules.LoadUser
+import com.example.bookworm.R
 import com.example.bookworm.databinding.FragmentFeedItemBinding
 import java.text.DateFormat
 import java.text.ParseException
@@ -48,32 +46,17 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
     var context: Context? = null
     var fbModule = FBModule(context)
     var Count: Long = 0
-    var pv: FeedViewModel
-    val feedUserInfo:MutableLiveData<UserInfo> = MutableLiveData()
-    val commentUserInfo: MutableLiveData<UserInfo> = MutableLiveData()
-//    var loadUser1: LoadUser? = null
+    var loadUser1: LoadUser? = null
     var loadUser2: LoadUser? = null
     var dateDuration: String? = null
-
     //생성자를 만든다.
     init {
         binding = FragmentFeedItemBinding.bind(itemView)
         this.context = context
         nowUser = PersonalD(context).userInfo //현재 사용자
-        pv = ViewModelProvider(context as MainActivity, FeedViewModel.Factory(context)).get(
-           FeedViewModel::class.java
-        )
-        //감시
-        feedUserInfo.observe(context,{
-            showProfile(it,false)
-        })
-        commentUserInfo.observe(context,{
-
-        })
-
         //사용자의 프로필 정보를 로드할 생성자를 만든다.
-//        loadUser1 = LoadUser(this) //피드의 프로필
-        loadUser2 = LoadUser(this) //최근 댓글의 프로필
+        loadUser1= LoadUser(this) //피드의 프로필
+        loadUser2= LoadUser(this) //최근 댓글의 프로필
     }
 
     //아이템을 세팅하는 메소드
@@ -89,17 +72,8 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
             intent.putExtra("itemid", book.itemId)
             context!!.startActivity(intent)
         })
-
         //작성자 UserInfo
-        pv.getUser(item.userToken,feedUserInfo)
-//        loadUser1!!.getData(item.userToken, false)
-
-//        var userInfo = UserInfoViewModel(context!!)
-//        userInfo.data.observe((context as MainActivity).viewLifecycleOwner, {
-//            showProfile(it,true)
-//        })
-
-
+        loadUser1!!.getData(item.userToken, false)
         //피드 내용
 
         //댓글 창 세팅
@@ -115,7 +89,7 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
             if (binding!!.tvCommentNickname.visibility != View.GONE) {
                 val intent = Intent(context, subactivity_comment::class.java)
                 intent.putExtra("item", item)
-                intent.putExtra("position", absoluteAdapterPosition)
+                intent.putExtra("position", getAdapterPosition())
                 context!!.startActivity(intent)
             }
         })
@@ -123,7 +97,7 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
         binding!!.btnComment.setOnClickListener({
             val intent = Intent(context, subactivity_comment::class.java)
             intent.putExtra("item", item)
-            intent.putExtra("position", absoluteAdapterPosition)
+            intent.putExtra("position", getAdapterPosition())
             context!!.startActivity(intent)
         })
         //댓글 빠르게 달기
@@ -189,8 +163,8 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
         data["comment"] = comment
 
         //입력한 댓글 화면에 표시하기
-        if (binding!!.llCommentInfo.visibility == View.GONE)
-            binding!!.llCommentInfo.visibility = View.VISIBLE
+        if (binding!!.llCommentInfo.visibility == View.GONE) binding!!.llCommentInfo.visibility =
+            View.VISIBLE
         CommentsCounter().addCounter(data, context, FeedID)
         //키보드 내리기
         val imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -236,6 +210,11 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
             map["liked"] = liked
             PersonalD(context).saveUserInfo(nowUser)
             likeCounter().updateCounter(map, item.feedID)
+
+            val bookworm = PersonalD(context).bookworm
+            val achievement = Achievement(context, fbModule, nowUser, bookworm)
+            achievement.CompleteAchievement(nowUser, context)
+
         } else {
             AlertDialog.Builder(context)
                 .setMessage("커뮤니티 활동 보호를 위해 잠시 후에 다시 시도해주세요")
@@ -302,6 +281,7 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
     //사용자의 프로필을 보여주는 메소드
     // (UserContract.View 인터페이스의 메소드를 오버라이딩함)
     override fun showProfile(userInfo: UserInfo, bool: Boolean?) {
+
         try {
             if (bool == false) {
                 binding!!.tvNickname.setText(userInfo.username)
@@ -312,8 +292,8 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
                 Glide.with(binding!!.getRoot()).load(userInfo.profileimg).circleCrop()
                     .into(binding!!.ivCommentProfileImage)
             }
-        } catch (e: IllegalArgumentException) {
-            Log.e("Glide Error", "itemView가 Null인 상태입니다.")
+        }catch (e: IllegalArgumentException){
+            Log.e("Glide Error","itemView가 Null인 상태입니다.")
         }
     }
 
