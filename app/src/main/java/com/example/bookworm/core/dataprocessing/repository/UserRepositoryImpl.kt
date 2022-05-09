@@ -49,6 +49,7 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
             //현재 유저인 경우 바로 유저인포 넘겨줌
             if (token == null || userInfo.token == token && !isFirst) {
                 userInfo.isMainUser = true
+
                 return userInfo
             }
             //로컬에 해당 토큰이 없는 경우, 서버에서 가져옴

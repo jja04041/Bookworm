@@ -101,7 +101,7 @@ public class fragment_bookworm extends Fragment {
             public void onClick(View view) {
                 String fcmtoken = userinfo.getFCMtoken();
 
-                myFirebaseMessagingService.sendPostToFCM(fcmtoken, "message");
+                myFirebaseMessagingService.sendPostToFCM(current_context,fcmtoken, "message");
 
             }
         });

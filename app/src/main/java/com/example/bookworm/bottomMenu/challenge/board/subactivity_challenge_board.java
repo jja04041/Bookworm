@@ -86,15 +86,12 @@ public class subactivity_challenge_board extends AppCompatActivity {
     private void initAdapter() {
         boardAdapter = new BoardAdapter(boardList, context);
         //어댑터 리스너
-        boardAdapter.setListener(new OnBoardItemClickListener() {
-            @Override
-            public void onItemClick(BoardAdapter.ItemViewHolder holder, View view, int position) {
-                //닫힌 챌린지 인경우 표시할 코드 등을 입력해야함.
-                //아이템 선택시 실행할 코드를 입력
-                Intent intent = new Intent(context, subactivity_challenge_board_comment.class);
-                intent.putExtra("boardInfo", boardList.get(position));
-                context.startActivity(intent);
-            }
+        boardAdapter.setListener((holder, view, position) -> {
+            //닫힌 챌린지 인경우 표시할 코드 등을 입력해야함.
+            //아이템 선택시 실행할 코드를 입력
+            Intent intent = new Intent(context, subactivity_challenge_board_comment.class);
+            intent.putExtra("boardInfo", boardList.get(position));
+            context.startActivity(intent);
         });
     }
 
@@ -121,15 +118,15 @@ public class subactivity_challenge_board extends AppCompatActivity {
         } catch (NullPointerException e) {
             canLoad = false;
         }
-        initRecyclerView();
         initAdapter();
+        initRecyclerView();
         isEmptyBoard(false);
         showShimmer(false);
     }
 
     //리사이클러뷰 초기화
     public void initRecyclerView() {
-        com.example.bookworm.bottomMenu.challenge.board.BoardAdapter boardAdapter = new com.example.bookworm.bottomMenu.challenge.board.BoardAdapter(boardList, context);
+
         GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false);
         binding.mRecyclerView.setLayoutManager(gridLayoutManager);
         binding.mRecyclerView.setAdapter(boardAdapter);

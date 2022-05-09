@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.bookworm.core.userdata.UserInfo
+
 import com.example.bookworm.databinding.ActivityProfileInfoBinding
 import com.example.bookworm.extension.follow.view.FollowViewModel
 import com.example.bookworm.notification.MyFirebaseMessagingService
@@ -126,12 +127,12 @@ class ProfileInfoActivity : AppCompatActivity() {
                 binding.tvFollow.text = "팔로잉"
                 lifecycleScope.launch {
                     setFollowerCnt(
-                        async { fv.follow(user, true) }
-                            .await()
-                            .followerCounts.toLong()
+                        async {
+                            fv.follow(user, true)
+                        }.await().followerCounts.toLong()
                     )
                 }
-                myFirebaseMessagingService!!.sendPostToFCM(user!!.fcMtoken,  "님이 팔로우하였습니다")
+                myFirebaseMessagingService!!.sendPostToFCM(this,user!!.fcMtoken,  "규연"+"님이 팔로우하였습니다")
             }
 
         }
