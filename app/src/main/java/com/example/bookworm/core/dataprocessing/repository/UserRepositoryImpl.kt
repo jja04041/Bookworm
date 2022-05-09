@@ -81,11 +81,10 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
     suspend override fun createUser(user: UserInfo): Boolean {
         val bookworm = BookWorm()
         bookworm.token = user.token
-        saveInLocal(user, bookworm)
         // get fcm token
         var a = FirebaseMessaging.getInstance().token.await()
         user.setFCMtoken(a)
-
+        saveInLocal(user, bookworm)
 
         return saveInFB(user, bookworm)
     }
