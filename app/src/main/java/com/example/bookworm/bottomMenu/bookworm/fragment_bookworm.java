@@ -12,11 +12,13 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.bookworm.notification.MyFirebaseMessagingService;
 import com.example.bookworm.R;
 import com.example.bookworm.achievement.activity_achievement;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.PersonalD;
 import com.example.bookworm.core.userdata.UserInfo;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class fragment_bookworm extends Fragment {
 
@@ -34,7 +36,7 @@ public class fragment_bookworm extends Fragment {
     private TextView tv_bookworm1, tv_bookworm2, tv_bookworm3, tv_bookworm4, tv_bookworm5, tv_bookworm6, tv_bookworm7,
             tv_bookworm8, tv_bookworm9, tv_bookworm10, tv_bookworm11;
 
-    private MyFirebaseMessagingService MyFirebaseMessagingService;
+    private MyFirebaseMessagingService myFirebaseMessagingService ;
     private FirebaseDatabase mFirebaseDatabase;
 
     private UserInfo userinfo;
@@ -49,7 +51,7 @@ public class fragment_bookworm extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_bookworm, container, false);
 
-        MyFirebaseMessagingService = new MyFirebaseMessagingService();
+        myFirebaseMessagingService = new MyFirebaseMessagingService();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 
         iv_bookworm = view.findViewById(R.id.iv_bookworm);
@@ -74,7 +76,6 @@ public class fragment_bookworm extends Fragment {
         tv_bookworm11 = view.findViewById(R.id.tv_bookworm_11);
 
 
-
         btn_Achievement_bg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,11 +98,10 @@ public class fragment_bookworm extends Fragment {
 
         btn_sendpush.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 String fcmtoken = userinfo.getFCMtoken();
 
-                MyFirebaseMessagingService.sendPostToFCM(fcmtoken,"message", mFirebaseDatabase);
+                myFirebaseMessagingService.sendPostToFCM(fcmtoken, "message", mFirebaseDatabase);
 
             }
         });
@@ -149,9 +149,6 @@ public class fragment_bookworm extends Fragment {
         iv_bg.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
         iv_bg.setAdjustViewBounds(true);
-
-
-
 
 
     }

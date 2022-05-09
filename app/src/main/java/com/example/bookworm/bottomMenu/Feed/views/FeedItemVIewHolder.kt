@@ -30,6 +30,8 @@ import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
 import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_result
 import com.example.bookworm.Feed.CustomPopup
+import com.example.bookworm.achievement.Achievement
+import com.example.bookworm.bottomMenu.Feed.views.FeedViewModel
 import com.example.bookworm.core.userdata.modules.LoadUser
 import com.example.bookworm.databinding.FragmentFeedItemBinding
 import java.text.DateFormat

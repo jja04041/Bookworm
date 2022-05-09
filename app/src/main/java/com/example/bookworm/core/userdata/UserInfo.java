@@ -58,6 +58,7 @@ public class UserInfo implements Serializable {
 
     public UserInfo() {
 
+        likedPost = new ArrayList<>();
         // get fcm token
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {

@@ -123,10 +123,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         // 카카오톡|스토리 간편로그인 실행 결과를 받아서 SDK로 전달
-        if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
-            return;
-        }
-        super.onActivityResult(requestCode, resultCode, data);
+        if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) return;
+
         //구글 로그인시도시
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -142,21 +140,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-//    //로그인 함수
-//    public void signIn(Boolean ResultCode, UserInfo fbUserInfo, BookWorm bookworm) {
-//        if (ResultCode) move(fbUserInfo, bookworm);//회원이 아닌 경우
-//        else move(fbUserInfo, bookworm); //회원인 경우
-//    }
-
-//    //화면 이동 => 메인 액티비티로
-//    public void move(UserInfo userInfo, BookWorm bookworm) {
-//        Intent intent = new Intent(this, MainActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-////        new PersonalD(this).saveUserInfo(userInfo); //값 저장
-////        new PersonalD(this).saveBookworm(bookworm);
-//        startActivity(intent);
-//        this.finish();
-//    }
 
     //메인액티비티로 이동
     public void move() {
