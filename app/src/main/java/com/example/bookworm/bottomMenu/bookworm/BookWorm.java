@@ -1,5 +1,6 @@
 package com.example.bookworm.bottomMenu.bookworm;
 
+import com.example.bookworm.BottomMenu.Search.items.Book;
 import com.example.bookworm.R;
 
 import java.util.ArrayList;
@@ -31,6 +32,11 @@ public class BookWorm {
 
 
 
+    private int readcount;
+    private Vector<Book> readedbook = new Vector<>();
+
+
+
     public BookWorm() {
         this.wormtype = R.drawable.bw_default;
         this.wormvec.add(R.drawable.bw_default);
@@ -39,6 +45,7 @@ public class BookWorm {
 
         this.achievementmap.put("디폴트", true);
 
+        this.readcount = 0;
     }
 
 
@@ -48,11 +55,17 @@ public class BookWorm {
         this.wormtype =Integer.parseInt(String.valueOf(document.get("wormtype")));
         this.wormvec = new Vector<>((ArrayList<Integer>)document.get("wormvec"));
 
-        this.bgtype =Integer.parseInt(String.valueOf(document.get("bgtype")));
+        this.bgtype = Integer.parseInt(String.valueOf(document.get("bgtype")));
         this.bgvec = new Vector<>((ArrayList<Integer>)document.get("bgvec"));
 
 
         this.achievementmap = new HashMap<>((HashMap<String, Boolean>)document.get("achievementmap"));
+
+        this.achievementmap.put("디폴트", true);
+
+        this.readcount = Integer.parseInt(String.valueOf(document.get("readcount")));
+        this.readedbook = new Vector<>((ArrayList<Book>)document.get("readedbook"));
+
     }
 
 
@@ -91,4 +104,22 @@ public class BookWorm {
     public void setAchievementmap(HashMap<String, Boolean> achievementmap) {
         this.achievementmap = achievementmap;
     }
+
+    public int getReadcount() {
+        return readcount;
+    }
+
+    public void setReadcount(int readcount) {
+        this.readcount = readcount;
+    }
+
+    public Vector<Book> getReadedbook() {
+        return readedbook;
+    }
+
+    public void setReadedbook(Vector<Book> readedbook) {
+        this.readedbook = readedbook;
+    }
+
 }
+
