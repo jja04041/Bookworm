@@ -70,6 +70,8 @@ public class FBModule {
                 query = query.startAfter(snapshot);
             }
 
+
+
             query = query.limit(LIMIT);
             task = query.get();
         }
@@ -132,6 +134,9 @@ public class FBModule {
                     // bg update
                 } else if (map.get("bookworm_bgtype") != null) {
                     document.getReference().update("BookWorm.bgtype", map.get("bookworm_bgtype"));
+                }
+                else if (map.get("bookworm_readcount") != null) {
+                    document.getReference().update("BookWorm.readcount", map.get("bookworm_readcount"));
                 }
                 //회원인 경우, 로그인 처리
                 else {
@@ -344,3 +349,7 @@ public class FBModule {
     }
 
 }
+
+
+
+

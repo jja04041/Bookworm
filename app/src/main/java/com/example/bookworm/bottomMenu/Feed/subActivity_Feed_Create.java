@@ -26,8 +26,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
-import com.example.bookworm.achievement.*;
-import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.search.items.Book;
 import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_main;
@@ -37,6 +35,7 @@ import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.internet.Module;
 import com.example.bookworm.core.userdata.PersonalD;
 import com.example.bookworm.databinding.SubactivityFeedCreateBinding;
+
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -501,18 +500,29 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             fbModule.readData(1, map, FeedID);
 
             // 장르 처리
-//            HashMap<String, Object> savegenremap = new HashMap<>();
+//            HashMap<String, Object> AfterCreatemap = new HashMap<>(); //피드 만들면 장르 up
+//            HashMap<String, Object> countmap = new HashMap<>(); // 피드 만들면
+//
 //
 //            userInfo.setGenre(selected_book.getCategoryname(), current_context);
-//            savegenremap.put("userinfo_genre", userInfo.getGenre());
-//            fbModule.readData(0, savegenremap, userInfo.getToken());
+//            AfterCreatemap.put("userinfo_genre", userInfo.getGenre());
+//            fbModule.readData(0, AfterCreatemap, userInfo.getToken());
 //
 //            BookWorm bookworm = new PersonalD(current_context).getBookworm();
+//            int count = bookworm.getReadcount();
+//            ++count;
+//            bookworm.setReadcount(count);
+//
+//            countmap.put("bookworm_readcount", bookworm.getReadcount());
+//            fbModule.readData(0, countmap, bookworm.getToken());
+//
+//
 //            Achievement achievement = new Achievement(current_context, fbModule, userInfo, bookworm);
 //            achievement.CompleteAchievement(userInfo, current_context);
-
-            new PersonalD(current_context).saveUserInfo(userInfo);
-            setResult(CREATE_OK);
+//
+//            new PersonalD(current_context).saveUserInfo(userInfo);
+//            new PersonalD(current_context).saveBookworm(bookworm);
+//            setResult(CREATE_OK);
             finish();
         }
     }

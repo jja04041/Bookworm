@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.Feed.views
+package com.example.bookworm.BottomMenu.Feed.ViewHolders
 
 import android.app.AlertDialog
 import android.content.Context
@@ -30,6 +30,8 @@ import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
 import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_result
 import com.example.bookworm.Feed.CustomPopup
+import com.example.bookworm.achievement.Achievement
+import com.example.bookworm.bottomMenu.Feed.views.FeedViewModel
 import com.example.bookworm.core.userdata.modules.LoadUser
 import com.example.bookworm.databinding.FragmentFeedItemBinding
 import java.text.DateFormat
@@ -92,12 +94,7 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
 
         //작성자 UserInfo
         pv.getUser(item.userToken,feedUserInfo)
-//        loadUser1!!.getData(item.userToken, false)
 
-//        var userInfo = UserInfoViewModel(context!!)
-//        userInfo.data.observe((context as MainActivity).viewLifecycleOwner, {
-//            showProfile(it,true)
-//        })
 
 
         //피드 내용
@@ -236,6 +233,11 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
             map["liked"] = liked
             PersonalD(context).saveUserInfo(nowUser)
             likeCounter().updateCounter(map, item.feedID)
+
+            val bookworm = PersonalD(context).bookworm
+            val achievement = Achievement(context, fbModule, nowUser, bookworm)
+            achievement.CompleteAchievement(nowUser, context)
+
         } else {
             AlertDialog.Builder(context)
                 .setMessage("커뮤니티 활동 보호를 위해 잠시 후에 다시 시도해주세요")
@@ -302,6 +304,7 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
     //사용자의 프로필을 보여주는 메소드
     // (UserContract.View 인터페이스의 메소드를 오버라이딩함)
     override fun showProfile(userInfo: UserInfo, bool: Boolean?) {
+
         try {
             if (bool == false) {
                 binding!!.tvNickname.setText(userInfo.username)

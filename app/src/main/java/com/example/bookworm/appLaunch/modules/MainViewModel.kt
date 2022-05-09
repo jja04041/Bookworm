@@ -12,7 +12,7 @@ import com.example.bookworm.core.login.LoginActivity
 import com.example.bookworm.core.userdata.UserInfo
 import kotlinx.coroutines.launch
 
-//앱 로딩 및 로그인 시에 사용하는 뷰모델
+//앱  로그인 시에 사용하는 뷰모델
 
 @SuppressLint("StaticFieldLeak")
 class MainViewModel(val context: Context):ViewModel() {
@@ -20,6 +20,7 @@ class MainViewModel(val context: Context):ViewModel() {
     var userInfoViewModel= ViewModelProvider(ct,UserInfoViewModel.Factory(context)).get(UserInfoViewModel::class.java)
     val data:MutableLiveData<Boolean> = MutableLiveData()
     val userInfo:MutableLiveData<UserInfo> = MutableLiveData()
+
     class Factory(val context: Context): ViewModelProvider.Factory{
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return MainViewModel(context) as T
@@ -30,9 +31,9 @@ class MainViewModel(val context: Context):ViewModel() {
             data.value= userInfoViewModel.createUser(userInfo)
         }
     }
-    fun getUser(token:String?){
+    fun getUser(token:String?,isFirst:Boolean){
         viewModelScope.launch {
-            userInfoViewModel.getUser(token)
+            userInfoViewModel.getUser(token,isFirst)
             userInfo.value = userInfoViewModel.data.value
         }
     }
