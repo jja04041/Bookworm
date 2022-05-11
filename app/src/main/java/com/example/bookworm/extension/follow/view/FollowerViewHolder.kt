@@ -24,7 +24,7 @@ class FollowerViewHolder(
     var context = context//전달된 context
     var binding = LayoutUserItemBinding.bind(itemView)
     var v = false
-    val fv = ViewModelProvider(context as FollowerActivity, FollowViewModel.Factory(context)).get(FollowViewModel::class.java)
+    val fv = ViewModelProvider(context as FollowerActivity, FollowViewModelImpl.Factory(context)).get(FollowViewModelImpl::class.java)
     fun setItem(item: UserInfo?) {
         Glide.with(context!!).load(item!!.profileimg).circleCrop().into(binding.ivProfileImg)
         binding.tvProfileID.setText(item.username)

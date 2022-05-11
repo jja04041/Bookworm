@@ -14,7 +14,6 @@ import com.google.android.material.tabs.TabLayout;
 public class FollowerActivity extends AppCompatActivity {
 
     ViewPager viewPager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -26,7 +25,7 @@ public class FollowerActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewpager);
         FollowPagerAdapter adapter = new FollowPagerAdapter(this, getSupportFragmentManager(), token);
         viewPager.setAdapter(adapter);
-        FollowViewModel fv = new ViewModelProvider(this, new FollowViewModel.Factory(this)).get(FollowViewModel.class);
+        FollowViewModelImpl fv = new ViewModelProvider(this, new FollowViewModelImpl.Factory(this)).get(FollowViewModelImpl.class);
 
         //전달받은 토큰을 이용하여 데이터를 조회한다 .
         fv.WithoutSuspendgetUser(token);
@@ -43,5 +42,7 @@ public class FollowerActivity extends AppCompatActivity {
         });
 
 
+
     }
+
 }

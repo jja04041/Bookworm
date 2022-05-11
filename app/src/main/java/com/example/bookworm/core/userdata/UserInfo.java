@@ -29,7 +29,7 @@ public class UserInfo implements Serializable {
     private String email; // 로그인한 이메일
     private String platform;
 
-    @Exclude private boolean isMainUser = false;
+   private boolean isMainUser = false;
 
     private String FCMtoken;
 
@@ -51,9 +51,8 @@ public class UserInfo implements Serializable {
     private int followingCounts;
 
     private HashMap<String, Integer> genre = new HashMap();
-    @Exclude private boolean followed = false;
 
-//    private BookWorm bookworm;
+    private boolean followed = false;
 
 
     public UserInfo() {
@@ -61,7 +60,7 @@ public class UserInfo implements Serializable {
         likedPost = new ArrayList<>();
 
     }
-
+    @Exclude
     public boolean isMainUser() {
         return isMainUser;
     }
@@ -75,7 +74,7 @@ public class UserInfo implements Serializable {
         this.followingCounts = followingCounts;
     }
 
-
+    @Exclude
     public boolean isFollowed() {
         return followed;
     }

@@ -59,7 +59,7 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
             binding.tvUserName.setText(userinfo.getUsername());
 
             binding.tvUserName.setOnClickListener(it->{
-                pv.getFollowerList(userinfo.getToken(),0);
+               pv.getFollowerList(userinfo.getToken(),false);
             });
             //팔로워액티비티 실행하기
             binding.btnFollower.setOnClickListener(new View.OnClickListener() {

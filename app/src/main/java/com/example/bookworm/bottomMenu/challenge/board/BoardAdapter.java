@@ -80,7 +80,6 @@ public class BoardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     if (position != RecyclerView.NO_POSITION) {
                         if (listener != null) {
                             listener.onItemClick(ItemViewHolder.this, view, position);
-                            notifyItemChanged(position);
                         }
                     }
                 }

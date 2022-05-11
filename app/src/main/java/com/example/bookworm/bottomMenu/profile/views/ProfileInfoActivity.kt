@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 import com.example.bookworm.core.userdata.UserInfo
 
 import com.example.bookworm.databinding.ActivityProfileInfoBinding
-import com.example.bookworm.extension.follow.view.FollowViewModel
+import com.example.bookworm.extension.follow.view.FollowViewModelImpl
 import com.example.bookworm.notification.MyFirebaseMessagingService
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.async
@@ -23,7 +23,7 @@ class ProfileInfoActivity : AppCompatActivity() {
     var nowUser //타인 userInfo, 현재 사용자 nowUser
             : UserInfo? = null
     lateinit var userID: String
-    lateinit var fv: FollowViewModel
+    lateinit var fv: FollowViewModelImpl
     var cache: Boolean? = null
 
     private var myFirebaseMessagingService: MyFirebaseMessagingService? = null
@@ -34,7 +34,7 @@ class ProfileInfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        fv = FollowViewModel(this)
+        fv = FollowViewModelImpl(this)
 
         myFirebaseMessagingService = MyFirebaseMessagingService()
         mFirebaseDatabase = FirebaseDatabase.getInstance()
@@ -53,7 +53,7 @@ class ProfileInfoActivity : AppCompatActivity() {
 
 
         lifecycleScope.launch {
-            val getSubUserjob = async { fv.getUser(userID) }
+            val getSubUserjob = async { fv.getUser(userID,true) }
             val data = getSubUserjob.await()
             data!!.let {
                 data.isFollowed = async { fv.isFollowNow(it) }.await()
@@ -61,19 +61,6 @@ class ProfileInfoActivity : AppCompatActivity() {
             }
         }
 
-
-        //        binding.btnFollower.setOnClickListener((view)-> {
-//            Intent intent=new Intent(context, FollowerActivity.class);
-//            intent.putExtra("token",userInfo.getToken());
-//            intent.putExtra("page",0);
-//            context.startActivity(intent);
-//        });
-//        binding.btnFollowing.setOnClickListener((view)-> {
-//            Intent intent=new Intent(context, FollowerActivity.class);
-//            intent.putExtra("token",userInfo.getToken());
-//            intent.putExtra("page",1);
-//            context.startActivity(intent);
-//        });
     }
 
     //이미 팔로잉 중

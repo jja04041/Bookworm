@@ -102,6 +102,8 @@ router.use('/getimage/:data', (req, res) => {
   });
 });
 
+
+
 //피드 삭제 시 이미지 삭제 
 router.post("/deleteImg", (req, res) => {
   const fileName = req.body.feedId+".jpg";

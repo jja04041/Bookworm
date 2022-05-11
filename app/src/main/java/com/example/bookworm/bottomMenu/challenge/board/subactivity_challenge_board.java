@@ -126,7 +126,6 @@ public class subactivity_challenge_board extends AppCompatActivity {
 
     //리사이클러뷰 초기화
     public void initRecyclerView() {
-
         GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false);
         binding.mRecyclerView.setLayoutManager(gridLayoutManager);
         binding.mRecyclerView.setAdapter(boardAdapter);
