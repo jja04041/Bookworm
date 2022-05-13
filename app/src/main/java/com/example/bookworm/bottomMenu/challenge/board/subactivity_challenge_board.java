@@ -27,7 +27,7 @@ import java.util.Map;
 public class subactivity_challenge_board extends AppCompatActivity {
 
     SubactivityChallengeBoardBinding binding;
-    Context context;
+    public static Context context;
     BoardFB boardFB;
     private Boolean canLoad = true; //더 로딩이 가능한지 확인하는 변수[자료의 끝을 판별한다.]
     private int page = 1;
@@ -49,7 +49,7 @@ public class subactivity_challenge_board extends AppCompatActivity {
         showShimmer(true);
 
         context = this;
-        boardFB = new com.example.bookworm.bottomMenu.challenge.board.BoardFB(context);
+        boardFB = new BoardFB(context);
 
         Intent intent = getIntent();
         //넘겨받은 값 챌린지 객체에 넣음
@@ -90,7 +90,8 @@ public class subactivity_challenge_board extends AppCompatActivity {
             //닫힌 챌린지 인경우 표시할 코드 등을 입력해야함.
             //아이템 선택시 실행할 코드를 입력
             Intent intent = new Intent(context, subactivity_challenge_board_comment.class);
-            intent.putExtra("boardInfo", boardList.get(position));
+            intent.putExtra("board", boardList.get(position));
+            intent.putExtra("challenge", challenge);
             context.startActivity(intent);
         });
     }
@@ -105,7 +106,7 @@ public class subactivity_challenge_board extends AppCompatActivity {
         try {
             for (DocumentSnapshot snapshot : a) {
                 Map data = snapshot.getData();
-                com.example.bookworm.bottomMenu.challenge.board.Board board = new com.example.bookworm.bottomMenu.challenge.board.Board(data);
+                Board board = new Board(data);
                 boardList.add(board);
             }
             //가져온 값의 마지막 snapshot부터 이어서 가져올 수 있도록 하기 위함.
