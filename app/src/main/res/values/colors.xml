@@ -12,5 +12,6 @@
     <color name="subcolor_2">#CCCCA3</color>
     <color name="select">#CCA3B8</color>
     <color name="brown">#A52A2A</color>
+    <color name="grey">#4A808080</color>
     <color name="bottombackground">#66CD66</color>
 </resources>

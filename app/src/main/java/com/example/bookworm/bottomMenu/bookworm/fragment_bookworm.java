@@ -14,10 +14,14 @@ import androidx.fragment.app.Fragment;
 
 import com.example.bookworm.R;
 import com.example.bookworm.achievement.activity_achievement;
+import com.example.bookworm.bottomMenu.Feed.items.Story;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.PersonalD;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.notification.MyFirebaseMessagingService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class fragment_bookworm extends Fragment {
 
@@ -43,11 +47,16 @@ public class fragment_bookworm extends Fragment {
     public static Context current_context;
     private FBModule fbModule;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_bookworm, container, false);
+
+        List<Story> stories = new ArrayList<>();
+        for(int i=0; i<10; ++i)
+            stories.add(new Story(false));
 
         // 알림 보낼때 해놔야댐
         myFirebaseMessagingService = new MyFirebaseMessagingService();
