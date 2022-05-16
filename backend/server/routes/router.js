@@ -1,6 +1,7 @@
 const express = require('express'); //express를 사용하기 위함.
 const multer = require('multer'); //이미지 업/다운로드를 위함.
 const fs = require('fs');
+const fb= require("../module/firebaseProcess"); //파이어베이스 관련 함수 모음 
 const router = express.Router();
 // const {
 //   createFirebaseToken
@@ -12,27 +13,6 @@ var Path = "";
 //Path List
 const LocalFeedImgPath="./Image/feed/"
 const LocalProfileImgPath="./Image/profileimg/"
-
-
-//Initialize FirebaseApp
-const {
-  initializeApp,
-  cert
-} = require('firebase-admin/app');
-const serviceAccount = require('./bookworm-f6973-firebase-adminsdk-lzs4b-a45e20e976.json');
-const {
-  getFirestore,
-  Timestamp,
-  FieldValue
-} = require('firebase-admin/firestore');
-initializeApp({
-  credential: cert(serviceAccount)
-});
-const db = getFirestore();
-
-
-
-
 //Main
 router.get("/", (req, res) => {
   res.send("helloworld~");
@@ -152,21 +132,9 @@ router.get("/token", (req, res) => {
 
 
 
-//가입이 되어있는지 확인 
-router.get("/:token", async (req, res) => {
-  var value = req.params.token;
-  checkID(value).then((token) => {
-    res.send(token);
+router.get("/showlist",async (req,res)=>{
+  var token = req.query.token;
+  fb.showlist(token).then((answer)=> {
+      if(answer) res.send("done");
   });
 });
-
-async function checkID(token) {
-  var ID = token;
-  var find = false;
-  const snapshot = await db.collection('users').get();
-  snapshot.forEach((doc) => {
-    if (doc.id == ID) find = true;
-  });
-  return find;
-};
- 
