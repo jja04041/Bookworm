@@ -25,6 +25,17 @@
             <include layout="@layout/shimmer_layout_user_item" />
 
             <include layout="@layout/shimmer_layout_user_item" />
+
+            <include layout="@layout/shimmer_layout_user_item" />
+
+            <include layout="@layout/shimmer_layout_user_item" />
+
+            <include layout="@layout/shimmer_layout_user_item" />
+
+            <include layout="@layout/shimmer_layout_user_item" />
+
+            <include layout="@layout/shimmer_layout_user_item" />
+
         </LinearLayout>
 
     </com.facebook.shimmer.ShimmerFrameLayout>

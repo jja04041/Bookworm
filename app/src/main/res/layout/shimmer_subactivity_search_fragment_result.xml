@@ -20,14 +20,16 @@
             android:orientation="vertical">
 
             <FrameLayout
+                android:id="@+id/setting"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="#DDDDDD"
+                android:background="@drawable/feed_bottom_border_only"
                 android:orientation="horizontal">
 
                 <Button
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:id="@+id/btnBack"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_gravity="start|center_vertical"
                     android:layout_marginStart="20dp"
                     android:background="@drawable/back_icon" />
@@ -37,14 +39,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="책 정보"
-                    android:textSize="20dp" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end|center_vertical"
-                    android:text="피드 작성" />
-
+                    android:textSize="13dp"
+                    android:textColor="@color/black"/>
             </FrameLayout>
 
             <LinearLayout
@@ -81,7 +77,7 @@
                                 android:layout_height="wrap_content"
                                 android:ellipsize="end"
                                 android:maxLines="3"
-                                android:text="      "
+                                android:text="                            "
                                 android:background="@color/cardview_shadow_start_color"
                                 android:textColor="#000000"
                                 android:textSize="20dp"
@@ -105,7 +101,7 @@
                                     android:ellipsize="end"
                                     android:background="@color/cardview_shadow_start_color"
                                     android:maxLines="1"
-                                    android:text=" " />
+                                    android:text="                              " />
 
                             </LinearLayout>
 
@@ -125,7 +121,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="      "
+                                    android:text="                                   "
                                     android:background="@color/cardview_shadow_start_color"/>
 
                                 <TextView
@@ -148,16 +144,12 @@
                                     android:text="  "
                                     android:background="@color/cardview_shadow_start_color"/>
 
-                                <RatingBar
-                                    style="?android:attr/ratingBarStyleSmall"
+                                <TextView
                                     android:background="@color/cardview_shadow_start_color"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="10dp"
-                                    android:isIndicator="true"
-                                    android:numStars="5"
-                                    android:rating="0"
-                                    android:stepSize="0.1" />
+                                    android:text="                          "/>
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -207,7 +199,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="     "
+                    android:text="                              "
                     android:background="@color/cardview_shadow_start_color"/>
 
                 <TextView
@@ -228,7 +220,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="      "
+                    android:text="                              "
                     android:background="@color/cardview_shadow_start_color"/>
 
                 <TextView
@@ -251,7 +243,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="10dp"
-                    android:text="           "
+                    android:text="                     "
                     android:background="@color/cardview_shadow_start_color"
                     android:textColor="#0000FF" />
             </LinearLayout>

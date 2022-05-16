@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
-        android:background="#EEEEEE"
+        android:background="@drawable/feed_bottom_border_only"
         android:orientation="horizontal">
 
         <LinearLayout

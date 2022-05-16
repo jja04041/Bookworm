@@ -21,7 +21,7 @@
             <gradient
                 android:angle="0"
                 android:startColor="#80FD8569"
-                android:centerColor="@color/maincolor50"
+                android:centerColor="@color/subcolor_0_50"
                 android:endColor="#80FD8569"
                 android:type="linear" />
             <corners android:bottomLeftRadius="0dp"
