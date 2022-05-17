@@ -3,6 +3,7 @@ package com.example.bookworm.notification;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
@@ -10,7 +11,6 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.bookworm.R;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -25,9 +25,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     final String CHANNEL_ID = "ChannerID";
     final String CHANNEL_NAME = "ChannerName";
     final String CHANNEL_DESCRIPTION = "ChannerDescription";
-
-    private static final String FCM_MESSAGE_URL = "https://fcm.googleapis.com/fcm/send";
-    private static final String SERVER_KEY = "AAAAgMY8NzM:APA91bHQsklAUmUfvWkKcu-joUx_HcGTI5g4l_qQDRbfoBuMWi2OpjHh7zQBDU_rJaJpQc_wcD1qw9ADobR5s65lOtzduBPTAwDj4N_aNrF2NT_iOQOIRpUHWpUmvRFULH7wBwmHL6BP";
 
 
     // 클라우드 서버에 등록되면 호출
@@ -72,7 +69,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationManager.notify(1, notification);
     }
 
-    public void sendPostToFCM(final String fcmtoken, final String message) {
+    public void sendPostToFCM(Context context, final String fcmtoken, final String message) {
 
         // honeycomb sdk 이상에서는 Main thread 에서 네트워킹을 실행할 수 없다 (Network On Main Thread exception 호출)
 
@@ -92,12 +89,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     // FMC 메시지 생성 end
 
                     // url와 firebase serverkey로 네트워크 연결
-                    URL Url = new URL(FCM_MESSAGE_URL);
+                    URL Url = new URL(context.getString(R.string.FCM_MESSAGE_URL));
                     HttpURLConnection conn = (HttpURLConnection) Url.openConnection();
                     conn.setRequestMethod("POST");
                     conn.setDoOutput(true);
                     conn.setDoInput(true);
-                    conn.addRequestProperty("Authorization", "key=" + SERVER_KEY);
+                    conn.addRequestProperty("Authorization", "key=" + context.getString(R.string.SERVER_KEY));
                     conn.setRequestProperty("Accept", "application/json");
                     conn.setRequestProperty("Content-type", "application/json");
                     OutputStream os = conn.getOutputStream();

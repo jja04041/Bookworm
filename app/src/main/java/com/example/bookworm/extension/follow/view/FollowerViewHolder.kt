@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.extension.follow.interfaces.PagerInterface
@@ -24,7 +25,11 @@ class FollowerViewHolder(
     var context = context//전달된 context
     var binding = LayoutUserItemBinding.bind(itemView)
     var v = false
-    val fv = ViewModelProvider(context as FollowerActivity, FollowViewModel.Factory(context)).get(FollowViewModel::class.java)
+    val fv =
+        ViewModelProvider(context as FollowerActivity, FollowViewModelImpl.Factory(context)).get(
+            FollowViewModelImpl::class.java
+        )
+
     fun setItem(item: UserInfo?) {
         Glide.with(context!!).load(item!!.profileimg).circleCrop().into(binding.ivProfileImg)
         binding.tvProfileID.setText(item.username)
@@ -70,13 +75,15 @@ class FollowerViewHolder(
     }
 
     fun following() {
-        binding.btnFollow.setBackgroundColor(Color.BLUE) //버튼의 색상을 파란색으로 수정
+//        binding.btnFollow.setBackgroundColor(Color.BLUE) //버튼의 색상을 파란색으로 수정
+        binding.btnFollow.isSelected = true
         binding.btnFollow.setText("팔로잉")
         v = true
     }
 
     fun unfollowing() {
-        binding.btnFollow.setBackgroundColor(Color.RED)
+//        binding.btnFollow.setBackgroundColor(Color.RED)
+        binding.btnFollow.isSelected = false
         binding.btnFollow.setText("팔로우")
         v = false
     }

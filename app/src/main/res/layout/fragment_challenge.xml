@@ -5,6 +5,7 @@
     android:id="@+id/swiperefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context="com.example.bookworm.bottomMenu.challenge.fragment_challenge">
 
 
@@ -16,34 +17,47 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <EditText
+                    android:id="@+id/etSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/round_button_gray"
+                    android:hint="   책 검색"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:paddingHorizontal="15dp"
+                    android:singleLine="true">
+
+                    <requestFocus />
+                </EditText>
+
+                <Button
+                    android:id="@+id/btnSearch"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="end"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/search" />
+
+            </FrameLayout>
+
 
             <Spinner
                 android:id="@+id/spinnerC"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.5"
+                android:layout_weight="2"
                 android:textAlignment="center" />
-
-
-            <EditText
-                android:id="@+id/etSearch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:hint="챌린지 검색"
-                android:imeOptions="actionSearch"
-                android:inputType="text"
-                android:singleLine="true" />
-
-            <Button
-                android:id="@+id/btnSearch"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/search" />
         </LinearLayout>
 
         <LinearLayout

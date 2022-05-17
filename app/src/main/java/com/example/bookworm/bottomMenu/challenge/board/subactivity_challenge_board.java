@@ -27,7 +27,7 @@ import java.util.Map;
 public class subactivity_challenge_board extends AppCompatActivity {
 
     SubactivityChallengeBoardBinding binding;
-    Context context;
+    public static Context context;
     BoardFB boardFB;
     private Boolean canLoad = true; //더 로딩이 가능한지 확인하는 변수[자료의 끝을 판별한다.]
     private int page = 1;
@@ -49,7 +49,7 @@ public class subactivity_challenge_board extends AppCompatActivity {
         showShimmer(true);
 
         context = this;
-        boardFB = new com.example.bookworm.bottomMenu.challenge.board.BoardFB(context);
+        boardFB = new BoardFB(context);
 
         Intent intent = getIntent();
         //넘겨받은 값 챌린지 객체에 넣음
@@ -86,15 +86,13 @@ public class subactivity_challenge_board extends AppCompatActivity {
     private void initAdapter() {
         boardAdapter = new BoardAdapter(boardList, context);
         //어댑터 리스너
-        boardAdapter.setListener(new OnBoardItemClickListener() {
-            @Override
-            public void onItemClick(BoardAdapter.ItemViewHolder holder, View view, int position) {
-                //닫힌 챌린지 인경우 표시할 코드 등을 입력해야함.
-                //아이템 선택시 실행할 코드를 입력
-                Intent intent = new Intent(context, subactivity_challenge_board_comment.class);
-                intent.putExtra("boardInfo", boardList.get(position));
-                context.startActivity(intent);
-            }
+        boardAdapter.setListener((holder, view, position) -> {
+            //닫힌 챌린지 인경우 표시할 코드 등을 입력해야함.
+            //아이템 선택시 실행할 코드를 입력
+            Intent intent = new Intent(context, subactivity_challenge_board_comment.class);
+            intent.putExtra("board", boardList.get(position));
+            intent.putExtra("challenge", challenge);
+            context.startActivity(intent);
         });
     }
 
@@ -108,7 +106,7 @@ public class subactivity_challenge_board extends AppCompatActivity {
         try {
             for (DocumentSnapshot snapshot : a) {
                 Map data = snapshot.getData();
-                com.example.bookworm.bottomMenu.challenge.board.Board board = new com.example.bookworm.bottomMenu.challenge.board.Board(data);
+                Board board = new Board(data);
                 boardList.add(board);
             }
             //가져온 값의 마지막 snapshot부터 이어서 가져올 수 있도록 하기 위함.
@@ -121,15 +119,14 @@ public class subactivity_challenge_board extends AppCompatActivity {
         } catch (NullPointerException e) {
             canLoad = false;
         }
-        initRecyclerView();
         initAdapter();
+        initRecyclerView();
         isEmptyBoard(false);
         showShimmer(false);
     }
 
     //리사이클러뷰 초기화
     public void initRecyclerView() {
-        com.example.bookworm.bottomMenu.challenge.board.BoardAdapter boardAdapter = new com.example.bookworm.bottomMenu.challenge.board.BoardAdapter(boardList, context);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false);
         binding.mRecyclerView.setLayoutManager(gridLayoutManager);
         binding.mRecyclerView.setAdapter(boardAdapter);

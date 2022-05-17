@@ -1,16 +1,11 @@
-package com.example.bookworm.Core.UserData;
+package com.example.bookworm.core.userdata;
 
 
 import android.content.Context;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.Exclude;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.kakao.usermgmt.response.model.Profile;
 import com.kakao.usermgmt.response.model.UserAccount;
 
@@ -29,6 +24,7 @@ public class UserInfo implements Serializable {
     private String email; // 로그인한 이메일
     private String platform;
 
+   private boolean isMainUser = false;
 
     private String FCMtoken;
 
@@ -50,10 +46,8 @@ public class UserInfo implements Serializable {
     private int followingCounts;
 
     private HashMap<String, Integer> genre = new HashMap();
-    @Exclude
-    private boolean followed = false;
 
-//    private BookWorm bookworm;
+    private boolean followed = false;
 
 
     public UserInfo() {
@@ -61,12 +55,21 @@ public class UserInfo implements Serializable {
         likedPost = new ArrayList<>();
 
     }
+    @Exclude
+    public boolean isMainUser() {
+        return isMainUser;
+    }
+
+    public void setMainUser(boolean mainUser) {
+        isMainUser = mainUser;
+    }
+
 
     public void setFollowingCounts(int followingCounts) {
         this.followingCounts = followingCounts;
     }
 
-
+    @Exclude
     public boolean isFollowed() {
         return followed;
     }
@@ -109,7 +112,6 @@ public class UserInfo implements Serializable {
         this.followingCounts = Integer.parseInt(String.valueOf(document.get("followingCounts")));
 
         this.genre = new HashMap<String, Integer>((HashMap<String, Integer>) document.get("genre"));
-        //this.genre = new HashMap<String, Integer>((Map) document.get("genre"));
 
         if ((ArrayList<String>) document.get("likedPost") != null)
             this.likedPost = (ArrayList<String>) document.get("likedPost");
@@ -138,6 +140,13 @@ public class UserInfo implements Serializable {
         return platform;
     }
 
+    public void setProfileimg(String profileimg) {
+        this.profileimg = profileimg;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public int getFollowerCounts() {
         return followerCounts;

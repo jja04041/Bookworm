@@ -11,16 +11,32 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.bookworm.appLaunch.views.MainActivity;
+import com.example.bookworm.bottomMenu.Feed.views.FeedViewModel;
+import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
+import com.example.bookworm.databinding.FragmentBookwormBinding;
+import com.example.bookworm.databinding.FragmentChallengeBinding;
 import com.example.bookworm.notification.MyFirebaseMessagingService;
 import com.example.bookworm.R;
 import com.example.bookworm.achievement.activity_achievement;
+import com.example.bookworm.bottomMenu.Feed.items.Story;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.PersonalD;
 import com.example.bookworm.core.userdata.UserInfo;
+import com.example.bookworm.notification.MyFirebaseMessagingService;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import java.util.ArrayList;
+
 public class fragment_bookworm extends Fragment {
+
+    private FragmentBookwormBinding binding;
 
     private ImageView iv_bookworm;
     private ImageView iv_bg;
@@ -36,30 +52,40 @@ public class fragment_bookworm extends Fragment {
     private TextView tv_bookworm1, tv_bookworm2, tv_bookworm3, tv_bookworm4, tv_bookworm5, tv_bookworm6, tv_bookworm7,
             tv_bookworm8, tv_bookworm9, tv_bookworm10, tv_bookworm11;
 
-    private MyFirebaseMessagingService myFirebaseMessagingService ;
-    private FirebaseDatabase mFirebaseDatabase;
+    private MyFirebaseMessagingService myFirebaseMessagingService;
+
+    UserInfoViewModel uv;
 
     private UserInfo userinfo;
     private BookWorm bookworm;
 
     public static Context current_context;
-    private FBModule fbModule;
+//    private FBModule fbModule;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_bookworm, container, false);
+        current_context = getContext();
 
+        List<Story> stories = new ArrayList<>();
+        for(int i=0; i<10; ++i)
+            stories.add(new Story(false));
+
+        // 알림 보낼때 해놔야댐
+        binding = FragmentBookwormBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+
+        uv = new ViewModelProvider(this, new UserInfoViewModel.Factory(getContext())).get(UserInfoViewModel.class);
         myFirebaseMessagingService = new MyFirebaseMessagingService();
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
 
         iv_bookworm = view.findViewById(R.id.iv_bookworm);
         iv_bg = view.findViewById(R.id.iv_bg);
 
-        btn_Achievement = view.findViewById(R.id.btn_achievement);
-        btn_Achievement_bg = view.findViewById(R.id.btn_achievement_bg);
-        btn_sendpush = view.findViewById(R.id.btn_sendpush);
+//        btn_Achievement = view.findViewById(R.id.btn_achievement);
+//        btn_Achievement_bg = view.findViewById(R.id.btn_achievement_bg);
+//        btn_sendpush = view.findViewById(R.id.btn_sendpush);
 
         tv_bookcount = view.findViewById(R.id.tv_bookworm_bookcount);
 
@@ -96,14 +122,12 @@ public class fragment_bookworm extends Fragment {
             }
         });
 
-        btn_sendpush.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String fcmtoken = userinfo.getFCMtoken();
-
-                myFirebaseMessagingService.sendPostToFCM(fcmtoken, "message");
-
-            }
+        btn_sendpush.setOnClickListener(view1 -> {
+            uv.getUser(null, false);
+            uv.getData().observe((MainActivity) current_context, it -> {
+                String fcmtoken = it.getFCMtoken();
+                myFirebaseMessagingService.sendPostToFCM(current_context, fcmtoken, "message");
+            });
         });
 
         return view;
@@ -112,40 +136,23 @@ public class fragment_bookworm extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        uv.getUser(null, false);
+        uv.getData().observe(this, userInfo -> {
+            String genre[] = {"자기계발", "소설", "육아", "어린이", "청소년", "사회", "과학", "인문", "생활", "공부", "만화"};
+            TextView bookworm[] = {tv_bookworm1, tv_bookworm2, tv_bookworm3, tv_bookworm4, tv_bookworm5,
+                    tv_bookworm6, tv_bookworm7, tv_bookworm8, tv_bookworm9, tv_bookworm10, tv_bookworm11};
+            for (int i = 0; i < genre.length; i++) {
+                if (userInfo.getGenre().get(genre[i]) != null)
+                    bookworm[i].setText(genre[i] + " : " + String.valueOf(userInfo.getGenre().get(genre[i])));
+            }
+            uv.getBookWorm(userInfo.getToken());
+        });
+        uv.getBwdata().observe(this, bw -> {
+            iv_bookworm.setImageResource(bw.getWormtype());
+            iv_bg.setImageResource(bw.getBgtype());
+            tv_bookcount.setText("읽은 권 수 : " + bw.getReadcount());
 
-        current_context = getActivity();
-        fbModule = new FBModule(current_context);
-        userinfo = new PersonalD(current_context).getUserInfo();
-        bookworm = new PersonalD(current_context).getBookworm();
-
-        iv_bookworm.setImageResource(bookworm.getWormtype());
-        iv_bg.setImageResource(bookworm.getBgtype());
-
-        tv_bookcount.setText("읽은 권 수 : " + String.valueOf(bookworm.getReadcount()));
-
-        if (userinfo.getGenre().get("자기계발") != null)
-            tv_bookworm1.append(String.valueOf(userinfo.getGenre().get("자기계발")));
-        if (userinfo.getGenre().get("소설") != null)
-            tv_bookworm2.append(String.valueOf(userinfo.getGenre().get("소설")));
-        if (userinfo.getGenre().get("육아") != null)
-            tv_bookworm3.append(String.valueOf(userinfo.getGenre().get("육아")));
-        if (userinfo.getGenre().get("어린이") != null)
-            tv_bookworm4.append(String.valueOf(userinfo.getGenre().get("어린이")));
-        if (userinfo.getGenre().get("청소년") != null)
-            tv_bookworm5.append(String.valueOf(userinfo.getGenre().get("청소년")));
-        if (userinfo.getGenre().get("사회") != null)
-            tv_bookworm6.append(String.valueOf(userinfo.getGenre().get("사회")));
-        if (userinfo.getGenre().get("과학") != null)
-            tv_bookworm7.append(String.valueOf(userinfo.getGenre().get("과학")));
-        if (userinfo.getGenre().get("인문") != null)
-            tv_bookworm8.append(String.valueOf(userinfo.getGenre().get("인문")));
-        if (userinfo.getGenre().get("생활") != null)
-            tv_bookworm9.append(String.valueOf(userinfo.getGenre().get("생활")));
-        if (userinfo.getGenre().get("공부") != null)
-            tv_bookworm10.append(String.valueOf(userinfo.getGenre().get("공부")));
-        if (userinfo.getGenre().get("만화") != null)
-            tv_bookworm11.append(String.valueOf(userinfo.getGenre().get("만화")));
-
+        });
         iv_bg.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
         iv_bg.setAdjustViewBounds(true);

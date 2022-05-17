@@ -39,7 +39,7 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:background="#DDDDDD"
+                    android:background="@color/white"
                     android:orientation="horizontal">
 
                     <Button
@@ -55,14 +55,17 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="책 정보"
-                        android:textSize="20dp" />
+                        android:textSize="13dp"
+                        android:textColor="@color/black"/>
 
                     <Button
                         android:id="@+id/btnFeedCreate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|center_vertical"
-                        android:text="피드 작성" />
+                        android:background="@color/white"
+                        android:text="피드 작성"
+                        android:textColor="@color/black"/>
 
                 </FrameLayout>
 

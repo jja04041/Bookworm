@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.signature.ObjectKey;
 import com.example.bookworm.achievement.Achievement;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.core.userdata.interfaces.UserContract;
@@ -278,7 +279,10 @@ public class ItemViewHolder extends RecyclerView.ViewHolder implements UserContr
     public void showProfile(@NonNull UserInfo userInfo, @Nullable Boolean aBoolean) {
         if (aBoolean == null) {
             binding.tvNickname.setText(userInfo.getUsername());
-            Glide.with(itemView).load(userInfo.getProfileimg()).circleCrop()
+            Glide.with(itemView)
+                    .load(userInfo.getProfileimg())
+                    .circleCrop()
+                    .signature(new ObjectKey(Long.toString(System.currentTimeMillis())))
                     .into(binding.ivProfileImage);
         } else {
             binding.tvCommentNickname.setText(userInfo.getUsername());

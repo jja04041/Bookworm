@@ -14,6 +14,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Transaction
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -39,30 +40,40 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
     }
 
     //사용자 가져오기 => token이 null인 경우 현재 사용자 데이터 가져옴
-    suspend override fun getUser(token: String?, isFirst: Boolean): UserInfo? {
+    //getFrom true: 인터넷에서 가져오기, false: 로컬에서 가져오기
+    override suspend fun getUser(token: String?, getFromExt: Boolean): UserInfo {
         //로컬에서 해당 토큰 확인
         var user = userPref.getString("key_user", null)
-        var userInfo = UserInfo()
+        var userInfo: UserInfo
         if (user != null) {
             val json = JSONObject(user)
             var userInfo = gson.fromJson(json.toString(), UserInfo::class.java)
-            //현재 유저인 경우 바로 유저인포 넘겨줌
-            if (token == null || userInfo.token == token && !isFirst) {
+            //가져오는 사용자가 현재유저인 경우, 실시간 데이터가 요구된다면, 실시간 데이터를 제공하는 메소드 구성
+            //로컬에 있는 현재 유저 값을 원하는 경우
+            if ((token == null || userInfo.token == token) && !getFromExt) {
                 userInfo.isMainUser = true
                 return userInfo
             }
-            //로컬에 해당 토큰이 없는 경우, 서버에서 가져옴
-            else {
-                userInfo= token?.let { findInFB(it).await() }!!
-                return userInfo
-            }
+            //로컬에 해당 토큰이 없는 경우 or 서버의 유저 정보를 가지고 오고 싶은 경우, 서버에서 가져옴
+            else return if(token==null) userInfo.token.let { getUserInFB(it).await() }!!
+                        else token.let { getUserInFB(it).await() }!!
         }
-        //로컬에 해당 토큰이 없는 경우, 서버에서 가져옴
+
+        //로컬에 아직 메인 사용자가 등록되지 않은 경우 ,서버에서 값을 가져옴.
+        //=> 기존 유저가 기기 변경시 데이터가 저장되지 않는 오류 수정
         else {
-            userInfo= token?.let { findInFB(it).await() }!!
+            userInfo = token?.let { getUserInFB(it).await() }!!
+            userInfo.isMainUser = true //메인 유저로 설정
+            val bw = getBookWorm(userInfo.token)
+            saveInLocal(userInfo, bw)  //로컬에 해당 정보 저장
             return userInfo
         }
 
+    }
+
+    override suspend fun updateBookWorm(token: String, bookWorm: BookWorm) {
+        updateBwInFB(token,bookWorm)
+        updateBwInLocal(bookWorm)
     }
 
 
@@ -76,6 +87,23 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
         updateInFB(user)
     }
 
+    override suspend fun getBookWorm(token: String): BookWorm {
+        //로컬, 서버에서 가져오는 방법
+        val key_bookworm = bwPref.getString("key_bookworm", null)
+        if (key_bookworm!= "null") {
+            val json = JSONObject(key_bookworm)
+            var bookWorm = gson.fromJson(json.toString(), BookWorm::class.java)
+            return bookWorm
+        } else return CoroutineScope(Dispatchers.IO).async {
+            var bookWorm = BookWorm()
+            var it = collectionReference.document(token).get().await()
+            var map = it.get("BookWorm") as MutableMap<Any?, Any?>?
+            bookWorm.add(map)
+            bookWorm
+        }.await()
+
+
+    }
 
     //사용자 생성과 동시에 파이어 베이스에 등록
     suspend override fun createUser(user: UserInfo): Boolean {
@@ -85,39 +113,43 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
         var a = FirebaseMessaging.getInstance().token.await()
         user.setFCMtoken(a)
         saveInLocal(user, bookworm)
-
         return saveInFB(user, bookworm)
     }
 
 
     //사용자 탈퇴
     override fun deleteUser() {
+        CoroutineScope(Dispatchers.IO).launch {
+            //1. 현재 유저의 정보를 가져온다.
+            var NowUser = getUser(null, false) //현재 사용자
+            //2. 파이어 베이스의 유저정보를 제거한다.
 
+            //3. 로컬에 저장된 유저의 정보를 제거한다.
+
+            //4. 현재 유저의 플랫폼에 맞추어 회원 탈퇴를 진행한다.
+            when (NowUser.platform) {
+                //카카오인 경우
+                "Kakao" -> {
+
+                }
+                //구글인 경우
+                else -> {
+
+                }
+            }
+            //5. 서버에게 해당 사용자와 관련된 데이터를 제거하도록 요청 한다.
+        }
     }
+
 
 //Public method
 
-    //사용자의 팔로워/팔로잉 목록의 토큰 리스트를 가져옴
-    override suspend fun getFollowTokenList(
-        token: String,
-        check: Int,
-        lastVisible: String?
-    ) = CoroutineScope(Dispatchers.IO).async {
-        var tokenList = ArrayList<String>()
-        launch {
-            val type = if (check == 1) "follower" else "following"
-            var query = collectionReference.document(token).collection(type).orderBy("token")
-            if (lastVisible != null) query = query.startAfter(lastVisible)
-            var it = query.limit(10).get().await()
-            for (i in it.documents) tokenList.add(i.id)
-        }
-        tokenList
-    }.await()
 
     //사용자가 현재 팔로우 중인지 확인
     suspend fun isFollowNow(user: UserInfo) = CoroutineScope(Dispatchers.IO).async {
         var localUser = getUser(null, false) //현재 유저의 정보를 가져옴
         //현재 유저의 팔로잉 목록에서 인자로 넘겨받은 유저의 토큰이 있는지 확인
+
         var query = collectionReference.document(localUser!!.token).collection("following")
             .whereEqualTo(FieldPath.documentId(), user.token)
         async {
@@ -126,40 +158,11 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
         }.await()
     }.await()
 
-    //팔로우 처리
-    fun followProcessing(
-        fromUserInfo: UserInfo,
-        toUserInfo: UserInfo,
-        type: Boolean
-    ): Task<Transaction> {
-        val fromRef = collectionReference.document(fromUserInfo.token)
-        val toRef = collectionReference.document(toUserInfo.token)
-        val fromRefFollow = fromRef.collection("following").document(toUserInfo.token)
-        val toRefFollow = toRef.collection("follower").document(fromUserInfo.token)
-
-
-        return db.runTransaction {
-            var current = it.get(fromRef).getLong("UserInfo.followingCounts")
-            var count = if (type) 1 else -1.toLong()
-            current = current?.plus(count)
-            it.update(fromRef, "UserInfo.followingCounts", current)
-                .update(toRef, "UserInfo.followerCounts", FieldValue.increment(count))
-            fromUserInfo.followingCounts = current!!.toInt()
-            updateInLocal(fromUserInfo)//새로 갱신된 데이터를 로컬과 서버 모두에 적용
-
-            if (type) {
-                it.set(fromRefFollow, toUserInfo).set(toRefFollow, fromUserInfo)
-            } else {
-                it.delete(fromRefFollow)
-                    .delete(toRefFollow)
-            }
-        }
-    }
 //Private Method
 
     //사용자 정보 저장
     //로컬에 저장
-    private fun saveInLocal(user: UserInfo, bookworm: BookWorm) {
+    private fun saveInLocal(user: UserInfo, bookworm: BookWorm?) {
         var editor = userPref.edit()
         var userInfo = gson.toJson(user, UserInfo::class.java)
         editor.putString("key_user", userInfo)
@@ -182,7 +185,7 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
     }
 
     //사용자 정보 업데이트
-    private fun updateInLocal(user: UserInfo) {
+    fun updateInLocal(user: UserInfo) {
         val editor = userPref.edit()
         val userinfo = gson.toJson(user, UserInfo::class.java)
         editor.putString("key_user", userinfo)
@@ -202,7 +205,7 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
             .await()
     }
 
-    private fun findInFB(token: String) = CoroutineScope(Dispatchers.IO).async{
+    private fun getUserInFB(token: String) = CoroutineScope(Dispatchers.IO).async {
         //초기화 ->
         // 초기화가 안되면
         // 현재 사용자의 결과값에 일부 수정이 이루어진 채로 값이 리턴되기 때문
@@ -218,4 +221,24 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
             null
         }
     }
+
+    private suspend fun updateBwInFB(token: String,bookworm: BookWorm){
+        collectionReference.document(token)
+            .update("BookWorm",bookworm)
+            .addOnSuccessListener {
+                Log.d("책볼레 데이터  업데이트 성공", "파이어스토어 서버에 책볼레 데이터가  업데이트 되었습니다.");
+            }.addOnFailureListener {
+                Log.e("책볼레 데이터 업데이트 실패", "파이어스토어 서버에 책볼레 데이터 업데이트를 실패하였습니다.");
+            }
+            .await()
+    }
+    private fun updateBwInLocal(bookworm: BookWorm){
+        //Bookworm 저장
+        var editor = bwPref.edit()
+        val strbookworm = gson.toJson(bookworm, BookWorm::class.java)
+        editor.putString("key_bookworm", strbookworm)
+        editor.apply()
+    }
+
+
 }

@@ -18,15 +18,16 @@
             android:orientation="vertical">
 
             <FrameLayout
+                android:id="@+id/setting"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="#DDDDDD"
+                android:background="@drawable/feed_bottom_border_only"
                 android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btnBack"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_gravity="start|center_vertical"
                     android:layout_marginStart="20dp"
                     android:background="@drawable/back_icon" />
@@ -36,7 +37,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="피드 수정"
-                    android:textSize="20dp" />
+                    android:textColor="@color/black"
+                    android:textSize="13dp" />
 
                 <TextView
                     android:id="@+id/tvFinish"
@@ -44,9 +46,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
                     android:layout_marginEnd="10dp"
+                    android:padding="10dp"
                     android:text="완료"
+                    android:textColor="@color/black"
                     android:textSize="18dp" />
-
             </FrameLayout>
 
 
@@ -266,6 +269,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
+                android:background="@drawable/square_button"
                 android:text="라벨 추가" />
         </LinearLayout>
 

@@ -35,10 +35,12 @@
         <activity
             android:name=".achievement.activity_achievement"
             android:exported="false"
-            android:label="@string/title_activity_achievement"
             android:theme="@style/NoActionBar" />
         <activity
             android:name="com.example.bookworm.bottomMenu.Feed.ImagePicker"
+            android:exported="false" />
+        <activity
+            android:name="com.example.bookworm.core.dataprocessing.image.ImagePicker"
             android:exported="false" />
         <activity
             android:name=".bottomMenu.profile.views.ProfileInfoActivity"

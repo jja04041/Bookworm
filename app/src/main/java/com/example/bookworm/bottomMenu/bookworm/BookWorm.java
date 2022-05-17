@@ -51,15 +51,10 @@ public class BookWorm {
         this.token = (String) document.get("token");
         this.wormtype = Integer.parseInt(String.valueOf(document.get("wormtype")));
         this.wormvec = new Vector<>((ArrayList<Integer>) document.get("wormvec"));
-
         this.bgtype = Integer.parseInt(String.valueOf(document.get("bgtype")));
         this.bgvec = new Vector<>((ArrayList<Integer>) document.get("bgvec"));
-
-
         this.achievementmap = new HashMap<>((HashMap<String, Boolean>) document.get("achievementmap"));
-
         this.achievementmap.put("디폴트", true);
-
         this.readcount = Integer.parseInt(String.valueOf(document.get("readcount")));
         this.readedbook = new Vector<>((ArrayList<Book>) document.get("readedbook"));
 

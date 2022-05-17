@@ -59,7 +59,7 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
             binding.tvUserName.setText(userinfo.getUsername());
 
             binding.tvUserName.setOnClickListener(it->{
-                pv.getFollowerList(userinfo.getToken(),0);
+               pv.getFollowerList(userinfo.getToken(),false);
             });
             //팔로워액티비티 실행하기
             binding.btnFollower.setOnClickListener(new View.OnClickListener() {
@@ -82,6 +82,7 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
                     startActivity(intent);
                 }
             });
+
             Glide.with(this).load(userinfo.getProfileimg()).circleCrop().into(binding.imgFragProfileProfile); //프로필사진 로딩후 삽입.
         });
 
@@ -97,7 +98,12 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
         super.onDestroyView();
     }
 
-//    //장르를 세팅하는 함수
+    @Override
+    public void onResume() {
+        pv.getUser(null,false);
+        super.onResume();
+    }
+    //    //장르를 세팅하는 함수
 //    private void setGenre(String key) {
 //        //로컬에서 업데이트
 //        userinfo.setGenre(key, current_context);
