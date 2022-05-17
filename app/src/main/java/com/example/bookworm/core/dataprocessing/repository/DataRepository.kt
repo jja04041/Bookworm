@@ -2,6 +2,7 @@ package com.example.bookworm.core.dataprocessing.repository
 
 import com.example.bookworm.bottomMenu.Feed.items.Feed
 import com.example.bookworm.bottomMenu.bookworm.BookWorm
+import com.example.bookworm.bottomMenu.challenge.items.Challenge
 import com.example.bookworm.core.userdata.UserInfo
 
 interface DataRepository {
@@ -25,6 +26,11 @@ interface DataRepository {
 
 
     interface HandleBookWorm {
+
+    }
+
+    interface HandleChallenge{
+        suspend fun getChallenges(token: String):ArrayList<Challenge>
 
     }
 }

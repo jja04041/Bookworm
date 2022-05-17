@@ -53,42 +53,11 @@ class FragmentBW : Fragment() {
         super.onResume()
         uv.getUser(null, false)
         uv.data.observe(this) { userInfo: UserInfo ->
-            val genre = arrayOf(
-                "자기계발",
-                "소설",
-                "육아",
-                "어린이",
-                "청소년",
-                "사회",
-                "과학",
-                "인문",
-                "생활",
-                "공부",
-                "만화"
-            )
-            val bookworm = arrayOf(
-                binding!!.tvBookworm1,
-                binding!!.tvBookworm2,
-                binding!!.tvBookworm3,
-                binding!!.tvBookworm4,
-                binding!!.tvBookworm5,
-                binding!!.tvBookworm6,
-                binding!!.tvBookworm7,
-                binding!!.tvBookworm8,
-                binding!!.tvBookworm9,
-                binding!!.tvBookworm10,
-                binding!!.tvBookworm11
-            )
-            for (i in genre.indices) {
-                if (userInfo.genre[genre[i]] != null) bookworm[i]
-                    .append(genre[i] + " : " + userInfo.genre[genre[i]])
-            }
             uv.getBookWorm(userInfo.token)
         }
         uv.bwdata.observe(this) { bw: BookWorm ->
             binding!!.ivBookworm.setImageResource(bw.wormtype)
             binding!!.ivBg.setImageResource(bw.bgtype)
-            binding!!.tvBookwormBookcount.setText("읽은 권 수 : " + bw.readcount)
         }
         binding!!.ivBg.setScaleType(ImageView.ScaleType.CENTER_INSIDE)
         binding!!.ivBg.setAdjustViewBounds(true)
