@@ -10,22 +10,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
-import com.example.bookworm.databinding.FragmentBookwormBinding;
-import com.example.bookworm.databinding.FragmentRecodeBinding;
+
+import com.example.bookworm.databinding.FragmentRecordBinding;
 
 
 public class fragment_record extends Fragment {
 
-    private FragmentRecodeBinding binding;
+    private FragmentRecordBinding binding;
     private UserInfoViewModel uv;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentRecodeBinding.inflate(getLayoutInflater());
+        binding = FragmentRecordBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         uv = new ViewModelProvider(this, new UserInfoViewModel.Factory(getContext())).get(UserInfoViewModel.class);
 
@@ -64,8 +63,12 @@ public class fragment_record extends Fragment {
                     binding.tvBookworm11};
             for (int i = 0; i < genre.length; i++) {
                 if (userInfo.getGenre().get(genre[i]) != null)
-                    bookworm[i].append(genre[i] + " : " + userInfo.getGenre().get(genre[i]));
+                    bookworm[i].setText(genre[i] + " : " + userInfo.getGenre().get(genre[i]));
             }
+            uv.getBookWorm(userInfo.getToken());
+        });
+        uv.getBwdata().observe(this,bw-> {
+            binding.tvBookwormBookcount.setText("읽은 권 수 : " + bw.getReadcount());
         });
     }
 }
