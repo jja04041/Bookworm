@@ -27,6 +27,7 @@ import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.PersonalD;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.notification.MyFirebaseMessagingService;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,9 +53,8 @@ public class fragment_bookworm extends Fragment {
             tv_bookworm8, tv_bookworm9, tv_bookworm10, tv_bookworm11;
 
     private MyFirebaseMessagingService myFirebaseMessagingService;
-    private FirebaseDatabase mFirebaseDatabase;
+
     UserInfoViewModel uv;
-    private MyFirebaseMessagingService myFirebaseMessagingService ;
 
     private UserInfo userinfo;
     private BookWorm bookworm;
@@ -79,7 +79,6 @@ public class fragment_bookworm extends Fragment {
 
         uv = new ViewModelProvider(this, new UserInfoViewModel.Factory(getContext())).get(UserInfoViewModel.class);
         myFirebaseMessagingService = new MyFirebaseMessagingService();
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
 
         iv_bookworm = view.findViewById(R.id.iv_bookworm);
         iv_bg = view.findViewById(R.id.iv_bg);
