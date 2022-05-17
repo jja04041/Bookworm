@@ -40,6 +40,9 @@
             android:name="com.example.bookworm.bottomMenu.Feed.ImagePicker"
             android:exported="false" />
         <activity
+            android:name="com.example.bookworm.core.dataprocessing.image.ImagePicker"
+            android:exported="false" />
+        <activity
             android:name=".bottomMenu.profile.views.ProfileInfoActivity"
             android:exported="false" />
         <activity

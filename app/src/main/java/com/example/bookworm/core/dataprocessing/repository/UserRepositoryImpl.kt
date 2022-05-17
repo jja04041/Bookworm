@@ -71,6 +71,11 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
 
     }
 
+    override suspend fun updateBookWorm(token: String, bookWorm: BookWorm) {
+        updateBwInFB(token,bookWorm)
+        updateBwInLocal(bookWorm)
+    }
+
 
     //사용자 정보 수정 => 개인만 가능
     override fun updateUser(user: UserInfo) {
@@ -216,4 +221,24 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
             null
         }
     }
+
+    private suspend fun updateBwInFB(token: String,bookworm: BookWorm){
+        collectionReference.document(token)
+            .update("BookWorm",bookworm)
+            .addOnSuccessListener {
+                Log.d("책볼레 데이터  업데이트 성공", "파이어스토어 서버에 책볼레 데이터가  업데이트 되었습니다.");
+            }.addOnFailureListener {
+                Log.e("책볼레 데이터 업데이트 실패", "파이어스토어 서버에 책볼레 데이터 업데이트를 실패하였습니다.");
+            }
+            .await()
+    }
+    private fun updateBwInLocal(bookworm: BookWorm){
+        //Bookworm 저장
+        var editor = bwPref.edit()
+        val strbookworm = gson.toJson(bookworm, BookWorm::class.java)
+        editor.putString("key_bookworm", strbookworm)
+        editor.apply()
+    }
+
+
 }

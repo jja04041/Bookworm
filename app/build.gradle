@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.bookworm"
-        minSdk 27
+        minSdk 29
         targetSdk 32
         versionCode 1
         versionName "1.0"

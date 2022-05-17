@@ -75,5 +75,18 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
         viewModelScope.launch{
         bwdata.value=repo.getBookWorm(token)
     }
+
+    fun updateUser(user:UserInfo){
+        viewModelScope.launch {
+            repo.updateBoth(user)
+        }
+    }
+
+    fun updateBw(token: String,bookWorm: BookWorm){
+        viewModelScope.launch {
+            repo.updateBookWorm(token,bookWorm)
+        }
+    }
+
 }
 

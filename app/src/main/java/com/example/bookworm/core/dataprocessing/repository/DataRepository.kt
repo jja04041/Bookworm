@@ -19,7 +19,7 @@ interface DataRepository {
         suspend fun createUser(user: UserInfo) :Boolean //사용자를 생성
         fun deleteUser() //회원 탈퇴
         suspend fun getUser(token: String?, isFirst: Boolean): UserInfo?//사용자의 정보를 가져옴
-
+        suspend fun updateBookWorm(token: String,bookWorm: BookWorm)
 
     }
 
