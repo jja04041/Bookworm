@@ -117,7 +117,6 @@ public class UserInfo implements Serializable {
         this.followingCounts = Integer.parseInt(String.valueOf(document.get("followingCounts")));
 
         this.genre = new HashMap<String, Integer>((HashMap<String, Integer>) document.get("genre"));
-        //this.genre = new HashMap<String, Integer>((Map) document.get("genre"));
 
         if ((ArrayList<String>) document.get("likedPost") != null)
             this.likedPost = (ArrayList<String>) document.get("likedPost");
