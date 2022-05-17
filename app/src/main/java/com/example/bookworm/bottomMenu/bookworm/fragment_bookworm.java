@@ -17,6 +17,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.bookworm.appLaunch.views.MainActivity;
 import com.example.bookworm.bottomMenu.Feed.views.FeedViewModel;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
+import com.example.bookworm.databinding.FragmentBookwormBinding;
+import com.example.bookworm.databinding.FragmentChallengeBinding;
 import com.example.bookworm.notification.MyFirebaseMessagingService;
 import com.example.bookworm.R;
 import com.example.bookworm.achievement.activity_achievement;
@@ -28,6 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 
 public class fragment_bookworm extends Fragment {
+
+    private FragmentBookwormBinding binding;
 
     private ImageView iv_bookworm;
     private ImageView iv_bg;
@@ -54,7 +58,10 @@ public class fragment_bookworm extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         current_context = getContext();
-        View view = inflater.inflate(R.layout.fragment_bookworm, container, false);
+
+        binding = FragmentBookwormBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+
         uv = new ViewModelProvider(this, new UserInfoViewModel.Factory(getContext())).get(UserInfoViewModel.class);
         myFirebaseMessagingService = new MyFirebaseMessagingService();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -62,9 +69,9 @@ public class fragment_bookworm extends Fragment {
         iv_bookworm = view.findViewById(R.id.iv_bookworm);
         iv_bg = view.findViewById(R.id.iv_bg);
 
-        btn_Achievement = view.findViewById(R.id.btn_achievement);
-        btn_Achievement_bg = view.findViewById(R.id.btn_achievement_bg);
-        btn_sendpush = view.findViewById(R.id.btn_sendpush);
+//        btn_Achievement = view.findViewById(R.id.btn_achievement);
+//        btn_Achievement_bg = view.findViewById(R.id.btn_achievement_bg);
+//        btn_sendpush = view.findViewById(R.id.btn_sendpush);
 
         tv_bookcount = view.findViewById(R.id.tv_bookworm_bookcount);
 
@@ -122,7 +129,7 @@ public class fragment_bookworm extends Fragment {
                     tv_bookworm6, tv_bookworm7, tv_bookworm8, tv_bookworm9, tv_bookworm10, tv_bookworm11};
             for (int i = 0; i < genre.length; i++) {
                 if (userInfo.getGenre().get(genre[i]) != null)
-                    bookworm[i].append(String.valueOf(userInfo.getGenre().get(genre[i])));
+                    bookworm[i].setText(genre[i] + " : " + String.valueOf(userInfo.getGenre().get(genre[i])));
             }
             uv.getBookWorm(userInfo.getToken());
         });
