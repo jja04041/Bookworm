@@ -146,6 +146,13 @@ public class UserInfo implements Serializable {
         return platform;
     }
 
+    public void setProfileimg(String profileimg) {
+        this.profileimg = profileimg;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public int getFollowerCounts() {
         return followerCounts;
