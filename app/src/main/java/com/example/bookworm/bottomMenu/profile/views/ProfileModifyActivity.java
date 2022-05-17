@@ -66,7 +66,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
                         finish();
                     }
                     else{
-                        Toast.makeText(this,"다른 아이디를 입력하여 주세요.",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this,"아이디 중복 체크 후 진행해 주세요.",Toast.LENGTH_SHORT).show();
                     }
                 });
             });
@@ -78,7 +78,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
                     finish();
                 }
                 else{
-                    Toast.makeText(this,"다른 아이디를 입력하여 주세요.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this,"아이디 중복 체크 후 진행해 주세요.",Toast.LENGTH_SHORT).show();
                 }
             });
             binding.edtNewNickname.addTextChangedListener(new TextWatcher() {
@@ -97,6 +97,8 @@ public class ProfileModifyActivity extends AppCompatActivity {
                     uploadCheck=checkIdChanged();
                 }
             });
+
+
 
             //값이 변경 되면 알려줌
             bool.observe(this, value -> {

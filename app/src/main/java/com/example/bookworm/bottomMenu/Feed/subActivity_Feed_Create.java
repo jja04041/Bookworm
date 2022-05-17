@@ -22,11 +22,13 @@ import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
+import com.example.bookworm.achievement.Achievement;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
 import com.example.bookworm.bottomMenu.search.items.Book;
 import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_main;
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing;
+import com.example.bookworm.core.userdata.PersonalD;
 import com.example.bookworm.core.userdata.UserInfo;
 
 import com.example.bookworm.core.internet.FBModule;
@@ -131,6 +133,18 @@ public class subActivity_Feed_Create extends AppCompatActivity {
                         feedUpload(imgurl);
                     });
                 });
+
+                binding.tvFinish.setOnClickListener(view ->
+                        new AlertDialog.Builder(current_context)
+                                .setMessage("피드를 업로드하시겠습니까?")
+                                .setPositiveButton("네", (dialog, which) -> {
+                                    dialog.dismiss();
+                                    upload(null, userInfo);
+                                })
+                                .setNegativeButton("아니요", (dialog, which)
+                                        -> dialog.dismiss())
+                                .show()
+                );
             });
         });
 
@@ -340,29 +354,19 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 //             장르 처리
 //            HashMap<String, Object> AfterCreatemap = new HashMap<>(); //피드 만들면 장르 up
 //            HashMap<String, Object> countmap = new HashMap<>(); // 피드 만들면
-//
-//
-//            userInfo.setGenre(selected_book.getCategoryname(), current_context);
+            userInfo.setGenre(selected_book.getCategoryname(), current_context);
 //            AfterCreatemap.put("userinfo_genre", userInfo.getGenre());
 //            fbModule.readData(0, AfterCreatemap, userInfo.getToken());
-//
 ////            BookWorm bookworm = new PersonalD(current_context).getBookworm();
 ////            int count = bookworm.getReadcount();
-//            int count = userBw.getReadcount();
-//            ++count;
-////            bookworm.setReadcount(count);
-//            userBw.setReadcount(count);
-//
-//            countmap.put("bookworm_readcount", bookworm.getReadcount());
-//            fbModule.readData(0, countmap, bookworm.getToken());
-//
-//
-//            Achievement achievement = new Achievement(current_context, fbModule, userInfo, bookworm);
-//            achievement.CompleteAchievement(userInfo, current_context);
-//
-//            uv.
-//            new PersonalD(current_context).saveUserInfo(userInfo);
-//            new PersonalD(current_context).saveBookworm(bookworm);
+            int count = userBw.getReadcount();
+            userBw.setReadcount(++count);
+            uv.updateUser(userInfo);
+            uv.updateBw(userInfo.getToken(), userBw);
+
+            Achievement achievement = new Achievement(current_context, fbModule, userInfo, userBw);
+            achievement.CompleteAchievement(userInfo, current_context);
+
             setResult(CREATE_OK);
             finish();
         }

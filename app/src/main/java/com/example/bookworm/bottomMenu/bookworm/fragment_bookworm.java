@@ -130,6 +130,7 @@ public class fragment_bookworm extends Fragment {
             iv_bookworm.setImageResource(bw.getWormtype());
             iv_bg.setImageResource(bw.getBgtype());
             tv_bookcount.setText("읽은 권 수 : " + bw.getReadcount());
+
         });
         iv_bg.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
