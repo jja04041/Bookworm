@@ -22,10 +22,14 @@ import com.example.bookworm.databinding.FragmentChallengeBinding;
 import com.example.bookworm.notification.MyFirebaseMessagingService;
 import com.example.bookworm.R;
 import com.example.bookworm.achievement.activity_achievement;
+import com.example.bookworm.bottomMenu.Feed.items.Story;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.PersonalD;
 import com.example.bookworm.core.userdata.UserInfo;
-import com.google.firebase.database.FirebaseDatabase;
+import com.example.bookworm.notification.MyFirebaseMessagingService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.ArrayList;
 
@@ -50,8 +54,14 @@ public class fragment_bookworm extends Fragment {
     private MyFirebaseMessagingService myFirebaseMessagingService;
     private FirebaseDatabase mFirebaseDatabase;
     UserInfoViewModel uv;
+    private MyFirebaseMessagingService myFirebaseMessagingService ;
+
+    private UserInfo userinfo;
+    private BookWorm bookworm;
+
     public static Context current_context;
 //    private FBModule fbModule;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,6 +69,11 @@ public class fragment_bookworm extends Fragment {
         // Inflate the layout for this fragment
         current_context = getContext();
 
+        List<Story> stories = new ArrayList<>();
+        for(int i=0; i<10; ++i)
+            stories.add(new Story(false));
+
+        // 알림 보낼때 해놔야댐
         binding = FragmentBookwormBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
 

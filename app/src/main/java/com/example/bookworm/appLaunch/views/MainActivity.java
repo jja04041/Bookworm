@@ -1,11 +1,7 @@
 package com.example.bookworm.appLaunch.views;
 
 
-import static android.content.ContentValues.TAG;
-
-import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -14,16 +10,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.bookworm.R;
-import com.example.bookworm.core.MoveFragment;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.example.bookworm.bottomMenu.Feed.Fragment_feed;
+import com.example.bookworm.core.MoveFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static Dialog achievedialog;
 
     Fragment Fragment_feed, fragment_search, fragment_bookworm, fragment_challenge, fragment_profile;
     Fragment[] fragments = {Fragment_feed, fragment_search, fragment_bookworm, fragment_challenge, fragment_profile};
@@ -33,32 +25,12 @@ public class MainActivity extends AppCompatActivity {
 
     com.example.bookworm.core.MoveFragment MoveFragment = new MoveFragment();
 
-    String FCMToken;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(new OnCompleteListener<String>() {
-                    @Override
-                    public void onComplete(@NonNull Task<String> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
-                            return;
-                        }
-
-                        // Get new FCM registration token
-                        String token = task.getResult();
-
-                        FCMToken = token;
-                        // Log and toast
-                    }
-                });
 
         // 초기화면 설정
         fragments[0] = new Fragment_feed();
