@@ -15,18 +15,11 @@ public class FollowPagerAdapter extends FragmentStatePagerAdapter{
 
     private ArrayList<Fragment> arrayList = new ArrayList<>();
 
-    public FollowPagerAdapter(Context context, @NonNull FragmentManager fm, String token) {
+    public FollowPagerAdapter( @NonNull FragmentManager fm, String token) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
-        arrayList.add(new FragmentFollowList(token, 1
-//                , this
-                )); //팔로워탭
-        arrayList.add(new FragmentFollowList(token, 0
-//                , this
-        )); //팔로잉탭
-
-
-
+        arrayList.add(new FragmentFollowList(token, 1 )); //팔로워탭
+        arrayList.add(new FragmentFollowList(token, 0 )); //팔로잉탭
     }
 
     @NonNull

@@ -17,13 +17,14 @@ import java.util.*
 
 //전반적으로 User을 관리하는 ViewModel
 class UserInfoViewModel(val context: Context) : ViewModel() {
+
     //LiveData : 동적으로 데이터의 변경이 이루어 짐
     //MutableLiveData는 읽기/쓰기 모두 가능
     //LiveData 선언 시에는 읽기만 가능
 
-    var data = MutableLiveData<UserInfo>()
-    var bwdata = MutableLiveData<BookWorm>()
-    var isDuplicated = MutableLiveData<Boolean>()
+    var data = MutableLiveData<UserInfo>() // 사용자 데이터 LiveData
+    var bwdata = MutableLiveData<BookWorm>() // 사용자의 BookWorm LiveData
+    var isDuplicated = MutableLiveData<Boolean>() //중복 여부를 체크 하는 LiveData
     val repo = UserRepositoryImpl(context)
     var fv: FollowViewModelImpl
 
@@ -34,7 +35,7 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
     }
 
     init {
-        fv = ViewModelProvider(context as AppCompatActivity, FollowViewModelImpl.Factory(context)).get<FollowViewModelImpl>(
+        fv = ViewModelProvider(context as AppCompatActivity, FollowViewModelImpl.Factory(context)).get(
             FollowViewModelImpl::class.java
         )
     }
@@ -70,7 +71,9 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
             }.join()
         }
     }
+
     fun getFollowerList(token: String, getFollower: Boolean) = fv.getFollowerList(token,getFollower)
+
     fun getBookWorm(token: String) =
         viewModelScope.launch{
         bwdata.value=repo.getBookWorm(token)
@@ -78,7 +81,7 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
 
     fun updateUser(user:UserInfo){
         viewModelScope.launch {
-            repo.updateBoth(user)
+            repo.updateUser(user)
         }
     }
 

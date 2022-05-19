@@ -165,7 +165,7 @@ class Fragment_feed : Fragment() {
     //페이지 새로고침 시 사용하는 메소드
     private fun pageRefresh() {
         initFeed()
-        map = HashMap<Any?, Any?>()
+        map = HashMap()
         if (map.get("lastVisible") != null) map.remove("lastVisible")
         feedList = ArrayList() //챌린지를 담는 리스트 생성
         isLoading = true

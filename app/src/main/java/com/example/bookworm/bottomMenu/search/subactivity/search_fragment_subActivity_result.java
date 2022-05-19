@@ -123,7 +123,10 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
                 float rank = Float.parseFloat(json.getString(text)) / 2;
                 customerReviewRank.setRating(rank);
                 textViews[i].setText(String.valueOf(rank));
-            } else textViews[i].setText(json.getString(getContent[i]));
+            }
+//            else  if(text.equals("d"))
+
+            else textViews[i].setText(json.getString(getContent[i]));
         }
 
         textViews[1].post(new Runnable() {
