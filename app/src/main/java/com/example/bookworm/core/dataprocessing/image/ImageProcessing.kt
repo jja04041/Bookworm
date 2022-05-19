@@ -192,8 +192,7 @@ class ImageProcessing(val context: Context) {
         query["rqbody"] = body
         query["rqname"] = name
         var imgurl = context.getString(R.string.serverUrl) //이미지 서버의 주소
-//        var module = Module(context, imgurl, map)
-//        module.connect(3)
+
         CoroutineScope(Dispatchers.IO).launch {
             var retrofit = Retrofit.Builder()
                 .baseUrl(imgurl)
@@ -205,11 +204,7 @@ class ImageProcessing(val context: Context) {
             val response = mainInterface.postprofileImage(body, name)
             CoroutineScope(Dispatchers.Main).launch {
                 if(response!!.isSuccessful){
-                    Log.d("경로",response.body().toString());
-                    Log.d("업로드","업로드 성공")
                     imgData.value=imgurl + response.body()
-                }else{
-                    Log.e("업로드","업로드 실패")
                 }
             }
         }

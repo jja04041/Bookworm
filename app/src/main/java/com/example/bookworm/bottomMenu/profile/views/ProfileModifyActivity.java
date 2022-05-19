@@ -4,18 +4,24 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.ObjectKey;
+import com.example.bookworm.bottomMenu.challenge.items.Challenge;
+import com.example.bookworm.bottomMenu.profile.ChallengeViewModel;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.databinding.ActivityProfileModifyBinding;
+
+import java.util.Arrays;
 
 public class ProfileModifyActivity extends AppCompatActivity {
 
@@ -34,7 +40,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
 
         imageProcess = new ImageProcessing(this);
         UserInfoViewModel pv = new UserInfoViewModel(this);
-
+        ChallengeViewModel cv = new ViewModelProvider(this,new ChallengeViewModel.Factory(context)).get(ChallengeViewModel.class);
         LiveData<Boolean> bool = pv.isDuplicated();
         pv.getUser(null, true);
 
@@ -46,7 +52,9 @@ public class ProfileModifyActivity extends AppCompatActivity {
                     .circleCrop()
                     .into(binding.ivProfileImage);
 
-
+            binding.btnFavGenre.setOnClickListener(it->{
+                cv.getChallengeList(userInfo.getToken());
+            });
             //프로필 이미지 변경
             imageProcess.getBitmapUri().observe(this, observer -> {
                 Glide.with(binding.getRoot()).load(observer).circleCrop().into(binding.ivProfileImage);
@@ -111,6 +119,11 @@ public class ProfileModifyActivity extends AppCompatActivity {
 
         });
 
+        cv.getChallengeList().observe(this,it->{
+            for(Challenge i:it){
+                Log.d("챌린지 데이터: ", i.getMaster());
+            }
+        });
         binding.tvProfileImageModify.setOnClickListener(it -> {
             imageProcess.initProcess();
         });
