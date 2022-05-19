@@ -18,9 +18,10 @@ import org.json.JSONObject;
 
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
-public class MyFirebaseMessagingService extends FirebaseMessagingService {
+public class MyFCMService extends FirebaseMessagingService {
 
     final String CHANNEL_ID = "ChannerID";
     final String CHANNEL_NAME = "ChannerName";
@@ -69,44 +70,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationManager.notify(1, notification);
     }
 
-    public void sendPostToFCM(Context context, final String fcmtoken, final String message) {
-
-        // honeycomb sdk 이상에서는 Main thread 에서 네트워킹을 실행할 수 없다 (Network On Main Thread exception 호출)
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                try {
-
-                    // json 형식으로  fmc 메시지 만들어준다
-                    JSONObject root = new JSONObject();
-                    JSONObject notification = new JSONObject();
-                    notification.put("body", message);
-                    notification.put("title", "BOOKWORM");
-                    root.put("notification", notification);
-                    root.put("to", fcmtoken);
-                    // FMC 메시지 생성 end
-
-                    // url와 firebase serverkey로 네트워크 연결
-                    URL Url = new URL(context.getString(R.string.FCM_MESSAGE_URL));
-                    HttpURLConnection conn = (HttpURLConnection) Url.openConnection();
-                    conn.setRequestMethod("POST");
-                    conn.setDoOutput(true);
-                    conn.setDoInput(true);
-                    conn.addRequestProperty("Authorization", "key=" + context.getString(R.string.SERVER_KEY));
-                    conn.setRequestProperty("Accept", "application/json");
-                    conn.setRequestProperty("Content-type", "application/json");
-                    OutputStream os = conn.getOutputStream();
-                    os.write(root.toString().getBytes("utf-8"));
-                    os.flush();
-                    conn.getResponseCode();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        thread.start();
+    public void sendPostToFCM(Context context, final String fcmtoken, final String message) throws MalformedURLException {
+        SupportFCMServiceImpl service = new SupportFCMServiceImpl(context);
+        service.sendMessage(fcmtoken, message);
     }
 }
+

@@ -6,6 +6,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import java.lang.NullPointerException
 
 class LoadUser(val view:UserContract.View):UserContract.Presenter {
     var token: String? = null
@@ -23,9 +24,13 @@ class LoadUser(val view:UserContract.View):UserContract.Presenter {
     }
 
     override fun setProfile(document: DocumentSnapshot) {
-        var map= document.data!!["UserInfo"] as Map<String?,Any?>
         var userData=UserInfo()
-        userData.add(map)
+        try{
+            var map= document.data!!["UserInfo"] as Map<String,String>
+            userData.add(map)
+        }catch (e:NullPointerException){
+        }
+
         view.showProfile(userData,boolean)
     }
 }

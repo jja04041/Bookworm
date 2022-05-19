@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.bookworm.bookworm_pages
+package com.example.bookworm.bottomMenu.bookworm.bookworm_pages.bookworm_detail
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,14 +13,17 @@ import com.example.bookworm.bottomMenu.bookworm.BookWorm
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.FragmentBwLayoutBinding
-import com.example.bookworm.notification.MyFirebaseMessagingService
+import com.example.bookworm.notification.MyFCMService
 import com.google.firebase.database.FirebaseDatabase
 
-class FragmentBW : Fragment() {
+class fragment_bookworm_detail : Fragment() {
     var binding: FragmentBwLayoutBinding? =null
     lateinit var uv:UserInfoViewModel
-    lateinit private var myFirebaseMessagingService: MyFirebaseMessagingService
+    lateinit private var myFCMService: MyFCMService
     lateinit private var  mFirebaseDatabase: FirebaseDatabase
+
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,7 +36,7 @@ class FragmentBW : Fragment() {
         ).get(
             UserInfoViewModel::class.java
         )
-        myFirebaseMessagingService = MyFirebaseMessagingService()
+        myFCMService = MyFCMService()
         mFirebaseDatabase = FirebaseDatabase.getInstance()
         binding!!.btnAchievementBg.setOnClickListener({
             val intent = Intent(requireContext(), activity_achievement::class.java)
@@ -52,10 +55,13 @@ class FragmentBW : Fragment() {
     override fun onResume() {
         super.onResume()
         uv.getUser(null, false)
+        //사용자 데이터를 추적
         uv.data.observe(this) { userInfo: UserInfo ->
-            uv.getBookWorm(userInfo.token)
+            uv.getBookWorm(userInfo.token) //책볼레 데이터를 불러오도록 한다.
         }
+        //책벌레 데이터의 도착 여부 추적
         uv.bwdata.observe(this) { bw: BookWorm ->
+            //데이터가 도착한 경우
             binding!!.ivBookworm.setImageResource(bw.wormtype)
             binding!!.ivBg.setImageResource(bw.bgtype)
         }

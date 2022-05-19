@@ -25,7 +25,6 @@ class FollowerAdapter(data: ArrayList<UserInfo>?, val context: Context, val nowU
             1 -> {
                 view = inflater.inflate(R.layout.layout_user_item, parent, false)
                 return FollowerViewHolder(view, context,nowUserInfo,-1
-//                    ,null
                 )
             }
             else -> {

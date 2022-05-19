@@ -12,7 +12,7 @@ import com.example.bookworm.core.userdata.UserInfo
 
 import com.example.bookworm.databinding.ActivityProfileInfoBinding
 import com.example.bookworm.extension.follow.view.FollowViewModelImpl
-import com.example.bookworm.notification.MyFirebaseMessagingService
+import com.example.bookworm.notification.MyFCMService
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -26,7 +26,7 @@ class ProfileInfoActivity : AppCompatActivity() {
     lateinit var fv: FollowViewModelImpl
     var cache: Boolean? = null
 
-    private var myFirebaseMessagingService: MyFirebaseMessagingService? = null
+    private var myFCMService: MyFCMService? = null
     private var mFirebaseDatabase: FirebaseDatabase? = null
 
     //자신이나 타인의 프로필을 클릭했을때 나오는 화면
@@ -36,7 +36,7 @@ class ProfileInfoActivity : AppCompatActivity() {
         setContentView(binding.root)
         fv = FollowViewModelImpl(this)
 
-        myFirebaseMessagingService = MyFirebaseMessagingService()
+        myFCMService = MyFCMService()
         mFirebaseDatabase = FirebaseDatabase.getInstance()
         //일단 안보였다가 파이어베이스에서 값을 모두 받아오면 보여주는게 UX면에서 좋을거같음
 //        binding.tvNickname.setVisibility(View.INVISIBLE);
@@ -54,10 +54,12 @@ class ProfileInfoActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             val getSubUserjob = async { fv.getUser(userID,true) }
-            val data = getSubUserjob.await()
-            data!!.let {
-                data.isFollowed = async { fv.isFollowNow(it) }.await()
-                setUI(data)
+            val getNowUserJob = async { fv.getUser(null,true) }
+            val SubUserData = getSubUserjob.await()
+            nowUser=getNowUserJob.await()
+            SubUserData!!.let {
+                SubUserData.isFollowed = async { fv.isFollowNow(it) }.await()
+                setUI(SubUserData)
             }
         }
 
@@ -119,7 +121,7 @@ class ProfileInfoActivity : AppCompatActivity() {
                         }.await().followerCounts.toLong()
                     )
                 }
-                myFirebaseMessagingService!!.sendPostToFCM(this,user!!.fcMtoken,  "규연"+"님이 팔로우하였습니다")
+                myFCMService!!.sendPostToFCM(this,user!!.fcMtoken,  nowUser!!.username+"님이 팔로우하였습니다")
             }
 
         }
