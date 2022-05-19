@@ -1,5 +1,6 @@
 package com.example.bookworm.bottomMenu.search.subactivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -17,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
+import com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Create;
+import com.example.bookworm.bottomMenu.search.items.Book;
 import com.example.bookworm.core.internet.Module;
 import com.example.bookworm.databinding.SubactivitySearchFragmentResultBinding;
 
@@ -31,23 +34,33 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
     ImageView iv_selectedItem;
     final int textViewCount = 8;
     String itemId;
-    Button btnBack;
+    Button btnBack, btnFeedCreate;
     int textViewID[] = {R.id.tvResTitle, R.id.tvResAuthor, R.id.tvLink, R.id.tvResPublisher, R.id.tvResDescription, R.id.tvResPriceSales, R.id.tvResPriceStandard, R.id.tvResRatingscore};
     String getContent[] = {"title", "author", "link", "publisher", "description", "priceSales", "priceStandard", "customerReviewRank"};
     TextView[] textViews = new TextView[textViewCount];
     TextView tvViewMore;
     RatingBar customerReviewRank;
+    Context context;
+    Book    book;
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding= SubactivitySearchFragmentResultBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Intent intent = getIntent();
+
+        book = (Book) intent.getSerializableExtra("data");
         itemId = intent.getExtras().getString("itemid");
         iv_selectedItem = findViewById(R.id.iv_selectedItem);
         tvViewMore = findViewById(R.id.tvViewMore);
         btnBack = findViewById(R.id.btnBack);
+        btnFeedCreate = findViewById(R.id.btnFeedCreate);
         customerReviewRank = findViewById(R.id.customerReviewRank);
+        context = getApplicationContext();
         for (int i = 0; i < textViewCount; i++) {
             textViews[i] = findViewById(textViewID[i]);
         }
@@ -60,6 +73,8 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
         binding.llSearch.setVisibility(View.GONE);
         binding.SFLSearch.startShimmer();
         binding.SFLSearch.setVisibility(View.VISIBLE);
+
+
 
 
         //제목,저자,출판사가 나오는 스크롤뷰를 터치해도 부모 스크롤뷰가 반응하지 않게 함
@@ -79,12 +94,25 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
             }
         });
 
+        btnFeedCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getApplicationContext(), subActivity_Feed_Create.class);
+                intent.putExtra("data", book);
+                startActivity(intent);
+            }
+        });
+
+
         //shimmer 적용 끝내고 shimmer는 안보이게, 기존 뷰는 보이게
         binding.llSearch.setVisibility(View.VISIBLE);
         binding.SFLSearch.stopShimmer();
         binding.SFLSearch.setVisibility(View.GONE);
 
     }
+
+
 
     private void setItem() {
         Map querys = new HashMap<String, String>();
@@ -147,5 +175,7 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
             }
         });
     }
+
+
 
 }

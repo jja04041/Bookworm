@@ -85,16 +85,17 @@ class Fragment_feed : Fragment() {
         }
         mView=binding!!.root
 
-        storiesBar = mView.findViewById(R.id.storybar)
-
-        val stories: MutableList<Story> = java.util.ArrayList()
-        for (i in 0..9) stories.add(Story(false))
-
-        val adapter = StorybarAdapter(stories)
-        storiesBar
-        storiesBar!!.setAdapter(adapter)
-        storiesBar!!.setLayoutManager(LinearLayoutManager(context, RecyclerView.HORIZONTAL, false))
-        storiesBar!!.addItemDecoration(StoryDeco(10))
+        // 스토리바
+//        storiesBar = mView.findViewById(R.id.storybar)
+//
+//        val stories: MutableList<Story> = java.util.ArrayList()
+//        for (i in 0..9) stories.add(Story(false))
+//
+//        val adapter = StorybarAdapter(stories)
+//        storiesBar
+//        storiesBar!!.setAdapter(adapter)
+//        storiesBar!!.setLayoutManager(LinearLayoutManager(context, RecyclerView.HORIZONTAL, false))
+//        storiesBar!!.addItemDecoration(StoryDeco(10))
 
         //companion 객체에 context값을 적재함
         setContext(requireContext())

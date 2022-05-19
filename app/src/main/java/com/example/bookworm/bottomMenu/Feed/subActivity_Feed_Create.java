@@ -11,7 +11,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-
 import android.view.Window;
 import android.widget.TextView;
 
@@ -28,13 +27,11 @@ import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
 import com.example.bookworm.bottomMenu.search.items.Book;
 import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_main;
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing;
-import com.example.bookworm.core.userdata.PersonalD;
-import com.example.bookworm.core.userdata.UserInfo;
-
 import com.example.bookworm.core.internet.FBModule;
+import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.databinding.SubactivityFeedCreateBinding;
-import java.text.SimpleDateFormat;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -51,6 +48,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
     UserInfoViewModel uv;
     BookWorm userBw;
     Book selected_book; //선택한 책 객체
+    Intent intent;
     public static int CREATE_OK = 30;
 
 
@@ -69,12 +67,15 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         binding = SubactivityFeedCreateBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        ;
 
         //피드 생성화면에 존재하는 라벨
         TextView feedCreateLabel[] = new TextView[5];
@@ -148,8 +149,16 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             });
         });
 
+        if(selected_book != null)
+            binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목만 세팅한다.
 
-
+        if(getIntent() != null) {
+            intent = getIntent();
+            if((Book) intent.getSerializableExtra("data") != null){
+            selected_book = (Book) intent.getSerializableExtra("data");
+            binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목만 세팅한다.
+            }
+        }
         imageProcess.getBitmapUri().observe(this, it -> {
             Glide.with(this).load(it)
                     .into(binding.ivpicture);
@@ -318,7 +327,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 
     //책 검색해서 선택하는 함수
     public void getBook() {
-        Intent intent = new Intent(this, search_fragment_subActivity_main.class);
+        intent = new Intent(this, search_fragment_subActivity_main.class);
         intent.putExtra("classindex", 2);
         bookResult.launch(intent); //검색 결과를 받는 핸들러를 작동한다.
     }
