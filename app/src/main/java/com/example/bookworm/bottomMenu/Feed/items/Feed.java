@@ -40,7 +40,7 @@ public class Feed implements Serializable {
         setFeedTopComment(Bdata);
     }
 
-    private void setFeedData(Map data) {
+    public void setFeedData(Map data) {
         this.feedID = (String) data.get("FeedID");
         if(data.get("book") instanceof Map){
             this.book.setBook((Map) data.get("book"));

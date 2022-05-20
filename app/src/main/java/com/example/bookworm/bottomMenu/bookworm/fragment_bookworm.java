@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.bookworm.bottomMenu.bookworm.bookworm_pages.bookworm_detail.fragment_bookworm_detail;
-import com.example.bookworm.bottomMenu.bookworm.bookworm_pages.fragment_record;
+import com.example.bookworm.bottomMenu.bookworm.bookworm_pages.bookworm_record.fragment_record;
 import com.example.bookworm.databinding.FragmentBookwormBinding;
 import com.example.bookworm.R;
 
