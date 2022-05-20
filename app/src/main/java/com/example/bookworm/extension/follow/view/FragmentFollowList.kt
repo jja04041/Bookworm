@@ -25,7 +25,8 @@ class FragmentFollowList(
     var binding: FragmentFollowListBinding? = null
     private var followerAdapter: FollowItemAdapter? = null
     private lateinit var userList: ArrayList<UserInfo>
-    private lateinit var fv:FollowViewModel
+    private lateinit var fv: FollowViewModelImpl
+
     //Paging 처리를 위해서
     var page = 0
     var canLoad = true //더 불러올 수 있는 지
@@ -38,12 +39,12 @@ class FragmentFollowList(
         savedInstanceState: Bundle?
     ): View? {
         nowUser = PersonalD(context).userInfo as UserInfo
-        fv = context.let { FollowViewModel(it!!) }
-        fv.followList.observe(viewLifecycleOwner,({
+        fv = context.let { FollowViewModelImpl(it!!) }
+        fv.followList.observe(viewLifecycleOwner, ({
             showInfo(it)
         }))
         init();
-        fv.getFollowerList(token,isfollower)
+        fv.getFollowerList(token, if (isfollower == 0) false else true)
         showShimmer(true)
 
         return binding!!.root
@@ -78,9 +79,12 @@ class FragmentFollowList(
     //어댑터 초기화
     private fun initAdapter() {
 
-        followerAdapter = context?.let { FollowItemAdapter(it, nowUser as UserInfo, isfollower
+        followerAdapter = context?.let {
+            FollowItemAdapter(
+                it, nowUser as UserInfo, isfollower
 //            , pager
-        ) }
+            )
+        }
         binding!!.recyclerView.adapter = followerAdapter
         binding!!.recyclerView.layoutManager = LinearLayoutManager(context)
         initScrollListener()
@@ -99,7 +103,7 @@ class FragmentFollowList(
                         if (layoutManager != null && lastVisibleItemPosition == followerAdapter!!.itemCount - 1) {
                             deleteLoading()
                             //다음 데이터를 조회한다.
-                            fv.getFollowerList(token,isfollower)
+                            fv.getFollowerList(token, if (isfollower == 0) false else true)
                             //현재 로딩을 끝냄을 알린다.
                             isLoading = true
                         }

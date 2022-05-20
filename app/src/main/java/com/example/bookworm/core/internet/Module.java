@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Create;
 import com.example.bookworm.appLaunch.views.MainActivity;
+import com.example.bookworm.bottomMenu.profile.views.ProfileModifyActivity;
 import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_main;
 import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_result;
 import com.example.bookworm.bottomMenu.search.fragment_search;
@@ -81,9 +82,13 @@ public class Module {
 
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("책 정보 : ", response.body());
-                    if (idx == 3) {
+                    if (idx == 3 && context instanceof subActivity_Feed_Create) {
                         ((subActivity_Feed_Create) context).feedUpload(url + response.body());
-                    } else {
+                    }
+                    else if(idx==3 && context instanceof ProfileModifyActivity){
+
+                    }
+                    else {
                         try {
                             JSONObject json = new JSONObject(response.body());
                             parseResult(idx, json);

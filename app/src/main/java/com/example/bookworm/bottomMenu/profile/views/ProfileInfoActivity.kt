@@ -9,9 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.bookworm.core.userdata.UserInfo
+
 import com.example.bookworm.databinding.ActivityProfileInfoBinding
-import com.example.bookworm.extension.follow.view.FollowViewModel
-import com.example.bookworm.notification.MyFirebaseMessagingService
+import com.example.bookworm.extension.follow.view.FollowViewModelImpl
+import com.example.bookworm.notification.MyFCMService
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -22,10 +23,10 @@ class ProfileInfoActivity : AppCompatActivity() {
     var nowUser //타인 userInfo, 현재 사용자 nowUser
             : UserInfo? = null
     lateinit var userID: String
-    lateinit var fv: FollowViewModel
+    lateinit var fv: FollowViewModelImpl
     var cache: Boolean? = null
 
-    private var myFirebaseMessagingService: MyFirebaseMessagingService? = null
+    private var myFCMService: MyFCMService? = null
     private var mFirebaseDatabase: FirebaseDatabase? = null
 
     //자신이나 타인의 프로필을 클릭했을때 나오는 화면
@@ -33,9 +34,9 @@ class ProfileInfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        fv = FollowViewModel(this)
+        fv = FollowViewModelImpl(this)
 
-        myFirebaseMessagingService = MyFirebaseMessagingService()
+        myFCMService = MyFCMService()
         mFirebaseDatabase = FirebaseDatabase.getInstance()
         //일단 안보였다가 파이어베이스에서 값을 모두 받아오면 보여주는게 UX면에서 좋을거같음
 //        binding.tvNickname.setVisibility(View.INVISIBLE);
@@ -52,27 +53,16 @@ class ProfileInfoActivity : AppCompatActivity() {
 
 
         lifecycleScope.launch {
-            val getSubUserjob = async { fv.getUser(userID) }
-            val data = getSubUserjob.await()
-            data!!.let {
-                data.isFollowed = async { fv.isFollowNow(it) }.await()
-                setUI(data)
+            val getSubUserjob = async { fv.getUser(userID,true) }
+            val getNowUserJob = async { fv.getUser(null,true) }
+            val SubUserData = getSubUserjob.await()
+            nowUser=getNowUserJob.await()
+            SubUserData!!.let {
+                SubUserData.isFollowed = async { fv.isFollowNow(it) }.await()
+                setUI(SubUserData)
             }
         }
 
-
-        //        binding.btnFollower.setOnClickListener((view)-> {
-//            Intent intent=new Intent(context, FollowerActivity.class);
-//            intent.putExtra("token",userInfo.getToken());
-//            intent.putExtra("page",0);
-//            context.startActivity(intent);
-//        });
-//        binding.btnFollowing.setOnClickListener((view)-> {
-//            Intent intent=new Intent(context, FollowerActivity.class);
-//            intent.putExtra("token",userInfo.getToken());
-//            intent.putExtra("page",1);
-//            context.startActivity(intent);
-//        });
     }
 
     //이미 팔로잉 중
@@ -126,12 +116,12 @@ class ProfileInfoActivity : AppCompatActivity() {
                 binding.tvFollow.text = "팔로잉"
                 lifecycleScope.launch {
                     setFollowerCnt(
-                        async { fv.follow(user, true) }
-                            .await()
-                            .followerCounts.toLong()
+                        async {
+                            fv.follow(user, true)
+                        }.await().followerCounts.toLong()
                     )
                 }
-                myFirebaseMessagingService!!.sendPostToFCM(user!!.fcMtoken,  "님이 팔로우하였습니다")
+                myFCMService!!.sendPostToFCM(this,user!!.fcMtoken,  nowUser!!.username+"님이 팔로우하였습니다")
             }
 
         }

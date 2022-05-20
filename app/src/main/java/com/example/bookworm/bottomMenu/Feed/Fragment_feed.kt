@@ -14,10 +14,13 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.Feed.items.Feed
 import com.example.bookworm.bottomMenu.Feed.items.FeedAdapter
+import com.example.bookworm.bottomMenu.Feed.items.Story
+import com.example.bookworm.bottomMenu.Feed.views.StoryDeco
+import com.example.bookworm.bottomMenu.Feed.views.StorybarAdapter
 import com.example.bookworm.core.internet.FBModule
-import com.example.bookworm.R
 import com.example.bookworm.databinding.FragmentFeedBinding
 import com.example.bookworm.databinding.FragmentFeedTopbarBinding
 import com.google.firebase.firestore.DocumentSnapshot
@@ -39,6 +42,8 @@ class Fragment_feed : Fragment() {
     private var isLoading = false
     private var canLoad = true
     private var page = 1
+
+    private var storiesBar: RecyclerView? = null
 
     //static 변수로 사용할 변수들
     companion object {
@@ -79,6 +84,19 @@ class Fragment_feed : Fragment() {
             startActivityResult.launch(intent)
         }
         mView=binding!!.root
+
+        // 스토리바
+//        storiesBar = mView.findViewById(R.id.storybar)
+//
+//        val stories: MutableList<Story> = java.util.ArrayList()
+//        for (i in 0..9) stories.add(Story(false))
+//
+//        val adapter = StorybarAdapter(stories)
+//        storiesBar
+//        storiesBar!!.setAdapter(adapter)
+//        storiesBar!!.setLayoutManager(LinearLayoutManager(context, RecyclerView.HORIZONTAL, false))
+//        storiesBar!!.addItemDecoration(StoryDeco(10))
+
         //companion 객체에 context값을 적재함
         setContext(requireContext())
         //스와이프하여 새로고침
@@ -148,7 +166,7 @@ class Fragment_feed : Fragment() {
     //페이지 새로고침 시 사용하는 메소드
     private fun pageRefresh() {
         initFeed()
-        map = HashMap<Any?, Any?>()
+        map = HashMap()
         if (map.get("lastVisible") != null) map.remove("lastVisible")
         feedList = ArrayList() //챌린지를 담는 리스트 생성
         isLoading = true

@@ -1,6 +1,7 @@
 package com.example.bookworm.bottomMenu.Feed.comments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_result;
 import com.example.bookworm.core.userdata.interfaces.UserContract;
 import com.example.bookworm.core.userdata.modules.LoadUser;
 import com.example.bookworm.bottomMenu.Feed.items.Feed;
@@ -30,6 +32,7 @@ public class SummaryViewHolder extends RecyclerView.ViewHolder implements UserCo
     Context context;
     FBModule fbModule = new FBModule(context);
     LoadUser user;
+
     public SummaryViewHolder(@NonNull View itemView, Context context) {
         super(itemView);
         binding = LayoutCommentSummaryBinding.bind(itemView);
@@ -53,6 +56,16 @@ public class SummaryViewHolder extends RecyclerView.ViewHolder implements UserCo
         if (item.getImgurl() != "")
             Glide.with(context).load(item.getImgurl()).into(binding.feedImage);
         else binding.feedImage.setVisibility(View.INVISIBLE);
+
+        binding.llbook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, search_fragment_subActivity_result.class);
+                intent.putExtra("itemid", book.getItemId());
+                context.startActivity(intent);
+            }
+        });
+
         setLabel(item.getLabel());
         //댓글 표시
 

@@ -4,13 +4,8 @@ package com.example.bookworm.core.userdata;
 import android.content.Context;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.Exclude;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.kakao.usermgmt.response.model.Profile;
 import com.kakao.usermgmt.response.model.UserAccount;
 
@@ -24,44 +19,37 @@ import java.util.StringTokenizer;
 
 public class UserInfo implements Serializable {
 
-    private String profileimg; // 회원가입시 프로필사진
-    private String username; // 회원가입시 닉네임
-    private String email; // 로그인한 이메일
-    private String platform;
+    private String profileimg =null; // 회원가입시 프로필사진
+    private String username="(알 수 없음)"; // 회원가입시 닉네임
+    private String email=null; // 로그인한 이메일
+    private String platform =null;
 
-    @Exclude private boolean isMainUser = false;
+   private boolean isMainUser = false;
 
-    private String FCMtoken;
+    private String FCMtoken=null;
 
 
-    private String token;
+    private String token=null;
 
-    public ArrayList<String> getLikedPost() {
-        return likedPost;
-    }
 
-    public void setLikedPost(ArrayList<String> likedPost) {
-        this.likedPost = likedPost;
-    }
 
     private ArrayList<String> likedPost;
 
 
-    private int followerCounts;
-    private int followingCounts;
+    private int followerCounts=0;
+    private int followingCounts=0;
 
-    private HashMap<String, Integer> genre = new HashMap();
-    @Exclude private boolean followed = false;
+    private HashMap<String, Integer> genre = null;
 
-//    private BookWorm bookworm;
+    private boolean followed = false;
 
 
     public UserInfo() {
-
+        genre =new HashMap<>();
         likedPost = new ArrayList<>();
 
     }
-
+    @Exclude
     public boolean isMainUser() {
         return isMainUser;
     }
@@ -75,7 +63,7 @@ public class UserInfo implements Serializable {
         this.followingCounts = followingCounts;
     }
 
-
+    @Exclude
     public boolean isFollowed() {
         return followed;
     }
@@ -118,7 +106,6 @@ public class UserInfo implements Serializable {
         this.followingCounts = Integer.parseInt(String.valueOf(document.get("followingCounts")));
 
         this.genre = new HashMap<String, Integer>((HashMap<String, Integer>) document.get("genre"));
-        //this.genre = new HashMap<String, Integer>((Map) document.get("genre"));
 
         if ((ArrayList<String>) document.get("likedPost") != null)
             this.likedPost = (ArrayList<String>) document.get("likedPost");
@@ -147,6 +134,13 @@ public class UserInfo implements Serializable {
         return platform;
     }
 
+    public void setProfileimg(String profileimg) {
+        this.profileimg = profileimg;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public int getFollowerCounts() {
         return followerCounts;
@@ -208,6 +202,13 @@ public class UserInfo implements Serializable {
 
     public void setFCMtoken(String FCMtoken) {
         this.FCMtoken = FCMtoken;
+    }
+    public ArrayList<String> getLikedPost() {
+        return likedPost;
+    }
+
+    public void setLikedPost(ArrayList<String> likedPost) {
+        this.likedPost = likedPost;
     }
 
 }

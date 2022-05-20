@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    android:orientation="vertical"
-    tools:context=".bottomMenu.challenge.board.subactivity_challenge_board_create">
+    android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -20,7 +19,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="#DDDDDD"
+                android:background="@color/white"
                 android:orientation="horizontal">
 
                 <Button
@@ -36,7 +35,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="인증글 작성"
-                    android:textSize="20dp" />
+                    android:textSize="13dp"
+                    android:textColor="@color/black"/>
 
                 <TextView
                     android:id="@+id/tvFinish"
@@ -44,8 +44,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
                     android:layout_marginEnd="10dp"
+                    android:padding="10dp"
                     android:text="완료"
-                    android:textSize="18dp" />
+                    android:textSize="18dp"
+                    android:textColor="@color/black"/>
 
             </FrameLayout>
 

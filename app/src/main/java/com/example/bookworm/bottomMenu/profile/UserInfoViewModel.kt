@@ -2,29 +2,31 @@ package com.example.bookworm.bottomMenu.profile
 
 import android.content.Context
 import android.util.Log
-
-import androidx.lifecycle.ViewModel
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.bookworm.bottomMenu.bookworm.BookWorm
 import com.example.bookworm.core.dataprocessing.repository.UserRepositoryImpl
 import com.example.bookworm.core.userdata.UserInfo
+import com.example.bookworm.extension.follow.view.FollowViewModelImpl
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.*
 import java.util.*
-import kotlin.collections.ArrayList
 
 //전반적으로 User을 관리하는 ViewModel
 class UserInfoViewModel(val context: Context) : ViewModel() {
+
     //LiveData : 동적으로 데이터의 변경이 이루어 짐
     //MutableLiveData는 읽기/쓰기 모두 가능
     //LiveData 선언 시에는 읽기만 가능
 
-    var data = MutableLiveData<UserInfo>()
-    var followList = MutableLiveData<ArrayList<UserInfo>>()
-    var lastVisibleUser: String? = null
-    var isDuplicated = MutableLiveData<Boolean>()
+    var data = MutableLiveData<UserInfo>() // 사용자 데이터 LiveData
+    var bwdata = MutableLiveData<BookWorm>() // 사용자의 BookWorm LiveData
+    var isDuplicated = MutableLiveData<Boolean>() //중복 여부를 체크 하는 LiveData
     val repo = UserRepositoryImpl(context)
+    var fv: FollowViewModelImpl
 
     class Factory(val context: Context) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -32,10 +34,16 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
         }
     }
 
+    init {
+        fv = ViewModelProvider(context as AppCompatActivity, FollowViewModelImpl.Factory(context)).get(
+            FollowViewModelImpl::class.java
+        )
+    }
+
     //사용자 가져오기
-    fun getUser(token: String?,isFirst:Boolean) {
+    fun getUser(token: String?, getFromExt: Boolean) {
         viewModelScope.launch {
-            data.value = repo.getUser(token,isFirst) //데이터 변경을 감지하면, 값이 업데이트 된다.
+            data.value = repo.getUser(token, getFromExt) //데이터 변경을 감지하면, 값이 업데이트 된다.
         }
     }
 
@@ -62,39 +70,25 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
                     })
             }.join()
         }
-
     }
 
-    // 팔로우 목록 가져오기
-    // 작업 루틴 :
-    // 토큰리스트 -> 사용자목록을 가져옴 => 팔로워인지 아닌지 확인 ->  확인된 UserInfo 리스트를 반환
-    fun getFollowerList(token: String, check: Int) = viewModelScope.launch {
-        var resultList: ArrayList<UserInfo>
-        val deferredTokenList: Deferred<ArrayList<String>> = async(Dispatchers.IO) {
-            repo.getFollowTokenList(token, check, lastVisibleUser)
+    fun getFollowerList(token: String, getFollower: Boolean) = fv.getFollowerList(token,getFollower)
+
+    fun getBookWorm(token: String) =
+        viewModelScope.launch{
+        bwdata.value=repo.getBookWorm(token)
+    }
+
+    fun updateUser(user:UserInfo){
+        viewModelScope.launch {
+            repo.updateUser(user)
         }
-        var tokenList = deferredTokenList.await()
-        val deferredFolowerList: Deferred<ArrayList<UserInfo>> = async(Dispatchers.IO) {
-            if (!tokenList.isEmpty()) lastVisibleUser =
-                tokenList.get(tokenList.size - 1)   //마지막에 가져온 사용자 정보를 저장
-            var tmpFollowList = ArrayList<UserInfo>()
-            for (i in tokenList) {
-                tmpFollowList.add(repo.getUser(i,false)!!)
-            }
-            tmpFollowList
+    }
+
+    fun updateBw(token: String,bookWorm: BookWorm){
+        viewModelScope.launch {
+            repo.updateBookWorm(token,bookWorm)
         }
-        resultList = deferredFolowerList.await()
-        (0..resultList.size - 1).map {
-            var user = resultList.get(it)
-            var data = async(Dispatchers.IO) {
-                repo.isFollowNow(user)
-            }.await()
-            if (data == true) {
-                user.isFollowed = true
-                resultList.set(it, user)
-            }
-        }
-        followList.value = resultList
     }
 
 }

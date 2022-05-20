@@ -13,6 +13,7 @@ public class Board implements Serializable {
     private String boardText; //인증글 내용
     private String date; //현재 날짜
     private String userToken; //작성자 토큰
+    private String challengeName; //챌린지 명
     private Book book; //챌린지에 사용된 책
     private long likeCount; //좋아요 수
     private long commentCount; //사용자 댓글 수
@@ -26,6 +27,7 @@ public class Board implements Serializable {
             this.boardText = (String) data.get("boardText");
             this.date = (String) data.get("date");
             this.userToken = (String) data.get("UserToken");
+            this.challengeName = (String) data.get("challengeName");
             this.book.setBook((Map) data.get("book"));
             this.likeCount = (long) data.get("likeCount");
             this.commentCount = (long) data.get("commentsCount");
@@ -62,5 +64,9 @@ public class Board implements Serializable {
 
     public long getCommentCount() {
         return commentCount;
+    }
+
+    public String getChallengeName() {
+        return challengeName;
     }
 }

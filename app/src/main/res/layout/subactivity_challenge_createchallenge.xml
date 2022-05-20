@@ -322,9 +322,10 @@
 
             <Button
                 android:id="@+id/btn_start_challenge"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:background="@drawable/square_button"
                 android:text="챌린지 시작"
                 android:textSize="20dp" />
         </LinearLayout>

@@ -31,9 +31,9 @@ class MainViewModel(val context: Context):ViewModel() {
             data.value= userInfoViewModel.createUser(userInfo)
         }
     }
-    fun getUser(token:String?,isFirst:Boolean){
+    fun getUser(token:String?,getFromExt:Boolean){
         viewModelScope.launch {
-            userInfoViewModel.getUser(token,isFirst)
+            userInfoViewModel.getUser(token,getFromExt)
             userInfo.value = userInfoViewModel.data.value
         }
     }

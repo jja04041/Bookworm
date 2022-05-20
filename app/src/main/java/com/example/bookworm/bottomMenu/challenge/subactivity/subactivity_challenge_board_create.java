@@ -301,6 +301,7 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
             //map.put("label", labelAdd(labelList)); //라벨 리스트
             map.put("date", formatTime); //현재 시간 millis로
             map.put("boardID", BoardID); //인증글 아이디
+            map.put("challengeName", challenge.getTitle()); //챌린지 명
             map.put("commentsCount",0);
             map.put("likeCount", 0);
             if (imgUrl != null) map.put("imgurl", imgUrl); //이미지 url

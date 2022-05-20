@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.challenge.subactivity.subactivity_challenge_challengeinfo;
@@ -61,6 +62,7 @@ public class FBModule {
             //피드 표시(토큰)
         else if (idx == 1) {
             //map객체: 팔로워 목록
+            query =query.orderBy("FeedID", Query.Direction.DESCENDING);
             if (map.get("FeedID") != null) {
                 query = collectionReference.document((String) map.get("FeedID")).collection("comments").orderBy("commentID", Query.Direction.DESCENDING);
             }
@@ -215,7 +217,7 @@ public class FBModule {
                 if (map.get("FeedID") != null) {
                     ((subactivity_comment) context).moduleUpdated(querySnapshot.getDocuments());
                 } else {
-                    ff = ((Fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
+                    ff = ((Fragment_feed) ((AppCompatActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
                     List<DocumentSnapshot> documents = querySnapshot.getDocuments();
                     ArrayList<DocumentSnapshot> data = new ArrayList<>(documents);
                     final int[] count = {0};

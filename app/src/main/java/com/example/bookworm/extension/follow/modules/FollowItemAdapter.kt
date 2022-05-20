@@ -79,4 +79,5 @@ class FollowItemAdapter(val context: Context, val nowUserInfo: UserInfo, val isF
         }
 
     }
+
 }
