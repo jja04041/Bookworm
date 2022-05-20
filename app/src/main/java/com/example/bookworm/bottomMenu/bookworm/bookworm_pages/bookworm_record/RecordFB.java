@@ -52,8 +52,6 @@ public class RecordFB {
                 if (task.isSuccessful()) {
                     QuerySnapshot querySnapshot = task.getResult();
                     if (!querySnapshot.isEmpty()) {//가져온 데이터가 존재할경우
-//                        ((subactivity_challenge_board) context).moduleUpdated(querySnapshot.getDocuments());
-//                        fragmentRecord.moduleUpdated(querySnapshot.getDocuments());
                         fragmentRecord = ((fragment_record) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("2").getChildFragmentManager().findFragmentByTag("1"));
                         fragmentRecord.moduleUpdated(querySnapshot.getDocuments());
                     } else {//가져온 데이터가 존재하지 않을 경우

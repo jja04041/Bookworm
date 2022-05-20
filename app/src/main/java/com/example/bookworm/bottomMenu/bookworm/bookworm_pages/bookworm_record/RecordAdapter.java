@@ -88,7 +88,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             Glide.with(context).load(item.getBook().getImg_url()).into(binding.ivBookThumb);
             binding.feedBookTitle.setText(item.getBook().getTitle());
             binding.tvFeedtext.setText(item.getFeedText());
-            binding.tvFeedDate.setText(item.getDate());
+            binding.tvFeedDate.setText(item.getDate().substring(5,10));
 //            binding.tvBoardText.setText(item.getBoardText());
 //        Glide.with(context).load(item.getImgurl()).into(binding.ivThumb); //썸네일 설정
 //            Glide.with(context).load("https://k.kakaocdn.net/dn/b8DtBK/btqRorUTUCy/w10D6Zn5IMsop8v2BJY5VK/img_640x640.jpg").into(binding.ivThumb); //이미지서버 닫혀있어서 일단 임시로....
