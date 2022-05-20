@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +59,7 @@ public class fragment_record extends Fragment {
         pv = new UserInfoViewModel(getContext());
         uv = new ViewModelProvider(this, new UserInfoViewModel.Factory(getContext())).get(UserInfoViewModel.class);
 
-//        showShimmer(true);
+        showShimmer(true);
 
         recordFB = new RecordFB(getContext());
 
@@ -126,10 +127,10 @@ public class fragment_record extends Fragment {
         recordAdapter.setListener((holder, view, position) -> {
             //닫힌 챌린지 인경우 표시할 코드 등을 입력해야함.
             //아이템 선택시 실행할 코드를 입력
-//            Intent intent = new Intent(context, subactivity_challenge_board_comment.class);
+//            Intent intent = new Intent(getContext(), subactivity_challenge_board_comment.class);
 //            intent.putExtra("board", boardList.get(position));
 //            intent.putExtra("challenge", challenge);
-//            context.startActivity(intent);
+//            getContext().startActivity(intent);
         });
     }
 
@@ -155,30 +156,39 @@ public class fragment_record extends Fragment {
         }
         initAdapter();
         initRecyclerView();
-//        isEmptyBoard(false);
-//        showShimmer(false);
+        isEmptyRecord(false);
+        showShimmer(false);
     }
 
     public void initRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         binding.mRecyclerView.setLayoutManager(linearLayoutManager);
-//        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false);
-//        binding.mRecyclerView.setLayoutManager(gridLayoutManager);//그리드 뷰로 보이게 함.
         binding.mRecyclerView.setAdapter(recordAdapter);
 //        initScrollListener(); //무한스크롤
     }
 
     //shimmer을 켜고 끄고 하는 메소드
-//    private void showShimmer(Boolean bool) {
-//        if (bool) {
-//            binding.llBoard.setVisibility(View.GONE);
-//            binding.SFLBoard.startShimmer();
-//            binding.SFLBoard.setVisibility(View.VISIBLE);
-//        } else {
-//            binding.llBoard.setVisibility(View.VISIBLE);
-//            binding.SFLBoard.stopShimmer();
-//            binding.SFLBoard.setVisibility(View.GONE);
-//        }
-//    }
+    private void showShimmer(Boolean bool) {
+        if (bool) {
+            binding.llRecord.setVisibility(View.GONE);
+            binding.SFLRecord.startShimmer();
+            binding.SFLRecord.setVisibility(View.VISIBLE);
+        } else {
+            binding.llRecord.setVisibility(View.VISIBLE);
+            binding.SFLRecord.stopShimmer();
+            binding.SFLRecord.setVisibility(View.GONE);
+        }
+    }
+
+    public void isEmptyRecord(boolean bool) {
+        showShimmer(false);//시머 종료
+        if (bool) {
+            binding.mRecyclerView.setVisibility(View.GONE);
+            binding.llEmptyRecord.setVisibility(View.VISIBLE);
+        } else {
+            binding.mRecyclerView.setVisibility(View.VISIBLE);
+            binding.llEmptyRecord.setVisibility(View.GONE);
+        }
+    }
 }

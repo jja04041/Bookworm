@@ -55,7 +55,8 @@ public class RecordFB {
                         fragmentRecord = ((fragment_record) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("2").getChildFragmentManager().findFragmentByTag("1"));
                         fragmentRecord.moduleUpdated(querySnapshot.getDocuments());
                     } else {//가져온 데이터가 존재하지 않을 경우
-//                        ((subactivity_challenge_board) context).isEmptyBoard(true);//인증글이 없습니다 라는 문구를 띄워줌
+                        fragmentRecord = ((fragment_record) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("2").getChildFragmentManager().findFragmentByTag("1"));
+                        fragmentRecord.isEmptyRecord(true);//인증글이 없습니다 라는 문구를 띄워줌
                     }
                 }
             }
