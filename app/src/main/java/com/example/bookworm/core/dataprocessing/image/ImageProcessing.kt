@@ -195,8 +195,8 @@ class ImageProcessing(val context: Context) {
 
         CoroutineScope(Dispatchers.IO).launch {
             var retrofit = Retrofit.Builder()
-                .baseUrl(imgurl)
                 .addConverterFactory(ScalarsConverterFactory.create())
+                .baseUrl(imgurl)
                 .build()
             var mainInterface = retrofit.create(GetDataInterface::class.java)
             val name = query.get("rqname") as RequestBody

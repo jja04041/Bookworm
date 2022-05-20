@@ -62,6 +62,7 @@ public class FBModule {
             //피드 표시(토큰)
         else if (idx == 1) {
             //map객체: 팔로워 목록
+            query =query.orderBy("FeedID", Query.Direction.DESCENDING);
             if (map.get("FeedID") != null) {
                 query = collectionReference.document((String) map.get("FeedID")).collection("comments").orderBy("commentID", Query.Direction.DESCENDING);
             }
