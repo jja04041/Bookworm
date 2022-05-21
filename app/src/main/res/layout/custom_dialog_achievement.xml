@@ -12,7 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textSize="30dp"
+        android:textAlignment="center"
+        android:textSize="20dp"
         android:text="축하합니다~" />
 
     <ImageView
@@ -25,7 +26,17 @@
         android:id="@+id/btn_achievement_cancle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:text="확인"/>
+
+    <TextView
+        android:id="@+id/tv_achievement_dialog_notice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:textSize="10dp"
+        android:text="가나다" />
 
 </LinearLayout>
 
