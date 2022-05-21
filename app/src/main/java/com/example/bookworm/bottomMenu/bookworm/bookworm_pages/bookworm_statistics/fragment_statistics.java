@@ -99,7 +99,11 @@ public class fragment_statistics extends Fragment {
                         // layoutParams.setMargins(0,0,0,0); 이미지 마진(왼쪽, 위, 오른쪽, 아래)
                         ImageView iv = new ImageView(getContext());
 
-                        iv.setBackgroundColor(ColorTemplate.JOYFUL_COLORS[random.nextInt(5)]);
+                        if (random.nextBoolean()){
+                            iv.setBackgroundColor(ColorTemplate.JOYFUL_COLORS[random.nextInt(5)]);
+                        }else {
+                            iv.setBackgroundColor(ColorTemplate.COLORFUL_COLORS[random.nextInt(5)]);
+                        }
                         iv.setLayoutParams(layoutParams);
                         llbooks[i].addView(iv);
                         llbookworm[i].setVisibility(View.VISIBLE);
