@@ -8,6 +8,7 @@
     tools:context=".bottomMenu.bookworm.bookworm_pages.bookworm_statistics.fragment_statistics">
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -332,6 +333,22 @@
 
 
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/llEmptyRecord"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:gravity="center"
+            android:text="독서기록이 없습니다.\n책을 읽고 기록을 남겨보세요!"
+            android:textSize="18dp" />
+
+    </LinearLayout>
 
 
 </LinearLayout>

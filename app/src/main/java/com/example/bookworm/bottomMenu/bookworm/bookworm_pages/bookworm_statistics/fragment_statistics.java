@@ -172,8 +172,24 @@ public class fragment_statistics extends Fragment {
 //            binding.tvBookwormBookcount.setText("읽은 권 수 : " + bw.getReadcount());
             binding.pieChart.setCenterText("총 " + bw.getReadcount() + "권");
             binding.pieChart.setCenterTextSize(20);
+
+            if (bw.getReadcount()==0){ //읽은 권수가 0권이라면 독서기록이 없다고 표기
+                isEmptyRecord(true);
+            }else {
+                isEmptyRecord(false);
+            }
         });
 
 
+    }
+
+    public void isEmptyRecord(boolean bool) {
+        if (bool) {
+            binding.scrollView.setVisibility(View.GONE);
+            binding.llEmptyRecord.setVisibility(View.VISIBLE);
+        } else {
+            binding.scrollView.setVisibility(View.VISIBLE);
+            binding.llEmptyRecord.setVisibility(View.GONE);
+        }
     }
 }
