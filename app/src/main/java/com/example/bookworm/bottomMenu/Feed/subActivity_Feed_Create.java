@@ -182,6 +182,10 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
 
     //서버에 이미지 업로드
     private void upload(Bitmap data, UserInfo userInfo) {
@@ -373,11 +377,15 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             uv.updateUser(userInfo);
             uv.updateBw(userInfo.getToken(), userBw);
 
+            boolean exit = true;
             Achievement achievement = new Achievement(current_context, fbModule, userInfo, userBw);
             achievement.CompleteAchievement(userInfo, current_context);
+            exit = achievement.canreturn();
 
-            setResult(CREATE_OK);
-            finish();
+            if(exit == true) {
+                setResult(CREATE_OK);
+                finish();
+            }
         }
     }
 

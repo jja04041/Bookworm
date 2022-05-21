@@ -9,12 +9,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.bookworm.R;
+import com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Create;
 
 public class CustomDialog {
 
     private Context context;
     private String key;
     int     resID;
+    boolean exit;
 
     public CustomDialog(Context context) {
         this.context = context;
@@ -24,9 +26,10 @@ public class CustomDialog {
         this.context = context;
         key = _AchieveKey;
         resID = _resID;
+        exit = false;
     }
 
-    public void CallDialog() {
+    public boolean CallDialog() {
         final Dialog dialog = new Dialog(context);
 
         // dialog 타이틀바 제거
@@ -37,19 +40,25 @@ public class CustomDialog {
         dialog.show();
 
         final TextView tvdialog = (TextView) dialog.findViewById(R.id.tv_achievement_dialog);
+        final TextView tvdialognotice = (TextView) dialog.findViewById(R.id.tv_achievement_dialog_notice);
+
         final Button btncancle = (Button) dialog.findViewById(R.id.btn_achievement_cancle);
         final ImageView ivdialog =(ImageView) dialog.findViewById(R.id.iv_achievement_dialog);
 
         tvdialog.setText("축하합니다! "+ key + " 획득!");
+        tvdialognotice.setText("획득한 보상을 인벤토리에서 확인해보세요!!");
         ivdialog.setImageResource(resID);
         btncancle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // 누르면 dialog탈출
                 dialog.dismiss();
+                exit = true;
+
+                ((subActivity_Feed_Create)context).finish();
             }
         });
-
+        return exit;
     }
 
 }

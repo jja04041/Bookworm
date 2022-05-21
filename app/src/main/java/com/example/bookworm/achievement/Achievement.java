@@ -2,11 +2,11 @@ package com.example.bookworm.achievement;
 
 import android.content.Context;
 
-import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.R;
-import com.example.bookworm.core.userdata.UserInfo;
+import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.PersonalD;
+import com.example.bookworm.core.userdata.UserInfo;
 
 import java.util.HashMap;
 
@@ -17,6 +17,7 @@ public class Achievement extends activity_achievement {
     UserInfo userinfo;
     BookWorm bookworm;
     CustomDialog customDialog;
+    Boolean exitactiviy;
 
     public Achievement (Context context, FBModule fbModule, UserInfo userinfo, BookWorm bookworm)
     {
@@ -26,17 +27,18 @@ public class Achievement extends activity_achievement {
         this.fbModule = fbModule;
         this.userinfo = userinfo;
         this.bookworm = bookworm;
+        exitactiviy = true;
     }
 
+    public boolean canreturn(){
+        return exitactiviy;
+    }
 
     private void ExecuteFB(int _drawblepath, String _key, int type) {
         // 업적 달성하면 FB에 정보를 줍니다.
 
 
         // 축하 다이얼로그
-        customDialog = new CustomDialog(context, _key, _drawblepath);
-        customDialog.CallDialog();
-
         HashMap<String, Object> map = new HashMap<>();
 
         // 볼레보상
@@ -56,6 +58,9 @@ public class Achievement extends activity_achievement {
 
         fbModule.readData(0, map, bookworm.getToken());
         new PersonalD(context).saveBookworm(bookworm);
+
+        customDialog = new CustomDialog(context, _key, _drawblepath);
+        exitactiviy = customDialog.CallDialog();
     }
 
 
@@ -63,34 +68,87 @@ public class Achievement extends activity_achievement {
 
         HashMap<String, Object> map = new HashMap<>();
 
-
-//        if (userinfo.getGenre().get("과학") == 10) {
-//            if(null == bookworm.getAchievementmap().get("과학")) {
-//                ExecuteFB(R.drawable.bw_horror, "과학왕", 0);
-//            }
-//        }
-//        else if (userinfo.getGenre().get("수필") == 10) {
-//            if(null == bookworm.getAchievementmap().get("수필")) {
-//                ExecuteFB(R.drawable.bw_detective, "수필왕", 0);
-//            }
-//        }
-
-        // 좋아요 업적
-        if(userinfo.getLikedPost() != null)
-        {         if (userinfo.getLikedPost().size() == 2) {
-            if(null == bookworm.getAchievementmap().get("하트배경")) {
-                ExecuteFB(R.drawable.bg_heart, "하트배경", 1);
+        if(userinfo.getGenre().get("자기계발") != null) {
+            if (userinfo.getGenre().get("자기계발") == 2) {
+                if (null == bookworm.getAchievementmap().get("자존감왕")) {
+                    ExecuteFB(R.drawable.bw_confidence, "자존감왕", 0);
+                }
             }
         }
 
-
-
-
-
-
-
-
-
+        if(userinfo.getGenre().get("소설") != null) {
+            if (userinfo.getGenre().get("소설") == 1) {
+                if (null == bookworm.getAchievementmap().get("가을볼레")) {
+                    ExecuteFB(R.drawable.bw_fall, "가을볼레", 0);
+                }
+            }
         }
-    }
+        if(userinfo.getGenre().get("육아") != null) {
+            if (userinfo.getGenre().get("육아") == 3) {
+                if (null == bookworm.getAchievementmap().get("좋은엄마")) {
+                    ExecuteFB(R.drawable.bw_mom, "좋은엄마", 0);
+                }
+            }
+        }
+        if(userinfo.getGenre().get("어린이") != null) {
+            if (userinfo.getGenre().get("어린이") == 3) {
+                if (null == bookworm.getAchievementmap().get("착한어린이")) {
+                    ExecuteFB(R.drawable.bw_child, "착한어린이", 0);
+                }
+            }
+        }
+
+        if(userinfo.getGenre().get("청소년") != null) {
+            if (userinfo.getGenre().get("청소년") == 3) {
+                    if(null == bookworm.getAchievementmap().get("사춘기볼레")) {
+                        ExecuteFB(R.drawable.bw_student, "사춘기볼레", 0);
+                    }
+                }
+        }
+
+        /*
+        else if (userinfo.getGenre().get("공부") == 10) {
+            if(null == bookworm.getAchievementmap().get("공부")) {
+                ExecuteFB(R.drawable.bw_detective, "수필왕", 0);
+            }
+        }
+        else if (userinfo.getGenre().get("사회") == 10) {
+            if(null == bookworm.getAchievementmap().get("사회")) {
+                ExecuteFB(R.drawable.bw_detective, "수필왕", 0);
+            }
+        }
+        else if (userinfo.getGenre().get("과학") == 10) {
+            if(null == bookworm.getAchievementmap().get("과학")) {
+                ExecuteFB(R.drawable.bw_detective, "수필왕", 0);
+            }
+        }
+        else if (userinfo.getGenre().get("인문") == 10) {
+            if(null == bookworm.getAchievementmap().get("인문")) {
+                ExecuteFB(R.drawable.bw_detective, "수필왕", 0);
+            }
+        }
+        else if (userinfo.getGenre().get("생활") == 10) {
+            if(null == bookworm.getAchievementmap().get("생활")) {
+                ExecuteFB(R.drawable.bw_detective, "수필왕", 0);
+            }
+        }
+                else if (userinfo.getGenre().get("만화") == 10) {
+            if(null == bookworm.getAchievementmap().get("만화")) {
+                ExecuteFB(R.drawable.bw_detective, "수필왕", 0);
+            }
+        }
+        */
+
+        // 좋아요 업적
+
+
+        if (userinfo.getLikedPost().size() == 2) {
+                if(null == bookworm.getAchievementmap().get("하트배경")) {
+                    ExecuteFB(R.drawable.bg_heart, "하트배경", 1);
+                }
+        }
+
+
+
+     }
 }
