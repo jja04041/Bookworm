@@ -171,31 +171,6 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
             binding.ivpicture.setColorFilter(ContextCompat.getColor(this, android.R.color.transparent));
         });
 
-
-        //완료 버튼 (피드 올리기)
-//        binding.tvFinish.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                new AlertDialog.Builder(current_context)
-//                        .setMessage("피드를 업로드하시겠습니까?")
-//                        .setPositiveButton("네", new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        dialog.dismiss();
-//                                        upload();
-//                                    }
-//                                }
-//                        )
-//                        .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        dialog.dismiss();
-//                                    }
-//                                }
-//                        ).show();
-//            }
-//        });
     }
 
     //메소드
@@ -208,103 +183,6 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
         binding.ivpicture.setColorFilter(ContextCompat.getColor(this, android.R.color.transparent));
     }
 
-    private void showImagePickerOptions() {
-        ImagePicker.showImagePickerOptions(this, new ImagePicker.PickerOptionListener() {
-            @Override
-            public void onTakeCameraSelected() {
-                launchCameraIntent();
-            }
-
-            @Override
-            public void onChooseGallerySelected() {
-                launchGalleryIntent();
-            }
-        });
-    }
-
-    private void launchCameraIntent() {
-        Intent intent = new Intent(subactivity_challenge_board_create.this, ImagePicker.class);
-        intent.putExtra(ImagePicker.INTENT_IMAGE_PICKER_OPTION, ImagePicker.REQUEST_IMAGE_CAPTURE);
-
-        // setting aspect ratio
-        intent.putExtra(ImagePicker.INTENT_LOCK_ASPECT_RATIO, true);
-        intent.putExtra(ImagePicker.INTENT_ASPECT_RATIO_X, 1); // 16x9, 1x1, 3:4, 3:2
-        intent.putExtra(ImagePicker.INTENT_ASPECT_RATIO_Y, 1);
-
-        // setting maximum bitmap width and height
-        intent.putExtra(ImagePicker.INTENT_SET_BITMAP_MAX_WIDTH_HEIGHT, true);
-        intent.putExtra(ImagePicker.INTENT_BITMAP_MAX_WIDTH, 1000);
-        intent.putExtra(ImagePicker.INTENT_BITMAP_MAX_HEIGHT, 1000);
-        startActivityResult.launch(intent);
-    }
-
-    private void launchGalleryIntent() {
-        Intent intent = new Intent(subactivity_challenge_board_create.this, ImagePicker.class);
-        intent.putExtra(ImagePicker.INTENT_IMAGE_PICKER_OPTION, ImagePicker.REQUEST_GALLERY_IMAGE);
-
-        // setting aspect ratio
-        intent.putExtra(ImagePicker.INTENT_LOCK_ASPECT_RATIO, true);
-        intent.putExtra(ImagePicker.INTENT_ASPECT_RATIO_X, 1); // 16x9, 1x1, 3:4, 3:2
-        intent.putExtra(ImagePicker.INTENT_ASPECT_RATIO_Y, 1);
-        startActivityResult.launch(intent);
-    }
-
-    private void showSettingsDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(subactivity_challenge_board_create.this);
-        builder.setTitle(getString(R.string.dialog_permission_title));
-        builder.setMessage(getString(R.string.dialog_permission_message));
-        builder.setPositiveButton(getString(R.string.go_to_settings), (dialog, which) -> {
-            dialog.cancel();
-            openSettings();
-        });
-        builder.setNegativeButton(getString(android.R.string.cancel), (dialog, which) -> dialog.cancel());
-        builder.show();
-
-    }
-
-    //권한 설정
-    private void openSettings() {
-        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        Uri uri = Uri.fromParts("package", getPackageName(), null);
-        intent.setData(uri);
-        startActivityResult.launch(intent);
-
-    }
-
-    //서버에 이미지 업로드
-    private void upload() {
-
-        BoardID = String.valueOf(System.currentTimeMillis()) + "_" + userInfo.getToken(); //현재 시각 + 사용자 토큰을 BoardID로 설정
-
-        if (uploaded != null) {
-            try {
-                File filesDir = getApplicationContext().getFilesDir();
-                File file = new File(filesDir, "feed_" + BoardID + ".jpg"); //파일명 설정
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                uploaded.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-                byte[] bitmapdata = bos.toByteArray();
-                //파일에 바이트배열로 담겨진 비트맵파일을 쓴다.
-                FileOutputStream fos = new FileOutputStream(file);
-                fos.write(bitmapdata);
-                fos.flush();
-                fos.close();
-                RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
-                MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
-                RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "upload");
-                Map map = new HashMap();
-                map.put("rqbody", body);
-                map.put("rqname", name);
-                imgurl = getString(R.string.serverUrl); //이미지 서버의 주소
-                module = new Module(current_context, imgurl, map);
-                module.connect(3);
-
-            } catch (IOException e) {
-
-            }
-        } else {
-            feedUpload(null);
-        }
-    }
 
     //서버에 이미지 업로드
     private void upload(Bitmap data, UserInfo userInfo) {
@@ -356,18 +234,22 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
 
             // 장르 처리
 //            HashMap<String, Object> savegenremap = new HashMap<>();
-//
-//            userInfo.setGenre(selected_book.getCategoryname(), current_context);
-//            savegenremap.put("userinfo_genre", userInfo.getGenre());
-//            fbModule.readData(0, savegenremap, userInfo.getToken());
-//
-//            BookWorm bookworm = new PersonalD(current_context).getBookworm();
-//            Achievement achievement = new Achievement(current_context, fbModule, userInfo, bookworm);
-//            achievement.CompleteAchievement(userInfo, current_context);
+            userInfo.setGenre(selected_book.getCategoryname(), current_context);
 
-            new PersonalD(current_context).saveUserInfo(userInfo);
-            setResult(CREATE_OK);
-            finish();
+            int count = userBw.getReadcount();
+            userBw.setReadcount(++count);
+            uv.updateUser(userInfo);
+            uv.updateBw(userInfo.getToken(), userBw);
+
+            boolean exit = true;
+            Achievement achievement = new Achievement(current_context, fbModule, userInfo, userBw);
+            achievement.CompleteAchievement(userInfo, current_context);
+            exit = achievement.canreturn();
+
+            if(exit == true) {
+                setResult(CREATE_OK);
+                finish();
+            }
         }
     }
 

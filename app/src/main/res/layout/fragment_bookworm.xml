@@ -32,6 +32,16 @@
             android:textSize="20dp"
             android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/tvStatistics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="통계"
+            android:textColor="@color/gray"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
     </LinearLayout>
 
     <LinearLayout
