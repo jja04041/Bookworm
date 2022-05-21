@@ -67,54 +67,17 @@ public class fragment_statistics extends Fragment {
         uv.getUser(null, false);
         uv.getData().observe(this, userInfo -> {
             String[] genre = {
-                    "자기계발",
-                    "소설",
-                    "육아",
-                    "어린이",
-                    "청소년",
-                    "사회",
-                    "과학",
-                    "인문",
-                    "생활",
-                    "공부",
-                    "만화"};
-            TextView bookworm[] = {
-                    binding.tvBookworm1,
-                    binding.tvBookworm2,
-                    binding.tvBookworm3,
-                    binding.tvBookworm4,
-                    binding.tvBookworm5,
-                    binding.tvBookworm6,
-                    binding.tvBookworm7,
-                    binding.tvBookworm8,
-                    binding.tvBookworm9,
-                    binding.tvBookworm10,
-                    binding.tvBookworm11};
-            LinearLayout llbookworm[] = {
-                    binding.llBookworm1,
-                    binding.llBookworm2,
-                    binding.llBookworm3,
-                    binding.llBookworm4,
-                    binding.llBookworm5,
-                    binding.llBookworm6,
-                    binding.llBookworm7,
-                    binding.llBookworm8,
-                    binding.llBookworm9,
-                    binding.llBookworm10,
-                    binding.llBookworm11};
-            ImageView ivBookshelf[] = {
-                    binding.ivBookshelf1,
-                    binding.ivBookshelf2,
-                    binding.ivBookshelf3,
-                    binding.ivBookshelf4,
-                    binding.ivBookshelf5,
-                    binding.ivBookshelf6,
-                    binding.ivBookshelf7,
-                    binding.ivBookshelf8,
-                    binding.ivBookshelf9,
-                    binding.ivBookshelf10,
-                    binding.ivBookshelf11
+                    "자기계발", "소설", "육아", "어린이", "청소년", "사회", "과학", "인문", "생활", "공부", "만화"};
+            TextView bookworm[] = { //권수 확인
+                    binding.tvBookworm1, binding.tvBookworm2, binding.tvBookworm3, binding.tvBookworm4, binding.tvBookworm5, binding.tvBookworm6, binding.tvBookworm7, binding.tvBookworm8, binding.tvBookworm9, binding.tvBookworm10, binding.tvBookworm11};
+            LinearLayout llbookworm[] = { //읽은 책만 Visible로 설정하기 위함
+                    binding.llBookworm1, binding.llBookworm2, binding.llBookworm3, binding.llBookworm4, binding.llBookworm5, binding.llBookworm6, binding.llBookworm7, binding.llBookworm8, binding.llBookworm9, binding.llBookworm10, binding.llBookworm11};
+            LinearLayout llbooks[] = { //책 ImageView가 추가될 레이아웃
+                    binding.llBooks1, binding.llBooks2, binding.llBooks3, binding.llBooks4, binding.llBooks5, binding.llBooks6, binding.llBooks7, binding.llBooks8, binding.llBooks9, binding.llBooks10, binding.llBooks11
             };
+            ImageView ivBookshelf[] = { // 선반
+                    binding.ivBookshelf1, binding.ivBookshelf2, binding.ivBookshelf3, binding.ivBookshelf4, binding.ivBookshelf5, binding.ivBookshelf6, binding.ivBookshelf7, binding.ivBookshelf8, binding.ivBookshelf9, binding.ivBookshelf10, binding.ivBookshelf11};
+
 
             userinfo = userInfo;
 
@@ -127,6 +90,8 @@ public class fragment_statistics extends Fragment {
 
                     Random random = new Random(); //책 길이, 색상을 랜덤으로 설정하기 위함
 
+                    llbooks[i].removeAllViews(); //onResume() 작동시 계속 뷰가 늘어나는 현상 해결
+
                     for (int j = 0; j < userInfo.getGenre().get(genre[i]); j++) {
                         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT /* layout_width */, LinearLayout.LayoutParams.WRAP_CONTENT /* layout_height */ /* layout_weight */);
                         layoutParams.width = 25;
@@ -136,7 +101,7 @@ public class fragment_statistics extends Fragment {
 
                         iv.setBackgroundColor(ColorTemplate.JOYFUL_COLORS[random.nextInt(5)]);
                         iv.setLayoutParams(layoutParams);
-                        llbookworm[i].addView(iv);
+                        llbooks[i].addView(iv);
                         llbookworm[i].setVisibility(View.VISIBLE);
                         ivBookshelf[i].setVisibility(View.VISIBLE);
                     }
