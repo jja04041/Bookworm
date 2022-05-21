@@ -25,8 +25,10 @@ import com.example.bookworm.achievement.Achievement;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.challenge.items.Challenge;
 import com.example.bookworm.bottomMenu.Feed.ImagePicker;
+import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
 import com.example.bookworm.bottomMenu.search.items.Book;
 
+import com.example.bookworm.core.dataprocessing.image.ImageProcessing;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.internet.Module;
 import com.example.bookworm.core.userdata.PersonalD;
@@ -61,6 +63,9 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
     Context current_context;
     Bitmap uploaded;
     Module module;
+    UserInfoViewModel uv;
+    ImageProcessing imageProcess;
+    BookWorm userBw;
     Challenge challenge;
     String imgurl = null;
     Dialog customDialog;
@@ -103,66 +108,94 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
 
 
         current_context = this;
+        uv = new UserInfoViewModel(current_context);
+        uv.getUser(null, false);
         fbModule = new FBModule(current_context);
-        userInfo = new PersonalD(current_context).getUserInfo(); //저장된 UserInfo값을 가져온다.
 
-
-        Glide.with(this).load(userInfo.getProfileimg()).circleCrop().into(binding.ivProfileImage); //프로필사진 로딩후 삽입.
-        binding.tvNickname.setText(userInfo.getUsername());
+        imageProcess = new ImageProcessing(current_context);
 
 
         //이미지 업로드 버튼
-        binding.btnImageUpload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        binding.btnImageUpload.setOnClickListener(view -> imageProcess.initProcess());
 
-                Dexter.withActivity((Activity) current_context)
-                        .withPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
-                        .withListener(new MultiplePermissionsListener() {
-                            @Override
-                            public void onPermissionsChecked(MultiplePermissionsReport report) {
-                                if (report.areAllPermissionsGranted()) {
-                                    showImagePickerOptions();
-                                }
+        uv.getData().observe(this, userinfo -> {
+            uv.getBookWorm(userinfo.getToken());
+            userInfo = userinfo;
+            Glide.with(this).load(userinfo.getProfileimg()).circleCrop().into(binding.ivProfileImage); //프로필사진 로딩후 삽입.
+            binding.tvNickname.setText(userinfo.getUsername());
 
-                                if (report.isAnyPermissionPermanentlyDenied()) {
-                                    showSettingsDialog();
-                                }
-                            }
+            uv.getBwdata().observe(this,bookWorm -> {
+                userBw=bookWorm;
+                imageProcess.getBitmap().observe(this, bitmap -> {
+                    //완료 버튼 (피드 올리기)
+                    binding.tvFinish.setOnClickListener(view ->
+                            new AlertDialog.Builder(current_context)
+                                    .setMessage("피드를 업로드하시겠습니까?")
+                                    .setPositiveButton("네", (dialog, which) -> {
+                                        dialog.dismiss();
+                                        upload(bitmap, userInfo);
+                                    })
+                                    .setNegativeButton("아니요", (dialog, which)
+                                            -> dialog.dismiss())
+                                    .show()
+                    );
+                    imageProcess.getImgData().observe(this,imgurl->{
+                        feedUpload(imgurl);
+                    });
+                });
 
-                            @Override
-                            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
-                                token.continuePermissionRequest();
-                            }
-                        }).check();
-            }
+                binding.tvFinish.setOnClickListener(view ->
+                        new AlertDialog.Builder(current_context)
+                                .setMessage("피드를 업로드하시겠습니까?")
+                                .setPositiveButton("네", (dialog, which) -> {
+                                    dialog.dismiss();
+                                    upload(null, userInfo);
+                                })
+                                .setNegativeButton("아니요", (dialog, which)
+                                        -> dialog.dismiss())
+                                .show()
+                );
+            });
+        });
+
+        if(getIntent() != null) {
+//            intent = getIntent();
+//            if((Book) intent.getSerializableExtra("data") != null){
+//                selected_book = (Book) intent.getSerializableExtra("data");
+//                binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목만 세팅한다.
+//            }
+        }
+        imageProcess.getBitmapUri().observe(this, it -> {
+            Glide.with(this).load(it)
+                    .into(binding.ivpicture);
+            binding.ivpicture.setColorFilter(ContextCompat.getColor(this, android.R.color.transparent));
         });
 
 
         //완료 버튼 (피드 올리기)
-        binding.tvFinish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                new AlertDialog.Builder(current_context)
-                        .setMessage("피드를 업로드하시겠습니까?")
-                        .setPositiveButton("네", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                        upload();
-                                    }
-                                }
-                        )
-                        .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                }
-                        ).show();
-            }
-        });
+//        binding.tvFinish.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                new AlertDialog.Builder(current_context)
+//                        .setMessage("피드를 업로드하시겠습니까?")
+//                        .setPositiveButton("네", new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                        dialog.dismiss();
+//                                        upload();
+//                                    }
+//                                }
+//                        )
+//                        .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                        dialog.dismiss();
+//                                    }
+//                                }
+//                        ).show();
+//            }
+//        });
     }
 
     //메소드
@@ -268,6 +301,18 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
             } catch (IOException e) {
 
             }
+        } else {
+            feedUpload(null);
+        }
+    }
+
+    //서버에 이미지 업로드
+    private void upload(Bitmap data, UserInfo userInfo) {
+
+        BoardID = System.currentTimeMillis() + "_" + userInfo.getToken(); //현재 시각 + 사용자 토큰을 FeedID로 설정
+        if (data != null) {
+            String name="feed_"+BoardID+".jpg";
+            imageProcess.uploadImage(data,name);
         } else {
             feedUpload(null);
         }
