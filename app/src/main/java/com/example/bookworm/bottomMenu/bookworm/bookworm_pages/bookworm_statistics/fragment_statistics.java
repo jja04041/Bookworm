@@ -173,9 +173,9 @@ public class fragment_statistics extends Fragment {
             binding.pieChart.setCenterText("총 " + bw.getReadcount() + "권");
             binding.pieChart.setCenterTextSize(20);
 
-            if (bw.getReadcount()==0){ //읽은 권수가 0권이라면 독서기록이 없다고 표기
+            if (bw.getReadcount() == 0) { //읽은 권수가 0권이라면 독서기록이 없다고 표기
                 isEmptyRecord(true);
-            }else {
+            } else {
                 isEmptyRecord(false);
             }
         });
