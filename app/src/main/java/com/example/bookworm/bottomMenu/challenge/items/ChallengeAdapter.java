@@ -18,6 +18,7 @@ import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.Circle;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnChallengeItemClickListener {
     ArrayList<Challenge> ChallengeList;
@@ -107,7 +108,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     //뷰홀더 클래스 부분
     public class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView tvBookTitle, tvCTitle, tvChallengeStartDate, tvChallengeEndDate, tvPerson;
+        TextView tvBookTitle, tvCTitle, tvChallengeStartDate, tvChallengeEndDate, tvPerson, tvDday;
         ImageView ivThumb;
 
         //생성자를 만든다.
@@ -120,6 +121,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             tvChallengeStartDate = itemView.findViewById(R.id.tvChallengeStartDate);
             tvChallengeEndDate = itemView.findViewById(R.id.tvChallengeEndDateDate);
             tvPerson = itemView.findViewById(R.id.tvPerson);
+            tvDday = itemView.findViewById(R.id.tvDday);
             //아이템 선택 시 리스너
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -145,7 +147,40 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             tvChallengeEndDate.setText(item.getEndDate().substring(5));
             tvPerson.setText(String.valueOf(item.getCurrentPart().size()));
             tvBookTitle.setText(item.getBook().getTitle());
+            tvDday.setText(countDday(item.getEndDate()));
             Glide.with(itemView).load(item.getBook().getImg_url()).into(ivThumb); //책 썸네일 설정
+        }
+    }
+
+    //D-day 계산
+    public String countDday(String EndDate) {
+        try {
+//            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+            Calendar todaCal = Calendar.getInstance(); //오늘날짜 가져오기
+            Calendar ddayCal = Calendar.getInstance(); //오늘날짜를 가져와 변경시킴
+
+            int year, month, day;
+
+            year = Integer.parseInt(EndDate.substring(0, 4));
+            month = Integer.parseInt(EndDate.substring(5, 7));
+            day = Integer.parseInt(EndDate.substring(8, 10));
+
+            month -= 1; // 받아온날짜에서 -1을 해줘야함.
+            ddayCal.set(year, month, day);// D-day의 날짜를 입력
+
+            long today = todaCal.getTimeInMillis() / 86400000; //->(24 * 60 * 60 * 1000) 24시간 60분 60초 * (ms초->초 변환 1000)
+            long dday = ddayCal.getTimeInMillis() / 86400000;
+            long count = dday - today; // 오늘 날짜에서 dday 날짜를 빼주게 됨.
+
+            if (count < 0) {
+                return "종료됨";
+            } else {
+                return "D-" + String.valueOf(count);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
         }
     }
 }

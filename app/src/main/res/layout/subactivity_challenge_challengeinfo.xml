@@ -85,6 +85,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="#### - ## - ##"
+                        android:textColor="@color/black"
                         android:textSize="17dp"
                         android:textStyle="bold" />
 
@@ -92,6 +93,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=" 에 종료됨"
+                        android:textColor="@color/black"
                         android:textSize="17dp"
                         android:textStyle="bold" />
 
@@ -139,6 +141,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="현재 참여자 "
+                        android:textColor="@color/black"
                         android:textSize="17dp" />
 
                     <TextView
@@ -146,12 +149,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="#"
+                        android:textColor="@color/black"
                         android:textSize="17dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=" / "
+                        android:textColor="@color/black"
                         android:textSize="17dp" />
 
                     <TextView
@@ -159,12 +164,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="#"
+                        android:textColor="@color/black"
                         android:textSize="17dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=" 명"
+                        android:textColor="@color/black"
                         android:textSize="17dp" />
 
                 </LinearLayout>
@@ -191,7 +198,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="start|center_vertical"
                         android:layout_marginStart="20dp"
-                        android:text="인증 게시판"
+                        android:text="챌린지 인증 하기"
+                        android:textColor="@color/black"
                         android:textSize="17dp" />
 
                     <ImageView
@@ -338,6 +346,7 @@
                             android:id="@+id/tv_challenge_Description"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/black"
                             android:layout_marginHorizontal="2dp" />
 
                     </LinearLayout>
