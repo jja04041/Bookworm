@@ -22,7 +22,8 @@
                 android:id="@+id/ivBwImage"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:background="#DDDDDD" />
+                android:background="#DDDDDD"
+                android:src="@drawable/ic_baseline_question_mark_24"/>
 
             <TextView
                 android:id="@+id/tvGenre"
@@ -30,7 +31,7 @@
                 android:layout_height="25dp"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
-                android:text="자기계발"
+                android:text="\?\?"
                 android:textColor="@color/black"
                 android:textSize="10dp" />
 
