@@ -63,14 +63,6 @@ public class activity_achievement extends AppCompatActivity {
                 wormname = "추리";
                 break;
 
-
-
-
-
-
-
-
-
             // 배경
             case R.drawable.bg_default:
                 wormname = "배경";

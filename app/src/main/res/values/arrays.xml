@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="bookworm_char">
+        <item>@drawable/bw_default</item>
+        <item>@drawable/bw_child</item>
+        <item>@drawable/bw_detective</item>
+        <item>@drawable/bw_confidence</item>
+        <item>@drawable/bw_fall</item>
+        <item>@drawable/bw_horror</item>
+        <item>@drawable/bw_student</item>
+        <item>@drawable/bw_mom</item>
+    </array>
+
+    <string-array name="bookworm_name">
+        <item>디폴트</item>
+        <item>아이볼레</item>
+        <item>탐정볼레</item>
+        <item>자기계발볼레</item>
+        <item>가을볼레</item>
+        <item>공포볼레</item>
+        <item>학생볼레</item>
+        <item>육아볼레</item>
+
+    </string-array>
+
+</resources>

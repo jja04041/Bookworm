@@ -311,17 +311,20 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
 
     //사용자의 프로필을 보여주는 메소드
     // (UserContract.View 인터페이스의 메소드를 오버라이딩함)
-    override fun showProfile(userInfo: UserInfo, bool: Boolean?) {
+    override fun showProfile(userInfo: UserInfo?, bool: Boolean?) {
 
         try {
             if (bool == false) {
-                binding!!.tvNickname.setText(userInfo.username)
-                Glide.with(itemView).load(userInfo.profileimg).circleCrop()
-                    .into(binding!!.ivProfileImage)
+                if(userInfo!=null){
+                binding!!.tvNickname.setText(userInfo!!.username)
+                Glide.with(itemView).load(userInfo!!.profileimg).circleCrop()
+                    .into(binding!!.ivProfileImage)}
             } else if (bool == true) {
-                binding!!.tvCommentNickname.setText(userInfo.username)
-                Glide.with(binding!!.getRoot()).load(userInfo.profileimg).circleCrop()
-                    .into(binding!!.ivCommentProfileImage)
+                if(userInfo!=null) {
+                    binding!!.tvCommentNickname.setText(userInfo!!.username)
+                    Glide.with(binding!!.getRoot()).load(userInfo!!.profileimg).circleCrop()
+                        .into(binding!!.ivCommentProfileImage)
+                }
             }
         } catch (e: IllegalArgumentException) {
             Log.e("Glide Error", "itemView가 Null인 상태입니다.")

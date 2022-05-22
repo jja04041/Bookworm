@@ -157,9 +157,9 @@ router.get("/token", (req, res) => {
 //사용자 탈퇴시 실행하는 쿼리 
 
 
-router.post("/userSignOut",async (req,res)=>{
+router.post("/showlist",async (req,res)=>{
   var token = req.query.token;
-  fb.cleanUserData(token).then((answer)=>{
-    if(answer) res.send("done");
-  })
+  fb.showlist(token).then((answer)=> {
+      if(answer) res.send("done");
+  });
 });

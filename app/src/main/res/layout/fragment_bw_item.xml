@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="120dp"
-        android:layout_height="160dp"
+        android:layout_width="100dp"
+        android:layout_height="105dp"
         android:layout_margin="10dp"
         card:cardCornerRadius="5dp">
 
@@ -19,9 +19,10 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/ivBwImage"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:background="#DDDDDD"/>
+                android:layout_height="80dp"
+                android:background="#DDDDDD" />
 
             <TextView
                 android:id="@+id/tvGenre"
@@ -30,14 +31,14 @@
                 android:layout_gravity="center_horizontal"
                 android:text="자기계발"
                 android:textColor="@color/black"
-                android:textSize="15dp" />
+                android:textSize="10dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="22/01/01"
-                android:textSize="14dp" />
+                android:textSize="10dp" />
 
         </LinearLayout>
 
