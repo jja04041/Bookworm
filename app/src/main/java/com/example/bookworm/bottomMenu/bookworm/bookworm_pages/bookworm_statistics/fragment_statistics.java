@@ -73,8 +73,7 @@ public class fragment_statistics extends Fragment {
             LinearLayout llbookworm[] = { //읽은 책만 Visible로 설정하기 위함
                     binding.llBookworm1, binding.llBookworm2, binding.llBookworm3, binding.llBookworm4, binding.llBookworm5, binding.llBookworm6, binding.llBookworm7, binding.llBookworm8, binding.llBookworm9, binding.llBookworm10, binding.llBookworm11};
             LinearLayout llbooks[] = { //책 ImageView가 추가될 레이아웃
-                    binding.llBooks1, binding.llBooks2, binding.llBooks3, binding.llBooks4, binding.llBooks5, binding.llBooks6, binding.llBooks7, binding.llBooks8, binding.llBooks9, binding.llBooks10, binding.llBooks11
-            };
+                    binding.llBooks1, binding.llBooks2, binding.llBooks3, binding.llBooks4, binding.llBooks5, binding.llBooks6, binding.llBooks7, binding.llBooks8, binding.llBooks9, binding.llBooks10, binding.llBooks11};
             ImageView ivBookshelf[] = { // 선반
                     binding.ivBookshelf1, binding.ivBookshelf2, binding.ivBookshelf3, binding.ivBookshelf4, binding.ivBookshelf5, binding.ivBookshelf6, binding.ivBookshelf7, binding.ivBookshelf8, binding.ivBookshelf9, binding.ivBookshelf10, binding.ivBookshelf11};
 
