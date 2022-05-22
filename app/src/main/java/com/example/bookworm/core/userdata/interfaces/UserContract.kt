@@ -13,7 +13,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 
 interface UserContract {
     interface View{
-        fun showProfile(userInfo: UserInfo,boolean: Boolean?)
+        fun showProfile(userInfo: UserInfo?,boolean: Boolean?)
     }
     interface Presenter{
         fun getData(token:String,boolean: Boolean?)
