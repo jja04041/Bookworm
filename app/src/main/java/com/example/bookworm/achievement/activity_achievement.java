@@ -56,11 +56,20 @@ public class activity_achievement extends AppCompatActivity {
             case R.drawable.bw_default:
                 wormname = "디폴트";
                 break;
-            case R.drawable.bw_horror:
-                wormname = "공포";
+            case R.drawable.bw_fall:
+                wormname = "가을볼레";
                 break;
-            case R.drawable.bw_detective:
-                wormname = "추리";
+            case R.drawable.bw_confidence:
+                wormname = "자존감왕";
+                break;
+            case R.drawable.bw_mom:
+                wormname = "자존감왕";
+                break;
+            case R.drawable.bw_child:
+                wormname = "자존감왕";
+                break;
+            case R.drawable.bw_student:
+                wormname = "자존감왕";
                 break;
 
             // 배경
