@@ -12,12 +12,11 @@
         android:layout_height="300dp"
         android:layout_gravity="center"
         android:layout_margin="20dp"
-        android:src="@drawable/bw_default"/>
+        android:src="@drawable/bw_default" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-       />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

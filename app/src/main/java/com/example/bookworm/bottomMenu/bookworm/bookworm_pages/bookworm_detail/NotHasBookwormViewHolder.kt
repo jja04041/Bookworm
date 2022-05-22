@@ -9,7 +9,7 @@ class NotHasBookwormViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
     var binding:FragmentBwItemBinding?=null
     init{
         binding= FragmentBwItemBinding.bind(itemView)
-        binding!!.ivBwImage.setImageResource(R.drawable.profile)
+        binding!!.ivBwImage.setImageResource(R.drawable.ic_baseline_question_mark_24)
         binding!!.tvGenre.setText("??")
     }
 }

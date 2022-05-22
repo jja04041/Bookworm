@@ -8,7 +8,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="100dp"
         android:layout_height="105dp"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         card:cardCornerRadius="5dp">
 
         <LinearLayout
@@ -27,18 +27,19 @@
             <TextView
                 android:id="@+id/tvGenre"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:layout_gravity="center_horizontal"
+                android:gravity="center"
                 android:text="자기계발"
                 android:textColor="@color/black"
                 android:textSize="10dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="22/01/01"
-                android:textSize="10dp" />
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center_horizontal"-->
+<!--                android:text="22/01/01"-->
+<!--                android:textSize="10dp" />-->
 
         </LinearLayout>
 
