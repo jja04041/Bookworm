@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +23,7 @@ import com.example.bookworm.core.userdata.modules.LoadUser;
 import com.example.bookworm.databinding.SearchFragmentResultFeedBinding;
 
 import java.util.ArrayList;
+import java.util.Observer;
 
 
 public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnSearchResultItemClickListener {
@@ -28,12 +31,13 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     Context context;
     OnSearchResultItemClickListener listener;
     FeedViewModel pv;
+    LifecycleOwner lifecycleOwner;
 
-
-    public SearchResultAdapter(ArrayList<Feed> data, Context c) {
+    public SearchResultAdapter(ArrayList<Feed> data, Context c, LifecycleOwner owner) {
         feedList = data;
         context = c;
         pv = new FeedViewModel(context);
+        lifecycleOwner = owner;
     }
 
     @NonNull
@@ -71,12 +75,13 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public class ItemViewHolder extends RecyclerView.ViewHolder implements UserContract.View {
 
         SearchFragmentResultFeedBinding binding;
-        LoadUser user;
+//        LoadUser user;
+        MutableLiveData<UserInfo> feedUserInfo = new MutableLiveData<>();
 
         public ItemViewHolder(@NonNull View itemView, final OnSearchResultItemClickListener listener) {
             super(itemView);
             binding = SearchFragmentResultFeedBinding.bind(itemView);
-            user = new LoadUser(this);
+//            user = new LoadUser(this);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -93,10 +98,14 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
         public void setItem(Feed item) {
-            user.getData(item.getUserToken(), null);
+//            user.getData(item.getUserToken(), null);
             binding.tvCommentContent.setText(item.getFeedText());
             binding.tvDate.setText(item.getDate());
 
+            pv.getUser(item.getUserToken(), feedUserInfo);
+            feedUserInfo.observe(lifecycleOwner, feedUserInfo -> {
+                showProfile(feedUserInfo, false);
+            });
         }
 
 

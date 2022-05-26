@@ -203,7 +203,7 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
     }
 
     private void initAdapter() {
-        searchResultAdapter = new SearchResultAdapter(feedList, thisContext);
+        searchResultAdapter = new SearchResultAdapter(feedList, thisContext, this);
         //어댑터 리스너
         searchResultAdapter.setListener((holder, view, position) -> {
             //닫힌 챌린지 인경우 표시할 코드 등을 입력해야함.
