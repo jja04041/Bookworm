@@ -251,7 +251,7 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
 
 
     //shimmer을 켜고 끄고 하는 메소드
-    private void showShimmer(Boolean bool) {
+    public void showShimmer(Boolean bool) {
         if (bool) {
             binding.llSearch.setVisibility(View.GONE);
             binding.SFLSearch.startShimmer();

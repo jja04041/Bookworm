@@ -10,9 +10,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.Feed.items.Feed;
+import com.example.bookworm.bottomMenu.Feed.views.FeedViewModel;
 import com.example.bookworm.bottomMenu.challenge.board.Board;
+import com.example.bookworm.core.userdata.UserInfo;
+import com.example.bookworm.core.userdata.interfaces.UserContract;
+import com.example.bookworm.core.userdata.modules.LoadUser;
 import com.example.bookworm.databinding.SearchFragmentResultFeedBinding;
 
 import java.util.ArrayList;
@@ -21,13 +26,14 @@ import java.util.ArrayList;
 public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnSearchResultItemClickListener {
     ArrayList<Feed> feedList;
     Context context;
-    SearchFragmentResultFeedBinding binding;
     OnSearchResultItemClickListener listener;
+    FeedViewModel pv;
 
 
     public SearchResultAdapter(ArrayList<Feed> data, Context c) {
         feedList = data;
         context = c;
+        pv = new FeedViewModel(context);
     }
 
     @NonNull
@@ -62,11 +68,16 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    public class ItemViewHolder extends RecyclerView.ViewHolder {
+    public class ItemViewHolder extends RecyclerView.ViewHolder implements UserContract.View {
+
+        SearchFragmentResultFeedBinding binding;
+        LoadUser user;
 
         public ItemViewHolder(@NonNull View itemView, final OnSearchResultItemClickListener listener) {
             super(itemView);
             binding = SearchFragmentResultFeedBinding.bind(itemView);
+            user = new LoadUser(this);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -82,12 +93,18 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
         public void setItem(Feed item) {
-//            Glide.with(context).load(item.getBook().getImg_url()).into(binding.ivBookThumb);
-//            binding.feedBookTitle.setText(item.getBook().getTitle());
-//            binding.tvFeedtext.setText(item.getFeedText());
-//            binding.tvFeedDate.setText(item.getDate().substring(5,10));
+            user.getData(item.getUserToken(), null);
             binding.tvCommentContent.setText(item.getFeedText());
             binding.tvDate.setText(item.getDate());
+
+        }
+
+
+        @Override
+        public void showProfile(@NonNull UserInfo userInfo, @NonNull Boolean bool) {
+            Glide.with(context).load(userInfo.getProfileimg()).circleCrop().into(binding.imgProfile);
+            binding.tvNickname.setText(userInfo.getUsername());
+//            ((search_fragment_subActivity_result) context).showShimmer(false);
         }
     }
 
