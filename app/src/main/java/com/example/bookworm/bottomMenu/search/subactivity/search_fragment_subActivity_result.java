@@ -15,18 +15,26 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
+import com.example.bookworm.bottomMenu.Feed.items.Feed;
 import com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Create;
+import com.example.bookworm.bottomMenu.bookworm.bookworm_pages.bookworm_record.RecordAdapter;
+import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
 import com.example.bookworm.bottomMenu.search.items.Book;
 import com.example.bookworm.core.internet.Module;
 import com.example.bookworm.databinding.SubactivitySearchFragmentResultBinding;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class search_fragment_subActivity_result extends AppCompatActivity {
@@ -40,8 +48,21 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
     TextView[] textViews = new TextView[textViewCount];
     TextView tvViewMore;
     RatingBar customerReviewRank;
-    Context context;
+    Context context, thisContext;
     Book    book;
+
+    SearchResultFB searchResultFB;
+    private Boolean canLoad = true; //더 로딩이 가능한지 확인하는 변수[자료의 끝을 판별한다.]
+    private int page = 1;
+    UserInfoViewModel pv;
+    private UserInfoViewModel uv;
+    private final int LIMIT = 10;
+    private ArrayList<Feed> feedList = null;
+    private SearchResultAdapter searchResultAdapter;
+    private Boolean isRefreshing = false;
+    public boolean isLoading = false; //스크롤을 당겨서 추가로 로딩 중인지 여부를 확인하는 변수
+    private DocumentSnapshot lastVisible;
+    Map<String, Object> map;
 
 
 
@@ -66,16 +87,20 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
         }
         setItem();
 
+        thisContext = this;
+
+        searchResultFB = new SearchResultFB(thisContext);
+        searchResultFB.getData(map, itemId);
+
+        pv = new UserInfoViewModel(thisContext);
+        uv = new ViewModelProvider(this, new UserInfoViewModel.Factory(thisContext)).get(UserInfoViewModel.class);
+
+
+
         ScrollView ScrParents = (ScrollView) findViewById(R.id.ScrParents);
         ScrollView ScrChild = (ScrollView) findViewById(R.id.ScrChild);
 
-        //shimmer 적용을 위해 기존 뷰는 일단 안보이게, shimmer는 보이게
-        binding.llSearch.setVisibility(View.GONE);
-        binding.SFLSearch.startShimmer();
-        binding.SFLSearch.setVisibility(View.VISIBLE);
-
-
-
+        showShimmer(true);
 
         //제목,저자,출판사가 나오는 스크롤뷰를 터치해도 부모 스크롤뷰가 반응하지 않게 함
         ScrChild.setOnTouchListener(new View.OnTouchListener() {
@@ -105,10 +130,8 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
         });
 
 
-        //shimmer 적용 끝내고 shimmer는 안보이게, 기존 뷰는 보이게
-        binding.llSearch.setVisibility(View.VISIBLE);
-        binding.SFLSearch.stopShimmer();
-        binding.SFLSearch.setVisibility(View.GONE);
+//        showShimmer(false);
+
 
     }
 
@@ -179,6 +202,76 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
         });
     }
 
+    private void initAdapter() {
+        searchResultAdapter = new SearchResultAdapter(feedList, thisContext);
+        //어댑터 리스너
+        searchResultAdapter.setListener((holder, view, position) -> {
+            //닫힌 챌린지 인경우 표시할 코드 등을 입력해야함.
+            //아이템 선택시 실행할 코드를 입력
+//            Intent intent = new Intent(getContext(), subactivity_challenge_board_comment.class);
+//            intent.putExtra("board", boardList.get(position));
+//            intent.putExtra("challenge", challenge);
+//            getContext().startActivity(intent);
+        });
+    }
 
+    //RecordFB에서 사용할 함수
+    public void moduleUpdated(List<DocumentSnapshot> a) {
+        feedList = new ArrayList<>();
+        try {
+            for (DocumentSnapshot snapshot : a) {
+                Map data = snapshot.getData();
+                Feed feed = new Feed();
+                feed.setFeedData(data);
+                feedList.add(feed);
+            }
+            //가져온 값의 마지막 snapshot부터 이어서 가져올 수 있도록 하기 위함.
+            lastVisible = a.get(a.size() - 1);
+            //리사이클러뷰에서 튕김현상이 발생하여 넣어준 코드
+            //현재 불러오는 값의 크기(a.size())가 페이징 제한 값(LIMIT)보다 작은 경우 => 더이상 불러오지 않게 함.
+            if (a.size() < LIMIT) {
+                canLoad = false;
+            }
+        } catch (NullPointerException e) {
+            canLoad = false;
+        }
+        initAdapter();
+        initRecyclerView();
+        isEmptyReview(false);
+        showShimmer(false);
+    }
+
+    public void initRecyclerView() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(thisContext);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        binding.mRecyclerView.setLayoutManager(linearLayoutManager);
+        binding.mRecyclerView.setAdapter(searchResultAdapter);
+//        initScrollListener(); //무한스크롤
+    }
+
+
+    //shimmer을 켜고 끄고 하는 메소드
+    private void showShimmer(Boolean bool) {
+        if (bool) {
+            binding.llSearch.setVisibility(View.GONE);
+            binding.SFLSearch.startShimmer();
+            binding.SFLSearch.setVisibility(View.VISIBLE);
+        } else {
+            binding.llSearch.setVisibility(View.VISIBLE);
+            binding.SFLSearch.stopShimmer();
+            binding.SFLSearch.setVisibility(View.GONE);
+        }
+    }
+
+    public void isEmptyReview(boolean bool) {
+        showShimmer(false);//시머 종료
+        if (bool) {
+            binding.mRecyclerView.setVisibility(View.GONE);
+            binding.llEmptyReview.setVisibility(View.VISIBLE);
+        } else {
+            binding.mRecyclerView.setVisibility(View.VISIBLE);
+            binding.llEmptyReview.setVisibility(View.GONE);
+        }
+    }
 
 }

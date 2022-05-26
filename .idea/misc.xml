@@ -149,12 +149,13 @@
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_second.xml" value="0.3072916666666667" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/fragment_statistics.xml" value="0.28802083333333334" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/layout_challenge_item.xml" value="0.36614583333333334" />
-        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/layout_comment_item.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/layout_comment_item.xml" value="0.33" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/layout_comment_summary.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/layout_content.xml" value="0.33" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/layout_feed.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/layout_topbar.xml" value="0.18020833333333333" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/layout_user_item.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/recyclerview_item.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/search_favoriteitem.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/search_fragment_result_feed.xml" value="0.33" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/search_item_loading.xml" value="0.18020833333333333" />
@@ -170,6 +171,7 @@
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/shimmer_subactivity_challenge_challengeinfo.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/shimmer_subactivity_challenge_createchallenge.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/shimmer_subactivity_comment.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/shimmer_subactivity_search_fragment_result.xml" value="0.2630208333333333" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/story_item.xml" value="0.2864583333333333" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/subactivity_challenge_board.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/subactivity_challenge_board_comment.xml" value="0.36614583333333334" />
@@ -184,6 +186,7 @@
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/subactivity_search_fragment_result.xml" value="0.33" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/subactivity_search_main.xml" value="0.33" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/view_content_edittext.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/view_loading.xml" value="0.3605128205128205" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/menu/board_comment_menu.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/menu/comment_menu.xml" value="0.321875" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/menu/menu_bottom.xml" value="0.3333333333333333" />
