@@ -14,6 +14,7 @@ import androidx.lifecycle.LifecycleObserver;
 import com.bumptech.glide.Glide;
 import com.example.bookworm.achievement.Achievement;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
+import com.example.bookworm.bottomMenu.profile.Album.CreateAlbumActivity;
 import com.example.bookworm.bottomMenu.profile.views.ProfileSettingActivity;
 import com.example.bookworm.databinding.FragmentProfileBinding;
 import com.example.bookworm.extension.follow.view.FollowerActivity;
@@ -46,16 +47,18 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
 
         //뷰모델 안에서 데이터가 배치된다.
 
-        binding.btnSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(current_context, ProfileSettingActivity.class);
-                startActivity(intent);
-            }
+        binding.btnSetting.setOnClickListener(view1 -> {
+            Intent intent = new Intent(current_context, ProfileSettingActivity.class);
+            startActivity(intent);
         });
+
+
+
+
         pv.getUser(null,false);
 
-        //데이터 수정을 감지함
+
+        //유저 데이터 수정을 감지함
         pv.getData().observe(getViewLifecycleOwner(), userinfo -> {
             bookworm = new PersonalD(current_context).getBookworm();
             achievement = new Achievement(current_context, fbModule, userinfo, bookworm);
@@ -85,16 +88,17 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
                     startActivity(intent);
                 }
             });
-
             Glide.with(this).load(userinfo.getProfileimg()).circleCrop().into(binding.imgFragProfileProfile); //프로필사진 로딩후 삽입.
-            binding.imgFragProfileProfile.setOnClickListener(it->{
-                MyFCMService service =new MyFCMService();
-                try {
-                    service.sendPostToFCM(current_context,userinfo.getFCMtoken(),"나야나");
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
+            //앨범 데이터를 불러오는 부분을 작성할 예정
+            pv.getFeedList(userinfo.token);
+            pv.getFeedList().observe(getViewLifecycleOwner(),it->{
+                binding.btnAddAlbum.setOnClickListener(t->{
+                    Intent intent = new Intent(current_context, CreateAlbumActivity.class);
+                    intent.putExtra("list",it);
+                    startActivity(intent);
+                });
             });
+
         });
 
 

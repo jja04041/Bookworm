@@ -68,6 +68,9 @@
             android:name=".bottomMenu.challenge.subactivity.subactivity_challenge_challengeinfo"
             android:exported="false"
             android:parentActivityName=".appLaunch.views.MainActivity" />
+        <activity android:name=".bottomMenu.profile.Album.CreateAlbumActivity"
+            android:exported="false"
+            android:parentActivityName=".appLaunch.views.MainActivity"/>
         <activity
             android:name=".bottomMenu.challenge.subactivity.subactivity_challenge_createchallenge"
             android:exported="false"

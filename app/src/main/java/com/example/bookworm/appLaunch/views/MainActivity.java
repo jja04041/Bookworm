@@ -2,6 +2,7 @@ package com.example.bookworm.appLaunch.views;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -12,7 +13,11 @@ import androidx.fragment.app.FragmentManager;
 import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.Feed.Fragment_feed;
 import com.example.bookworm.core.MoveFragment;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,16 +31,21 @@ public class MainActivity extends AppCompatActivity {
     com.example.bookworm.core.MoveFragment MoveFragment = new MoveFragment();
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        GoogleSignInAccount gsa = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
+        FirebaseAuth.getInstance()
+                .signInWithCredential(GoogleAuthProvider.getCredential(gsa.getIdToken(), null))
+                .addOnCompleteListener(it -> {
+                Log.d("현재 사용자",FirebaseAuth.getInstance().getCurrentUser()+"입니다");
+        });
 
         // 초기화면 설정
         fragments[0] = new Fragment_feed();
         fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.container, fragments[0],"0").commitAllowingStateLoss();
+        fragmentManager.beginTransaction().replace(R.id.container, fragments[0], "0").commitAllowingStateLoss();
 
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom);

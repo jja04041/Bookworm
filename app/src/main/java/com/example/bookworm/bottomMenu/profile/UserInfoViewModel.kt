@@ -7,13 +7,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.bookworm.bottomMenu.Feed.items.Feed
 import com.example.bookworm.bottomMenu.bookworm.BookWorm
 import com.example.bookworm.core.dataprocessing.repository.UserRepositoryImpl
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.extension.follow.view.FollowViewModelImpl
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
 import java.util.*
+import kotlin.collections.ArrayList
 
 //전반적으로 User을 관리하는 ViewModel
 class UserInfoViewModel(val context: Context) : ViewModel() {
@@ -27,7 +30,7 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
     var isDuplicated = MutableLiveData<Boolean>() //중복 여부를 체크 하는 LiveData
     val repo = UserRepositoryImpl(context)
     var fv: FollowViewModelImpl
-
+    var feedList = MutableLiveData<ArrayList<Feed>>()
     class Factory(val context: Context) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return UserInfoViewModel(context) as T
@@ -88,6 +91,18 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
     fun updateBw(token: String?,bookWorm: BookWorm){
         viewModelScope.launch {
             repo.updateBookWorm(token,bookWorm)
+        }
+    }
+    fun getFeedList(token: String){
+        viewModelScope.launch {
+            var data= FirebaseFirestore.getInstance().collection("feed").whereEqualTo("UserToken",token).get().await()
+            var arrayList = ArrayList<Feed>()
+            data.documents.forEach {
+                var feed = Feed()
+                feed.setFeedData(it.getData())
+                arrayList.add(feed)
+            }
+            feedList.value=arrayList
         }
     }
 

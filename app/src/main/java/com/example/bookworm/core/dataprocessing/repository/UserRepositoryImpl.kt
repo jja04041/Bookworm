@@ -123,7 +123,7 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
                 bookworm.token = user.token
                 // get fcm token
                 var a = FirebaseMessaging.getInstance().token.await()
-                user.setFCMtoken(a)
+                user.fCMtoken = a
                 saveInLocal(user, bookworm)
                 saveInFB(user, bookworm)
             }

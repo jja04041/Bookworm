@@ -102,8 +102,15 @@
         android:textColor="@color/black"
         android:textSize="20dp" />
 
+    <Button
+        android:layout_gravity="right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnAddAlbum"
+        android:text="앨범추가"
+        />
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/albumRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

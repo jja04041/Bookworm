@@ -70,6 +70,7 @@ public class MyFCMService extends FirebaseMessagingService {
         notificationManager.notify(1, notification);
     }
 
+    //FCM 메시지
     public void sendPostToFCM(Context context, final String fcmtoken, final String message) throws MalformedURLException {
         SupportFCMServiceImpl service = new SupportFCMServiceImpl(context);
         service.sendMessage(fcmtoken, message);

@@ -142,7 +142,7 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
         //좋아요 수 세팅
         binding!!.tvLike.setText(item.likeCount.toString())
         liked = try {
-            if (nowUser!!.likedPost.contains(item.feedID)) {
+            if (nowUser!!.likedPost!!.contains(item.feedID)) {
                 binding!!.btnLike.setBackground(context!!.getDrawable(R.drawable.icon_like_red))
                 true
             } else {
@@ -217,7 +217,7 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
         if (limit < 5) {
             limit += 1
             nowUser = PersonalD(context).userInfo
-            strings = nowUser!!.getLikedPost()
+            strings = nowUser!!.likedPost
             val map = HashMap<Any, Any>()
             var likeCount: Int = binding!!.tvLike.getText().toString().toInt()
             if (!liked) {
@@ -234,7 +234,7 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
                 strings!!.remove(item.feedID)
                 binding!!.btnLike.setBackground(context!!.getDrawable(R.drawable.icon_like))
             }
-            nowUser!!.setLikedPost(strings)
+            nowUser!!.likedPost = strings
             map["nowUser"] = nowUser!!
             binding!!.tvLike.setText(likeCount.toString())
             map["liked"] = liked

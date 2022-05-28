@@ -121,7 +121,7 @@ class ProfileInfoActivity : AppCompatActivity() {
                         }.await().followerCounts.toLong()
                     )
                 }
-                myFCMService!!.sendPostToFCM(this,user!!.fcMtoken,  nowUser!!.username+"님이 팔로우하였습니다")
+                myFCMService!!.sendPostToFCM(this,user!!.fCMtoken,  nowUser!!.username+"님이 팔로우하였습니다")
             }
 
         }
