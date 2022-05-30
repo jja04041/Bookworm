@@ -15,11 +15,11 @@ import com.bumptech.glide.Glide;
 import com.example.bookworm.achievement.Achievement;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.profile.views.ProfileSettingActivity;
-import com.example.bookworm.databinding.FragmentProfileBinding;
-import com.example.bookworm.extension.follow.view.FollowerActivity;
-import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.PersonalD;
+import com.example.bookworm.core.userdata.UserInfo;
+import com.example.bookworm.databinding.FragmentProfileBinding;
+import com.example.bookworm.extension.follow.view.FollowerActivity;
 import com.example.bookworm.notification.MyFCMService;
 
 import java.net.MalformedURLException;
@@ -53,6 +53,8 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
                 startActivity(intent);
             }
         });
+
+
         pv.getUser(null,false);
 
         //데이터 수정을 감지함
