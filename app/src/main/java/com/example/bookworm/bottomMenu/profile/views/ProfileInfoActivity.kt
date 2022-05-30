@@ -8,6 +8,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.example.bookworm.chat.activity_chating
 import com.example.bookworm.core.userdata.UserInfo
 
 import com.example.bookworm.databinding.ActivityProfileInfoBinding
@@ -51,7 +52,6 @@ class ProfileInfoActivity : AppCompatActivity() {
         //작성자 UserInfo (userID를 사용해 파이어베이스에서 받아옴)
         userID = intent.getStringExtra("userID")!!
 
-
         lifecycleScope.launch {
             val getSubUserjob = async { fv.getUser(userID,true) }
             val getNowUserJob = async { fv.getUser(null,true) }
@@ -91,6 +91,19 @@ class ProfileInfoActivity : AppCompatActivity() {
         Glide.with(this).load(user.profileimg).circleCrop()
             .into(binding.ivProfileImage) //프로필이미지 설정
         binding.ivProfileImage.visibility = View.VISIBLE
+
+        // 채팅버튼
+        binding.btnchatting.visibility = View.VISIBLE
+
+        binding.btnchatting.setOnClickListener { view: View? ->
+
+            // google id는 token길이가 매우 길기때문에 biginteger을 사용해야한다
+            val intent = Intent(this , activity_chating::class.java)
+            intent.putExtra("opponent", (user.token).toBigInteger() );
+            startActivity(intent)
+
+        }
+
 
         if (user.isFollowed) isFollowingTrue
         else isFollowingFalse
