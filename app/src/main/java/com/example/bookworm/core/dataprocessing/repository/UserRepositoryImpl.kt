@@ -71,13 +71,17 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
                 saveInLocal(userInfo, bw)  //로컬에 해당 정보 저장
                 return userInfo
             }
-            else return  null
+            else return  UserInfo()
         }
 
     }
 
-    override suspend fun updateBookWorm(token: String, bookWorm: BookWorm) {
-        updateBwInFB(token, bookWorm)
+    override suspend fun updateBookWorm( token: String?, bookWorm: BookWorm) {
+        var token = token
+        if (token==null){
+            token=getUser(null,false)!!.token
+        }
+        updateBwInFB(token!!, bookWorm)
         updateBwInLocal(bookWorm)
     }
 
@@ -96,7 +100,8 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
             val json = JSONObject(key_bookworm)
             var bookWorm = gson.fromJson(json.toString(), BookWorm::class.java)
             return bookWorm
-        } else return CoroutineScope(Dispatchers.IO).async {
+        } else
+        return CoroutineScope(Dispatchers.IO).async {
             var bookWorm = BookWorm()
             var it = collectionReference.document(token).get().await()
             var map = it.get("BookWorm") as MutableMap<Any?, Any?>?

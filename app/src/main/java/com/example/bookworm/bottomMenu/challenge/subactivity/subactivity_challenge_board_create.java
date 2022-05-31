@@ -25,8 +25,10 @@ import com.example.bookworm.achievement.Achievement;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.challenge.items.Challenge;
 import com.example.bookworm.bottomMenu.Feed.ImagePicker;
+import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
 import com.example.bookworm.bottomMenu.search.items.Book;
 
+import com.example.bookworm.core.dataprocessing.image.ImageProcessing;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.internet.Module;
 import com.example.bookworm.core.userdata.PersonalD;
@@ -61,6 +63,9 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
     Context current_context;
     Bitmap uploaded;
     Module module;
+    UserInfoViewModel uv;
+    ImageProcessing imageProcess;
+    BookWorm userBw;
     Challenge challenge;
     String imgurl = null;
     Dialog customDialog;
@@ -103,66 +108,69 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
 
 
         current_context = this;
+        uv = new UserInfoViewModel(current_context);
+        uv.getUser(null, false);
         fbModule = new FBModule(current_context);
-        userInfo = new PersonalD(current_context).getUserInfo(); //저장된 UserInfo값을 가져온다.
 
-
-        Glide.with(this).load(userInfo.getProfileimg()).circleCrop().into(binding.ivProfileImage); //프로필사진 로딩후 삽입.
-        binding.tvNickname.setText(userInfo.getUsername());
+        imageProcess = new ImageProcessing(current_context);
 
 
         //이미지 업로드 버튼
-        binding.btnImageUpload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        binding.btnImageUpload.setOnClickListener(view -> imageProcess.initProcess());
 
-                Dexter.withActivity((Activity) current_context)
-                        .withPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
-                        .withListener(new MultiplePermissionsListener() {
-                            @Override
-                            public void onPermissionsChecked(MultiplePermissionsReport report) {
-                                if (report.areAllPermissionsGranted()) {
-                                    showImagePickerOptions();
-                                }
+        uv.getData().observe(this, userinfo -> {
+            uv.getBookWorm(userinfo.getToken());
+            userInfo = userinfo;
+            Glide.with(this).load(userinfo.getProfileimg()).circleCrop().into(binding.ivProfileImage); //프로필사진 로딩후 삽입.
+            binding.tvNickname.setText(userinfo.getUsername());
 
-                                if (report.isAnyPermissionPermanentlyDenied()) {
-                                    showSettingsDialog();
-                                }
-                            }
+            uv.getBwdata().observe(this,bookWorm -> {
+                userBw=bookWorm;
+                imageProcess.getBitmap().observe(this, bitmap -> {
+                    //완료 버튼 (피드 올리기)
+                    binding.tvFinish.setOnClickListener(view ->
+                            new AlertDialog.Builder(current_context)
+                                    .setMessage("피드를 업로드하시겠습니까?")
+                                    .setPositiveButton("네", (dialog, which) -> {
+                                        dialog.dismiss();
+                                        upload(bitmap, userInfo);
+                                    })
+                                    .setNegativeButton("아니요", (dialog, which)
+                                            -> dialog.dismiss())
+                                    .show()
+                    );
+                    imageProcess.getImgData().observe(this,imgurl->{
+                        feedUpload(imgurl);
+                    });
+                });
 
-                            @Override
-                            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
-                                token.continuePermissionRequest();
-                            }
-                        }).check();
-            }
+                binding.tvFinish.setOnClickListener(view ->
+                        new AlertDialog.Builder(current_context)
+                                .setMessage("피드를 업로드하시겠습니까?")
+                                .setPositiveButton("네", (dialog, which) -> {
+                                    dialog.dismiss();
+                                    upload(null, userInfo);
+                                })
+                                .setNegativeButton("아니요", (dialog, which)
+                                        -> dialog.dismiss())
+                                .show()
+                );
+            });
         });
 
-
-        //완료 버튼 (피드 올리기)
-        binding.tvFinish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                new AlertDialog.Builder(current_context)
-                        .setMessage("피드를 업로드하시겠습니까?")
-                        .setPositiveButton("네", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                        upload();
-                                    }
-                                }
-                        )
-                        .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                }
-                        ).show();
-            }
+        if(getIntent() != null) {
+//            intent = getIntent();
+//            if((Book) intent.getSerializableExtra("data") != null){
+//                selected_book = (Book) intent.getSerializableExtra("data");
+//                binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목만 세팅한다.
+//            }
+        }
+        imageProcess.getBitmapUri().observe(this, it -> {
+            Glide.with(this).load(it)
+                    .into(binding.ivpicture);
+            binding.ivpicture.setColorFilter(ContextCompat.getColor(this, android.R.color.transparent));
         });
+
     }
 
     //메소드
@@ -175,99 +183,14 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
         binding.ivpicture.setColorFilter(ContextCompat.getColor(this, android.R.color.transparent));
     }
 
-    private void showImagePickerOptions() {
-        ImagePicker.showImagePickerOptions(this, new ImagePicker.PickerOptionListener() {
-            @Override
-            public void onTakeCameraSelected() {
-                launchCameraIntent();
-            }
-
-            @Override
-            public void onChooseGallerySelected() {
-                launchGalleryIntent();
-            }
-        });
-    }
-
-    private void launchCameraIntent() {
-        Intent intent = new Intent(subactivity_challenge_board_create.this, ImagePicker.class);
-        intent.putExtra(ImagePicker.INTENT_IMAGE_PICKER_OPTION, ImagePicker.REQUEST_IMAGE_CAPTURE);
-
-        // setting aspect ratio
-        intent.putExtra(ImagePicker.INTENT_LOCK_ASPECT_RATIO, true);
-        intent.putExtra(ImagePicker.INTENT_ASPECT_RATIO_X, 1); // 16x9, 1x1, 3:4, 3:2
-        intent.putExtra(ImagePicker.INTENT_ASPECT_RATIO_Y, 1);
-
-        // setting maximum bitmap width and height
-        intent.putExtra(ImagePicker.INTENT_SET_BITMAP_MAX_WIDTH_HEIGHT, true);
-        intent.putExtra(ImagePicker.INTENT_BITMAP_MAX_WIDTH, 1000);
-        intent.putExtra(ImagePicker.INTENT_BITMAP_MAX_HEIGHT, 1000);
-        startActivityResult.launch(intent);
-    }
-
-    private void launchGalleryIntent() {
-        Intent intent = new Intent(subactivity_challenge_board_create.this, ImagePicker.class);
-        intent.putExtra(ImagePicker.INTENT_IMAGE_PICKER_OPTION, ImagePicker.REQUEST_GALLERY_IMAGE);
-
-        // setting aspect ratio
-        intent.putExtra(ImagePicker.INTENT_LOCK_ASPECT_RATIO, true);
-        intent.putExtra(ImagePicker.INTENT_ASPECT_RATIO_X, 1); // 16x9, 1x1, 3:4, 3:2
-        intent.putExtra(ImagePicker.INTENT_ASPECT_RATIO_Y, 1);
-        startActivityResult.launch(intent);
-    }
-
-    private void showSettingsDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(subactivity_challenge_board_create.this);
-        builder.setTitle(getString(R.string.dialog_permission_title));
-        builder.setMessage(getString(R.string.dialog_permission_message));
-        builder.setPositiveButton(getString(R.string.go_to_settings), (dialog, which) -> {
-            dialog.cancel();
-            openSettings();
-        });
-        builder.setNegativeButton(getString(android.R.string.cancel), (dialog, which) -> dialog.cancel());
-        builder.show();
-
-    }
-
-    //권한 설정
-    private void openSettings() {
-        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        Uri uri = Uri.fromParts("package", getPackageName(), null);
-        intent.setData(uri);
-        startActivityResult.launch(intent);
-
-    }
 
     //서버에 이미지 업로드
-    private void upload() {
+    private void upload(Bitmap data, UserInfo userInfo) {
 
-        BoardID = String.valueOf(System.currentTimeMillis()) + "_" + userInfo.getToken(); //현재 시각 + 사용자 토큰을 BoardID로 설정
-
-        if (uploaded != null) {
-            try {
-                File filesDir = getApplicationContext().getFilesDir();
-                File file = new File(filesDir, "feed_" + BoardID + ".jpg"); //파일명 설정
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                uploaded.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-                byte[] bitmapdata = bos.toByteArray();
-                //파일에 바이트배열로 담겨진 비트맵파일을 쓴다.
-                FileOutputStream fos = new FileOutputStream(file);
-                fos.write(bitmapdata);
-                fos.flush();
-                fos.close();
-                RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
-                MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
-                RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "upload");
-                Map map = new HashMap();
-                map.put("rqbody", body);
-                map.put("rqname", name);
-                imgurl = getString(R.string.serverUrl); //이미지 서버의 주소
-                module = new Module(current_context, imgurl, map);
-                module.connect(3);
-
-            } catch (IOException e) {
-
-            }
+        BoardID = System.currentTimeMillis() + "_" + userInfo.getToken(); //현재 시각 + 사용자 토큰을 FeedID로 설정
+        if (data != null) {
+            String name="feed_"+BoardID+".jpg";
+            imageProcess.uploadImage(data,name);
         } else {
             feedUpload(null);
         }
@@ -311,18 +234,22 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
 
             // 장르 처리
 //            HashMap<String, Object> savegenremap = new HashMap<>();
-//
-//            userInfo.setGenre(selected_book.getCategoryname(), current_context);
-//            savegenremap.put("userinfo_genre", userInfo.getGenre());
-//            fbModule.readData(0, savegenremap, userInfo.getToken());
-//
-//            BookWorm bookworm = new PersonalD(current_context).getBookworm();
-//            Achievement achievement = new Achievement(current_context, fbModule, userInfo, bookworm);
-//            achievement.CompleteAchievement(userInfo, current_context);
+            userInfo.setGenre(selected_book.getCategoryname(), current_context);
 
-            new PersonalD(current_context).saveUserInfo(userInfo);
-            setResult(CREATE_OK);
-            finish();
+            int count = userBw.getReadcount();
+            userBw.setReadcount(++count);
+            uv.updateUser(userInfo);
+            uv.updateBw(userInfo.getToken(), userBw);
+
+            boolean exit = true;
+            Achievement achievement = new Achievement(current_context, fbModule, userInfo, userBw);
+            achievement.CompleteAchievement(userInfo, current_context);
+            exit = achievement.canreturn();
+
+            if(exit == true) {
+                setResult(CREATE_OK);
+                finish();
+            }
         }
     }
 

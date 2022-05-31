@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:orientation="vertical"
-    tools:context=".BottomMenu.Challenge.Board.subactivity_challenge_board">
+    tools:context=".bottomMenu.challenge.board.subactivity_challenge_board">
 
     <LinearLayout
         android:layout_width="match_parent"

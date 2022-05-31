@@ -9,7 +9,7 @@
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/activity_profile_setting.xml" value="0.22" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_bookworm.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_bw.xml" value="0.17" />
-        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_bw_item.xml" value="0.36614583333333334" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_bw_item.xml" value="0.75" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_bw_layout.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_feed.xml" value="0.18697916666666667" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_feed_item.xml" value="0.5" />
@@ -22,6 +22,7 @@
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/layout_comment_summary.xml" value="0.33" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/layout_feed.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/shimmer_subactivity_challenge_createchallenge.xml" value="0.1875" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/story_item.xml" value="0.5" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_challenge_board.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_challenge_board_item.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_challenge_createchallenge.xml" value="0.1875" />

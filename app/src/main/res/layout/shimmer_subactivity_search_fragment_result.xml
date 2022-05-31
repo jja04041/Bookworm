@@ -39,8 +39,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="책 정보"
-                    android:textSize="13dp"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black"
+                    android:textSize="13dp" />
             </FrameLayout>
 
             <LinearLayout
@@ -52,7 +52,7 @@
                     android:layout_width="130dp"
                     android:layout_height="165dp"
                     android:layout_margin="20dp"
-                    android:background="@color/cardview_shadow_start_color"/>
+                    android:background="@color/cardview_shadow_start_color" />
 
                 <ScrollView
                     android:layout_width="match_parent"
@@ -75,10 +75,10 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:background="@color/cardview_shadow_start_color"
                                 android:ellipsize="end"
                                 android:maxLines="3"
                                 android:text="                            "
-                                android:background="@color/cardview_shadow_start_color"
                                 android:textColor="#000000"
                                 android:textSize="20dp"
                                 android:textStyle="bold" />
@@ -92,14 +92,14 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="     "
-                                    android:background="@color/cardview_shadow_start_color"/>
+                                    android:background="@color/cardview_shadow_start_color"
+                                    android:text="     " />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:ellipsize="end"
                                     android:background="@color/cardview_shadow_start_color"
+                                    android:ellipsize="end"
                                     android:maxLines="1"
                                     android:text="                              " />
 
@@ -121,8 +121,8 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="                                   "
-                                    android:background="@color/cardview_shadow_start_color"/>
+                                    android:background="@color/cardview_shadow_start_color"
+                                    android:text="                                   " />
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -141,22 +141,22 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="  "
-                                    android:background="@color/cardview_shadow_start_color"/>
-
-                                <TextView
                                     android:background="@color/cardview_shadow_start_color"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="10dp"
-                                    android:text="                          "/>
+                                    android:text="  " />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="10dp"
-                                    android:text="     "
-                                    android:background="@color/cardview_shadow_start_color"/>
+                                    android:background="@color/cardview_shadow_start_color"
+                                    android:text="                          " />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:background="@color/cardview_shadow_start_color"
+                                    android:text="     " />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -168,8 +168,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginVertical="10dp"
-                android:text="    "
                 android:background="@color/cardview_shadow_start_color"
+                android:text="                  "
                 android:textColor="#000000"
                 android:textSize="18dp"
                 android:textStyle="bold" />
@@ -183,8 +183,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/cardview_shadow_start_color"
                     android:layout_margin="5dp"
+                    android:background="@color/cardview_shadow_start_color"
                     android:text="                                                                                                          \n\n\n" />
 
             </LinearLayout>
@@ -199,15 +199,15 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="                              "
-                    android:background="@color/cardview_shadow_start_color"/>
+                    android:background="@color/cardview_shadow_start_color"
+                    android:text="                              " />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
-                    android:text=""
-                    android:background="@color/cardview_shadow_start_color"/>
+                    android:background="@color/cardview_shadow_start_color"
+                    android:text="" />
 
             </LinearLayout>
 
@@ -220,8 +220,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="                              "
-                    android:background="@color/cardview_shadow_start_color"/>
+                    android:background="@color/cardview_shadow_start_color"
+                    android:text="                              " />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -243,8 +243,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="10dp"
-                    android:text="                     "
                     android:background="@color/cardview_shadow_start_color"
+                    android:text="                     "
                     android:textColor="#0000FF" />
             </LinearLayout>
 
@@ -252,8 +252,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:text="      "
+                android:layout_marginBottom="10dp"
                 android:background="@color/cardview_shadow_start_color"
+                android:text="                   "
                 android:textColor="#000000"
                 android:textSize="18dp"
                 android:textStyle="bold" />
@@ -261,14 +262,30 @@
             <!-- 이 리사이클러 뷰에 들어가는 아이템이 search_fragment_result_feed.xml   -->
             <!--            https://velog.io/@kimbsu00/Android-7  -->
 
-            <androidx.recyclerview.widget.RecyclerView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:nestedScrollingEnabled="false"
-                android:background="@color/cardview_shadow_start_color"
+                android:layout_height="50dp"
+                android:layout_margin="10dp"
+                android:background="@color/cardview_shadow_start_color" />
 
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="10dp"
+                android:background="@color/cardview_shadow_start_color" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="10dp"
+                android:background="@color/cardview_shadow_start_color" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="10dp"
+                android:background="@color/cardview_shadow_start_color" />
+
 
         </LinearLayout>
 

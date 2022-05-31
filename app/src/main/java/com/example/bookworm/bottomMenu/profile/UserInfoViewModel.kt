@@ -85,7 +85,7 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
         }
     }
 
-    fun updateBw(token: String,bookWorm: BookWorm){
+    fun updateBw(token: String?,bookWorm: BookWorm){
         viewModelScope.launch {
             repo.updateBookWorm(token,bookWorm)
         }

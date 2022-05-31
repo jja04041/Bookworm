@@ -186,7 +186,6 @@ public class UserInfo implements Serializable {
         }
 
         int unboxint = 0;
-
         if (null == this.genre.get(category)) {
             this.genre.put(category, 1);
         } else {
