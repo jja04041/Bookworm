@@ -104,7 +104,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             pv.getUser(item.getUserToken(), feedUserInfo);
             feedUserInfo.observe(lifecycleOwner, feedUserInfo -> {
-                showProfile(feedUserInfo, false);
+                showProfile(feedUserInfo, false); //프로필 설정
             });
         }
 
