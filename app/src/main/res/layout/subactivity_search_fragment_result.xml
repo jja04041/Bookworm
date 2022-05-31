@@ -4,17 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context=".bottomMenu.search.subactivity.search_fragment_subActivity_result">
 
-        <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/SFLSearch"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/SFLSearch"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <include layout="@layout/shimmer_subactivity_search_fragment_result" />
 
-        </com.facebook.shimmer.ShimmerFrameLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <LinearLayout
         android:id="@+id/llSearch"
@@ -55,8 +56,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="책 정보"
-                        android:textSize="13dp"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black"
+                        android:textSize="13dp" />
 
                     <Button
                         android:id="@+id/btnFeedCreate"
@@ -65,7 +66,7 @@
                         android:layout_gravity="end|center_vertical"
                         android:background="@color/white"
                         android:text="피드 작성"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black" />
 
                 </FrameLayout>
 
@@ -289,6 +290,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
+                    android:layout_marginBottom="10dp"
                     android:text="책볼레 리뷰"
                     android:textColor="#000000"
                     android:textSize="18dp"
@@ -298,13 +300,29 @@
                 <!--            https://velog.io/@kimbsu00/Android-7  -->
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView"
+                    android:id="@+id/mRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
                     android:nestedScrollingEnabled="false"
 
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                <LinearLayout
+                    android:id="@+id/llEmptyReview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="90dp"
+                        android:gravity="center"
+                        android:text="리뷰가 없습니다.\n책을 읽고 리뷰를 남겨보세요!"
+                        android:textSize="18dp" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

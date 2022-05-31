@@ -41,10 +41,12 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
 
     //사용자 가져오기 => token이 null인 경우 현재 사용자 데이터 가져옴
     //getFrom true: 인터넷에서 가져오기, false: 로컬에서 가져오기
-    override suspend fun getUser(token: String?, getFromExt: Boolean): UserInfo {
+    override suspend fun getUser(token: String?, getFromExt: Boolean): UserInfo? {
         //로컬에서 해당 토큰 확인
         var user = userPref.getString("key_user", null)
-        var userInfo: UserInfo
+        var userInfo: UserInfo?
+
+        //로컬에 유저 데이터가 있는 경우
         if (user != null) {
             val json = JSONObject(user)
             var userInfo = gson.fromJson(json.toString(), UserInfo::class.java)
@@ -54,35 +56,39 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
                 userInfo.isMainUser = true
                 return userInfo
             }
-            //로컬에 해당 토큰이 없는 경우 or 서버의 유저 정보를 가지고 오고 싶은 경우, 서버에서 가져옴
-            else return if(token==null) userInfo.token.let { getUserInFB(it).await() }!!
-                        else token.let { getUserInFB(it).await() }!!
+            //로컬에 해당 토큰이 없는 경우 or 서버의 유저 정보를 가지고 오고 싶은 경우=>  서버에서 가져옴
+            else return if (token == null) userInfo.token.let { getUserInFB(it).await() }
+            else token.let { getUserInFB(it).await() }
         }
 
         //로컬에 아직 메인 사용자가 등록되지 않은 경우 ,서버에서 값을 가져옴.
         //=> 기존 유저가 기기 변경시 데이터가 저장되지 않는 오류 수정
         else {
-            userInfo = token?.let { getUserInFB(it).await() }!!
-            userInfo.isMainUser = true //메인 유저로 설정
-            val bw = getBookWorm(userInfo.token)
-            saveInLocal(userInfo, bw)  //로컬에 해당 정보 저장
-            return userInfo
+            userInfo = CoroutineScope(Dispatchers.IO).async { getUserInFB(token!!).await() }.await()
+            if (userInfo!=null){
+                userInfo.isMainUser = true //메인 유저로 설정
+                val bw = getBookWorm(userInfo.token)
+                saveInLocal(userInfo, bw)  //로컬에 해당 정보 저장
+                return userInfo
+            }
+            else return  UserInfo()
         }
 
     }
 
-    override suspend fun updateBookWorm(token: String, bookWorm: BookWorm) {
-        updateBwInFB(token,bookWorm)
+    override suspend fun updateBookWorm( token: String?, bookWorm: BookWorm) {
+        var token = token
+        if (token==null){
+            token=getUser(null,false)!!.token
+        }
+        updateBwInFB(token!!, bookWorm)
         updateBwInLocal(bookWorm)
     }
 
 
     //사용자 정보 수정 => 개인만 가능
-    override fun updateUser(user: UserInfo) {
-        updateInLocal(user)
-    }
 
-    suspend fun updateBoth(user: UserInfo) {
+    override suspend fun updateUser(user: UserInfo) {
         updateInLocal(user)
         updateInFB(user)
     }
@@ -90,11 +96,12 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
     override suspend fun getBookWorm(token: String): BookWorm {
         //로컬, 서버에서 가져오는 방법
         val key_bookworm = bwPref.getString("key_bookworm", null)
-        if (key_bookworm!= "null") {
+        if (key_bookworm != null) {
             val json = JSONObject(key_bookworm)
             var bookWorm = gson.fromJson(json.toString(), BookWorm::class.java)
             return bookWorm
-        } else return CoroutineScope(Dispatchers.IO).async {
+        } else
+        return CoroutineScope(Dispatchers.IO).async {
             var bookWorm = BookWorm()
             var it = collectionReference.document(token).get().await()
             var map = it.get("BookWorm") as MutableMap<Any?, Any?>?
@@ -108,12 +115,20 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
     //사용자 생성과 동시에 파이어 베이스에 등록
     suspend override fun createUser(user: UserInfo): Boolean {
         val bookworm = BookWorm()
-        bookworm.token = user.token
-        // get fcm token
-        var a = FirebaseMessaging.getInstance().token.await()
-        user.setFCMtoken(a)
-        saveInLocal(user, bookworm)
-        return saveInFB(user, bookworm)
+        return CoroutineScope(Dispatchers.IO).async {
+            var result = getUserInFB(user.token).await()
+            if (result != null) {
+                saveInLocal(result,bookworm)
+            } else {
+                bookworm.token = user.token
+                // get fcm token
+                var a = FirebaseMessaging.getInstance().token.await()
+                user.setFCMtoken(a)
+                saveInLocal(user, bookworm)
+                saveInFB(user, bookworm)
+            }
+            true
+        }.await()
     }
 
 
@@ -127,7 +142,7 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
             //3. 로컬에 저장된 유저의 정보를 제거한다.
 
             //4. 현재 유저의 플랫폼에 맞추어 회원 탈퇴를 진행한다.
-            when (NowUser.platform) {
+            when (NowUser!!.platform) {
                 //카카오인 경우
                 "Kakao" -> {
 
@@ -166,7 +181,7 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
         var editor = userPref.edit()
         var userInfo = gson.toJson(user, UserInfo::class.java)
         editor.putString("key_user", userInfo)
-        editor.apply() //생성 완료
+        editor.commit() //생성 완료
 
         //Bookworm 저장
         editor = bwPref.edit()
@@ -189,7 +204,7 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
         val editor = userPref.edit()
         val userinfo = gson.toJson(user, UserInfo::class.java)
         editor.putString("key_user", userinfo)
-        editor.apply()
+        editor.commit()
         Log.d("nowUser", userPref.getString("key_user", null)!!)
     }
 
@@ -219,12 +234,12 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
             userInfo//최종 return 값
         } catch (e: FirebaseException) {
             null
-        }
+        }catch (e:NullPointerException) {null}
     }
 
-    private suspend fun updateBwInFB(token: String,bookworm: BookWorm){
+    private suspend fun updateBwInFB(token: String, bookworm: BookWorm) {
         collectionReference.document(token)
-            .update("BookWorm",bookworm)
+            .update("BookWorm", bookworm)
             .addOnSuccessListener {
                 Log.d("책볼레 데이터  업데이트 성공", "파이어스토어 서버에 책볼레 데이터가  업데이트 되었습니다.");
             }.addOnFailureListener {
@@ -232,12 +247,13 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
             }
             .await()
     }
-    private fun updateBwInLocal(bookworm: BookWorm){
+
+    private fun updateBwInLocal(bookworm: BookWorm) {
         //Bookworm 저장
         var editor = bwPref.edit()
         val strbookworm = gson.toJson(bookworm, BookWorm::class.java)
         editor.putString("key_bookworm", strbookworm)
-        editor.apply()
+        editor.commit()
     }
 
 

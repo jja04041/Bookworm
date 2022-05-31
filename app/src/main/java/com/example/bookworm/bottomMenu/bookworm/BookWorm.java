@@ -5,8 +5,10 @@ import com.example.bookworm.bottomMenu.search.items.Book;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 public class BookWorm {
 
@@ -50,7 +52,9 @@ public class BookWorm {
     public void add(Map document) {
         this.token = (String) document.get("token");
         this.wormtype = Integer.parseInt(String.valueOf(document.get("wormtype")));
-        this.wormvec = new Vector<>((ArrayList<Integer>) document.get("wormvec"));
+        this.wormvec = new Vector<>( ((List<Long>) document.get("wormvec")).stream()
+                .map(Long::intValue)
+                .collect(Collectors.toList()));
         this.bgtype = Integer.parseInt(String.valueOf(document.get("bgtype")));
         this.bgvec = new Vector<>((ArrayList<Integer>) document.get("bgvec"));
         this.achievementmap = new HashMap<>((HashMap<String, Boolean>) document.get("achievementmap"));

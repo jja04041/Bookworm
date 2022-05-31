@@ -242,7 +242,11 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
 
                         if (classindex == 0) {
                             Intent intent = new Intent(getApplicationContext(), search_fragment_subActivity_result.class);
+
                             intent.putExtra("itemid", bookList.get(position).getItemId());
+                            intent.putExtra("data",bookList.get(position));
+                            setResult(Activity.RESULT_OK,intent);
+
                             startActivity(intent);
                         } else if (classindex == 1) {
                             finish();

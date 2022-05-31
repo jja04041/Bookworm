@@ -8,17 +8,17 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.bookworm.bottomMenu.bookworm.BookWorm;
-import com.example.bookworm.bottomMenu.challenge.subactivity.subactivity_challenge_challengeinfo;
+import com.example.bookworm.appLaunch.views.MainActivity;
+import com.example.bookworm.bottomMenu.Feed.Fragment_feed;
 import com.example.bookworm.bottomMenu.Feed.comments.Comment;
 import com.example.bookworm.bottomMenu.Feed.comments.subactivity_comment;
-import com.example.bookworm.core.login.LoginActivity;
-import com.example.bookworm.appLaunch.views.MainActivity;
+import com.example.bookworm.bottomMenu.bookworm.BookWorm;
+import com.example.bookworm.bottomMenu.challenge.fragment_challenge;
+import com.example.bookworm.bottomMenu.challenge.subactivity.subactivity_challenge_challengeinfo;
 import com.example.bookworm.bottomMenu.profile.views.ProfileSettingActivity;
 import com.example.bookworm.core.userdata.UserInfo;
-import com.example.bookworm.bottomMenu.challenge.fragment_challenge;
-import com.example.bookworm.bottomMenu.Feed.Fragment_feed;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -61,6 +61,7 @@ public class FBModule {
             //피드 표시(토큰)
         else if (idx == 1) {
             //map객체: 팔로워 목록
+            query =query.orderBy("FeedID", Query.Direction.DESCENDING);
             if (map.get("FeedID") != null) {
                 query = collectionReference.document((String) map.get("FeedID")).collection("comments").orderBy("commentID", Query.Direction.DESCENDING);
             }
@@ -215,7 +216,7 @@ public class FBModule {
                 if (map.get("FeedID") != null) {
                     ((subactivity_comment) context).moduleUpdated(querySnapshot.getDocuments());
                 } else {
-                    ff = ((Fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
+                    ff = ((Fragment_feed) ((AppCompatActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
                     List<DocumentSnapshot> documents = querySnapshot.getDocuments();
                     ArrayList<DocumentSnapshot> data = new ArrayList<>(documents);
                     final int[] count = {0};

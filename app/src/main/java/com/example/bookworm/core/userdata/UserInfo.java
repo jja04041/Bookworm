@@ -19,39 +19,33 @@ import java.util.StringTokenizer;
 
 public class UserInfo implements Serializable {
 
-    private String profileimg; // 회원가입시 프로필사진
-    private String username; // 회원가입시 닉네임
-    private String email; // 로그인한 이메일
-    private String platform;
+    private String profileimg =null; // 회원가입시 프로필사진
+    private String username="(알 수 없음)"; // 회원가입시 닉네임
+    private String email=null; // 로그인한 이메일
+    private String platform =null;
 
    private boolean isMainUser = false;
 
-    private String FCMtoken;
+    private String FCMtoken=null;
 
 
-    private String token;
+    private String token=null;
 
-    public ArrayList<String> getLikedPost() {
-        return likedPost;
-    }
 
-    public void setLikedPost(ArrayList<String> likedPost) {
-        this.likedPost = likedPost;
-    }
 
     private ArrayList<String> likedPost;
 
 
-    private int followerCounts;
-    private int followingCounts;
+    private int followerCounts=0;
+    private int followingCounts=0;
 
-    private HashMap<String, Integer> genre = new HashMap();
+    private HashMap<String, Integer> genre = null;
 
     private boolean followed = false;
 
 
     public UserInfo() {
-
+        genre =new HashMap<>();
         likedPost = new ArrayList<>();
 
     }
@@ -192,7 +186,6 @@ public class UserInfo implements Serializable {
         }
 
         int unboxint = 0;
-
         if (null == this.genre.get(category)) {
             this.genre.put(category, 1);
         } else {
@@ -208,6 +201,13 @@ public class UserInfo implements Serializable {
 
     public void setFCMtoken(String FCMtoken) {
         this.FCMtoken = FCMtoken;
+    }
+    public ArrayList<String> getLikedPost() {
+        return likedPost;
+    }
+
+    public void setLikedPost(ArrayList<String> likedPost) {
+        this.likedPost = likedPost;
     }
 
 }

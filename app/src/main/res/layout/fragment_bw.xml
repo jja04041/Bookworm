@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".bottomMenu.bookworm.fragment_bw">
+    tools:context=".bottomMenu.bookworm.bookworm_pages.fragment_bw">
 
     <ImageView
         android:id="@+id/iv_bookworm"
@@ -12,7 +12,7 @@
         android:layout_height="300dp"
         android:layout_gravity="center"
         android:layout_margin="20dp"
-        android:src="@drawable/bw_default"/>
+        android:src="@drawable/bw_default" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

@@ -39,7 +39,7 @@ class FollowerViewHolder(
             else unfollowing()
             binding.btnFollow.setOnClickListener({
                 AlertDialog.Builder(context)
-                    .setMessage("팔로우를 취소하시겠습니까?")
+                    .setMessage(if(item.isFollowed) "팔로우를 취소하시겠습니까?" else "팔로우 하시겠습니까?")
                     .setPositiveButton(
                         "네"
                     ) { dialog, which ->

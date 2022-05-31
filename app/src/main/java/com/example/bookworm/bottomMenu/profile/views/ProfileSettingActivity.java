@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -85,7 +86,7 @@ public class ProfileSettingActivity extends AppCompatActivity {
                                 Session.getCurrentSession().clearCallbacks(); }
                         }});
                 }
-
+                localLogout();
                 Intent intent = new Intent(current_context, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
@@ -132,6 +133,16 @@ public class ProfileSettingActivity extends AppCompatActivity {
 
     }
 
+    private void localLogout(){
+        SharedPreferences pref = getSharedPreferences("user", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.remove("key_user");
+        editor.commit();
+        pref = getSharedPreferences("bookworm", MODE_PRIVATE);
+        editor = pref.edit();
+        editor.remove("key_bookworm");
+        editor.commit();
+    }
     //카카오 회원탈퇴  메소드
     private void signOutKakao(FBModule fbModule, UserInfo userInfo) {
         UserManagement.getInstance().requestUnlink(new UnLinkResponseCallback() {

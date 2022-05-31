@@ -32,6 +32,7 @@ public class SummaryViewHolder extends RecyclerView.ViewHolder implements UserCo
     Context context;
     FBModule fbModule = new FBModule(context);
     LoadUser user;
+
     public SummaryViewHolder(@NonNull View itemView, Context context) {
         super(itemView);
         binding = LayoutCommentSummaryBinding.bind(itemView);

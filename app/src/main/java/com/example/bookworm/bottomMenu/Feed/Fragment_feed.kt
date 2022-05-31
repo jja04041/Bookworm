@@ -85,16 +85,17 @@ class Fragment_feed : Fragment() {
         }
         mView=binding!!.root
 
-        storiesBar = mView.findViewById(R.id.storybar)
-
-        val stories: MutableList<Story> = java.util.ArrayList()
-        for (i in 0..9) stories.add(Story(false))
-
-        val adapter = StorybarAdapter(stories)
-        storiesBar
-        storiesBar!!.setAdapter(adapter)
-        storiesBar!!.setLayoutManager(LinearLayoutManager(context, RecyclerView.HORIZONTAL, false))
-        storiesBar!!.addItemDecoration(StoryDeco(10))
+        // 스토리바
+//        storiesBar = mView.findViewById(R.id.storybar)
+//
+//        val stories: MutableList<Story> = java.util.ArrayList()
+//        for (i in 0..9) stories.add(Story(false))
+//
+//        val adapter = StorybarAdapter(stories)
+//        storiesBar
+//        storiesBar!!.setAdapter(adapter)
+//        storiesBar!!.setLayoutManager(LinearLayoutManager(context, RecyclerView.HORIZONTAL, false))
+//        storiesBar!!.addItemDecoration(StoryDeco(10))
 
         //companion 객체에 context값을 적재함
         setContext(requireContext())
@@ -165,7 +166,7 @@ class Fragment_feed : Fragment() {
     //페이지 새로고침 시 사용하는 메소드
     private fun pageRefresh() {
         initFeed()
-        map = HashMap<Any?, Any?>()
+        map = HashMap()
         if (map.get("lastVisible") != null) map.remove("lastVisible")
         feedList = ArrayList() //챌린지를 담는 리스트 생성
         isLoading = true

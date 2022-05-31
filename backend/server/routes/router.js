@@ -4,6 +4,9 @@ const fs = require('fs');
 const fb= require("../module/firebaseProcess"); //파이어베이스 관련 함수 모음 
 const e = require('express');
 const router = express.Router();
+// const {
+//   createFirebaseToken
+// } = require("../module/firebase/getToken")
 module.exports = router;
 var imgPath = "";
 var Path = "";
@@ -11,8 +14,6 @@ var Path = "";
 //Path List
 const LocalFeedImgPath="./Image/feed/"
 const LocalProfileImgPath="./Image/profileimg/"
-
-
 //Main
 router.get("/", (req, res) => {
   res.send("helloworld~");
@@ -158,13 +159,7 @@ router.get("/token", (req, res) => {
 
 router.post("/showlist",async (req,res)=>{
   var token = req.query.token;
-  //팔로워 삭제 
   fb.showlist(token).then((answer)=> {
       if(answer) res.send("done");
   });
-  //피드 삭제
-
-  //댓글 삭제 
-
-  //회원 정보 삭제 
 });

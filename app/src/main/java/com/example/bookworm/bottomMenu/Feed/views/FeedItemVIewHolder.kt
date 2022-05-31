@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -42,7 +43,7 @@ import java.util.*
 class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolder(itemView),
     UserContract.View {
     var binding: FragmentFeedItemBinding? = null
-    var nowUser: UserInfo? = null
+    lateinit var nowUser: UserInfo
     var strings: ArrayList<String>? = null
     var liked = false
     var limit = 0
@@ -51,31 +52,35 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
     var fbModule = FBModule(context)
     var Count: Long = 0
     var pv: FeedViewModel
-    val feedUserInfo:MutableLiveData<UserInfo> = MutableLiveData()
+    val nowUserInfo: MutableLiveData<UserInfo> = MutableLiveData()
+    val feedUserInfo: MutableLiveData<UserInfo> = MutableLiveData()
     val commentUserInfo: MutableLiveData<UserInfo> = MutableLiveData()
-//    var loadUser1: LoadUser? = null
-    var loadUser2: LoadUser? = null
+//
+//    var loadUser2: LoadUser? = null
     var dateDuration: String? = null
 
     //생성자를 만든다.
     init {
         binding = FragmentFeedItemBinding.bind(itemView)
         this.context = context
-        nowUser = PersonalD(context).userInfo //현재 사용자
         pv = ViewModelProvider(context as MainActivity, FeedViewModel.Factory(context)).get(
-           FeedViewModel::class.java
+            FeedViewModel::class.java
         )
+        //현재 사용자의 데이터를 가져온다.
+        pv.getUser(null, nowUserInfo)
+        nowUserInfo.observe(context, {
+            nowUser = it
+        })
+
         //감시
-        feedUserInfo.observe(context,{
-            showProfile(it,false)
+        feedUserInfo.observe(context, {
+            showProfile(it, false)
         })
-        commentUserInfo.observe(context,{
-
+        commentUserInfo.observe(context, {
+            showProfile(it, true)
         })
-
-        //사용자의 프로필 정보를 로드할 생성자를 만든다.
-//        loadUser1 = LoadUser(this) //피드의 프로필
-        loadUser2 = LoadUser(this) //최근 댓글의 프로필
+//
+//        loadUser2 = LoadUser(this) //최근 댓글의 프로필
     }
 
     //아이템을 세팅하는 메소드
@@ -91,17 +96,18 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
             intent.putExtra("itemid", book.itemId)
             context!!.startActivity(intent)
         })
-
         //작성자 UserInfo
-        pv.getUser(item.userToken,feedUserInfo)
-
+        pv.getUser(item.userToken, feedUserInfo)
 
 
         //피드 내용
 
         //댓글 창 세팅
         Count = item.commentCount
-        if (Count > 0) setComment(item.comment)
+        if (Count > 0) {
+            pv.getUser(item.comment.userToken,commentUserInfo)
+            setComment(item.comment)
+        }
         else {
             setViewV(false)
             binding!!.llCommentInfo.visibility = View.GONE //댓글이 0개인 경우, 몇개 더보기 지움.
@@ -124,10 +130,11 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
             context!!.startActivity(intent)
         })
         //댓글 빠르게 달기
-        binding!!.btnWriteComment.setOnClickListener(View.OnClickListener {
+        binding!!.btnWriteComment.setOnClickListener({
             val userComment: String = binding!!.edtComment.getText().toString()
             if (userComment != "" && userComment != null) {
                 Count++
+                pv.getUser(nowUser.token,commentUserInfo)
                 setComment(addComment(item.feedID))
             }
         })
@@ -257,17 +264,18 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
 
     //댓글을 화면에 세팅하는 메소드
     fun setComment(comment: Comment?) {
-        if (comment != null) {
             setViewV(true)
             binding!!.tvCommentCount.setText(Count.toString())
-            binding!!.tvCommentContent.setText(comment.contents)
-            loadUser2!!.getData(comment.userToken, true)
-
+            binding!!.tvCommentContent.setText(comment!!.contents)
             getDateDuration(comment.madeDate)
-
             binding!!.tvCommentDate.setText(dateDuration)
-
-        } else setViewV(false)
+//        if (comment != null) {
+//
+////            loadUser2!!.getData(comment.userToken, true)
+//
+//
+//
+//        } else setViewV(false)
     }
 
     //뷰를 보여주는 메소드(Visibility 조정)
@@ -303,17 +311,20 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
 
     //사용자의 프로필을 보여주는 메소드
     // (UserContract.View 인터페이스의 메소드를 오버라이딩함)
-    override fun showProfile(userInfo: UserInfo, bool: Boolean?) {
+    override fun showProfile(userInfo: UserInfo?, bool: Boolean?) {
 
         try {
             if (bool == false) {
-                binding!!.tvNickname.setText(userInfo.username)
-                Glide.with(itemView).load(userInfo.profileimg).circleCrop()
-                    .into(binding!!.ivProfileImage)
+                if(userInfo!=null){
+                binding!!.tvNickname.setText(userInfo!!.username)
+                Glide.with(itemView).load(userInfo!!.profileimg).circleCrop()
+                    .into(binding!!.ivProfileImage)}
             } else if (bool == true) {
-                binding!!.tvCommentNickname.setText(userInfo.username)
-                Glide.with(binding!!.getRoot()).load(userInfo.profileimg).circleCrop()
-                    .into(binding!!.ivCommentProfileImage)
+                if(userInfo!=null) {
+                    binding!!.tvCommentNickname.setText(userInfo!!.username)
+                    Glide.with(binding!!.getRoot()).load(userInfo!!.profileimg).circleCrop()
+                        .into(binding!!.ivCommentProfileImage)
+                }
             }
         } catch (e: IllegalArgumentException) {
             Log.e("Glide Error", "itemView가 Null인 상태입니다.")

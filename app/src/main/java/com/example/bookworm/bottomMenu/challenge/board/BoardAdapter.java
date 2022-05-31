@@ -2,20 +2,16 @@ package com.example.bookworm.bottomMenu.challenge.board;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
-import com.example.bookworm.bottomMenu.challenge.items.OnChallengeItemClickListener;
 import com.example.bookworm.databinding.SubactivityChallengeBoardItemBinding;
 
 import java.util.ArrayList;
@@ -88,8 +84,8 @@ public class BoardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         public void setItem(Board item) {
             binding.tvBoardText.setText(item.getBoardText());
-//        Glide.with(context).load(item.getImgurl()).into(binding.ivThumb); //썸네일 설정
-            Glide.with(context).load("https://k.kakaocdn.net/dn/b8DtBK/btqRorUTUCy/w10D6Zn5IMsop8v2BJY5VK/img_640x640.jpg").into(binding.ivThumb); //이미지서버 닫혀있어서 일단 임시로....
+        Glide.with(context).load(item.getImgurl()).into(binding.ivThumb); //썸네일 설정
+//            Glide.with(context).load("https://k.kakaocdn.net/dn/b8DtBK/btqRorUTUCy/w10D6Zn5IMsop8v2BJY5VK/img_640x640.jpg").into(binding.ivThumb); //이미지서버 닫혀있어서 일단 임시로....
         }
     }
 

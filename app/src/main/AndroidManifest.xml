@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.bookworm">
     <!-- 인터넷 접속 중인지 확인 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 인터넷 사용 권한 설정 -->
@@ -11,9 +12,9 @@
     <application
         android:name=".core.login.GlobalApplication"
         android:allowBackup="true"
-        android:icon="@drawable/appicon_bookworm"
+        android:icon="@mipmap/appicon"
         android:label="책볼레"
-        android:roundIcon="@drawable/appicon_bookworm"
+        android:roundIcon="@mipmap/appicon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
@@ -88,18 +89,20 @@
             android:exported="false" /> <!-- 메인 화면 -->
         <activity
             android:name=".core.login.LoginActivity"
-            android:exported="false"
-            /><!-- 로그인 화면 -->
+            android:exported="false"/> <!-- 로그인 화면 -->
+        <activity
+            android:name=".chat.activity_chating"
+            android:exported="false"/>
+
         <activity
             android:name=".LoadingActivity"
             android:exported="true"> <!-- 로딩 화면 -->
             <intent-filter>
-
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity> <!-- uCrop cropping activity -->
+
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
@@ -116,7 +119,7 @@
 
 
         <service
-            android:name=".notification.MyFirebaseMessagingService"
+            android:name=".notification.MyFCMService"
             android:stopWithTask="false"
             android:exported="false">
             <intent-filter>

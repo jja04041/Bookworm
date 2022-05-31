@@ -105,7 +105,7 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
         //책 썸네일 설정
         Glide.with(this).load(challenge.getBook().getImg_url()).into(binding.ivThumbnail);
         binding.tvChallengeEnd.setText(challenge.getEndDate());
-        binding.tvDday.setText(countdday(challenge.getEndDate()));
+        binding.tvDday.setText(countDday(challenge.getEndDate()));
         binding.tvChallengeinfoCurrentParticipants.setText(String.valueOf(challenge.getCurrentPart().size())); // 받아온 ArrayList 의 길이를 넣음 (현재 참여 인원 수 )
         binding.tvMaxParticipants.setText(String.valueOf(challenge.getMaxPart()));
         binding.tvChallengeinfoEnd.setText(challenge.getEndDate());
@@ -133,7 +133,7 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
     }
 
     //D-day 계산
-    public String countdday(String EndDate) {
+    public String countDday(String EndDate) {
         try {
 //            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 

@@ -7,14 +7,14 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/SFLChallinfo"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/SFLChallinfo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <include layout="@layout/shimmer_subactivity_challenge_challengeinfo" />
+            <include layout="@layout/shimmer_subactivity_challenge_challengeinfo" />
 
-    </com.facebook.shimmer.ShimmerFrameLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
     <LinearLayout
         android:id="@+id/llChallinfo"
@@ -52,8 +52,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="챌린지 정보"
-                        android:textSize="13dp"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black"
+                        android:textSize="13dp" />
                 </FrameLayout>
 
                 <!-- 뒤에 넣을만한 배경이미지 있으면 좋을거같음. 투명한 검은 배경 겹쳐서 살짝 어둡게-->
@@ -85,6 +85,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="#### - ## - ##"
+                        android:textColor="@color/black"
                         android:textSize="17dp"
                         android:textStyle="bold" />
 
@@ -92,6 +93,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=" 에 종료됨"
+                        android:textColor="@color/black"
                         android:textSize="17dp"
                         android:textStyle="bold" />
 
@@ -139,6 +141,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="현재 참여자 "
+                        android:textColor="@color/black"
                         android:textSize="17dp" />
 
                     <TextView
@@ -146,12 +149,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="#"
+                        android:textColor="@color/black"
                         android:textSize="17dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=" / "
+                        android:textColor="@color/black"
                         android:textSize="17dp" />
 
                     <TextView
@@ -159,12 +164,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="#"
+                        android:textColor="@color/black"
                         android:textSize="17dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=" 명"
+                        android:textColor="@color/black"
                         android:textSize="17dp" />
 
                 </LinearLayout>
@@ -191,7 +198,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="start|center_vertical"
                         android:layout_marginStart="20dp"
-                        android:text="인증 게시판"
+                        android:text="챌린지 인증 하기"
+                        android:textColor="@color/black"
                         android:textSize="17dp" />
 
                     <ImageView
@@ -235,9 +243,9 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:gravity="end"
                             android:layout_weight="3"
                             android:ellipsize="marquee"
+                            android:gravity="end"
                             android:marqueeRepeatLimit="marquee_forever"
                             android:singleLine="true"
                             android:text="######" />
@@ -338,7 +346,8 @@
                             android:id="@+id/tv_challenge_Description"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="2dp" />
+                            android:layout_marginHorizontal="2dp"
+                            android:textColor="@color/black" />
 
                     </LinearLayout>
 
@@ -349,6 +358,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginHorizontal="20dp"
+                    android:background="@drawable/square_button"
                     android:text="챌린지 참여"
                     android:textSize="17dp" />
 
