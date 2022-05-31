@@ -92,6 +92,8 @@ class ProfileInfoActivity : AppCompatActivity() {
             .into(binding.ivProfileImage) //프로필이미지 설정
         binding.ivProfileImage.visibility = View.VISIBLE
 
+        binding.tvIntroduce.setText(user.introduce)
+
         // 채팅버튼
         binding.btnchatting.visibility = View.VISIBLE
 
@@ -110,7 +112,7 @@ class ProfileInfoActivity : AppCompatActivity() {
 
         //내 프로필 화면이라면 팔로우 버튼 안보이게
         if (user.isMainUser) binding.tvFollow.visibility = View.GONE
-        binding.tvFollowCount.text = user.followerCounts.toString()
+        binding.tvFollowerCount.text = user.followerCounts.toString()
 
 
         //팔로우 버튼을 클릭했을때 버튼 모양, 상태 변경
@@ -158,6 +160,6 @@ class ProfileInfoActivity : AppCompatActivity() {
     }
 
     fun setFollowerCnt(count: Long) {
-        binding.tvFollowCount.text = count.toString()
+        binding.tvFollowerCount.text = count.toString()
     }
 }

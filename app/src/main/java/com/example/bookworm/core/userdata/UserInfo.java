@@ -19,25 +19,25 @@ import java.util.StringTokenizer;
 
 public class UserInfo implements Serializable {
 
-    private String profileimg =null; // 회원가입시 프로필사진
-    private String username="(알 수 없음)"; // 회원가입시 닉네임
-    private String email=null; // 로그인한 이메일
-    private String platform =null;
+    private String profileimg = null; // 회원가입시 프로필사진
+    private String username = "(알 수 없음)"; // 회원가입시 닉네임
+    private String email = null; // 로그인한 이메일
+    private String platform = null;
+    private String introduce = "안녕하세요~";
 
-   private boolean isMainUser = false;
+    private boolean isMainUser = false;
 
-    private String FCMtoken=null;
+    private String FCMtoken = null;
 
 
-    private String token=null;
-
+    private String token = null;
 
 
     private ArrayList<String> likedPost;
 
 
-    private int followerCounts=0;
-    private int followingCounts=0;
+    private int followerCounts = 0;
+    private int followingCounts = 0;
 
     private HashMap<String, Integer> genre = null;
 
@@ -45,10 +45,11 @@ public class UserInfo implements Serializable {
 
 
     public UserInfo() {
-        genre =new HashMap<>();
+        genre = new HashMap<>();
         likedPost = new ArrayList<>();
 
     }
+
     @Exclude
     public boolean isMainUser() {
         return isMainUser;
@@ -111,6 +112,9 @@ public class UserInfo implements Serializable {
             this.likedPost = (ArrayList<String>) document.get("likedPost");
         else this.likedPost = new ArrayList<>();
 
+        if ((String) document.get("introduce") != null)
+            this.introduce = (String) document.get("introduce");
+
         this.FCMtoken = (String) document.get("fcmtoken");
     }
 
@@ -146,6 +150,14 @@ public class UserInfo implements Serializable {
         return followerCounts;
     }
 
+    public String getIntroduce() {
+        return introduce;
+    }
+
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
+    }
+
     public int getFollowingCounts() {
         return followingCounts;
     }
@@ -168,7 +180,7 @@ public class UserInfo implements Serializable {
 
         if (category.equals("자기계발") || category.equals("에세이") || category.equals("예술/대중문화")) {
             category = "자기계발";
-        } else if (category.equals("소설/시/희곡") || category.equals("장르소설")  || category.equals("전집/중고전집")) {
+        } else if (category.equals("소설/시/희곡") || category.equals("장르소설") || category.equals("전집/중고전집")) {
             category = "소설";
         } else if (category.equals("좋은부모")) {
             category = "육아";
@@ -176,7 +188,7 @@ public class UserInfo implements Serializable {
             category = "사회";
         } else if (category.equals("어린이") || category.equals("유아")) {
             category = "어린이";
-        } else if (category.equals("종교/역학") || category.equals("인문학")  || category.equals("역사")  || category.equals("고전")) {
+        } else if (category.equals("종교/역학") || category.equals("인문학") || category.equals("역사") || category.equals("고전")) {
             category = "인문";
         } else if (category.equals("가정/요리/뷰티") || category.equals("건강/취미/레저") || category.equals("여행") || category.equals("잡지") || category.equals("달력/기타")) {
             category = "생활";
@@ -202,6 +214,7 @@ public class UserInfo implements Serializable {
     public void setFCMtoken(String FCMtoken) {
         this.FCMtoken = FCMtoken;
     }
+
     public ArrayList<String> getLikedPost() {
         return likedPost;
     }
@@ -211,7 +224,6 @@ public class UserInfo implements Serializable {
     }
 
 }
-
 
 
 //
