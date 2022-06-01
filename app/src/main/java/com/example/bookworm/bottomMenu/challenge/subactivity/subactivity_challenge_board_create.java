@@ -110,7 +110,7 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
                     //완료 버튼 (피드 올리기)
                     binding.tvFinish.setOnClickListener(view ->
                             new AlertDialog.Builder(current_context)
-                                    .setMessage("피드를 업로드하시겠습니까?")
+                                    .setMessage("인증글을 업로드하시겠습니까?")
                                     .setPositiveButton("네", (dialog, which) -> {
                                         dialog.dismiss();
                                         upload(bitmap, userInfo);
@@ -126,7 +126,7 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
 
                 binding.tvFinish.setOnClickListener(view ->
                         new AlertDialog.Builder(current_context)
-                                .setMessage("피드를 업로드하시겠습니까?")
+                                .setMessage("인증글을 업로드하시겠습니까?")
                                 .setPositiveButton("네", (dialog, which) -> {
                                     dialog.dismiss();
                                     upload(null, userInfo);
@@ -179,9 +179,9 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
     //피드 업로드
     public void feedUpload(String imgUrl) {
 
-        if (binding.edtFeedText.getText().toString().equals("")) { //피드 내용이 없으면 작성해달라는 알림 띄움
+        if (binding.edtFeedText.getText().toString().equals("") || binding.ivpicture.getDrawable() == null) { //인증사진이나 피드 내용이 없으면 작성해달라는 알림 띄움
             new AlertDialog.Builder(current_context)
-                    .setMessage("인증글 내용을 작성해주세요")
+                    .setMessage("인증 사진과 인증글 내용을 작성해주세요")
                     .setPositiveButton("알겠습니다.", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
