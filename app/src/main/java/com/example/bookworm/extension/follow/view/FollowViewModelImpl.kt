@@ -92,7 +92,7 @@ class FollowViewModelImpl(val context: Context) : ViewModel(),FollowViewModel{
                 resultList.set(it, user)
             }
         }
-        followList.value = resultList//가져온 값을 결과로 셋팅
+        followList.value =resultList//가져온 값을 결과로 셋팅
     }
 
    override suspend fun follow(toUserInfo: UserInfo, type: Boolean): UserInfo {

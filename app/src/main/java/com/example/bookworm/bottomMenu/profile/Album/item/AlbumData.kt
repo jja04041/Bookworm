@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.profile.Album
+package com.example.bookworm.bottomMenu.profile.Album.item
 
 import com.example.bookworm.bottomMenu.Feed.items.Feed
 
@@ -11,6 +11,8 @@ class AlbumData {
 
     //파이어베이스에서 전달받은 데이터를 객체에 담음
     fun addData(data:Map<String,Any>){
-
+        thumbnail= data["thumnail"] as String?
+        albumName = data["albumName"] as String?
+        containsList = data["containsList"] as ArrayList<Feed>
     }
 }

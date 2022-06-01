@@ -57,8 +57,14 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
                 return userInfo
             }
             //로컬에 해당 토큰이 없는 경우 or 서버의 유저 정보를 가지고 오고 싶은 경우=>  서버에서 가져옴
-            else return if (token == null) userInfo.token.let { getUserInFB(it).await() }
-            else token.let { getUserInFB(it).await() }
+            else return if (token == null) userInfo.token.let {
+                var data = getUserInFB(it).await()
+                updateInLocal(data!!)
+                data
+            }
+            else token.let {
+                getUserInFB(it).await()
+            }
         }
 
         //로컬에 아직 메인 사용자가 등록되지 않은 경우 ,서버에서 값을 가져옴.
@@ -99,19 +105,19 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
         if (key_bookworm != null) {
             val json = JSONObject(key_bookworm)
             var bookWorm = gson.fromJson(json.toString(), BookWorm::class.java)
-            return bookWorm
-        } else
-        return CoroutineScope(Dispatchers.IO).async {
-            var bookWorm = BookWorm()
-            var it = collectionReference.document(token).get().await()
-            var map = it.get("BookWorm") as MutableMap<Any?, Any?>?
-            bookWorm.add(map)
-            bookWorm
-        }.await()
+            if(bookWorm.token!=token) return getBwFromFB(token)
+            else return bookWorm
+        } else return getBwFromFB(token)
 
 
     }
-
+    private suspend fun getBwFromFB(token: String) = CoroutineScope(Dispatchers.IO).async {
+        var bookWorm = BookWorm()
+        var it = collectionReference.document(token).get().await()
+        var map = it.get("BookWorm") as MutableMap<Any?, Any?>?
+        bookWorm.add(map)
+        bookWorm
+    }.await()
     //사용자 생성과 동시에 파이어 베이스에 등록
     suspend override fun createUser(user: UserInfo): Boolean {
         val bookworm = BookWorm()

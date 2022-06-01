@@ -1,5 +1,6 @@
 package com.example.bookworm.extension.follow.view
 
+//import com.example.bookworm.Extension.Follow.LoadData
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,12 +9,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bookworm.extension.follow.interfaces.Contract
 import com.example.bookworm.core.userdata.UserInfo
-import com.example.bookworm.core.userdata.PersonalD
-//import com.example.bookworm.Extension.Follow.LoadData
-import com.example.bookworm.extension.follow.modules.FollowItemAdapter
 import com.example.bookworm.databinding.FragmentFollowListBinding
+import com.example.bookworm.extension.follow.interfaces.Contract
+import com.example.bookworm.extension.follow.modules.FollowItemAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.*
 
 //팔로워, 팔로잉 탭의 틀을 가지고 있는 클래스 => 팔로워 탭과 팔로잉 탭의 구분은 isFollower변수로 체크한다.
 //뷰는 가져온 데이터를 화면에 표시만 하는 역할을 한다
@@ -32,28 +35,25 @@ class FragmentFollowList(
     var canLoad = true //더 불러올 수 있는 지
     var isLoading: Boolean = false
     var nowUser: UserInfo? = null //현재 사용자의 토큰
-
+    var start: Boolean = true
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        nowUser = PersonalD(context).userInfo as UserInfo
         fv = context.let { FollowViewModelImpl(it!!) }
+        binding = FragmentFollowListBinding.inflate(layoutInflater)
+//        loadUserData()
         fv.followList.observe(viewLifecycleOwner, ({
             showInfo(it)
         }))
-        init();
-        fv.getFollowerList(token, if (isfollower == 0) false else true)
-        showShimmer(true)
-
         return binding!!.root
     }
 
 
     override fun onResume() {
-        initValues()
-
+        loadUserData(start)
+        if (start) start = false
         Log.d("데이터 보여줌", "ㅇㅇ")
         super.onResume()
     }
@@ -66,7 +66,7 @@ class FragmentFollowList(
 
     //초기화
     fun init() {
-        binding = FragmentFollowListBinding.inflate(layoutInflater)
+//        binding = FragmentFollowListBinding.inflate(layoutInflater)
         initValues()
         initAdapter()
     }
@@ -76,13 +76,25 @@ class FragmentFollowList(
         userList = ArrayList()
     }
 
+    fun loadUserData(flag: Boolean) {
+        CoroutineScope(Dispatchers.Main).launch {
+            nowUser = fv.getUser(null, true)
+            (context as FollowerActivity).tabLayout.getTabAt(0)!!.setText("${nowUser!!.followerCounts} 팔로워")
+            (context as FollowerActivity).tabLayout.getTabAt(1)!!.setText("${nowUser!!.followingCounts} 팔로잉")
+            Log.d("data", nowUser!!.followerCounts.toString())
+            if (flag) init()
+            fv.getFollowerList(token, if (isfollower == 0) false else true)
+            showShimmer(true)
+        }
+
+    }
+
     //어댑터 초기화
     private fun initAdapter() {
 
         followerAdapter = context?.let {
             FollowItemAdapter(
                 it, nowUser as UserInfo, isfollower
-//            , pager
             )
         }
         binding!!.recyclerView.adapter = followerAdapter
@@ -129,17 +141,23 @@ class FragmentFollowList(
         } //더이상 로드하지 않음
         //가져온 데이터를 새롭게 담는다
         else {
-            userList.addAll(info)
+            if (userList != info) userList.addAll(info)
+            else if(info.size==0)
+            else {
+                userList.clear()
+                userList.addAll(info)
+            }
             //만약 가져온 데이터가 최대치보다 작다면 => 더 가져올 데이터가 없음을 의미
             if (info.size < 10) canLoad = false
         }
         if (!canLoad) {
             isLoading = true
-            followerAdapter!!.submitList(userList.toList())
+            followerAdapter!!.submitList(userList.toMutableList())
+
         } else {
             isLoading = false
             userList.add(UserInfo())
-            followerAdapter!!.submitList(userList.toList())
+            followerAdapter!!.submitList(userList.toMutableList())
             page++ //로딩을 다하면 그 다음 페이지로 넘어간다
         }
         showShimmer(false)

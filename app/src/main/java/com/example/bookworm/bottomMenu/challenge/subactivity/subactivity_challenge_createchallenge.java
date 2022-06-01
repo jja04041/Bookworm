@@ -20,11 +20,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.core.userdata.PersonalD;
-import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.search.items.Book;
 import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_main;
 import com.example.bookworm.core.internet.FBModule;
+import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.databinding.SubactivityChallengeCreatechallengeBinding;
 
 import java.text.DateFormat;

@@ -14,10 +14,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.extension.DiffUtilCallback;
 import com.example.bookworm.bottomMenu.Feed.items.Feed;
 import com.example.bookworm.appLaunch.views.MainActivity;
-import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Modify;
 import com.example.bookworm.databinding.SubactivityCommentBinding;
 import com.example.bookworm.bottomMenu.Feed.Fragment_feed;

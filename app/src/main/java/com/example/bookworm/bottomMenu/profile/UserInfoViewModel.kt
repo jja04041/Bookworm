@@ -93,6 +93,7 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
             repo.updateBookWorm(token,bookWorm)
         }
     }
+
     fun getFeedList(token: String){
         viewModelScope.launch {
             var data= FirebaseFirestore.getInstance().collection("feed").whereEqualTo("UserToken",token).get().await()

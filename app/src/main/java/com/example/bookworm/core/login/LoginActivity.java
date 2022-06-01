@@ -3,14 +3,12 @@ package com.example.bookworm.core.login;
 import android.content.Context;
 import android.content.Intent;
 
-import android.net.wifi.hotspot2.pps.Credential;
 import android.os.Bundle;
 
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,17 +17,14 @@ import com.example.bookworm.appLaunch.modules.MainViewModel;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.appLaunch.views.MainActivity;
 import com.example.bookworm.R;
-import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.core.internet.FBModule;
+import com.example.bookworm.core.userdata.UserInfo;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.kakao.auth.AuthType;

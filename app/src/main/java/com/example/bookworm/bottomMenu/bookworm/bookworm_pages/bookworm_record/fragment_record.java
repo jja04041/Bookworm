@@ -1,29 +1,19 @@
 package com.example.bookworm.bottomMenu.bookworm.bookworm_pages.bookworm_record;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.bookworm.bottomMenu.Feed.items.Feed;
-import com.example.bookworm.bottomMenu.challenge.board.Board;
-import com.example.bookworm.bottomMenu.challenge.board.BoardAdapter;
-import com.example.bookworm.bottomMenu.challenge.board.subactivity_challenge_board_comment;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
 
-import com.example.bookworm.core.userdata.PersonalD;
-import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.databinding.FragmentRecordBinding;
 import com.google.firebase.firestore.DocumentSnapshot;
 

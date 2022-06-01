@@ -5,19 +5,65 @@
     android:orientation="vertical">
 
 
-    <TextView
+    <LinearLayout
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="여기는 피드 선택 화면입니다" />
+        android:layout_marginHorizontal="50dp"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnprev"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3/3"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="앨범에 들어갈 포스트를 \n선택해 주세요"
+            android:textColor="@color/black"
+            android:textSize="25dp" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="이전 단계로" />
-    <Button
-        android:id="@+id/btnDone"
-        android:layout_width="wrap_content"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginVertical="30dp"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="300dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="끝" />
+        android:layout_marginBottom="40dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnPrev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:backgroundTint="@color/subcolor_0_50"
+            android:text="이전"
+            android:textSize="15dp"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/btnNext"
+            android:textSize="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="160dp"
+
+            android:backgroundTint="@color/subcolor_1"
+            android:text="만들기" />
+    </LinearLayout>
 </LinearLayout>

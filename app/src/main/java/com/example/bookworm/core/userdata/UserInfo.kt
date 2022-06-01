@@ -2,31 +2,33 @@ package com.example.bookworm.core.userdata
 
 import android.content.Context
 import android.util.Log
-import com.example.bookworm.bottomMenu.profile.Album.AlbumData
-import com.kakao.usermgmt.response.model.UserAccount
+import com.example.bookworm.bottomMenu.profile.Album.item.AlbumData
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.firestore.Exclude
+import com.kakao.usermgmt.response.model.UserAccount
 import java.io.Serializable
-import java.lang.NullPointerException
 import java.util.*
 
 class UserInfo : Serializable {
     var profileimg: String? = null // 회원가입시 프로필사진
-    var username: String? = "(알 수 없음)" // 회원가입시 닉네임
+    var username = "(알 수 없음)" // 회원가입시 닉네임
     private var email: String? = null // 로그인한 이메일
     var platform: String? = null //플랫폼 확인
+    var introduce = "안녕하세요~"
+
     @get:Exclude
     var isMainUser = false //메인 유저인지 확인하는 변수
+
     @get:Exclude
     var isFollowed = false //팔로우 여부 확인 하는 변수
 
     private val albumData: ArrayList<AlbumData> //앨범리스트
-    var fCMtoken: String?=null
+    var fCMtoken: String? = null
     lateinit var token: String
     var likedPost: ArrayList<String>?
     var followerCounts = 0
     var followingCounts = 0
-var genre: HashMap<String, Int?>? = null
+    var genre: HashMap<String, Int?>? = null
 
 
     init {
@@ -44,7 +46,7 @@ var genre: HashMap<String, Int?>? = null
         } catch (e: NullPointerException) {
             Log.d("profile", "Null")
         }
-        username = account.displayName
+        username = account.displayName!!
         email = account.email
         platform = "Google"
     }
@@ -60,7 +62,7 @@ var genre: HashMap<String, Int?>? = null
 
     //파이어베이스에서 값을 가져옴
     fun add(document: Map<*, *>) {
-        username = document["username"] as String?
+        username = document["username"] as String
         email = document["email"] as String?
         profileimg = document["profileimg"] as String?
         token = document["token"] as String
@@ -71,6 +73,9 @@ var genre: HashMap<String, Int?>? = null
         if (document["likedPost"] as ArrayList<String?>? != null) likedPost =
             document["likedPost"] as ArrayList<String>? else likedPost = ArrayList()
         fCMtoken = document["fcmtoken"] as String
+        if (document["introduce"] as String? != null)
+            introduce = (document["introduce"] as String?)!!
+
     }
 
     //장르 설정

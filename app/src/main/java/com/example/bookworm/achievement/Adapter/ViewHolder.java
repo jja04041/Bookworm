@@ -15,9 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bookworm.achievement.Listener.OnViewHolderItemClickListener;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.R;
-import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.PersonalD;
+import com.example.bookworm.core.userdata.UserInfo;
 
 import java.util.HashMap;
 

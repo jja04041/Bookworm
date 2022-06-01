@@ -133,6 +133,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvReadBookCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -202,7 +203,7 @@
                     android:layout_width="125dp"
                     android:layout_height="125dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/bw_confidence" />
+                    android:id="@+id/ivBookworm" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

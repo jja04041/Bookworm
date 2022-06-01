@@ -154,7 +154,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 
         if(getIntent() != null) {
             intent = getIntent();
-            if((Book) intent.getSerializableExtra("data") != null){
+            if(intent.getSerializableExtra("data") != null){
             selected_book = (Book) intent.getSerializableExtra("data");
             binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목만 세팅한다.
             }
@@ -189,7 +189,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 
     //서버에 이미지 업로드
     private void upload(Bitmap data, UserInfo userInfo) {
-
         FeedID = System.currentTimeMillis() + "_" + userInfo.getToken(); //현재 시각 + 사용자 토큰을 FeedID로 설정
         if (data != null) {
           String name="feed_"+FeedID+".jpg";

@@ -42,9 +42,7 @@ public class activity_chating extends AppCompatActivity {
 
     // 유저 데이터
     private UserInfoViewModel uv;
-    UserInfoViewModel pv;
     UserInfo userinfo;
-
     Context context;
 
     @Override
@@ -59,13 +57,13 @@ public class activity_chating extends AppCompatActivity {
 
         context = activity_chating.this;
 
-        pv = new UserInfoViewModel(context);
+//        pv = new UserInfoViewModel(context);
         uv = new ViewModelProvider(this, new UserInfoViewModel.Factory(context)).get(UserInfoViewModel.class);
 
 
-        pv.getUser(null, false);
+        uv.getUser(null, false);
 
-        pv.getData().observe(this, userInfo -> {
+        uv.getData().observe(this, userInfo -> {
             userinfo = userInfo;
 
             //제목줄 제목글시를 닉네임으로(또는 채팅방)

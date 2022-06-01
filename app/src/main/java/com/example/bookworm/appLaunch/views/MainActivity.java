@@ -36,11 +36,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         GoogleSignInAccount gsa = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
-        FirebaseAuth.getInstance()
-                .signInWithCredential(GoogleAuthProvider.getCredential(gsa.getIdToken(), null))
-                .addOnCompleteListener(it -> {
-                Log.d("현재 사용자",FirebaseAuth.getInstance().getCurrentUser()+"입니다");
-        });
+//        FirebaseAuth.getInstance()
+//                .signInWithCredential(GoogleAuthProvider.getCredential(gsa.getIdToken(), null))
+//                .addOnCompleteListener(it -> {
+//                Log.d("현재 사용자",FirebaseAuth.getInstance().getCurrentUser()+"입니다");
+//        });
 
         // 초기화면 설정
         fragments[0] = new Fragment_feed();
