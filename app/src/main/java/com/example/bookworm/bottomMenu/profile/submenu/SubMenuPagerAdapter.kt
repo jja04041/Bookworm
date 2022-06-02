@@ -16,7 +16,7 @@ class SubMenuPagerAdapter : FragmentStatePagerAdapter {
     }
 
     init {
-        pageList.add(Fragment_posts()) //포스트 탭
+        pageList.add(FragmentPosts()) //포스트 탭
         pageList.add(FragmentAlbums()) //앨범 탭
     }
 

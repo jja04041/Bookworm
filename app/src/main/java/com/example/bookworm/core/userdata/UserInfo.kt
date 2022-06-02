@@ -2,7 +2,6 @@ package com.example.bookworm.core.userdata
 
 import android.content.Context
 import android.util.Log
-import com.example.bookworm.bottomMenu.profile.Album.item.AlbumData
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.firestore.Exclude
 import com.kakao.usermgmt.response.model.UserAccount
@@ -22,7 +21,6 @@ class UserInfo : Serializable {
     @get:Exclude
     var isFollowed = false //팔로우 여부 확인 하는 변수
 
-    private val albumData: ArrayList<AlbumData> //앨범리스트
     var fCMtoken: String? = null
     lateinit var token: String
     var likedPost: ArrayList<String>?
@@ -34,7 +32,7 @@ class UserInfo : Serializable {
     init {
         genre = HashMap()
         likedPost = ArrayList()
-        albumData = ArrayList()
+
     }
 
 

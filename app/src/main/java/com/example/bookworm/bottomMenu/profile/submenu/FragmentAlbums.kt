@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.bookworm.bottomMenu.profile.Album.view.CreateAlbumActivity
+import com.example.bookworm.bottomMenu.profile.album.AlbumCreate.view.CreateAlbumActivity
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.databinding.FragmentAlbumsBinding
 
@@ -34,18 +34,11 @@ class FragmentAlbums : Fragment() {
                 startActivity(intent)
             })
         })
-        //앨범 추가 버튼 클릭시
-//        pv.getFeedList().observe(getViewLifecycleOwner(), list -> {
-//            binding.btnAddAlbum.setOnClickListener(it -> {
-//                Intent intent = new Intent(current_context, CreateAlbumActivity.class);
-//                intent.putExtra("list", list);
-//                startActivity(intent);
-//            });
-//        });
         return binding!!.root
     }
 
     override fun onResume() {
+        //프레그먼트가 화면에 비추어질때 유저의 데이터를 가지고 온다 .
         pv!!.getUser(null, false)
         super.onResume()
     }

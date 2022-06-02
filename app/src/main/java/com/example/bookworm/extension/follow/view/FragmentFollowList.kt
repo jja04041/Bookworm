@@ -23,7 +23,6 @@ import java.util.*
 class FragmentFollowList(
     val token: String,
     val isfollower: Int,
-//    val pager: PagerInterface.PageAdapter
 ) : Fragment(), Contract.View {
     var binding: FragmentFollowListBinding? = null
     private var followerAdapter: FollowItemAdapter? = null
@@ -43,7 +42,6 @@ class FragmentFollowList(
     ): View? {
         fv = context.let { FollowViewModelImpl(it!!) }
         binding = FragmentFollowListBinding.inflate(layoutInflater)
-//        loadUserData()
         fv.followList.observe(viewLifecycleOwner, ({
             showInfo(it)
         }))
@@ -66,7 +64,6 @@ class FragmentFollowList(
 
     //초기화
     fun init() {
-//        binding = FragmentFollowListBinding.inflate(layoutInflater)
         initValues()
         initAdapter()
     }
@@ -84,7 +81,7 @@ class FragmentFollowList(
             Log.d("data", nowUser!!.followerCounts.toString())
             if (flag) init()
             fv.getFollowerList(token, if (isfollower == 0) false else true)
-            showShimmer(true)
+            if (flag) showShimmer(true)
         }
 
     }

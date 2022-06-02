@@ -1,19 +1,21 @@
-package com.example.bookworm.bottomMenu.profile.Album.view
+package com.example.bookworm.bottomMenu.profile.album.AlbumCreate.view
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputFilter
 import android.text.TextWatcher
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.example.bookworm.bottomMenu.profile.Album.item.AlbumData
+import com.example.bookworm.bottomMenu.profile.album.AlbumData
 import com.example.bookworm.databinding.FragmentAlbumNameBinding
 
-class fragment_albumName : Fragment() {
+class FragmentAlbumName : Fragment() {
     var binding: FragmentAlbumNameBinding? = null
     lateinit var parentActivity: CreateAlbumActivity
     override fun onCreateView(
@@ -23,26 +25,15 @@ class fragment_albumName : Fragment() {
     ): View? {
         binding = FragmentAlbumNameBinding.inflate(inflater)
         parentActivity = context as CreateAlbumActivity
-        parentActivity.albumViewModel.newAlbumData
+        parentActivity.albumProcessViewModel.newAlbumData
             .observe(viewLifecycleOwner, { data: AlbumData ->
                 if (data.thumbnail != null)
                     Glide.with(binding!!.root).load(data.thumbnail)
                         .into(binding!!.albumThumb)
             })
         binding!!.btnNext.setOnClickListener {
-            val string = binding!!.edtAlbumName.text.toString()
-            if (string.equals("") || string.contains(" ")) {
-                Toast.makeText(
-                    context,
-                    "앨범명에는 공백을 포함할 수 없습니다. 다시 시도해 주세요.",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
-            } else {
-                parentActivity.albumViewModel.modifyName(binding!!.edtAlbumName.text.toString())
-                //데이터 삽입
-                parentActivity.switchTab(1)
-            }
+            val albumName = binding!!.edtAlbumName.text.toString()
+            parentActivity.albumProcessViewModel.isOkayToUse(albumName)
         }
         binding!!.btnCancel.setOnClickListener(
             {
@@ -63,6 +54,19 @@ class fragment_albumName : Fragment() {
                 }
 
             })
+        binding!!.edtAlbumName.setOnKeyListener(object : View.OnKeyListener{
+            override fun onKey(v: View?, keyCode: Int, keyEvent: KeyEvent): Boolean {
+                //엔터키를 눌렀을 경우 처리
+                if((keyEvent.action== KeyEvent.ACTION_DOWN )&&(keyCode == KeyEvent.KEYCODE_ENTER) )
+                {
+                    val imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(binding!!.edtAlbumName.getWindowToken(), 0)
+                    binding!!.btnNext.performClick()
+                }
+                return false
+            }
+
+        })
         return binding!!.root
     }
 }

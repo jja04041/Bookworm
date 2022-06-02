@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.bookworm.databinding.FragmentPostsBinding
 
-class Fragment_posts:Fragment() {
+class FragmentPosts:Fragment() {
     var binding:FragmentPostsBinding?=null
 
     override fun onCreateView(

@@ -29,6 +29,7 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -39,6 +40,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.net.URLEncoder
 
 
 //이미지를 처리하는 클래스
@@ -47,7 +49,7 @@ class ImageProcessing(val context: Context) {
     var startActivityResult: ActivityResultLauncher<Intent>;
     val bitmap: MutableLiveData<Bitmap> = MutableLiveData()
     val bitmapUri: MutableLiveData<Uri> = MutableLiveData()
-    val imgData:MutableLiveData<String> = MutableLiveData()
+    val imgData: MutableLiveData<String> = MutableLiveData()
     //라벨은 알럿 다이어그램을 통해 입력을 받고, 선택한 값으로 라벨이 지정됨 => 구현 예정
 
 
@@ -174,7 +176,28 @@ class ImageProcessing(val context: Context) {
         startActivityResult.launch(intent)
     }
 
-    fun uploadImage(data: Bitmap,fileName:String){
+    fun uploadImage(data: Bitmap, fileName: String) {
+
+        var imgurl = context.getString(R.string.serverUrl) //이미지 서버의 주소
+        val query = uploadBase(data, fileName)
+        CoroutineScope(Dispatchers.IO).launch {
+            var retrofit = Retrofit.Builder()
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .baseUrl(imgurl)
+                .build()
+            var mainInterface = retrofit.create(GetDataInterface::class.java)
+            val name = query.get("rqname") as RequestBody
+            val body = query.get("rqbody") as MultipartBody.Part
+            val response = mainInterface.uploadImage(body, name)
+            CoroutineScope(Dispatchers.Main).launch {
+                if (response!!.isSuccessful) {
+                    imgData.value = imgurl + response.body()
+                }
+            }
+        }
+    }
+
+    private fun uploadBase(data: Bitmap, fileName: String): Map<String, Any> {
         val filesDir: File = context.getFilesDir()
         val file = File(filesDir, "$fileName") //파일명 설정
         val bos = ByteArrayOutputStream()
@@ -188,25 +211,23 @@ class ImageProcessing(val context: Context) {
         val reqFile = RequestBody.create(MediaType.parse("image/*"), file)
         val body = MultipartBody.Part.createFormData("upload", file.name, reqFile)
         val name = RequestBody.create(MediaType.parse("text/plain"), "upload")
-        var query: MutableMap<String,Any> = HashMap()
+        var query: MutableMap<String, Any> = HashMap()
         query["rqbody"] = body
         query["rqname"] = name
-        var imgurl = context.getString(R.string.serverUrl) //이미지 서버의 주소
-
-        CoroutineScope(Dispatchers.IO).launch {
-            var retrofit = Retrofit.Builder()
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .baseUrl(imgurl)
-                .build()
-            var mainInterface = retrofit.create(GetDataInterface::class.java)
-            val name = query.get("rqname") as RequestBody
-            val body = query.get("rqbody") as MultipartBody.Part
-            val response = mainInterface.postprofileImage(body, name)
-            CoroutineScope(Dispatchers.Main).launch {
-                if(response!!.isSuccessful){
-                    imgData.value=imgurl + response.body()
-                }
-            }
-        }
+        return query
     }
+
+    suspend fun uploadImg(bitmap: Bitmap, string: String) = CoroutineScope(Dispatchers.IO).async {
+        var imgurl = context.getString(R.string.serverUrl) //이미지 서버의 주소
+        val query = uploadBase(bitmap, string)
+        var retrofit = Retrofit.Builder()
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .baseUrl(imgurl)
+            .build()
+        var mainInterface = retrofit.create(GetDataInterface::class.java)
+        val name = query.get("rqname") as RequestBody
+        val body = query.get("rqbody") as MultipartBody.Part
+        val response = mainInterface.uploadImage(body, name)
+        imgurl + response!!.body()
+    }.await()
 }

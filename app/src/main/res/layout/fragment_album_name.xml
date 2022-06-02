@@ -73,10 +73,11 @@
             android:textSize="15dp" />
 
         <EditText
+            android:inputType="text"
+            android:maxLines="1"
             android:id="@+id/edtAlbumName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:hint="예) 홍길동의 어떤 앨범 " />
     </LinearLayout>
 
