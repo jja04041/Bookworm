@@ -129,7 +129,7 @@ public class fragment_search extends Fragment {
     }
 
     //RankFB에서 사용할 함수
-    public void moduleUpdated(List<DocumentSnapshot> a) {
+    public void setRanking(List<DocumentSnapshot> a) {
         userInfoList = new ArrayList<>();
         bookWormList = new ArrayList<>();
         ImageView rankProfile[] = {binding.img1stProfile, binding.img2ndProfile, binding.img3rdProfile};
