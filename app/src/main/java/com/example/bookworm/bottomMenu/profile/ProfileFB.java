@@ -13,14 +13,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Map;
 
 //fragment_profile에서 자기소개를 수정할때 사용하는 모듈
-public class profileFB {
+public class ProfileFB {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     Context context;
     Task task = null;
     CollectionReference collectionReference;
 
 
-    profileFB(Context context) {
+    ProfileFB(Context context) {
         this.context = context;
     }
 

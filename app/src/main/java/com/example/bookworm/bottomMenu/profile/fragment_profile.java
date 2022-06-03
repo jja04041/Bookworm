@@ -35,7 +35,7 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
     private FragmentProfileBinding binding;
     private Context current_context;
     private FBModule fbModule;
-    private profileFB profileFB;
+    private ProfileFB profileFB;
     UserInfoViewModel pv;
     FollowViewModelImpl fv;
     SubMenuPagerAdapter menuPagerAdapter;
@@ -49,7 +49,7 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
         pv = new ViewModelProvider(this, new UserInfoViewModel.Factory(current_context)).get(UserInfoViewModel.class);
         fv = new ViewModelProvider(this, new FollowViewModelImpl.Factory(current_context)).get(FollowViewModelImpl.class);
         fbModule = new FBModule(current_context);
-        profileFB = new profileFB(current_context);
+        profileFB = new ProfileFB(current_context);
         //서브 메뉴를 보여주기위한 어댑터
         menuPagerAdapter = new SubMenuPagerAdapter(getChildFragmentManager());
         binding.subMenuViewPager.setAdapter(menuPagerAdapter);
