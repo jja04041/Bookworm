@@ -13,10 +13,8 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
-import com.example.bookworm.R;
 import com.example.bookworm.achievement.Achievement;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
-import com.example.bookworm.bottomMenu.profile.Album.view.CreateAlbumActivity;
 import com.example.bookworm.bottomMenu.profile.submenu.SubMenuPagerAdapter;
 import com.example.bookworm.bottomMenu.profile.views.ProfileSettingActivity;
 import com.example.bookworm.core.userdata.UserInfo;
@@ -24,7 +22,6 @@ import com.example.bookworm.databinding.FragmentProfileBinding;
 import com.example.bookworm.extension.follow.view.FollowViewModelImpl;
 import com.example.bookworm.extension.follow.view.FollowerActivity;
 import com.example.bookworm.core.internet.FBModule;
-import com.example.bookworm.core.userdata.PersonalD;
 
 public class fragment_profile extends Fragment implements LifecycleObserver {
 
@@ -102,14 +99,6 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
             intent.putExtra("page", 1);
             startActivity(intent);
         });
-//        //앨범 추가 버튼 클릭시
-//        pv.getFeedList().observe(getViewLifecycleOwner(), list -> {
-//            binding.btnAddAlbum.setOnClickListener(it -> {
-//                Intent intent = new Intent(current_context, CreateAlbumActivity.class);
-//                intent.putExtra("list", list);
-//                startActivity(intent);
-//            });
-//        });
 
     }
 

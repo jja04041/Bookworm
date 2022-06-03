@@ -1,7 +1,7 @@
 const express = require('express'); //express를 사용하기 위함.
 const multer = require('multer'); //이미지 업/다운로드를 위함.
 const fs = require('fs');
-const fb= require("../module/firebaseProcess"); //파이어베이스 관련 함수 모음 
+const fb = require("../module/firebaseProcess"); //파이어베이스 관련 함수 모음 
 const e = require('express');
 const router = express.Router();
 // const {
@@ -12,8 +12,9 @@ var imgPath = "";
 var Path = "";
 
 //Path List
-const LocalFeedImgPath="./Image/feed/"
-const LocalProfileImgPath="./Image/profileimg/"
+const LocalFeedImgPath = "./Image/feed/";
+const LocalProfileImgPath = "./Image/profileimg/";
+const LocalAlbumImgPath = "./Image/albumimg/";
 //Main
 router.get("/", (req, res) => {
   res.send("helloworld~");
@@ -31,29 +32,40 @@ var _storage = multer.diskStorage({
       if (!fs.existsSync(Path)) {
         fs.mkdirSync(Path);
       }
-      
+
     } else if (arr[0] == "profile") {
       Path = LocalProfileImgPath;
       //폴더가 없다면 생성한다.
       if (!fs.existsSync(Path)) {
         fs.mkdirSync(Path);
       }
-      //해당 폴더에 사용자 프로필 사진이 남아있는 경우 다 지운다. 
-
-
+    } else if (arr[0] == "album") {
+      Path = LocalAlbumImgPath;
+      //폴더가 없다면 생성한다.
+      if (!fs.existsSync(Path)) {
+        fs.mkdirSync(Path);
+      }
     }
+
 
     cb(null, Path);
   },
   filename: function (req, file, cb) {
     var arr = file.originalname.split('_');
-    imgfile = `${arr[1]}_${arr[2]}`;
-    if (Path == LocalProfileImgPath) {
-      imgPath = "/getprofileimg/" + imgfile;
-    } else if (Path ==LocalFeedImgPath) {
-      imgPath = "/getimage/" + imgfile;
+    switch (Path) {
+      case LocalProfileImgPath:
+        imgfile = `${arr[1]}`;
+        imgPath = "/getprofileimg/" + imgfile;
+        break;
+      case LocalFeedImgPath:
+        imgfile = `${arr[1]}_${arr[2]}`;
+        imgPath = "/getimage/" + imgfile;
+        break;
+      case LocalAlbumImgPath:
+        imgfile = `${arr[1]}_${arr[2]}`;
+        imgPath = "/getalbumimg/" + imgfile;
+        break;
     }
-
     cb(null, imgfile); //콜백을 통해 파일명을 설정
   }
 });
@@ -65,8 +77,8 @@ const upload = multer({
 router.post('/upload', upload.single('upload'), (req, res) => {
   try {
     res.status(200).send(imgPath);
-    if(imgPath.includes("/getimage/")) console.log(imgPath +" 피드 이미지가 업로드 되었습니다");
-    else console.log(imgPath +" 프로필 이미지가 업로드 되었습니다");
+    if (imgPath.includes("/getimage/")) console.log(imgPath + " 피드 이미지가 업로드 되었습니다");
+    else console.log(imgPath + " 프로필 이미지가 업로드 되었습니다");
   } catch (err) {
 
     console.dir(err.stack);
@@ -74,10 +86,11 @@ router.post('/upload', upload.single('upload'), (req, res) => {
 
 });
 
+/* 앨범 이미지 다운로드  */
 
-//이미지를 다운로드 받을 때(프로필 이미지 )
+//프로필 이미지
 router.use('/getprofileimg/:data', (req, res) => {
-  const dataPath =LocalProfileImgPath + req.params.data; //피드 이미지 경로 숨기기 
+  const dataPath = LocalProfileImgPath + req.params.data; //피드 이미지 경로 숨기기 
   fs.readFile(dataPath, function (err, data) {
     if (err) {
       return res.status(404).end();
@@ -89,7 +102,7 @@ router.use('/getprofileimg/:data', (req, res) => {
   });
 });
 
-//이미지를 다운로드 받을 때(피드 이미지 )
+//피드 이미지
 router.use('/getimage/:data', (req, res) => {
   const dataPath = LocalFeedImgPath + req.params.data; //피드 이미지 경로 숨기기 
   fs.readFile(dataPath, function (err, data) {
@@ -103,13 +116,29 @@ router.use('/getimage/:data', (req, res) => {
   });
 });
 
+//앨범 이미지
+router.use('/getalbumimg/:data', (req, res) => {
+  const dataPath = LocalAlbumImgPath + req.params.data; //피드 이미지 경로 숨기기 
+  fs.readFile(dataPath, function (err, data) {
+    if (err) {
+      console.log("가져올 수 없는 데이터입니다.");
+      return res.status(404).end();
+    } // Fail if the file can't be read.
+    res.writeHead(200, {
+      'Content-Type': 'image/jpeg'
+    });
+    res.end(data); // Send the file data to the browser.
+  });
+});
 
 
+
+/* 이미지 삭제 */
 
 
 //피드 삭제 시 이미지 삭제 
 router.post("/deleteImg", (req, res) => {
-  const fileName = req.body.feedId+".jpg";
+  const fileName = req.body.feedId + ".jpg";
   const userToken = req.body.userToken;
   const filePath = LocalFeedImgPath + fileName;
 
@@ -130,7 +159,7 @@ router.post("/deleteImg", (req, res) => {
         return res.sendStatus(200);
       })
     })
-  }else return res.sendStatus(401); //유저 토큰과 일치 하지 않은 경우 401에러 표시 
+  } else return res.sendStatus(401); //유저 토큰과 일치 하지 않은 경우 401에러 표시 
 })
 //토큰 관리 
 router.get("/token", (req, res) => {
@@ -157,9 +186,9 @@ router.get("/token", (req, res) => {
 //사용자 탈퇴시 실행하는 쿼리 
 
 
-router.post("/showlist",async (req,res)=>{
+router.post("/showlist", async (req, res) => {
   var token = req.query.token;
-  fb.showlist(token).then((answer)=> {
-      if(answer) res.send("done");
+  fb.showlist(token).then((answer) => {
+    if (answer) res.send("done");
   });
 });

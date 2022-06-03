@@ -35,7 +35,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
 
 
         imageProcess = new ImageProcessing(this);
-        UserInfoViewModel pv = new UserInfoViewModel(this);
+        UserInfoViewModel pv = new ViewModelProvider(this,new UserInfoViewModel.Factory(context)).get(UserInfoViewModel.class);
         ChallengeViewModel cv = new ViewModelProvider(this,new ChallengeViewModel.Factory(context)).get(ChallengeViewModel.class);
         LiveData<Boolean> bool = pv.isDuplicated();
         pv.getUser(null, false);
@@ -60,7 +60,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
             imageProcess.getBitmap().observe(this,bitmap -> {
                 //완료버튼을 누르면 이미지 업데이트
                 binding.btnFinish.setOnClickListener(view -> {
-                    String imgName="profile_"+System.currentTimeMillis() + "_"+NowUser.getToken()+".jpg";
+                    String imgName="profile_"+NowUser.getToken()+".jpg";
                     imageProcess.uploadImage(bitmap,imgName); // 이미지 업로드
                 });
                 imageProcess.getImgData().observe(this,imgurl->{

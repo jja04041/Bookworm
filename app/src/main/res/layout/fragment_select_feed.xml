@@ -35,9 +35,18 @@
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:visibility="gone"
             android:id="@+id/mRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="300dp" />
+        <TextView
+            android:id="@+id/tvAlertNoPost"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:gravity="center"
+            android:text="넣을 포스트가 없습니다."
+
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -57,13 +66,13 @@
             android:textColor="@color/black" />
 
         <Button
+            android:enabled="false"
             android:id="@+id/btnNext"
             android:textSize="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="160dp"
-
-            android:backgroundTint="@color/subcolor_1"
+            android:backgroundTint="@color/gray"
             android:text="만들기" />
     </LinearLayout>
 </LinearLayout>

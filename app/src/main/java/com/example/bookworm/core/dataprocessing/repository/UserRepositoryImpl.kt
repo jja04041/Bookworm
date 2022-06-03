@@ -211,7 +211,6 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
         val userinfo = gson.toJson(user, UserInfo::class.java)
         editor.putString("key_user", userinfo)
         editor.commit()
-        Log.d("nowUser", userPref.getString("key_user", null)!!)
     }
 
     //파이어 스토어에서 업데이트
