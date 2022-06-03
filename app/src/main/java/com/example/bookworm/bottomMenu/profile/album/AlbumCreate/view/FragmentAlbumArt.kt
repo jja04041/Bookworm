@@ -22,14 +22,14 @@ class FragmentAlbumArt : Fragment() {
         parentActivity = context as CreateAlbumActivity
         val imageProcessing = parentActivity.imageProcessing
         parentActivity.albumProcessViewModel.newAlbumData.observe(viewLifecycleOwner) { data ->
-            binding!!.albumName.setText(data.albumName)
+            binding!!.albumItem.albumName.setText(data.albumName)
             binding!!.ivSelectedImg.setOnClickListener({
                 imageProcessing.initProcess()
                 imageProcessing.bitmapUri.observe(viewLifecycleOwner, {
                     parentActivity.albumProcessViewModel.modifyThumb(it.toString())
                     Glide.with(binding!!.root).load(it).into(binding!!.ivSelectedImg)
                     Glide.with(binding!!.root).load(it)
-                        .into(binding!!.albumThumb)
+                        .into(binding!!.albumItem.albumThumb)
                 })
 
             })
