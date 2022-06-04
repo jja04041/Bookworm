@@ -9,14 +9,14 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/SFLSearchbook"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+<!--    <com.facebook.shimmer.ShimmerFrameLayout-->
+<!--        android:id="@+id/SFLSearchbook"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent">-->
 
-        <include layout="@layout/shimmer_fragment_search" />
+<!--        <include layout="@layout/shimmer_fragment_search" />-->
 
-    </com.facebook.shimmer.ShimmerFrameLayout>
+<!--    </com.facebook.shimmer.ShimmerFrameLayout>-->
 
     <LinearLayout
         android:id="@+id/llSearchbook"
@@ -87,7 +87,7 @@
         </LinearLayout>
 
         <FrameLayout
-            android:layout_width="match_parent"
+            android:layout_width="370dp"
             android:layout_height="300dp"
             android:layout_margin="20dp">
 
