@@ -8,9 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bookworm.BottomMenu.Feed.ViewHolders.FeedItemVIewHolder
 import com.example.bookworm.R
-import com.example.bookworm.bottomMenu.Feed.items.Feed
 import com.example.bookworm.bottomMenu.profile.album.AlbumData
 import com.example.bookworm.bottomMenu.profile.album.AlbumDisplay.view.AlbumDisplayViewHolder
 
@@ -24,7 +22,7 @@ class AlbumDisplayAdapter(val context: Context) :
         when (viewType) {
             1 -> {
                 view = inflater.inflate(R.layout.fragment_album_item, parent, false)
-                return FeedItemVIewHolder(view, context)
+                return AlbumDisplayViewHolder(view, context)
             }
             else -> {
                 view = inflater.inflate(R.layout.layout_item_loading, parent, false)
@@ -40,9 +38,10 @@ class AlbumDisplayAdapter(val context: Context) :
 
     //Arraylist에 있는 아이템을 뷰 홀더에 바인딩 하는 메소드
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val safePosition = holder.adapterPosition
+        val safePosition = holder.bindingAdapterPosition
         if (holder is AlbumDisplayViewHolder) {
             val item = currentList[safePosition]
+            holder.setItem(item)
         } else if (holder is LoadingViewHolder) {
             showLoadingView(holder, safePosition)
         }
