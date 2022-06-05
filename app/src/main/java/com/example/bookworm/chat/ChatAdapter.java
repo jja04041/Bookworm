@@ -9,21 +9,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.bookworm.R;
 
 import java.util.ArrayList;
 
 public class ChatAdapter extends BaseAdapter {
 
-    ArrayList<MessageItem> messageItems;
+    ArrayList<Chatmodel> messageItems;
     LayoutInflater layoutInflater;
     String username;
 
-    public ChatAdapter(ArrayList<MessageItem> messageItems, LayoutInflater layoutInflater, String username) {
+    public ChatAdapter(ArrayList<Chatmodel> messageItems, LayoutInflater layoutInflater, String username) {
         this.messageItems = messageItems;
         this.layoutInflater = layoutInflater;
         this.username = username;
     }
+
 
     @Override
     public int getCount() {
@@ -44,13 +46,12 @@ public class ChatAdapter extends BaseAdapter {
     public View getView(int position, View view, ViewGroup viewGroup) {
 
         //현재 보여줄 번째의(position)의 데이터로 뷰를 생성
-        MessageItem item=messageItems.get(position);
+        Chatmodel item= messageItems.get(position);
 
-        //재활용할 뷰는 사용하지 않음!!
         View itemView=null;
 
         //메세지가 내 메세지인지??
-        if(item.getName().equals(username)){
+        if(item.getMessageitem().getName().equals(username)){
             itemView= layoutInflater.inflate(R.layout.my_msgbox,viewGroup,false);
         }else{
             itemView= layoutInflater.inflate(R.layout.other_msgbox,viewGroup,false);
@@ -62,11 +63,11 @@ public class ChatAdapter extends BaseAdapter {
         TextView tvMsg= itemView.findViewById(R.id.tv_msg);
         TextView tvTime= itemView.findViewById(R.id.tv_time);
 
-        tvName.setText(item.getName());
-        tvMsg.setText(item.getMessage());
-        tvTime.setText(item.getTime());
+        tvName.setText(item.getMessageitem().getName());
+        tvMsg.setText(item.getMessageitem().getMessage());
+        tvTime.setText(item.getMessageitem().getTime());
 
-        Glide.with(itemView).load(item.getProfileUrl()).into(iv);
+        Glide.with(itemView).load(item.getMessageitem().getProfileUri()).apply(new RequestOptions().circleCrop().centerCrop() ).into(iv);
 
         return itemView;
     }

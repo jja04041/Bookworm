@@ -93,6 +93,9 @@
         <activity
             android:name=".chat.activity_chating"
             android:exported="false"/>
+        <activity
+            android:name=".chat.chatlist.activity_chatlist"
+            android:exported="false"/>
 
         <activity
             android:name=".LoadingActivity"

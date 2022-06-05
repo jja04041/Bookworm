@@ -11,6 +11,14 @@
         android:background="@color/white"
         android:orientation="horizontal">
 
+        <Button
+            android:id="@+id/btnSetting"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="15dp"
+            android:background="@drawable/setting" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -19,13 +27,14 @@
             android:textColor="@color/black"
             android:textSize="13dp" />
 
+
         <Button
-            android:id="@+id/btnSetting"
+            android:id="@+id/btnchatlist"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="15dp"
-            android:background="@drawable/setting" />
+            android:background="@drawable/icon_chat" />
 
     </FrameLayout>
 
