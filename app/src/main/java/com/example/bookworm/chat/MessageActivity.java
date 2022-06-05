@@ -1,5 +1,6 @@
 package com.example.bookworm.chat;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -15,28 +16,35 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.bookworm.R;
+import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
+import com.example.bookworm.core.userdata.UserInfo;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
 
-import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
 
 public class MessageActivity extends AppCompatActivity {
     private String chatRoomUid; //채팅방 하나 id
     private String myuid;       //나의 id
     private String destUid;     //상대방 uid
+
+    private UserInfoViewModel uv;
+    private UserInfoViewModel pv;
 
     private RecyclerView recyclerView;
     private Button button;
@@ -44,14 +52,17 @@ public class MessageActivity extends AppCompatActivity {
 
     private FirebaseDatabase firebaseDatabase;
 
-    private User destUser;
+    private com.example.bookworm.core.userdata.UserInfo destUser;
+    private com.example.bookworm.core.userdata.UserInfo userinfo;
+
+    private Context context;
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy.MM.dd HH:mm");
 
 
     @Override
     public void onBackPressed() {
-
+        finish();
     }
 
     @Override
@@ -59,23 +70,41 @@ public class MessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
 
+        recyclerView = (RecyclerView)findViewById(R.id.message_recyclerview);
+        button = (Button)findViewById(R.id.message_btn);
+        editText = (EditText)findViewById(R.id.message_editText);
+
         init();
         sendMsg();
     }
 
     private void init()
     {
-        myuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        destUid = getIntent().getStringExtra("destUid");        //채팅 상대
 
-        recyclerView = (RecyclerView)findViewById(R.id.message_recyclerview);
-        button=(Button)findViewById(R.id.message_btn);
-        editText = (EditText)findViewById(R.id.message_editText);
+        Intent intent = getIntent();
+        destUser = (com.example.bookworm.core.userdata.UserInfo) intent.getSerializableExtra("opponent");
+        destUid = destUser.getToken();
+
+
+        context = MessageActivity.this;
+
+        pv = new UserInfoViewModel(context);
+        uv = new ViewModelProvider(this, new UserInfoViewModel.Factory(context)).get(UserInfoViewModel.class);
+
+        pv.getUser(null, false);
+
+        pv.getData().observe(this, userInfo -> {
+            userinfo = userInfo;
+            myuid = userinfo.getToken();
+        });
+
 
         firebaseDatabase = FirebaseDatabase.getInstance();
 
-        if(editText.getText().toString() == null) button.setEnabled(false);
-        else button.setEnabled(true);
+//        if(editText.getText() == null)
+//            button.setEnabled(false);
+//        else
+        button.setEnabled(true);
 
         checkChatRoom();
     }
@@ -126,10 +155,7 @@ public class MessageActivity extends AppCompatActivity {
     private void checkChatRoom()
     {
         //자신 key == true 일때 chatModel 가져온다.
-        /* chatModel
-        public Map<String,Boolean> users = new HashMap<>(); //채팅방 유저
-        public Map<String, ChatModel.Comment> comments = new HashMap<>(); //채팅 메시지
-        */
+
         firebaseDatabase.getReference().child("chatrooms").orderByChild("users/"+myuid).equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -149,6 +175,7 @@ public class MessageActivity extends AppCompatActivity {
                     }
                 }
             }
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -173,7 +200,7 @@ public class MessageActivity extends AppCompatActivity {
             firebaseDatabase.getReference().child("users").child(destUid).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    destUser = snapshot.getValue(User.class);
+                    destUser = snapshot.getValue(UserInfo.class);
 
                     //채팅 내용 읽어들임
                     getMessageList();
@@ -228,10 +255,10 @@ public class MessageActivity extends AppCompatActivity {
             }else{
                 //상대방 말풍선 왼쪽
                 Glide.with(holder.itemView.getContext())
-                        .load(destUser.profileImgUrl)
+                        .load(destUser.getPlatform())
                         .apply(new RequestOptions().circleCrop())
                         .into(holder.imageViewProfile);
-                viewHolder.textViewName.setText(destUser.name);
+                viewHolder.textViewName.setText(destUser.getUsername());
                 viewHolder.linearLayoutDest.setVisibility(View.VISIBLE);
                 viewHolder.textViewMsg.setBackgroundResource(R.drawable.leftbubble);
                 viewHolder.textViewMsg.setText(comments.get(position).message);

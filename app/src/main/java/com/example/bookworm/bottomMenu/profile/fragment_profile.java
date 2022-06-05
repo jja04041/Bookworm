@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import com.example.bookworm.achievement.Achievement;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.profile.views.ProfileSettingActivity;
-import com.example.bookworm.chat.chatlist.activity_chatlist;
+
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.PersonalD;
 import com.example.bookworm.core.userdata.UserInfo;
@@ -57,8 +57,8 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
         binding.btnchatlist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(current_context, activity_chatlist.class);
-                startActivity(intent);
+//                Intent intent = new Intent(current_context, ac.class);
+//                startActivity(intent);
             }
         });
 

@@ -8,7 +8,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.example.bookworm.chat.activity_chating
+import com.example.bookworm.chat.MessageActivity
 import com.example.bookworm.core.userdata.UserInfo
 
 import com.example.bookworm.databinding.ActivityProfileInfoBinding
@@ -98,9 +98,9 @@ class ProfileInfoActivity : AppCompatActivity() {
         binding.btnchatting.setOnClickListener { view: View? ->
 
             // google id는 token길이가 매우 길기때문에 biginteger을 사용해야한다
-            val intent = Intent(this , activity_chating::class.java)
-            intent.putExtra("opponent", (user.token) );
-            intent.putExtra("opponentname", (user.username));
+            val intent = Intent(this , MessageActivity::class.java)
+            intent.putExtra("opponent", (user) );
+//            intent.putExtra("opponentname", (user.username));
             startActivity(intent)
 
         }
