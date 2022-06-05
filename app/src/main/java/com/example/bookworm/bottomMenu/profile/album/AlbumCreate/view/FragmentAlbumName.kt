@@ -29,7 +29,7 @@ class FragmentAlbumName : Fragment() {
             .observe(viewLifecycleOwner, { data: AlbumData ->
                 if (data.thumbnail != null)
                     Glide.with(binding!!.root).load(data.thumbnail)
-                        .into(binding!!.albumThumb)
+                        .into(binding!!.albumItem.albumThumb)
             })
         binding!!.btnNext.setOnClickListener {
             val albumName = binding!!.edtAlbumName.text.toString()
@@ -50,7 +50,7 @@ class FragmentAlbumName : Fragment() {
                 }
 
                 override fun afterTextChanged(p0: Editable?) {
-                    binding!!.albumName.setText(p0.toString())
+                    binding!!.albumItem.albumName.setText(p0.toString())
                 }
 
             })

@@ -130,8 +130,6 @@ dependencies {
 
     // 독서기록통계 그래프
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
-//리사이클러뷰 아이템 다중 선택
-    implementation "androidx.recyclerview:recyclerview:1.1.0"
-    implementation "androidx.recyclerview:recyclerview-selection:1.1.0-rc03"
+
 }
 

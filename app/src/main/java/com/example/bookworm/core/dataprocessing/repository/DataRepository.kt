@@ -3,6 +3,7 @@ package com.example.bookworm.core.dataprocessing.repository
 import com.example.bookworm.bottomMenu.Feed.items.Feed
 import com.example.bookworm.bottomMenu.bookworm.BookWorm
 import com.example.bookworm.bottomMenu.challenge.items.Challenge
+import com.example.bookworm.bottomMenu.profile.album.AlbumData
 import com.example.bookworm.core.userdata.UserInfo
 
 interface DataRepository {
@@ -21,6 +22,8 @@ interface DataRepository {
         fun deleteUser() //회원 탈퇴
         suspend fun getUser(token: String?, isFirst: Boolean): UserInfo?//사용자의 정보를 가져옴
         suspend fun updateBookWorm(token: String?, bookWorm: BookWorm)
+        suspend fun getAlbums(token:String?):ArrayList<AlbumData> //사용자의 앨범 정보를 가져옴
+        suspend fun updateAlbums(token: String?)
     }
 
     interface HandleChallenge{

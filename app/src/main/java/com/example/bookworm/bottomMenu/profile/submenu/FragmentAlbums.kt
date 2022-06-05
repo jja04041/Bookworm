@@ -20,13 +20,20 @@ class FragmentAlbums : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        //initialize
         binding = FragmentAlbumsBinding.inflate(layoutInflater)
         pv = ViewModelProvider(this, UserInfoViewModel.Factory(requireContext())).get(
             UserInfoViewModel::class.java
         )
+
+
+        //implements
+
+        //감지 센서 부착
         pv!!.data.observe(viewLifecycleOwner, { userinfo ->
             pv!!.getFeedList(userinfo.token)
         })
+
         pv!!.feedList.observe(viewLifecycleOwner,{ list->
             binding!!.btnAddAlbum.setOnClickListener({
                 var intent = Intent(context,CreateAlbumActivity::class.java)
@@ -38,8 +45,9 @@ class FragmentAlbums : Fragment() {
     }
 
     override fun onResume() {
-        //프레그먼트가 화면에 비추어질때 유저의 데이터를 가지고 온다 .
+        //데이터 불러오기
         pv!!.getUser(null, false)
+
         super.onResume()
     }
 

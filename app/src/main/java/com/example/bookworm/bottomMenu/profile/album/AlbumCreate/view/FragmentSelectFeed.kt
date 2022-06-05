@@ -5,7 +5,6 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bookworm.R
-import com.example.bookworm.bottomMenu.Feed.items.Feed
 import com.example.bookworm.bottomMenu.profile.album.AlbumCreate.item.AlbumProcessAdapter
 import com.example.bookworm.databinding.FragmentSelectFeedBinding
 
@@ -56,7 +55,7 @@ class FragmentSelectFeed : Fragment() {
             albumProcessAdapter!!.setItemClickListener {
                 var theme = getResources().newTheme()
                 theme.applyStyle(R.style.ThemeOverlay_AppCompat_Dark, true)
-                val a = albumProcessAdapter!!.selectedFeed.size >=1
+                val a = albumProcessAdapter!!.selectedFeed.size >= 1
                 if (!a) {
                     binding!!.btnNext.setBackgroundTintList(
                         requireContext().getResources().getColorStateList(
@@ -65,7 +64,7 @@ class FragmentSelectFeed : Fragment() {
                         )
                     )
 
-                }else{
+                } else {
                     binding!!.btnNext.setBackgroundTintList(
                         requireContext().getResources().getColorStateList(
                             R.color.subcolor_1,

@@ -6,6 +6,7 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.*
 import com.example.bookworm.bottomMenu.Feed.items.Feed
@@ -37,6 +38,7 @@ class AlbumProcessViewModel(val context: Context, val pv: UserInfoViewModel) : V
     }
 
     init {
+
         newAlbumData.value = albumData
         parentActivity = context as CreateAlbumActivity
         var job1 = viewModelScope.launch { pv.getUser(null, false) } //사용자 정보를 가져오는 작업
@@ -98,10 +100,11 @@ class AlbumProcessViewModel(val context: Context, val pv: UserInfoViewModel) : V
     fun uploadAlbum() {
         //서버에 이미지 업로드
         viewModelScope.launch {
+            albumData.albumId ="${token!!}_${token.hashCode()}"
             if (albumData.thumbnail != null) {
                 var uploadImageToServer = viewModelScope.launch {
                     var imgName = "album_${albumData.albumName.hashCode()}_${token}.jpg"
-                    var url = parentActivity.imageProcessing.uploadImg(getImgBitmap()!!,imgName)
+                    var url = parentActivity.imageProcessing.uploadImg(getImgBitmap()!!, imgName)
                     modifyThumb(url)
                 }
                 uploadImageToServer.join()
