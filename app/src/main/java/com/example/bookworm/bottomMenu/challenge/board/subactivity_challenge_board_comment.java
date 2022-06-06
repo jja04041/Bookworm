@@ -1,7 +1,5 @@
 package com.example.bookworm.bottomMenu.challenge.board;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DiffUtil;
@@ -9,22 +7,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.example.bookworm.appLaunch.views.MainActivity;
-import com.example.bookworm.bottomMenu.Feed.Fragment_feed;
 import com.example.bookworm.bottomMenu.Feed.comments.Comment;
-import com.example.bookworm.bottomMenu.Feed.items.Feed;
-import com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Modify;
 import com.example.bookworm.bottomMenu.challenge.items.Challenge;
-import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.PersonalD;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.databinding.SubactivityChallengeBoardCommentBinding;
-import com.example.bookworm.databinding.SubactivityCommentBinding;
 import com.example.bookworm.extension.DiffUtilCallback;
 import com.google.firebase.firestore.DocumentSnapshot;
 

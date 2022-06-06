@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager;
 import com.example.bookworm.bottomMenu.bookworm.bookworm_pages.bookworm_detail.fragment_bookworm_detail;
 import com.example.bookworm.bottomMenu.bookworm.bookworm_pages.bookworm_record.fragment_record;
 import com.example.bookworm.bottomMenu.bookworm.bookworm_pages.bookworm_statistics.fragment_statistics;
+import com.example.bookworm.core.login.GlobalApplication;
 import com.example.bookworm.databinding.FragmentBookwormBinding;
 import com.example.bookworm.R;
 
@@ -74,7 +75,6 @@ public class fragment_bookworm extends Fragment {
                 fm.beginTransaction().add(R.id.bwContainer, fragmentStatistics, "2").commitAllowingStateLoss();
             }
         });
-
         return binding.getRoot();
     }
 
