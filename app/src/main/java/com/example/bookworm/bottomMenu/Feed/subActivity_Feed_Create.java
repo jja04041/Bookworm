@@ -362,15 +362,8 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             if (imgUrl != null) map.put("imgurl", imgUrl); //이미지 url
 
             fbModule.readData(1, map, FeedID);
-
-//             장르 처리
-//            HashMap<String, Object> AfterCreatemap = new HashMap<>(); //피드 만들면 장르 up
-//            HashMap<String, Object> countmap = new HashMap<>(); // 피드 만들면
             userInfo.setGenre(selected_book.getCategoryname(), current_context);
-//            AfterCreatemap.put("userinfo_genre", userInfo.getGenre());
-//            fbModule.readData(0, AfterCreatemap, userInfo.getToken());
-////            BookWorm bookworm = new PersonalD(current_context).getBookworm();
-////            int count = bookworm.getReadcount();
+
             int count = userBw.getReadcount();
             userBw.setReadcount(++count);
             uv.updateUser(userInfo);

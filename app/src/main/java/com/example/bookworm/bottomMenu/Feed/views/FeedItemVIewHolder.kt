@@ -94,6 +94,7 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
         binding!!.llbook.setOnClickListener({
             val intent = Intent(context, search_fragment_subActivity_result::class.java)
             intent.putExtra("itemid", book.itemId)
+            intent.putExtra("data", book)
             context!!.startActivity(intent)
         })
         //작성자 UserInfo
