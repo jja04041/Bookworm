@@ -100,8 +100,7 @@ class ProfileInfoActivity : AppCompatActivity() {
             // google id는 token길이가 매우 길기때문에 biginteger을 사용해야한다
             val intent = Intent(this , activity_chating::class.java)
             intent.putExtra("opponent", (user) );
-            intent.putExtra("opponentname", (user.username));
-            startActivity(intent)
+            //intent.putExtra("opponentname", (user.username));
 
         }
 

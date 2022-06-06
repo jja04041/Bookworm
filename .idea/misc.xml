@@ -9,6 +9,7 @@
         <entry key="..\:/Bookworm/app/src/main/res/layout/activity_chating.xml" value="0.2734375" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/activity_chatlist.xml" value="0.2734375" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/activity_follower.xml" value="0.25364583333333335" />
+        <entry key="..\:/Bookworm/app/src/main/res/layout/activity_message.xml" value="0.2734375" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/activity_profile_info.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/activity_profile_setting.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/chat_topbar.xml" value="0.13541666666666666" />
@@ -19,6 +20,7 @@
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_bw_item.xml" value="0.12552083333333333" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_bw_layout.xml" value="0.13297872340425532" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_challenge.xml" value="0.25364583333333335" />
+        <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_chat.xml" value="0.1" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_datepicker.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_feed.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_feed_topbar.xml" value="0.13541666666666666" />
@@ -26,7 +28,9 @@
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_profile.xml" value="0.176" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_search.xml" value="0.1" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_statistics.xml" value="0.2734375" />
+        <entry key="..\:/Bookworm/app/src/main/res/layout/item_chat.xml" value="0.2734375" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/item_chatlist.xml" value="0.2734375" />
+        <entry key="..\:/Bookworm/app/src/main/res/layout/item_messagebox.xml" value="0.2734375" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/item_slider.xml" value="0.13177083333333334" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/layout_challenge_item.xml" value="0.2734375" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/layout_feed.xml" value="0.2734375" />
