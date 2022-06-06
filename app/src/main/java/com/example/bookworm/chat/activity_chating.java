@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -82,7 +83,13 @@ public class activity_chating extends AppCompatActivity {
 
             //Firebase DB관리 객체와 chat노드 참조객체 얻어오기
             firebaseDatabase = FirebaseDatabase.getInstance();
-            String key = userinfo.getToken() + opponent.getToken();
+
+            BigInteger mytoken = new BigInteger(userinfo.getToken());
+            BigInteger oppotoken = new BigInteger(opponent.getToken());
+            BigInteger result = mytoken.add(oppotoken);
+            String key = result.toString();
+
+            //String key = userinfo.getToken() + opponent.getToken();
             chatRef = firebaseDatabase.getReference(key);
 
             //firebaseDB에서 채팅 메세지들 실시간 읽어오기
