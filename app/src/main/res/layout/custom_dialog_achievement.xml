@@ -3,23 +3,25 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:background="@color/white"
     android:orientation="vertical">
-
-
 
     <TextView
         android:id="@+id/tv_achievement_dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:text="축하합니다~"
         android:textAlignment="center"
+        android:textColor="@color/black"
         android:textSize="20dp"
-        android:text="축하합니다~" />
+        android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/iv_achievement_dialog"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="360dp"
+        android:layout_height="300dp"
         android:layout_gravity="center" />
 
     <Button
@@ -27,16 +29,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="확인"/>
+        android:background="@drawable/white_button"
+        android:text="확인" />
 
     <TextView
         android:id="@+id/tv_achievement_dialog_notice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginBottom="40dp"
+        android:text="획득한 보상을 인벤토리에서 확인해보세요!!"
         android:textAlignment="center"
-        android:textSize="10dp"
-        android:text="가나다" />
+        android:textColor="@color/black"
+        android:textSize="12dp" />
 
 </LinearLayout>
 

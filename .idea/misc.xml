@@ -4,12 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Bookworm/app/src/main/res/layout/activity_achievement.xml" value="0.25364583333333335" />
-        <entry key="..\:/Bookworm/app/src/main/res/layout/activity_chating.xml" value="0.12552083333333333" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/activity_follower.xml" value="0.25364583333333335" />
-        <entry key="..\:/Bookworm/app/src/main/res/layout/activity_message.xml" value="0.12552083333333333" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/activity_profile_info.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/activity_profile_setting.xml" value="0.25364583333333335" />
-        <entry key="..\:/Bookworm/app/src/main/res/layout/chatroom_topbar.xml" value="0.12552083333333333" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/custom_dialog_achievement.xml" value="0.13177083333333334" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_bookworm.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_challenge.xml" value="0.25364583333333335" />
@@ -17,7 +14,6 @@
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_feed.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_profile.xml" value="0.176" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/item_slider.xml" value="0.13177083333333334" />
-        <entry key="..\:/Bookworm/app/src/main/res/layout/my_msgbox.xml" value="0.12552083333333333" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/recyclerview_item.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/subactivity_challenge_createchallenge.xml" value="0.25364583333333335" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/bottom_icon_color.xml" value="0.11" />
