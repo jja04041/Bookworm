@@ -61,9 +61,12 @@ public class CustomDialog {
                 String activityname = "";
 
                 activityname = getRunActivity();
-                activityname.contains("subActivity_Feed_Create");
                 if(activityname.contains("subActivity_Feed_Create") == true)
                     ((subActivity_Feed_Create)context).finish();
+//                else if(activityname.contains("subActivity_Feed_Create") == true)
+//                    ((subActivity_Feed_Create)context).finish();
+//                else if(activityname.contains("subActivity_Feed_Create") == true)
+//                    ((subActivity_Feed_Create)context).finish();
             }
         });
         return exit;

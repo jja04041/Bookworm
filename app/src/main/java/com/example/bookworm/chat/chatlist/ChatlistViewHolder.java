@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookworm.R;
 import com.example.bookworm.achievement.Listener.OnViewHolderItemClickListener;
-import com.example.bookworm.chat.Chatmodel;
+import com.example.bookworm.chat.MessageItem;
 import com.example.bookworm.core.internet.FBModule;
 
 public class ChatlistViewHolder extends RecyclerView.ViewHolder  {
@@ -44,7 +44,7 @@ public class ChatlistViewHolder extends RecyclerView.ViewHolder  {
             });
         }
 
-    public void onBind(Chatmodel.MessageItem itemData){
+    public void onBind(MessageItem itemData){
         tv_opponame.setText("곽성근");
         tv_time.setText("5분전");
         tv_content.setText("졸작 화이팅");

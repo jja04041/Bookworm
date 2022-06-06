@@ -7,12 +7,27 @@
     <LinearLayout
         android:id="@+id/chat_topbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-        <include layout="@layout/chat_topbar" />
+            <TextView
+                android:id="@+id/tv_chatroomtopbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="이름"
+                android:fontFamily="@font/fontstyle"
+                android:textColor="@color/black"
+                android:textSize="20dp" />
 
     </LinearLayout>
+
+    <View
+        android:background="#808080"
+        android:layout_width="match_parent"
+        android:layout_height="5px"/>
 
     <ListView
         android:id="@+id/chat_listview"

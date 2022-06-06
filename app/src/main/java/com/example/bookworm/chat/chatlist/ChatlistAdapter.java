@@ -9,14 +9,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookworm.R;
 import com.example.bookworm.achievement.Listener.OnViewHolderItemClickListener;
-import com.example.bookworm.chat.Chatmodel;
+import com.example.bookworm.chat.MessageItem;
 
 import java.util.ArrayList;
 
 public class ChatlistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     // adapter에 들어갈 list 입니다.
-    private ArrayList<Chatmodel.MessageItem> listData = new ArrayList<>();
+    private ArrayList<MessageItem> listData = new ArrayList<>();
 
 
 
@@ -47,7 +47,7 @@ public class ChatlistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return listData.size();
     }
 
-    public void addItem(Chatmodel.MessageItem messageItem) {
+    public void addItem(MessageItem messageItem) {
         listData.add(messageItem);
     }
 }
