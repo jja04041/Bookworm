@@ -94,7 +94,7 @@
             android:name=".core.login.LoginActivity"
             android:exported="false"/> <!-- 로그인 화면 -->
         <activity
-            android:name=".chat.MessageActivity"
+            android:name=".chat.activity_chating"
             android:exported="false"/>
 
         <activity
