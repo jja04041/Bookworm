@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-<!--  책 상세정보화면 (subactivity_search_fragment_result.xml)의
-하단 리사이클러 뷰에 들어갈 피드의 테두리를 아랫쪽만 주고싶어서 만듦-->
-<item>
-    <shape android:shape="rectangle">
-        <solid android:color="#DDDDDD"/>
-    </shape>
-</item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#DDDDDD" />
+        </shape>
+    </item>
     <item android:bottom="1dp">
         <shape android:shape="rectangle">
-            <solid android:color="#FFFFFF"/>
+            <solid android:color="#FFFFFF" />
         </shape>
     </item>
 </layer-list>

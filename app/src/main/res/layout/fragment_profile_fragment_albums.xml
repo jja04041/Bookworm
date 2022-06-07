@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:text="앨범추가"
+        android:background="@drawable/white_button"
         android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
