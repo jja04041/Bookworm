@@ -14,6 +14,7 @@ import com.google.android.material.tabs.TabLayout;
 public class FollowerActivity extends AppCompatActivity {
 
     ViewPager viewPager;
+    TabLayout tabLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -31,7 +32,7 @@ public class FollowerActivity extends AppCompatActivity {
         fv.WithoutSuspendgetUser(token);
 
         //탭 레이아웃 구성
-        TabLayout tabLayout = findViewById(R.id.tab_layout);
+        tabLayout = findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.getTabAt(selected).select();
 

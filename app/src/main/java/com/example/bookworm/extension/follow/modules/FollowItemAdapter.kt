@@ -67,6 +67,7 @@ class FollowItemAdapter(val context: Context, val nowUserInfo: UserInfo, val isF
             oldItem: UserInfo,
             newItem: UserInfo
         ): Boolean {
+
             return oldItem.token == newItem.token
         }
 

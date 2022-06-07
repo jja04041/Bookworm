@@ -9,19 +9,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.signature.ObjectKey;
 import com.example.bookworm.bottomMenu.challenge.items.Challenge;
 import com.example.bookworm.bottomMenu.profile.ChallengeViewModel;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.databinding.ActivityProfileModifyBinding;
-
-import java.util.Arrays;
 
 public class ProfileModifyActivity extends AppCompatActivity {
 
@@ -36,13 +32,13 @@ public class ProfileModifyActivity extends AppCompatActivity {
         binding = ActivityProfileModifyBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Context context = this;
-//        NowUser = new PersonalD(this).getUserInfo();
+
 
         imageProcess = new ImageProcessing(this);
-        UserInfoViewModel pv = new UserInfoViewModel(this);
+        UserInfoViewModel pv = new ViewModelProvider(this,new UserInfoViewModel.Factory(context)).get(UserInfoViewModel.class);
         ChallengeViewModel cv = new ViewModelProvider(this,new ChallengeViewModel.Factory(context)).get(ChallengeViewModel.class);
         LiveData<Boolean> bool = pv.isDuplicated();
-        pv.getUser(null, true);
+        pv.getUser(null, false);
 
         pv.getData().observe(this, userInfo -> {
             NowUser = userInfo;
@@ -64,7 +60,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
             imageProcess.getBitmap().observe(this,bitmap -> {
                 //완료버튼을 누르면 이미지 업데이트
                 binding.btnFinish.setOnClickListener(view -> {
-                    String imgName="profile_"+System.currentTimeMillis() + "_"+NowUser.getToken()+".jpg";
+                    String imgName="profile_"+NowUser.getToken()+".jpg";
                     imageProcess.uploadImage(bitmap,imgName); // 이미지 업로드
                 });
                 imageProcess.getImgData().observe(this,imgurl->{

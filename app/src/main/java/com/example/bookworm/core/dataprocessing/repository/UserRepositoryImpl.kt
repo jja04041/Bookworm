@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import com.example.bookworm.bottomMenu.bookworm.BookWorm
+import com.example.bookworm.bottomMenu.profile.album.AlbumData
 import com.example.bookworm.core.userdata.UserInfo
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
@@ -57,32 +58,58 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
                 return userInfo
             }
             //로컬에 해당 토큰이 없는 경우 or 서버의 유저 정보를 가지고 오고 싶은 경우=>  서버에서 가져옴
-            else return if (token == null) userInfo.token.let { getUserInFB(it).await() }
-            else token.let { getUserInFB(it).await() }
+            else return if (token == null) userInfo.token.let {
+                var data = getUserInFB(it).await()
+                updateInLocal(data!!)
+                data.isMainUser = true
+                data
+            }
+            else token.let {
+                var data = getUserInFB(it).await()
+                if(data!!.token==userInfo.token) data!!.isMainUser=true
+                data
+            }
         }
 
         //로컬에 아직 메인 사용자가 등록되지 않은 경우 ,서버에서 값을 가져옴.
         //=> 기존 유저가 기기 변경시 데이터가 저장되지 않는 오류 수정
         else {
             userInfo = CoroutineScope(Dispatchers.IO).async { getUserInFB(token!!).await() }.await()
-            if (userInfo!=null){
+            if (userInfo != null) {
                 userInfo.isMainUser = true //메인 유저로 설정
                 val bw = getBookWorm(userInfo.token)
                 saveInLocal(userInfo, bw)  //로컬에 해당 정보 저장
                 return userInfo
-            }
-            else return  UserInfo()
+            } else return UserInfo()
         }
 
     }
 
-    override suspend fun updateBookWorm( token: String?, bookWorm: BookWorm) {
+    override suspend fun updateBookWorm(token: String?, bookWorm: BookWorm) {
         var token = token
-        if (token==null){
-            token=getUser(null,false)!!.token
+        if (token == null) {
+            token = getUser(null, false)!!.token
         }
         updateBwInFB(token!!, bookWorm)
         updateBwInLocal(bookWorm)
+    }
+
+    override suspend fun getAlbums(token: String?): ArrayList<AlbumData> {
+        var token = token
+        var resultArray = ArrayList<AlbumData>()
+        return CoroutineScope(Dispatchers.IO).async {
+            if (token == null) token = CoroutineScope(Dispatchers.IO).async {
+                getUser(token, false)
+            }.await()!!.token
+            var albumReference = collectionReference.document(token!!)
+            resultArray
+        }.await()
+
+
+    }
+
+    override suspend fun updateAlbums(token: String?) {
+        TODO("Not yet implemented")
     }
 
 
@@ -99,18 +126,20 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
         if (key_bookworm != null) {
             val json = JSONObject(key_bookworm)
             var bookWorm = gson.fromJson(json.toString(), BookWorm::class.java)
-            return bookWorm
-        } else
-        return CoroutineScope(Dispatchers.IO).async {
-            var bookWorm = BookWorm()
-            var it = collectionReference.document(token).get().await()
-            var map = it.get("BookWorm") as MutableMap<Any?, Any?>?
-            bookWorm.add(map)
-            bookWorm
-        }.await()
+            if (bookWorm.token != token) return getBwFromFB(token)
+            else return bookWorm
+        } else return getBwFromFB(token)
 
 
     }
+
+    private suspend fun getBwFromFB(token: String) = CoroutineScope(Dispatchers.IO).async {
+        var bookWorm = BookWorm()
+        var it = collectionReference.document(token).get().await()
+        var map = it.get("BookWorm") as MutableMap<Any?, Any?>?
+        bookWorm.add(map)
+        bookWorm
+    }.await()
 
     //사용자 생성과 동시에 파이어 베이스에 등록
     suspend override fun createUser(user: UserInfo): Boolean {
@@ -118,12 +147,12 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
         return CoroutineScope(Dispatchers.IO).async {
             var result = getUserInFB(user.token).await()
             if (result != null) {
-                saveInLocal(result,bookworm)
+                saveInLocal(result, bookworm)
             } else {
                 bookworm.token = user.token
                 // get fcm token
                 var a = FirebaseMessaging.getInstance().token.await()
-                user.setFCMtoken(a)
+                user.fCMtoken = a
                 saveInLocal(user, bookworm)
                 saveInFB(user, bookworm)
             }
@@ -205,7 +234,6 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
         val userinfo = gson.toJson(user, UserInfo::class.java)
         editor.putString("key_user", userinfo)
         editor.commit()
-        Log.d("nowUser", userPref.getString("key_user", null)!!)
     }
 
     //파이어 스토어에서 업데이트
@@ -234,7 +262,9 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
             userInfo//최종 return 값
         } catch (e: FirebaseException) {
             null
-        }catch (e:NullPointerException) {null}
+        } catch (e: NullPointerException) {
+            null
+        }
     }
 
     private suspend fun updateBwInFB(token: String, bookworm: BookWorm) {

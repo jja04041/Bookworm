@@ -95,16 +95,15 @@ public class FBModule {
 
 
         //결과 확인
-        task.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task task) {
-                if (task.isSuccessful()) {
-                    if (token != null)
-                        successRead((DocumentSnapshot) task.getResult(), idx, map);
-                    else successRead((QuerySnapshot) task.getResult(), idx, map); //챌린지 조회
-                } else {
-                    Log.d("TAG3", "get failed with ", task.getException());
+        task.addOnCompleteListener((OnCompleteListener<Object>) task -> {
+            if (task.isSuccessful()) {
+                if(task.getResult() instanceof DocumentSnapshot){
+                    if (token != null)successRead((DocumentSnapshot) task.getResult(), idx, map);
                 }
+                else if(task.getResult() instanceof QuerySnapshot)
+                    successRead((QuerySnapshot) task.getResult(), idx, map); //챌린지 조회
+            } else {
+                Log.d("TAG3", "get failed with ", task.getException());
             }
         });
     }

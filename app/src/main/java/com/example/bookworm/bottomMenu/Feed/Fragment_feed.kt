@@ -17,9 +17,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.Feed.items.Feed
 import com.example.bookworm.bottomMenu.Feed.items.FeedAdapter
-import com.example.bookworm.bottomMenu.Feed.items.Story
-import com.example.bookworm.bottomMenu.Feed.views.StoryDeco
-import com.example.bookworm.bottomMenu.Feed.views.StorybarAdapter
 import com.example.bookworm.core.internet.FBModule
 import com.example.bookworm.databinding.FragmentFeedBinding
 import com.example.bookworm.databinding.FragmentFeedTopbarBinding

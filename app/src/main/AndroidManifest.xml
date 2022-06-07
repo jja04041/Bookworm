@@ -68,6 +68,9 @@
             android:name=".bottomMenu.challenge.subactivity.subactivity_challenge_challengeinfo"
             android:exported="false"
             android:parentActivityName=".appLaunch.views.MainActivity" />
+        <activity android:name="com.example.bookworm.bottomMenu.profile.album.AlbumCreate.view.CreateAlbumActivity"
+            android:exported="false"
+            android:parentActivityName=".appLaunch.views.MainActivity"/>
         <activity
             android:name=".bottomMenu.challenge.subactivity.subactivity_challenge_createchallenge"
             android:exported="false"
@@ -92,8 +95,7 @@
             android:exported="false"/> <!-- 로그인 화면 -->
         <activity
             android:name=".chat.activity_chating"
-            android:exported="false"/>
-
+            android:exported="false"/> <!-- 로그인 화면 -->
         <activity
             android:name=".LoadingActivity"
             android:exported="true"> <!-- 로딩 화면 -->

@@ -5,7 +5,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -16,43 +15,24 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.achievement.Achievement;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.challenge.items.Challenge;
-import com.example.bookworm.bottomMenu.Feed.ImagePicker;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
 import com.example.bookworm.bottomMenu.search.items.Book;
 
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.internet.Module;
-import com.example.bookworm.core.userdata.PersonalD;
 import com.example.bookworm.core.userdata.UserInfo;
-import com.example.bookworm.R;
 import com.example.bookworm.databinding.SubactivityChallengeBoardCreateBinding;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 
 public class subactivity_challenge_board_create extends AppCompatActivity {
 
@@ -130,7 +110,7 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
                     //완료 버튼 (피드 올리기)
                     binding.tvFinish.setOnClickListener(view ->
                             new AlertDialog.Builder(current_context)
-                                    .setMessage("피드를 업로드하시겠습니까?")
+                                    .setMessage("인증글을 업로드하시겠습니까?")
                                     .setPositiveButton("네", (dialog, which) -> {
                                         dialog.dismiss();
                                         upload(bitmap, userInfo);
@@ -146,7 +126,7 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
 
                 binding.tvFinish.setOnClickListener(view ->
                         new AlertDialog.Builder(current_context)
-                                .setMessage("피드를 업로드하시겠습니까?")
+                                .setMessage("인증글을 업로드하시겠습니까?")
                                 .setPositiveButton("네", (dialog, which) -> {
                                     dialog.dismiss();
                                     upload(null, userInfo);
@@ -199,9 +179,9 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
     //피드 업로드
     public void feedUpload(String imgUrl) {
 
-        if (binding.edtFeedText.getText().toString().equals("")) { //피드 내용이 없으면 작성해달라는 알림 띄움
+        if (binding.edtFeedText.getText().toString().equals("") || binding.ivpicture.getDrawable() == null) { //인증사진이나 피드 내용이 없으면 작성해달라는 알림 띄움
             new AlertDialog.Builder(current_context)
-                    .setMessage("인증글 내용을 작성해주세요")
+                    .setMessage("인증 사진과 인증글 내용을 작성해주세요")
                     .setPositiveButton("알겠습니다.", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

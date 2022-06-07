@@ -19,11 +19,9 @@ import com.example.bookworm.bottomMenu.Feed.views.FeedViewModel;
 import com.example.bookworm.bottomMenu.challenge.board.Board;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.core.userdata.interfaces.UserContract;
-import com.example.bookworm.core.userdata.modules.LoadUser;
 import com.example.bookworm.databinding.SearchFragmentResultFeedBinding;
 
 import java.util.ArrayList;
-import java.util.Observer;
 
 
 public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnSearchResultItemClickListener {

@@ -154,7 +154,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 
         if(getIntent() != null) {
             intent = getIntent();
-            if((Book) intent.getSerializableExtra("data") != null){
+            if(intent.getSerializableExtra("data") != null){
             selected_book = (Book) intent.getSerializableExtra("data");
             binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목만 세팅한다.
             }
@@ -189,7 +189,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 
     //서버에 이미지 업로드
     private void upload(Bitmap data, UserInfo userInfo) {
-
         FeedID = System.currentTimeMillis() + "_" + userInfo.getToken(); //현재 시각 + 사용자 토큰을 FeedID로 설정
         if (data != null) {
           String name="feed_"+FeedID+".jpg";
@@ -363,15 +362,8 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             if (imgUrl != null) map.put("imgurl", imgUrl); //이미지 url
 
             fbModule.readData(1, map, FeedID);
-
-//             장르 처리
-//            HashMap<String, Object> AfterCreatemap = new HashMap<>(); //피드 만들면 장르 up
-//            HashMap<String, Object> countmap = new HashMap<>(); // 피드 만들면
             userInfo.setGenre(selected_book.getCategoryname(), current_context);
-//            AfterCreatemap.put("userinfo_genre", userInfo.getGenre());
-//            fbModule.readData(0, AfterCreatemap, userInfo.getToken());
-////            BookWorm bookworm = new PersonalD(current_context).getBookworm();
-////            int count = bookworm.getReadcount();
+
             int count = userBw.getReadcount();
             userBw.setReadcount(++count);
             uv.updateUser(userInfo);

@@ -2,18 +2,23 @@ package com.example.bookworm.bottomMenu.search;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-
+import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
 //import com.example.bookworm.modules.module_search;
+import com.example.bookworm.bottomMenu.Feed.items.Feed;
+import com.example.bookworm.bottomMenu.bookworm.BookWorm;
+import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity;
 import com.example.bookworm.bottomMenu.search.items.Book;
 import com.example.bookworm.bottomMenu.search.items.BookAdapter;
 import com.example.bookworm.bottomMenu.search.items.OnBookItemClickListener;
@@ -21,7 +26,10 @@ import com.example.bookworm.bottomMenu.search.items.RecomBookAdapter;
 import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_main;
 import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_result;
 import com.example.bookworm.core.internet.Module;
+import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.databinding.FragmentSearchBinding;
+import com.example.bookworm.extension.follow.view.FollowerActivity;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +37,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 //import com.example.bookworm.modules.module_search;
@@ -36,8 +45,11 @@ import java.util.Map;
 
 public class fragment_search extends Fragment {
     EditText edtSearchBtn;
+    private ArrayList<UserInfo> userInfoList = null;
+    private ArrayList<BookWorm> bookWormList = null;
     RecyclerView favRecyclerView;
     Module favmodule;
+    RankFB rankFB;
     FragmentSearchBinding binding;
 
 
@@ -45,6 +57,9 @@ public class fragment_search extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentSearchBinding.inflate(getLayoutInflater());
+
+        rankFB = new RankFB(getContext());
+        rankFB.getData();
 
         showShimmer(true);
 
@@ -103,12 +118,55 @@ public class fragment_search extends Fragment {
             public void onItemClick(RecomBookAdapter.ItemViewHolder holder, View view, int position) {
                 Intent intent = new Intent(getContext(), search_fragment_subActivity_result.class);
                 intent.putExtra("itemid", bookList.get(position).getItemId());
+                intent.putExtra("data", bookList.get(position));
                 startActivity(intent);
             }
         });
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 1, GridLayoutManager.HORIZONTAL, false);
         binding.favRecyclerView.setLayoutManager(gridLayoutManager);//그리드 뷰로 보이게 함.
         binding.favRecyclerView.setAdapter(bookAdapter);
+        showShimmer(false);
+    }
+
+    //RankFB에서 사용할 함수
+    public void setRanking(List<DocumentSnapshot> a) {
+        userInfoList = new ArrayList<>();
+        bookWormList = new ArrayList<>();
+        ImageView rankProfile[] = {binding.img1stProfile, binding.img2ndProfile, binding.img3rdProfile};
+        TextView rankNickname[] = {binding.tv1stNickname, binding.tv2ndNickname, binding.tv3rdNickname};
+        TextView rankReadCount[] = {binding.tv1stReadCount, binding.tv2ndReadCount, binding.tv3rdReadCount};
+        try {
+            for (DocumentSnapshot snapshot : a) {
+                Map data = snapshot.getData();
+
+                UserInfo userInfo = new UserInfo();
+                BookWorm bookWorm = new BookWorm();
+
+                userInfo.add((Map) data.get("UserInfo"));
+                bookWorm.add((Map) data.get("BookWorm"));
+
+                userInfoList.add(userInfo);
+                bookWormList.add(bookWorm);
+            }
+        } catch (NullPointerException e) {
+            System.out.print(e);
+        }
+        for (int i = 0; i < userInfoList.size(); i++) {
+            Glide.with(this).load(userInfoList.get(i).getProfileimg()).circleCrop().into(rankProfile[i]); //등수 별 프로필 사진 세팅
+            rankNickname[i].setText(userInfoList.get(i).getUsername()); //등수 별 닉네임 세팅
+            rankReadCount[i].setText(String.valueOf(bookWormList.get(i).getReadcount()) + "권"); //등수 별 읽은 권 수 세팅
+
+            int index = i;
+            rankProfile[i].setOnClickListener(new View.OnClickListener() { //프로필 클릭시 프로필 화면으로 이동
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getContext(), ProfileInfoActivity.class);
+                    intent.putExtra("userID", userInfoList.get(index).getToken());
+                    startActivity(intent);
+                }
+            });
+        }
+
         showShimmer(false);
     }
 

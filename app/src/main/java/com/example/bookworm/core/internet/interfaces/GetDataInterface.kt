@@ -35,7 +35,7 @@ interface GetDataInterface {
 
     @Multipart
     @POST("/upload")
-    suspend fun postprofileImage(
+    suspend fun uploadImage(
         @Part image: MultipartBody.Part?,
         @Part("upload") name: RequestBody?
     ): Response<String?>?

@@ -47,7 +47,7 @@ public class ChatAdapter extends BaseAdapter {
         MessageItem item=messageItems.get(position);
 
         //재활용할 뷰는 사용하지 않음!!
-        View itemView=null;
+        View itemView = null;
 
         //메세지가 내 메세지인지??
         if(item.getName().equals(username)){
@@ -62,11 +62,15 @@ public class ChatAdapter extends BaseAdapter {
         TextView tvMsg= itemView.findViewById(R.id.tv_msg);
         TextView tvTime= itemView.findViewById(R.id.tv_time);
 
+
+
+
         tvName.setText(item.getName());
         tvMsg.setText(item.getMessage());
         tvTime.setText(item.getTime());
 
-        Glide.with(itemView).load(item.getProfileUrl()).into(iv);
+        Glide.with(itemView).load(item.getProfileUrl()).circleCrop().into(iv);
+
 
         return itemView;
     }

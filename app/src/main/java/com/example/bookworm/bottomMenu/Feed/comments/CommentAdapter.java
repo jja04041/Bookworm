@@ -11,12 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.core.userdata.interfaces.UserContract;
 import com.example.bookworm.bottomMenu.Feed.items.Feed;
 import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity;
 import com.example.bookworm.Feed.CustomPopup;
 import com.example.bookworm.R;
-import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.bottomMenu.Feed.Fragment_feed;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.PersonalD;

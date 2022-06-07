@@ -42,7 +42,7 @@ public class RecordFB {
         this.LIMIT = LIMIT;
     }
 
-    public void getData(Map map, String UserToken) {//token = 챌린지 명
+    public void getData(Map map, String UserToken) {//token = 유저 토큰
         collectionReference = db.collection("feed");
         Query query = collectionReference.whereEqualTo("UserToken", UserToken).orderBy("FeedID", Query.Direction.DESCENDING).limit(LIMIT);
 //        Query query = collectionReference.orderBy("FeedID", Query.Direction.DESCENDING);

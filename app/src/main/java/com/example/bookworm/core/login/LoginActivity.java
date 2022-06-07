@@ -17,14 +17,16 @@ import com.example.bookworm.appLaunch.modules.MainViewModel;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.appLaunch.views.MainActivity;
 import com.example.bookworm.R;
-import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.core.internet.FBModule;
+import com.example.bookworm.core.userdata.UserInfo;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.kakao.auth.AuthType;
 import com.kakao.auth.Session;
 
@@ -47,7 +49,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_login);
         super.onCreate(savedInstanceState);
-
         mContext = this;
         fbModule = new FBModule(mContext);
         isLogined = Boolean.FALSE; //카카오 이중로그인 방지
@@ -84,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
         // 카카오
         // 이미 로그인되어있고 세션이 살아있는 경우에만 작동
         if (Session.getCurrentSession().checkAndImplicitOpen() && isLogined == Boolean.TRUE) {
-            Log.d(TAG, "onClick: 로그인 세션살아있음");
+            Log.d("카카오 로그인 토큰 ", "onClick: 로그인 세션살아있음"+ Session.getCurrentSession().getTokenInfo());
             // 카카오 자동 로그인
             sessionCallback.requestMe();
             return;
@@ -124,6 +125,8 @@ public class LoginActivity extends AppCompatActivity {
             task.addOnCompleteListener(task1 -> {
                 //회원의 정보를 가져옴
                 GoogleSignInAccount account = task1.getResult();
+                gsa=task1.getResult();
+                Log.d("구글 로그인 데이터",task1.getResult().getIdToken());
                 //회원가입 여부를 확인.
                 userInfo = new UserInfo();
                 userInfo.add(account);
@@ -145,6 +148,18 @@ public class LoginActivity extends AppCompatActivity {
 
     //회원가입 함수
     public void signUp(UserInfo userInfo) {
+        if(mAuth.getCurrentUser()==null) {
+            if (Session.getCurrentSession().isOpened()) {
+                String AccessToken = Session.getCurrentSession().getTokenInfo().getAccessToken();
+            }
+            if (gsa != null) {
+                String AccessToken = gsa.getIdToken();
+                AuthCredential credential = GoogleAuthProvider.getCredential(AccessToken,null);
+                mAuth.signInWithCredential(credential).addOnCompleteListener(task -> Log.d("로그인 완료",task.getResult().toString()));
+
+            }
+        }
+
         mv.getUser(userInfo.getToken(), true); //회원 여부 확인을 위한 회원정보 조회
         mv.getUserInfo().observe(this, it -> {
             if (null != userInfo.getUsername()) {
