@@ -239,6 +239,11 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
                 liked = true
                 strings!!.add(item.feedID)
                 binding!!.btnLike.setBackground(context!!.getDrawable(R.drawable.icon_like_red))
+
+                myFCMService!!.sendPostToFCM(
+                    context,
+                    feedUserFcmtoken, "${nowUser!!.username}님이 좋아요를 표시했습니다."
+                )
             } else {
                 //현재 좋아요를 누른 상태
                 likeCount -= 1
