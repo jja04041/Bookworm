@@ -8,18 +8,13 @@ import com.example.bookworm.bottomMenu.profile.submenu.views.FragmentPosts
 
 class SubMenuPagerAdapter : FragmentStatePagerAdapter {
     private val pageList = ArrayList<Fragment>()
-    var token: String? = null
 
-    constructor(fragmentManager: FragmentManager) :
-            super(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
-
-    fun addToken(token: String) {
-        this.token = token
-    }
-
-    init {
-        pageList.add(FragmentPosts()) //포스트 탭
-        pageList.add(FragmentAlbums()) //앨범 탭
+    constructor(token: String?, fragmentManager: FragmentManager) : super(
+        fragmentManager,
+        BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+    ) {
+        pageList.add(FragmentPosts(token)) //포스트 탭
+        pageList.add(FragmentAlbums(token)) //앨범 탭
     }
 
     override fun getCount(): Int {

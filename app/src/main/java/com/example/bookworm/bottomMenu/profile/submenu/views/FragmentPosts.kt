@@ -13,7 +13,7 @@ import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumDisplay.item.A
 import com.example.bookworm.bottomMenu.profile.submenu.posts.PostDisplayAdapter
 import com.example.bookworm.databinding.FragmentProfileFragmentPostsBinding
 
-class FragmentPosts : Fragment() {
+class FragmentPosts(val token:String?) : Fragment() {
     var binding: FragmentProfileFragmentPostsBinding? = null
     var pv: UserInfoViewModel? = null
     lateinit var adapter: PostDisplayAdapter
@@ -28,10 +28,11 @@ class FragmentPosts : Fragment() {
         )
         initRecyclerView()
         //감지 센서 부착
+
         pv!!.data.observe(viewLifecycleOwner, { userinfo ->
             pv!!.getFeedList(userinfo.token)
         })
-
+        if(token!=null) pv!!.getFeedList(token)
         pv!!.feedList.observe(viewLifecycleOwner, { list ->
             //받은 포스트 목록을 화면에 띄워줘야함.
             if (list.size == 0) binding!!.llalertNoPosts.visibility = View.VISIBLE
@@ -47,7 +48,8 @@ class FragmentPosts : Fragment() {
     fun initRecyclerView() {
         adapter = PostDisplayAdapter()
         binding!!.postRecyclerView.adapter = adapter
-        (binding!!.postRecyclerView?.itemAnimator as SimpleItemAnimator).supportsChangeAnimations =
+        val animator =(binding!!.postRecyclerView?.itemAnimator as SimpleItemAnimator)
+        animator.supportsChangeAnimations =
             false //데이터 업데이트 시, 플리커(깜빡이는 현상) 끄기
         val gridLayoutManager = GridLayoutManager(
             context, 3, GridLayoutManager.VERTICAL, false
@@ -57,7 +59,7 @@ class FragmentPosts : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        pv!!.getUser(null, false)
+        if(token==null) pv!!.getUser(null, false)
     }
 
     override fun onDestroy() {

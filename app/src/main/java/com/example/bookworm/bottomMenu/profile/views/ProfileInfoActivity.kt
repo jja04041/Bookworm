@@ -1,6 +1,7 @@
 package com.example.bookworm.bottomMenu.profile.views
 
 //import com.example.bookworm.Extension.Follow.Modules.followCounter
+
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,12 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.bookworm.BookWorm
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
+import com.example.bookworm.bottomMenu.profile.submenu.SubMenuPagerAdapter
 import com.example.bookworm.chat.activity_chating
 import com.example.bookworm.core.userdata.UserInfo
-
 import com.example.bookworm.databinding.ActivityProfileInfoBinding
 import com.example.bookworm.extension.follow.view.FollowViewModelImpl
 import com.example.bookworm.notification.MyFCMService
@@ -31,13 +31,15 @@ class ProfileInfoActivity : AppCompatActivity() {
     lateinit var fv: FollowViewModelImpl
     lateinit var pv: UserInfoViewModel
     var cache: Boolean? = null
-
+    lateinit var menuPagerAdapter: SubMenuPagerAdapter
     private var myFCMService: MyFCMService? = null
     private var mFirebaseDatabase: FirebaseDatabase? = null
 
     //자신이나 타인의 프로필을 클릭했을때 나오는 화면
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //initialize
+
         binding = ActivityProfileInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
         fv = FollowViewModelImpl(this)
@@ -45,12 +47,12 @@ class ProfileInfoActivity : AppCompatActivity() {
             this,
             UserInfoViewModel.Factory(this)
         ).get(UserInfoViewModel::class.java)
+
+
         myFCMService = MyFCMService()
         mFirebaseDatabase = FirebaseDatabase.getInstance()
-        //일단 안보였다가 파이어베이스에서 값을 모두 받아오면 보여주는게 UX면에서 좋을거같음
-//        binding.tvNickname.setVisibility(View.INVISIBLE);
-//        binding.ivProfileImage.setVisibility(View.INVISIBLE);
-//        binding.tvFollow.setVisibility(View.INVISIBLE);
+
+        //implements
 
         //shimmer 적용을 위해 기존 뷰는 일단 안보이게, shimmer는 보이게
         binding.llResult.visibility = View.GONE
@@ -67,8 +69,9 @@ class ProfileInfoActivity : AppCompatActivity() {
             nowUser = getNowUserJob.await()
 
             SubUserData!!.let {
-                SubUserData.isFollowed = async { fv.isFollowNow(it) }.await()
+                it.isFollowed = async { fv.isFollowNow(it) }.await()
                 pv.getBookWorm(SubUserData.token).join()
+                menuPagerAdapter = SubMenuPagerAdapter(it.token,supportFragmentManager)
                 Log.d("현재 읽은 도서 수 ",pv.bwdata.value!!.readcount!!.toString())
                 setUI(SubUserData, pv.bwdata.value!! )
             }
@@ -119,6 +122,12 @@ class ProfileInfoActivity : AppCompatActivity() {
             startActivity(intent)
 
         }
+        //서브 메뉴 세팅
+        binding.subMenuViewPager.adapter = menuPagerAdapter
+        binding.tabLayout.setupWithViewPager(binding.subMenuViewPager)
+        binding.tabLayout.getTabAt(1)!!.text = "앨범"
+        binding.tabLayout.getTabAt(0)!!.text = "포스트"
+        binding.tabLayout.getTabAt(0)!!.select()
 
 
         if (user.isFollowed) isFollowingTrue

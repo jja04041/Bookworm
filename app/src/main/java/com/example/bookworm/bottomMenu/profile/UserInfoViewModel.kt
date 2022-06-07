@@ -14,6 +14,7 @@ import com.example.bookworm.core.dataprocessing.repository.UserRepositoryImpl
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.extension.follow.view.FollowViewModelImpl
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import java.util.*
@@ -110,7 +111,8 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
     fun getFeedList(token: String) {
         viewModelScope.launch {
             var data =
-                FirebaseFirestore.getInstance().collection("feed").whereEqualTo("UserToken", token)
+                FirebaseFirestore.getInstance().collection("feed").whereEqualTo("UserToken", token).orderBy("FeedID",
+                    Query.Direction.DESCENDING)
                     .get().await()
             var arrayList = ArrayList<Feed>()
             data.documents.forEach {

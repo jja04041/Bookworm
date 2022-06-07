@@ -12,13 +12,15 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumActivity
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumDisplay.item.AlbumDisplayAdapter
+import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.FragmentProfileFragmentAlbumsBinding
 
-
-class FragmentAlbums : Fragment() {
+//본인 앨범을 보는 경우, null이 전달됨 .
+class FragmentAlbums(val token:String?) : Fragment() {
     var binding: FragmentProfileFragmentAlbumsBinding? = null
     var pv: UserInfoViewModel? = null
     lateinit var adapter: AlbumDisplayAdapter
+    var NowUser: UserInfo?=null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,12 +36,19 @@ class FragmentAlbums : Fragment() {
         //implements
 
         //감지 센서 부착
-        pv!!.data.observe(viewLifecycleOwner, { userinfo ->
-            pv!!.getFeedList(userinfo.token)
-            pv!!.getalbums(userinfo.token)
-        })
+        pv!!.data.observe(viewLifecycleOwner) { userinfo ->
+            if (NowUser == null) NowUser = userinfo
+            if (token != null && userinfo.token != token) {
+                pv!!.getFeedList(token!!)
+                pv!!.getalbums(token!!)
+            } else {
+                pv!!.getFeedList(userinfo.token)
+                pv!!.getalbums(userinfo.token)
+            }
+        }
 
         pv!!.feedList.observe(viewLifecycleOwner, { list ->
+            if(token==NowUser!!.token || token==null) binding!!.btnAddAlbum.visibility=View.VISIBLE
             binding!!.btnAddAlbum.setOnClickListener({
                 var intent = Intent(context, CreateAlbumActivity::class.java)
                 intent.putExtra("list", list)

@@ -35,5 +35,6 @@ class PostDisplayAdapter:
         @SuppressLint("DiffUtilEquals")
         override fun areContentsTheSame(oldItem: Feed, newItem: Feed): Boolean =
             (oldItem == newItem)
+
     }
 }
