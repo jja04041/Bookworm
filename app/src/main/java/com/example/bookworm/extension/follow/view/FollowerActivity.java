@@ -14,6 +14,8 @@ import com.google.android.material.tabs.TabLayout;
 public class FollowerActivity extends AppCompatActivity {
 
     ViewPager viewPager;
+    TabLayout tabLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -23,7 +25,7 @@ public class FollowerActivity extends AppCompatActivity {
         String token = intent.getStringExtra("token");
         int selected = intent.getIntExtra("page", 0);
         viewPager = findViewById(R.id.viewpager);
-        FollowPagerAdapter adapter = new FollowPagerAdapter( getSupportFragmentManager(), token);
+        FollowPagerAdapter adapter = new FollowPagerAdapter(getSupportFragmentManager(), token);
         viewPager.setAdapter(adapter);
         FollowViewModelImpl fv = new ViewModelProvider(this, new FollowViewModelImpl.Factory(this)).get(FollowViewModelImpl.class);
 
@@ -31,7 +33,7 @@ public class FollowerActivity extends AppCompatActivity {
         fv.WithoutSuspendgetUser(token);
 
         //탭 레이아웃 구성
-        TabLayout tabLayout = findViewById(R.id.tab_layout);
+        tabLayout = findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.getTabAt(selected).select();
 
@@ -42,8 +44,11 @@ public class FollowerActivity extends AppCompatActivity {
         });
 
 
-
-
     }
 
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+    }
 }

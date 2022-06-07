@@ -205,10 +205,10 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
     public void moduleUpdated(JSONArray jsonArray) throws JSONException {
         page = module.getPage();
         count = module.getCount();
-        int beforeSize=bookList.size();
+        int beforeSize = bookList.size();
         if (page == 1) {
             check = count;
-            Log.d("cje",String.valueOf(check));
+            Log.d("cje", String.valueOf(check));
             bookList = new ArrayList<>(); //book을 담는 리스트 생성
         }
         if (count == 0) {
@@ -223,17 +223,17 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
             //아마 북리스트에 아이템을 계속 추가하면 되지 않을까,,
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
-                Book book = new Book(obj.getString("title"), obj.getString("categoryName") ,obj.getString("description"), obj.getString("publisher"), obj.getString("author"), obj.getString("cover"), obj.getString("itemId"));
+                Book book = new Book(obj.getString("title"), obj.getString("categoryName"), obj.getString("description"), obj.getString("publisher"), obj.getString("author"), obj.getString("cover"), obj.getString("itemId"));
                 bookList.add(book);
             }
             if (check > 20 && page < 20) {
-                bookList.add(new Book("","", "", "", "", ""));
+                bookList.add(new Book("", "", "", "", "", ""));
                 this.check = count - bookList.size();
             } else isLoading = true;
 
             if (page != 1 && page < 20) {
                 isLoading = false;
-                bookAdapter.notifyItemRangeChanged(beforeSize, bookList.size() -beforeSize);
+                bookAdapter.notifyItemRangeChanged(beforeSize, bookList.size() - beforeSize);
             } else {
                 bookAdapter = new BookAdapter(bookList, this);
                 bookAdapter.setListener(new OnBookItemClickListener() {
@@ -244,16 +244,16 @@ public class search_fragment_subActivity_main extends AppCompatActivity {
                             Intent intent = new Intent(getApplicationContext(), search_fragment_subActivity_result.class);
 
                             intent.putExtra("itemid", bookList.get(position).getItemId());
-                            intent.putExtra("data",bookList.get(position));
-                            setResult(Activity.RESULT_OK,intent);
+                            intent.putExtra("data", bookList.get(position));
+                            setResult(Activity.RESULT_OK, intent);
 
                             startActivity(intent);
                         } else if (classindex == 1) {
                             finish();
                         } else if (classindex == 2) {
-                            Intent intent=new Intent();
-                            intent.putExtra("data",bookList.get(position));
-                            setResult(Activity.RESULT_OK,intent);
+                            Intent intent = new Intent();
+                            intent.putExtra("data", bookList.get(position));
+                            setResult(Activity.RESULT_OK, intent);
                             finish();
                         }
                     }

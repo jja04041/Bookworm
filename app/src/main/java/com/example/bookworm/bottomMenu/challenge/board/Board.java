@@ -1,7 +1,6 @@
 package com.example.bookworm.bottomMenu.challenge.board;
 
 
-
 import com.example.bookworm.bottomMenu.search.items.Book;
 
 import java.io.Serializable;
@@ -21,7 +20,7 @@ public class Board implements Serializable {
 
     public Board(Map data) {
         book = new Book(null);
-        if (data!=null) {
+        if (data != null) {
             this.boardID = (String) data.get("boardID");
             if (data.get("imgurl") != null) this.imgurl = (String) data.get("imgurl");
             this.boardText = (String) data.get("boardText");

@@ -1,29 +1,19 @@
 package com.example.bookworm.bottomMenu.bookworm.bookworm_pages.bookworm_record;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.bookworm.bottomMenu.Feed.items.Feed;
-import com.example.bookworm.bottomMenu.challenge.board.Board;
-import com.example.bookworm.bottomMenu.challenge.board.BoardAdapter;
-import com.example.bookworm.bottomMenu.challenge.board.subactivity_challenge_board_comment;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
 
-import com.example.bookworm.core.userdata.PersonalD;
-import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.databinding.FragmentRecordBinding;
 import com.google.firebase.firestore.DocumentSnapshot;
 
@@ -64,7 +54,6 @@ public class fragment_record extends Fragment {
         recordFB = new RecordFB(getContext());
 
 
-
         pv.getUser(null, false);
 
         //데이터 수정을 감지함
@@ -73,7 +62,6 @@ public class fragment_record extends Fragment {
             recordFB.getData(map, userinfo.getToken());
 
         });
-
 
 
         return view;
@@ -125,12 +113,7 @@ public class fragment_record extends Fragment {
         recordAdapter = new RecordAdapter(feedList, getContext());
         //어댑터 리스너
         recordAdapter.setListener((holder, view, position) -> {
-            //닫힌 챌린지 인경우 표시할 코드 등을 입력해야함.
-            //아이템 선택시 실행할 코드를 입력
-//            Intent intent = new Intent(getContext(), subactivity_challenge_board_comment.class);
-//            intent.putExtra("board", boardList.get(position));
-//            intent.putExtra("challenge", challenge);
-//            getContext().startActivity(intent);
+
         });
     }
 

@@ -68,16 +68,15 @@
             android:name=".bottomMenu.challenge.subactivity.subactivity_challenge_challengeinfo"
             android:exported="false"
             android:parentActivityName=".appLaunch.views.MainActivity" />
+        <activity android:name="com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumActivity"
+            android:exported="false"
+            android:parentActivityName=".appLaunch.views.MainActivity"/>
         <activity
             android:name=".bottomMenu.challenge.subactivity.subactivity_challenge_createchallenge"
             android:exported="false"
             android:parentActivityName=".appLaunch.views.MainActivity" /> <!-- Main Activities -->
-        <activity
-            android:name=".PreferActivity"
-            android:exported="false" /> <!-- 선호장르 설정 -->
-        <activity
-            android:name=".JoinActivity"
-            android:exported="false" /> <!-- 회원 정보 수정 -->
+        <!-- 선호장르 설정 -->
+        <!-- 회원 정보 수정 -->
         <activity
             android:name=".bottomMenu.profile.views.ProfileModifyActivity"
             android:exported="false" /> <!-- 회원 정보 수정 -->
@@ -92,7 +91,10 @@
             android:exported="false"/> <!-- 로그인 화면 -->
         <activity
             android:name=".chat.activity_chating"
-            android:exported="false"/>
+            android:exported="false"/> <!-- 채팅 화면 -->
+        <activity
+            android:name=".chat.chatlist.activity_chatlist"
+            android:exported="false"/> <!-- 채팅리스트 화면 -->
 
         <activity
             android:name=".LoadingActivity"

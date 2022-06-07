@@ -49,7 +49,7 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
     TextView tvViewMore;
     RatingBar customerReviewRank;
     Context context, thisContext;
-    Book    book;
+    Book book;
 
     SearchResultFB searchResultFB;
     private Boolean canLoad = true; //더 로딩이 가능한지 확인하는 변수[자료의 끝을 판별한다.]
@@ -65,12 +65,10 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
     Map<String, Object> map;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding= SubactivitySearchFragmentResultBinding.inflate(getLayoutInflater());
+        binding = SubactivitySearchFragmentResultBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Intent intent = getIntent();
 
@@ -94,7 +92,6 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
 
         pv = new UserInfoViewModel(thisContext);
         uv = new ViewModelProvider(this, new UserInfoViewModel.Factory(thisContext)).get(UserInfoViewModel.class);
-
 
 
         ScrollView ScrParents = (ScrollView) findViewById(R.id.ScrParents);
@@ -136,7 +133,6 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
     }
 
 
-
     private void setItem() {
         Map querys = new HashMap<String, String>();
         querys.put("ItemId", itemId);
@@ -152,7 +148,7 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
     }
 
     public void putItem(JSONObject json) throws JSONException {
-        Glide.with(this).load(json.getString("cover").replace("coversum","cover500")).into(iv_selectedItem);
+        Glide.with(this).load(json.getString("cover").replace("coversum", "cover500")).into(iv_selectedItem);
         for (int i = 0; i < textViewCount; i++) {
             String text = getContent[i];
             if (text.equals("link")) {
@@ -174,10 +170,14 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
                 float rank = Float.parseFloat(json.getString(text)) / 2;
                 customerReviewRank.setRating(rank);
                 textViews[i].setText(String.valueOf(rank));
-            }
-//            else  if(text.equals("d"))
-
-            else textViews[i].setText(json.getString(getContent[i]));
+            } else if (text.equals("description")) {
+                String description = json.getString(text);
+                description = description.replace("&lt;", "<")
+                        .replace("&gt;", ">")
+                        .replace("&lt", "<")
+                        .replace("&gt", ">");
+                textViews[i].setText(description);
+            } else textViews[i].setText(json.getString(getContent[i]));
         }
 
         textViews[1].post(new Runnable() {
@@ -208,10 +208,6 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
         searchResultAdapter.setListener((holder, view, position) -> {
             //닫힌 챌린지 인경우 표시할 코드 등을 입력해야함.
             //아이템 선택시 실행할 코드를 입력
-//            Intent intent = new Intent(getContext(), subactivity_challenge_board_comment.class);
-//            intent.putExtra("board", boardList.get(position));
-//            intent.putExtra("challenge", challenge);
-//            getContext().startActivity(intent);
         });
     }
 

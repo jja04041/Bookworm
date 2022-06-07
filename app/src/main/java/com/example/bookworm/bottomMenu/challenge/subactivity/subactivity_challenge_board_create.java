@@ -5,7 +5,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -16,43 +15,24 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.achievement.Achievement;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.challenge.items.Challenge;
-import com.example.bookworm.bottomMenu.Feed.ImagePicker;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
 import com.example.bookworm.bottomMenu.search.items.Book;
 
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.internet.Module;
-import com.example.bookworm.core.userdata.PersonalD;
 import com.example.bookworm.core.userdata.UserInfo;
-import com.example.bookworm.R;
 import com.example.bookworm.databinding.SubactivityChallengeBoardCreateBinding;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 
 public class subactivity_challenge_board_create extends AppCompatActivity {
 
@@ -62,13 +42,11 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
     UserInfo userInfo;
     Context current_context;
     Bitmap uploaded;
-    Module module;
     UserInfoViewModel uv;
     ImageProcessing imageProcess;
     BookWorm userBw;
     Challenge challenge;
     String imgurl = null;
-    Dialog customDialog;
     String BoardID;
     Book selected_book; //선택한 책 객체
 
@@ -80,10 +58,8 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
                 if (code == Activity.RESULT_OK) {
                     Uri uri = result.getData().getParcelableExtra("path");
                     try {
-                        // You can update this bitmap to your server
                         uploaded = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
 
-                        // loading profile image from local cache
                         loadImage(uri.toString());
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -124,13 +100,13 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
             Glide.with(this).load(userinfo.getProfileimg()).circleCrop().into(binding.ivProfileImage); //프로필사진 로딩후 삽입.
             binding.tvNickname.setText(userinfo.getUsername());
 
-            uv.getBwdata().observe(this,bookWorm -> {
-                userBw=bookWorm;
+            uv.getBwdata().observe(this, bookWorm -> {
+                userBw = bookWorm;
                 imageProcess.getBitmap().observe(this, bitmap -> {
                     //완료 버튼 (피드 올리기)
                     binding.tvFinish.setOnClickListener(view ->
                             new AlertDialog.Builder(current_context)
-                                    .setMessage("피드를 업로드하시겠습니까?")
+                                    .setMessage("인증글을 업로드하시겠습니까?")
                                     .setPositiveButton("네", (dialog, which) -> {
                                         dialog.dismiss();
                                         upload(bitmap, userInfo);
@@ -139,14 +115,14 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
                                             -> dialog.dismiss())
                                     .show()
                     );
-                    imageProcess.getImgData().observe(this,imgurl->{
+                    imageProcess.getImgData().observe(this, imgurl -> {
                         feedUpload(imgurl);
                     });
                 });
 
                 binding.tvFinish.setOnClickListener(view ->
                         new AlertDialog.Builder(current_context)
-                                .setMessage("피드를 업로드하시겠습니까?")
+                                .setMessage("인증글을 업로드하시겠습니까?")
                                 .setPositiveButton("네", (dialog, which) -> {
                                     dialog.dismiss();
                                     upload(null, userInfo);
@@ -158,12 +134,8 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
             });
         });
 
-        if(getIntent() != null) {
-//            intent = getIntent();
-//            if((Book) intent.getSerializableExtra("data") != null){
-//                selected_book = (Book) intent.getSerializableExtra("data");
-//                binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목만 세팅한다.
-//            }
+        if (getIntent() != null) {
+
         }
         imageProcess.getBitmapUri().observe(this, it -> {
             Glide.with(this).load(it)
@@ -189,8 +161,8 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
 
         BoardID = System.currentTimeMillis() + "_" + userInfo.getToken(); //현재 시각 + 사용자 토큰을 FeedID로 설정
         if (data != null) {
-            String name="feed_"+BoardID+".jpg";
-            imageProcess.uploadImage(data,name);
+            String name = "feed_" + BoardID + ".jpg";
+            imageProcess.uploadImage(data, name);
         } else {
             feedUpload(null);
         }
@@ -199,9 +171,9 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
     //피드 업로드
     public void feedUpload(String imgUrl) {
 
-        if (binding.edtFeedText.getText().toString().equals("")) { //피드 내용이 없으면 작성해달라는 알림 띄움
+        if (binding.edtFeedText.getText().toString().equals("") || binding.ivpicture.getDrawable() == null) { //인증사진이나 피드 내용이 없으면 작성해달라는 알림 띄움
             new AlertDialog.Builder(current_context)
-                    .setMessage("인증글 내용을 작성해주세요")
+                    .setMessage("인증 사진과 인증글 내용을 작성해주세요")
                     .setPositiveButton("알겠습니다.", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -212,20 +184,16 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
             HashMap<String, Object> map = new HashMap<>();
 
 
-
-            //ArrayList<String> labelList = new ArrayList<String>(); //선택한 라벨 목록을 담을 리스트
-
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String formatTime = dateFormat.format(System.currentTimeMillis());
 
             map.put("UserToken", userInfo.getToken()); //유저 정보
             map.put("book", selected_book); //책 정보
             map.put("boardText", binding.edtFeedText.getText().toString()); //피드 내용
-            //map.put("label", labelAdd(labelList)); //라벨 리스트
             map.put("date", formatTime); //현재 시간 millis로
             map.put("boardID", BoardID); //인증글 아이디
             map.put("challengeName", challenge.getTitle()); //챌린지 명
-            map.put("commentsCount",0);
+            map.put("commentsCount", 0);
             map.put("likeCount", 0);
             if (imgUrl != null) map.put("imgurl", imgUrl); //이미지 url
 
@@ -233,7 +201,6 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
             fbModule.uploadChallengeBoard(2, challenge.getTitle(), BoardID, map);
 
             // 장르 처리
-//            HashMap<String, Object> savegenremap = new HashMap<>();
             userInfo.setGenre(selected_book.getCategoryname(), current_context);
 
             int count = userBw.getReadcount();
@@ -246,7 +213,7 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
             achievement.CompleteAchievement(userInfo, current_context);
             exit = achievement.canreturn();
 
-            if(exit == true) {
+            if (exit == true) {
                 setResult(CREATE_OK);
                 finish();
             }

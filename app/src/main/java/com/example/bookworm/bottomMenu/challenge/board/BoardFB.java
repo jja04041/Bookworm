@@ -5,10 +5,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.bookworm.appLaunch.views.MainActivity;
-import com.example.bookworm.bottomMenu.Feed.Fragment_feed;
-import com.example.bookworm.bottomMenu.Feed.comments.subactivity_comment;
-import com.example.bookworm.bottomMenu.challenge.fragment_challenge;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -20,8 +16,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class BoardFB {
@@ -30,7 +24,6 @@ public class BoardFB {
     private int LIMIT = 10;
     Task task = null;
     CollectionReference collectionReference;
-    DocumentReference documentReference;
 
     BoardFB(Context context) {
         this.context = context;

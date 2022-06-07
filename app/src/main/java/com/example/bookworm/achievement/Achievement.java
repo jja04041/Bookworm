@@ -106,38 +106,49 @@ public class Achievement extends activity_achievement {
                 }
         }
 
-        /*
-        else if (userinfo.getGenre().get("공부") == 10) {
-            if(null == bookworm.getAchievementmap().get("공부")) {
-                ExecuteFB(R.drawable.bw_detective, "수필왕", 0);
+        if(userinfo.getGenre().get("공부") != null) {
+            if (userinfo.getGenre().get("공부") == 3) {
+                if(null == bookworm.getAchievementmap().get("공부벌레")) {
+                    ExecuteFB(R.drawable.bw_study, "공부벌레", 0);
+                }
             }
         }
-        else if (userinfo.getGenre().get("사회") == 10) {
-            if(null == bookworm.getAchievementmap().get("사회")) {
-                ExecuteFB(R.drawable.bw_detective, "수필왕", 0);
+        if(userinfo.getGenre().get("사회") != null) {
+            if (userinfo.getGenre().get("사회") == 3) {
+                if(null == bookworm.getAchievementmap().get("사회왕")) {
+                    ExecuteFB(R.drawable.bw_social, "사회왕", 0);
+                }
             }
         }
-        else if (userinfo.getGenre().get("과학") == 10) {
-            if(null == bookworm.getAchievementmap().get("과학")) {
-                ExecuteFB(R.drawable.bw_detective, "수필왕", 0);
+        if(userinfo.getGenre().get("과학") != null) {
+            if (userinfo.getGenre().get("과학") == 3) {
+                if(null == bookworm.getAchievementmap().get("싸이언쓰볼레")) {
+                    ExecuteFB(R.drawable.bw_science, "싸이언쓰볼레", 0);
+                }
             }
         }
-        else if (userinfo.getGenre().get("인문") == 10) {
-            if(null == bookworm.getAchievementmap().get("인문")) {
-                ExecuteFB(R.drawable.bw_detective, "수필왕", 0);
+        if(userinfo.getGenre().get("인문") != null) {
+            if (userinfo.getGenre().get("인문") == 3) {
+                if(null == bookworm.getAchievementmap().get("문학볼레")) {
+                    ExecuteFB(R.drawable.bw_literature, "문학볼레", 0);
+                }
             }
         }
-        else if (userinfo.getGenre().get("생활") == 10) {
-            if(null == bookworm.getAchievementmap().get("생활")) {
-                ExecuteFB(R.drawable.bw_detective, "수필왕", 0);
+//        if(userinfo.getGenre().get("생활") != null) {
+//            if (userinfo.getGenre().get("생활") == 3) {
+//                if(null == bookworm.getAchievementmap().get("생활볼레")) {
+//                    ExecuteFB(R.drawable.bw_detective, "생활볼레", 0);
+//                }
+//            }
+//        }
+        if(userinfo.getGenre().get("만화") != null) {
+            if (userinfo.getGenre().get("만화") == 3) {
+                if(null == bookworm.getAchievementmap().get("만화광")) {
+                    ExecuteFB(R.drawable.bw_cartoon, "만화광", 0);
+                }
             }
         }
-                else if (userinfo.getGenre().get("만화") == 10) {
-            if(null == bookworm.getAchievementmap().get("만화")) {
-                ExecuteFB(R.drawable.bw_detective, "수필왕", 0);
-            }
-        }
-        */
+
 
         // 좋아요 업적
 

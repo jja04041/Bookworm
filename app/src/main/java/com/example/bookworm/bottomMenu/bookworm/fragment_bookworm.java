@@ -40,8 +40,10 @@ public class fragment_bookworm extends Fragment {
             binding.tvRecord.setTextSize(20);
             binding.tvStatistics.setTextSize(20);
 
-            if (fragmentRecord != null) fm.beginTransaction().hide(fragmentRecord).commitAllowingStateLoss();
-            if (fragmentStatistics != null) fm.beginTransaction().hide(fragmentStatistics).commitAllowingStateLoss();
+            if (fragmentRecord != null)
+                fm.beginTransaction().hide(fragmentRecord).commitAllowingStateLoss();
+            if (fragmentStatistics != null)
+                fm.beginTransaction().hide(fragmentStatistics).commitAllowingStateLoss();
             fm.beginTransaction().show(fragmentbookwormdetail).commitAllowingStateLoss();
         });
         binding.tvRecord.setOnClickListener(it -> {
@@ -51,9 +53,12 @@ public class fragment_bookworm extends Fragment {
             binding.tvBookworm.setTextSize(20);
             binding.tvRecord.setTextSize(25);
             binding.tvStatistics.setTextSize(20);
-            if (fragmentbookwormdetail != null) fm.beginTransaction().hide(fragmentbookwormdetail).commitAllowingStateLoss();
-            if (fragmentStatistics != null) fm.beginTransaction().hide(fragmentStatistics).commitAllowingStateLoss();
-            if (fragmentRecord != null)fm.beginTransaction().show(fragmentRecord).commitAllowingStateLoss();
+            if (fragmentbookwormdetail != null)
+                fm.beginTransaction().hide(fragmentbookwormdetail).commitAllowingStateLoss();
+            if (fragmentStatistics != null)
+                fm.beginTransaction().hide(fragmentStatistics).commitAllowingStateLoss();
+            if (fragmentRecord != null)
+                fm.beginTransaction().show(fragmentRecord).commitAllowingStateLoss();
             else {
                 fragmentRecord = new fragment_record();
                 fm.beginTransaction().add(R.id.bwContainer, fragmentRecord, "1").commitAllowingStateLoss();
@@ -66,21 +71,23 @@ public class fragment_bookworm extends Fragment {
             binding.tvBookworm.setTextSize(20);
             binding.tvRecord.setTextSize(20);
             binding.tvStatistics.setTextSize(25);
-            if (fragmentbookwormdetail != null) fm.beginTransaction().hide(fragmentbookwormdetail).commitAllowingStateLoss();
-            if (fragmentRecord != null)fm.beginTransaction().hide(fragmentRecord).commitAllowingStateLoss();
-            if (fragmentStatistics != null)fm.beginTransaction().show(fragmentStatistics).commitAllowingStateLoss();
+            if (fragmentbookwormdetail != null)
+                fm.beginTransaction().hide(fragmentbookwormdetail).commitAllowingStateLoss();
+            if (fragmentRecord != null)
+                fm.beginTransaction().hide(fragmentRecord).commitAllowingStateLoss();
+            if (fragmentStatistics != null)
+                fm.beginTransaction().show(fragmentStatistics).commitAllowingStateLoss();
             else {
                 fragmentStatistics = new fragment_statistics();
                 fm.beginTransaction().add(R.id.bwContainer, fragmentStatistics, "2").commitAllowingStateLoss();
             }
         });
-
         return binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
-        fm=null;
+        fm = null;
         binding = null;
         super.onDestroyView();
     }

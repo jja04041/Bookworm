@@ -13,13 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_result;
+import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.core.userdata.interfaces.UserContract;
 import com.example.bookworm.core.userdata.modules.LoadUser;
 import com.example.bookworm.bottomMenu.Feed.items.Feed;
 import com.example.bookworm.Feed.CustomPopup;
 import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.search.items.Book;
-import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.bottomMenu.Feed.Fragment_feed;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.PersonalD;
@@ -37,7 +37,7 @@ public class SummaryViewHolder extends RecyclerView.ViewHolder implements UserCo
         super(itemView);
         binding = LayoutCommentSummaryBinding.bind(itemView);
         this.context = context; //subComment의 context  =>
-        user=new LoadUser(this);
+        user = new LoadUser(this);
     }
 
     public void setItem(Feed item) {
@@ -47,7 +47,7 @@ public class SummaryViewHolder extends RecyclerView.ViewHolder implements UserCo
         Glide.with(context).load(book.getImg_url()).into(binding.feedBookThumb);
         binding.feedBookAuthor.setText(book.getAuthor());
         //프로필 표시
-        user.getData(item.getUserToken(),null);
+        user.getData(item.getUserToken(), null);
 
         //현재 로그인중인 유저
         UserInfo nowUser = new PersonalD(context).getUserInfo();
@@ -99,7 +99,7 @@ public class SummaryViewHolder extends RecyclerView.ViewHolder implements UserCo
     }
 
     @Override
-    public void showProfile(@NonNull UserInfo userInfo,@NonNull Boolean bool) {
+    public void showProfile(@NonNull UserInfo userInfo, @NonNull Boolean bool) {
         Glide.with(context).load(userInfo.getProfileimg()).circleCrop().into(binding.ivProfileImage);
         binding.tvNickname.setText(userInfo.getUsername());
     }

@@ -1,22 +1,26 @@
 package com.example.bookworm.bottomMenu.profile.views
 
-//import com.example.bookworm.Extension.Follow.Modules.followCounter
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.example.bookworm.R
+import com.example.bookworm.bottomMenu.bookworm.BookWorm
+import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
+import com.example.bookworm.bottomMenu.profile.submenu.SubMenuPagerAdapter
 import com.example.bookworm.chat.activity_chating
 import com.example.bookworm.core.userdata.UserInfo
-
 import com.example.bookworm.databinding.ActivityProfileInfoBinding
 import com.example.bookworm.extension.follow.view.FollowViewModelImpl
 import com.example.bookworm.notification.MyFCMService
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import java.lang.reflect.Type
 
 class ProfileInfoActivity : AppCompatActivity() {
     lateinit var binding: ActivityProfileInfoBinding
@@ -25,24 +29,27 @@ class ProfileInfoActivity : AppCompatActivity() {
             : UserInfo? = null
     lateinit var userID: String
     lateinit var fv: FollowViewModelImpl
+    lateinit var pv: UserInfoViewModel
     var cache: Boolean? = null
-
+    lateinit var menuPagerAdapter: SubMenuPagerAdapter
     private var myFCMService: MyFCMService? = null
     private var mFirebaseDatabase: FirebaseDatabase? = null
 
     //자신이나 타인의 프로필을 클릭했을때 나오는 화면
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //initialize
+
         binding = ActivityProfileInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
         fv = FollowViewModelImpl(this)
+        pv = ViewModelProvider(
+            this,
+            UserInfoViewModel.Factory(this)
+        ).get(UserInfoViewModel::class.java)
 
         myFCMService = MyFCMService()
         mFirebaseDatabase = FirebaseDatabase.getInstance()
-        //일단 안보였다가 파이어베이스에서 값을 모두 받아오면 보여주는게 UX면에서 좋을거같음
-//        binding.tvNickname.setVisibility(View.INVISIBLE);
-//        binding.ivProfileImage.setVisibility(View.INVISIBLE);
-//        binding.tvFollow.setVisibility(View.INVISIBLE);
 
         //shimmer 적용을 위해 기존 뷰는 일단 안보이게, shimmer는 보이게
         binding.llResult.visibility = View.GONE
@@ -53,13 +60,17 @@ class ProfileInfoActivity : AppCompatActivity() {
         userID = intent.getStringExtra("userID")!!
 
         lifecycleScope.launch {
-            val getSubUserjob = async { fv.getUser(userID,true) }
-            val getNowUserJob = async { fv.getUser(null,true) }
+            val getSubUserjob = async { fv.getUser(userID, true) }
+            val getNowUserJob = async { fv.getUser(null, true) }
             val SubUserData = getSubUserjob.await()
-            nowUser=getNowUserJob.await()
+            nowUser = getNowUserJob.await()
+
             SubUserData!!.let {
-                SubUserData.isFollowed = async { fv.isFollowNow(it) }.await()
-                setUI(SubUserData)
+                it.isFollowed = async { fv.isFollowNow(it) }.await()
+                pv.getBookWorm(SubUserData.token).join()
+                menuPagerAdapter = SubMenuPagerAdapter(it.token, supportFragmentManager)
+                Log.d("현재 읽은 도서 수 ", pv.bwdata.value!!.readcount!!.toString())
+                setUI(SubUserData, pv.bwdata.value!!)
             }
         }
 
@@ -84,7 +95,7 @@ class ProfileInfoActivity : AppCompatActivity() {
         }
 
     //UI설정
-    suspend fun setUI(user: UserInfo) {
+    suspend fun setUI(user: UserInfo, bookWorm: BookWorm) {
 
         binding.tvNickname.text = user.username //닉네임 설정
         binding.tvNickname.visibility = View.VISIBLE
@@ -92,17 +103,25 @@ class ProfileInfoActivity : AppCompatActivity() {
             .into(binding.ivProfileImage) //프로필이미지 설정
         binding.ivProfileImage.visibility = View.VISIBLE
 
+        binding.tvIntroduce.setText(user.introduce)
+
         // 채팅버튼
         binding.btnchatting.visibility = View.VISIBLE
 
         binding.btnchatting.setOnClickListener { view: View? ->
 
             // google id는 token길이가 매우 길기때문에 biginteger을 사용해야한다
-            val intent = Intent(this , activity_chating::class.java)
-            intent.putExtra("opponent", (user.token).toBigInteger() );
+            val intent = Intent(this, activity_chating::class.java)
+            intent.putExtra("opponent", (user));
             startActivity(intent)
 
         }
+        //서브 메뉴 세팅
+        binding.subMenuViewPager.adapter = menuPagerAdapter
+        binding.tabLayout.setupWithViewPager(binding.subMenuViewPager)
+        binding.tabLayout.getTabAt(1)!!.text = "앨범"
+        binding.tabLayout.getTabAt(0)!!.text = "포스트"
+        binding.tabLayout.getTabAt(0)!!.select()
 
 
         if (user.isFollowed) isFollowingTrue
@@ -110,7 +129,10 @@ class ProfileInfoActivity : AppCompatActivity() {
 
         //내 프로필 화면이라면 팔로우 버튼 안보이게
         if (user.isMainUser) binding.tvFollow.visibility = View.GONE
-        binding.tvFollowCount.text = user.followerCounts.toString()
+        binding.tvFollowerCount.text = user.followerCounts.toString()
+        binding.tvFollowingCount.text = user.followingCounts.toString()
+        binding.tvReadBookCount.text = bookWorm.readcount.toString()
+        binding.ivBookworm.setImageResource(bookWorm.wormtype)
 
 
         //팔로우 버튼을 클릭했을때 버튼 모양, 상태 변경
@@ -134,7 +156,11 @@ class ProfileInfoActivity : AppCompatActivity() {
                         }.await().followerCounts.toLong()
                     )
                 }
-                myFCMService!!.sendPostToFCM(this,user!!.fcMtoken,  nowUser!!.username+"님이 팔로우하였습니다")
+                myFCMService!!.sendPostToFCM(
+                    this,
+                    user!!.fCMtoken,
+                    nowUser!!.username + "님이 팔로우하였습니다"
+                )
             }
 
         }
@@ -158,6 +184,6 @@ class ProfileInfoActivity : AppCompatActivity() {
     }
 
     fun setFollowerCnt(count: Long) {
-        binding.tvFollowCount.text = count.toString()
+        binding.tvFollowerCount.text = count.toString()
     }
 }

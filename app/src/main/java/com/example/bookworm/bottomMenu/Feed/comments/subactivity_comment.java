@@ -4,6 +4,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,17 +15,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
+import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.extension.DiffUtilCallback;
 import com.example.bookworm.bottomMenu.Feed.items.Feed;
 import com.example.bookworm.appLaunch.views.MainActivity;
-import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Modify;
 import com.example.bookworm.databinding.SubactivityCommentBinding;
 import com.example.bookworm.bottomMenu.Feed.Fragment_feed;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.PersonalD;
+import com.example.bookworm.notification.MyFCMService;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,12 +39,15 @@ public class subactivity_comment extends AppCompatActivity {
     Context context;
     Feed item;
     UserInfo nowUser;//현재 사용자 계정
+    UserInfo creatorUser;
     final int LIMIT = 10;
     int page = 1;
     int position;
     FBModule fbModule;
     private Map map;
     CommentAdapter commentAdapter;
+    MyFCMService myFCMService;
+    UserInfoViewModel uv;
     public ArrayList commentList;
     private Boolean isLoading = false, canLoad = true;
     DocumentSnapshot lastVisible = null;
@@ -55,10 +62,10 @@ public class subactivity_comment extends AppCompatActivity {
                     newList.add(0, item);
                     replaceItem(newList);
                     //피드에서도 수정 내역을 반영
-                    Fragment_feed ff=((Fragment_feed) ((MainActivity) Fragment_feed.mContext).getSupportFragmentManager().findFragmentByTag("0"));
-                    ArrayList list= new ArrayList(ff.feedList);
+                    Fragment_feed ff = ((Fragment_feed) ((MainActivity) Fragment_feed.mContext).getSupportFragmentManager().findFragmentByTag("0"));
+                    ArrayList list = new ArrayList(ff.feedList);
                     list.remove(item.getPosition());
-                    list.add(item.getPosition(),item);
+                    list.add(item.getPosition(), item);
                     ff.getFeedAdapter().submitList(list);
                 }
             });
@@ -77,17 +84,23 @@ public class subactivity_comment extends AppCompatActivity {
         item = (Feed) getIntent().getSerializableExtra("item");
         position = (Integer) getIntent().getSerializableExtra("position");
         nowUser = new PersonalD(this).getUserInfo();
-        context=this;
+        context = this;
         fbModule = new FBModule(context);
+        myFCMService = new MyFCMService();
+        uv = new ViewModelProvider(this, new UserInfoViewModel.Factory(context)).get(UserInfoViewModel.class);
         setItems();
         binding.mRecyclerView.setNestedScrollingEnabled(false);
 
-//        showShimmer(true);
+        showShimmer(true);
 
         binding.btnWriteComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addComment();
+                try {
+                    addComment();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -95,6 +108,10 @@ public class subactivity_comment extends AppCompatActivity {
     private void setItems() {
         initComment();
         loadData();
+        uv.getUser(item.getUserToken(), true);
+        uv.getData().observe(this, userInfo -> {
+            creatorUser = userInfo;
+        });
     }
 
     //피드 초기화
@@ -167,7 +184,7 @@ public class subactivity_comment extends AppCompatActivity {
         diffResult.dispatchUpdatesTo(commentAdapter);
     }
 
-    private void addComment() {
+    private void addComment() throws MalformedURLException {
         Map<String, Object> data = new HashMap<>();
         String string = binding.edtComment.getText().toString();
 
@@ -188,6 +205,8 @@ public class subactivity_comment extends AppCompatActivity {
             binding.edtComment.clearFocus();
             binding.edtComment.setText(null);
             binding.mRecyclerView.smoothScrollToPosition(0); //맨 위로 포커스를 이동 (본인 댓글 확인을 위함)
+
+            myFCMService.sendPostToFCM(context, creatorUser.getFCMtoken(), nowUser.getUsername() + "님이 댓글을 남겼습니다. " + "\"" + string + "\"");
         }
     }
 
@@ -213,7 +232,7 @@ public class subactivity_comment extends AppCompatActivity {
         } else {
             if (page == 1) {
                 isLoading = false;
-                if(commentList.size()<1) {
+                if (commentList.size() < 1) {
                     commentList = new ArrayList(); //챌린지를 담는 리스트 생성
                     commentList.add(item);
                 }
@@ -261,8 +280,9 @@ public class subactivity_comment extends AppCompatActivity {
             }
             page++; //로딩을 다하면 그다음 페이지로 넘어간다.
         }
-//        showShimmer(false);
+        showShimmer(false);
     }
+
     //shimmer을 켜고 끄고 하는 메소드
     private void showShimmer(Boolean bool) {
         if (bool) {

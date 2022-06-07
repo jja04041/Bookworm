@@ -44,29 +44,31 @@ public class ChatAdapter extends BaseAdapter {
     public View getView(int position, View view, ViewGroup viewGroup) {
 
         //현재 보여줄 번째의(position)의 데이터로 뷰를 생성
-        MessageItem item=messageItems.get(position);
+        MessageItem item = messageItems.get(position);
 
         //재활용할 뷰는 사용하지 않음!!
-        View itemView=null;
+        View itemView = null;
 
         //메세지가 내 메세지인지??
-        if(item.getName().equals(username)){
-            itemView= layoutInflater.inflate(R.layout.my_msgbox,viewGroup,false);
-        }else{
-            itemView= layoutInflater.inflate(R.layout.other_msgbox,viewGroup,false);
+        if (item.getName().equals(username)) {
+            itemView = layoutInflater.inflate(R.layout.my_msgbox, viewGroup, false);
+        } else {
+            itemView = layoutInflater.inflate(R.layout.other_msgbox, viewGroup, false);
         }
 
         //만들어진 itemView에 값들 설정
-        ImageView iv= itemView.findViewById(R.id.iv);
-        TextView tvName= itemView.findViewById(R.id.tv_name);
-        TextView tvMsg= itemView.findViewById(R.id.tv_msg);
-        TextView tvTime= itemView.findViewById(R.id.tv_time);
+        ImageView iv = itemView.findViewById(R.id.iv);
+        TextView tvName = itemView.findViewById(R.id.tv_name);
+        TextView tvMsg = itemView.findViewById(R.id.tv_msg);
+        TextView tvTime = itemView.findViewById(R.id.tv_time);
+
 
         tvName.setText(item.getName());
         tvMsg.setText(item.getMessage());
         tvTime.setText(item.getTime());
 
-        Glide.with(itemView).load(item.getProfileUrl()).into(iv);
+        Glide.with(itemView).load(item.getProfileUrl()).circleCrop().into(iv);
+
 
         return itemView;
     }

@@ -12,11 +12,12 @@ import com.google.firebase.firestore.DocumentSnapshot
 //뷰는 전달된 값을 화면에 표시한다.
 
 interface UserContract {
-    interface View{
-        fun showProfile(userInfo: UserInfo?,boolean: Boolean?)
+    interface View {
+        fun showProfile(userInfo: UserInfo?, boolean: Boolean?)
     }
-    interface Presenter{
-        fun getData(token:String,boolean: Boolean?)
-        fun setProfile(document:DocumentSnapshot)
+
+    interface Presenter {
+        fun getData(token: String, boolean: Boolean?)
+        fun setProfile(document: DocumentSnapshot)
     }
 }

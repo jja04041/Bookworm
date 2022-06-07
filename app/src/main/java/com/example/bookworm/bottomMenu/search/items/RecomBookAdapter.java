@@ -94,6 +94,7 @@ public class RecomBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             //북 클래스의 각 아이템을 세팅하는 메소드
 
         }
+
         public void setItem(Book item) {
             Glide.with(itemView).load(item.getImg_url()).into(ivBook);
             tvBookTitle.setText(item.getTitle());

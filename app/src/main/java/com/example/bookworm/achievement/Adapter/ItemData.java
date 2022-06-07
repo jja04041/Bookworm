@@ -8,12 +8,13 @@ public class ItemData {
     String title;
     Context context;
 
-    public ItemData(int image, int type, String title, Context context){
+    public ItemData(int image, int type, String title, Context context) {
         this.image = image;
         this.type = type;
         this.title = title;
         this.context = context;
     }
+
     public int getType() {
         return type;
     }

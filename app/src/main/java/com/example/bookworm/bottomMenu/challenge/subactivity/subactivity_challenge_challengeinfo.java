@@ -17,8 +17,8 @@ import com.bumptech.glide.Glide;
 import com.example.bookworm.bottomMenu.challenge.items.Challenge;
 import com.example.bookworm.bottomMenu.challenge.board.subactivity_challenge_board;
 import com.example.bookworm.core.userdata.PersonalD;
-import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.core.internet.FBModule;
+import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.databinding.SubactivityChallengeChallengeinfoBinding;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -39,7 +39,7 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding= SubactivityChallengeChallengeinfoBinding.inflate(getLayoutInflater());
+        binding = SubactivityChallengeChallengeinfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         ActivityInit(); //변수 초기화
         UpdateUI(); // 화면 갱신
@@ -135,7 +135,6 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
     //D-day 계산
     public String countDday(String EndDate) {
         try {
-//            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
             Calendar todaCal = Calendar.getInstance(); //오늘날짜 가져오기
             Calendar ddayCal = Calendar.getInstance(); //오늘날짜를 가져와 변경시킴
@@ -238,6 +237,7 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
         binding.btnChallengeJoin.setEnabled(false);
         binding.btnChallengeJoin.setText("정원이 초과된 챌린지입니다.");
     }
+
     //참여한 경우 세팅
     private void partJoin() {
         binding.btnChallengeJoin.setEnabled(false); //이미 사용자의 토큰이 있다면 (이미 참여한 챌린지라면) 챌린지 참여 버튼 비활성화

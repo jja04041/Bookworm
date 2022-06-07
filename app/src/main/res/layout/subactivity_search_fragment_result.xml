@@ -296,9 +296,6 @@
                     android:textSize="18dp"
                     android:textStyle="bold" />
 
-                <!-- 이 리사이클러 뷰에 들어가는 아이템이 search_fragment_result_feed.xml   -->
-                <!--            https://velog.io/@kimbsu00/Android-7  -->
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/mRecyclerView"
                     android:layout_width="match_parent"

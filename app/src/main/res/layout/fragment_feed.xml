@@ -8,8 +8,6 @@
     tools:context="com.example.bookworm.bottomMenu.Feed.">
 
 
-
-
     <LinearLayout
         android:id="@+id/lltopbar"
         android:layout_width="match_parent"
@@ -19,15 +17,6 @@
         <include layout="@layout/fragment_feed_topbar" />
 
     </LinearLayout>
-
-<!--    <androidx.core.widget.NestedScrollView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content">-->
-<!--        <androidx.recyclerview.widget.RecyclerView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:id="@+id/storybar"/>-->
-<!--    </androidx.core.widget.NestedScrollView>-->
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/SFLFeed"

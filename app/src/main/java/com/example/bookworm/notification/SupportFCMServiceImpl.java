@@ -8,12 +8,10 @@ import com.example.bookworm.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import okhttp3.Headers;
-import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

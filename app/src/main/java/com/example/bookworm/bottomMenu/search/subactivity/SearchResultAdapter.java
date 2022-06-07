@@ -19,11 +19,9 @@ import com.example.bookworm.bottomMenu.Feed.views.FeedViewModel;
 import com.example.bookworm.bottomMenu.challenge.board.Board;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.core.userdata.interfaces.UserContract;
-import com.example.bookworm.core.userdata.modules.LoadUser;
 import com.example.bookworm.databinding.SearchFragmentResultFeedBinding;
 
 import java.util.ArrayList;
-import java.util.Observer;
 
 
 public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnSearchResultItemClickListener {
@@ -75,13 +73,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public class ItemViewHolder extends RecyclerView.ViewHolder implements UserContract.View {
 
         SearchFragmentResultFeedBinding binding;
-//        LoadUser user;
         MutableLiveData<UserInfo> feedUserInfo = new MutableLiveData<>();
 
         public ItemViewHolder(@NonNull View itemView, final OnSearchResultItemClickListener listener) {
             super(itemView);
             binding = SearchFragmentResultFeedBinding.bind(itemView);
-//            user = new LoadUser(this);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -98,7 +94,6 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
         public void setItem(Feed item) {
-//            user.getData(item.getUserToken(), null);
             binding.tvCommentContent.setText(item.getFeedText());
             binding.tvDate.setText(item.getDate());
 
@@ -113,7 +108,6 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public void showProfile(@NonNull UserInfo userInfo, @NonNull Boolean bool) {
             Glide.with(context).load(userInfo.getProfileimg()).circleCrop().into(binding.imgProfile);
             binding.tvNickname.setText(userInfo.getUsername());
-//            ((search_fragment_subActivity_result) context).showShimmer(false);
         }
     }
 

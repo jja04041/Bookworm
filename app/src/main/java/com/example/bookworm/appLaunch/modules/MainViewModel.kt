@@ -15,25 +15,28 @@ import kotlinx.coroutines.launch
 //앱  로그인 시에 사용하는 뷰모델
 
 @SuppressLint("StaticFieldLeak")
-class MainViewModel(val context: Context):ViewModel() {
+class MainViewModel(val context: Context) : ViewModel() {
     val ct = if (context is MainActivity) context else context as LoginActivity
-    var userInfoViewModel= ViewModelProvider(ct,UserInfoViewModel.Factory(context)).get(UserInfoViewModel::class.java)
-    val data:MutableLiveData<Boolean> = MutableLiveData()
-    val userInfo:MutableLiveData<UserInfo> = MutableLiveData()
+    var userInfoViewModel =
+        ViewModelProvider(ct, UserInfoViewModel.Factory(context)).get(UserInfoViewModel::class.java)
+    val data: MutableLiveData<Boolean> = MutableLiveData()
+    val userInfo: MutableLiveData<UserInfo> = MutableLiveData()
 
-    class Factory(val context: Context): ViewModelProvider.Factory{
+    class Factory(val context: Context) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return MainViewModel(context) as T
         }
     }
-    fun createUser(userInfo:UserInfo){
+
+    fun createUser(userInfo: UserInfo) {
         viewModelScope.launch {
-            data.value= userInfoViewModel.createUser(userInfo)
+            data.value = userInfoViewModel.createUser(userInfo)
         }
     }
-    fun getUser(token:String?,getFromExt:Boolean){
+
+    fun getUser(token: String?, getFromExt: Boolean) {
         viewModelScope.launch {
-            userInfoViewModel.getUser(token,getFromExt)
+            userInfoViewModel.getUser(token, getFromExt)
             userInfo.value = userInfoViewModel.data.value
         }
     }

@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -33,8 +32,8 @@ import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subAct
 import com.example.bookworm.Feed.CustomPopup
 import com.example.bookworm.achievement.Achievement
 import com.example.bookworm.bottomMenu.Feed.views.FeedViewModel
-import com.example.bookworm.core.userdata.modules.LoadUser
 import com.example.bookworm.databinding.FragmentFeedItemBinding
+import com.example.bookworm.notification.MyFCMService
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -50,13 +49,14 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
     var restricted = false
     var context: Context? = null
     var fbModule = FBModule(context)
+    private var myFCMService: MyFCMService? = null
     var Count: Long = 0
     var pv: FeedViewModel
     val nowUserInfo: MutableLiveData<UserInfo> = MutableLiveData()
     val feedUserInfo: MutableLiveData<UserInfo> = MutableLiveData()
     val commentUserInfo: MutableLiveData<UserInfo> = MutableLiveData()
-//
-//    var loadUser2: LoadUser? = null
+    var feedUserFcmtoken: String? = null
+
     var dateDuration: String? = null
 
     //생성자를 만든다.
@@ -75,12 +75,14 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
         //감시
         feedUserInfo.observe(context, {
             showProfile(it, false)
+            feedUserFcmtoken = it.fCMtoken
         })
         commentUserInfo.observe(context, {
             showProfile(it, true)
         })
+
+        myFCMService = MyFCMService()
 //
-//        loadUser2 = LoadUser(this) //최근 댓글의 프로필
     }
 
     //아이템을 세팅하는 메소드
@@ -94,6 +96,7 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
         binding!!.llbook.setOnClickListener({
             val intent = Intent(context, search_fragment_subActivity_result::class.java)
             intent.putExtra("itemid", book.itemId)
+            intent.putExtra("data", book)
             context!!.startActivity(intent)
         })
         //작성자 UserInfo
@@ -105,10 +108,9 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
         //댓글 창 세팅
         Count = item.commentCount
         if (Count > 0) {
-            pv.getUser(item.comment.userToken,commentUserInfo)
+            pv.getUser(item.comment.userToken, commentUserInfo)
             setComment(item.comment)
-        }
-        else {
+        } else {
             setViewV(false)
             binding!!.llCommentInfo.visibility = View.GONE //댓글이 0개인 경우, 몇개 더보기 지움.
         }
@@ -134,7 +136,7 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
             val userComment: String = binding!!.edtComment.getText().toString()
             if (userComment != "" && userComment != null) {
                 Count++
-                pv.getUser(nowUser.token,commentUserInfo)
+                pv.getUser(nowUser.token, commentUserInfo)
                 setComment(addComment(item.feedID))
             }
         })
@@ -142,7 +144,7 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
         //좋아요 수 세팅
         binding!!.tvLike.setText(item.likeCount.toString())
         liked = try {
-            if (nowUser!!.likedPost.contains(item.feedID)) {
+            if (nowUser!!.likedPost!!.contains(item.feedID)) {
                 binding!!.btnLike.setBackground(context!!.getDrawable(R.drawable.icon_like_red))
                 true
             } else {
@@ -201,6 +203,12 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
         imm.hideSoftInputFromWindow(binding!!.edtComment.getWindowToken(), 0)
         binding!!.edtComment.clearFocus()
         binding!!.edtComment.setText(null)
+
+        myFCMService!!.sendPostToFCM(
+            context,
+            feedUserFcmtoken, "${nowUser!!.username}님이 댓글을 남겼습니다.\"${comment.contents}\""
+        )
+
         return comment
     }
 
@@ -217,7 +225,7 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
         if (limit < 5) {
             limit += 1
             nowUser = PersonalD(context).userInfo
-            strings = nowUser!!.getLikedPost()
+            strings = nowUser!!.likedPost
             val map = HashMap<Any, Any>()
             var likeCount: Int = binding!!.tvLike.getText().toString().toInt()
             if (!liked) {
@@ -226,6 +234,11 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
                 liked = true
                 strings!!.add(item.feedID)
                 binding!!.btnLike.setBackground(context!!.getDrawable(R.drawable.icon_like_red))
+
+                myFCMService!!.sendPostToFCM(
+                    context,
+                    feedUserFcmtoken, "${nowUser!!.username}님이 좋아요를 표시했습니다."
+                )
             } else {
                 //현재 좋아요를 누른 상태
                 likeCount -= 1
@@ -234,7 +247,7 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
                 strings!!.remove(item.feedID)
                 binding!!.btnLike.setBackground(context!!.getDrawable(R.drawable.icon_like))
             }
-            nowUser!!.setLikedPost(strings)
+            nowUser!!.likedPost = strings
             map["nowUser"] = nowUser!!
             binding!!.tvLike.setText(likeCount.toString())
             map["liked"] = liked
@@ -264,18 +277,11 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
 
     //댓글을 화면에 세팅하는 메소드
     fun setComment(comment: Comment?) {
-            setViewV(true)
-            binding!!.tvCommentCount.setText(Count.toString())
-            binding!!.tvCommentContent.setText(comment!!.contents)
-            getDateDuration(comment.madeDate)
-            binding!!.tvCommentDate.setText(dateDuration)
-//        if (comment != null) {
-//
-////            loadUser2!!.getData(comment.userToken, true)
-//
-//
-//
-//        } else setViewV(false)
+        setViewV(true)
+        binding!!.tvCommentCount.setText(Count.toString())
+        binding!!.tvCommentContent.setText(comment!!.contents)
+        getDateDuration(comment.madeDate)
+        binding!!.tvCommentDate.setText(dateDuration)
     }
 
     //뷰를 보여주는 메소드(Visibility 조정)
@@ -315,12 +321,13 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
 
         try {
             if (bool == false) {
-                if(userInfo!=null){
-                binding!!.tvNickname.setText(userInfo!!.username)
-                Glide.with(itemView).load(userInfo!!.profileimg).circleCrop()
-                    .into(binding!!.ivProfileImage)}
+                if (userInfo != null) {
+                    binding!!.tvNickname.setText(userInfo!!.username)
+                    Glide.with(itemView).load(userInfo!!.profileimg).circleCrop()
+                        .into(binding!!.ivProfileImage)
+                }
             } else if (bool == true) {
-                if(userInfo!=null) {
+                if (userInfo != null) {
                     binding!!.tvCommentNickname.setText(userInfo!!.username)
                     Glide.with(binding!!.getRoot()).load(userInfo!!.profileimg).circleCrop()
                         .into(binding!!.ivCommentProfileImage)

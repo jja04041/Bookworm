@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".bottomMenu.search.subactivity.search_fragment_subActivity_main">
-    <!--이전으로 돌아가는 버튼 세팅-->
-
 
     <FrameLayout
         android:id="@+id/setting"
@@ -39,8 +37,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginTop="5dp"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <FrameLayout
@@ -56,8 +54,8 @@
                 android:background="@drawable/round_button_gray"
                 android:hint="   책 검색"
                 android:imeOptions="actionSearch"
-                android:paddingHorizontal="15dp"
                 android:inputType="text"
+                android:paddingHorizontal="15dp"
                 android:singleLine="true">
 
                 <requestFocus />
@@ -67,12 +65,11 @@
                 android:id="@+id/btnSearch"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginRight="10dp"
                 android:layout_gravity="end"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/search" />
 
         </FrameLayout>
-
 
 
         <Spinner

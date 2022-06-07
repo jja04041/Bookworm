@@ -61,7 +61,7 @@ public class FBModule {
             //피드 표시(토큰)
         else if (idx == 1) {
             //map객체: 팔로워 목록
-            query =query.orderBy("FeedID", Query.Direction.DESCENDING);
+            query = query.orderBy("FeedID", Query.Direction.DESCENDING);
             if (map.get("FeedID") != null) {
                 query = collectionReference.document((String) map.get("FeedID")).collection("comments").orderBy("commentID", Query.Direction.DESCENDING);
             }
@@ -70,7 +70,6 @@ public class FBModule {
                 DocumentSnapshot snapshot = (DocumentSnapshot) map.get("lastVisible");
                 query = query.startAfter(snapshot);
             }
-
 
 
             query = query.limit(LIMIT);
@@ -95,16 +94,14 @@ public class FBModule {
 
 
         //결과 확인
-        task.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task task) {
-                if (task.isSuccessful()) {
-                    if (token != null)
-                        successRead((DocumentSnapshot) task.getResult(), idx, map);
-                    else successRead((QuerySnapshot) task.getResult(), idx, map); //챌린지 조회
-                } else {
-                    Log.d("TAG3", "get failed with ", task.getException());
-                }
+        task.addOnCompleteListener((OnCompleteListener<Object>) task -> {
+            if (task.isSuccessful()) {
+                if (task.getResult() instanceof DocumentSnapshot) {
+                    if (token != null) successRead((DocumentSnapshot) task.getResult(), idx, map);
+                } else if (task.getResult() instanceof QuerySnapshot)
+                    successRead((QuerySnapshot) task.getResult(), idx, map); //챌린지 조회
+            } else {
+                Log.d("TAG3", "get failed with ", task.getException());
             }
         });
     }
@@ -120,12 +117,11 @@ public class FBModule {
                     document.getReference().update("UserInfo.genre", map.get("userinfo_genre"));
                 }
                 // 업적, 인벤토리 업데이트
-                else if (map.get("bookworm_achievementmap") != null  ) {
-                    if(map.get("bookworm_wormvec") != null) {
+                else if (map.get("bookworm_achievementmap") != null) {
+                    if (map.get("bookworm_wormvec") != null) {
                         document.getReference().update("BookWorm.achievementmap", map.get("bookworm_achievementmap"));
                         document.getReference().update("BookWorm.wormvec", map.get("bookworm_wormvec"));
-                    }
-                    else if(map.get("bookworm_bgvec") != null) {
+                    } else if (map.get("bookworm_bgvec") != null) {
                         document.getReference().update("BookWorm.achievementmap", map.get("bookworm_achievementmap"));
                         document.getReference().update("BookWorm.bgvec", map.get("bookworm_bgvec"));
                     }
@@ -135,8 +131,7 @@ public class FBModule {
                     // bg update
                 } else if (map.get("bookworm_bgtype") != null) {
                     document.getReference().update("BookWorm.bgtype", map.get("bookworm_bgtype"));
-                }
-                else if (map.get("bookworm_readcount") != null) {
+                } else if (map.get("bookworm_readcount") != null) {
                     document.getReference().update("BookWorm.readcount", map.get("bookworm_readcount"));
                 }
                 //회원인 경우, 로그인 처리
@@ -249,21 +244,6 @@ public class FBModule {
 
     public void saveData(int idx, Map data) {
         switch (idx) {
-//            case 0://회원가입
-//                UserInfo userInfo = (UserInfo) (data.get("UserInfo"));
-//
-//                data.put("UserInfo", userInfo);
-//                // db.collection(location[idx]).document(userInfo.getToken()).set(data);
-//
-//                // bookworm 필드 추가
-//                BookWorm bookworm = new BookWorm();
-//                // user의 토큰 수령
-//                bookworm.setToken(userInfo.getToken());
-//                data.put("BookWorm", bookworm);
-//                db.collection(location[idx]).document(userInfo.getToken()).set(data);
-//
-////                ((LoginActivity) context).signIn(Boolean.TRUE, userInfo, bookworm); //회원이 아닌 경우
-//                break;
 
             case 1: //피드 작성
                 db.collection(location[idx]).document((String) data.get("FeedID")).set(data);

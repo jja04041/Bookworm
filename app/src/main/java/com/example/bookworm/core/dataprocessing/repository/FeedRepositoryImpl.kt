@@ -2,9 +2,9 @@ package com.example.bookworm.core.dataprocessing.repository
 
 import com.example.bookworm.bottomMenu.Feed.items.Feed
 
-class FeedRepositoryImpl : DataRepository.HandleFeed{
+class FeedRepositoryImpl : DataRepository.HandleFeed {
     override fun getFeedList(lastVisible: String?) {
-        if(lastVisible!=null){
+        if (lastVisible != null) {
 
         }
     }

@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
 import com.example.bookworm.core.userdata.UserInfo;
+import com.example.bookworm.notification.MyFCMService;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.math.BigInteger;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -34,6 +36,8 @@ public class activity_chating extends AppCompatActivity {
     ArrayList<MessageItem> messageItems=new ArrayList<>();
     ChatAdapter adapter;
 
+    MyFCMService myFCMService;
+
     //Firebase Database 관리 객체참조변수
     FirebaseDatabase firebaseDatabase;
 
@@ -42,8 +46,11 @@ public class activity_chating extends AppCompatActivity {
 
     // 유저 데이터
     private UserInfoViewModel uv;
-    UserInfoViewModel pv;
-    UserInfo userinfo;
+    private UserInfoViewModel pv;
+    private UserInfo userinfo;
+    private UserInfo opponent;
+
+    private TextView tv;
 
     Context context;
 
@@ -52,10 +59,14 @@ public class activity_chating extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chating);
 
+        myFCMService = new MyFCMService();
+
         // 상대방 토큰 받음
         Intent intent = getIntent();
-        BigInteger opponent = (BigInteger) intent.getSerializableExtra("opponent");
+        opponent = (UserInfo) intent.getSerializableExtra("opponent");
 
+        tv = findViewById(R.id.tv_chatroomtopbar);
+        tv.setText(opponent.getUsername());
 
         context = activity_chating.this;
 
@@ -63,28 +74,30 @@ public class activity_chating extends AppCompatActivity {
         uv = new ViewModelProvider(this, new UserInfoViewModel.Factory(context)).get(UserInfoViewModel.class);
 
 
+
         pv.getUser(null, false);
 
         pv.getData().observe(this, userInfo -> {
             userinfo = userInfo;
 
-            //제목줄 제목글시를 닉네임으로(또는 채팅방)
-            //getSupportActionBar().setTitle(userinfo.getUsername());
 
             et = findViewById(R.id.et);
             listView = findViewById(R.id.chat_listview);
             adapter = new ChatAdapter(messageItems, getLayoutInflater(), userinfo.getUsername());
             listView.setAdapter(adapter);
 
-            // 내토큰 + 상대토큰 = 채팅방 이름
-            BigInteger mytoken = new BigInteger(userinfo.getToken());
-            BigInteger result = mytoken.add(opponent);
 
-            String chatpath = result.toString();
 
             //Firebase DB관리 객체와 chat노드 참조객체 얻어오기
             firebaseDatabase = FirebaseDatabase.getInstance();
-            chatRef = firebaseDatabase.getReference(chatpath);
+
+            BigInteger mytoken = new BigInteger(userinfo.getToken());
+            BigInteger oppotoken = new BigInteger(opponent.getToken());
+            BigInteger result = mytoken.add(oppotoken);
+            String key = result.toString();
+
+            //String key = userinfo.getToken() + opponent.getToken();
+            chatRef = firebaseDatabase.getReference(key);
 
             //firebaseDB에서 채팅 메세지들 실시간 읽어오기
             //chat노드에 저장되어 있는 데이터들을 읽어오기
@@ -108,6 +121,8 @@ public class activity_chating extends AppCompatActivity {
                 @Override
                 public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
+
+
                 }
                 @Override
                 public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
@@ -127,34 +142,38 @@ public class activity_chating extends AppCompatActivity {
         });
 
 
-
+//        getSupportActionBar().setTitle(opponent.getUsername());
     }
-    public void clickSend(View view) {
+    public void clickSend(View view) throws MalformedURLException {
 
         //firebase DB에 저장할 값들
         String nickName= userinfo.getUsername();
-        String opponent = userinfo.getUsername();
+        String opponentName = userinfo.getUsername();
         String message= et.getText().toString();
         String pofileUrl= userinfo.getProfileimg();
+        String token= userinfo.getToken();
+        MessageItem messageItem= null;
 
-
-        //메세지 작성 시간 문자열로
+                //메세지 작성 시간 문자열로
         Calendar calendar= Calendar.getInstance(); //현재 시간을 가지고 있는 객체
-        String time=calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE); //14:16
+        String time=calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE);
 
         //firebase DB에 저장할 값(MessageItem객체) 설정
-        MessageItem messageItem= new MessageItem(nickName, message,time,pofileUrl);
+        if(!message.equals("")) {
+            new MessageItem(nickName, message,time,pofileUrl, token);
+            //chat노드에 MessageItem객체를 전달
+            chatRef.push().setValue(messageItem);
+            //EditText에 있는 글씨 지우기
+            et.setText("");
+            myFCMService.sendPostToFCM(context, opponent.getFCMtoken(), userinfo.getUsername() + "님이 메시지를 보냈습니다. " + "\"" + message + "\"");
+        }
 
 
-        //char노드에 MessageItem객체를 통해
-        chatRef.push().setValue(messageItem);
 
-        //EditText에 있는 글씨 지우기
-        et.setText("");
 
-        //소프트키패드를 안보이도록
-        InputMethodManager imm=(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),0);
+//        //소프트키패드를 안보이도록
+//        InputMethodManager imm=(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),0);
 
     }
 }

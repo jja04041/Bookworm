@@ -8,9 +8,6 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-    <!-- subactivity_search_fragment_result 의
-    하단 리사이클러뷰에 들어갈 피드 xml -->
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -45,7 +42,6 @@
 
             </LinearLayout>
 
-
             <TextView
                 android:id="@+id/tvDate"
                 android:layout_width="wrap_content"
@@ -53,9 +49,7 @@
                 android:layout_marginTop="5dp"
                 android:text="##/## ##:##" />
 
-
         </LinearLayout>
-
 
     </FrameLayout>
 

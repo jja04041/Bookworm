@@ -60,12 +60,8 @@ public class subActivity_Feed_Create extends AppCompatActivity {
                     Intent intent = result.getData();
                     this.selected_book = (Book) intent.getSerializableExtra("data");
                     binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목만 세팅한다.
-
-                    //Glide.with(this).load(selected_book.getImg_url()).into(Thumbnail); //책 표지 로딩후 삽입.
                 }
             });
-
-
 
 
     @Override
@@ -86,10 +82,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             feedCreateLabel[i] = findViewById(feedCreateLabelID[i]);
             feedCreateLabel[i].setVisibility(View.INVISIBLE);
         }
-
-
-        //tvlabel1.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#55ff0000"))); //자바로 BackgroundTint 설정
-
 
         current_context = this;
         uv = new UserInfoViewModel(current_context);
@@ -115,8 +107,8 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             Glide.with(this).load(userinfo.getProfileimg()).circleCrop().into(binding.ivProfileImage); //프로필사진 로딩후 삽입.
             binding.tvNickname.setText(userinfo.getUsername());
 
-            uv.getBwdata().observe(this,bookWorm -> {
-                userBw=bookWorm;
+            uv.getBwdata().observe(this, bookWorm -> {
+                userBw = bookWorm;
                 imageProcess.getBitmap().observe(this, bitmap -> {
                     //완료 버튼 (피드 올리기)
                     binding.tvFinish.setOnClickListener(view ->
@@ -130,7 +122,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
                                             -> dialog.dismiss())
                                     .show()
                     );
-                    imageProcess.getImgData().observe(this,imgurl->{
+                    imageProcess.getImgData().observe(this, imgurl -> {
                         feedUpload(imgurl);
                     });
                 });
@@ -149,14 +141,14 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             });
         });
 
-        if(selected_book != null)
+        if (selected_book != null)
             binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목만 세팅한다.
 
-        if(getIntent() != null) {
+        if (getIntent() != null) {
             intent = getIntent();
-            if((Book) intent.getSerializableExtra("data") != null){
-            selected_book = (Book) intent.getSerializableExtra("data");
-            binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목만 세팅한다.
+            if (intent.getSerializableExtra("data") != null) {
+                selected_book = (Book) intent.getSerializableExtra("data");
+                binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목만 세팅한다.
             }
         }
         imageProcess.getBitmapUri().observe(this, it -> {
@@ -189,11 +181,10 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 
     //서버에 이미지 업로드
     private void upload(Bitmap data, UserInfo userInfo) {
-
         FeedID = System.currentTimeMillis() + "_" + userInfo.getToken(); //현재 시각 + 사용자 토큰을 FeedID로 설정
         if (data != null) {
-          String name="feed_"+FeedID+".jpg";
-          imageProcess.uploadImage(data,name);
+            String name = "feed_" + FeedID + ".jpg";
+            imageProcess.uploadImage(data, name);
         } else {
             feedUpload(null);
         }
@@ -363,15 +354,8 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             if (imgUrl != null) map.put("imgurl", imgUrl); //이미지 url
 
             fbModule.readData(1, map, FeedID);
-
-//             장르 처리
-//            HashMap<String, Object> AfterCreatemap = new HashMap<>(); //피드 만들면 장르 up
-//            HashMap<String, Object> countmap = new HashMap<>(); // 피드 만들면
             userInfo.setGenre(selected_book.getCategoryname(), current_context);
-//            AfterCreatemap.put("userinfo_genre", userInfo.getGenre());
-//            fbModule.readData(0, AfterCreatemap, userInfo.getToken());
-////            BookWorm bookworm = new PersonalD(current_context).getBookworm();
-////            int count = bookworm.getReadcount();
+
             int count = userBw.getReadcount();
             userBw.setReadcount(++count);
             uv.updateUser(userInfo);
@@ -382,7 +366,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             achievement.CompleteAchievement(userInfo, current_context);
             exit = achievement.canreturn();
 
-            if(exit == true) {
+            if (exit == true) {
                 setResult(CREATE_OK);
                 finish();
             }

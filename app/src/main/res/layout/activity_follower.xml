@@ -32,8 +32,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="팔로우"
-                android:textSize="13dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                android:textSize="13dp" />
         </FrameLayout>
 
         <com.google.android.material.tabs.TabLayout

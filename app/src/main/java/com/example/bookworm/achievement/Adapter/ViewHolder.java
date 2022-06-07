@@ -15,17 +15,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bookworm.achievement.Listener.OnViewHolderItemClickListener;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.R;
-import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.PersonalD;
+import com.example.bookworm.core.userdata.UserInfo;
 
 import java.util.HashMap;
 
-public class ViewHolder extends  RecyclerView.ViewHolder  {
+public class ViewHolder extends RecyclerView.ViewHolder {
 
     TextView title;
     // 샘플 iv와 tap시 나오는 큰 iv
-    ImageView iv_1,iv_2, iv_bookworm;
+    ImageView iv_1, iv_2, iv_bookworm;
     Button btnsetworm;
     LinearLayout linearlayout;
     UserInfo userinfo;
@@ -54,7 +54,7 @@ public class ViewHolder extends  RecyclerView.ViewHolder  {
         });
     }
 
-    public void onBind(ItemData itemData, int position, SparseBooleanArray selectedItems){
+    public void onBind(ItemData itemData, int position, SparseBooleanArray selectedItems) {
         title.setText(itemData.getTitle());
         iv_1.setImageResource(itemData.getImage());
         iv_2.setImageResource(itemData.getImage());
@@ -68,13 +68,13 @@ public class ViewHolder extends  RecyclerView.ViewHolder  {
                 HashMap<String, Object> map = new HashMap<>();
 
                 // bookworm 세팅
-                if(0 == itemData.getType()) {
+                if (0 == itemData.getType()) {
                     bookworm.setWormtype(itemData.image);
                     fbModule = new FBModule(itemData.context);
                     map.put("bookworm_wormtype", bookworm.getWormtype());
                 }
                 // bg 세팅
-                if(1 == itemData.getType()) {
+                if (1 == itemData.getType()) {
                     bookworm.setBgtype(itemData.image);
                     fbModule = new FBModule(itemData.context);
                     map.put("bookworm_bgtype", bookworm.getBgtype());
@@ -82,7 +82,7 @@ public class ViewHolder extends  RecyclerView.ViewHolder  {
 
                 fbModule.readData(0, map, bookworm.getToken());
                 new PersonalD(itemData.context).saveBookworm(bookworm);
-                ((Activity)itemData.context).finish();
+                ((Activity) itemData.context).finish();
 
 
             }

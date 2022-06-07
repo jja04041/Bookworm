@@ -14,12 +14,7 @@ import com.example.bookworm.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import org.json.JSONObject;
-
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL;
 
 public class MyFCMService extends FirebaseMessagingService {
 
@@ -64,12 +59,13 @@ public class MyFCMService extends FirebaseMessagingService {
 
         builder.setContentTitle(title)
                 .setContentText(body)
-                .setSmallIcon(R.drawable.ic_launcher_background);
+                .setSmallIcon(R.drawable.appicon_bookworm);
 
         Notification notification = builder.build();
         notificationManager.notify(1, notification);
     }
 
+    //FCM 메시지
     public void sendPostToFCM(Context context, final String fcmtoken, final String message) throws MalformedURLException {
         SupportFCMServiceImpl service = new SupportFCMServiceImpl(context);
         service.sendMessage(fcmtoken, message);

@@ -12,7 +12,6 @@ import com.bumptech.glide.Glide;
 
 import com.example.bookworm.bottomMenu.challenge.items.Challenge;
 import com.example.bookworm.bottomMenu.challenge.subactivity.subactivity_challenge_board_create;
-import com.example.bookworm.bottomMenu.challenge.subactivity.subactivity_challenge_challengeinfo;
 import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_result;
 
 import com.example.bookworm.databinding.SubactivityChallengeBoardBinding;
@@ -55,7 +54,6 @@ public class subactivity_challenge_board extends AppCompatActivity {
         //넘겨받은 값 챌린지 객체에 넣음
         challenge = (Challenge) intent.getSerializableExtra("challenge");
 
-//        Book book = item.getBook();
         binding.feedBookAuthor.setText(challenge.getBook().getAuthor());
         Glide.with(this).load(challenge.getBook().getImg_url()).into(binding.feedBookThumb); //책 썸네일 설정
         binding.feedBookTitle.setText(challenge.getBook().getTitle());

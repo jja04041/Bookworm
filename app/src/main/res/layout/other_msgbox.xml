@@ -2,22 +2,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="8dp">
 
     <ImageView
         android:id="@+id/iv"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@mipmap/ic_launcher"
-        />
+        android:src="@mipmap/ic_launcher" />
+
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="name"
-        android:textColor="#333333"
+        android:layout_marginLeft="16dp"
         android:layout_toRightOf="@+id/iv"
-        android:layout_marginLeft="16dp"/>
+        android:text="name"
+        android:textColor="#333333" />
 
     <TextView
         android:id="@+id/tv_msg"
@@ -28,17 +28,19 @@
         android:layout_toRightOf="@id/iv"
         android:background="@drawable/bg_othermsgbox"
         android:maxWidth="250dp"
-        android:padding="12dp"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="8dp"
         android:text="디폴트 텍스트"
         android:textColor="#333333" />
+
     <TextView
         android:id="@+id/tv_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="13:35"
-        android:textSize="12sp"
-        android:layout_toRightOf="@+id/tv_msg"
+        android:layout_alignBottom="@id/tv_msg"
         android:layout_marginLeft="8dp"
-        android:layout_alignBottom="@id/tv_msg"/>
+        android:layout_toRightOf="@+id/tv_msg"
+        android:text="13:35"
+        android:textSize="12sp" />
 </RelativeLayout>
 

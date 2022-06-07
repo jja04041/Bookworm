@@ -16,7 +16,6 @@ import kotlinx.coroutines.launch
 //isFollower 0=팔로잉 탭, 1=팔로워 탭
 class FollowerViewHolder(
     val itemView: View, context: Context?, val nowUserInfo: UserInfo, val isFollower: Int
-//,val pager: PagerInterface.PageAdapter?
 ) :
     RecyclerView.ViewHolder(itemView) {
     var context = context//전달된 context
@@ -36,7 +35,7 @@ class FollowerViewHolder(
             else unfollowing()
             binding.btnFollow.setOnClickListener({
                 AlertDialog.Builder(context)
-                    .setMessage(if(item.isFollowed) "팔로우를 취소하시겠습니까?" else "팔로우 하시겠습니까?")
+                    .setMessage(if (item.isFollowed) "팔로우를 취소하시겠습니까?" else "팔로우 하시겠습니까?")
                     .setPositiveButton(
                         "네"
                     ) { dialog, which ->
@@ -72,14 +71,12 @@ class FollowerViewHolder(
     }
 
     fun following() {
-//        binding.btnFollow.setBackgroundColor(Color.BLUE) //버튼의 색상을 파란색으로 수정
         binding.btnFollow.isSelected = true
         binding.btnFollow.setText("팔로잉")
         v = true
     }
 
     fun unfollowing() {
-//        binding.btnFollow.setBackgroundColor(Color.RED)
         binding.btnFollow.isSelected = false
         binding.btnFollow.setText("팔로우")
         v = false
