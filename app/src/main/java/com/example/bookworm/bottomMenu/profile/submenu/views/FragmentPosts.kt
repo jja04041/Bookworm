@@ -9,11 +9,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
-import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumDisplay.item.AlbumDisplayAdapter
 import com.example.bookworm.bottomMenu.profile.submenu.posts.PostDisplayAdapter
 import com.example.bookworm.databinding.FragmentProfileFragmentPostsBinding
 
-class FragmentPosts(val token:String?) : Fragment() {
+class FragmentPosts(val token: String?) : Fragment() {
     var binding: FragmentProfileFragmentPostsBinding? = null
     var pv: UserInfoViewModel? = null
     lateinit var adapter: PostDisplayAdapter
@@ -32,7 +31,7 @@ class FragmentPosts(val token:String?) : Fragment() {
         pv!!.data.observe(viewLifecycleOwner, { userinfo ->
             pv!!.getFeedList(userinfo.token)
         })
-        if(token!=null) pv!!.getFeedList(token)
+        if (token != null) pv!!.getFeedList(token)
         pv!!.feedList.observe(viewLifecycleOwner, { list ->
             //받은 포스트 목록을 화면에 띄워줘야함.
             if (list.size == 0) binding!!.llalertNoPosts.visibility = View.VISIBLE
@@ -48,7 +47,7 @@ class FragmentPosts(val token:String?) : Fragment() {
     fun initRecyclerView() {
         adapter = PostDisplayAdapter()
         binding!!.postRecyclerView.adapter = adapter
-        val animator =(binding!!.postRecyclerView?.itemAnimator as SimpleItemAnimator)
+        val animator = (binding!!.postRecyclerView?.itemAnimator as SimpleItemAnimator)
         animator.supportsChangeAnimations =
             false //데이터 업데이트 시, 플리커(깜빡이는 현상) 끄기
         val gridLayoutManager = GridLayoutManager(
@@ -59,7 +58,7 @@ class FragmentPosts(val token:String?) : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if(token==null) pv!!.getUser(null, false)
+        if (token == null) pv!!.getUser(null, false)
     }
 
     override fun onDestroy() {

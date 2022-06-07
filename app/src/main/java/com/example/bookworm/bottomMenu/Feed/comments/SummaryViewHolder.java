@@ -37,7 +37,7 @@ public class SummaryViewHolder extends RecyclerView.ViewHolder implements UserCo
         super(itemView);
         binding = LayoutCommentSummaryBinding.bind(itemView);
         this.context = context; //subComment의 context  =>
-        user=new LoadUser(this);
+        user = new LoadUser(this);
     }
 
     public void setItem(Feed item) {
@@ -47,7 +47,7 @@ public class SummaryViewHolder extends RecyclerView.ViewHolder implements UserCo
         Glide.with(context).load(book.getImg_url()).into(binding.feedBookThumb);
         binding.feedBookAuthor.setText(book.getAuthor());
         //프로필 표시
-        user.getData(item.getUserToken(),null);
+        user.getData(item.getUserToken(), null);
 
         //현재 로그인중인 유저
         UserInfo nowUser = new PersonalD(context).getUserInfo();

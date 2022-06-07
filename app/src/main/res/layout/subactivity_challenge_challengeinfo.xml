@@ -7,14 +7,14 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-        <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/SFLChallinfo"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/SFLChallinfo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-            <include layout="@layout/shimmer_subactivity_challenge_challengeinfo" />
+        <include layout="@layout/shimmer_subactivity_challenge_challengeinfo" />
 
-        </com.facebook.shimmer.ShimmerFrameLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <LinearLayout
         android:id="@+id/llChallinfo"
@@ -56,7 +56,6 @@
                         android:textSize="13dp" />
                 </FrameLayout>
 
-                <!-- 뒤에 넣을만한 배경이미지 있으면 좋을거같음. 투명한 검은 배경 겹쳐서 살짝 어둡게-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -184,7 +183,6 @@
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="10dp" />
 
-                <!--            프레임 레이아웃 자체에 OnClickListener 적용-->
                 <FrameLayout
                     android:id="@+id/FL_board"
                     android:layout_width="match_parent"

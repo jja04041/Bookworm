@@ -33,7 +33,7 @@ public class activity_chating extends AppCompatActivity {
     EditText et;
     ListView listView;
 
-    ArrayList<MessageItem> messageItems=new ArrayList<>();
+    ArrayList<MessageItem> messageItems = new ArrayList<>();
     ChatAdapter adapter;
 
     MyFCMService myFCMService;
@@ -74,7 +74,6 @@ public class activity_chating extends AppCompatActivity {
         uv = new ViewModelProvider(this, new UserInfoViewModel.Factory(context)).get(UserInfoViewModel.class);
 
 
-
         pv.getUser(null, false);
 
         pv.getData().observe(this, userInfo -> {
@@ -85,7 +84,6 @@ public class activity_chating extends AppCompatActivity {
             listView = findViewById(R.id.chat_listview);
             adapter = new ChatAdapter(messageItems, getLayoutInflater(), userinfo.getUsername());
             listView.setAdapter(adapter);
-
 
 
             //Firebase DB관리 객체와 chat노드 참조객체 얻어오기
@@ -122,16 +120,18 @@ public class activity_chating extends AppCompatActivity {
                 public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
 
-
                 }
+
                 @Override
                 public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
                 }
+
                 @Override
                 public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -144,22 +144,23 @@ public class activity_chating extends AppCompatActivity {
 
 //        getSupportActionBar().setTitle(opponent.getUsername());
     }
+
     public void clickSend(View view) throws MalformedURLException {
 
         //firebase DB에 저장할 값들
-        String nickName= userinfo.getUsername();
+        String nickName = userinfo.getUsername();
         String opponentName = userinfo.getUsername();
-        String message= et.getText().toString();
-        String pofileUrl= userinfo.getProfileimg();
-        String token= userinfo.getToken();
+        String message = et.getText().toString();
+        String pofileUrl = userinfo.getProfileimg();
+        String token = userinfo.getToken();
 
 
         //메세지 작성 시간 문자열로
-        Calendar calendar= Calendar.getInstance(); //현재 시간을 가지고 있는 객체
-        String time=calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE);
+        Calendar calendar = Calendar.getInstance(); //현재 시간을 가지고 있는 객체
+        String time = calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
 
         //firebase DB에 저장할 값(MessageItem객체) 설정
-        MessageItem messageItem= new MessageItem(nickName, message,time,pofileUrl, token);
+        MessageItem messageItem = new MessageItem(nickName, message, time, pofileUrl, token);
 
 
         //chat노드에 MessageItem객체를 전달
@@ -169,10 +170,6 @@ public class activity_chating extends AppCompatActivity {
         et.setText("");
 
         myFCMService.sendPostToFCM(context, opponent.getFCMtoken(), userinfo.getUsername() + "님이 메시지를 보냈습니다. " + "\"" + message + "\"");
-
-//        //소프트키패드를 안보이도록
-//        InputMethodManager imm=(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),0);
 
     }
 }

@@ -99,7 +99,7 @@ class AlbumProcessViewModel(val context: Context, val pv: UserInfoViewModel) : V
     fun uploadAlbum() {
         //서버에 이미지 업로드
         viewModelScope.launch {
-            albumData.albumId ="${albumData.albumName.hashCode()}_${token}"
+            albumData.albumId = "${albumData.albumName.hashCode()}_${token}"
             if (albumData.thumbnail != null) {
                 var uploadImageToServer = viewModelScope.launch {
                     var imgName = "album_${albumData.albumName.hashCode()}_${token}.jpg"

@@ -17,9 +17,10 @@ import kotlin.collections.ArrayList
 class AlbumProcessAdapter(val context: Context) :
     ListAdapter<Feed, AlbumProcessViewHolder>(MyDiffCallback) {
     val parentActivity = context as CreateAlbumActivity
-    var binding:FragmentRecordItemBinding?=null
+    var binding: FragmentRecordItemBinding? = null
     var onItemClickListener: ((Feed) -> Unit)? = null
-    var selectedFeed:ArrayList<Feed> = ArrayList()
+    var selectedFeed: ArrayList<Feed> = ArrayList()
+
     init {
         setHasStableIds(true)
     }
@@ -27,7 +28,7 @@ class AlbumProcessAdapter(val context: Context) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumProcessViewHolder {
         val inflater = LayoutInflater.from(parentActivity)
-        binding= FragmentRecordItemBinding.inflate(inflater)
+        binding = FragmentRecordItemBinding.inflate(inflater)
 
         return AlbumProcessViewHolder(binding!!, context)
     }
@@ -50,6 +51,7 @@ class AlbumProcessAdapter(val context: Context) :
             changeBackground(binding, R.color.purple_200)
         }
     }
+
     private fun changeBackground(binding: FragmentRecordItemBinding, resId: Int) {
         binding.frame.setBackgroundColor(ContextCompat.getColor(binding.root.context, resId))
     }

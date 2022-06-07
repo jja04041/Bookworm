@@ -5,34 +5,34 @@
     android:orientation="vertical">
 
     <Button
-        android:layout_gravity="right"
-        android:visibility="gone"
+        android:id="@+id/btnAddAlbum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btnAddAlbum"
+        android:layout_gravity="right"
         android:text="앨범추가"
-        />
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/albumRecyclerView"
         android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
     </androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout
         android:id="@+id/llalertNoAlbums"
         android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
         <TextView
-            android:layout_marginVertical="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="30dp"
             android:gravity="center"
-            android:textSize="20dp"
             android:text="생성된 앨범이 없습니다."
-            />
+            android:textSize="20dp" />
 
     </LinearLayout>
 

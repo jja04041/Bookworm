@@ -14,9 +14,7 @@ import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.Feed.items.Feed;
 import com.example.bookworm.bottomMenu.challenge.board.Board;
-import com.example.bookworm.bottomMenu.challenge.board.OnBoardItemClickListener;
 import com.example.bookworm.databinding.FragmentRecordItemBinding;
-import com.example.bookworm.databinding.SubactivityChallengeBoardItemBinding;
 
 import java.util.ArrayList;
 
@@ -88,7 +86,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             Glide.with(context).load(item.getBook().getImg_url()).into(binding.ivBookThumb);
             binding.feedBookTitle.setText(item.getBook().getTitle());
             binding.tvFeedtext.setText(item.getFeedText());
-            binding.tvFeedDate.setText(item.getDate().substring(5,10));
+            binding.tvFeedDate.setText(item.getDate().substring(5, 10));
         }
     }
 

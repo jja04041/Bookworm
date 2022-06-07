@@ -2,15 +2,12 @@ package com.example.bookworm.bottomMenu.profile;
 
 
 import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,8 +30,6 @@ import com.example.bookworm.databinding.FragmentProfileBinding;
 import com.example.bookworm.extension.follow.view.FollowViewModelImpl;
 import com.example.bookworm.extension.follow.view.FollowerActivity;
 import com.example.bookworm.core.internet.FBModule;
-
-import java.util.HashMap;
 
 public class fragment_profile extends Fragment implements LifecycleObserver {
 
@@ -206,15 +201,4 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
         }
         super.onHiddenChanged(hidden);
     }
-//    //장르를 세팅하는 함수
-//    private void setGenre(String key) {
-//        //로컬에서 업데이트
-//        userinfo.setGenre(key, current_context);
-//        //로컬 값 변경이후, 서버에 업데이트
-//        Map map = new HashMap();
-//        map.put("userinfo_genre", userinfo.getGenre());
-//        fbModule.readData(0, map, userinfo.getToken());
-//
-//        achievement.CompleteAchievement(userinfo, current_context);
-//    }
 }

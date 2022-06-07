@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.ListAdapter
 import com.example.bookworm.BottomMenu.Feed.ViewHolders.FeedItemVIewHolder
 import com.example.bookworm.R
 
-class FeedAdapter( c: Context) :
-    ListAdapter<Feed, RecyclerView.ViewHolder>(MyDiffCallback){
+class FeedAdapter(c: Context) :
+    ListAdapter<Feed, RecyclerView.ViewHolder>(MyDiffCallback) {
     var context: Context
 
     init {
@@ -41,6 +41,7 @@ class FeedAdapter( c: Context) :
     override fun getItemId(position: Int): Long {
         return currentList[position].hashCode().toLong()
     }
+
     //Arraylist에 있는 아이템을 뷰 홀더에 바인딩 하는 메소드
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val safePosition = holder.adapterPosition
@@ -76,6 +77,7 @@ class FeedAdapter( c: Context) :
         ): Boolean {
             return oldItem.feedID == newItem.feedID
         }
+
         @SuppressLint("DiffUtilEquals")
         override fun areContentsTheSame(
             oldItem: Feed,

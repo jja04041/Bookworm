@@ -1,7 +1,6 @@
 package com.example.bookworm.chat.chatlist;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
-import com.example.bookworm.chat.MessageItem;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,7 +32,6 @@ public class activity_chatlist extends AppCompatActivity {
     private UserInfoViewModel uv;
     private UserInfoViewModel pv;
     private UserInfo userinfo;
-
 
 
     @Override
@@ -76,11 +73,10 @@ public class activity_chatlist extends AppCompatActivity {
     private void getData() {
 
 
-//        orderByChild("token/"+userinfo.getToken()).equalTo(true).
         firebaseDatabase.getReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot dataSnapshot:snapshot.getChildren()) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     dataSnapshot.getValue();
 
 

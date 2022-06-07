@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:viewBindingIgnore="true"
     android:orientation="vertical"
-    tools:context=".appLaunch.views.MainActivity">
+    tools:context=".appLaunch.views.MainActivity"
+    tools:viewBindingIgnore="true">
 
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
     </FrameLayout>
 

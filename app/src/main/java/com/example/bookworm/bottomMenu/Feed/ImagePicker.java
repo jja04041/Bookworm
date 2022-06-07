@@ -198,12 +198,11 @@ public class ImagePicker extends AppCompatActivity {
         options.setToolbarTitle("\t사진 편집"); //타이틀 제목
 
 
-
-
         Intent intent = UCrop.of(sourceUri, destinationUri).withOptions(options).getIntent(this);
         cropResult.launch(intent);
 
     }
+
     //이미지가 캐시된 경로를 반환하는 메소드
     private Uri getCacheImagePath(String fileName) {
         File path = new File(getExternalCacheDir(), "camera");

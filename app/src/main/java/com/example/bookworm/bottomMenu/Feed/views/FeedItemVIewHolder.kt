@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -33,7 +32,6 @@ import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subAct
 import com.example.bookworm.Feed.CustomPopup
 import com.example.bookworm.achievement.Achievement
 import com.example.bookworm.bottomMenu.Feed.views.FeedViewModel
-import com.example.bookworm.core.userdata.modules.LoadUser
 import com.example.bookworm.databinding.FragmentFeedItemBinding
 import com.example.bookworm.notification.MyFCMService
 import java.text.DateFormat
@@ -59,8 +57,6 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
     val commentUserInfo: MutableLiveData<UserInfo> = MutableLiveData()
     var feedUserFcmtoken: String? = null
 
-    //
-//    var loadUser2: LoadUser? = null
     var dateDuration: String? = null
 
     //생성자를 만든다.
@@ -87,7 +83,6 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
 
         myFCMService = MyFCMService()
 //
-//        loadUser2 = LoadUser(this) //최근 댓글의 프로필
     }
 
     //아이템을 세팅하는 메소드
@@ -239,6 +234,11 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
                 liked = true
                 strings!!.add(item.feedID)
                 binding!!.btnLike.setBackground(context!!.getDrawable(R.drawable.icon_like_red))
+
+                myFCMService!!.sendPostToFCM(
+                    context,
+                    feedUserFcmtoken, "${nowUser!!.username}님이 좋아요를 표시했습니다."
+                )
             } else {
                 //현재 좋아요를 누른 상태
                 likeCount -= 1
@@ -282,13 +282,6 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
         binding!!.tvCommentContent.setText(comment!!.contents)
         getDateDuration(comment.madeDate)
         binding!!.tvCommentDate.setText(dateDuration)
-//        if (comment != null) {
-//
-////            loadUser2!!.getData(comment.userToken, true)
-//
-//
-//
-//        } else setViewV(false)
     }
 
     //뷰를 보여주는 메소드(Visibility 조정)

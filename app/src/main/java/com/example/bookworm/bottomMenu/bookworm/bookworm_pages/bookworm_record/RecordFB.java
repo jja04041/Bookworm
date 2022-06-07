@@ -28,9 +28,7 @@ public class RecordFB {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     Context context;
     private int LIMIT = 10;
-    Task task = null;
     CollectionReference collectionReference;
-    DocumentReference documentReference;
     fragment_record fragmentRecord;
 
 
@@ -45,7 +43,6 @@ public class RecordFB {
     public void getData(Map map, String UserToken) {//token = 유저 토큰
         collectionReference = db.collection("feed");
         Query query = collectionReference.whereEqualTo("UserToken", UserToken).orderBy("FeedID", Query.Direction.DESCENDING).limit(LIMIT);
-//        Query query = collectionReference.orderBy("FeedID", Query.Direction.DESCENDING);
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {

@@ -51,8 +51,7 @@ public class activity_achievement extends AppCompatActivity {
 
         String wormname = "디폴트";
 
-        switch(iData)
-        {
+        switch (iData) {
             case R.drawable.bw_default:
                 wormname = "디폴트";
                 break;
@@ -78,24 +77,21 @@ public class activity_achievement extends AppCompatActivity {
                 break;
         }
 
-        ItemData itemData = new ItemData(iData, achievetype ,wormname, context);
+        ItemData itemData = new ItemData(iData, achievetype, wormname, context);
         adapter.addItem(itemData);
 
     }
 
 
-    public void ShowView ()
-    {
-        int size =  0;
+    public void ShowView() {
+        int size = 0;
 
-        if (achievetype == 0){
-        size = bookworm.getWormvec().size();
-        for (int i = 0; i < size; ++i)
-            if (null != bookworm.getWormvec().get(i))
-                getData(bookworm.getWormvec().get(i));
-        }
-
-        else if (achievetype == 1){
+        if (achievetype == 0) {
+            size = bookworm.getWormvec().size();
+            for (int i = 0; i < size; ++i)
+                if (null != bookworm.getWormvec().get(i))
+                    getData(bookworm.getWormvec().get(i));
+        } else if (achievetype == 1) {
             size = bookworm.getBgvec().size();
             for (int i = 0; i < size; ++i)
                 if (null != bookworm.getBgvec().get(i))

@@ -104,15 +104,18 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
 
     fun getalbums(token: String?) {
         viewModelScope.launch {
-            albumdata.value=repo.getAlbums(token)
+            albumdata.value = repo.getAlbums(token)
         }
     }
 
     fun getFeedList(token: String) {
         viewModelScope.launch {
             var data =
-                FirebaseFirestore.getInstance().collection("feed").whereEqualTo("UserToken", token).orderBy("FeedID",
-                    Query.Direction.DESCENDING)
+                FirebaseFirestore.getInstance().collection("feed").whereEqualTo("UserToken", token)
+                    .orderBy(
+                        "FeedID",
+                        Query.Direction.DESCENDING
+                    )
                     .get().await()
             var arrayList = ArrayList<Feed>()
             data.documents.forEach {

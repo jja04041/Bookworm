@@ -15,8 +15,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:background="@color/cardview_shadow_start_color">
+            android:background="@color/cardview_shadow_start_color"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="80dp"
@@ -37,8 +37,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:background="@color/cardview_shadow_start_color">
+            android:background="@color/cardview_shadow_start_color"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="80dp"
@@ -59,8 +59,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:background="@color/cardview_shadow_start_color">
+            android:background="@color/cardview_shadow_start_color"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="80dp"
@@ -81,8 +81,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:background="@color/cardview_shadow_start_color">
+            android:background="@color/cardview_shadow_start_color"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="80dp"
@@ -103,8 +103,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:background="@color/cardview_shadow_start_color">
+            android:background="@color/cardview_shadow_start_color"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="80dp"
@@ -125,8 +125,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:background="@color/cardview_shadow_start_color">
+            android:background="@color/cardview_shadow_start_color"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="80dp"

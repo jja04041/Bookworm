@@ -241,6 +241,7 @@
         android:background="@color/cardview_shadow_start_color"
         android:text="\n"
         android:textColor="#CC000000" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -302,6 +303,7 @@
         android:background="@color/cardview_shadow_start_color"
         android:text="\n"
         android:textColor="#CC000000" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -363,6 +365,7 @@
         android:background="@color/cardview_shadow_start_color"
         android:text="\n"
         android:textColor="#CC000000" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -424,6 +427,7 @@
         android:background="@color/cardview_shadow_start_color"
         android:text="\n"
         android:textColor="#CC000000" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

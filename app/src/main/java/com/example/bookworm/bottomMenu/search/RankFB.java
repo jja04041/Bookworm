@@ -5,16 +5,13 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.example.bookworm.appLaunch.views.MainActivity;
-import com.example.bookworm.bottomMenu.bookworm.bookworm_pages.bookworm_record.fragment_record;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.Map;
 
 public class RankFB {
     FirebaseFirestore db = FirebaseFirestore.getInstance();

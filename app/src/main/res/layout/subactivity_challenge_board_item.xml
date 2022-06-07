@@ -40,9 +40,9 @@
                     android:layout_height="80dp"
                     android:layout_gravity="center"
                     android:ellipsize="end"
+                    android:gravity="center"
                     android:maxLines="5"
                     android:text="@string/lorem"
-                    android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="13dp" />
 

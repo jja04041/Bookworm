@@ -24,7 +24,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
     private UserInfo NowUser;
     private ImageProcessing imageProcess;
     ActivityProfileModifyBinding binding;
-    private boolean uploadCheck=false;
+    private boolean uploadCheck = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +35,8 @@ public class ProfileModifyActivity extends AppCompatActivity {
 
 
         imageProcess = new ImageProcessing(this);
-        UserInfoViewModel pv = new ViewModelProvider(this,new UserInfoViewModel.Factory(context)).get(UserInfoViewModel.class);
-        ChallengeViewModel cv = new ViewModelProvider(this,new ChallengeViewModel.Factory(context)).get(ChallengeViewModel.class);
+        UserInfoViewModel pv = new ViewModelProvider(this, new UserInfoViewModel.Factory(context)).get(UserInfoViewModel.class);
+        ChallengeViewModel cv = new ViewModelProvider(this, new ChallengeViewModel.Factory(context)).get(ChallengeViewModel.class);
         LiveData<Boolean> bool = pv.isDuplicated();
         pv.getUser(null, false);
 
@@ -48,7 +48,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
                     .circleCrop()
                     .into(binding.ivProfileImage);
 
-            binding.btnFavGenre.setOnClickListener(it->{
+            binding.btnFavGenre.setOnClickListener(it -> {
                 cv.getChallengeList(userInfo.getToken());
             });
             //프로필 이미지 변경
@@ -57,20 +57,19 @@ public class ProfileModifyActivity extends AppCompatActivity {
             });
 
             //프로필이미지를 업로드 하는 경우
-            imageProcess.getBitmap().observe(this,bitmap -> {
+            imageProcess.getBitmap().observe(this, bitmap -> {
                 //완료버튼을 누르면 이미지 업데이트
                 binding.btnFinish.setOnClickListener(view -> {
-                    String imgName="profile_"+NowUser.getToken()+".jpg";
-                    imageProcess.uploadImage(bitmap,imgName); // 이미지 업로드
+                    String imgName = "profile_" + NowUser.getToken() + ".jpg";
+                    imageProcess.uploadImage(bitmap, imgName); // 이미지 업로드
                 });
-                imageProcess.getImgData().observe(this,imgurl->{
-                    if(checkIdChanged()) {
+                imageProcess.getImgData().observe(this, imgurl -> {
+                    if (checkIdChanged()) {
                         NowUser.setProfileimg(imgurl);
                         pv.updateUser(NowUser);
                         finish();
-                    }
-                    else{
-                        Toast.makeText(this,"아이디 중복 체크 후 진행해 주세요.",Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "아이디 중복 체크 후 진행해 주세요.", Toast.LENGTH_SHORT).show();
                     }
                 });
             });
@@ -80,9 +79,8 @@ public class ProfileModifyActivity extends AppCompatActivity {
                 if (uploadCheck) {
                     pv.updateUser(NowUser);
                     finish();
-                }
-                else{
-                    Toast.makeText(this,"아이디 중복 체크 후 진행해 주세요.",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "아이디 중복 체크 후 진행해 주세요.", Toast.LENGTH_SHORT).show();
                 }
             });
             binding.edtNewNickname.addTextChangedListener(new TextWatcher() {
@@ -93,30 +91,29 @@ public class ProfileModifyActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    uploadCheck=false;
+                    uploadCheck = false;
                 }
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    uploadCheck=checkIdChanged();
+                    uploadCheck = checkIdChanged();
                 }
             });
-
 
 
             //값이 변경 되면 알려줌
             bool.observe(this, value -> {
                 if (value == false) {
                     NowUser.setUsername(binding.edtNewNickname.getText().toString());
-                    uploadCheck=true;
+                    uploadCheck = true;
                     Toast.makeText(context, "사용 가능한 닉네임입니다.", Toast.LENGTH_SHORT).show();
                 } else Toast.makeText(context, "사용할 수 없는 닉네임입니다.", Toast.LENGTH_SHORT).show();
             });
 
         });
 
-        cv.getChallengeList().observe(this,it->{
-            for(Challenge i:it){
+        cv.getChallengeList().observe(this, it -> {
+            for (Challenge i : it) {
                 Log.d("챌린지 데이터: ", i.getMaster());
             }
         });
@@ -135,10 +132,11 @@ public class ProfileModifyActivity extends AppCompatActivity {
         binding.btnBack.setOnClickListener(view -> finish());
 
     }
-    private boolean checkIdChanged(){
-        String name=binding.edtNewNickname.getText().toString();
-        if(name.equals(""))return true;
-        else if(!name.equals("")&&!uploadCheck) return false;
+
+    private boolean checkIdChanged() {
+        String name = binding.edtNewNickname.getText().toString();
+        if (name.equals("")) return true;
+        else if (!name.equals("") && !uploadCheck) return false;
         else return true;
     }
 

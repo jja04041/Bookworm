@@ -42,13 +42,11 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
     UserInfo userInfo;
     Context current_context;
     Bitmap uploaded;
-    Module module;
     UserInfoViewModel uv;
     ImageProcessing imageProcess;
     BookWorm userBw;
     Challenge challenge;
     String imgurl = null;
-    Dialog customDialog;
     String BoardID;
     Book selected_book; //선택한 책 객체
 
@@ -60,10 +58,8 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
                 if (code == Activity.RESULT_OK) {
                     Uri uri = result.getData().getParcelableExtra("path");
                     try {
-                        // You can update this bitmap to your server
                         uploaded = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
 
-                        // loading profile image from local cache
                         loadImage(uri.toString());
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -104,8 +100,8 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
             Glide.with(this).load(userinfo.getProfileimg()).circleCrop().into(binding.ivProfileImage); //프로필사진 로딩후 삽입.
             binding.tvNickname.setText(userinfo.getUsername());
 
-            uv.getBwdata().observe(this,bookWorm -> {
-                userBw=bookWorm;
+            uv.getBwdata().observe(this, bookWorm -> {
+                userBw = bookWorm;
                 imageProcess.getBitmap().observe(this, bitmap -> {
                     //완료 버튼 (피드 올리기)
                     binding.tvFinish.setOnClickListener(view ->
@@ -119,7 +115,7 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
                                             -> dialog.dismiss())
                                     .show()
                     );
-                    imageProcess.getImgData().observe(this,imgurl->{
+                    imageProcess.getImgData().observe(this, imgurl -> {
                         feedUpload(imgurl);
                     });
                 });
@@ -138,12 +134,8 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
             });
         });
 
-        if(getIntent() != null) {
-//            intent = getIntent();
-//            if((Book) intent.getSerializableExtra("data") != null){
-//                selected_book = (Book) intent.getSerializableExtra("data");
-//                binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목만 세팅한다.
-//            }
+        if (getIntent() != null) {
+
         }
         imageProcess.getBitmapUri().observe(this, it -> {
             Glide.with(this).load(it)
@@ -169,8 +161,8 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
 
         BoardID = System.currentTimeMillis() + "_" + userInfo.getToken(); //현재 시각 + 사용자 토큰을 FeedID로 설정
         if (data != null) {
-            String name="feed_"+BoardID+".jpg";
-            imageProcess.uploadImage(data,name);
+            String name = "feed_" + BoardID + ".jpg";
+            imageProcess.uploadImage(data, name);
         } else {
             feedUpload(null);
         }
@@ -192,20 +184,16 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
             HashMap<String, Object> map = new HashMap<>();
 
 
-
-            //ArrayList<String> labelList = new ArrayList<String>(); //선택한 라벨 목록을 담을 리스트
-
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String formatTime = dateFormat.format(System.currentTimeMillis());
 
             map.put("UserToken", userInfo.getToken()); //유저 정보
             map.put("book", selected_book); //책 정보
             map.put("boardText", binding.edtFeedText.getText().toString()); //피드 내용
-            //map.put("label", labelAdd(labelList)); //라벨 리스트
             map.put("date", formatTime); //현재 시간 millis로
             map.put("boardID", BoardID); //인증글 아이디
             map.put("challengeName", challenge.getTitle()); //챌린지 명
-            map.put("commentsCount",0);
+            map.put("commentsCount", 0);
             map.put("likeCount", 0);
             if (imgUrl != null) map.put("imgurl", imgUrl); //이미지 url
 
@@ -213,7 +201,6 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
             fbModule.uploadChallengeBoard(2, challenge.getTitle(), BoardID, map);
 
             // 장르 처리
-//            HashMap<String, Object> savegenremap = new HashMap<>();
             userInfo.setGenre(selected_book.getCategoryname(), current_context);
 
             int count = userBw.getReadcount();
@@ -226,7 +213,7 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
             achievement.CompleteAchievement(userInfo, current_context);
             exit = achievement.canreturn();
 
-            if(exit == true) {
+            if (exit == true) {
                 setResult(CREATE_OK);
                 finish();
             }

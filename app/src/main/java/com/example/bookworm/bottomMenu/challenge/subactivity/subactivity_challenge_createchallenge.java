@@ -88,7 +88,6 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity {
 
         userInfo = new PersonalD(mContext).getUserInfo(); //저장된 UserInfo값을 가져온다.
 
-
         //챌린지 시작일에 오늘 날짜가 나오게 함
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
@@ -207,9 +206,6 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity {
             map.put("Username", userInfo.getUsername()); //닉네임
             map.put("masterToken", userInfo.getToken()); //토큰
             map.put("book", selected_book);
-//            map.put("thumbnailURL", selected_book.getImg_url()); //책 썸네일
-//            map.put("bookname", strBookname); //책 이름
-//            map.put("BookId", selected_book.getItemId()); //책 ID
             map.put("strChallengeName", strChallengeName); //챌린지 명
             map.put("challengeInfo", strChallengeInfo); //챌린지 설명
             map.put("challengeStartDate", strChallengeStartDate); //챌린지 시작일
@@ -221,8 +217,6 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity {
             //파이어베이스에 해당 챌린지명이 등록돼있지 않다면
 
             fbModule.readData(2, map, strChallengeName);
-
-
 
 
         }

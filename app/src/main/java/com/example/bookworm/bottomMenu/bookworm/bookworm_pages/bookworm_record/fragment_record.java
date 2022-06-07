@@ -54,7 +54,6 @@ public class fragment_record extends Fragment {
         recordFB = new RecordFB(getContext());
 
 
-
         pv.getUser(null, false);
 
         //데이터 수정을 감지함
@@ -63,7 +62,6 @@ public class fragment_record extends Fragment {
             recordFB.getData(map, userinfo.getToken());
 
         });
-
 
 
         return view;
@@ -115,12 +113,7 @@ public class fragment_record extends Fragment {
         recordAdapter = new RecordAdapter(feedList, getContext());
         //어댑터 리스너
         recordAdapter.setListener((holder, view, position) -> {
-            //닫힌 챌린지 인경우 표시할 코드 등을 입력해야함.
-            //아이템 선택시 실행할 코드를 입력
-//            Intent intent = new Intent(getContext(), subactivity_challenge_board_comment.class);
-//            intent.putExtra("board", boardList.get(position));
-//            intent.putExtra("challenge", challenge);
-//            getContext().startActivity(intent);
+
         });
     }
 

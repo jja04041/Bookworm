@@ -1,4 +1,5 @@
 @file:JvmName("fragment_feed")
+
 package com.example.bookworm.bottomMenu.Feed
 
 import android.content.Context
@@ -32,7 +33,8 @@ class Fragment_feed : Fragment() {
             : DocumentSnapshot? = null
     private lateinit var map: HashMap<Any?, Any?>
     private var fbModule: FBModule? = null
-    lateinit var mView:View
+    lateinit var mView: View
+
     //isLoading:스크롤을 당겨서 추가로 로딩 중인지 여부를 확인하는 변수
     //canLoad:더 로딩이 가능한지 확인하는 변수[자료의 끝을 판별한다.]
     private var isRefreshing = false
@@ -45,9 +47,10 @@ class Fragment_feed : Fragment() {
     //static 변수로 사용할 변수들
     companion object {
         lateinit var mContext: Context
+
         //qb
         fun setContext(con: Context) {
-            mContext =con
+            mContext = con
         }
     }
 
@@ -59,11 +62,12 @@ class Fragment_feed : Fragment() {
         }
         if (result.resultCode == subActivity_Feed_Modify.MODIFY_OK) {
             val item = result.data!!.getSerializableExtra("modifiedFeed") as Feed?
-            feedList.set(item!!.position,item)
+            feedList.set(item!!.position, item)
             feedAdapter.submitList(feedList.toList())
             binding!!.recyclerView.smoothScrollToPosition(item.position)
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -80,19 +84,7 @@ class Fragment_feed : Fragment() {
             val intent = Intent(context, subActivity_Feed_Create::class.java)
             startActivityResult.launch(intent)
         }
-        mView=binding!!.root
-
-        // 스토리바
-//        storiesBar = mView.findViewById(R.id.storybar)
-//
-//        val stories: MutableList<Story> = java.util.ArrayList()
-//        for (i in 0..9) stories.add(Story(false))
-//
-//        val adapter = StorybarAdapter(stories)
-//        storiesBar
-//        storiesBar!!.setAdapter(adapter)
-//        storiesBar!!.setLayoutManager(LinearLayoutManager(context, RecyclerView.HORIZONTAL, false))
-//        storiesBar!!.addItemDecoration(StoryDeco(10))
+        mView = binding!!.root
 
         //companion 객체에 context값을 적재함
         setContext(requireContext())
@@ -112,7 +104,8 @@ class Fragment_feed : Fragment() {
 
     //화면 이동 시 보여졌던 키보드를 숨김
     override fun onHiddenChanged(hidden: Boolean) {
-        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         if (mView.findViewById<View?>(R.id.edtComment) != null) imm.hideSoftInputFromWindow(
             mView.findViewById<View>(R.id.edtComment).windowToken,
             InputMethodManager.HIDE_NOT_ALWAYS

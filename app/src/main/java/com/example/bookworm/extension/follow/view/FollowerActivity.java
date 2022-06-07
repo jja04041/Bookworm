@@ -15,6 +15,7 @@ public class FollowerActivity extends AppCompatActivity {
 
     ViewPager viewPager;
     TabLayout tabLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -24,7 +25,7 @@ public class FollowerActivity extends AppCompatActivity {
         String token = intent.getStringExtra("token");
         int selected = intent.getIntExtra("page", 0);
         viewPager = findViewById(R.id.viewpager);
-        FollowPagerAdapter adapter = new FollowPagerAdapter( getSupportFragmentManager(), token);
+        FollowPagerAdapter adapter = new FollowPagerAdapter(getSupportFragmentManager(), token);
         viewPager.setAdapter(adapter);
         FollowViewModelImpl fv = new ViewModelProvider(this, new FollowViewModelImpl.Factory(this)).get(FollowViewModelImpl.class);
 
