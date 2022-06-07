@@ -3,7 +3,7 @@ package com.example.bookworm.core.dataprocessing.repository
 import com.example.bookworm.bottomMenu.Feed.items.Feed
 import com.example.bookworm.bottomMenu.bookworm.BookWorm
 import com.example.bookworm.bottomMenu.challenge.items.Challenge
-import com.example.bookworm.bottomMenu.profile.album.AlbumData
+import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumData
 import com.example.bookworm.core.userdata.UserInfo
 
 interface DataRepository {

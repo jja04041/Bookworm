@@ -45,7 +45,7 @@ public class MoveFragment {
             }
             else {
                 if (fragments[i] != null) {
-                    if(i == 2 || i == 4)
+                    if(i == 2)
                     {
                         fragmentManager.beginTransaction().remove(fragments[i]).commitAllowingStateLoss();
                         fragments[i] = null;

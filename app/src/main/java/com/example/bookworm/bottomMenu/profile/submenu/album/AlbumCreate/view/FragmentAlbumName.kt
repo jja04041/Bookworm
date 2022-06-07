@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.profile.album.AlbumCreate.view
+package com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view
 
 import android.content.Context
 import android.os.Bundle
@@ -12,18 +12,18 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.example.bookworm.bottomMenu.profile.album.AlbumData
-import com.example.bookworm.databinding.FragmentAlbumNameBinding
+import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumData
+import com.example.bookworm.databinding.FragmentProfileAlbumNameBinding
 
 class FragmentAlbumName : Fragment() {
-    var binding: FragmentAlbumNameBinding? = null
+    var binding: FragmentProfileAlbumNameBinding? = null
     lateinit var parentActivity: CreateAlbumActivity
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentAlbumNameBinding.inflate(inflater)
+        binding = FragmentProfileAlbumNameBinding.inflate(inflater)
         parentActivity = context as CreateAlbumActivity
         parentActivity.albumProcessViewModel.newAlbumData
             .observe(viewLifecycleOwner, { data: AlbumData ->

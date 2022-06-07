@@ -9,10 +9,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.bookworm.bottomMenu.Feed.items.Feed
 import com.example.bookworm.bottomMenu.bookworm.BookWorm
+import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumData
 import com.example.bookworm.core.dataprocessing.repository.UserRepositoryImpl
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.extension.follow.view.FollowViewModelImpl
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import java.util.*
@@ -27,10 +29,12 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
 
     var data = MutableLiveData<UserInfo>() // 사용자 데이터 LiveData
     var bwdata = MutableLiveData<BookWorm>() // 사용자의 BookWorm LiveData
+    var albumdata = MutableLiveData<ArrayList<AlbumData>>()
     var isDuplicated = MutableLiveData<Boolean>() //중복 여부를 체크 하는 LiveData
     val repo = UserRepositoryImpl(context)
     var fv: FollowViewModelImpl
     var feedList = MutableLiveData<ArrayList<Feed>>()
+
     class Factory(val context: Context) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return UserInfoViewModel(context) as T
@@ -38,7 +42,10 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
     }
 
     init {
-        fv = ViewModelProvider(context as AppCompatActivity, FollowViewModelImpl.Factory(context)).get(
+        fv = ViewModelProvider(
+            context as AppCompatActivity,
+            FollowViewModelImpl.Factory(context)
+        ).get(
             FollowViewModelImpl::class.java
         )
     }
@@ -75,35 +82,45 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
         }
     }
 
-    fun getFollowerList(token: String, getFollower: Boolean) = fv.getFollowerList(token,getFollower)
+    fun getFollowerList(token: String, getFollower: Boolean) =
+        fv.getFollowerList(token, getFollower)
 
     fun getBookWorm(token: String) =
-        viewModelScope.launch{
-        bwdata.value=repo.getBookWorm(token)
-    }
+        viewModelScope.launch {
+            bwdata.value = repo.getBookWorm(token)
+        }
 
-    fun updateUser(user:UserInfo){
+    fun updateUser(user: UserInfo) {
         viewModelScope.launch {
             repo.updateUser(user)
         }
     }
 
-    fun updateBw(token: String?,bookWorm: BookWorm){
+    fun updateBw(token: String?, bookWorm: BookWorm) {
         viewModelScope.launch {
-            repo.updateBookWorm(token,bookWorm)
+            repo.updateBookWorm(token, bookWorm)
         }
     }
 
-    fun getFeedList(token: String){
+    fun getalbums(token: String?) {
         viewModelScope.launch {
-            var data= FirebaseFirestore.getInstance().collection("feed").whereEqualTo("UserToken",token).get().await()
+            albumdata.value=repo.getAlbums(token)
+        }
+    }
+
+    fun getFeedList(token: String) {
+        viewModelScope.launch {
+            var data =
+                FirebaseFirestore.getInstance().collection("feed").whereEqualTo("UserToken", token).orderBy("FeedID",
+                    Query.Direction.DESCENDING)
+                    .get().await()
             var arrayList = ArrayList<Feed>()
             data.documents.forEach {
                 var feed = Feed()
                 feed.setFeedData(it.getData())
                 arrayList.add(feed)
             }
-            feedList.value=arrayList
+            feedList.value = arrayList
         }
     }
 

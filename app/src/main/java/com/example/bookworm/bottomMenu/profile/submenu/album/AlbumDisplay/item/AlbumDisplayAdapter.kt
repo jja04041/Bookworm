@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.profile.album.AlbumDisplay.item
+package com.example.bookworm.bottomMenu.profile.submenu.album.AlbumDisplay.item
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookworm.R
-import com.example.bookworm.bottomMenu.profile.album.AlbumData
-import com.example.bookworm.bottomMenu.profile.album.AlbumDisplay.view.AlbumDisplayViewHolder
+import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumData
+import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumDisplay.view.AlbumDisplayViewHolder
 
 class AlbumDisplayAdapter(val context: Context) :
     ListAdapter<AlbumData, RecyclerView.ViewHolder>(MyDiffCallback) {
@@ -21,7 +21,7 @@ class AlbumDisplayAdapter(val context: Context) :
         val view: View
         when (viewType) {
             1 -> {
-                view = inflater.inflate(R.layout.fragment_album_item, parent, false)
+                view = inflater.inflate(R.layout.fragment_profile_album_item, parent, false)
                 return AlbumDisplayViewHolder(view, context)
             }
             else -> {
