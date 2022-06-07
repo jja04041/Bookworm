@@ -75,10 +75,6 @@ public class activity_chatlist extends AppCompatActivity {
 
     private void getData() {
 
-        Uri uri = Uri.parse("https://k.kakaocdn.net/dn/b8DtBK/btqRorUTUCy/w10D6Zn5IMsop8v2BJY5VK/img_640x640.jpg");
-        MessageItem messageItem = new MessageItem("곽성근", "5분전", "졸작 화이팅", "https://k.kakaocdn.net/dn/b8DtBK/btqRorUTUCy/w10D6Zn5IMsop8v2BJY5VK/img_640x640.jpg", "123");
-        adapter.addItem(messageItem);
-
 
 //        orderByChild("token/"+userinfo.getToken()).equalTo(true).
         firebaseDatabase.getReference().addListenerForSingleValueEvent(new ValueEventListener() {

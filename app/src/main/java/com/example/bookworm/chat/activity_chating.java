@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
 import com.example.bookworm.core.userdata.UserInfo;
+import com.example.bookworm.notification.MyFCMService;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.math.BigInteger;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -33,6 +35,8 @@ public class activity_chating extends AppCompatActivity {
 
     ArrayList<MessageItem> messageItems=new ArrayList<>();
     ChatAdapter adapter;
+
+    MyFCMService myFCMService;
 
     //Firebase Database 관리 객체참조변수
     FirebaseDatabase firebaseDatabase;
@@ -55,6 +59,8 @@ public class activity_chating extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chating);
 
+        myFCMService = new MyFCMService();
+
         // 상대방 토큰 받음
         Intent intent = getIntent();
         opponent = (UserInfo) intent.getSerializableExtra("opponent");
@@ -66,6 +72,7 @@ public class activity_chating extends AppCompatActivity {
 
         pv = new UserInfoViewModel(context);
         uv = new ViewModelProvider(this, new UserInfoViewModel.Factory(context)).get(UserInfoViewModel.class);
+
 
 
         pv.getUser(null, false);
@@ -137,11 +144,11 @@ public class activity_chating extends AppCompatActivity {
 
 //        getSupportActionBar().setTitle(opponent.getUsername());
     }
-    public void clickSend(View view) {
+    public void clickSend(View view) throws MalformedURLException {
 
         //firebase DB에 저장할 값들
         String nickName= userinfo.getUsername();
-        String opponent = userinfo.getUsername();
+        String opponentName = userinfo.getUsername();
         String message= et.getText().toString();
         String pofileUrl= userinfo.getProfileimg();
         String token= userinfo.getToken();
@@ -160,6 +167,8 @@ public class activity_chating extends AppCompatActivity {
 
         //EditText에 있는 글씨 지우기
         et.setText("");
+
+        myFCMService.sendPostToFCM(context, opponent.getFCMtoken(), userinfo.getUsername() + "님이 메시지를 보냈습니다. " + "\"" + message + "\"");
 
 //        //소프트키패드를 안보이도록
 //        InputMethodManager imm=(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
