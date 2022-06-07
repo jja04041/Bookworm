@@ -60,7 +60,8 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
             }
             else token.let {
                 var data = getUserInFB(it).await()
-                if(data!!.token==userInfo.token) data!!.isMainUser=true
+                if(data!=null&&data!!.token==userInfo.token) data!!.isMainUser=true
+                if(data==null) data=UserInfo()
                 data
             }
         }
