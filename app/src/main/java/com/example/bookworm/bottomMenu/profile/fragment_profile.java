@@ -21,6 +21,7 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.bookworm.achievement.Achievement;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.profile.submenu.SubMenuPagerAdapter;
@@ -73,7 +74,11 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
             Intent intent = new Intent(current_context, ProfileSettingActivity.class);
             startActivity(intent);
         });
-
+        binding.subMenuViewPager.setAdapter(menuPagerAdapter);
+        binding.tabLayout.setupWithViewPager(binding.subMenuViewPager);
+        binding.tabLayout.getTabAt(1).setText("앨범");
+        binding.tabLayout.getTabAt(0).setText("포스트");
+        binding.tabLayout.getTabAt(0).select();
         //데이터를 가져옴
         pv.getUser(null, false);
         fv.WithoutSuspendgetUser(null);
@@ -101,14 +106,16 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
     }
 
     private void setUI(UserInfo user) {
-        Glide.with(this).load(user.getProfileimg()).circleCrop().into(binding.imgFragProfileProfile); //프로필사진 로딩후 삽입.
+        Glide.with(current_context)
+                .load(user.getProfileimg())
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .circleCrop()
+                .into(binding.imgFragProfileProfile);
+       //프로필사진 로딩후 삽입.
         binding.tvUserName.setText(user.getUsername());
         binding.edtIntroduce.setText(user.getIntroduce());
-        binding.subMenuViewPager.setAdapter(menuPagerAdapter);
-        binding.tabLayout.setupWithViewPager(binding.subMenuViewPager);
-        binding.tabLayout.getTabAt(1).setText("앨범");
-        binding.tabLayout.getTabAt(0).setText("포스트");
-        binding.tabLayout.getTabAt(0).select();
+
 
 
         //팔로워액티비티 실행하기
@@ -190,6 +197,13 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
     public void onDestroyView() {
         binding = null;
         super.onDestroyView();
+    }
+
+    @Override
+    public void onResume() {
+        pv.getUser(null,false);
+        fv.WithoutSuspendgetUser(null);
+        super.onResume();
     }
 
     @Override
