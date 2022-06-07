@@ -45,9 +45,9 @@ public class ChatlistViewHolder extends RecyclerView.ViewHolder  {
         }
 
     public void onBind(MessageItem itemData){
-        tv_opponame.setText("곽성근");
-        tv_time.setText("5분전");
-        tv_content.setText("졸작 화이팅");
+        tv_opponame.setText(itemData.getName());
+        tv_time.setText(itemData.getTime());
+        tv_content.setText(itemData.getMessage());
         Uri uri = Uri.parse("https://k.kakaocdn.net/dn/b8DtBK/btqRorUTUCy/w10D6Zn5IMsop8v2BJY5VK/img_640x640.jpg");
         iv_oppopic.setImageURI(uri);
     }

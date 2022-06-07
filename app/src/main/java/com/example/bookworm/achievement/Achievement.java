@@ -134,13 +134,13 @@ public class Achievement extends activity_achievement {
                 }
             }
         }
-        if(userinfo.getGenre().get("생활") != null) {
-            if (userinfo.getGenre().get("생활") == 3) {
-                if(null == bookworm.getAchievementmap().get("생활볼레")) {
-                    ExecuteFB(R.drawable.bw_detective, "생활볼레", 0);
-                }
-            }
-        }
+//        if(userinfo.getGenre().get("생활") != null) {
+//            if (userinfo.getGenre().get("생활") == 3) {
+//                if(null == bookworm.getAchievementmap().get("생활볼레")) {
+//                    ExecuteFB(R.drawable.bw_detective, "생활볼레", 0);
+//                }
+//            }
+//        }
         if(userinfo.getGenre().get("만화") != null) {
             if (userinfo.getGenre().get("만화") == 3) {
                 if(null == bookworm.getAchievementmap().get("만화광")) {

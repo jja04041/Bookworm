@@ -141,7 +141,6 @@ public class activity_chating extends AppCompatActivity {
 
         //firebase DB에 저장할 값들
         String nickName= userinfo.getUsername();
-        String opponent = userinfo.getUsername();
         String message= et.getText().toString();
         String pofileUrl= userinfo.getProfileimg();
         String token= userinfo.getToken();
@@ -153,7 +152,6 @@ public class activity_chating extends AppCompatActivity {
 
         //firebase DB에 저장할 값(MessageItem객체) 설정
         MessageItem messageItem= new MessageItem(nickName, message,time,pofileUrl, token);
-
 
         //chat노드에 MessageItem객체를 전달
         chatRef.push().setValue(messageItem);
