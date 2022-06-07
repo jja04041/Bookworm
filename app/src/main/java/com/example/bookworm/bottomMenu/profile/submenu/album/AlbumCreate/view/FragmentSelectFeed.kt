@@ -1,11 +1,11 @@
-package com.example.bookworm.bottomMenu.profile.album.AlbumCreate.view
+package com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view
 
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bookworm.R
-import com.example.bookworm.bottomMenu.profile.album.AlbumCreate.item.AlbumProcessAdapter
+import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.item.AlbumProcessAdapter
 import com.example.bookworm.databinding.FragmentSelectFeedBinding
 
 //앨범에 담을 피드를 선택하는 화면

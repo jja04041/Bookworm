@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.profile.album
+package com.example.bookworm.bottomMenu.profile.submenu.album
 
 import com.example.bookworm.bottomMenu.Feed.items.Feed
 import java.io.Serializable
@@ -13,8 +13,9 @@ class AlbumData : Serializable {
 
     //파이어베이스에서 전달받은 데이터를 객체에 담음
     fun addData(data: Map<String, Any>) {
-        thumbnail = data["thumnail"] as String?
+        thumbnail = data["thumbnail"] as String?
         albumName = data["albumName"] as String?
+        albumId = data["albumId"] as String?
         containsList = data["containsList"] as ArrayList<Feed>
     }
 }

@@ -57,7 +57,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="send"
+            android:text="보내기"
             android:backgroundTint="#ff8800"
             android:layout_marginLeft="8dp"
             android:onClick="clickSend"/>

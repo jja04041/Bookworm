@@ -4,18 +4,12 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import com.example.bookworm.bottomMenu.bookworm.BookWorm
-import com.example.bookworm.bottomMenu.profile.album.AlbumData
+import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumData
 import com.example.bookworm.core.userdata.UserInfo
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
-import com.google.firebase.firestore.FieldPath
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Transaction
+import com.google.firebase.firestore.*
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
-import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -101,7 +95,12 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
             if (token == null) token = CoroutineScope(Dispatchers.IO).async {
                 getUser(token, false)
             }.await()!!.token
-            var albumReference = collectionReference.document(token!!)
+            var albumReference = collectionReference.document(token!!).collection("albums").get().await()
+            for(i in albumReference.documents){
+                var data=AlbumData()
+                data.addData(i.data as Map<String, Any>)
+                resultArray.add(data)
+            }
             resultArray
         }.await()
 

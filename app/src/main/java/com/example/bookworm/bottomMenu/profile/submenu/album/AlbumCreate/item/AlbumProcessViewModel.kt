@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.profile.album.AlbumCreate.item
+package com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.item
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -6,13 +6,12 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.*
 import com.example.bookworm.bottomMenu.Feed.items.Feed
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
-import com.example.bookworm.bottomMenu.profile.album.AlbumCreate.view.CreateAlbumActivity
-import com.example.bookworm.bottomMenu.profile.album.AlbumData
+import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumActivity
+import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumData
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
@@ -100,7 +99,7 @@ class AlbumProcessViewModel(val context: Context, val pv: UserInfoViewModel) : V
     fun uploadAlbum() {
         //서버에 이미지 업로드
         viewModelScope.launch {
-            albumData.albumId ="${token!!}_${token.hashCode()}"
+            albumData.albumId ="${albumData.albumName.hashCode()}_${token}"
             if (albumData.thumbnail != null) {
                 var uploadImageToServer = viewModelScope.launch {
                     var imgName = "album_${albumData.albumName.hashCode()}_${token}.jpg"

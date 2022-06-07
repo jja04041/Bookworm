@@ -108,7 +108,7 @@ public class Achievement extends activity_achievement {
 
 
         else if (userinfo.getGenre().get("공부") == 3) {
-            if(null == bookworm.getAchievementmap().get("공부")) {
+             if(null == bookworm.getAchievementmap().get("공부")){
                 ExecuteFB(R.drawable.bw_study, "공부벌레", 0);
             }
         }

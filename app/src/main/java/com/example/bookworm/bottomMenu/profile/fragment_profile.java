@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.ViewModelProvider;
@@ -35,10 +36,15 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
     private FragmentProfileBinding binding;
     private Context current_context;
     private FBModule fbModule;
-    private ProfileFB profileFB;
     UserInfoViewModel pv;
     FollowViewModelImpl fv;
     SubMenuPagerAdapter menuPagerAdapter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,7 +55,6 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
         pv = new ViewModelProvider(this, new UserInfoViewModel.Factory(current_context)).get(UserInfoViewModel.class);
         fv = new ViewModelProvider(this, new FollowViewModelImpl.Factory(current_context)).get(FollowViewModelImpl.class);
         fbModule = new FBModule(current_context);
-        profileFB = new ProfileFB(current_context);
         //서브 메뉴를 보여주기위한 어댑터
         menuPagerAdapter = new SubMenuPagerAdapter(getChildFragmentManager());
         binding.subMenuViewPager.setAdapter(menuPagerAdapter);
@@ -72,7 +77,6 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
             achievement = new Achievement(current_context, fbModule, userinfo, bookworm);
             binding.tvFollowerCount.setText(String.valueOf(userinfo.getFollowerCounts()));
             binding.tvFollowingCount.setText(String.valueOf(userinfo.getFollowingCounts()));
-
             setUI(userinfo);
         });
         fv.getData().observe(getViewLifecycleOwner(), userInfo -> {
@@ -127,12 +131,8 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
                     new AlertDialog.Builder(current_context) //변경하
                         .setMessage("변경하시겠습니까?")
                         .setPositiveButton("네", (dialog, which) -> {
-
-                            HashMap<String, Object> map = new HashMap<>();
                             user.setIntroduce(binding.edtIntroduce.getText().toString()); //userinfo의 자기소개를 변경
-                            map.put("UserInfo.introduce", user.getIntroduce()); //map 객체에 수정할 항목 삽입
-
-                            profileFB.modifyIntroduce(map, user.getToken());
+                            pv.updateUser(user); // 사용자 정보 업데이트
                             binding.btnIntroModify.setText("수정"); //완료 버튼에서 다시 수정 버튼으로 변경
                             binding.edtIntroduce.setBackgroundColor(Color.WHITE); //배경색 변경
                             binding.edtIntroduce.setEnabled(false); //수정 불가능하게 변경

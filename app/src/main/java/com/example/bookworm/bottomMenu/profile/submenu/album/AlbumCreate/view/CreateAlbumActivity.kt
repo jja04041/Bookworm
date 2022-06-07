@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.profile.album.AlbumCreate.view
+package com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.Feed.items.Feed
-import com.example.bookworm.bottomMenu.profile.album.AlbumCreate.item.AlbumProcessViewModel
+import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.item.AlbumProcessViewModel
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing
 import com.example.bookworm.databinding.ActivityCreateAlbumBinding

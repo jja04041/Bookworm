@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.profile.album.AlbumCreate.view
+package com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,19 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.example.bookworm.core.dataprocessing.image.ImageProcessing
-import com.example.bookworm.databinding.FragmentAlbumArtBinding
+import com.example.bookworm.databinding.FragmentProfileAlbumArtBinding
 
 //앨범의 사진을 선택하는 화면
 class FragmentAlbumArt : Fragment() {
-    var binding: FragmentAlbumArtBinding? = null
+    var binding: FragmentProfileAlbumArtBinding? = null
     lateinit var parentActivity: CreateAlbumActivity
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentAlbumArtBinding.inflate(inflater)
+        binding = FragmentProfileAlbumArtBinding.inflate(inflater)
         parentActivity = context as CreateAlbumActivity
         val imageProcessing = parentActivity.imageProcessing
         parentActivity.albumProcessViewModel.newAlbumData.observe(viewLifecycleOwner) { data ->

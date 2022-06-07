@@ -68,7 +68,7 @@
             android:name=".bottomMenu.challenge.subactivity.subactivity_challenge_challengeinfo"
             android:exported="false"
             android:parentActivityName=".appLaunch.views.MainActivity" />
-        <activity android:name="com.example.bookworm.bottomMenu.profile.album.AlbumCreate.view.CreateAlbumActivity"
+        <activity android:name="com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumActivity"
             android:exported="false"
             android:parentActivityName=".appLaunch.views.MainActivity"/>
         <activity
