@@ -19,7 +19,6 @@ public class ChatlistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private ArrayList<MessageItem> listData = new ArrayList<>();
 
 
-
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

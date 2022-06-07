@@ -52,7 +52,7 @@ public class BookWorm {
     public void add(Map document) {
         this.token = (String) document.get("token");
         this.wormtype = Integer.parseInt(String.valueOf(document.get("wormtype")));
-        this.wormvec = new Vector<>( ((List<Long>) document.get("wormvec")).stream()
+        this.wormvec = new Vector<>(((List<Long>) document.get("wormvec")).stream()
                 .map(Long::intValue)
                 .collect(Collectors.toList()));
         this.bgtype = Integer.parseInt(String.valueOf(document.get("bgtype")));

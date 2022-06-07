@@ -15,8 +15,9 @@ public class KakaoSDKAdapter extends KakaoAdapter {
             @Override
             public AuthType[] getAuthTypes() {
                 // Kakao SDK로그인을 하는 방식에 대한 Enum class (카카오톡 앱 + 카카오 스토리 + 웹뷰 다이어로그 포함)
-                return new AuthType[] {AuthType.KAKAO_LOGIN_ALL};
+                return new AuthType[]{AuthType.KAKAO_LOGIN_ALL};
             }
+
             @Override
             public boolean isUsingWebviewTimer() {
                 return false;
@@ -26,6 +27,7 @@ public class KakaoSDKAdapter extends KakaoAdapter {
             public boolean isSecureMode() {
                 return false;
             }
+
             @Nullable
             @Override
             public ApprovalType getApprovalType() {
@@ -38,6 +40,7 @@ public class KakaoSDKAdapter extends KakaoAdapter {
             }
         };
     }
+
     @Override
     public IApplicationConfig getApplicationConfig() {
         return GlobalApplication::getInstance;

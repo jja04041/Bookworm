@@ -1,10 +1,11 @@
 package com.example.bookworm.bottomMenu.Feed.comments.Interface
 
 interface CommentContract {
-    interface View{
+    interface View {
         fun showData()
     }
-    interface Presenter{
+
+    interface Presenter {
         fun LoadData()
         fun setData()
     }

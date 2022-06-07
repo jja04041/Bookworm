@@ -70,8 +70,6 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
 
-
-
     //    @Override
 //    //아이템 선택 시 보여줄 화면 구성 => 아마 인텐트로 넘기지 않을까?
     public void onItemClick(ItemViewHolder holder, View view, int position) {

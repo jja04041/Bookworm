@@ -13,10 +13,10 @@ import com.example.bookworm.R
 import com.example.bookworm.core.userdata.UserInfo
 
 //data: ArrayList<UserInfo>?,
-class FollowItemAdapter(val context: Context, val nowUserInfo: UserInfo, val isFollower:Int
+class FollowItemAdapter(
+    val context: Context, val nowUserInfo: UserInfo, val isFollower: Int
 //                    , val pager: PagerInterface.PageAdapter
-                        )
-    : ListAdapter<UserInfo, RecyclerView.ViewHolder>(MyDiffCallback) {
+) : ListAdapter<UserInfo, RecyclerView.ViewHolder>(MyDiffCallback) {
     //뷰홀더가 만들어질때 작동하는 메서드
     //화면을 인플레이트하고 인플레이트된 화면을 리턴한다.
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -25,7 +25,8 @@ class FollowItemAdapter(val context: Context, val nowUserInfo: UserInfo, val isF
         when (viewType) {
             1 -> {
                 view = inflater.inflate(R.layout.layout_user_item, parent, false)
-                return FollowerViewHolder(view, context,nowUserInfo,isFollower
+                return FollowerViewHolder(
+                    view, context, nowUserInfo, isFollower
 //                    ,pager
                 )
             }

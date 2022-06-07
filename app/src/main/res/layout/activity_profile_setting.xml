@@ -27,99 +27,97 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="설정"
-            android:textSize="13dp"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:textSize="13dp" />
     </FrameLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:background="@drawable/square_button">
+        android:background="@drawable/square_button"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btnModify"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@drawable/square_button"
-            android:orientation="horizontal"/>
+            android:orientation="horizontal" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="프로필 수정"
-            android:textSize="17dp"
+            android:layout_gravity="center_vertical"
             android:layout_marginLeft="20dp"
-            android:layout_gravity="center_vertical"/>
+            android:text="프로필 수정"
+            android:textSize="17dp" />
 
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_gravity="center_vertical|right"
             android:layout_marginRight="10dp"
-            android:src="@drawable/ic_baseline_chevron_right_24"
-            android:layout_gravity="center_vertical|right"/>
+            android:src="@drawable/ic_baseline_chevron_right_24" />
 
     </FrameLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:background="@drawable/square_button">
+        android:background="@drawable/square_button"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btnLogout"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:orientation="horizontal"
-            android:background="@drawable/square_button">
-        </Button>
+            android:background="@drawable/square_button"
+            android:orientation="horizontal"></Button>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="로그아웃"
-            android:textSize="17dp"
+            android:layout_gravity="center_vertical"
             android:layout_marginLeft="20dp"
-            android:layout_gravity="center_vertical"/>
+            android:text="로그아웃"
+            android:textSize="17dp" />
 
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_gravity="center_vertical|right"
             android:layout_marginRight="10dp"
-            android:src="@drawable/ic_baseline_chevron_right_24"
-            android:layout_gravity="center_vertical|right"/>
+            android:src="@drawable/ic_baseline_chevron_right_24" />
 
     </FrameLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:background="@drawable/square_button">
+        android:background="@drawable/square_button"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btnSignout"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:orientation="horizontal"
-            android:background="@drawable/square_button">
-        </Button>
+            android:background="@drawable/square_button"
+            android:orientation="horizontal"></Button>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="회원 탈퇴"
-            android:textSize="17dp"
+            android:layout_gravity="center_vertical"
             android:layout_marginLeft="20dp"
-            android:layout_gravity="center_vertical"/>
+            android:text="회원 탈퇴"
+            android:textSize="17dp" />
 
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_gravity="center_vertical|right"
             android:layout_marginRight="10dp"
-            android:src="@drawable/ic_baseline_chevron_right_24"
-            android:layout_gravity="center_vertical|right"/>
+            android:src="@drawable/ic_baseline_chevron_right_24" />
 
     </FrameLayout>
 

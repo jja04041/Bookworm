@@ -38,10 +38,11 @@ public class ProfileSettingActivity extends AppCompatActivity {
 
     Context current_context;
     UserInfoViewModel pv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding =ActivityProfileSettingBinding.inflate(getLayoutInflater());
+        binding = ActivityProfileSettingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -51,12 +52,11 @@ public class ProfileSettingActivity extends AppCompatActivity {
         gsi = GoogleSignIn.getClient(ProfileSettingActivity.this, gso);
         current_context = this;
 
-        userInfo=new PersonalD(current_context).getUserInfo();
+        userInfo = new PersonalD(current_context).getUserInfo();
         //설정 버튼
         binding.btnModify.setOnClickListener(view -> {
             Intent intent = new Intent(current_context, ProfileModifyActivity.class);
             //프로필 수정 화면으로 유저정보 넘겨주기
-//                intent.putExtra("userinfo",userInfo);
             startActivity(intent);
         });
 
@@ -74,17 +74,17 @@ public class ProfileSettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(current_context, "정상적으로 로그아웃되었습니다.", Toast.LENGTH_SHORT).show();
-                if(GoogleSignIn.getLastSignedInAccount(current_context)!=null)
-                {
+                if (GoogleSignIn.getLastSignedInAccount(current_context) != null) {
                     gsi.signOut();
-                }
-                else{
+                } else {
                     UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
                         @Override
                         public void onCompleteLogout() {
-                            if(Session.getCurrentSession().checkAndImplicitOpen()){
-                                Session.getCurrentSession().clearCallbacks(); }
-                        }});
+                            if (Session.getCurrentSession().checkAndImplicitOpen()) {
+                                Session.getCurrentSession().clearCallbacks();
+                            }
+                        }
+                    });
                 }
                 localLogout();
                 Intent intent = new Intent(current_context, LoginActivity.class);
@@ -105,7 +105,7 @@ public class ProfileSettingActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 //토큰을 이용하여 파이어베이스에 있는 데이터 삭제
                                 //카카오로 가입한 계정인 경우
-                                String platform=userInfo.getPlatform();
+                                String platform = userInfo.getPlatform();
                                 if (platform.equals("Kakao")) {
                                     signOutKakao(fbModule, userInfo);
                                 } else if (platform.equals("Google")) {
@@ -133,7 +133,7 @@ public class ProfileSettingActivity extends AppCompatActivity {
 
     }
 
-    private void localLogout(){
+    private void localLogout() {
         SharedPreferences pref = getSharedPreferences("user", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.remove("key_user");
@@ -143,6 +143,7 @@ public class ProfileSettingActivity extends AppCompatActivity {
         editor.remove("key_bookworm");
         editor.commit();
     }
+
     //카카오 회원탈퇴  메소드
     private void signOutKakao(FBModule fbModule, UserInfo userInfo) {
         UserManagement.getInstance().requestUnlink(new UnLinkResponseCallback() {
@@ -184,5 +185,5 @@ public class ProfileSettingActivity extends AppCompatActivity {
     private void signOutGoogle(FBModule fbModule, UserInfo userInfo) {
         gsi.revokeAccess();
         fbModule.deleteData(0, userInfo.getToken());
-     }
+    }
 }

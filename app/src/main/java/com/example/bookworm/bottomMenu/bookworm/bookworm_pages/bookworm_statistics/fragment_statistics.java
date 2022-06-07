@@ -92,12 +92,11 @@ public class fragment_statistics extends Fragment {
                         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT /* layout_width */, LinearLayout.LayoutParams.WRAP_CONTENT /* layout_height */ /* layout_weight */);
                         layoutParams.width = 25;
                         layoutParams.height = random.nextInt(20) + 90;
-                        // layoutParams.setMargins(0,0,0,0); 이미지 마진(왼쪽, 위, 오른쪽, 아래)
                         ImageView iv = new ImageView(getContext());
 
-                        if (random.nextBoolean()){
+                        if (random.nextBoolean()) {
                             iv.setBackgroundColor(ColorTemplate.JOYFUL_COLORS[random.nextInt(5)]);
-                        }else {
+                        } else {
                             iv.setBackgroundColor(ColorTemplate.COLORFUL_COLORS[random.nextInt(5)]);
                         }
                         iv.setLayoutParams(layoutParams);
@@ -110,7 +109,6 @@ public class fragment_statistics extends Fragment {
 
             }
 
-//            record.add(new PieEntry(42,"자기계발"));
 
             PieDataSet pieDataSet = new PieDataSet(record, "");
             pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS);
@@ -127,14 +125,12 @@ public class fragment_statistics extends Fragment {
             description.setTextSize(15);
             binding.pieChart.setDescription(description);
 
-//        binding.pieChart.setCenterText("센터");
             binding.pieChart.animate();
 
 
             uv.getBookWorm(userInfo.getToken());
         });
         uv.getBwdata().observe(this, bw -> {
-//            binding.tvBookwormBookcount.setText("읽은 권 수 : " + bw.getReadcount());
             binding.pieChart.setCenterText("총 " + bw.getReadcount() + "권");
             binding.pieChart.setCenterTextSize(20);
 

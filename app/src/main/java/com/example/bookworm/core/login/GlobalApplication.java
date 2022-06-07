@@ -2,9 +2,6 @@ package com.example.bookworm.core.login;
 
 import android.app.Application;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
 import com.kakao.auth.KakaoSDK;
 
 
@@ -15,12 +12,13 @@ public class GlobalApplication extends Application {
     private static GlobalApplication instance;
 
 
-    public static Application getInstance(){
-        if (instance == null){
+    public static Application getInstance() {
+        if (instance == null) {
             throw new IllegalStateException("this app illegal state");
         }
         return instance;
     }
+
     @Override
     public void onCreate() {
         super.onCreate();

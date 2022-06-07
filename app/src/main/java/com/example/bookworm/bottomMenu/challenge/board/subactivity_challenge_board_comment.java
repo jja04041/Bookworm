@@ -50,22 +50,6 @@ public class subactivity_challenge_board_comment extends AppCompatActivity {
     private Boolean isLoading = false, canLoad = true;
     DocumentSnapshot lastVisible = null;
 
-//    public ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
-//            new ActivityResultContracts.StartActivityForResult(),
-//            result -> {
-//                if (result.getResultCode() == subActivity_Feed_Modify.MODIFY_OK) {
-//                    ArrayList newList = new ArrayList(commentList);
-//                    Feed item = (Feed) result.getData().getSerializableExtra("modifiedFeed");
-//                    newList.remove(0);
-//                    newList.add(0, item);
-//                    replaceItem(newList);
-//                    //피드에서도 수정 내역을 반영
-//                    Fragment_feed ff=((Fragment_feed) ((MainActivity) Fragment_feed.mContext).getSupportFragmentManager().findFragmentByTag("0"));
-//                    ArrayList list= new ArrayList(ff.feedList);
-//                    list.remove(item.getPosition());
-//                    list.add(item.getPosition(),item);
-//                    ff.getFeedAdapter().submitList(list);
-//                }
 //            });
 
     @Override
@@ -81,7 +65,6 @@ public class subactivity_challenge_board_comment extends AppCompatActivity {
         setContentView(binding.getRoot());
         item = (Board) getIntent().getSerializableExtra("board");
         challenge = (Challenge) getIntent().getSerializableExtra("challenge");
-//        position = (Integer) getIntent().getSerializableExtra("position");
         nowUser = new PersonalD(this).getUserInfo();
         context = this;
         boardFB = new BoardFB(context);
@@ -90,8 +73,6 @@ public class subactivity_challenge_board_comment extends AppCompatActivity {
         setItems();
         binding.mRecyclerView.setNestedScrollingEnabled(false);
 
-
-//        showShimmer(true);
 
         binding.btnWriteComment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,7 +89,7 @@ public class subactivity_challenge_board_comment extends AppCompatActivity {
     private void setItems() {
         initComment();
         loadData();
-        uv.getUser(item.getUserToken(),true);
+        uv.getUser(item.getUserToken(), true);
         uv.getData().observe(this, userInfo -> {
             creatorUser = userInfo;
         });
@@ -281,18 +262,5 @@ public class subactivity_challenge_board_comment extends AppCompatActivity {
             }
             page++; //로딩을 다하면 그다음 페이지로 넘어간다.
         }
-//        showShimmer(false);
     }
-    //shimmer을 켜고 끄고 하는 메소드
-//    private void showShimmer(Boolean bool) {
-//        if (bool) {
-//            binding.llComment.setVisibility(View.GONE);
-//            binding.SFLComment.startShimmer();
-//            binding.SFLComment.setVisibility(View.VISIBLE);
-//        } else {
-//            binding.llComment.setVisibility(View.VISIBLE);
-//            binding.SFLComment.stopShimmer();
-//            binding.SFLComment.setVisibility(View.GONE);
-//        }
-//    }
 }

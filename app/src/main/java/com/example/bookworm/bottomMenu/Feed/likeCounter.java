@@ -17,18 +17,19 @@ import java.util.Map;
 
 public class likeCounter {
     FirebaseFirestore db;
+
     public likeCounter() {
         db = FirebaseFirestore.getInstance();
     }
 
-    public void updateCounter( Map map, String feedID) {
+    public void updateCounter(Map map, String feedID) {
         final DocumentReference ref = db.collection("feed").document(feedID);
         final DocumentReference ref2 = db.collection("users").document(((UserInfo) map.get("nowUser")).getToken());
 
         db.runTransaction(new Transaction.Function<Void>() {
             @Override
             public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
-                DocumentSnapshot snapshot =transaction.get(ref);
+                DocumentSnapshot snapshot = transaction.get(ref);
                 long likecount = snapshot.getLong("likeCount");
                 if ((Boolean) map.get("liked")) likecount += 1;
                 else likecount -= 1;
@@ -42,10 +43,10 @@ public class likeCounter {
 
             }
         }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("Failed", "Transaction failure.", e);
-                    }
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("Failed", "Transaction failure.", e);
+            }
         });
     }
 

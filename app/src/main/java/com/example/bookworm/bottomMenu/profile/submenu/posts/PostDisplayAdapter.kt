@@ -10,7 +10,7 @@ import com.example.bookworm.bottomMenu.Feed.items.Feed
 import com.example.bookworm.databinding.FragmentProfilePostItemBinding
 
 
-class PostDisplayAdapter:
+class PostDisplayAdapter :
     ListAdapter<Feed, PostDisplayViewHolder>(PostDiffCallback) {
     lateinit var context: Context
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostDisplayViewHolder {

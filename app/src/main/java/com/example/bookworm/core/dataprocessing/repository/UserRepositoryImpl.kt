@@ -60,8 +60,8 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
             }
             else token.let {
                 var data = getUserInFB(it).await()
-                if(data!=null&&data!!.token==userInfo.token) data!!.isMainUser=true
-                if(data==null) data=UserInfo()
+                if (data != null && data!!.token == userInfo.token) data!!.isMainUser = true
+                if (data == null) data = UserInfo()
                 data
             }
         }
@@ -96,9 +96,10 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
             if (token == null) token = CoroutineScope(Dispatchers.IO).async {
                 getUser(token, false)
             }.await()!!.token
-            var albumReference = collectionReference.document(token!!).collection("albums").get().await()
-            for(i in albumReference.documents){
-                var data=AlbumData()
+            var albumReference =
+                collectionReference.document(token!!).collection("albums").get().await()
+            for (i in albumReference.documents) {
+                var data = AlbumData()
                 data.addData(i.data as Map<String, Any>)
                 resultArray.add(data)
             }

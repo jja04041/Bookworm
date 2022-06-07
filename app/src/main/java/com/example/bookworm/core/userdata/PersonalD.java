@@ -2,23 +2,26 @@
 package com.example.bookworm.core.userdata;
 
 import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class PersonalD {
     Context context;
-    public PersonalD(Context context){
-        this.context=context;
+
+    public PersonalD(Context context) {
+        this.context = context;
     }
 
     //데이터 저장을 위해서
-    public void saveUserInfo(UserInfo userInfo){
+    public void saveUserInfo(UserInfo userInfo) {
         SharedPreferences pref = context.getSharedPreferences("user", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         Gson gson = new Gson();
@@ -27,7 +30,7 @@ public class PersonalD {
         editor.commit();
     }
 
-    public void saveBookworm(BookWorm bookworm){
+    public void saveBookworm(BookWorm bookworm) {
         SharedPreferences pref = context.getSharedPreferences("bookworm", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         Gson gson = new Gson();
@@ -37,11 +40,11 @@ public class PersonalD {
     }
 
     //데이터 출력을 위해서
-    public UserInfo getUserInfo(){
+    public UserInfo getUserInfo() {
         SharedPreferences pref = context.getSharedPreferences("user", MODE_PRIVATE);
         Gson gson = new GsonBuilder().create();
         String key_user = pref.getString("key_user", null);
-        UserInfo userInfo=null;
+        UserInfo userInfo = null;
         try {
             JSONObject json = new JSONObject(key_user);
             userInfo = gson.fromJson(json.toString(), UserInfo.class);
@@ -50,11 +53,11 @@ public class PersonalD {
         return userInfo;
     }
 
-    public BookWorm getBookworm(){
+    public BookWorm getBookworm() {
         SharedPreferences pref = context.getSharedPreferences("bookworm", MODE_PRIVATE);
         Gson gson = new GsonBuilder().create();
         String key_bookworm = pref.getString("key_bookworm", null);
-        BookWorm bookWorm=null;
+        BookWorm bookWorm = null;
         try {
             JSONObject json = new JSONObject(key_bookworm);
             bookWorm = gson.fromJson(json.toString(), BookWorm.class);

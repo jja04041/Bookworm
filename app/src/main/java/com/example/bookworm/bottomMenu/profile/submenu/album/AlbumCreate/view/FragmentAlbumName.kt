@@ -54,12 +54,12 @@ class FragmentAlbumName : Fragment() {
                 }
 
             })
-        binding!!.edtAlbumName.setOnKeyListener(object : View.OnKeyListener{
+        binding!!.edtAlbumName.setOnKeyListener(object : View.OnKeyListener {
             override fun onKey(v: View?, keyCode: Int, keyEvent: KeyEvent): Boolean {
                 //엔터키를 눌렀을 경우 처리
-                if((keyEvent.action== KeyEvent.ACTION_DOWN )&&(keyCode == KeyEvent.KEYCODE_ENTER) )
-                {
-                    val imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                if ((keyEvent.action == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    val imm =
+                        context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(binding!!.edtAlbumName.getWindowToken(), 0)
                     binding!!.btnNext.performClick()
                 }

@@ -20,11 +20,12 @@ class CreateAlbumActivity : AppCompatActivity() {
     lateinit var fragmentAlbumArt: FragmentAlbumArt //앨범의 커버를 선택
     lateinit var fragmentAlbumname: FragmentAlbumName //앨범의 이름을 지어줌
     lateinit var feedList: ArrayList<Feed>
-    lateinit var imageProcessing:ImageProcessing
+    lateinit var imageProcessing: ImageProcessing
+
     //시작
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= ActivityCreateAlbumBinding.inflate(layoutInflater)
+        binding = ActivityCreateAlbumBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
         var pv: UserInfoViewModel =
             ViewModelProvider(
@@ -35,8 +36,11 @@ class CreateAlbumActivity : AppCompatActivity() {
             )
         imageProcessing = ImageProcessing(this)
         selectedFeed = ArrayList()
-        albumProcessViewModel = ViewModelProvider(this,AlbumProcessViewModel.Factory(this,pv)).get(AlbumProcessViewModel::class.java)
-        feedList= intent.getSerializableExtra("list") as ArrayList<Feed> //사용자가 작성한 피드의 목록을 보여줌
+        albumProcessViewModel =
+            ViewModelProvider(this, AlbumProcessViewModel.Factory(this, pv)).get(
+                AlbumProcessViewModel::class.java
+            )
+        feedList = intent.getSerializableExtra("list") as ArrayList<Feed> //사용자가 작성한 피드의 목록을 보여줌
 
         //생성
         fragmentSelectfeed = FragmentSelectFeed()
@@ -61,7 +65,7 @@ class CreateAlbumActivity : AppCompatActivity() {
                     .commitAllowingStateLoss()
                 albumProcessViewModel.updateAlbum()
             }
-            1->{
+            1 -> {
                 fm.beginTransaction()
                     .show(fragmentAlbumArt)
                     .hide(fragmentAlbumname)
@@ -69,7 +73,7 @@ class CreateAlbumActivity : AppCompatActivity() {
                     .commitAllowingStateLoss()
                 albumProcessViewModel.updateAlbum()
             }
-            else->{
+            else -> {
                 fm.beginTransaction()
                     .show(fragmentSelectfeed)
                     .hide(fragmentAlbumname)

@@ -1,6 +1,5 @@
 package com.example.bookworm.extension.follow.view
 
-//import com.example.bookworm.Extension.Follow.LoadData
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -76,8 +75,10 @@ class FragmentFollowList(
     fun loadUserData(flag: Boolean) {
         CoroutineScope(Dispatchers.Main).launch {
             nowUser = fv.getUser(null, true)
-            (context as FollowerActivity).tabLayout.getTabAt(0)!!.setText("${nowUser!!.followerCounts} 팔로워")
-            (context as FollowerActivity).tabLayout.getTabAt(1)!!.setText("${nowUser!!.followingCounts} 팔로잉")
+            (context as FollowerActivity).tabLayout.getTabAt(0)!!
+                .setText("${nowUser!!.followerCounts} 팔로워")
+            (context as FollowerActivity).tabLayout.getTabAt(1)!!
+                .setText("${nowUser!!.followingCounts} 팔로잉")
             Log.d("data", nowUser!!.followerCounts.toString())
             if (flag) init()
             fv.getFollowerList(token, if (isfollower == 0) false else true)
@@ -139,7 +140,7 @@ class FragmentFollowList(
         //가져온 데이터를 새롭게 담는다
         else {
             if (userList != info) userList.addAll(info)
-            else if(info.size==0)
+            else if (info.size == 0)
             else {
                 userList.clear()
                 userList.addAll(info)

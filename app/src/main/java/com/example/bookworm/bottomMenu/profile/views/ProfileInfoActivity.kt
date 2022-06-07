@@ -1,7 +1,5 @@
 package com.example.bookworm.bottomMenu.profile.views
 
-//import com.example.bookworm.Extension.Follow.Modules.followCounter
-
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -52,8 +50,6 @@ class ProfileInfoActivity : AppCompatActivity() {
         myFCMService = MyFCMService()
         mFirebaseDatabase = FirebaseDatabase.getInstance()
 
-        //implements
-
         //shimmer 적용을 위해 기존 뷰는 일단 안보이게, shimmer는 보이게
         binding.llResult.visibility = View.GONE
         binding.SFLoading.startShimmer()
@@ -71,9 +67,9 @@ class ProfileInfoActivity : AppCompatActivity() {
             SubUserData!!.let {
                 it.isFollowed = async { fv.isFollowNow(it) }.await()
                 pv.getBookWorm(SubUserData.token).join()
-                menuPagerAdapter = SubMenuPagerAdapter(it.token,supportFragmentManager)
-                Log.d("현재 읽은 도서 수 ",pv.bwdata.value!!.readcount!!.toString())
-                setUI(SubUserData, pv.bwdata.value!! )
+                menuPagerAdapter = SubMenuPagerAdapter(it.token, supportFragmentManager)
+                Log.d("현재 읽은 도서 수 ", pv.bwdata.value!!.readcount!!.toString())
+                setUI(SubUserData, pv.bwdata.value!!)
             }
         }
 
@@ -114,11 +110,8 @@ class ProfileInfoActivity : AppCompatActivity() {
         binding.btnchatting.setOnClickListener { view: View? ->
 
             // google id는 token길이가 매우 길기때문에 biginteger을 사용해야한다
-//            val intent = Intent(this, activity_chating::class.java)
-//            intent.putExtra("opponent", (user.token).toBigInteger());
-            val intent = Intent(this , activity_chating::class.java)
-            intent.putExtra("opponent", (user) );
-//            intent.putExtra("opponentname", (user.username));
+            val intent = Intent(this, activity_chating::class.java)
+            intent.putExtra("opponent", (user));
             startActivity(intent)
 
         }

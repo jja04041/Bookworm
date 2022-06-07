@@ -26,7 +26,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     OnBookItemClickListener listener;
 
     public BookAdapter(ArrayList<Book> data, Context c) {
-        BookList=data;
+        BookList = data;
         context = c;
     }
 
@@ -51,7 +51,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     //Arraylist에 있는 아이템을 뷰 홀더에 바인딩 하는 메소드
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        int safePosition=holder.getAdapterPosition();
+        int safePosition = holder.getAdapterPosition();
         if (holder instanceof ItemViewHolder) {
             Book item = BookList.get(safePosition);
             ((ItemViewHolder) holder).setItem(item);
@@ -59,6 +59,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             showLoadingView((LoadingViewHolder) holder, safePosition);
         }
     }
+
     @Override
     public int getItemCount() {
         return BookList.size();
@@ -74,7 +75,7 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
     }
 
-//    @Override
+    //    @Override
 //    //아이템 선택 시 보여줄 화면 구성 => 아마 인텐트로 넘기지 않을까?
     public void onItemClick(ItemViewHolder holder, View view, int position) {
         if (listener != null) {
@@ -91,8 +92,8 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
     private void showLoadingView(BookAdapter.LoadingViewHolder viewHolder, int position) {
-        LayoutItemLoadingBinding binding= LayoutItemLoadingBinding.bind(viewHolder.itemView);
-        Sprite Circle=new ThreeBounce();
+        LayoutItemLoadingBinding binding = LayoutItemLoadingBinding.bind(viewHolder.itemView);
+        Sprite Circle = new ThreeBounce();
         Circle.setAnimationDelay(0);
         binding.progressBar.setIndeterminateDrawable(Circle);
     }

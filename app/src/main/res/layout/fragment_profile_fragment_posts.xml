@@ -8,21 +8,21 @@
         android:id="@+id/postRecyclerView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/llalertNoPosts"
-        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
         <TextView
-            android:layout_marginVertical="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="30dp"
             android:gravity="center"
-            android:textSize="20dp"
             android:text="업로드된 포스트가 없습니다."
-            />
+            android:textSize="20dp" />
 
     </LinearLayout>
 

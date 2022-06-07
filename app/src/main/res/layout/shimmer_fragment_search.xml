@@ -5,7 +5,6 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -63,17 +62,19 @@
                 android:layout_width="100dp"
                 android:layout_height="147dp"
                 android:layout_margin="10dp"
-                android:background="@color/cardview_shadow_start_color"/>
+                android:background="@color/cardview_shadow_start_color" />
+
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="147dp"
                 android:layout_margin="10dp"
-                android:background="@color/cardview_shadow_start_color"/>
+                android:background="@color/cardview_shadow_start_color" />
+
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="147dp"
                 android:layout_margin="10dp"
-                android:background="@color/cardview_shadow_start_color"/>
+                android:background="@color/cardview_shadow_start_color" />
 
 
         </LinearLayout>

@@ -10,20 +10,23 @@ import com.example.bookworm.core.dataprocessing.repository.ChallengeRepositoryIm
 import kotlinx.coroutines.launch
 
 
-class ChallengeViewModel(val context: Context):ViewModel() {
+class ChallengeViewModel(val context: Context) : ViewModel() {
     var repo: ChallengeRepositoryImpl
-    val challengeList:MutableLiveData<ArrayList<Challenge>> = MutableLiveData()
-    class Factory(val context: Context): ViewModelProvider.Factory{
+    val challengeList: MutableLiveData<ArrayList<Challenge>> = MutableLiveData()
+
+    class Factory(val context: Context) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return ChallengeViewModel(context) as T
         }
     }
-    init{
+
+    init {
         repo = ChallengeRepositoryImpl(context)
     }
-    fun getChallengeList(token:String){
+
+    fun getChallengeList(token: String) {
         viewModelScope.launch {
-            challengeList.value=repo.getChallenges(token)
+            challengeList.value = repo.getChallenges(token)
         }
     }
 }

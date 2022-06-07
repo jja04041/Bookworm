@@ -31,14 +31,6 @@ public class MessageItem {
         this.name = name;
     }
 
-//        public String getOpponent() {
-//                return opponent;
-//        }
-//
-//        public void setOpponent(String opponent) {
-//                this.opponent = opponent;
-//        }
-
 
     public String getMessage() {
         return message;

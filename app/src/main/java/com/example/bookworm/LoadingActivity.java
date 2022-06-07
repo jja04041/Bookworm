@@ -8,7 +8,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -47,8 +46,7 @@ public class LoadingActivity extends AppCompatActivity {
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         finish();
-                    }
-                    else{
+                    } else {
 
                         //자동 로그인 (구글 , 카카오)
                         Intent intent = new Intent(LoadingActivity.this, MainActivity.class);

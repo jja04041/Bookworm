@@ -7,14 +7,14 @@
     android:orientation="vertical"
     tools:context=".bottomMenu.profile.views.ProfileInfoActivity">
 
-        <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/SFLoading"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/SFLoading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-            <include layout="@layout/shimmer_activity_profile_info" />
+        <include layout="@layout/shimmer_activity_profile_info" />
 
-        </com.facebook.shimmer.ShimmerFrameLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <LinearLayout
         android:id="@+id/llResult"
@@ -231,7 +231,6 @@
             </LinearLayout>
 
         </LinearLayout>
-        <!--이곳에 뷰 페이져 작성 -->
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"

@@ -17,7 +17,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 
 //FollowViewModel 구현체
-class FollowViewModelImpl(val context: Context) : ViewModel(),FollowViewModel{
+class FollowViewModelImpl(val context: Context) : ViewModel(), FollowViewModel {
     val db = FirebaseFirestore.getInstance() //파이어스토어와 연결
     var collectionReference = db.collection("users")
     var followList = MutableLiveData<ArrayList<UserInfo>>()
@@ -25,7 +25,7 @@ class FollowViewModelImpl(val context: Context) : ViewModel(),FollowViewModel{
     var lastVisibleUser: String? = null
     val repo = UserRepositoryImpl(context)
 
-    class Factory(val context: Context):ViewModelProvider.Factory{
+    class Factory(val context: Context) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return FollowViewModelImpl(context) as T
         }
@@ -43,17 +43,18 @@ class FollowViewModelImpl(val context: Context) : ViewModel(),FollowViewModel{
             }.await()
         }.await()
 
-    override suspend fun getUser(token: String?,getFromExt:Boolean) = repo.getUser(token,getFromExt)
+    override suspend fun getUser(token: String?, getFromExt: Boolean) =
+        repo.getUser(token, getFromExt)
 
-    override fun WithoutSuspendgetUser(token: String?){
+    override fun WithoutSuspendgetUser(token: String?) {
         viewModelScope.launch {
-            data.value = repo.getUser(token,true)
+            data.value = repo.getUser(token, true)
         }
     }
 
-     override suspend fun getFollowTokenList(
+    override suspend fun getFollowTokenList(
         token: String,
-        getFollower:Boolean,
+        getFollower: Boolean,
         lastVisible: String?
     ) = CoroutineScope(Dispatchers.IO).async {
         var tokenList = ArrayList<String>()
@@ -67,7 +68,7 @@ class FollowViewModelImpl(val context: Context) : ViewModel(),FollowViewModel{
         tokenList
     }.await()
 
-   override fun getFollowerList(token: String, getFollower: Boolean) = viewModelScope.launch {
+    override fun getFollowerList(token: String, getFollower: Boolean) = viewModelScope.launch {
         var resultList: ArrayList<UserInfo> //최종적으로 출력할 데이터
         val deferredTokenList: Deferred<ArrayList<String>> = async(Dispatchers.IO) {
             getFollowTokenList(token, getFollower, lastVisibleUser)
@@ -77,7 +78,7 @@ class FollowViewModelImpl(val context: Context) : ViewModel(),FollowViewModel{
             if (!tokenList.isEmpty()) lastVisibleUser =
                 tokenList.get(tokenList.size - 1)   //마지막에 가져온 사용자 정보를 저장
             var tmpFollowList = ArrayList<UserInfo>() //아직은 팔로우 여부를 체크하지 않은 User들의 정보가 들어감
-            for (i in tokenList) tmpFollowList.add(repo.getUser(i,false)!!)
+            for (i in tokenList) tmpFollowList.add(repo.getUser(i, false)!!)
             tmpFollowList
         }
         resultList = deferredFolowerList.await() //위 작업이 진행 된 후 결과값이 넘어옴
@@ -92,24 +93,24 @@ class FollowViewModelImpl(val context: Context) : ViewModel(),FollowViewModel{
                 resultList.set(it, user)
             }
         }
-        followList.value =resultList//가져온 값을 결과로 셋팅
+        followList.value = resultList//가져온 값을 결과로 셋팅
     }
 
-   override suspend fun follow(toUserInfo: UserInfo, type: Boolean): UserInfo {
+    override suspend fun follow(toUserInfo: UserInfo, type: Boolean): UserInfo {
         var fromUserInfo = viewModelScope.async {
-            getUser(null,true)
+            getUser(null, true)
         }.await()!!
         followProcessing(fromUserInfo, toUserInfo, type).await()
         val returnValue = viewModelScope.async {
-            getUser(toUserInfo.token,true)
+            getUser(toUserInfo.token, true)
         }.await()
         //새로운 값으로 뷰페이지 업데이트
-        data.value = getUser(null,true)
+        data.value = getUser(null, true)
         return returnValue!!
     }
 
     //팔로우 처리
-   override fun followProcessing(
+    override fun followProcessing(
         fromUserInfo: UserInfo,
         toUserInfo: UserInfo,
         type: Boolean

@@ -15,8 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
-//import com.example.bookworm.modules.module_search;
-import com.example.bookworm.bottomMenu.Feed.items.Feed;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity;
 import com.example.bookworm.bottomMenu.search.items.Book;
@@ -28,7 +26,6 @@ import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subAct
 import com.example.bookworm.core.internet.Module;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.databinding.FragmentSearchBinding;
-import com.example.bookworm.extension.follow.view.FollowerActivity;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import org.json.JSONArray;
@@ -40,14 +37,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//import com.example.bookworm.modules.module_search;
 //탐색 탭
 
 public class fragment_search extends Fragment {
-    EditText edtSearchBtn;
     private ArrayList<UserInfo> userInfoList = null;
     private ArrayList<BookWorm> bookWormList = null;
-    RecyclerView favRecyclerView;
     Module favmodule;
     RankFB rankFB;
     FragmentSearchBinding binding;

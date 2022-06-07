@@ -57,7 +57,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class subActivity_Feed_Modify extends AppCompatActivity{
+public class subActivity_Feed_Modify extends AppCompatActivity {
 
     public static int MODIFY_OK = 26;
     private SubactivityFeedModifyBinding binding;
@@ -102,7 +102,6 @@ public class subActivity_Feed_Modify extends AppCompatActivity{
                     Intent intent = result.getData();
                     this.selected_book = (Book) intent.getSerializableExtra("data");
                     binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목만 세팅한다.
-                    //Glide.with(this).load(selected_book.getImg_url()).into(Thumbnail); //책 표지 로딩후 삽입.
                 }
             });
 
@@ -133,7 +132,6 @@ public class subActivity_Feed_Modify extends AppCompatActivity{
         //프로필 세팅
 
 
-
         ArrayList<String> modifyLabel; //수정화면의 라벨 세팅
         modifyLabel = feed.getLabel();
 
@@ -155,10 +153,6 @@ public class subActivity_Feed_Modify extends AppCompatActivity{
                 binding.tvlabelHint.setVisibility(View.INVISIBLE);
             }
         }
-
-
-        //tvlabel1.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#55ff0000"))); //자바로 BackgroundTint 설정
-
 
         current_context = this;
         fbModule = new FBModule(current_context);
@@ -500,7 +494,7 @@ public class subActivity_Feed_Modify extends AppCompatActivity{
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String formatTime = dateFormat.format(System.currentTimeMillis());
 
-            map.put("UserToken",userInfo.getToken()); //사용자 토큰
+            map.put("UserToken", userInfo.getToken()); //사용자 토큰
             map.put("book", selected_book); //책 정보
             map.put("feedText", binding.edtFeedText.getText().toString()); //피드 내용
             map.put("label", labelAdd(labelList)); //라벨 리스트

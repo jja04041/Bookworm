@@ -39,19 +39,14 @@ public class MoveFragment {
 
                     fragmentManager.beginTransaction().add(R.id.container, fragments[i], String.valueOf(i)).commitAllowingStateLoss();
 
-                }
-                else
+                } else
                     fragmentManager.beginTransaction().show(fragments[i]).commitAllowingStateLoss();
-            }
-            else {
+            } else {
                 if (fragments[i] != null) {
-                    if(i == 2)
-                    {
+                    if (i == 2) {
                         fragmentManager.beginTransaction().remove(fragments[i]).commitAllowingStateLoss();
                         fragments[i] = null;
-                    }
-
-                    else
+                    } else
                         fragmentManager.beginTransaction().hide(fragments[i]).commitAllowingStateLoss();
                 }
 
