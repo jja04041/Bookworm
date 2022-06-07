@@ -17,7 +17,7 @@ const LocalProfileImgPath = "./Image/profileimg/";
 const LocalAlbumImgPath = "./Image/albumimg/";
 //Main
 router.get("/", (req, res) => {
-  res.send("helloworld~");
+  res.send("helloworlde~");
 });
 
 

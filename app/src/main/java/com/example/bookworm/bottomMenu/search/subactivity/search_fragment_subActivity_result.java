@@ -174,8 +174,11 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
                 float rank = Float.parseFloat(json.getString(text)) / 2;
                 customerReviewRank.setRating(rank);
                 textViews[i].setText(String.valueOf(rank));
+            }else if (text.equals("description")){
+                String description= json.getString(text);
+                description =description.replace("&lt;","<").replace("&gt;",">");
+                textViews[i].setText(description);
             }
-//            else  if(text.equals("d"))
 
             else textViews[i].setText(json.getString(getContent[i]));
         }

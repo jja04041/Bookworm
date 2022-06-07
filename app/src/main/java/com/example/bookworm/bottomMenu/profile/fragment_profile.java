@@ -1,6 +1,10 @@
 package com.example.bookworm.bottomMenu.profile;
 
 
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
+
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleObserver;
@@ -41,6 +47,12 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
     FollowViewModelImpl fv;
     private UserInfo NowUser;
     SubMenuPagerAdapter menuPagerAdapter;
+    public ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_CANCELED)
+                    fv.WithoutSuspendgetUser(NowUser.token);
+            });
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,7 +85,7 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
 
         //데이터 수정을 감지함
         pv.getData().observe(getViewLifecycleOwner(), userinfo -> {
-            NowUser=userinfo;
+            NowUser = userinfo;
             pv.getBookWorm(NowUser.token);
             achievement = new Achievement(current_context, fbModule, NowUser, bookworm);
             binding.tvFollowerCount.setText(String.valueOf(userinfo.getFollowerCounts()));
@@ -81,7 +93,6 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
             setUI(NowUser);
         });
         fv.getData().observe(getViewLifecycleOwner(), userInfo -> {
-
             binding.tvFollowerCount.setText(String.valueOf(userInfo.getFollowerCounts()));
             binding.tvFollowingCount.setText(String.valueOf(userInfo.getFollowingCounts()));
         });
@@ -110,7 +121,7 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
             Intent intent = new Intent(current_context, FollowerActivity.class);
             intent.putExtra("token", user.getToken());
             intent.putExtra("page", 0);
-            startActivity(intent);
+            startActivityResult.launch(intent);
         });
 
         //팔로잉액티비티 실행하기
@@ -118,7 +129,7 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
             Intent intent = new Intent(current_context, FollowerActivity.class);
             intent.putExtra("token", user.getToken());
             intent.putExtra("page", 1);
-            startActivity(intent);
+            startActivityResult.launch(intent);
         });
 
         binding.btnIntroModify.setOnClickListener(new View.OnClickListener() { //자기소개 수정
