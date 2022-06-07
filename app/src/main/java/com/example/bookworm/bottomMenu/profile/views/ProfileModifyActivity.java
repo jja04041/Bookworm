@@ -12,6 +12,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.bookworm.bottomMenu.challenge.items.Challenge;
 import com.example.bookworm.bottomMenu.profile.ChallengeViewModel;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
@@ -46,6 +47,8 @@ public class ProfileModifyActivity extends AppCompatActivity {
             Glide.with(this)
                     .load(userInfo.getProfileimg())
                     .circleCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .into(binding.ivProfileImage);
 
             binding.btnFavGenre.setOnClickListener(it -> {

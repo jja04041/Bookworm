@@ -15,6 +15,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.bookworm.core.internet.FBModule
 import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.core.userdata.interfaces.UserContract
@@ -324,12 +325,17 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
                 if (userInfo != null) {
                     binding!!.tvNickname.setText(userInfo!!.username)
                     Glide.with(itemView).load(userInfo!!.profileimg).circleCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
                         .into(binding!!.ivProfileImage)
+
                 }
             } else if (bool == true) {
                 if (userInfo != null) {
                     binding!!.tvCommentNickname.setText(userInfo!!.username)
                     Glide.with(binding!!.getRoot()).load(userInfo!!.profileimg).circleCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
                         .into(binding!!.ivCommentProfileImage)
                 }
             }
