@@ -14,37 +14,36 @@ import com.example.bookworm.achievement.Listener.OnViewHolderItemClickListener;
 import com.example.bookworm.chat.MessageItem;
 import com.example.bookworm.core.internet.FBModule;
 
-public class ChatlistViewHolder extends RecyclerView.ViewHolder  {
+public class ChatlistViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tv_opponame, tv_time, tv_content;
-        // 샘플 iv와 tap시 나오는 큰 iv
-        ImageView iv_oppopic;
-        LinearLayout chatlistitem;
-        FBModule fbModule;
+    TextView tv_opponame, tv_time, tv_content;
+    // 샘플 iv와 tap시 나오는 큰 iv
+    ImageView iv_oppopic;
+    LinearLayout chatlistitem;
 
-        OnViewHolderItemClickListener onViewHolderItemClickListener;
-
-
-        public ChatlistViewHolder(@NonNull View itemView) {
-            super(itemView);
+    OnViewHolderItemClickListener onViewHolderItemClickListener;
 
 
-            chatlistitem = itemView.findViewById(R.id.chatlist_item);
-            tv_opponame = itemView.findViewById(R.id.tv_opponame);
-            tv_time = itemView.findViewById(R.id.tv_chatlisttime);
-            tv_content = itemView.findViewById(R.id.tv_chatlistcontent);
-            iv_oppopic = itemView.findViewById(R.id.iv_oppopic);
+    public ChatlistViewHolder(@NonNull View itemView) {
+        super(itemView);
 
 
-            chatlistitem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                        onViewHolderItemClickListener.onViewHolderItemClick();
-                        }
-            });
-        }
+        chatlistitem = itemView.findViewById(R.id.chatlist_item);
+        tv_opponame = itemView.findViewById(R.id.tv_opponame);
+        tv_time = itemView.findViewById(R.id.tv_chatlisttime);
+        tv_content = itemView.findViewById(R.id.tv_chatlistcontent);
+        iv_oppopic = itemView.findViewById(R.id.iv_oppopic);
 
-    public void onBind(MessageItem itemData){
+
+        chatlistitem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onViewHolderItemClickListener.onViewHolderItemClick();
+            }
+        });
+    }
+
+    public void onBind(MessageItem itemData) {
         tv_opponame.setText(itemData.getName());
         tv_time.setText(itemData.getTime());
         tv_content.setText(itemData.getMessage());
@@ -53,8 +52,8 @@ public class ChatlistViewHolder extends RecyclerView.ViewHolder  {
     }
 
 
-        public void setOnViewHolderItemClickListener(OnViewHolderItemClickListener onViewHolderItemClickListener) {
+    public void setOnViewHolderItemClickListener(OnViewHolderItemClickListener onViewHolderItemClickListener) {
 
-            this.onViewHolderItemClickListener = onViewHolderItemClickListener;
-        }
+        this.onViewHolderItemClickListener = onViewHolderItemClickListener;
+    }
 }

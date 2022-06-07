@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.bookworm.BookWorm
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.profile.submenu.SubMenuPagerAdapter
@@ -19,6 +20,7 @@ import com.example.bookworm.notification.MyFCMService
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import java.lang.reflect.Type
 
 class ProfileInfoActivity : AppCompatActivity() {
     lateinit var binding: ActivityProfileInfoBinding
@@ -45,7 +47,6 @@ class ProfileInfoActivity : AppCompatActivity() {
             this,
             UserInfoViewModel.Factory(this)
         ).get(UserInfoViewModel::class.java)
-
 
         myFCMService = MyFCMService()
         mFirebaseDatabase = FirebaseDatabase.getInstance()

@@ -32,17 +32,14 @@ public class RankFB {
     public void getData() {
         collectionReference = db.collection("users");
         Query query = collectionReference.orderBy("BookWorm.readcount", Query.Direction.DESCENDING).limit(LIMIT);
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    QuerySnapshot querySnapshot = task.getResult();
-                    if (!querySnapshot.isEmpty()) {//가져온 데이터가 존재할경우
-                        fragment_search = ((fragment_search) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("1"));
-                        fragment_search.setRanking(querySnapshot.getDocuments());
-                    } else {//가져온 데이터가 존재하지 않을 경우
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                if (!querySnapshot.isEmpty()) {//가져온 데이터가 존재할경우
+                    fragment_search = ((fragment_search) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("1"));
+                    fragment_search.setRanking(querySnapshot.getDocuments());
+                } else {//가져온 데이터가 존재하지 않을 경우
 
-                    }
                 }
             }
         });

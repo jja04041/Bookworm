@@ -2,7 +2,10 @@ package com.example.bookworm.appLaunch.views;
 
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -11,6 +14,11 @@ import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.Feed.Fragment_feed;
 import com.example.bookworm.core.MoveFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,11 +36,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         // 초기화면 설정
         fragments[0] = new Fragment_feed();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.container, fragments[0], "0").commitAllowingStateLoss();
+
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom);
         bottomNavigationView.setOnItemSelectedListener(

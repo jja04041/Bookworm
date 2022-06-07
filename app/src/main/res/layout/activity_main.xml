@@ -21,8 +21,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:itemBackground="@color/maincolor"
-        app:itemIconTint="@drawable/bottom_icon_color"
-        app:itemTextColor="@drawable/bottom_icon_color"
+        app:itemIconTint="@color/black"
+        app:itemTextColor="@color/black"
         app:labelVisibilityMode="selected"
         app:menu="@menu/menu_bottom" />
 
