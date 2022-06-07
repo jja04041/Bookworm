@@ -39,6 +39,7 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
     private FBModule fbModule;
     UserInfoViewModel pv;
     FollowViewModelImpl fv;
+    private UserInfo NowUser;
     SubMenuPagerAdapter menuPagerAdapter;
 
     @Override
@@ -72,14 +73,15 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
 
         //데이터 수정을 감지함
         pv.getData().observe(getViewLifecycleOwner(), userinfo -> {
-            pv.getFeedList(userinfo.token);
-            pv.getBookWorm(userinfo.token);
-            achievement = new Achievement(current_context, fbModule, userinfo, bookworm);
+            NowUser=userinfo;
+            pv.getBookWorm(NowUser.token);
+            achievement = new Achievement(current_context, fbModule, NowUser, bookworm);
             binding.tvFollowerCount.setText(String.valueOf(userinfo.getFollowerCounts()));
             binding.tvFollowingCount.setText(String.valueOf(userinfo.getFollowingCounts()));
-            setUI(userinfo);
+            setUI(NowUser);
         });
         fv.getData().observe(getViewLifecycleOwner(), userInfo -> {
+
             binding.tvFollowerCount.setText(String.valueOf(userInfo.getFollowerCounts()));
             binding.tvFollowingCount.setText(String.valueOf(userInfo.getFollowingCounts()));
         });
@@ -189,6 +191,7 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
         if (!hidden) {
             menuPagerAdapter.getItem(0).onResume();
             fv.WithoutSuspendgetUser(null);
+            pv.getBookWorm(NowUser.token);
         }
         super.onHiddenChanged(hidden);
     }
