@@ -24,8 +24,7 @@
         </shape>
     </item>
 
-    <!--위와 동일하다.
-    -->
+    <!--위와 동일하다.    -->
     <item android:state_selected="false">
         <shape>
             <solid

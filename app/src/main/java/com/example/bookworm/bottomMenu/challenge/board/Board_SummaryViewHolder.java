@@ -41,9 +41,10 @@ public class Board_SummaryViewHolder extends RecyclerView.ViewHolder implements 
         UserInfo nowUser = new PersonalD(context).getUserInfo();
         //피드 요약
         binding.tvFeedtext.setText(item.getBoardText());
-        if (item.getImgurl() != "")
+        if (item.getImgurl() != "") {
             Glide.with(context).load(item.getImgurl()).into(binding.feedImage);
-        else binding.feedImage.setVisibility(View.INVISIBLE);
+            binding.feedImage.setVisibility(View.VISIBLE);
+        } else binding.feedImage.setVisibility(View.INVISIBLE);
 
         binding.llbook.setOnClickListener(new View.OnClickListener() {
             @Override
