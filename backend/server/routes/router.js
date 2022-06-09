@@ -4,9 +4,6 @@ const fs = require('fs');
 const fb = require("../module/firebaseProcess"); //파이어베이스 관련 함수 모음 
 const e = require('express');
 const router = express.Router();
-// const {
-//   createFirebaseToken
-// } = require("../module/firebase/getToken")
 module.exports = router;
 var imgPath = "";
 var Path = "";
