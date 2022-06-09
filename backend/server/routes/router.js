@@ -2,11 +2,8 @@ const express = require('express'); //express를 사용하기 위함.
 const multer = require('multer'); //이미지 업/다운로드를 위함.
 const fs = require('fs');
 const fb = require("../module/firebaseProcess"); //파이어베이스 관련 함수 모음 
-const e = require('express');
+const { request } = require('http');
 const router = express.Router();
-// const {
-//   createFirebaseToken
-// } = require("../module/firebase/getToken")
 module.exports = router;
 var imgPath = "";
 var Path = "";
@@ -15,8 +12,11 @@ var Path = "";
 const LocalFeedImgPath = "./Image/feed/";
 const LocalProfileImgPath = "./Image/profileimg/";
 const LocalAlbumImgPath = "./Image/albumimg/";
-//Main
+
+
+// Main -> 어플 소개페이지로 사용할 듯 하다. 
 router.get("/", (req, res) => {
+  console.log(`${writeAccessLog(req.ip)} - 메인 페이지 접속`); 
   res.send("helloworlde~");
 });
 
@@ -77,10 +77,11 @@ const upload = multer({
 router.post('/upload', upload.single('upload'), (req, res) => {
   try {
     res.status(200).send(imgPath);
-    if (imgPath.includes("/getimage/")) console.log(imgPath + " 피드 이미지가 업로드 되었습니다");
-    else console.log(imgPath + " 프로필 이미지가 업로드 되었습니다");
+    if (imgPath.includes("/getimage/")) console.log(`${writeAccessLog(req.ip)} - ${imgPath}  피드 이미지가 업로드 되었습니다`);  
+    else if(imgPath.includes("/getprofileimg"))console.log(`${writeAccessLog(req.ip)} - ${imgPath}  프로필 이미지가 업로드 되었습니다`);
+    else console.log(`${writeAccessLog(req.ip)} - ${imgPath}  앨범 이미지가 업로드 되었습니다`);
   } catch (err) {
-
+    console.log(`${writeAccessLog(req.ip)} - `);
     console.dir(err.stack);
   }
 
@@ -91,10 +92,13 @@ router.post('/upload', upload.single('upload'), (req, res) => {
 //프로필 이미지
 router.use('/getprofileimg/:data', (req, res) => {
   const dataPath = LocalProfileImgPath + req.params.data; //피드 이미지 경로 숨기기 
+  writeAccessLog(req.ip);
   fs.readFile(dataPath, function (err, data) {
     if (err) {
+      console.log(`${writeAccessLog(req.ip)} - ${dataPath} 조회 실패`);
       return res.status(404).end();
     } // Fail if the file can't be read.
+    console.log(`${writeAccessLog(req.ip)} - ${dataPath} 조회 완료`);
     res.writeHead(200, {
       'Content-Type': 'image/jpeg'
     });
@@ -105,10 +109,15 @@ router.use('/getprofileimg/:data', (req, res) => {
 //피드 이미지
 router.use('/getimage/:data', (req, res) => {
   const dataPath = LocalFeedImgPath + req.params.data; //피드 이미지 경로 숨기기 
+  //서버 접속기록 생성 
+  writeAccessLog(req.ip);
+
   fs.readFile(dataPath, function (err, data) {
     if (err) {
+      console.log(`${writeAccessLog(req.ip)} - ${dataPath} 조회 실패`);
       return res.status(404).end();
     } // Fail if the file can't be read.
+    console.log(`${writeAccessLog(req.ip)} - ${dataPath} 조회 완료`);
     res.writeHead(200, {
       'Content-Type': 'image/jpeg'
     });
@@ -119,11 +128,13 @@ router.use('/getimage/:data', (req, res) => {
 //앨범 이미지
 router.use('/getalbumimg/:data', (req, res) => {
   const dataPath = LocalAlbumImgPath + req.params.data; //피드 이미지 경로 숨기기 
+  writeAccessLog(req.ip);
   fs.readFile(dataPath, function (err, data) {
     if (err) {
-      console.log("가져올 수 없는 데이터입니다.");
+      console.log(`${writeAccessLog(req.ip)} - ${dataPath} 조회 실패`);
       return res.status(404).end();
     } // Fail if the file can't be read.
+    console.log(`${writeAccessLog(req.ip)} - ${dataPath} 조회 완료`);
     res.writeHead(200, {
       'Content-Type': 'image/jpeg'
     });
@@ -142,6 +153,7 @@ router.post("/deleteImg", (req, res) => {
   const userToken = req.body.userToken;
   const filePath = LocalFeedImgPath + fileName;
 
+  
   if (req.body.feedId.split('_')[1] == userToken) {
     //파일이 있는지 여부를 먼저 확인 
     fs.access(filePath, fs.constants.F_OK, (err) => {
@@ -162,7 +174,7 @@ router.post("/deleteImg", (req, res) => {
   } else return res.sendStatus(401); //유저 토큰과 일치 하지 않은 경우 401에러 표시 
 })
 //토큰 관리 
-router.get("/token", (req, res) => {
+router.post("/token", (req, res) => {
   const token = req.query.token;
   const platform = req.query.platform;
   if (!token) return res.status(400).send({
@@ -184,11 +196,19 @@ router.get("/token", (req, res) => {
 
 
 //사용자 탈퇴시 실행하는 쿼리 
-
-
-router.post("/showlist", async (req, res) => {
+router.post("/removeuser", async (req, res) => {
   var token = req.query.token;
   fb.showlist(token).then((answer) => {
     if (answer) res.send("done");
   });
+});
+
+//서버 접속시 로그 남김 
+var writeAccessLog=((remoteAddress)=>{
+  const now = new Date();
+  now.setHours(now.getHours()+9);
+  var date=["일","월","화","수","목","금","토"];
+  var stringDate=`${now.getFullYear()}년${now.getMonth()+1}월${now.getDate()}일( ${date[now.getDay()]}) ${now.getHours()}시${now.getMinutes()}분`   
+  const newLog = `${stringDate}: IP(${remoteAddress})`;
+  return newLog;
 });

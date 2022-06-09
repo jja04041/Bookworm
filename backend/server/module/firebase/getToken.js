@@ -28,10 +28,9 @@ initializeApp({
 
 
 function createFirebaseToken(AccessToken, platform) {
-    if (platform=="google"){
+    if (platform == "google") {
 
-    }
-    else if (platform == "kakao") {
+    } else if (platform == "kakao") {
         return requestMe(AccessToken).then((response) => {
             const body = JSON.parse(response);
             console.log(body);
@@ -49,7 +48,7 @@ function createFirebaseToken(AccessToken, platform) {
                 profileImage = body.properties.profile_image;
             }
             return updateOrCreateUser(userId, body.kaccount_email, nickname,
-                profileImage,platform);
+                profileImage, platform);
         }).then((userRecord) => {
             const userId = userRecord.uid;
             console.log(`creating a custom firebase token based on uid ${userId}`);
@@ -60,7 +59,7 @@ function createFirebaseToken(AccessToken, platform) {
     }
 };
 
-function updateOrCreateUser(userId, email, displayName, photoURL,platform) {
+function updateOrCreateUser(userId, email, displayName, photoURL, platform) {
     console.log('updating or creating a firebase user');
     const updateParams = {
         provider: platform,
