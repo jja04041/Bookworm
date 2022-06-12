@@ -148,11 +148,11 @@ public class activity_chating extends AppCompatActivity {
 
         //firebase DB에 저장할 값들
         String nickName= userinfo.getUsername();
-        String opponentName = userinfo.getUsername();
+        String opponentName = opponent.getUsername();
         String message= et.getText().toString();
         String pofileUrl= userinfo.getProfileimg();
         String token= userinfo.getToken();
-        MessageItem messageItem= null;
+        MessageItem messageItem = null;
 
                 //메세지 작성 시간 문자열로
         Calendar calendar= Calendar.getInstance(); //현재 시간을 가지고 있는 객체
@@ -160,7 +160,7 @@ public class activity_chating extends AppCompatActivity {
 
         //firebase DB에 저장할 값(MessageItem객체) 설정
         if(!message.equals("")) {
-            new MessageItem(nickName, message,time,pofileUrl, token);
+            messageItem = new MessageItem(nickName, message,time,pofileUrl, token);
             //chat노드에 MessageItem객체를 전달
             chatRef.push().setValue(messageItem);
             //EditText에 있는 글씨 지우기
