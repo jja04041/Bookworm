@@ -24,9 +24,6 @@ var checkID = async (token) => {
 };
 
 
-//사용자 탈퇴 시 사용자의 서브컬렉션을 지워야 함. 
-
-
 //피드 삭제 -> 전달받은 토큰을 기반으로 사용자의 피드 삭제    
 var deleteFeed = async (token) => {
   var query = db.collection('feed').where('UserToken', '==', token);
