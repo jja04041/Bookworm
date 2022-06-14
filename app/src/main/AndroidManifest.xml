@@ -9,9 +9,11 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+<!--
+        android:allowBackup="false" : 앱삭제시 데이터 백업을 하지 않도록 함. -->
     <application
         android:name=".core.login.GlobalApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/appicon"
         android:label="책볼레"
         android:roundIcon="@mipmap/appicon_round"

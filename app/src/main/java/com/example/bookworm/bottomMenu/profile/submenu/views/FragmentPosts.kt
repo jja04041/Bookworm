@@ -32,14 +32,17 @@ class FragmentPosts(val token: String?) : Fragment() {
             pv!!.getFeedList(userinfo.token)
         })
         if (token != null) pv!!.getFeedList(token)
-        pv!!.feedList.observe(viewLifecycleOwner, { list ->
-            //받은 포스트 목록을 화면에 띄워줘야함.
-            if (list.size == 0) binding!!.llalertNoPosts.visibility = View.VISIBLE
-            else {
-                binding!!.postRecyclerView.visibility = View.VISIBLE
-                adapter.submitList(list.toList())
+        pv!!.feedList.observe(viewLifecycleOwner) { list ->
+            adapter.submitList(list.toList()) {
+                if (adapter.currentList.size == 0) {
+                    binding!!.llalertNoPosts.visibility = View.VISIBLE
+                    binding!!.postRecyclerView.visibility = View.INVISIBLE;
+                } else {
+                    binding!!.postRecyclerView.visibility = View.VISIBLE
+                    binding!!.llalertNoPosts.visibility = View.INVISIBLE
+                }
             }
-        })
+        }
 
         return binding!!.root
     }
