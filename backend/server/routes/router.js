@@ -17,7 +17,7 @@ const LocalAlbumImgPath = "./Image/albumimg/";
 // Main -> 어플 소개페이지로 사용할 듯 하다. 
 router.get("/", (req, res) => {
   console.log(`${writeAccessLog(req.ip)} - 메인 페이지 접속`); 
-  res.send("helloworlde~");
+  res.send("서버가 현재 작동중입니다.");
 });
 
 
@@ -78,11 +78,12 @@ router.post('/upload', upload.single('upload'), (req, res) => {
   try {
     res.status(200).send(imgPath);
     if (imgPath.includes("/getimage/")) console.log(`${writeAccessLog(req.ip)} - ${imgPath}  피드 이미지가 업로드 되었습니다`);  
-    else if(imgPath.includes("/getprofileimg"))console.log(`${writeAccessLog(req.ip)} - ${imgPath}  프로필 이미지가 업로드 되었습니다`);
+    else if(imgPath.includes("/getprofileimg/"))console.log(`${writeAccessLog(req.ip)} - ${imgPath}  프로필 이미지가 업로드 되었습니다`);
     else console.log(`${writeAccessLog(req.ip)} - ${imgPath}  앨범 이미지가 업로드 되었습니다`);
   } catch (err) {
     console.log(`${writeAccessLog(req.ip)} - `);
     console.dir(err.stack);
+    res.status(400);
   }
 
 });
@@ -92,7 +93,6 @@ router.post('/upload', upload.single('upload'), (req, res) => {
 //프로필 이미지
 router.use('/getprofileimg/:data', (req, res) => {
   const dataPath = LocalProfileImgPath + req.params.data; //피드 이미지 경로 숨기기 
-  writeAccessLog(req.ip);
   fs.readFile(dataPath, function (err, data) {
     if (err) {
       console.log(`${writeAccessLog(req.ip)} - ${dataPath} 조회 실패`);
@@ -110,7 +110,6 @@ router.use('/getprofileimg/:data', (req, res) => {
 router.use('/getimage/:data', (req, res) => {
   const dataPath = LocalFeedImgPath + req.params.data; //피드 이미지 경로 숨기기 
   //서버 접속기록 생성 
-  writeAccessLog(req.ip);
 
   fs.readFile(dataPath, function (err, data) {
     if (err) {
@@ -128,7 +127,6 @@ router.use('/getimage/:data', (req, res) => {
 //앨범 이미지
 router.use('/getalbumimg/:data', (req, res) => {
   const dataPath = LocalAlbumImgPath + req.params.data; //피드 이미지 경로 숨기기 
-  writeAccessLog(req.ip);
   fs.readFile(dataPath, function (err, data) {
     if (err) {
       console.log(`${writeAccessLog(req.ip)} - ${dataPath} 조회 실패`);

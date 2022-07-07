@@ -58,11 +58,15 @@ class FragmentAlbums(val token: String?) : Fragment() {
         })
 
         pv!!.albumdata.observe(viewLifecycleOwner, { albumlist ->
-            //데이터가 있는 경우에만 리사이클러뷰를 화면에 표시한다.
-            if (albumlist.size == 0) binding!!.llalertNoAlbums.visibility = View.VISIBLE
-            else {
-                binding!!.albumRecyclerView.visibility = View.VISIBLE
-                adapter.submitList(albumlist.toList())
+            adapter.submitList(albumlist.toList()) {
+                //데이터가 있는 경우에만 리사이클러뷰를 화면에 표시한다.
+                if (adapter.currentList.size == 0) {
+                    binding!!.llalertNoAlbums.visibility = View.VISIBLE
+                    binding!!.albumRecyclerView.visibility = View.INVISIBLE;
+                } else {
+                    binding!!.albumRecyclerView.visibility = View.VISIBLE
+                    binding!!.llalertNoAlbums.visibility = View.INVISIBLE
+                }
             }
         })
 
