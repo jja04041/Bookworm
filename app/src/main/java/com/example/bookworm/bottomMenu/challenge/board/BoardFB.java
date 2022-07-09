@@ -51,6 +51,25 @@ public class BoardFB {
         });
     }
 
+    //인증글 삭제
+    public void deleteBoard(Board board) {
+        collectionReference = db.collection("challenge").document(board.getChallengeName()).collection("feed");
+        //task 결정
+        task = collectionReference.document(board.getBoardID()).delete();
+        //task 실행
+        task.addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("오류", "Error deleting " + e);
+            }
+        });
+    }
+
     //인증글 댓글 삭제
     public void deleteComment(Board board, String commentID) {
         collectionReference = db.collection("challenge").document(board.getChallengeName()).collection("feed").document(board.getBoardID()).collection("comments");
