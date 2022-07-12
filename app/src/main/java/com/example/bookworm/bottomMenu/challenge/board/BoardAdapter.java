@@ -81,6 +81,11 @@ public class BoardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         public void setItem(Board item) {
             binding.tvBoardText.setText(item.getBoardText());
+            if (item.isAllowed()) { //승인된 인증글이면 체크표시가 뜨게
+                binding.ivAllow.setVisibility(View.VISIBLE);
+            } else {
+                binding.ivAllow.setVisibility(View.INVISIBLE);
+            }
             Glide.with(context).load(item.getImgurl()).into(binding.ivThumb); //썸네일 설정
         }
     }

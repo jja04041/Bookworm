@@ -2,9 +2,11 @@ package com.example.bookworm.bottomMenu.challenge.board;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.bookworm.bottomMenu.Feed.comments.Comment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -12,9 +14,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Transaction;
 
 import java.util.Map;
 
@@ -47,6 +52,39 @@ public class BoardFB {
                         ((subactivity_challenge_board) context).isEmptyBoard(true);//인증글이 없습니다 라는 문구를 띄워줌
                     }
                 }
+            }
+        });
+    }
+
+    //인증글 승인(트랜잭션)
+    public void allowBoard(Board board) {
+        final DocumentReference ref = db.collection("challenge").document(board.getChallengeName()).collection("feed").document(board.getBoardID()); //인증글
+//        Comment comment = (Comment) map.get("comment");
+//        final DocumentReference ref2 = db.collection("users").document(board.getUserToken()); //인증글 작성자
+
+        db.runTransaction(new Transaction.Function<Void>() {
+            @Override
+            public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
+                transaction.update(ref, "allowed", true);
+
+
+
+
+//                transaction.update(ref, "commentsCount", FieldValue.increment(count));
+//                if (count == 1) {
+//                    transaction.set(ref2, comment);
+//                } else transaction.delete(ref2);
+                return null;
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d("Success", "Transaction success!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("Failed", "Transaction failure.", e);
             }
         });
     }

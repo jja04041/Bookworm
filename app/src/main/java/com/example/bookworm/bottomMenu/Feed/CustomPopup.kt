@@ -7,6 +7,7 @@ import android.content.Intent
 import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
+import android.widget.Toast
 import com.example.bookworm.R
 import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.Feed.Fragment_feed
@@ -15,7 +16,10 @@ import com.example.bookworm.bottomMenu.Feed.comments.CommentsCounter
 import com.example.bookworm.bottomMenu.Feed.comments.subactivity_comment
 import com.example.bookworm.bottomMenu.Feed.items.Feed
 import com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Modify
-import com.example.bookworm.bottomMenu.challenge.board.*
+import com.example.bookworm.bottomMenu.challenge.board.Board
+import com.example.bookworm.bottomMenu.challenge.board.BoardFB
+import com.example.bookworm.bottomMenu.challenge.board.Board_CommentsCounter
+import com.example.bookworm.bottomMenu.challenge.board.subactivity_challenge_board_comment
 import com.example.bookworm.core.internet.FBModule
 
 class CustomPopup(context: Context?, anchor: View?) : PopupMenu(context, anchor),
@@ -166,7 +170,8 @@ class CustomPopup(context: Context?, anchor: View?) : PopupMenu(context, anchor)
         } else if (layout == R.menu.board_menu) { //인증글의 메뉴 팝업
             when (p0?.itemId) {
                 R.id.menu_allow -> { //인증글 승인시 (챌린지 개설자 권한)
-
+                    boardFB!!.allowBoard(boardItem)
+                    Toast.makeText(context, "승인되었습니다.", Toast.LENGTH_SHORT).show()
                 }
                 R.id.menu_notallow -> { //인증글 반려시 (챌린지 개설자 권한)
 
