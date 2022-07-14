@@ -56,6 +56,7 @@ public class BoardFB {
         });
     }
 
+
     //인증글 승인(트랜잭션)
     public void allowBoard(Board board) {
         final DocumentReference ref = db.collection("challenge").document(board.getChallengeName()).collection("feed").document(board.getBoardID()); //인증글
