@@ -71,8 +71,10 @@ public class MessageActivity extends AppCompatActivity {
         Intent intent = getIntent();
         opponent = (UserInfo) intent.getSerializableExtra("opponent");
 
+
+
+
         TextView tv = findViewById(R.id.tv_chatroomtopbar);
-        tv.setText(opponent.getUsername());
 
         pv = new UserInfoViewModel(context);
         uv = new ViewModelProvider(this, new UserInfoViewModel.Factory(context)).get(UserInfoViewModel.class);
@@ -87,8 +89,20 @@ public class MessageActivity extends AppCompatActivity {
 
             myuid = userinfo.getToken();
 
-            if(opponent != null)
+            if(opponent != null) {
                 destUid = opponent.getToken();
+                tv.setText(opponent.getUsername());
+            }
+            else
+            {
+                destUid = (String) intent.getSerializableExtra("destuid");
+
+                uv.getUser(destUid, true);
+                uv.getData().observe(this, oppo -> {
+                    opponent = oppo;
+                    tv.setText(opponent.getUsername());
+                });
+            }
 
 
             init();
