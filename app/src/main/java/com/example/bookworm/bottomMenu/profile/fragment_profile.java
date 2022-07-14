@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.bookworm.R;
 import com.example.bookworm.achievement.Achievement;
 import com.example.bookworm.appLaunch.views.MainActivity;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
@@ -108,7 +109,8 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
         });
         pv.getBwdata().observe(getViewLifecycleOwner(), bookWorm -> {
             binding.tvReadBookCount.setText(String.valueOf(bookWorm.getReadcount()));
-            binding.ivBookworm.setImageResource(bookWorm.getWormtype());
+//            binding.ivBookworm.setImageResource(bookWorm.getWormtype());
+            binding.ivBookworm.setImageResource(R.drawable.bw_confidence);
         });
 
 

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--앨범내용을 보여주거나 앨범을 생성,수정 시에 사용하는 레이아웃-->
+<?xml version="1.0" encoding="utf-8"?><!--앨범내용을 보여주거나 앨범을 생성,수정 시에 사용하는 레이아웃-->
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -20,12 +19,11 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivAlbumPic"
                 android:layout_width="match_parent"
-                app:layout_collapseMode="parallax"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:id="@+id/ivAlbumPic"
-                android:src="@drawable/tmp2" />
+                app:layout_collapseMode="parallax" />
             <!--[1]사진에 그림자 효과를 두어 텍스트가 잘 두드러 지도록 함.  -->
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="match_parent"
@@ -37,14 +35,14 @@
             <!--[1] End-->
 
             <LinearLayout
-                app:layout_collapseMode="parallax"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginBottom="50dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_collapseMode="parallax">
 
                 <EditText
                     android:id="@+id/edtTitle"
@@ -91,6 +89,7 @@
                     android:textColor="@color/white"
                     android:textSize="20dp" />
             </LinearLayout>
+
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
@@ -147,8 +146,6 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-
-
     <!--    <EditText-->
     <!--        android:id="@+id/edtAlbumDesc"-->
     <!--        android:layout_width="match_parent"-->
@@ -167,6 +164,6 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mRecyclerView"
         android:layout_width="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
