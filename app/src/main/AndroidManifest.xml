@@ -36,10 +36,6 @@
             android:name="com.example.bookworm.bottomMenu.Feed.comments.subactivity_comment"
             android:exported="false" />
         <activity
-            android:name=".achievement.activity_achievement"
-            android:exported="false"
-            android:theme="@style/NoActionBar" />
-        <activity
             android:name="com.example.bookworm.bottomMenu.Feed.ImagePicker"
             android:exported="false" />
         <activity

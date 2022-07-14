@@ -10,7 +10,7 @@ import com.example.bookworm.core.userdata.UserInfo;
 
 import java.util.HashMap;
 
-public class Achievement extends activity_achievement {
+public class Achievement {
 
     Context context;
     FBModule fbModule;
