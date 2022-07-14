@@ -1,6 +1,5 @@
 package com.example.bookworm.appLaunch.modules
 
-import android.annotation.SuppressLint
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,7 +13,7 @@ import kotlinx.coroutines.launch
 
 //앱  로그인 시에 사용하는 뷰모델
 
-@SuppressLint("StaticFieldLeak")
+
 class MainViewModel(val context: Context) : ViewModel() {
     val ct = if (context is MainActivity) context else context as LoginActivity
     var userInfoViewModel =

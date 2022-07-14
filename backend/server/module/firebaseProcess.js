@@ -5,13 +5,12 @@ const {
 } = require('firebase-admin/app');
 const serviceAccount = require('../module/firebase/bookworm-f6973-firebase-adminsdk-lzs4b-a45e20e976.json');
 const {
-  getFirestore,
-  Timestamp,
-  FieldValue
+  getFirestore
 } = require('firebase-admin/firestore');
 initializeApp({
   credential: cert(serviceAccount)
 });
+const firebaseAdmin = require('firebase-admin');
 const db = getFirestore();
 var checkID = async (token) => {
   var ID = token;
@@ -64,7 +63,6 @@ var showlist = async (token) => {
   });
   return true;
 }
-
-exports.checkID = checkID;
-exports.deleteFeed = deleteFeed;
-exports.showlist = showlist;
+module.exports = {
+  checkID,deleteFeed,showlist,firebaseAdmin
+};

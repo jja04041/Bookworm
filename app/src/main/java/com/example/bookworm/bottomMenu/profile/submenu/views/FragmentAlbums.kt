@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumActivity
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumDisplay.item.AlbumDisplayAdapter
+import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumDisplay.view.ShowAlbumContentActivity
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.FragmentProfileFragmentAlbumsBinding
 
@@ -86,7 +87,17 @@ class FragmentAlbums(val token: String?) : Fragment() {
 
     fun initRecyclerView() {
         adapter = AlbumDisplayAdapter(requireContext())
+        adapter.setOnItemClickListener(object : AlbumDisplayAdapter.OnViewHolderItemClickListener {
+            override fun onViewHolderItemClick(view: View, position: Int) {
+                val albumItem = adapter.currentList[position]
+                var intent = Intent(context, ShowAlbumContentActivity::class.java)
+                intent.putExtra("albumData",albumItem)
+                startActivity(intent)
+            }
+
+        })
         binding!!.albumRecyclerView.adapter = adapter
+
         (binding!!.albumRecyclerView?.itemAnimator as SimpleItemAnimator).supportsChangeAnimations =
             false //데이터 업데이트 시, 플리커(깜빡이는 현상) 끄기
         val gridLayoutManager = GridLayoutManager(

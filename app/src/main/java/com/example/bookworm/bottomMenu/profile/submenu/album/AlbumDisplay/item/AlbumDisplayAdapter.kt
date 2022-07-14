@@ -16,13 +16,18 @@ class AlbumDisplayAdapter(val context: Context) :
     ListAdapter<AlbumData, RecyclerView.ViewHolder>(MyDiffCallback) {
     //뷰홀더가 만들어질때 작동하는 메서드
     //화면을 인플레이트하고 인플레이트된 화면을 리턴한다.
+
+    interface OnViewHolderItemClickListener {
+        fun onViewHolderItemClick(view:View,position: Int)
+    }
+    var mItemClickListener:OnViewHolderItemClickListener?=null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view: View
         when (viewType) {
             1 -> {
                 view = inflater.inflate(R.layout.fragment_profile_album_item, parent, false)
-                return AlbumDisplayViewHolder(view, context)
+                return AlbumDisplayViewHolder(view, context,mItemClickListener!!)
             }
             else -> {
                 view = inflater.inflate(R.layout.layout_item_loading, parent, false)
@@ -47,6 +52,9 @@ class AlbumDisplayAdapter(val context: Context) :
         }
     }
 
+    fun setOnItemClickListener(listener: OnViewHolderItemClickListener){
+        mItemClickListener=listener
+    }
     override fun getItemCount(): Int {
         return currentList.size
     }

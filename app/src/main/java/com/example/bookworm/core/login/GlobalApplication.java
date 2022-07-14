@@ -2,6 +2,7 @@ package com.example.bookworm.core.login;
 
 import android.app.Application;
 
+import com.example.bookworm.notification.MyFCMService;
 import com.kakao.auth.KakaoSDK;
 
 
@@ -10,7 +11,7 @@ import com.kakao.auth.KakaoSDK;
 
 public class GlobalApplication extends Application {
     private static GlobalApplication instance;
-
+    private MyFCMService fcmService;
 
     public static Application getInstance() {
         if (instance == null) {
@@ -22,7 +23,7 @@ public class GlobalApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        instance = this;
+        setItem();
         // Kakao Sdk 초기화
         KakaoSDK.init(new KakaoSDKAdapter());
     }
@@ -30,7 +31,20 @@ public class GlobalApplication extends Application {
     @Override
     public void onTerminate() {
         super.onTerminate();
-        instance = null;
+        setNull();
     }
 
+    private void setItem() {
+        instance = this;
+        fcmService = new MyFCMService();
+    }
+
+    private void setNull() {
+        instance = null;
+        fcmService = null;
+    }
+
+    public MyFCMService getFcmService() {
+        return fcmService;
+    }
 }

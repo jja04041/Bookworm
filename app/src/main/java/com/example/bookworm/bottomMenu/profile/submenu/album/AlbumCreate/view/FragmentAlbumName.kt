@@ -40,6 +40,8 @@ class FragmentAlbumName : Fragment() {
                 parentActivity.finish()
             })
 
+
+        //앨범명 입력 감지
         binding!!.edtAlbumName.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(16))
         binding!!.edtAlbumName.addTextChangedListener(
             object : TextWatcher {

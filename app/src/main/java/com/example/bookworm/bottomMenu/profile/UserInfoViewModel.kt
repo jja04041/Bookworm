@@ -82,8 +82,6 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
         }
     }
 
-    fun getFollowerList(token: String, getFollower: Boolean) =
-        fv.getFollowerList(token, getFollower)
 
     fun getBookWorm(token: String) =
         viewModelScope.launch {
