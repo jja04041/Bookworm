@@ -101,6 +101,9 @@
         <activity
             android:name=".chat.chatlist.activity_chatlist"
             android:exported="false"/> <!-- 채팅리스트 화면 -->
+        <activity
+            android:name=".chat.newchat.MessageActivity"
+            android:exported="false"/> <!-- 채팅리스트 화면 -->
 
         <activity
             android:name=".LoadingActivity"
