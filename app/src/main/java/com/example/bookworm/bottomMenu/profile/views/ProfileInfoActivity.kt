@@ -14,6 +14,7 @@ import com.example.bookworm.bottomMenu.bookworm.BookWorm
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.profile.submenu.SubMenuPagerAdapter
 import com.example.bookworm.chat.activity_chating
+import com.example.bookworm.chat.newchat.MessageActivity
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.ActivityProfileInfoBinding
 import com.example.bookworm.extension.follow.view.FollowViewModelImpl
@@ -119,6 +120,18 @@ class ProfileInfoActivity : AppCompatActivity() {
             startActivity(intent)
 
         }
+
+        binding.btnchatting2.visibility = View.VISIBLE
+
+        binding.btnchatting2.setOnClickListener { view: View? ->
+            // google id는 token길이가 매우 길기때문에 biginteger을 사용해야한다
+            val intent = Intent(this, MessageActivity::class.java)
+            intent.putExtra("opponent", (user));
+            startActivity(intent)
+
+        }
+
+
         //서브 메뉴 세팅
         binding.subMenuViewPager.adapter = menuPagerAdapter
         binding.tabLayout.setupWithViewPager(binding.subMenuViewPager)

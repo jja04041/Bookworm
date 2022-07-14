@@ -23,14 +23,15 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.bookworm.achievement.Achievement;
+import com.example.bookworm.appLaunch.views.MainActivity;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.profile.submenu.SubMenuPagerAdapter;
 import com.example.bookworm.bottomMenu.profile.views.ProfileSettingActivity;
+import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.databinding.FragmentProfileBinding;
 import com.example.bookworm.extension.follow.view.FollowViewModelImpl;
 import com.example.bookworm.extension.follow.view.FollowerActivity;
-import com.example.bookworm.core.internet.FBModule;
 
 public class fragment_profile extends Fragment implements LifecycleObserver {
 
@@ -74,6 +75,15 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
             Intent intent = new Intent(current_context, ProfileSettingActivity.class);
             startActivity(intent);
         });
+
+
+        binding.btnChatlist.setOnClickListener(v -> {
+            MainActivity mainActivity = (MainActivity) getActivity();
+
+            mainActivity.MovetoChatlist();
+        });
+
+
         binding.subMenuViewPager.setAdapter(menuPagerAdapter);
         binding.tabLayout.setupWithViewPager(binding.subMenuViewPager);
         binding.tabLayout.getTabAt(1).setText("앨범");

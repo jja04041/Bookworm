@@ -13,9 +13,13 @@
         <entry key="..\:/Bookworm/app/src/main/res/layout/activity_image_picker.xml" value="0.1" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/activity_loading.xml" value="0.1" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/activity_login.xml" value="0.1" />
+        <entry key="..\:/Bookworm/app/src/main/res/layout/activity_main.xml" value="0.1431159420289855" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/activity_profile_info.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/activity_profile_modify.xml" value="0.1" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/activity_profile_setting.xml" value="0.25364583333333335" />
+        <entry key="..\:/Bookworm/app/src/main/res/layout/blog_activity_message.xml" value="0.2734375" />
+        <entry key="..\:/Bookworm/app/src/main/res/layout/blog_fragment_chat.xml" value="0.19895833333333332" />
+        <entry key="..\:/Bookworm/app/src/main/res/layout/blog_item_messagebox.xml" value="0.2734375" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/custom_dialog_achievement.xml" value="0.13177083333333334" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/custom_dialog_label.xml" value="0.1" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_bookworm.xml" value="0.25364583333333335" />
