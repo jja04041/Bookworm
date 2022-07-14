@@ -1,6 +1,6 @@
 package com.example.bookworm.chat.newchat;
 
-import android.app.ActivityOptions;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -82,6 +82,7 @@ public class fragment_chatlist extends Fragment {
                         for (DataSnapshot item :snapshot.getChildren())
                         {
                             chatModels.add(item.getValue(ChatModel.class));
+
                         }
                         notifyDataSetChanged();
                     }
@@ -107,7 +108,7 @@ public class fragment_chatlist extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
             CustomViewHolder customViewHolder = (CustomViewHolder) holder;
             String destuid = null;
@@ -125,7 +126,7 @@ public class fragment_chatlist extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                     uv.getUser(finalDestuid, true);
-                    uv.getData().observe(getActivity(), userInfo -> {
+                    uv.getData().observe(getViewLifecycleOwner(), userInfo -> {
 
                         UserInfo opponent = userInfo;
                         Glide.with(customViewHolder.itemView.getContext())
