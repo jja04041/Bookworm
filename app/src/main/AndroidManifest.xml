@@ -59,6 +59,10 @@
             android:exported="false"
             android:parentActivityName=".appLaunch.views.MainActivity" />
         <activity
+            android:name=".bottomMenu.profile.submenu.album.AlbumDisplay.view.ShowAlbumContentActivity"
+            android:exported="false"
+            android:parentActivityName=".appLaunch.views.MainActivity" />
+        <activity
             android:name=".bottomMenu.search.subactivity.search_fragment_subActivity_result"
             android:exported="false"
             android:parentActivityName=".bottomMenu.search.subactivity.search_fragment_subActivity_main" />

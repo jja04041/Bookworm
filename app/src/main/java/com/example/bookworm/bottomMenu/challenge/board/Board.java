@@ -16,7 +16,7 @@ public class Board implements Serializable {
     private String masterToken; //챌린지 생성자 토큰
     private Book book; //챌린지에 사용된 책
     private long likeCount; //좋아요 수
-    private long commentCount; //사용자 댓글 수
+    private long commentsCount; //사용자 댓글 수
     private boolean allowed; //인증글 승인 여부
 
 
@@ -32,7 +32,7 @@ public class Board implements Serializable {
             this.masterToken = (String) data.get("masterToken");
             this.book.setBook((Map) data.get("book"));
             this.likeCount = (long) data.get("likeCount");
-            this.commentCount = (long) data.get("commentsCount");
+            this.commentsCount = (long) data.get("commentsCount");
             this.allowed = (boolean) data.get("allowed");
         }
     }
@@ -65,8 +65,8 @@ public class Board implements Serializable {
         return book;
     }
 
-    public long getCommentCount() {
-        return commentCount;
+    public long getCommentsCount() {
+        return commentsCount;
     }
 
     public String getChallengeName() {

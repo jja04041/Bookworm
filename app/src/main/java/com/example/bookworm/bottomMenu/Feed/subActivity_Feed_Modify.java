@@ -500,7 +500,7 @@ public class subActivity_Feed_Modify extends AppCompatActivity {
             map.put("label", labelAdd(labelList)); //라벨 리스트
             map.put("date", feed.getDate()); //현재 시간 millis로
             map.put("FeedID", feed.getFeedID()); //피드 아이디
-            map.put("commentsCount", feed.getCommentCount());
+            map.put("commentsCount", feed.getCommentsCount());
             map.put("likeCount", feed.getLikeCount());
             if (feed.getImgurl() != null) map.put("imgurl", feed.getImgurl()); //이미지 url
 

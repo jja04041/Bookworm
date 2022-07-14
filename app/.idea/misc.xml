@@ -3,9 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/back_icon.xml" value="0.2435" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/back_icon_white.xml" value="0.2435" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/bg_indicator_inactive.xml" value="0.1" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/bg_othermsgbox.xml" value="0.1" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/bottom_icon_color.xml" value="0.179" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/cover_design.xml" value="0.2415" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/ic_baseline_menu_24.xml" value="0.1" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/ic_baseline_more_horiz_24.xml" value="0.1" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/ic_baseline_more_vert_24.xml" value="0.1" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/selected_feed.xml" value="0.1" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/setting.xml" value="0.1" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/activity_achievement.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/activity_chating.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/activity_create_album.xml" value="0.25" />
@@ -52,14 +60,23 @@
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/layout_user_item.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/my_msgbox.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/other_msgbox.xml" value="0.36614583333333334" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/recyclerview_item.xml" value="0.23148148148148148" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/search_favoriteitem.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/search_fragment_result_feed.xml" value="0.36614583333333334" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/search_recyclerview_item.xml" value="0.36614583333333334" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/shimmer_fragment_record_item.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/shimmer_subactivity_challenge_createchallenge.xml" value="0.1875" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/story_item.xml" value="0.5" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_challenge_board.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_challenge_board_item.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_challenge_createchallenge.xml" value="0.1875" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_comment.xml" value="0.22" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_feed_modify.xml" value="0.36614583333333334" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_search_fragment_result.xml" value="0.36614583333333334" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_showalbumcontent.xml" value="0.25" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_showalbumcontent_introduction.xml" value="0.25" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_showalbumcontent_item.xml" value="0.34444444444444444" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/menu/create_album_menu.xml" value="0.36614583333333334" />
       </map>
     </option>
   </component>

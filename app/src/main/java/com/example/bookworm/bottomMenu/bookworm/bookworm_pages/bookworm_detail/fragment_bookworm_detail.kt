@@ -49,8 +49,6 @@ class fragment_bookworm_detail : Fragment() {
             this.userInfo = userInfo
             uv.getBookWorm(userInfo.token) //책볼레 데이터를 불러오도록 한다.
         }
-
-
         return binding!!.root
     }
 
