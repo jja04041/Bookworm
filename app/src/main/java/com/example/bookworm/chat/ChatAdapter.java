@@ -18,11 +18,13 @@ public class ChatAdapter extends BaseAdapter {
     ArrayList<MessageItem> messageItems;
     LayoutInflater layoutInflater;
     String username;
+    String token;
 
-    public ChatAdapter(ArrayList<MessageItem> messageItems, LayoutInflater layoutInflater, String username) {
+    public ChatAdapter(ArrayList<MessageItem> messageItems, LayoutInflater layoutInflater, String username, String token) {
         this.messageItems = messageItems;
         this.layoutInflater = layoutInflater;
         this.username = username;
+        this.token = token;
     }
 
     @Override
@@ -50,7 +52,7 @@ public class ChatAdapter extends BaseAdapter {
         View itemView = null;
 
         //메세지가 내 메세지인지??
-        if (item.getName().equals(username)) {
+        if (item.getName().equals(token)) {
             itemView = layoutInflater.inflate(R.layout.my_msgbox, viewGroup, false);
         } else {
             itemView = layoutInflater.inflate(R.layout.other_msgbox, viewGroup, false);

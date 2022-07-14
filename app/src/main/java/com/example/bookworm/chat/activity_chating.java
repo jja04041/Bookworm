@@ -83,7 +83,7 @@ public class activity_chating extends AppCompatActivity {
 
             et = findViewById(R.id.et);
             listView = findViewById(R.id.chat_listview);
-            adapter = new ChatAdapter(messageItems, getLayoutInflater(), userinfo.getUsername());
+            adapter = new ChatAdapter(messageItems, getLayoutInflater(), userinfo.getUsername(), userinfo.getToken());
             listView.setAdapter(adapter);
 
 

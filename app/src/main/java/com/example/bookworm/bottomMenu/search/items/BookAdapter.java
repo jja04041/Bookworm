@@ -20,7 +20,7 @@ import com.github.ybq.android.spinkit.style.ThreeBounce;
 
 import java.util.ArrayList;
 
-public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnBookItemClickListener {
+    public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnBookItemClickListener {
     ArrayList<Book> BookList;
     Context context;
     OnBookItemClickListener listener;

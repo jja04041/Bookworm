@@ -2,29 +2,22 @@ package com.example.bookworm.appLaunch.views;
 
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.Feed.Fragment_feed;
+import com.example.bookworm.chat.newchat.fragment_chatlist;
 import com.example.bookworm.core.MoveFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
 
-    Fragment Fragment_feed, fragment_search, fragment_bookworm, fragment_challenge, fragment_profile;
-    Fragment[] fragments = {Fragment_feed, fragment_search, fragment_bookworm, fragment_challenge, fragment_profile};
+    Fragment Fragment_feed, fragment_search, fragment_bookworm, fragment_challenge, fragment_profile, fragment_chatlist;
+    Fragment[] fragments = {Fragment_feed, fragment_search, fragment_bookworm, fragment_challenge, fragment_profile, fragment_chatlist};
     // 위험 권한을 부여할 권한 지정
 
     FragmentManager fragmentManager;
@@ -40,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         fragments[0] = new Fragment_feed();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.container, fragments[0], "0").commitAllowingStateLoss();
-
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom);
         bottomNavigationView.setOnItemSelectedListener(
@@ -69,12 +61,23 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.tab_profile:
                             MoveFragment.show_fragment(fragments, fragmentManager, 4);
                             return true;
+
+
                     }
+
 
 
                     return false;
                 });
 
     }
+
+
+    public void MovetoChatlist()
+    {
+        getSupportFragmentManager().beginTransaction().replace(R.id.container,new fragment_chatlist()).commitAllowingStateLoss();
+    }
+
+
 
 }
