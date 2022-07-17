@@ -64,7 +64,8 @@ class fragment_bookworm_detail : Fragment() {
             }
             bwAdapter.submitList(bwDataList)
 //            //데이터가 도착한 경우 , 사용자가 뷰홀더에서 선택한 경우에만 세팅을 한다.
-            binding!!.ivBookworm.setImageResource(bw.wormtype)
+//            binding!!.ivBookworm.setImageResource(bw.wormtype)
+            binding!!.ivBookworm.setImageResource(R.drawable.bw_cartoon) //id값 꼬여서 임시로 해놓음
             binding!!.ivBg.setImageResource(bw.bgtype)
         }
         bwAdapter.submitList(bwDataList)

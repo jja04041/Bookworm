@@ -14,6 +14,8 @@ class UserInfo : Serializable {
     private var email: String? = null // 로그인한 이메일
     var platform: String? = null //플랫폼 확인
     var introduce = "안녕하세요~"
+    var completedChallenge: Long? = 0 //인증 완료된 챌린지 개수
+    var tier: Long? = 0 //인증 완료된 챌린지에 따른 티어(닉네임 옆 메달 표시용)
 
     @get:Exclude
     var isMainUser = false //메인 유저인지 확인하는 변수
@@ -73,7 +75,8 @@ class UserInfo : Serializable {
         fCMtoken = document["fcmtoken"] as String
         if (document["introduce"] as String? != null)
             introduce = (document["introduce"] as String?)!!
-
+        completedChallenge = document["completedChallenge"] as Long?
+        tier = document["tier"] as Long?
     }
 
     //장르 설정

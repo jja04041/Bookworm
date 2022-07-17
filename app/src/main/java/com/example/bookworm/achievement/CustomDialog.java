@@ -29,7 +29,13 @@ public class CustomDialog {
     public CustomDialog(Context context, String _AchieveKey, int _resID) {
         this.context = context;
         key = _AchieveKey;
-        resID = _resID;
+        if (_resID == 1) { //티어 1일때
+            resID = R.drawable.bronze_medal;
+        } else if (_resID == 2) { //티어 2일때
+            //resID = R.drawable.silver_medal; 아마도 실버로??
+        } else {
+            resID = _resID;
+        }
         exit = false;
     }
 

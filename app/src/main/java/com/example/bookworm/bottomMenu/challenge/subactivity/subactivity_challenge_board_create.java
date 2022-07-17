@@ -170,8 +170,8 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
 
     //피드 업로드
     public void feedUpload(String imgUrl) {
-//        if (binding.edtFeedText.getText().toString().equals("")) { //테스트용@@@ 나중에 지우고 바로 밑줄로 바꿔야함 (인증글 테스트 할때마다 사진 올리는거 힘들어서...)
-        if (binding.edtFeedText.getText().toString().equals("") || binding.ivpicture.getDrawable() == null) { //인증사진이나 피드 내용이 없으면 작성해달라는 알림 띄움
+        if (binding.edtFeedText.getText().toString().equals("")) { //테스트용@@@ 나중에 지우고 바로 밑줄로 바꿔야함 (인증글 테스트 할때마다 사진 올리는거 힘들어서...)
+//        if (binding.edtFeedText.getText().toString().equals("") || binding.ivpicture.getDrawable() == null) { //인증사진이나 피드 내용이 없으면 작성해달라는 알림 띄움
             new AlertDialog.Builder(current_context)
                     .setMessage("인증 사진과 인증글 내용을 작성해주세요")
                     .setPositiveButton("알겠습니다.", new DialogInterface.OnClickListener() {

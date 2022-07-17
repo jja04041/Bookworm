@@ -60,21 +60,14 @@ public class BoardFB {
     //인증글 승인(트랜잭션)
     public void allowBoard(Board board) {
         final DocumentReference ref = db.collection("challenge").document(board.getChallengeName()).collection("feed").document(board.getBoardID()); //인증글
-//        Comment comment = (Comment) map.get("comment");
-//        final DocumentReference ref2 = db.collection("users").document(board.getUserToken()); //인증글 작성자
+        final DocumentReference ref2 = db.collection("users").document(board.getUserToken()); //인증글 작성자
 
         db.runTransaction(new Transaction.Function<Void>() {
             @Override
             public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
-                transaction.update(ref, "allowed", true);
+                transaction.update(ref, "allowed", true); //인증완료 여부를 true로
+                transaction.update(ref2, "UserInfo.completedChallenge", FieldValue.increment(1)); //완료한 챌린지 개수에 +1
 
-
-
-
-//                transaction.update(ref, "commentsCount", FieldValue.increment(count));
-//                if (count == 1) {
-//                    transaction.set(ref2, comment);
-//                } else transaction.delete(ref2);
                 return null;
             }
         }).addOnSuccessListener(new OnSuccessListener<Void>() {
