@@ -1,5 +1,6 @@
 package com.example.bookworm.chat.newchat;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
@@ -66,9 +67,9 @@ public class fragment_chatlist extends Fragment {
             context = getContext();
 
             pv = new UserInfoViewModel(context);
-            uv = new ViewModelProvider(getActivity(), new UserInfoViewModel.Factory(context)).get(UserInfoViewModel.class);
 
-            pv.getUser(null, false);
+
+            pv.getUser(null, false); //본인 데이터
 
             pv.getData().observe(getActivity(), userInfo -> {
                 userinfo = userInfo;
@@ -107,7 +108,7 @@ public class fragment_chatlist extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
             CustomViewHolder customViewHolder = (CustomViewHolder) holder;
             String destuid = null;
@@ -120,29 +121,7 @@ public class fragment_chatlist extends Fragment {
             }
 
             String finalDestuid = destuid;
-            FirebaseDatabase.getInstance().getReference().child("users").child(destuid).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                    uv.getUser(finalDestuid, true);
-                    uv.getData().observe(getActivity(), userInfo -> {
-
-                        UserInfo opponent = userInfo;
-                        Glide.with(customViewHolder.itemView.getContext())
-                                .load(opponent.getProfileimg())
-                                .apply(new RequestOptions().circleCrop())
-                                .into(customViewHolder.iv_profileimg);
-
-                        customViewHolder.tv_title.setText(opponent.getUsername());
-                    });
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
+            uv.getUser(finalDestuid, true);
 
 
             // 메시지 내림순으로 정렬 후 마지막 메시지 키 가져옴
@@ -156,7 +135,6 @@ public class fragment_chatlist extends Fragment {
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), MessageActivity.class);
                     intent.putExtra("destuid", destusers.get(position));
-
                     startActivity(intent);
 
                 }
@@ -176,10 +154,17 @@ public class fragment_chatlist extends Fragment {
 
             public CustomViewHolder(View view){
                 super(view);
+                uv = new ViewModelProvider(getActivity(), new UserInfoViewModel.Factory(context)).get(UserInfoViewModel.class);
                 iv_profileimg = (ImageView)view.findViewById(R.id.item_chat_imageView);
                 tv_title = (TextView)view.findViewById(R.id.item_chat_tv_title);
                 tv_comment = (TextView)view.findViewById(R.id.item_chat_tv_comment);
-
+                uv.getData().observe(getViewLifecycleOwner(), opponent -> {
+                    Glide.with(view)
+                            .load(opponent.getProfileimg())
+                            .apply(new RequestOptions().circleCrop())
+                            .into(iv_profileimg);
+                   tv_title.setText(opponent.getUsername());
+                });
             }
         }
 

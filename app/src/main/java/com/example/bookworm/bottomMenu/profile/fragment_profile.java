@@ -54,7 +54,6 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -108,10 +107,9 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
         });
         pv.getBwdata().observe(getViewLifecycleOwner(), bookWorm -> {
             binding.tvReadBookCount.setText(String.valueOf(bookWorm.getReadcount()));
-            binding.ivBookworm.setImageResource(bookWorm.getWormtype());
+            int id = current_context.getResources().getIdentifier("bw_" + bookWorm.getWormtype(), "drawable", current_context.getPackageName());
+            binding.ivBookworm.setImageResource(id);
         });
-
-
         return view;
     }
 
@@ -122,10 +120,9 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
                 .skipMemoryCache(true)
                 .circleCrop()
                 .into(binding.imgFragProfileProfile);
-       //프로필사진 로딩후 삽입.
+        //프로필사진 로딩후 삽입.
         binding.tvUserName.setText(user.getUsername());
         binding.edtIntroduce.setText(user.getIntroduce());
-
 
 
         //팔로워액티비티 실행하기
@@ -211,7 +208,7 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
 
     @Override
     public void onResume() {
-        pv.getUser(null,false);
+        pv.getUser(null, false);
         fv.WithoutSuspendgetUser(null);
         super.onResume();
     }

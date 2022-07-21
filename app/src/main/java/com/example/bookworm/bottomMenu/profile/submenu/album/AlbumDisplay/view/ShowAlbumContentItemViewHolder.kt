@@ -14,10 +14,11 @@ class ShowAlbumContentItemViewHolder(
 ) :
     RecyclerView.ViewHolder(binding.root) {
     fun setItem(data: Feed) {
-        binding.tvBookTitle.text=data.book.title
-        binding.tvFeedDate.text=data.date
-        binding.tvFeedDesc.text=data.feedText
-                Glide.with(binding.root).load(data.book.img_url).into(binding.ivBookThumb)
+        binding.tvBookTitle.text = data.book.title
+        binding.tvFeedDate.text = data.date
+        binding.tvFeedDesc.text = data.feedText
+        Glide.with(binding.root).load(data.book.img_url).into(binding.ivBookThumb)
+        
 //        binding.tvFeedDate.text = data.date
 //        binding.tvFeedtext.text = data.feedText
 //        Glide.with(binding.root).load(data.book.img_url).into(binding.ivBookThumb)

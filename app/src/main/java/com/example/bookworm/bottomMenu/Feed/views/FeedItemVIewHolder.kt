@@ -257,6 +257,7 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
 
             val bookworm = PersonalD(context).bookworm
             val achievement = Achievement(context, fbModule, nowUser, bookworm)
+
             achievement.CompleteAchievement(nowUser, context)
 
         } else {

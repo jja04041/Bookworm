@@ -19,14 +19,14 @@ public class CustomDialog {
 
     private Context context;
     private String key;
-    int resID;
+    String resID;
     boolean exit;
 
     public CustomDialog(Context context) {
         this.context = context;
     }
 
-    public CustomDialog(Context context, String _AchieveKey, int _resID) {
+    public CustomDialog(Context context, String _AchieveKey, String _resID) {
         this.context = context;
         key = _AchieveKey;
         resID = _resID;
@@ -51,7 +51,7 @@ public class CustomDialog {
 
         tvdialog.setText("축하합니다! " + key + " 획득!");
         tvdialognotice.setText("획득한 보상을 인벤토리에서 확인해보세요!!");
-        ivdialog.setImageResource(resID);
+        ivdialog.setImageResource(context.getResources().getIdentifier("bw_"+resID,"drawable",context.getPackageName()));
         btncancle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

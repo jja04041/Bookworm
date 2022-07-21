@@ -36,11 +36,11 @@ class fragment_bookworm_detail : Fragment() {
         )
         bwDataList = ArrayList()
         initAdapter()
-        val bwImgList = resources.obtainTypedArray(R.array.bookworm_char)
+        val bwImgList = resources.getStringArray(R.array.bookworm_char)
         val bwNameList = resources.getStringArray(R.array.bookworm_name) //전체 책볼레 리스트 생성
-        for (i: Int in 0..bwImgList.length() - 1) {
+        for (i: Int in 0..bwImgList.size - 1) {
             var bookwormData = BookwormData()
-            bookwormData.setBwData(bwImgList.getResourceId(i, -1), bwNameList[i], false)
+            bookwormData.setBwData(bwImgList[i], bwNameList[i], false)
             bwDataList.add(bookwormData)
         }
         uv.getUser(null, false)
@@ -64,7 +64,8 @@ class fragment_bookworm_detail : Fragment() {
             }
             bwAdapter.submitList(bwDataList)
 //            //데이터가 도착한 경우 , 사용자가 뷰홀더에서 선택한 경우에만 세팅을 한다.
-            binding!!.ivBookworm.setImageResource(bw.wormtype)
+
+            binding!!.ivBookworm.setImageResource(requireContext().resources.getIdentifier("bw_${bw.wormtype}","drawable",requireContext().packageName))
             binding!!.ivBg.setImageResource(bw.bgtype)
         }
         bwAdapter.submitList(bwDataList)
@@ -82,7 +83,7 @@ class fragment_bookworm_detail : Fragment() {
         bwAdapter.setOnItemClickListener(object : BookwormImgAdapter.OnItemClickEventListener {
             override fun onItemClick(a_view: View?, a_position: Int) {
                 var item = bwDataList[a_position]
-                binding!!.ivBookworm.setImageResource(item.id)
+                binding!!.ivBookworm.setImageResource(requireContext().resources.getIdentifier("bw_${item.id}","drawable",requireContext().packageName))
             }
         })
         val gridLayoutManager = GridLayoutManager(context, 2, LinearLayoutManager.HORIZONTAL, false)

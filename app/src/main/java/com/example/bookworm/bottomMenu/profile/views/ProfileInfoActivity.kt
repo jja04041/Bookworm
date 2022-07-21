@@ -148,7 +148,7 @@ class ProfileInfoActivity : AppCompatActivity() {
         binding.tvFollowerCount.text = user.followerCounts.toString()
         binding.tvFollowingCount.text = user.followingCounts.toString()
         binding.tvReadBookCount.text = bookWorm.readcount.toString()
-        binding.ivBookworm.setImageResource(bookWorm.wormtype)
+        binding.ivBookworm.setImageResource(this.resources.getIdentifier("bw_${bookWorm.wormtype}","drawable",this.packageName))
 
 
         //팔로우 버튼을 클릭했을때 버튼 모양, 상태 변경

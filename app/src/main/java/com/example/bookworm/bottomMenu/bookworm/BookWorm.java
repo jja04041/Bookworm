@@ -24,8 +24,9 @@ public class BookWorm {
 
 
     // 업적 달성시 이 벡터에 책볼레 drawble id값을 추가합니다.
-    private int wormtype = R.drawable.bw_default;
-    private Vector<Integer> wormvec = new Vector<>();
+//    private int wormtype = R.drawable.bw_default;
+    private String wormtype ;
+    private Vector<String> wormvec = new Vector<>();
 
     private int bgtype = R.drawable.bg_default;
     private Vector<Integer> bgvec = new Vector<>();
@@ -38,22 +39,19 @@ public class BookWorm {
 
 
     public BookWorm() {
-        this.wormtype = R.drawable.bw_default;
-        this.wormvec.add(R.drawable.bw_default);
+        this.wormtype = "default";
+        this.wormvec.add(this.wormtype);
         this.bgtype = R.drawable.bg_default;
         this.bgvec.add(R.drawable.bg_default);
-
         this.achievementmap.put("디폴트", true);
-
         this.readcount = 0;
     }
 
 
     public void add(Map document) {
         this.token = (String) document.get("token");
-        this.wormtype = Integer.parseInt(String.valueOf(document.get("wormtype")));
-        this.wormvec = new Vector<>(((List<Long>) document.get("wormvec")).stream()
-                .map(Long::intValue)
+        this.wormtype = (String) document.get("wormtype");
+        this.wormvec = new Vector<String>(((List<String>) document.get("wormvec")).stream()
                 .collect(Collectors.toList()));
         this.bgtype = Integer.parseInt(String.valueOf(document.get("bgtype")));
         this.bgvec = new Vector<>((ArrayList<Integer>) document.get("bgvec"));
@@ -66,19 +64,19 @@ public class BookWorm {
 
 
     // 볼레
-    public Vector<Integer> getWormvec() {
+    public Vector<String> getWormvec() {
         return wormvec;
     }
 
-    public void setWormvec(Vector<Integer> wormvec) {
+    public void setWormvec(Vector<String> wormvec) {
         this.wormvec = wormvec;
     }
 
-    public int getWormtype() {
+    public String getWormtype() {
         return wormtype;
     }
 
-    public void setWormtype(int wormtype) {
+    public void setWormtype(String wormtype) {
         this.wormtype = wormtype;
     }
 

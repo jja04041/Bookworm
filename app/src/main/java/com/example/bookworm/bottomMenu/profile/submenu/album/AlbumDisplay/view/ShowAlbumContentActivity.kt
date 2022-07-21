@@ -1,6 +1,7 @@
 package com.example.bookworm.bottomMenu.profile.submenu.album.AlbumDisplay.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +20,7 @@ class ShowAlbumContentActivity: AppCompatActivity(){
         binding= SubactivityShowalbumcontentBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
         var data = intent.getSerializableExtra("albumData") as AlbumData //onclick 이벤트를 통해 넘겨받은 앨범 데이터
+
         setUI(data)
     }
 
