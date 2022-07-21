@@ -3,9 +3,10 @@ buildscript {
     ext.kotlin_version = '1.6.20'
     repositories {
         google()
-        mavenCentral()
         maven {url 'https://devrepo.kakao.com/nexus/content/groups/public/'}
         maven { url "https://jitpack.io" }
+        mavenCentral()
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.1.2'

@@ -1,16 +1,16 @@
 package com.example.bookworm.bottomMenu.challenge.board;
 
+import android.content.Context;
+import android.os.Bundle;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Context;
-import android.os.Bundle;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
 import com.example.bookworm.bottomMenu.Feed.comments.Comment;
 import com.example.bookworm.bottomMenu.challenge.items.Challenge;
@@ -30,10 +30,10 @@ import java.util.Map;
 
 //인증 게시판에서 사진을 누르면 댓글이 보이도록 한다.
 
-public class subactivity_challenge_board_comment extends AppCompatActivity {
+    public class subactivity_challenge_board_comment extends AppCompatActivity {
 
     SubactivityChallengeBoardCommentBinding binding;
-    Context context;
+    public static Context context;
     Board item;
     Challenge challenge;
     UserInfo nowUser;//현재 사용자 계정

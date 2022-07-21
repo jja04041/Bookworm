@@ -148,17 +148,19 @@ public class LoginActivity extends AppCompatActivity {
 
     //회원가입 함수
     public void signUp(UserInfo userInfo) {
-        if (mAuth.getCurrentUser() == null) {
-            if (Session.getCurrentSession().isOpened()) {
-                String AccessToken = Session.getCurrentSession().getTokenInfo().getAccessToken();
-            }
-            if (gsa != null) {
-                String AccessToken = gsa.getIdToken();
-                AuthCredential credential = GoogleAuthProvider.getCredential(AccessToken, null);
-                mAuth.signInWithCredential(credential).addOnCompleteListener(task -> Log.d("로그인 완료", task.getResult().toString()));
-
-            }
+        if (Session.getCurrentSession().isOpened()) {
+            String AccessToken = Session.getCurrentSession().getTokenInfo().getAccessToken();
+            Log.d("카카오 토큰 ",AccessToken);
         }
+        if (gsa != null) {
+            String AccessToken = gsa.getIdToken();
+            AuthCredential credential = GoogleAuthProvider.getCredential(AccessToken, null);
+            mAuth.signInWithCredential(credential).addOnCompleteListener(task -> Log.d("로그인 완료", task.getResult().toString()));
+
+        }
+//        if (mAuth.getCurrentUser() == null) {
+//
+//        }
 
         mv.getUser(userInfo.getToken(), true); //회원 여부 확인을 위한 회원정보 조회
         mv.getUserInfo().observe(this, it -> {

@@ -9,11 +9,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.bookworm.BookWorm
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.profile.submenu.SubMenuPagerAdapter
-import com.example.bookworm.chat.activity_chating
+import com.example.bookworm.chat.newchat.MessageActivity
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.ActivityProfileInfoBinding
 import com.example.bookworm.extension.follow.view.FollowViewModelImpl
@@ -21,7 +20,6 @@ import com.example.bookworm.notification.MyFCMService
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import java.lang.reflect.Type
 
 class ProfileInfoActivity : AppCompatActivity() {
     lateinit var binding: ActivityProfileInfoBinding
@@ -112,13 +110,14 @@ class ProfileInfoActivity : AppCompatActivity() {
         binding.btnchatting.visibility = View.VISIBLE
 
         binding.btnchatting.setOnClickListener { view: View? ->
-
             // google id는 token길이가 매우 길기때문에 biginteger을 사용해야한다
-            val intent = Intent(this, activity_chating::class.java)
+            val intent = Intent(this, MessageActivity::class.java)
             intent.putExtra("opponent", (user));
             startActivity(intent)
 
         }
+
+
         //서브 메뉴 세팅
         binding.subMenuViewPager.adapter = menuPagerAdapter
         binding.tabLayout.setupWithViewPager(binding.subMenuViewPager)
@@ -135,7 +134,7 @@ class ProfileInfoActivity : AppCompatActivity() {
         binding.tvFollowerCount.text = user.followerCounts.toString()
         binding.tvFollowingCount.text = user.followingCounts.toString()
         binding.tvReadBookCount.text = bookWorm.readcount.toString()
-        binding.ivBookworm.setImageResource(bookWorm.wormtype)
+        binding.ivBookworm.setImageResource(this.resources.getIdentifier("bw_${bookWorm.wormtype}","drawable",this.packageName))
 
 
         //팔로우 버튼을 클릭했을때 버튼 모양, 상태 변경

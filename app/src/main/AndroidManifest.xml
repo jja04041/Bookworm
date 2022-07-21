@@ -36,10 +36,6 @@
             android:name="com.example.bookworm.bottomMenu.Feed.comments.subactivity_comment"
             android:exported="false" />
         <activity
-            android:name=".achievement.activity_achievement"
-            android:exported="false"
-            android:theme="@style/NoActionBar" />
-        <activity
             android:name="com.example.bookworm.bottomMenu.Feed.ImagePicker"
             android:exported="false" />
         <activity
@@ -56,6 +52,10 @@
             android:value="@string/kakaoKey" /> <!-- SubActivities -->
         <activity
             android:name="com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Create"
+            android:exported="false"
+            android:parentActivityName=".appLaunch.views.MainActivity" />
+        <activity
+            android:name=".bottomMenu.profile.submenu.album.AlbumDisplay.view.ShowAlbumContentActivity"
             android:exported="false"
             android:parentActivityName=".appLaunch.views.MainActivity" />
         <activity
@@ -91,11 +91,12 @@
         <activity
             android:name=".core.login.LoginActivity"
             android:exported="false"/> <!-- 로그인 화면 -->
+        <!-- 채팅 화면 -->
         <activity
-            android:name=".chat.activity_chating"
-            android:exported="false"/> <!-- 채팅 화면 -->
+            android:name=".chat.newchat.Activity_chatlist"
+            android:exported="false"/> <!-- 채팅리스트 화면 -->
         <activity
-            android:name=".chat.chatlist.activity_chatlist"
+            android:name=".chat.newchat.MessageActivity"
             android:exported="false"/> <!-- 채팅리스트 화면 -->
 
         <activity

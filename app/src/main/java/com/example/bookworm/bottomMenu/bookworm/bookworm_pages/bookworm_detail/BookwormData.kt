@@ -2,10 +2,10 @@ package com.example.bookworm.bottomMenu.bookworm.bookworm_pages.bookworm_detail
 
 class BookwormData {
     lateinit var name: String
-    var id: Int = 0
+    var id: String= ""
     var hasBw: Boolean = false
 
-    fun setBwData(id: Int, name: String, boolean: Boolean) {
+    fun setBwData(id: String, name: String, boolean: Boolean) {
         this.name = name
         this.id = id
         hasBw = boolean

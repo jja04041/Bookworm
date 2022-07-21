@@ -56,7 +56,8 @@
                     android:id="@+id/btnchatting"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:background="@drawable/send" />
+                    android:background="@drawable/icon_chat" />
+
 
                 <TextView
                     android:id="@+id/tvFollow"

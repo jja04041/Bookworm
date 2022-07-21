@@ -8,12 +8,14 @@ import android.widget.LinearLayout.LayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.bookworm.R
+
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumData
+import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumDisplay.item.AlbumDisplayAdapter
 import com.example.bookworm.databinding.FragmentProfileAlbumItemBinding
 
 
 //앨범을 보여주는 뷰 홀더
-class AlbumDisplayViewHolder(itemView: View, val context: Context) :
+class AlbumDisplayViewHolder(itemView: View, val context: Context,var listener: AlbumDisplayAdapter.OnViewHolderItemClickListener) :
     RecyclerView.ViewHolder(itemView) {
     var binding: FragmentProfileAlbumItemBinding? = FragmentProfileAlbumItemBinding.bind(itemView)
     var CARDVIEWWIDTH: Int = 0
@@ -30,6 +32,12 @@ class AlbumDisplayViewHolder(itemView: View, val context: Context) :
         if (album.thumbnail != null) Glide.with(itemView).load(album.thumbnail)
             .into(binding!!.albumThumb)
         else binding!!.albumThumb.setImageResource(R.color.black)
+        itemView.setOnClickListener {
+            val position = bindingAdapterPosition
+            if(position!=RecyclerView.NO_POSITION){
+                listener.onViewHolderItemClick(itemView,position)
+            }
+        }
     }
 
     //픽셀을 DP로 변환
@@ -47,4 +55,5 @@ class AlbumDisplayViewHolder(itemView: View, val context: Context) :
         layoutParams.setMargins(convertPX2DP(25F), 0, convertPX2DP(50F), convertPX2DP(50F))
         binding!!.albumContainer.layoutParams = layoutParams
     }
+
 }

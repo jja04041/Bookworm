@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="bookworm_char">
-        <item>@drawable/bw_default</item>
-        <item>@drawable/bw_child</item>
-        <item>@drawable/bw_confidence</item>
-        <item>@drawable/bw_fall</item>
-        <item>@drawable/bw_literature</item>
-        <item>@drawable/bw_student</item>
-        <item>@drawable/bw_mom</item>
-        <item>@drawable/bw_study</item>
-        <item>@drawable/bw_social</item>
-        <item>@drawable/bw_science</item>
-    </array>
+
+    <string-array name="bookworm_char">
+        <item>default</item>
+        <item>child</item>
+        <item>confidence</item>
+        <item>fall</item>
+        <item>literature</item>
+        <item>student</item>
+        <item>mom</item>
+        <item>study</item>
+        <item>social</item>
+        <item>science</item>
+    </string-array>
 
     <string-array name="bookworm_name">
         <item>책볼레</item>

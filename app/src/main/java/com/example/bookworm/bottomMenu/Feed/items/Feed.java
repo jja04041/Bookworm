@@ -14,7 +14,7 @@ public class Feed implements Serializable {
     //라벨 Array 추가
     private String feedID = null; //피드 ID
     private String imgurl = null; //업로드 이미지 url
-    private long commentCount; //사용자 댓글 수
+    private long commentsCount; //사용자 댓글 수
     private String feedText = null; //피드의 내용
     private String date = null; //현재 날짜
     private long likeCount;//좋아요 수
@@ -47,7 +47,7 @@ public class Feed implements Serializable {
         }
         this.userToken = (String) data.get("UserToken");
         this.label = (ArrayList<String>) data.get("label");
-        this.commentCount = (long) data.get("commentsCount");
+        this.commentsCount = (long) data.get("commentsCount");
         this.likeCount = (long) data.get("likeCount");
         if (data.get("imgurl") != null) this.imgurl = (String) data.get("imgurl");
         this.feedText = (String) data.get("feedText");
@@ -81,8 +81,8 @@ public class Feed implements Serializable {
         return feedText;
     }
 
-    public long getCommentCount() {
-        return commentCount;
+    public long getCommentsCount() {
+        return commentsCount;
     }
 
     public String getDate() {

@@ -2,9 +2,9 @@ const express = require('express'); //express를 사용하기 위함.
 const multer = require('multer'); //이미지 업/다운로드를 위함.
 const fs = require('fs');
 const fb = require("../module/firebaseProcess"); //파이어베이스 관련 함수 모음 
-const { request } = require('http');
 const router = express.Router();
 module.exports = router;
+const {createFirebaseToken} = require("../module/firebase/getToken");
 var imgPath = "";
 var Path = "";
 
@@ -172,25 +172,46 @@ router.post("/deleteImg", (req, res) => {
   } else return res.sendStatus(401); //유저 토큰과 일치 하지 않은 경우 401에러 표시 
 })
 //토큰 관리 
-router.post("/token", (req, res) => {
-  const token = req.query.token;
-  const platform = req.query.platform;
-  if (!token) return res.status(400).send({
-      error: 'There is no token.'
-    })
-    .send({
-      message: 'Access token is a required parameter.'
-    });
+// router.post("/token", (req, res) => {
+//   const token = req.body.token;
+//   const platform = req.body.platform;
+//   if (!token) return res.status(400).send({
+//       error: 'There is no token.'
+//     })
+//     .send({
+//       message: 'Access token is a required parameter.'
+//     });
 
-  console.log(`Verifying Kakao token: ${token}`);
-  //토큰 생성 
-  if (platform == "kakao") {
-    createFirebaseToken(token, platform).then((firebaseToken) => {
-      console.log(`Returning firebase token to user: ${firebaseToken}`);
-      console.log(firebaseToken);
-    });
-  }
-});
+//   console.log(`Verifying Kakao token: ${token}`);
+//   //토큰 생성 
+//   if (platform == "kakao") {
+//     createFirebaseToken(token, platform).then((firebaseToken) => {
+//       console.log(`Returning firebase token to user: ${firebaseToken}`);
+//       console.log(firebaseToken);
+//     });
+//   }
+// });
+
+// router.get("/token", (req, res) => {
+//   const token = req.query.token;
+//   const platform = req.query.platform;
+//   if (!token) return res.status(400).send({
+//       error: 'There is no token.'
+//     })
+//     .send({
+//       message: 'Access token is a required parameter.'
+//     });
+
+//   console.log(`Verifying Kakao token: ${token}`);
+//   //토큰 생성 
+//   if (platform == "kakao") {
+//     createFirebaseToken(token, platform).then((firebaseToken) => {
+//       console.log(`Returning firebase token to user: ${firebaseToken}`);
+//       console.log(firebaseToken);
+//     });
+//   }
+// });
+
 
 
 //사용자 탈퇴시 실행하는 쿼리 

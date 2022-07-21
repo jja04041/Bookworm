@@ -19,17 +19,23 @@ public class CustomDialog {
 
     private Context context;
     private String key;
-    int resID;
+    String resID;
     boolean exit;
 
     public CustomDialog(Context context) {
         this.context = context;
     }
 
-    public CustomDialog(Context context, String _AchieveKey, int _resID) {
+    public CustomDialog(Context context, String _AchieveKey, String _resID) {
         this.context = context;
         key = _AchieveKey;
-        resID = _resID;
+        if (_resID.equals("1")) { //티어 1일때
+            resID = "bronze_medal";
+        } else if (_resID.equals("2")) { //티어 2일때
+            //resID = R.drawable.silver_medal; 아마도 실버로??
+        } else {
+            resID = _resID;
+        }
         exit = false;
     }
 
@@ -51,7 +57,11 @@ public class CustomDialog {
 
         tvdialog.setText("축하합니다! " + key + " 획득!");
         tvdialognotice.setText("획득한 보상을 인벤토리에서 확인해보세요!!");
-        ivdialog.setImageResource(resID);
+
+
+        if (!resID.contains("medal")) resID = "bw_" + resID;
+        ivdialog.setImageResource(context.getResources().getIdentifier(resID, "drawable", context.getPackageName()));
+
         btncancle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

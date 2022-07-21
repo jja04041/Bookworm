@@ -103,11 +103,14 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
         //작성자 UserInfo
         pv.getUser(item.userToken, feedUserInfo)
 
+        //피드 작성 시간
+        getDateDuration(item.date)
+        binding!!.tvDate.setText(dateDuration + " 전")
 
         //피드 내용
 
         //댓글 창 세팅
-        Count = item.commentCount
+        Count = item.commentsCount
         if (Count > 0) {
             pv.getUser(item.comment.userToken, commentUserInfo)
             setComment(item.comment)
@@ -141,7 +144,7 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
                 setComment(addComment(item.feedID))
             }
         })
-        binding!!.tvCommentCount.setText(item.commentCount.toString()) //댓글 수 세팅
+        binding!!.tvCommentCount.setText(item.commentsCount.toString()) //댓글 수 세팅
         //좋아요 수 세팅
         binding!!.tvLike.setText(item.likeCount.toString())
         liked = try {
@@ -257,6 +260,7 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
 
             val bookworm = PersonalD(context).bookworm
             val achievement = Achievement(context, fbModule, nowUser, bookworm)
+
             achievement.CompleteAchievement(nowUser, context)
 
         } else {

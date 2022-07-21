@@ -22,15 +22,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.bookworm.R;
 import com.example.bookworm.achievement.Achievement;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.profile.submenu.SubMenuPagerAdapter;
 import com.example.bookworm.bottomMenu.profile.views.ProfileSettingActivity;
+import com.example.bookworm.chat.newchat.Activity_chatlist;
+import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.databinding.FragmentProfileBinding;
 import com.example.bookworm.extension.follow.view.FollowViewModelImpl;
 import com.example.bookworm.extension.follow.view.FollowerActivity;
-import com.example.bookworm.core.internet.FBModule;
 
 public class fragment_profile extends Fragment implements LifecycleObserver {
 
@@ -74,6 +76,14 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
             Intent intent = new Intent(current_context, ProfileSettingActivity.class);
             startActivity(intent);
         });
+
+
+        binding.btnChatlist.setOnClickListener(v -> {
+            Intent intent = new Intent (getActivity(), Activity_chatlist.class);
+            startActivity(intent);
+        });
+
+
         binding.subMenuViewPager.setAdapter(menuPagerAdapter);
         binding.tabLayout.setupWithViewPager(binding.subMenuViewPager);
         binding.tabLayout.getTabAt(1).setText("앨범");
@@ -98,7 +108,8 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
         });
         pv.getBwdata().observe(getViewLifecycleOwner(), bookWorm -> {
             binding.tvReadBookCount.setText(String.valueOf(bookWorm.getReadcount()));
-            binding.ivBookworm.setImageResource(bookWorm.getWormtype());
+            int id = current_context.getResources().getIdentifier("bw_" + bookWorm.getWormtype(), "drawable", current_context.getPackageName());
+            binding.ivBookworm.setImageResource(id);
         });
 
 
@@ -112,7 +123,7 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
                 .skipMemoryCache(true)
                 .circleCrop()
                 .into(binding.imgFragProfileProfile);
-       //프로필사진 로딩후 삽입.
+        //프로필사진 로딩후 삽입.
         binding.tvUserName.setText(user.getUsername());
         binding.edtIntroduce.setText(user.getIntroduce());
 
@@ -201,7 +212,7 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
 
     @Override
     public void onResume() {
-        pv.getUser(null,false);
+        pv.getUser(null, false);
         fv.WithoutSuspendgetUser(null);
         super.onResume();
     }

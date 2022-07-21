@@ -32,13 +32,12 @@ class HasBookwormViewHolder(
         uv.data.observe(context as MainActivity, {
             user = it
             uv.getBookWorm(user.token)
-
         })
 
     }
 
     fun setItems(data: BookwormData) {
-        binding!!.ivBwImage.setImageResource(data.id)
+        binding!!.ivBwImage.setImageResource(context.resources.getIdentifier("bw_${data.id}","drawable",context.packageName))
         binding!!.tvGenre.setText(data.name)
         uv.bwdata.observe(context as MainActivity) {
             bwData = it
@@ -54,6 +53,7 @@ class HasBookwormViewHolder(
             }
             uv.bwdata.observe(context as MainActivity, {
                 if (it.wormtype != data.id) {
+
                     it.wormtype = data.id
                     CoroutineScope(Dispatchers.IO).launch {
                         uv.updateBw(null, it)
