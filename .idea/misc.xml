@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Bookworm/app/src/main/res/drawable/button_gradient_maincolor.xml" value="0.158" />
+        <entry key="..\:/Bookworm/app/src/main/res/drawable/edittext_border.xml" value="0.181" />
         <entry key="..\:/Bookworm/app/src/main/res/font/fontstyle.xml" value="0.2948717948717949" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/activity_achievement.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/activity_chating.xml" value="0.1" />
@@ -40,7 +41,7 @@
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_record.xml" value="0.1" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_record_item.xml" value="0.1" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_select_feed.xml" value="0.1" />
-        <entry key="..\:/Bookworm/app/src/main/res/layout/item_chat.xml" value="0.1" />
+        <entry key="..\:/Bookworm/app/src/main/res/layout/item_chat.xml" value="0.18365218000502148" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/item_chatlist.xml" value="0.1" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/item_slider.xml" value="0.13177083333333334" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/layout_challenge_item.xml" value="0.1" />
@@ -49,6 +50,9 @@
         <entry key="..\:/Bookworm/app/src/main/res/layout/layout_item_loading.xml" value="0.1" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/layout_user_item.xml" value="0.1" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/my_msgbox.xml" value="0.1" />
+        <entry key="..\:/Bookworm/app/src/main/res/layout/newchat_activity_message.xml" value="0.4173913181932306" />
+        <entry key="..\:/Bookworm/app/src/main/res/layout/newchat_fragment_chat.xml" value="0.2734375" />
+        <entry key="..\:/Bookworm/app/src/main/res/layout/newchat_item_messagebox.xml" value="0.15416666666666667" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/other_msgbox.xml" value="0.1" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/recyclerview_item.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/search_favoriteitem.xml" value="0.1" />

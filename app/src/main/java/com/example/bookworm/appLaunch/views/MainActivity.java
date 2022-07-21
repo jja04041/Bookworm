@@ -9,15 +9,14 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.Feed.Fragment_feed;
-import com.example.bookworm.chat.newchat.fragment_chatlist;
 import com.example.bookworm.core.MoveFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
 
-    Fragment Fragment_feed, fragment_search, fragment_bookworm, fragment_challenge, fragment_profile, fragment_chatlist;
-    Fragment[] fragments = {Fragment_feed, fragment_search, fragment_bookworm, fragment_challenge, fragment_profile, fragment_chatlist};
+    Fragment Fragment_feed, fragment_search, fragment_bookworm, fragment_challenge, fragment_profile;
+    Fragment[] fragments = {Fragment_feed, fragment_search, fragment_bookworm, fragment_challenge, fragment_profile};
     // 위험 권한을 부여할 권한 지정
 
     FragmentManager fragmentManager;
@@ -71,13 +70,6 @@ public class MainActivity extends AppCompatActivity {
                 });
 
     }
-
-
-    public void MovetoChatlist()
-    {
-        getSupportFragmentManager().beginTransaction().replace(R.id.container,new fragment_chatlist()).commitAllowingStateLoss();
-    }
-
 
 
 }

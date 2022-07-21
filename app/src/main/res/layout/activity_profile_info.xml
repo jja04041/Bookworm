@@ -58,11 +58,6 @@
                     android:layout_height="30dp"
                     android:background="@drawable/icon_chat" />
 
-                <Button
-                    android:id="@+id/btnchatting2"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/icon_chatlist" />
 
                 <TextView
                     android:id="@+id/tvFollow"
