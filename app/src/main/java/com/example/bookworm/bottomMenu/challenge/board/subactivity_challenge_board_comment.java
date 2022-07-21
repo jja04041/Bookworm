@@ -33,7 +33,7 @@ import java.util.Map;
     public class subactivity_challenge_board_comment extends AppCompatActivity {
 
     SubactivityChallengeBoardCommentBinding binding;
-    Context context;
+    public static Context context;
     Board item;
     Challenge challenge;
     UserInfo nowUser;//현재 사용자 계정

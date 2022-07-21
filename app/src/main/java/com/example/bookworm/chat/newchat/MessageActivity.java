@@ -64,15 +64,17 @@ public class MessageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.newchat_activity_message);
+        setContentView(R.layout.activity_message);
 
         context = MessageActivity.this;
 
         Intent intent = getIntent();
         opponent = (UserInfo) intent.getSerializableExtra("opponent");
 
+
+
+
         TextView tv = findViewById(R.id.tv_chatroomtopbar);
-        tv.setText(opponent.getUsername());
 
         pv = new UserInfoViewModel(context);
         uv = new ViewModelProvider(this, new UserInfoViewModel.Factory(context)).get(UserInfoViewModel.class);
@@ -87,8 +89,20 @@ public class MessageActivity extends AppCompatActivity {
 
             myuid = userinfo.getToken();
 
-            if(opponent != null)
+            if(opponent != null) {
                 destUid = opponent.getToken();
+                tv.setText(opponent.getUsername());
+            }
+            else
+            {
+                destUid = (String) intent.getSerializableExtra("destuid");
+
+                uv.getUser(destUid, true);
+                uv.getData().observe(this, oppo -> {
+                    opponent = oppo;
+                    tv.setText(opponent.getUsername());
+                });
+            }
 
 
             init();
@@ -248,7 +262,7 @@ public class MessageActivity extends AppCompatActivity {
 
 
 
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.newchat_item_messagebox,parent,false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_messagebox,parent,false);
             return new ViewHolder(view);
         }
 
@@ -260,10 +274,10 @@ public class MessageActivity extends AppCompatActivity {
             {
                 //나의 말풍선 오른쪽으로
                 viewHolder.textViewMsg.setText(comments.get(position).message);
+                viewHolder.textViewMsg.setBackgroundResource(R.drawable.rightbubble);
                 viewHolder.linearLayoutDest.setVisibility(View.INVISIBLE);        //상대방 레이아웃
                 viewHolder.linearLayoutRoot.setGravity(Gravity.RIGHT);
                 viewHolder.linearLayoutTime.setGravity(Gravity.RIGHT);
-                viewHolder.textViewMsg.setBackgroundColor(getResources().getColor(R.color.maincolor));
 
             }else{
                 //상대방 말풍선 왼쪽
@@ -273,10 +287,10 @@ public class MessageActivity extends AppCompatActivity {
                         .into(holder.imageViewProfile);
                 viewHolder.textViewName.setText(opponent.getUsername());
                 viewHolder.linearLayoutDest.setVisibility(View.VISIBLE);
+                viewHolder.textViewMsg.setBackgroundResource(R.drawable.leftbubble);
                 viewHolder.textViewMsg.setText(comments.get(position).message);
                 viewHolder.linearLayoutRoot.setGravity(Gravity.LEFT);
                 viewHolder.linearLayoutTime.setGravity(Gravity.LEFT);
-                viewHolder.textViewMsg.setBackgroundColor(getResources().getColor(R.color.grey));
             }
             viewHolder.textViewTimeStamp.setText(getDateTime(position));
 

@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.bookworm.Feed.CustomPopup;
+import com.example.bookworm.bottomMenu.Feed.Fragment_feed;
 import com.example.bookworm.bottomMenu.search.items.Book;
 import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_result;
 import com.example.bookworm.core.userdata.PersonalD;
@@ -19,6 +21,7 @@ import com.example.bookworm.databinding.LayoutCommentSummaryBinding;
 public class Board_SummaryViewHolder extends RecyclerView.ViewHolder implements UserContract.View {
     LayoutCommentSummaryBinding binding;
     Context context;
+    BoardFB boardFB = new BoardFB(context);
     LoadUser user;
 
     public Board_SummaryViewHolder(@NonNull View itemView, Context context) {
@@ -62,6 +65,12 @@ public class Board_SummaryViewHolder extends RecyclerView.ViewHolder implements 
         binding.ivFeedMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                CustomPopup popup1 = new CustomPopup(context, view);
+                popup1.setItems(subactivity_challenge_board_comment.context, boardFB, item);
+                popup1.setVisible(nowUser.getToken().equals(item.getMasterToken()));
+                popup1.setDeleteVisible(nowUser.getToken().equals(item.getUserToken()));
+                popup1.setOnMenuItemClickListener(popup1);
+                popup1.show();
             }
         });
     }

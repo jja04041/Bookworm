@@ -13,7 +13,6 @@ public class Book implements Serializable {
     private String author;
     private String itemId;
 
-
     public Book(String... strings) {
         if (strings != null) {
             this.title = strings[0];

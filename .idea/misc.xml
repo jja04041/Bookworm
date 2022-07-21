@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Bookworm/app/src/main/res/drawable/button_gradient_maincolor.xml" value="0.158" />
+        <entry key="..\:/Bookworm/app/src/main/res/drawable/edittext_border.xml" value="0.181" />
         <entry key="..\:/Bookworm/app/src/main/res/font/fontstyle.xml" value="0.2948717948717949" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/activity_achievement.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/activity_chating.xml" value="0.1" />
@@ -40,7 +41,7 @@
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_record.xml" value="0.1" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_record_item.xml" value="0.1" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/fragment_select_feed.xml" value="0.1" />
-        <entry key="..\:/Bookworm/app/src/main/res/layout/item_chat.xml" value="0.1" />
+        <entry key="..\:/Bookworm/app/src/main/res/layout/item_chat.xml" value="0.18365218000502148" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/item_chatlist.xml" value="0.1" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/item_slider.xml" value="0.13177083333333334" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/layout_challenge_item.xml" value="0.1" />
@@ -49,6 +50,9 @@
         <entry key="..\:/Bookworm/app/src/main/res/layout/layout_item_loading.xml" value="0.1" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/layout_user_item.xml" value="0.1" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/my_msgbox.xml" value="0.1" />
+        <entry key="..\:/Bookworm/app/src/main/res/layout/newchat_activity_message.xml" value="0.4173913181932306" />
+        <entry key="..\:/Bookworm/app/src/main/res/layout/newchat_fragment_chat.xml" value="0.2734375" />
+        <entry key="..\:/Bookworm/app/src/main/res/layout/newchat_item_messagebox.xml" value="0.15416666666666667" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/other_msgbox.xml" value="0.1" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/recyclerview_item.xml" value="0.25364583333333335" />
         <entry key="..\:/Bookworm/app/src/main/res/layout/search_favoriteitem.xml" value="0.1" />
@@ -169,6 +173,7 @@
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/drawable/feed_bottom_border_only.xml" value="0.32407407407407407" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/drawable/feed_bottom_top_border.xml" value="0.3494791666666667" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/drawable/ic_baseline_chevron_right_24.xml" value="0.3494791666666667" />
+        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.248" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/drawable/ic_baseline_done_24.xml" value="0.224" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/drawable/ic_baseline_image_24.xml" value="0.33229166666666665" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/drawable/ic_baseline_menu_24.xml" value="0.3494791666666667" />
@@ -277,9 +282,11 @@
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/subactivity_feed_modify.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/subactivity_search_fragment_result.xml" value="0.33" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/subactivity_search_main.xml" value="0.33" />
+        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/subactivity_showalbumcontent.xml" value="0.2734375" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/view_content_edittext.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/layout/view_loading.xml" value="0.3605128205128205" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/menu/board_comment_menu.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/menu/board_menu.xml" value="0.2833333333333333" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/menu/comment_menu.xml" value="0.321875" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/menu/feed_menu.xml" value="0.33489583333333334" />
         <entry key="..\:/Users/jja04/AndroidStudioProjects/Bookworm/app/src/main/res/menu/menu_bottom.xml" value="0.3333333333333333" />

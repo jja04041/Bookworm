@@ -22,11 +22,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.bookworm.R;
 import com.example.bookworm.achievement.Achievement;
-import com.example.bookworm.appLaunch.views.MainActivity;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.profile.submenu.SubMenuPagerAdapter;
 import com.example.bookworm.bottomMenu.profile.views.ProfileSettingActivity;
+import com.example.bookworm.chat.newchat.Activity_chatlist;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.databinding.FragmentProfileBinding;
@@ -54,6 +55,7 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -77,9 +79,8 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
 
 
         binding.btnChatlist.setOnClickListener(v -> {
-            MainActivity mainActivity = (MainActivity) getActivity();
-
-            mainActivity.MovetoChatlist();
+            Intent intent = new Intent (getActivity(), Activity_chatlist.class);
+            startActivity(intent);
         });
 
 
@@ -110,6 +111,8 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
             int id = current_context.getResources().getIdentifier("bw_" + bookWorm.getWormtype(), "drawable", current_context.getPackageName());
             binding.ivBookworm.setImageResource(id);
         });
+
+
         return view;
     }
 
@@ -123,6 +126,7 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
         //프로필사진 로딩후 삽입.
         binding.tvUserName.setText(user.getUsername());
         binding.edtIntroduce.setText(user.getIntroduce());
+
 
 
         //팔로워액티비티 실행하기

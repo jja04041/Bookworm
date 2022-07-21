@@ -2,9 +2,11 @@ package com.example.bookworm.bottomMenu.challenge.board;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.bookworm.bottomMenu.Feed.comments.Comment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -12,9 +14,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Transaction;
 
 import java.util.Map;
 
@@ -47,6 +52,52 @@ public class BoardFB {
                         ((subactivity_challenge_board) context).isEmptyBoard(true);//인증글이 없습니다 라는 문구를 띄워줌
                     }
                 }
+            }
+        });
+    }
+
+
+    //인증글 승인(트랜잭션)
+    public void allowBoard(Board board) {
+        final DocumentReference ref = db.collection("challenge").document(board.getChallengeName()).collection("feed").document(board.getBoardID()); //인증글
+        final DocumentReference ref2 = db.collection("users").document(board.getUserToken()); //인증글 작성자
+
+        db.runTransaction(new Transaction.Function<Void>() {
+            @Override
+            public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
+                transaction.update(ref, "allowed", true); //인증완료 여부를 true로
+                transaction.update(ref2, "UserInfo.completedChallenge", FieldValue.increment(1)); //완료한 챌린지 개수에 +1
+
+                return null;
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d("Success", "Transaction success!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("Failed", "Transaction failure.", e);
+            }
+        });
+    }
+
+    //인증글 삭제
+    public void deleteBoard(Board board) {
+        collectionReference = db.collection("challenge").document(board.getChallengeName()).collection("feed");
+        //task 결정
+        task = collectionReference.document(board.getBoardID()).delete();
+        //task 실행
+        task.addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("오류", "Error deleting " + e);
             }
         });
     }

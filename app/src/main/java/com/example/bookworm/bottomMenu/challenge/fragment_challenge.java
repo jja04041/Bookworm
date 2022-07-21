@@ -23,11 +23,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.bookworm.achievement.Achievement;
+import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.challenge.items.Challenge;
 import com.example.bookworm.bottomMenu.challenge.subactivity.subactivity_challenge_challengeinfo;
 import com.example.bookworm.bottomMenu.challenge.subactivity.subactivity_challenge_createchallenge;
 import com.example.bookworm.bottomMenu.challenge.items.ChallengeAdapter;
 import com.example.bookworm.bottomMenu.challenge.items.OnChallengeItemClickListener;
+import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
+import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.databinding.FragmentChallengeBinding;
 import com.example.bookworm.core.internet.FBModule;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -52,6 +56,9 @@ public class fragment_challenge extends Fragment {
     public boolean isLoading = false; //스크롤을 당겨서 추가로 로딩 중인지 여부를 확인하는 변수
     private DocumentSnapshot lastVisible;
     private FragmentChallengeBinding binding;
+    UserInfo userInfo;
+    BookWorm userBw;
+    UserInfoViewModel uv;
     Map<String, Object> map;
     //액티비티의 결과를 받아오기 위함.
     ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
@@ -76,6 +83,30 @@ public class fragment_challenge extends Fragment {
         fbModule.setLIMIT(LIMIT);
         map = new HashMap();
         fbModule.readData(2, map, null); //검색한 데이터를 조회
+
+        //인증글 보상을 위한 부분
+        uv = new UserInfoViewModel(getContext());
+        uv.getUser(null, false);
+
+        uv.getData().observe(getViewLifecycleOwner(), userinfo -> {
+            userInfo = userinfo;
+            uv.updateUser(userInfo);
+
+            uv.getBookWorm(userinfo.getToken());
+            uv.getBwdata().observe(getViewLifecycleOwner(), bookWorm -> {
+                userBw = bookWorm;
+                uv.updateBw(userInfo.getToken(), userBw);
+
+                Achievement achievement = new Achievement(getContext(), fbModule, userInfo, userBw);
+                achievement.CompleteAchievement(userInfo, getContext());
+            });
+
+        });
+        //여기까지 인증글 보상
+
+
+//        boolean exit = true;
+//        exit = achievement.canreturn();
 
 
         //리스너 설정

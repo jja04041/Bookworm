@@ -21,6 +21,7 @@
                 android:layout_width="120dp"
                 android:layout_height="120dp">
 
+
                 <ImageView
                     android:id="@+id/ivThumb"
                     android:layout_width="120dp"
@@ -33,6 +34,14 @@
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:background="#77000000" />
+
+                <ImageView
+                    android:id="@+id/ivAllow"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_margin="3dp"
+                    android:background="@drawable/ic_baseline_done_24"
+                    android:visibility="invisible" />
 
                 <TextView
                     android:id="@+id/tvBoardText"

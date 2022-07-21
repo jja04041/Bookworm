@@ -103,6 +103,9 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
         //작성자 UserInfo
         pv.getUser(item.userToken, feedUserInfo)
 
+        //피드 작성 시간
+        getDateDuration(item.date)
+        binding!!.tvDate.setText(dateDuration + " 전")
 
         //피드 내용
 

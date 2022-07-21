@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
+import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.PersonalD;
 import com.example.bookworm.core.userdata.UserInfo;
@@ -17,20 +18,20 @@ public class Achievement  {
     UserInfo userinfo;
     BookWorm bookworm;
     CustomDialog customDialog;
+    UserInfoViewModel uv;
     Boolean exitactiviy;
 
-    public Achievement (Context context, FBModule fbModule, UserInfo userinfo, BookWorm bookworm)
-    {
+    public Achievement(Context context, FBModule fbModule, UserInfo userinfo, BookWorm bookworm) {
         // 어떤곳에서든 업적 달성할 수 있도록 context와 fbmodule받음
 
         this.context = context;
         this.fbModule = fbModule;
         this.userinfo = userinfo;
-        this.bookworm = bookworm;
+        if (bookworm != null) this.bookworm = bookworm;
         exitactiviy = true;
     }
 
-    public boolean canreturn(){
+    public boolean canreturn() {
         return exitactiviy;
     }
 
@@ -41,8 +42,8 @@ public class Achievement  {
         // 축하 다이얼로그
         HashMap<String, Object> map = new HashMap<>();
 
-        // 볼레보상
-        if(type == 0) {
+        // 볼레 보상
+        if (type == 0) {
             bookworm.getWormvec().add(_drawblepath);
             bookworm.getAchievementmap().put(_key, true);
             map.put("bookworm_achievementmap", bookworm.getAchievementmap());
@@ -56,11 +57,25 @@ public class Achievement  {
             map.put("bookworm_bgvec", bookworm.getBgvec());
         }
 
-        fbModule.readData(0, map, bookworm.getToken());
-        new PersonalD(context).saveBookworm(bookworm);
+        //인증글 보상
+        else if (type == 2) {
+            //타입이 인증글일때
+            uv = new UserInfoViewModel(context);
+            uv.getUser(null, false);
+            uv.updateUser(userinfo);
 
-        customDialog = new CustomDialog(context, _key, _drawblepath);
-        exitactiviy = customDialog.CallDialog();
+            customDialog = new CustomDialog(context, _key, _drawblepath);
+            exitactiviy = customDialog.CallDialog();
+        }
+
+        //볼레 보상 이거나 배경 보상일때
+        if (type == 0 || type == 1) {
+            fbModule.readData(0, map, bookworm.getToken());
+            new PersonalD(context).saveBookworm(bookworm);
+
+            customDialog = new CustomDialog(context, _key, _drawblepath);
+            exitactiviy = customDialog.CallDialog();
+        }
     }
 
 
@@ -159,6 +174,14 @@ public class Achievement  {
                 }
         }
 
+
+        //인증글 업적
+        //티어는 1 ~ n까지로, 일단 1티어는 브론즈로 해둠
+
+        if (userinfo.getCompletedChallenge() == 3 && userinfo.getTier() < 1) {
+            userinfo.setTier(Long.parseLong(String.valueOf(1)));
+            ExecuteFB(1, "브론즈 티어", 2); //1티어, 브론즈 티어, type(인증글인지, 볼레인지)
+        }
 
 
      }
