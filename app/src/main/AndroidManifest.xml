@@ -91,11 +91,9 @@
         <activity
             android:name=".core.login.LoginActivity"
             android:exported="false"/> <!-- 로그인 화면 -->
+        <!-- 채팅 화면 -->
         <activity
-            android:name=".chat.activity_chating"
-            android:exported="false"/> <!-- 채팅 화면 -->
-        <activity
-            android:name=".chat.chatlist.activity_chatlist"
+            android:name=".chat.newchat.Activity_chatlist"
             android:exported="false"/> <!-- 채팅리스트 화면 -->
         <activity
             android:name=".chat.newchat.MessageActivity"
