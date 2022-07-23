@@ -182,29 +182,29 @@
                     android:orientation="vertical"
                     android:padding="5dp">
 
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+<!--                    <FrameLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content">-->
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="자기소개"
-                            android:textColor="@color/black"
-                            android:textSize="15dp"
-                            android:textStyle="bold" />
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="자기소개"-->
+<!--                            android:textColor="@color/black"-->
+<!--                            android:textSize="15dp"-->
+<!--                            android:textStyle="bold" />-->
 
-                        <Button
-                            android:id="@+id/btnIntroModify"
-                            android:layout_width="60dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="end"
-                            android:layout_marginEnd="10dp"
-                            android:background="@drawable/white_button"
-                            android:text="수정"
-                            android:textColor="@color/black" />
+<!--                        <Button-->
+<!--                            android:id="@+id/btnIntroModify"-->
+<!--                            android:layout_width="60dp"-->
+<!--                            android:layout_height="20dp"-->
+<!--                            android:layout_gravity="end"-->
+<!--                            android:layout_marginEnd="10dp"-->
+<!--                            android:background="@drawable/white_button"-->
+<!--                            android:text="수정"-->
+<!--                            android:textColor="@color/black" />-->
 
-                    </FrameLayout>
+<!--                    </FrameLayout>-->
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -225,16 +225,6 @@
                             <requestFocus />
                         </EditText>
 
-                        <Button
-                            android:id="@+id/btnModifyCancle"
-                            android:layout_width="60dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="end|bottom"
-                            android:layout_margin="10dp"
-                            android:background="@drawable/white_button"
-                            android:text="수정 취소"
-                            android:textColor="@color/black"
-                            android:visibility="gone" />
                     </FrameLayout>
 
                 </LinearLayout>
