@@ -49,7 +49,9 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
             FollowViewModelImpl::class.java
         )
     }
-
+    fun setUserLiveData(liveData: MutableLiveData<UserInfo>){
+        data=liveData;
+    }
     //사용자 가져오기
     fun getUser(token: String?, getFromExt: Boolean) {
         viewModelScope.launch {

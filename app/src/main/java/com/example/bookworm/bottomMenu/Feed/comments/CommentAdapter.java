@@ -66,14 +66,14 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         int safePosition = holder.getAdapterPosition();
-        if (holder instanceof ItemViewHolder) {
-            Comment item = (Comment) commentList.get(safePosition);
-            ((ItemViewHolder) holder).setItem(item);
-        } else if (holder instanceof CommentAdapter.LoadingViewHolder) {
-            showLoadingView((CommentAdapter.LoadingViewHolder) holder, safePosition);
-        } else if (holder instanceof SummaryViewHolder) {
-            Feed item = (Feed) commentList.get(safePosition);
-            ((SummaryViewHolder) holder).setItem(item);
+            if (holder instanceof ItemViewHolder) {
+                Comment item = (Comment) commentList.get(safePosition);
+                ((ItemViewHolder) holder).setItem(item);
+            } else if (holder instanceof CommentAdapter.LoadingViewHolder) {
+                showLoadingView((CommentAdapter.LoadingViewHolder) holder, safePosition);
+            } else if (holder instanceof SummaryViewHolder) {
+                Feed item = (Feed) commentList.get(safePosition);
+                ((SummaryViewHolder) holder).setItem(item);
         }
     }
 
