@@ -384,8 +384,8 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
                 binding!!.ivMedal.setVisibility(View.VISIBLE)
                 when (userInfo.tier!!.toInt()) {
                     1 -> binding!!.ivMedal.setImageResource(R.drawable.medal_bronze)
-                    2 -> {}
-                    3 -> {}
+                    2 -> binding!!.ivMedal.setImageResource(R.drawable.medal_silver)
+                    3 -> binding!!.ivMedal.setImageResource(R.drawable.medal_gold)
                     4 -> {}
                     5 -> {}
                     else -> binding!!.ivMedal.setImageResource(0)
@@ -394,8 +394,8 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
                 binding!!.ivCommentMedal.setVisibility(View.VISIBLE)
                 when (userInfo.tier!!.toInt()) {
                     1 -> binding!!.ivCommentMedal.setImageResource(R.drawable.medal_bronze)
-                    2 -> {}
-                    3 -> {}
+                    2 -> binding!!.ivCommentMedal.setImageResource(R.drawable.medal_silver)
+                    3 -> binding!!.ivCommentMedal.setImageResource(R.drawable.medal_gold)
                     4 -> {}
                     5 -> {}
                     else -> binding!!.ivCommentMedal.setImageResource(0)
