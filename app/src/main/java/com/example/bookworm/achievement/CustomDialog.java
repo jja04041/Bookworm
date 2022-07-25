@@ -32,7 +32,7 @@ public class CustomDialog {
         if (_resID.equals("1")) { //티어 1일때
             resID = "bronze_medal";
         } else if (_resID.equals("2")) { //티어 2일때
-            //resID = R.drawable.silver_medal; 아마도 실버로??
+            //resID = R.drawable.medal_silver; 아마도 실버로??
         } else {
             resID = _resID;
         }

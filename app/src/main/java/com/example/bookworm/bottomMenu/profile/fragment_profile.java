@@ -3,15 +3,12 @@ package com.example.bookworm.bottomMenu.profile;
 
 import static android.app.Activity.RESULT_CANCELED;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -79,7 +76,7 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
 
 
         binding.btnChatlist.setOnClickListener(v -> {
-            Intent intent = new Intent (getActivity(), Activity_chatlist.class);
+            Intent intent = new Intent(getActivity(), Activity_chatlist.class);
             startActivity(intent);
         });
 
@@ -127,7 +124,7 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
         binding.tvUserName.setText(user.getUsername());
         binding.edtIntroduce.setText(user.getIntroduce());
 
-
+        setMedal(user); //메달 세팅
 
         //팔로워액티비티 실행하기
         binding.btnFollower.setOnClickListener(view -> {
@@ -170,5 +167,34 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
             pv.getBookWorm(NowUser.token);
         }
         super.onHiddenChanged(hidden);
+    }
+
+    //메달 표시 유무에 따른 세팅
+    private void setMedal(UserInfo userInfo) {
+        if (userInfo.getMedalAppear()) { //메달을 표시한다면
+            binding.ivMedal.setVisibility(View.VISIBLE);
+            switch (Integer.parseInt(String.valueOf(userInfo.getTier()))) { //티어 0 ~ 5에 따라 다른 메달이 나오게
+                case 1:
+                    binding.ivMedal.setImageResource(R.drawable.medal_bronze);
+                    break;
+                case 2:
+                    binding.ivMedal.setImageResource(R.drawable.medal_silver);
+                    break;
+                case 3:
+                    binding.ivMedal.setImageResource(R.drawable.medal_gold);
+                    break;
+                case 4:
+//                    binding.ivMedal.setImageResource(R.drawable.medal_platinum);
+                    break;
+                case 5:
+//                    binding.ivMedal.setImageResource(R.drawable.medal_diamond);
+                    break;
+                default: //티어가 없을때
+                    binding.ivMedal.setImageResource(0);
+            }
+        } else { //메달을 표시하지 않을거라면
+            binding.ivMedal.setVisibility(View.GONE);
+            binding.ivMedal.setImageResource(0);
+        }
     }
 }

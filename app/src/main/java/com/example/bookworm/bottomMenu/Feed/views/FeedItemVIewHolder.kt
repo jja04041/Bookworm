@@ -328,6 +328,7 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
             if (bool == false) {
                 if (userInfo != null) {
                     binding!!.tvNickname.setText(userInfo!!.username)
+                    setMedal(userInfo, bool)
                     Glide.with(itemView).load(userInfo!!.profileimg).circleCrop()
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
@@ -337,6 +338,7 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
             } else if (bool == true) {
                 if (userInfo != null) {
                     binding!!.tvCommentNickname.setText(userInfo!!.username)
+                    setMedal(userInfo, bool)
                     Glide.with(binding!!.getRoot()).load(userInfo!!.profileimg).circleCrop()
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
@@ -371,6 +373,44 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
             }
         } catch (e: ParseException) {
             e.printStackTrace()
+        }
+    }
+
+    //메달 표시 유무에 따른 세팅
+    //댓글창 메달도 있기때문에 여기는 인자를 userInfo, bool 이렇게 2개 받음
+    private fun setMedal(userInfo: UserInfo, bool: Boolean?) {
+        if (userInfo.medalAppear!!) { //메달을 표시한다면
+            if (bool == false) { //피드라면
+                binding!!.ivMedal.setVisibility(View.VISIBLE)
+                when (userInfo.tier!!.toInt()) {
+                    1 -> binding!!.ivMedal.setImageResource(R.drawable.medal_bronze)
+                    2 -> {}
+                    3 -> {}
+                    4 -> {}
+                    5 -> {}
+                    else -> binding!!.ivMedal.setImageResource(0)
+                }
+            } else { //댓글이라면
+                binding!!.ivCommentMedal.setVisibility(View.VISIBLE)
+                when (userInfo.tier!!.toInt()) {
+                    1 -> binding!!.ivCommentMedal.setImageResource(R.drawable.medal_bronze)
+                    2 -> {}
+                    3 -> {}
+                    4 -> {}
+                    5 -> {}
+                    else -> binding!!.ivCommentMedal.setImageResource(0)
+                }
+            }
+
+        } else { //메달을 표시하지 않을거라면
+
+            if (bool == false) { //피드라면
+                binding!!.ivMedal.setVisibility(View.GONE)
+                binding!!.ivMedal.setImageResource(0)
+            } else { //댓글이라면
+                binding!!.ivCommentMedal.setVisibility(View.GONE)
+                binding!!.ivCommentMedal.setImageResource(0)
+            }
         }
     }
 

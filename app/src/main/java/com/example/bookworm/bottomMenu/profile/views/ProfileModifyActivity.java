@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.challenge.items.Challenge;
 import com.example.bookworm.bottomMenu.profile.ChallengeViewModel;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
@@ -48,6 +49,7 @@ public class ProfileModifyActivity extends AppCompatActivity {
         pv.getData().observe(this, userInfo -> {
             NowUser = userInfo;
             binding.tvNickname.setText(NowUser.getUsername());
+            setMedal(NowUser);
             Glide.with(this)
                     .load(userInfo.getProfileimg())
                     .circleCrop()
@@ -175,6 +177,33 @@ public class ProfileModifyActivity extends AppCompatActivity {
                 }
             });
 
+            if (NowUser.getMedalAppear()) { //메달 표시가 true일때
+                binding.setMedalInNickname.setSelected(true);
+                binding.setMedalInNickname.setText("표시");
+            } else { //메달 표시가 false일때
+                binding.setMedalInNickname.setSelected(false);
+                binding.setMedalInNickname.setText("숨김");
+            }
+
+            binding.setMedalInNickname.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (binding.setMedalInNickname.isSelected()) {
+                        NowUser.setMedalAppear(false);
+                        binding.setMedalInNickname.setSelected(false);
+                        binding.setMedalInNickname.setText("숨김");
+                        pv.updateUser(NowUser);
+                        setMedal(NowUser);
+                    } else {
+                        NowUser.setMedalAppear(true);
+                        binding.setMedalInNickname.setSelected(true);
+                        binding.setMedalInNickname.setText("표시");
+                        pv.updateUser(NowUser);
+                        setMedal(NowUser);
+                    }
+                }
+            });
+
         });
 
         cv.getChallengeList().observe(this, it -> {
@@ -205,5 +234,33 @@ public class ProfileModifyActivity extends AppCompatActivity {
         else return true;
     }
 
+    //메달 표시 유무에 따른 세팅
+    private void setMedal(UserInfo userInfo) {
+        if (userInfo.getMedalAppear()) { //메달을 표시한다면
+            binding.ivMedal.setVisibility(View.VISIBLE);
+            switch (Integer.parseInt(String.valueOf(userInfo.getTier()))) { //티어 0 ~ 5에 따라 다른 메달이 나오게
+                case 1:
+                    binding.ivMedal.setImageResource(R.drawable.medal_bronze);
+                    break;
+                case 2:
+                    binding.ivMedal.setImageResource(R.drawable.medal_silver);
+                    break;
+                case 3:
+                    binding.ivMedal.setImageResource(R.drawable.medal_gold);
+                    break;
+                case 4:
+//                    binding.ivMedal.setImageResource(R.drawable.medal_platinum);
+                    break;
+                case 5:
+//                    binding.ivMedal.setImageResource(R.drawable.medal_diamond);
+                    break;
+                default: //티어가 없을때
+                    binding.ivMedal.setImageResource(0);
+            }
+        } else { //메달을 표시하지 않을거라면
+            binding.ivMedal.setVisibility(View.GONE);
+            binding.ivMedal.setImageResource(0);
+        }
+    }
 
 }
