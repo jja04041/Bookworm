@@ -77,7 +77,8 @@ class UserInfo : Serializable {
         if (document["introduce"] as String? != null)
             introduce = (document["introduce"] as String?)!!
         completedChallenge = document["completedChallenge"] as Long?
-        tier = document["tier"] as Long?
+        if (document["tier"] as Long? != null) //파이어베이스의 유저인포에 모두가 tier를 포함하게 되면 지워도 되는 if문. 현재 오류 방지용으로 삽입해놓음
+            tier = document["tier"] as Long?
         if (document["medalAppear"] as Boolean? != null) //파이어베이스의 유저인포에 모두가 medalAppear을 포함하게 되면 지워도 되는 if문. 현재 오류 방지용으로 삽입해놓음
             medalAppear = document["medalAppear"] as Boolean?
     }
