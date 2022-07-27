@@ -16,7 +16,7 @@ class UserInfo : Serializable {
     var introduce = "안녕하세요~"
     var completedChallenge: Long? = 0 //인증 완료된 챌린지 개수
     var tier: Long? = 0 //인증 완료된 챌린지에 따른 티어(닉네임 옆 메달 표시용)
-    var medalAppear: Boolean? = false
+    var medalAppear: Boolean? = true
 
     @get:Exclude
     var isMainUser = false //메인 유저인지 확인하는 변수
