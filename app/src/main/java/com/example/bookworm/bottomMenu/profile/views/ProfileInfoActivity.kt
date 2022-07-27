@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.bookworm.BookWorm
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.profile.submenu.SubMenuPagerAdapter
@@ -97,6 +98,7 @@ class ProfileInfoActivity : AppCompatActivity() {
     suspend fun setUI(user: UserInfo, bookWorm: BookWorm) {
 
         binding.tvNickname.text = user.username //닉네임 설정
+        setMedal(user) //메달 설정
         binding.tvNickname.visibility = View.VISIBLE
         Glide.with(this).load(user.profileimg).circleCrop()
             .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -134,7 +136,13 @@ class ProfileInfoActivity : AppCompatActivity() {
         binding.tvFollowerCount.text = user.followerCounts.toString()
         binding.tvFollowingCount.text = user.followingCounts.toString()
         binding.tvReadBookCount.text = bookWorm.readcount.toString()
-        binding.ivBookworm.setImageResource(this.resources.getIdentifier("bw_${bookWorm.wormtype}","drawable",this.packageName))
+        binding.ivBookworm.setImageResource(
+            this.resources.getIdentifier(
+                "bw_${bookWorm.wormtype}",
+                "drawable",
+                this.packageName
+            )
+        )
 
 
         //팔로우 버튼을 클릭했을때 버튼 모양, 상태 변경
@@ -187,5 +195,23 @@ class ProfileInfoActivity : AppCompatActivity() {
 
     fun setFollowerCnt(count: Long) {
         binding.tvFollowerCount.text = count.toString()
+    }
+
+    //메달 표시 유무에 따른 세팅
+    private fun setMedal(userInfo: UserInfo) {
+        if (userInfo.medalAppear!!) { //메달을 표시한다면
+            binding!!.ivMedal.setVisibility(View.VISIBLE)
+            when (userInfo.tier.toString().toInt()) {
+                1 -> binding.ivMedal.setImageResource(R.drawable.medal_bronze)
+                2 -> binding.ivMedal.setImageResource(R.drawable.medal_silver)
+                3 -> binding.ivMedal.setImageResource(R.drawable.medal_gold)
+                4 -> {}
+                5 -> {}
+                else -> binding.ivMedal.setImageResource(0)
+            }
+        } else { //메달을 표시하지 않을거라면
+            binding!!.ivMedal.setVisibility(View.GONE)
+            binding!!.ivMedal.setImageResource(0)
+        }
     }
 }

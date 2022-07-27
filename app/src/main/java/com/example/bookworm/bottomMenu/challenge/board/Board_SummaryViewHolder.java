@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Feed.CustomPopup;
+import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.Feed.Fragment_feed;
 import com.example.bookworm.bottomMenu.search.items.Book;
 import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_result;
@@ -79,5 +80,35 @@ public class Board_SummaryViewHolder extends RecyclerView.ViewHolder implements 
     public void showProfile(@NonNull UserInfo userInfo, @NonNull Boolean bool) {
         Glide.with(context).load(userInfo.getProfileimg()).circleCrop().into(binding.ivProfileImage);
         binding.tvNickname.setText(userInfo.getUsername());
+        setMedal(userInfo);
+    }
+
+    //메달 표시 유무에 따른 세팅
+    private void setMedal(UserInfo userInfo) {
+        if (userInfo.getMedalAppear()) { //메달을 표시한다면
+            binding.ivMedal.setVisibility(View.VISIBLE);
+            switch (Integer.parseInt(String.valueOf(userInfo.getTier()))) { //티어 0 ~ 5에 따라 다른 메달이 나오게
+                case 1:
+                    binding.ivMedal.setImageResource(R.drawable.medal_bronze);
+                    break;
+                case 2:
+                    binding.ivMedal.setImageResource(R.drawable.medal_silver);
+                    break;
+                case 3:
+                    binding.ivMedal.setImageResource(R.drawable.medal_gold);
+                    break;
+                case 4:
+//                    binding.ivMedal.setImageResource(R.drawable.medal_platinum);
+                    break;
+                case 5:
+//                    binding.ivMedal.setImageResource(R.drawable.medal_diamond);
+                    break;
+                default: //티어가 없을때
+                    binding.ivMedal.setImageResource(0);
+            }
+        } else { //메달을 표시하지 않을거라면
+            binding.ivMedal.setVisibility(View.GONE);
+            binding.ivMedal.setImageResource(0);
+        }
     }
 }

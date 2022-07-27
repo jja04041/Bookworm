@@ -110,13 +110,6 @@
                     android:textColor="#000000"
                     android:textSize="15dp" />
 
-                <Button
-                    android:id="@+id/btn_createchallenge_search"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/search"
-                    android:gravity="end" />
             </LinearLayout>
 
             <LinearLayout

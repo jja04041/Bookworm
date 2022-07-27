@@ -16,6 +16,7 @@ class UserInfo : Serializable {
     var introduce = "안녕하세요~"
     var completedChallenge: Long? = 0 //인증 완료된 챌린지 개수
     var tier: Long? = 0 //인증 완료된 챌린지에 따른 티어(닉네임 옆 메달 표시용)
+    var medalAppear: Boolean? = true
 
     @get:Exclude
     var isMainUser = false //메인 유저인지 확인하는 변수
@@ -76,7 +77,10 @@ class UserInfo : Serializable {
         if (document["introduce"] as String? != null)
             introduce = (document["introduce"] as String?)!!
         completedChallenge = document["completedChallenge"] as Long?
-        tier = document["tier"] as Long?
+        if (document["tier"] as Long? != null) //파이어베이스의 유저인포에 모두가 tier를 포함하게 되면 지워도 되는 if문. 현재 오류 방지용으로 삽입해놓음
+            tier = document["tier"] as Long?
+        if (document["medalAppear"] as Boolean? != null) //파이어베이스의 유저인포에 모두가 medalAppear을 포함하게 되면 지워도 되는 if문. 현재 오류 방지용으로 삽입해놓음
+            medalAppear = document["medalAppear"] as Boolean?
     }
 
     //장르 설정

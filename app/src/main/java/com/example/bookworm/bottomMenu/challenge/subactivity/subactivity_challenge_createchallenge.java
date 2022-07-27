@@ -38,7 +38,7 @@ import java.util.Locale;
 public class subactivity_challenge_createchallenge extends AppCompatActivity {
     SubactivityChallengeCreatechallengeBinding binding;
     UserInfo userInfo;
-    Button btn_search, btn_back;
+    Button btn_back;
     TextView tv_bookname, tv_challenge_start, tv_challenge_end;
     EditText et_challenge_date, et_challenge_name, et_challenge_max, et_challenge_info;
     Button btn_confirm, btn_start_challenge;
@@ -66,7 +66,6 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity {
         binding = SubactivityChallengeCreatechallengeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        btn_search = findViewById(R.id.btn_createchallenge_search);
         btn_start_challenge = findViewById(R.id.btn_start_challenge);
         btn_back = findViewById(R.id.btnBack);
         tv_bookname = findViewById(R.id.tv_createchallenge_bookname);
@@ -134,13 +133,6 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 getBook();
-            }
-        });
-        btn_search.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getBook();
-                btn_search.clearFocus();
             }
         });
 

@@ -66,14 +66,14 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         int safePosition = holder.getAdapterPosition();
-            if (holder instanceof ItemViewHolder) {
-                Comment item = (Comment) commentList.get(safePosition);
-                ((ItemViewHolder) holder).setItem(item);
-            } else if (holder instanceof CommentAdapter.LoadingViewHolder) {
-                showLoadingView((CommentAdapter.LoadingViewHolder) holder, safePosition);
-            } else if (holder instanceof SummaryViewHolder) {
-                Feed item = (Feed) commentList.get(safePosition);
-                ((SummaryViewHolder) holder).setItem(item);
+        if (holder instanceof ItemViewHolder) {
+            Comment item = (Comment) commentList.get(safePosition);
+            ((ItemViewHolder) holder).setItem(item);
+        } else if (holder instanceof CommentAdapter.LoadingViewHolder) {
+            showLoadingView((CommentAdapter.LoadingViewHolder) holder, safePosition);
+        } else if (holder instanceof SummaryViewHolder) {
+            Feed item = (Feed) commentList.get(safePosition);
+            ((SummaryViewHolder) holder).setItem(item);
         }
     }
 
@@ -124,6 +124,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             Feed feed = ((subactivity_comment) context).item;
             UserInfo nowUser = new PersonalD(context).getUserInfo();
             user.getData(item.getUserToken(), null);
+
             binding.tvCommentContent.setText(item.getContents());
 
             getDateDuration(item.getMadeDate());
@@ -155,6 +156,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public void showProfile(@NonNull UserInfo userInfo, @NonNull Boolean bool) {
             Glide.with(context).load(userInfo.getProfileimg()).circleCrop().into(binding.imgProfile);
             binding.tvNickname.setText(userInfo.getUsername());
+            setMedal(userInfo);
         }
 
         //시간차 구하기 n분 전, n시간 전 등등
@@ -183,6 +185,35 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             } catch (ParseException e) {
                 e.printStackTrace();
+            }
+        }
+
+        //메달 표시 유무에 따른 세팅
+        private void setMedal(UserInfo userInfo) {
+            if (userInfo.getMedalAppear()) { //메달을 표시한다면
+                binding.ivMedal.setVisibility(View.VISIBLE);
+                switch (Integer.parseInt(String.valueOf(userInfo.getTier()))) { //티어 0 ~ 5에 따라 다른 메달이 나오게
+                    case 1:
+                        binding.ivMedal.setImageResource(R.drawable.medal_bronze);
+                        break;
+                    case 2:
+                    binding.ivMedal.setImageResource(R.drawable.medal_silver);
+                        break;
+                    case 3:
+                    binding.ivMedal.setImageResource(R.drawable.medal_gold);
+                        break;
+                    case 4:
+//                    binding.ivMedal.setImageResource(R.drawable.medal_platinum);
+                        break;
+                    case 5:
+//                    binding.ivMedal.setImageResource(R.drawable.medal_diamond);
+                        break;
+                    default: //티어가 없을때
+                        binding.ivMedal.setImageResource(0);
+                }
+            } else { //메달을 표시하지 않을거라면
+                binding.ivMedal.setVisibility(View.GONE);
+                binding.ivMedal.setImageResource(0);
             }
         }
     }
