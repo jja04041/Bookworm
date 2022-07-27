@@ -205,8 +205,8 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
             // 장르 처리
             userInfo.setGenre(selected_book.getCategoryname(), current_context);
 
-            int count = userBw.getReadcount();
-            userBw.setReadcount(++count);
+//            int count = userBw.getReadcount();
+//            userBw.setReadcount(++count);
             uv.updateUser(userInfo);
             uv.updateBw(userInfo.getToken(), userBw);
 

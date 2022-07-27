@@ -9,6 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#BBBBBB</color>
     <color name="maincolor">#FFFFFF</color>
+    <color name="navicolor">#CDBBA7</color>
     <color name="subcolor_0">#ff7f43</color>
     <color name="subcolor_0_50">#80ff7f43</color>
     <color name="subcolor_1">#A3A3CC</color>
