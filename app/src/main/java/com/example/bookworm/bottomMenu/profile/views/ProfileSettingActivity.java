@@ -73,24 +73,38 @@ public class ProfileSettingActivity extends AppCompatActivity {
         binding.btnLogout.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(current_context, "정상적으로 로그아웃되었습니다.", Toast.LENGTH_SHORT).show();
-                if (GoogleSignIn.getLastSignedInAccount(current_context) != null) {
-                    gsi.signOut();
-                } else {
-                    UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
-                        @Override
-                        public void onCompleteLogout() {
-                            if (Session.getCurrentSession().checkAndImplicitOpen()) {
-                                Session.getCurrentSession().clearCallbacks();
+                new AlertDialog.Builder(current_context)
+                        .setMessage("로그아웃하시겠습니까?")
+                        .setPositiveButton("네", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(current_context, "정상적으로 로그아웃되었습니다.", Toast.LENGTH_SHORT).show();
+                                if (GoogleSignIn.getLastSignedInAccount(current_context) != null) {
+                                    gsi.signOut();
+                                } else {
+                                    UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
+                                        @Override
+                                        public void onCompleteLogout() {
+                                            if (Session.getCurrentSession().checkAndImplicitOpen()) {
+                                                Session.getCurrentSession().clearCallbacks();
+                                            }
+                                        }
+                                    });
+                                }
+                                localLogout();
+                                Intent intent = new Intent(current_context, LoginActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                                dialog.dismiss();
                             }
-                        }
-                    });
-                }
-                localLogout();
-                Intent intent = new Intent(current_context, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                finish();
+                        })
+                        .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
             }
         });
         //회원탈퇴 버튼
