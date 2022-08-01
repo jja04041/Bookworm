@@ -172,12 +172,9 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
                 textViews[i].setText(String.valueOf(rank));
             } else if (text.equals("description")) {
                 String description = json.getString(text);
-                description = description.replace("&lt;", "<")
-                        .replace("&gt;", ">")
-                        .replace("&lt", "<")
-                        .replace("&gt", ">");
-                textViews[i].setText(description);
-            } else textViews[i].setText(json.getString(getContent[i]));
+                if (description.equals("")) description = "책 소개가 없습니다.";
+                textViews[i].setText(replace_ltgt(description));
+            } else textViews[i].setText(replace_ltgt(json.getString(getContent[i])));
         }
 
         textViews[1].post(new Runnable() {
@@ -268,6 +265,14 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
             binding.mRecyclerView.setVisibility(View.VISIBLE);
             binding.llEmptyReview.setVisibility(View.GONE);
         }
+    }
+
+    private String replace_ltgt(String text) {
+        text = text.replace("&lt;", "<")
+                .replace("&gt;", ">")
+                .replace("&lt", "<")
+                .replace("&gt", ">");
+        return text;
     }
 
 }
