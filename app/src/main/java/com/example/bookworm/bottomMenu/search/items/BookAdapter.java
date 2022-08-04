@@ -20,7 +20,7 @@ import com.github.ybq.android.spinkit.style.ThreeBounce;
 
 import java.util.ArrayList;
 
-    public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnBookItemClickListener {
+public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnBookItemClickListener {
     ArrayList<Book> BookList;
     Context context;
     OnBookItemClickListener listener;
@@ -141,11 +141,19 @@ import java.util.ArrayList;
         }
 
         public void setItem(Book item) {
-            tvTitle.setText(item.getTitle());
-            tvAuthor.setText(item.getAuthor());
-            tvDescription.setText(item.getContent().replaceAll("&lt;", "<").replaceAll("&gt;", ">"));//가끔 &lt &gt로 표시되는 경우가 발생  => 이를 해결
-            tvPublisher.setText(item.getPublisher());
+            tvTitle.setText(replace_ltgt(item.getTitle()));
+            tvAuthor.setText(replace_ltgt(item.getAuthor()));
+            tvDescription.setText(replace_ltgt(item.getContent()));
+            tvPublisher.setText(replace_ltgt(item.getPublisher()));
             Glide.with(itemView).load(item.getImg_url()).into(ivThumb);
+        }
+
+        private String replace_ltgt(String text) {//가끔 &lt &gt로 표시되는 경우가 발생  => 이를 해결
+            text = text.replace("&lt;", "<")
+                    .replace("&gt;", ">")
+                    .replace("&lt", "<")
+                    .replace("&gt", ">");
+            return text;
         }
     }
 }

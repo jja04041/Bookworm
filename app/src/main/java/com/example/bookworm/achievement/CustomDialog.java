@@ -30,9 +30,11 @@ public class CustomDialog {
         this.context = context;
         key = _AchieveKey;
         if (_resID.equals("1")) { //티어 1일때
-            resID = "bronze_medal";
+            resID = "medal_bronze";
         } else if (_resID.equals("2")) { //티어 2일때
-            //resID = R.drawable.medal_silver; 아마도 실버로??
+            resID = "medal_silver";
+        } else if (_resID.equals("3")) { //티어 3일때
+            resID = "medal_gold";
         } else {
             resID = _resID;
         }

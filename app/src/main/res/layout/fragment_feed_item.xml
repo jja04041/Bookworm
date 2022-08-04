@@ -140,14 +140,6 @@
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/btnBookInfo"
-            android:layout_width="41dp"
-            android:layout_height="41dp"
-            android:layout_gravity="center"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/back_icon"
-            android:rotation="180" />
     </LinearLayout>
 
     <LinearLayout
@@ -319,7 +311,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="5dp"
                         android:layout_weight="3"
-                        android:text="##/## ##:##" />
+                        android:text="#일 전" />
 
                     <LinearLayout
                         android:id="@+id/llCommentInfo"
