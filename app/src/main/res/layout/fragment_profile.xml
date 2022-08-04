@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f5eddc"
     android:orientation="vertical">
+
+
 
     <FrameLayout
         android:id="@+id/setting"
@@ -18,6 +23,7 @@
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="15dp"
             android:background="@drawable/setting" />
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -70,16 +76,30 @@
                         android:src="@drawable/profile" />
 
 
-                    <TextView
-                        android:id="@+id/tvUserName"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="10dp"
-                        android:text="닉네임"
-                        android:textColor="#000000"
-                        android:textSize="17dp"
-                        android:textStyle="bold" />
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvUserName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="닉네임"
+                            android:textColor="#000000"
+                            android:textSize="17dp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/ivMedal"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
 
 
                 </LinearLayout>
@@ -95,7 +115,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="읽은 책 수"
+                        android:text="리뷰"
                         android:textColor="@color/black"
                         android:textSize="18dp"
                         android:textStyle="bold" />
@@ -184,30 +204,6 @@
 
                     <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="자기소개"
-                            android:textColor="@color/black"
-                            android:textSize="15dp"
-                            android:textStyle="bold" />
-
-                        <Button
-                            android:id="@+id/btnIntroModify"
-                            android:layout_width="60dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="end"
-                            android:layout_marginEnd="10dp"
-                            android:background="@drawable/white_button"
-                            android:text="수정"
-                            android:textColor="@color/black" />
-
-                    </FrameLayout>
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <EditText
@@ -222,19 +218,8 @@
                             android:textColor="@color/black"
                             android:textSize="13dp">
 
-                            <requestFocus />
                         </EditText>
 
-                        <Button
-                            android:id="@+id/btnModifyCancle"
-                            android:layout_width="60dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="end|bottom"
-                            android:layout_margin="10dp"
-                            android:background="@drawable/white_button"
-                            android:text="수정 취소"
-                            android:textColor="@color/black"
-                            android:visibility="gone" />
                     </FrameLayout>
 
                 </LinearLayout>
@@ -245,12 +230,13 @@
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/navicolor"
             android:elevation="10dp">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="포스트" />
+                android:text="리뷰" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"

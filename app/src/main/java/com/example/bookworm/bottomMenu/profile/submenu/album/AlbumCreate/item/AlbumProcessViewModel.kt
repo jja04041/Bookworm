@@ -100,6 +100,7 @@ class AlbumProcessViewModel(val context: Context, val pv: UserInfoViewModel) : V
         //서버에 이미지 업로드
         viewModelScope.launch {
             albumData.albumId = "${albumData.albumName.hashCode()}_${token}"
+
             if (albumData.thumbnail != null) {
                 var uploadImageToServer = viewModelScope.launch {
                     var imgName = "album_${albumData.albumName.hashCode()}_${token}.jpg"
@@ -109,6 +110,7 @@ class AlbumProcessViewModel(val context: Context, val pv: UserInfoViewModel) : V
                 uploadImageToServer.join()
             }
             var uploadAlbumToFB = viewModelScope.launch {
+                albumData.creater=token //업로드하는 당사자의 토큰을 담는다.
                 collectionReference.document("${albumData.albumName!!}").set(albumData).await()
             }
             uploadAlbumToFB.join()

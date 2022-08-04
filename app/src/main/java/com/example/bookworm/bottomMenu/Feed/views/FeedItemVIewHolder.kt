@@ -1,38 +1,41 @@
 package com.example.bookworm.BottomMenu.Feed.ViewHolders
 
 import android.app.AlertDialog
+import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.example.bookworm.core.internet.FBModule
+import com.example.bookworm.Feed.CustomPopup
+import com.example.bookworm.R
+import com.example.bookworm.achievement.Achievement
 import com.example.bookworm.appLaunch.views.MainActivity
-import com.example.bookworm.core.userdata.interfaces.UserContract
-
-import com.example.bookworm.core.userdata.PersonalD
-import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.bottomMenu.Feed.comments.Comment
 import com.example.bookworm.bottomMenu.Feed.comments.CommentsCounter
 import com.example.bookworm.bottomMenu.Feed.comments.subactivity_comment
 import com.example.bookworm.bottomMenu.Feed.items.Feed
 import com.example.bookworm.bottomMenu.Feed.likeCounter
-import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
-import com.example.bookworm.R
-import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_result
-import com.example.bookworm.Feed.CustomPopup
-import com.example.bookworm.achievement.Achievement
 import com.example.bookworm.bottomMenu.Feed.views.FeedViewModel
+import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
+import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_result
+import com.example.bookworm.core.internet.FBModule
+import com.example.bookworm.core.userdata.PersonalD
+import com.example.bookworm.core.userdata.UserInfo
+import com.example.bookworm.core.userdata.interfaces.UserContract
 import com.example.bookworm.databinding.FragmentFeedItemBinding
 import com.example.bookworm.notification.MyFCMService
 import java.text.DateFormat
@@ -145,6 +148,12 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
             }
         })
         binding!!.tvCommentCount.setText(item.commentsCount.toString()) //댓글 수 세팅
+        // 공유하기 버튼 눌렀을 때
+        binding!!.btnShare.setOnClickListener({
+
+
+
+        })
         //좋아요 수 세팅
         binding!!.tvLike.setText(item.likeCount.toString())
         liked = try {
@@ -328,6 +337,7 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
             if (bool == false) {
                 if (userInfo != null) {
                     binding!!.tvNickname.setText(userInfo!!.username)
+                    setMedal(userInfo, bool)
                     Glide.with(itemView).load(userInfo!!.profileimg).circleCrop()
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
@@ -337,6 +347,7 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
             } else if (bool == true) {
                 if (userInfo != null) {
                     binding!!.tvCommentNickname.setText(userInfo!!.username)
+                    setMedal(userInfo, bool)
                     Glide.with(binding!!.getRoot()).load(userInfo!!.profileimg).circleCrop()
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
@@ -371,6 +382,44 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
             }
         } catch (e: ParseException) {
             e.printStackTrace()
+        }
+    }
+
+    //메달 표시 유무에 따른 세팅
+    //댓글창 메달도 있기때문에 여기는 인자를 userInfo, bool 이렇게 2개 받음
+    private fun setMedal(userInfo: UserInfo, bool: Boolean?) {
+        if (userInfo.medalAppear!!) { //메달을 표시한다면
+            if (bool == false) { //피드라면
+                binding!!.ivMedal.setVisibility(View.VISIBLE)
+                when (userInfo.tier!!.toInt()) {
+                    1 -> binding!!.ivMedal.setImageResource(R.drawable.medal_bronze)
+                    2 -> binding!!.ivMedal.setImageResource(R.drawable.medal_silver)
+                    3 -> binding!!.ivMedal.setImageResource(R.drawable.medal_gold)
+                    4 -> {}
+                    5 -> {}
+                    else -> binding!!.ivMedal.setImageResource(0)
+                }
+            } else { //댓글이라면
+                binding!!.ivCommentMedal.setVisibility(View.VISIBLE)
+                when (userInfo.tier!!.toInt()) {
+                    1 -> binding!!.ivCommentMedal.setImageResource(R.drawable.medal_bronze)
+                    2 -> binding!!.ivCommentMedal.setImageResource(R.drawable.medal_silver)
+                    3 -> binding!!.ivCommentMedal.setImageResource(R.drawable.medal_gold)
+                    4 -> {}
+                    5 -> {}
+                    else -> binding!!.ivCommentMedal.setImageResource(0)
+                }
+            }
+
+        } else { //메달을 표시하지 않을거라면
+
+            if (bool == false) { //피드라면
+                binding!!.ivMedal.setVisibility(View.GONE)
+                binding!!.ivMedal.setImageResource(0)
+            } else { //댓글이라면
+                binding!!.ivCommentMedal.setVisibility(View.GONE)
+                binding!!.ivCommentMedal.setImageResource(0)
+            }
         }
     }
 

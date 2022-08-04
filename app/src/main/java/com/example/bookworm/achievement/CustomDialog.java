@@ -13,7 +13,12 @@ import android.widget.TextView;
 import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Create;
 
+import java.util.Arrays;
 import java.util.List;
+
+import nl.dionsegijn.konfetti.KonfettiView;
+import nl.dionsegijn.konfetti.models.Shape;
+import nl.dionsegijn.konfetti.models.Size;
 
 public class CustomDialog {
 
@@ -30,9 +35,11 @@ public class CustomDialog {
         this.context = context;
         key = _AchieveKey;
         if (_resID.equals("1")) { //티어 1일때
-            resID = "bronze_medal";
+            resID = "medal_bronze";
         } else if (_resID.equals("2")) { //티어 2일때
-            //resID = R.drawable.silver_medal; 아마도 실버로??
+            resID = "medal_silver";
+        } else if (_resID.equals("3")) { //티어 3일때
+            resID = "medal_gold";
         } else {
             resID = _resID;
         }
@@ -49,6 +56,7 @@ public class CustomDialog {
 
         dialog.show();
 
+        final KonfettiView konfettiView = (KonfettiView)dialog.findViewById(R.id.viewKonfetti);
         final TextView tvdialog = (TextView) dialog.findViewById(R.id.tv_achievement_dialog);
         final TextView tvdialognotice = (TextView) dialog.findViewById(R.id.tv_achievement_dialog_notice);
 
@@ -58,6 +66,19 @@ public class CustomDialog {
         tvdialog.setText("축하합니다! " + key + " 획득!");
         tvdialognotice.setText("획득한 보상을 인벤토리에서 확인해보세요!!");
 
+
+
+
+        konfettiView.build()
+                .addColors(Arrays.asList(0xfce18a, 0xff726d, 0xf4306d, 0xb48def))
+                .setDirection(-0.0, -999.0)
+                .setSpeed(1f, 4f)
+                .setFadeOutEnabled(true)
+                .setTimeToLive(2000L)
+                .addShapes(Shape.RECT, Shape.CIRCLE)
+                .addSizes(new Size(7,10))
+                .setPosition(-50f,konfettiView.getWidth() +50f, -50f,-50f)
+                .streamFor(300, 3000L);
 
         if (!resID.contains("medal")) resID = "bw_" + resID;
         ivdialog.setImageResource(context.getResources().getIdentifier(resID, "drawable", context.getPackageName()));
@@ -89,4 +110,6 @@ public class CustomDialog {
 
         return "";
     }
+
+
 }
