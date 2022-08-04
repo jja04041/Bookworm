@@ -6,6 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".chat.newchat.MessageActivity">
 
+
+    <WebView
+        android:id="@+id/webview2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+
     <LinearLayout
         android:id="@+id/chat_topbar"
         android:layout_width="match_parent"
@@ -23,6 +31,14 @@
             android:text="이름"
             android:textColor="@color/black"
             android:textSize="20dp" />
+
+        <Button
+            android:id="@+id/btnsharee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:text="공유" />
 
     </LinearLayout>
 
