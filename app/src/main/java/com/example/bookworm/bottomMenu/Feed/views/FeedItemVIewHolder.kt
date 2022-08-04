@@ -1,40 +1,49 @@
 package com.example.bookworm.BottomMenu.Feed.ViewHolders
 
 import android.app.AlertDialog
+import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.example.bookworm.core.internet.FBModule
+import com.example.bookworm.Feed.CustomPopup
+import com.example.bookworm.R
+import com.example.bookworm.achievement.Achievement
 import com.example.bookworm.appLaunch.views.MainActivity
-import com.example.bookworm.core.userdata.interfaces.UserContract
-
-import com.example.bookworm.core.userdata.PersonalD
-import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.bottomMenu.Feed.comments.Comment
 import com.example.bookworm.bottomMenu.Feed.comments.CommentsCounter
 import com.example.bookworm.bottomMenu.Feed.comments.subactivity_comment
 import com.example.bookworm.bottomMenu.Feed.items.Feed
 import com.example.bookworm.bottomMenu.Feed.likeCounter
-import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
-import com.example.bookworm.R
-import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_result
-import com.example.bookworm.Feed.CustomPopup
-import com.example.bookworm.achievement.Achievement
 import com.example.bookworm.bottomMenu.Feed.views.FeedViewModel
+import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
+import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_result
+import com.example.bookworm.core.internet.FBModule
+import com.example.bookworm.core.userdata.PersonalD
+import com.example.bookworm.core.userdata.UserInfo
+import com.example.bookworm.core.userdata.interfaces.UserContract
 import com.example.bookworm.databinding.FragmentFeedItemBinding
 import com.example.bookworm.notification.MyFCMService
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.dynamiclinks.DynamicLink.AndroidParameters
+import com.google.firebase.dynamiclinks.DynamicLink.SocialMetaTagParameters
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
+import com.google.firebase.dynamiclinks.ShortDynamicLink
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -145,6 +154,12 @@ class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
             }
         })
         binding!!.tvCommentCount.setText(item.commentsCount.toString()) //댓글 수 세팅
+        // 공유하기 버튼 눌렀을 때
+        binding!!.btnShare.setOnClickListener({
+
+
+
+        })
         //좋아요 수 세팅
         binding!!.tvLike.setText(item.likeCount.toString())
         liked = try {

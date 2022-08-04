@@ -26,4 +26,13 @@
     <string name="cancel">설정 닫기</string>
     <!--Strings used for xml(layout)-->
     <string name="set_your_title"><font bold="true">제목을 입력해주세요</font></string>
+
+
+
+    <string name="ted_scheme">ted</string>
+
+    <string name="scheme_host_main">main</string>
+    <string name="scheme_host_profile">profile</string>
+
+
 </resources>

@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f5eddc"
     android:orientation="vertical">
+
+
 
     <FrameLayout
         android:id="@+id/setting"
@@ -19,6 +23,7 @@
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="15dp"
             android:background="@drawable/setting" />
+
 
         <TextView
             android:layout_width="wrap_content"
