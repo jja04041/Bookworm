@@ -76,7 +76,7 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
 
 
         binding.btnChatlist.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), Activity_chatlist.class);
+            Intent intent = new Intent (getActivity(), Activity_chatlist.class);
             startActivity(intent);
         });
 
@@ -124,7 +124,7 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
         binding.tvUserName.setText(user.getUsername());
         binding.edtIntroduce.setText(user.getIntroduce());
 
-        setMedal(user); //메달 세팅
+
 
         //팔로워액티비티 실행하기
         binding.btnFollower.setOnClickListener(view -> {
@@ -197,4 +197,8 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
             binding.ivMedal.setImageResource(0);
         }
     }
+
+
+
+
 }

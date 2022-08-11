@@ -1,8 +1,11 @@
 package com.example.bookworm.chat.newchat;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,12 +28,17 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
 import com.example.bookworm.core.userdata.UserInfo;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.dynamiclinks.DynamicLink;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,7 +52,7 @@ public class MessageActivity extends AppCompatActivity {
     private String destUid;     //상대방 uid
 
     private RecyclerView recyclerView;
-    private Button button;
+    private Button button, button2;
     private EditText editText;
 
     private FirebaseDatabase firebaseDatabase;
@@ -70,8 +78,6 @@ public class MessageActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         opponent = (UserInfo) intent.getSerializableExtra("opponent");
-
-
 
 
         TextView tv = findViewById(R.id.tv_chatroomtopbar);
@@ -107,7 +113,27 @@ public class MessageActivity extends AppCompatActivity {
 
             init();
             sendMsg();
+
+
+            button2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String message = "안녕 나는 책벌레야";
+                    Create_DynamicLink(message);
+                    Intent msg = new Intent(Intent.ACTION_SEND);
+
+                    msg.addCategory(Intent.CATEGORY_DEFAULT);
+                    msg.putExtra(Intent.EXTRA_TEXT, "https://bookbollae.page.link/63fF");
+                    msg.putExtra(Intent.EXTRA_TITLE, "제목");
+                    msg.setType("text/plain");
+                    startActivity(Intent.createChooser(msg, "앱을 선택해 주세요"));
+
+
+                }
+            });
         });
+
+
     }
 
     private void init()
@@ -118,6 +144,8 @@ public class MessageActivity extends AppCompatActivity {
         recyclerView = (RecyclerView)findViewById(R.id.message_recyclerview);
         button=(Button)findViewById(R.id.message_btn);
         editText = (EditText)findViewById(R.id.message_editText);
+
+        button2 = (Button)findViewById(R.id.btnsharee);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
 
@@ -333,4 +361,47 @@ public class MessageActivity extends AppCompatActivity {
             }
         }
     }
+
+
+        // (subject = 들어갈 문구, pageurl =
+        public void Create_DynamicLink (final String subject){
+
+            // 다른 이미지 넣고싶으면 함수 인자로 이미지 받기
+            Uri appiconuri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, R.drawable.appicon_bookworm);
+
+            Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                    .setLink(Uri.parse("www.google.com")) // pageurl
+                    .setDomainUriPrefix("https://b00kworm.page.link/TG78")
+                    .setAndroidParameters(
+                            new DynamicLink.AndroidParameters.Builder(getPackageName())
+                                    .build())
+                    .setSocialMetaTagParameters(
+                            new DynamicLink.SocialMetaTagParameters.Builder()
+                                    .setTitle("공유하기 테스트")
+                                    .setImageUrl(appiconuri)
+                                    .build())
+                    .buildShortDynamicLink()
+                    .addOnCompleteListener(this, new OnCompleteListener<ShortDynamicLink>() {
+                        @Override
+                        public void onComplete(@NonNull Task<ShortDynamicLink> task) {
+                            if (task.isSuccessful()) {
+                                Uri ShortLink = task.getResult().getShortLink();
+                                try {
+                                    Intent Sharing_Intent = new Intent();
+                                    Sharing_Intent.setAction(Intent.ACTION_SEND);
+                                    Sharing_Intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+                                    Sharing_Intent.putExtra(Intent.EXTRA_TEXT, ShortLink.toString());
+                                    Sharing_Intent.setType("text/plain");
+                                    startActivity(Intent.createChooser(Sharing_Intent, "sharing"));
+                                }
+                                catch (Exception e) {
+                                }
+                            }
+                        }
+                    });
+
+
+        }
+
+
 }

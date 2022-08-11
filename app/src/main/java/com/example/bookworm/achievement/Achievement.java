@@ -2,11 +2,9 @@ package com.example.bookworm.achievement;
 
 import android.content.Context;
 
-
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
 import com.example.bookworm.core.internet.FBModule;
-import com.example.bookworm.core.login.GlobalApplication;
 import com.example.bookworm.core.userdata.PersonalD;
 import com.example.bookworm.core.userdata.UserInfo;
 
@@ -196,4 +194,7 @@ public class Achievement {
 
 
     }
+
+
+
 }

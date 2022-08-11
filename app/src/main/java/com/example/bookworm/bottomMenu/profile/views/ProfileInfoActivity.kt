@@ -40,6 +40,7 @@ class ProfileInfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         //initialize
 
+
         binding = ActivityProfileInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
         fv = FollowViewModelImpl(this)

@@ -27,6 +27,8 @@ class BookwormImgAdapter(val parentView: View, val context: Context) :
 
     interface OnItemClickEventListener {
         fun onItemClick(a_view: View?, a_position: Int)
+
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
