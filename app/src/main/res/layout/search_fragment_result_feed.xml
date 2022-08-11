@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/feed_bottom_border_only"
     android:orientation="vertical"
+    android:id="@+id/llview"
     android:padding="10dp">
 
     <FrameLayout
