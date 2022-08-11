@@ -2,9 +2,7 @@ package com.example.bookworm.core.login;
 
 import android.content.Context;
 import android.content.Intent;
-
 import android.os.Bundle;
-
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -13,10 +11,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.bookworm.appLaunch.modules.MainViewModel;
-import com.example.bookworm.bottomMenu.bookworm.BookWorm;
-import com.example.bookworm.appLaunch.views.MainActivity;
 import com.example.bookworm.R;
+import com.example.bookworm.appLaunch.modules.MainViewModel;
+import com.example.bookworm.appLaunch.views.MainActivity;
+import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -49,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_login);
         super.onCreate(savedInstanceState);
+
         mContext = this;
         fbModule = new FBModule(mContext);
         isLogined = Boolean.FALSE; //카카오 이중로그인 방지

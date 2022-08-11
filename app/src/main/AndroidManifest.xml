@@ -46,20 +46,17 @@
             android:exported="false"
             tools:ignore="AppLinkUrlError">
 
-        <intent-filter>
-            <action android:name="android.intent.action.VIEW"/>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-            <category android:name="android.intent.category.DEFAULT"/>
-            <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-            <data
-                android:host="www.example.com"
-                android:scheme="http"
-                android:pathPrefix="/b00kworm"/>
-            <data
-                android:host="profile"
-                android:scheme="b00kworm" />
-        </intent-filter>
+                <data
+                    android:scheme="b00kworm"
+                    android:host="profile"
+                    android:pathPrefix="/b00kworm" />
+            </intent-filter>
 
         </activity>
 
@@ -102,60 +99,47 @@
         <activity
             android:name=".bottomMenu.profile.views.ProfileModifyActivity"
             android:exported="false" /> <!-- 회원 정보 수정 -->
+
         <activity
             android:name=".bottomMenu.profile.views.ProfileSettingActivity"
-            android:exported="false" /> <!-- 회원 설정 -->
+            android:exported="false"
+            tools:ignore="AppLinkUrlError"> <!-- 채팅리스트 화면 -->
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="bookwormlinktest.page.link"
+                    android:scheme="https"
+                    android:path="/message" />
+            </intent-filter> <!-- 회원 설정 -->
+        </activity>
+
         <activity
             android:name=".appLaunch.views.MainActivity"
             android:exported="false"
             tools:ignore="AppLinkUrlError">
 
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
+            <intent-filter android:autoVerify="true">
 
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-
-                <data
-                    android:host="www.example.com"
-                    android:scheme="http"
-                    android:pathPrefix="/b00kworm"/>
-                <data
-                    android:host="Mainactivity"
-                    android:scheme="b00kworm" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity> <!-- 메인 화면 -->
 
         <activity
             android:name=".core.login.LoginActivity"
-            android:exported="false" /> <!-- 로그인 화면 -->
+            android:exported="false"></activity><!-- 로그인 화면 -->
         <!-- 채팅 화면 -->
         <activity
             android:name=".chat.newchat.Activity_chatlist"
             android:exported="false" /> <!-- 채팅리스트 화면 -->
         <activity
             android:name=".chat.newchat.MessageActivity"
-            android:exported="false"> <!-- 채팅리스트 화면 -->
-
-        <intent-filter>
-            <action android:name="android.intent.action.VIEW"/>
-
-            <category android:name="android.intent.category.DEFAULT"/>
-            <category android:name="android.intent.category.BROWSABLE"/>
-
-
-            <data
-                android:host="www.google.com"
-                android:scheme="https" />
-
-            <data
-                android:host="www.maps.google.com"
-                android:scheme="https" />
-
-            <data
-                android:host="www.maps.google.com"
-                android:scheme="http" />
-        </intent-filter>
+            android:exported="false">
 
         </activity>
 

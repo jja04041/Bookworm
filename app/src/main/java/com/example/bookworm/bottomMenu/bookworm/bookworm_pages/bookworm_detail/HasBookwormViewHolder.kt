@@ -43,18 +43,25 @@ class HasBookwormViewHolder(
             bwData = it
         }
 
+        // userinfo의 wormtype데이터와
+        // 리사이클러뷰의 position의 data.id 값이 일치하면
+        // binding!!.itemContainer.setBackgroundColor(Color.rgb(204, 204, 204))
+        // binding!!.ivBwImage.setBackgroundColor(Color.rgb(170, 170, 170))
+        // 이것이 상시로 돌아가야함 그래야 click했을때나 항시에 적용이됨
 
         //해당 데이터 선택시
         binding!!.ivBwImage.setOnClickListener({
+
             uv.getBookWorm(user.token)
             var position = bindingAdapterPosition
-            if (position != RecyclerView.NO_POSITION) {
-                listener.onItemClick(itemView, position)
-            }
+
+            listener.onItemClick(itemView, position)
+
             uv.bwdata.observe(context as MainActivity, {
                 if (it.wormtype != data.id) {
 
                     it.wormtype = data.id
+
                     CoroutineScope(Dispatchers.IO).launch {
                         uv.updateBw(null, it)
                     }

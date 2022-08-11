@@ -10,7 +10,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -80,17 +79,6 @@ public class MessageActivity extends AppCompatActivity {
         Intent intent = getIntent();
         opponent = (UserInfo) intent.getSerializableExtra("opponent");
 
-        Intent share = new Intent(Intent.ACTION_SEND);
-        Uri uri = getIntent().getData();
-        if(uri != null)
-        {
-            String path = uri.toString();
-            Toast.makeText(MessageActivity.this, "Path = "+path, Toast.LENGTH_SHORT).show();
-            WebView webView = (WebView)findViewById(R.id.webview2);
-            webView.loadUrl(path);
-
-        }
-
 
         TextView tv = findViewById(R.id.tv_chatroomtopbar);
 
@@ -135,7 +123,7 @@ public class MessageActivity extends AppCompatActivity {
                     Intent msg = new Intent(Intent.ACTION_SEND);
 
                     msg.addCategory(Intent.CATEGORY_DEFAULT);
-                    msg.putExtra(Intent.EXTRA_TEXT, "https://b00kworm.page.link/TG78");
+                    msg.putExtra(Intent.EXTRA_TEXT, "https://bookbollae.page.link/63fF");
                     msg.putExtra(Intent.EXTRA_TITLE, "제목");
                     msg.setType("text/plain");
                     startActivity(Intent.createChooser(msg, "앱을 선택해 주세요"));
@@ -414,5 +402,6 @@ public class MessageActivity extends AppCompatActivity {
 
 
         }
+
 
 }

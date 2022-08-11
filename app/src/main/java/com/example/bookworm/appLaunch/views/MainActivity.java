@@ -24,10 +24,16 @@ public class MainActivity extends AppCompatActivity {
     MoveFragment MoveFragment = new MoveFragment();
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
+
+
         // 초기화면 설정
         fragments[0] = new Fragment_feed();
         fragmentManager = getSupportFragmentManager();
