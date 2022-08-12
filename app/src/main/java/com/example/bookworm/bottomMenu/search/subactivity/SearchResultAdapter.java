@@ -2,6 +2,7 @@ package com.example.bookworm.bottomMenu.search.subactivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
+import com.example.bookworm.bottomMenu.Feed.comments.subactivity_comment;
 import com.example.bookworm.bottomMenu.Feed.items.Feed;
 import com.example.bookworm.bottomMenu.Feed.views.FeedViewModel;
 import com.example.bookworm.bottomMenu.challenge.board.Board;
@@ -102,6 +104,15 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             binding.tvCommentContent.setText(item.getFeedText());
             getDateDuration(item.getDate());
             binding.tvDate.setText(dateDuration + " 전");
+            binding.llview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, subactivity_comment.class);
+                    intent.putExtra("item", item);
+                    intent.putExtra("position", getAbsoluteAdapterPosition());
+                    context.startActivity(intent);
+                }
+            });
 
             pv.getUser(item.getUserToken(), feedUserInfo);
             feedUserInfo.observe(lifecycleOwner, feedUserInfo -> {
