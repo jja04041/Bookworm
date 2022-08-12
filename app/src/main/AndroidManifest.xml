@@ -48,10 +48,9 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
+                <data android:scheme="https" android:host="bookwormlinktest.page.link" android:pathPrefix="/b00kworm" />
                 <data
                     android:scheme="b00kworm"
                     android:host="profile"

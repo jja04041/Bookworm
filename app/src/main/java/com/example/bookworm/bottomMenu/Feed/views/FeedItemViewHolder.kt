@@ -1,4 +1,4 @@
-package com.example.bookworm.BottomMenu.Feed.ViewHolders
+package com.example.bookworm.bottomMenu.Feed.views
 
 import android.app.AlertDialog
 import android.content.ContentUris
@@ -43,7 +43,7 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FeedItemVIewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolder(itemView),
+class FeedItemViewHolder(itemView: View, context: Context?) : RecyclerView.ViewHolder(itemView),
     UserContract.View {
     var binding: FragmentFeedItemBinding? = null
     lateinit var nowUser: UserInfo

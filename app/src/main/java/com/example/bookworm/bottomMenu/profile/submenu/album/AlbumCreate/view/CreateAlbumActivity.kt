@@ -1,15 +1,19 @@
 package com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view
 
+import android.graphics.Insets
+import android.os.Build
 import android.os.Bundle
+import android.view.WindowInsets
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.Feed.items.Feed
-import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.item.AlbumProcessViewModel
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
+import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.item.AlbumProcessViewModel
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing
 import com.example.bookworm.databinding.ActivityCreateAlbumBinding
+
 
 class CreateAlbumActivity : AppCompatActivity() {
     lateinit var selectedFeed: ArrayList<Feed>
@@ -89,4 +93,5 @@ class CreateAlbumActivity : AppCompatActivity() {
         binding = null
         super.onDestroy()
     }
+
 }

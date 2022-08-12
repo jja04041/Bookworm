@@ -1,6 +1,7 @@
 package com.example.bookworm.bottomMenu.profile.views
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -38,6 +39,15 @@ class ProfileInfoActivity : AppCompatActivity() {
     //자신이나 타인의 프로필을 클릭했을때 나오는 화면
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val intent = intent
+        if (Intent.ACTION_VIEW == intent.action) {
+            val uri: Uri? = intent.data
+            if (uri != null) {
+                val w: String? = uri.getQueryParameter("when")
+                val message: String?= uri.getQueryParameter("message")
+                Log.d("MyTag", "when : $w , message : $message")
+            }
+        }
         //initialize
 
 
