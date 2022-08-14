@@ -177,9 +177,19 @@ public class Achievement {
         //인증글 업적
         //티어는 1 ~ n까지로, 일단 1티어는 브론즈로 해둠
 
-        if (userinfo.getCompletedChallenge() >= 3 && userinfo.getTier() < 1) {
+        if (userinfo.getCompletedChallenge() >= 3 && userinfo.getTier() < 1) { //3 넘으면 브론즈로
             userinfo.setTier(Long.parseLong(String.valueOf(1)));
             ExecuteFB("1", "브론즈 티어", 2); //1티어, 브론즈 티어, type(인증글인지, 볼레인지)
+        }
+
+        if (userinfo.getCompletedChallenge() >= 10 && userinfo.getTier() < 2) { //10 넘으면 실버로
+            userinfo.setTier(Long.parseLong(String.valueOf(2)));
+            ExecuteFB("2", "실버 티어", 2); //2티어, 실버 티어, type(인증글인지, 볼레인지)
+        }
+
+        if (userinfo.getCompletedChallenge() >= 30 && userinfo.getTier() < 3) { //30 넘으면 골드로
+            userinfo.setTier(Long.parseLong(String.valueOf(3)));
+            ExecuteFB("3", "골드 티어", 2); //3티어, 골드 티어, type(인증글인지, 볼레인지)
         }
 
 

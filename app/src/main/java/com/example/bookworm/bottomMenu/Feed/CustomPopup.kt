@@ -197,20 +197,17 @@ class CustomPopup(context: Context?, anchor: View?) : PopupMenu(context, anchor)
         if (layout == R.menu.feed_menu) { //레이아웃이 피드_메뉴 일때
             this.menu.findItem(R.id.menu_delete).setVisible(boolean)
             this.menu.findItem(R.id.menu_modify).setVisible(boolean)
-        }
-        else if (layout == R.menu.comment_menu) { //레이아웃이 댓글_메뉴 일때
+        } else if (layout == R.menu.comment_menu) { //레이아웃이 댓글_메뉴 일때
             this.menu.findItem(R.id.menu_delete).setVisible(boolean)
-        }
-        else if (layout == R.menu.board_menu) { //레이아웃이 인증글_메뉴 일때
+        } else if (layout == R.menu.board_menu) { //레이아웃이 인증글_메뉴 일때
             this.menu.findItem(R.id.menu_allow).setVisible(boolean)
             this.menu.findItem(R.id.menu_notallow).setVisible(boolean)
-        }
-        else if (layout == R.menu.board_comment_menu) { //레이아웃이 인증글_댓글_메뉴 일때
+        } else if (layout == R.menu.board_comment_menu) { //레이아웃이 인증글_댓글_메뉴 일때
             this.menu.findItem(R.id.menu_delete).setVisible(boolean)
         }
     }
 
-    fun  setDeleteVisible(boolean: Boolean) { //작성자만 자신의 인증글을 삭제할 수 있게 함
+    fun setDeleteVisible(boolean: Boolean) { //작성자만 자신의 인증글을 삭제할 수 있게 함
         if (layout == R.menu.board_menu) { //레이아웃이 인증글_메뉴 일때
             this.menu.findItem(R.id.menu_delete).setVisible(boolean)
         }

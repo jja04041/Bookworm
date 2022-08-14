@@ -38,12 +38,6 @@ import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.core.userdata.interfaces.UserContract
 import com.example.bookworm.databinding.FragmentFeedItemBinding
 import com.example.bookworm.notification.MyFCMService
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import com.google.firebase.dynamiclinks.DynamicLink.AndroidParameters
-import com.google.firebase.dynamiclinks.DynamicLink.SocialMetaTagParameters
-import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
-import com.google.firebase.dynamiclinks.ShortDynamicLink
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
