@@ -81,8 +81,17 @@ public class subactivity_comment extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = SubactivityCommentBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
         item = (Feed) getIntent().getSerializableExtra("item");
-        position = (Integer) getIntent().getSerializableExtra("position");
+        if(!getIntent().hasExtra("position")) {
+
+        }
+        else position = (Integer) getIntent().getSerializableExtra("position");
+
+
+
+
+
         nowUser = new PersonalD(this).getUserInfo();
         context = this;
         fbModule = new FBModule(context);

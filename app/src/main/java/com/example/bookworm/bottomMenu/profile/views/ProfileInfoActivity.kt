@@ -20,8 +20,10 @@ import com.example.bookworm.databinding.ActivityProfileInfoBinding
 import com.example.bookworm.extension.follow.view.FollowViewModelImpl
 import com.example.bookworm.notification.MyFCMService
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+
 
 class ProfileInfoActivity : AppCompatActivity() {
     lateinit var binding: ActivityProfileInfoBinding
@@ -39,16 +41,6 @@ class ProfileInfoActivity : AppCompatActivity() {
     //자신이나 타인의 프로필을 클릭했을때 나오는 화면
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val intent = intent
-        if (Intent.ACTION_VIEW == intent.action) {
-            val uri: Uri? = intent.data
-            if (uri != null) {
-                val w: String? = uri.getQueryParameter("when")
-                val message: String?= uri.getQueryParameter("message")
-                Log.d("MyTag", "when : $w , message : $message")
-            }
-        }
-        //initialize
 
 
         binding = ActivityProfileInfoBinding.inflate(layoutInflater)

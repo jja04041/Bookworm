@@ -46,16 +46,7 @@
             android:exported="false"
             tools:ignore="AppLinkUrlError">
 
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="bookwormlinktest.page.link" android:pathPrefix="/b00kworm" />
-                <data
-                    android:scheme="b00kworm"
-                    android:host="profile"
-                    android:pathPrefix="/b00kworm" />
-            </intent-filter>
+
 
         </activity>
 
@@ -103,18 +94,6 @@
             android:name=".bottomMenu.profile.views.ProfileSettingActivity"
             android:exported="false"
             tools:ignore="AppLinkUrlError"> <!-- 채팅리스트 화면 -->
-
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="bookwormlinktest.page.link"
-                    android:scheme="https"
-                    android:path="/message" />
-            </intent-filter> <!-- 회원 설정 -->
         </activity>
 
         <activity
@@ -123,8 +102,11 @@
             tools:ignore="AppLinkUrlError">
 
             <intent-filter android:autoVerify="true">
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="example.com"/>
+                <data android:scheme="http" android:host="example.com"/>
             </intent-filter>
 
         </activity> <!-- 메인 화면 -->
