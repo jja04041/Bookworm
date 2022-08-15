@@ -8,8 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.example.bookworm.BottomMenu.Feed.ViewHolders.FeedItemVIewHolder
+
 import com.example.bookworm.R
+import com.example.bookworm.bottomMenu.Feed.views.FeedItemViewHolder
 
 class FeedAdapter(c: Context) :
     ListAdapter<Feed, RecyclerView.ViewHolder>(MyDiffCallback) {
@@ -28,7 +29,7 @@ class FeedAdapter(c: Context) :
         when (viewType) {
             1 -> {
                 view = inflater.inflate(R.layout.fragment_feed_item, parent, false)
-                return FeedItemVIewHolder(view, context)
+                return FeedItemViewHolder(view, context)
             }
             else -> {
                 view = inflater.inflate(R.layout.layout_item_loading, parent, false)
@@ -44,8 +45,8 @@ class FeedAdapter(c: Context) :
 
     //Arraylist에 있는 아이템을 뷰 홀더에 바인딩 하는 메소드
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val safePosition = holder.adapterPosition
-        if (holder is FeedItemVIewHolder) {
+        val safePosition = holder.bindingAdapterPosition
+        if (holder is FeedItemViewHolder) {
             val item = currentList[safePosition]
             holder.setVisibillity(item.imgurl != null)
             holder.setItem(item)

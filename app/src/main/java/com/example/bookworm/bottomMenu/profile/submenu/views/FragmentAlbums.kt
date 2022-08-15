@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumActivity
+import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumContentActivity
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumDisplay.item.AlbumDisplayAdapter
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumDisplay.view.ShowAlbumContentActivity
 import com.example.bookworm.core.userdata.UserInfo
@@ -52,8 +53,9 @@ class FragmentAlbums(val token: String?) : Fragment() {
             if (token == NowUser!!.token || token == null) binding!!.btnAddAlbum.visibility =
                 View.VISIBLE
             binding!!.btnAddAlbum.setOnClickListener({
-                var intent = Intent(context, CreateAlbumActivity::class.java)
-                intent.putExtra("list", list)
+//                var intent = Intent(context, CreateAlbumActivity::class.java)
+                var intent = Intent(context, CreateAlbumContentActivity::class.java)
+                intent.putExtra("list", list) //사용자가 작성한 포스트의 목록
                 startActivity(intent)
             })
         })

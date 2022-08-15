@@ -14,6 +14,7 @@
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/ic_baseline_more_vert_24.xml" value="0.1" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/selected_feed.xml" value="0.1" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/setting.xml" value="0.1" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/speech_bubble_left.xml" value="0.3265" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/activity_achievement.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/activity_chating.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/activity_create_album.xml" value="0.25" />
@@ -35,7 +36,7 @@
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_bw_layout.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_feed.xml" value="0.18697916666666667" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_feed_item.xml" value="0.22" />
-        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_feed_topbar.xml" value="0.25925925925925924" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_feed_topbar.xml" value="0.2638888888888889" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_follow_list.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_posts.xml" value="0.3605128205128205" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/fragment_profile.xml" value="0.22" />
@@ -68,16 +69,21 @@
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/shimmer_fragment_record_item.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/shimmer_subactivity_challenge_createchallenge.xml" value="0.1875" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/story_item.xml" value="0.5" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_albumcontent_item.xml" value="0.33" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_challenge_board.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_challenge_board_item.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_challenge_createchallenge.xml" value="0.1875" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_comment.xml" value="0.22" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_createalbumcontent.xml" value="0.36614583333333334" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_createalbumcontent_addalbumpost_layout.xml" value="0.30055579307396324" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_feed_modify.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_search_fragment_result.xml" value="0.36614583333333334" />
-        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_showalbumcontent.xml" value="0.25" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_showalbumcontent.xml" value="0.33" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_showalbumcontent_introduction.xml" value="0.25" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/layout/subactivity_showalbumcontent_item.xml" value="0.34444444444444444" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/menu/comment_menu.xml" value="0.36614583333333334" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/menu/create_album_menu.xml" value="0.36614583333333334" />
+        <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/menu/menu_bottom.xml" value="0.36614583333333334" />
       </map>
     </option>
   </component>

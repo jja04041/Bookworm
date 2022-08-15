@@ -11,11 +11,14 @@ import androidx.lifecycle.*
 import com.example.bookworm.bottomMenu.Feed.items.Feed
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumActivity
+import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumContentActivity
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumData
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.io.IOException
 
 
@@ -24,7 +27,7 @@ class AlbumProcessViewModel(val context: Context, val pv: UserInfoViewModel) : V
     var albumData = AlbumData()
     val db = FirebaseFirestore.getInstance() //파이어스토어와 연결
     var token: String? = null
-    var parentActivity: CreateAlbumActivity
+    var parentActivity: CreateAlbumContentActivity
 
 
     lateinit var collectionReference: CollectionReference
@@ -39,7 +42,7 @@ class AlbumProcessViewModel(val context: Context, val pv: UserInfoViewModel) : V
     init {
 
         newAlbumData.value = albumData
-        parentActivity = context as CreateAlbumActivity
+        parentActivity = context as CreateAlbumContentActivity
         var job1 = viewModelScope.launch { pv.getUser(null, false) } //사용자 정보를 가져오는 작업
         var job2 = viewModelScope.launch {
             job1.join()
@@ -84,7 +87,7 @@ class AlbumProcessViewModel(val context: Context, val pv: UserInfoViewModel) : V
                 if (result.isEmpty) {
                     parentActivity.albumProcessViewModel.modifyName(name)
                     //데이터 삽입
-                    parentActivity.switchTab(1)
+//                    parentActivity.switchTab(1)
                 } else {
                     Toast.makeText(
                         context,
@@ -94,7 +97,34 @@ class AlbumProcessViewModel(val context: Context, val pv: UserInfoViewModel) : V
                 }
             }
     }
+    //앨범 이름 사용가능 여부 확인
+    suspend fun titleDuplicationCheck(name: String):Boolean {
+        if (name.equals("") || name.contains(" ")) {
+            Toast.makeText(
+                context,
+                "앨범명에는 공백을 포함할 수 없습니다. \n 다시 시도해 주세요.",
+                Toast.LENGTH_SHORT
+            ).show()
+            return false
+        } else
+           return withContext(viewModelScope.coroutineContext, {
+               var result = collectionReference.whereEqualTo("albumName", name).get().await()
+               if (result.isEmpty) {
+                   parentActivity.albumProcessViewModel.modifyName(name)
+                   true
+                   //데이터 삽입
+//                    parentActivity.switchTab(1)
+               } else {
+                   Toast.makeText(
+                       context,
+                       "앨범명이 중복되었습니다. \n 다른 이름으로 시도해주세요",
+                       Toast.LENGTH_SHORT
+                   ).show()
+                   false
+               }
+           })
 
+    }
     //서버에 앨범 업로드
     fun uploadAlbum() {
         //서버에 이미지 업로드
@@ -104,8 +134,8 @@ class AlbumProcessViewModel(val context: Context, val pv: UserInfoViewModel) : V
             if (albumData.thumbnail != null) {
                 var uploadImageToServer = viewModelScope.launch {
                     var imgName = "album_${albumData.albumName.hashCode()}_${token}.jpg"
-                    var url = parentActivity.imageProcessing.uploadImg(getImgBitmap()!!, imgName)
-                    modifyThumb(url)
+//                    var url = parentActivity.imageProcessing.uploadImg(getImgBitmap()!!, imgName)
+//                    modifyThumb(url)
                 }
                 uploadImageToServer.join()
             }
