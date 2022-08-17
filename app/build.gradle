@@ -54,20 +54,26 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'
     implementation 'androidx.compose.ui:ui-graphics:1.0.0-rc01'
+
+
     // Firebase
+    implementation platform('com.google.firebase:firebase-bom:30.3.1')
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    implementation 'com.google.firebase:firebase-core:17.0.0'
-    implementation 'com.google.firebase:firebase-auth:17.0.0'
-    implementation 'com.google.firebase:firebase-firestore:19.0.1'
-    implementation 'com.google.firebase:firebase-storage:17.0.0'
+    implementation 'com.google.firebase:firebase-core'
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.firebase:firebase-firestore'
+    implementation 'com.google.firebase:firebase-storage'
 
-    implementation platform('com.google.firebase:firebase-bom:29.0.4')
+    // Firebase dynamic Link
+    implementation 'com.google.firebase:firebase-dynamic-links'
+    //Firebase analytics
     implementation 'com.google.firebase:firebase-analytics'
-
     // FCM
-    implementation 'com.google.firebase:firebase-messaging:21.1.0'
+    implementation 'com.google.firebase:firebase-messaging'
+
+
 
 
     // 카카오 SDK 모듈 설정
@@ -87,11 +93,9 @@ dependencies {
     // Firebase
     implementation platform('com.google.firebase:firebase-bom:30.3.1')
     implementation 'com.google.firebase:firebase-analytics'
-
     implementation 'com.google.firebase:firebase-firestore'
 
-    // Firebase dynamic Link
-    implementation 'com.google.firebase:firebase-dynamic-links:19.0.0'
+
 
     // ViewPager2
     implementation "androidx.viewpager2:viewpager2:1.0.0"
@@ -142,8 +146,5 @@ dependencies {
 
     //implementation 'com.sackcentury:shinebutton:1.0.0'
 
-    // deeplink
-    implementation 'com.google.firebase:firebase-dynamic-links'
-    implementation 'com.google.firebase:firebase-analytics'
 }
 

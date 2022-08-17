@@ -1,16 +1,27 @@
 package com.example.bookworm.appLaunch.views;
 
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.Feed.Fragment_feed;
+import com.example.bookworm.bottomMenu.Feed.comments.subactivity_comment;
+import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity;
 import com.example.bookworm.core.MoveFragment;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,22 +35,50 @@ public class MainActivity extends AppCompatActivity {
     MoveFragment MoveFragment = new MoveFragment();
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom);
 
 
+        //딥링크로 연결되는 경우 처리되는 코드들
+        FirebaseDynamicLinks.getInstance()
+                .getDynamicLink(getIntent())
+                .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
+                    @Override
+                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+                        // Get deep link from result (may be null if no link is found)
+                        Uri deepLink;
+                        Intent intent;
+                        if (pendingDynamicLinkData != null) {
+                            deepLink = pendingDynamicLinkData.getLink();
+                            if(deepLink.getLastPathSegment().equals("profile")) {
+                                intent = new Intent(MainActivity.this, subactivity_comment.class);
+                                intent.putExtra("userID",deepLink.getQueryParameter("uid"));
+                                Log.d("params",deepLink.getQueryParameter("uid"));
+                                startActivity(intent);
+//                                bottomNavigationView.setSelectedItemId(R.id.tab_profile);
+                            }
+                        }
+                    }
+                })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("error", "getDynamicLink:onFailure", e);
+                    }
+                });
+        // Get deep link from result (may be null if no link is found)
 
-
+        //딥링크 코드 end
 
         // 초기화면 설정
         fragments[0] = new Fragment_feed();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.container, fragments[0], "0").commitAllowingStateLoss();
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom);
+
         bottomNavigationView.setOnItemSelectedListener(
                 item -> {
                     switch (item.getItemId()) {
@@ -71,13 +110,10 @@ public class MainActivity extends AppCompatActivity {
                     }
 
 
-
                     return false;
                 });
 
     }
-
-
 
 
 }
