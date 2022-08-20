@@ -19,7 +19,7 @@
         android:id="@+id/bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:itemBackground="@color/navicolor"
+        app:itemBackground="@color/maincolor"
         app:itemIconTint="@color/black"
         app:itemTextColor="@color/black"
         app:labelVisibilityMode="selected"

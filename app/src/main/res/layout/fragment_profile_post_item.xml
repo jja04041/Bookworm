@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?><!--사용자 프로필에 나타나는 포스트 아이템의 외형을 디자인 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/postContainer"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="@drawable/ripplebutton_none"
     android:orientation="horizontal">
 
     <androidx.cardview.widget.CardView
@@ -12,7 +14,6 @@
         card:cardCornerRadius="3dp">
 
         <LinearLayout
-            android:id="@+id/postContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">

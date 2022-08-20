@@ -65,47 +65,47 @@ import java.util.Map;
             return view;
         }
 
-        @Override
-        public void onResume() {
-            super.onResume();
-            uv.getUser(null, false);
-            uv.getData().observe(this, userInfo -> {
-                String[] genre = {
-                        "자기계발",
-                        "소설",
-                        "육아",
-                        "어린이",
-                        "청소년",
-                        "사회",
-                        "과학",
-                        "인문",
-                        "생활",
-                        "공부",
-                        "만화"};
-                TextView bookworm[] = {
-                        binding.tvBookworm1,
-                        binding.tvBookworm2,
-                        binding.tvBookworm3,
-                        binding.tvBookworm4,
-                        binding.tvBookworm5,
-                        binding.tvBookworm6,
-                        binding.tvBookworm7,
-                        binding.tvBookworm8,
-                        binding.tvBookworm9,
-                        binding.tvBookworm10,
-                        binding.tvBookworm11};
-                for (int i = 0; i < genre.length; i++) {
-                    if (userInfo.getGenre().get(genre[i]) != null)
-                        bookworm[i].setText(genre[i] + " : " + userInfo.getGenre().get(genre[i]));
-                }
-                uv.getBookWorm(userInfo.getToken());
-            });
-            uv.getBwdata().observe(this, bw -> {
-                binding.tvBookwormBookcount.setText("읽은 권 수 : " + bw.getReadcount());
-            });
-
-
-        }
+//        @Override
+//        public void onResume() {
+//            super.onResume();
+//            uv.getUser(null, false);
+//            uv.getData().observe(this, userInfo -> {
+//                String[] genre = {
+//                        "자기계발",
+//                        "소설",
+//                        "육아",
+//                        "어린이",
+//                        "청소년",
+//                        "사회",
+//                        "과학",
+//                        "인문",
+//                        "생활",
+//                        "공부",
+//                        "만화"};
+//                TextView bookworm[] = {
+//                        binding.tvBookworm1,
+//                        binding.tvBookworm2,
+//                        binding.tvBookworm3,
+//                        binding.tvBookworm4,
+//                        binding.tvBookworm5,
+//                        binding.tvBookworm6,
+//                        binding.tvBookworm7,
+//                        binding.tvBookworm8,
+//                        binding.tvBookworm9,
+//                        binding.tvBookworm10,
+//                        binding.tvBookworm11};
+//                for (int i = 0; i < genre.length; i++) {
+//                    if (userInfo.getGenre().get(genre[i]) != null)
+//                        bookworm[i].setText(genre[i] + " : " + userInfo.getGenre().get(genre[i]));
+//                }
+//                uv.getBookWorm(userInfo.getToken());
+//            });
+//            uv.getBwdata().observe(this, bw -> {
+//                binding.tvBookwormBookcount.setText("읽은 권 수 : " + bw.getReadcount());
+//            });
+//
+//
+//        }
 
         private void initAdapter() {
             recordAdapter = new RecordAdapter(feedList, getContext());
