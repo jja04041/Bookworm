@@ -6,13 +6,20 @@ import android.util.Log;
 import android.widget.Toast;
 
 
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+
+import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Create;
 import com.example.bookworm.appLaunch.views.MainActivity;
 import com.example.bookworm.bottomMenu.profile.views.ProfileModifyActivity;
+import com.example.bookworm.bottomMenu.search.subactivity.SearchPageAdapter;
+import com.example.bookworm.bottomMenu.search.subactivity.SearchPageBookFragment;
 import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_main;
 import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_result;
 import com.example.bookworm.bottomMenu.search.fragment_search;
 import com.example.bookworm.core.internet.interfaces.GetDataInterface;
+import com.example.bookworm.databinding.FragmentSearchPageBookBinding;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +44,7 @@ public class Module {
     Call call = null; //레트로핏이 실제로 실행되는 call객체
     Map<String, String> querys;
     Map<String, Object> query;
+    SearchPageBookFragment searchPageBookFragment;
     int count = 0;
     int page = 1;
 
@@ -130,7 +138,10 @@ public class Module {
     {
         count = Integer.parseInt(json.get("totalResults").toString());
         JSONArray jsonArray = json.getJSONArray("item");
-        ((search_fragment_subActivity_main) context).moduleUpdated(jsonArray); //이후의 작업은 서브액티비티의 메소드에서 진행
+//        searchPageBookFragment = ((SearchPageBookFragment) ((search_fragment_subActivity_main) context).getSupportFragmentManager().findFragmentByTag("0"));
+        searchPageBookFragment = (SearchPageBookFragment) ((SearchPageAdapter) ((ViewPager) ((search_fragment_subActivity_main) context).findViewById(R.id.viewpager)).getAdapter()).getItem(0);
+        searchPageBookFragment.moduleUpdated(jsonArray); //이후의 작업은 서브액티비티의 메소드에서 진행
+//        ((search_fragment_subActivity_main) context).moduleUpdated(jsonArray); //이후의 작업은 서브액티비티의 메소드에서 진행
     }
 
     public void setPage(int page) {

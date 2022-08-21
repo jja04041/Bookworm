@@ -2,6 +2,7 @@ package com.example.bookworm.bottomMenu.search.items;
 
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,13 +29,14 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     public BookAdapter(ArrayList<Book> data, Context c) {
         BookList = data;
         context = c;
+        Log.d("itemsize", String.valueOf(this.getItemCount()));
     }
 
     //뷰홀더가 만들어질때 작동하는 메서드
     //화면을 인플레이트하고 인플레이트된 화면을 리턴한다.
 
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        LayoutInflater inflater = LayoutInflater.from(context);
         if (viewType == 0) {
             View view = inflater.inflate(R.layout.search_recyclerview_item, parent, false);
             return new ItemViewHolder(view, listener);
