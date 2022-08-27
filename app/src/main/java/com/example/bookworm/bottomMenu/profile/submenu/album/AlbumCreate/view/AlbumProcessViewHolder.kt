@@ -3,7 +3,7 @@ package com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.bookworm.bottomMenu.Feed.items.Feed
+import com.example.bookworm.bottomMenu.feed.items.Feed
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.item.AlbumProcessAdapter
 import com.example.bookworm.databinding.FragmentRecordItemBinding
 

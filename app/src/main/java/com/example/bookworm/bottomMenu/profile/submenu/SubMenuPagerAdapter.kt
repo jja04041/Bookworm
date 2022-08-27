@@ -24,4 +24,5 @@ class SubMenuPagerAdapter : FragmentStatePagerAdapter {
     override fun getItem(position: Int): Fragment {
         return pageList[position]
     }
+
 }

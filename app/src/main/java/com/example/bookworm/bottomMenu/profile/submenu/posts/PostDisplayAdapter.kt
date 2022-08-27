@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.example.bookworm.bottomMenu.Feed.items.Feed
+import com.example.bookworm.bottomMenu.feed.items.Feed
 import com.example.bookworm.databinding.FragmentProfilePostItemBinding
 
 

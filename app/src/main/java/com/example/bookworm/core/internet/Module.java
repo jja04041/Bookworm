@@ -6,7 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 
-import com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Create;
+import com.example.bookworm.bottomMenu.feed.subActivity_Feed_Create;
 import com.example.bookworm.appLaunch.views.MainActivity;
 import com.example.bookworm.bottomMenu.profile.views.ProfileModifyActivity;
 import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_main;

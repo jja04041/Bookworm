@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.bookworm.R;
-import com.example.bookworm.bottomMenu.Feed.Fragment_feed;
+import com.example.bookworm.bottomMenu.feed.Fragment_feed;
 import com.example.bookworm.bottomMenu.bookworm.fragment_bookworm;
 import com.example.bookworm.bottomMenu.challenge.fragment_challenge;
 import com.example.bookworm.bottomMenu.profile.fragment_profile;

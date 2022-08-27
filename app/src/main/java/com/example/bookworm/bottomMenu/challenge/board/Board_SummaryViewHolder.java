@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Feed.CustomPopup;
 import com.example.bookworm.R;
-import com.example.bookworm.bottomMenu.Feed.Fragment_feed;
 import com.example.bookworm.bottomMenu.search.items.Book;
 import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_result;
 import com.example.bookworm.core.userdata.PersonalD;

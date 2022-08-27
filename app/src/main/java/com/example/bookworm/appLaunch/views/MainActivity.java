@@ -1,7 +1,6 @@
 package com.example.bookworm.appLaunch.views;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,9 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.bookworm.R;
-import com.example.bookworm.bottomMenu.Feed.Fragment_feed;
-import com.example.bookworm.bottomMenu.Feed.comments.subactivity_comment;
-import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity;
+import com.example.bookworm.bottomMenu.feed.Fragment_feed;
+import com.example.bookworm.bottomMenu.feed.comments.subactivity_comment;
 import com.example.bookworm.core.MoveFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

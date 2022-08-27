@@ -9,7 +9,7 @@ import java.io.Serializable
 import java.util.*
 
 class UserInfo : Serializable {
-    var profileimg: String? = null // 회원가입시 프로필사진
+    var profileimg: String = "" // 회원가입시 프로필사진
     var username = "(알 수 없음)" // 회원가입시 닉네임
     private var email: String? = null // 로그인한 이메일
     var platform: String? = null //플랫폼 확인
@@ -65,7 +65,7 @@ class UserInfo : Serializable {
     fun add(document: Map<*, *>) {
         username = document["username"] as String
         email = document["email"] as String?
-        profileimg = document["profileimg"] as String?
+        profileimg = document["profileimg"] as String
         token = document["token"] as String
         platform = document["platform"] as String?
         followerCounts = document["followerCounts"].toString().toInt()

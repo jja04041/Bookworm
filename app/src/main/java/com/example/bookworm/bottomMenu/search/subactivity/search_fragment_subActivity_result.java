@@ -20,9 +20,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
-import com.example.bookworm.bottomMenu.Feed.items.Feed;
-import com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Create;
-import com.example.bookworm.bottomMenu.bookworm.bookworm_pages.bookworm_record.RecordAdapter;
+import com.example.bookworm.bottomMenu.feed.items.Feed;
+import com.example.bookworm.bottomMenu.feed.subActivity_Feed_Create;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
 import com.example.bookworm.bottomMenu.search.items.Book;
 import com.example.bookworm.core.internet.Module;

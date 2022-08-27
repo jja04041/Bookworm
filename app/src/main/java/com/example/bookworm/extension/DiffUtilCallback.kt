@@ -2,8 +2,8 @@ package com.example.bookworm.extension
 
 import androidx.recyclerview.widget.DiffUtil
 import com.example.bookworm.core.userdata.UserInfo
-import com.example.bookworm.bottomMenu.Feed.comments.Comment
-import com.example.bookworm.bottomMenu.Feed.items.Feed
+import com.example.bookworm.bottomMenu.feed.comments.Comment
+import com.example.bookworm.bottomMenu.feed.items.Feed
 import java.util.ArrayList
 
 class DiffUtilCallback(private val oldList: ArrayList<*>, private val newList: ArrayList<*>) :

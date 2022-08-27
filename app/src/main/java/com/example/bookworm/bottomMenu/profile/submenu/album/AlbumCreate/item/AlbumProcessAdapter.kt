@@ -8,7 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.bookworm.R
-import com.example.bookworm.bottomMenu.Feed.items.Feed
+import com.example.bookworm.bottomMenu.feed.items.Feed
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.AlbumProcessViewHolder
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumActivity
 import com.example.bookworm.databinding.FragmentRecordItemBinding

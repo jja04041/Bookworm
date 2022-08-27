@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.bookworm.Feed.CustomPopup;
 import com.example.bookworm.R;
-import com.example.bookworm.bottomMenu.Feed.comments.Comment;
+import com.example.bookworm.bottomMenu.feed.comments.Comment;
 import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.PersonalD;

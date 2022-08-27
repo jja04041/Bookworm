@@ -10,10 +10,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.bookworm.bottomMenu.Feed.items.Feed;
+import com.example.bookworm.bottomMenu.feed.items.Feed;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
-import com.example.bookworm.databinding.FragmentRecordBinding;
-import com.google.firebase.firestore.DocumentSnapshot;
+    import com.example.bookworm.databinding.FragmentRecordBinding;
+    import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;

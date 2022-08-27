@@ -129,6 +129,7 @@ class ProfileInfoActivity : AppCompatActivity() {
         binding.tabLayout.getTabAt(1)!!.text = "앨범"
         binding.tabLayout.getTabAt(0)!!.text = "포스트"
         binding.tabLayout.getTabAt(0)!!.select()
+        Log.d("fragment", (binding.subMenuViewPager.adapter as SubMenuPagerAdapter).getItem(0).toString())
 
 
         if (user.isFollowed) isFollowingTrue

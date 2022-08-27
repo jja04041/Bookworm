@@ -5,13 +5,13 @@ import java.util.Map;
 
 public class Book implements Serializable {
     //제목, 간단한 내용, 출판사, 저자 정도 표기?
-    private String img_url;
-    private String title;
-    private String categoryname;
-    private String content;
-    private String publisher;
-    private String author;
-    private String itemId;
+    private String img_url = "";
+    private String title= "";
+    private String categoryname = "";
+    private String content= "";
+    private String publisher = "";
+    private String author= "";
+    private String itemId = "";
 
     public Book(String... strings) {
         if (strings != null) {
@@ -24,6 +24,8 @@ public class Book implements Serializable {
             if (strings.length == 7) this.itemId = strings[6];
         }
     }
+
+    public Book(){}
 
     public void setBook(Map map) {
         this.title = (String) map.get("title");

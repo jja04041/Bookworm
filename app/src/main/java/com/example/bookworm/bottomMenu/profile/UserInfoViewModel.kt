@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.bookworm.bottomMenu.Feed.items.Feed
+import com.example.bookworm.bottomMenu.feed.items.Feed
 import com.example.bookworm.bottomMenu.bookworm.BookWorm
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumData
 import com.example.bookworm.core.dataprocessing.repository.UserRepositoryImpl
@@ -58,7 +58,13 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
             data.value = repo.getUser(token, getFromExt) //데이터 변경을 감지하면, 값이 업데이트 된다.
         }
     }
-
+    //사용자 가져오기
+    fun getUser(token: String?, liveData: MutableLiveData<UserInfo>) {
+        data = liveData
+        viewModelScope.launch {
+            data.value = repo.getUser(token, true) //데이터 변경을 감지하면, 값이 업데이트 된다.
+        }
+    }
     //사용자 생성
     suspend fun createUser(userInfo: UserInfo) =
         viewModelScope.async {

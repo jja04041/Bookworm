@@ -3,9 +3,10 @@
     <CLASSES>
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/adf6785670a212e9108cc92e723640f5/transformed/jetified-viewbindingpropertydelegate-noreflection-1.5.3/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/f6732a08353bb11a3ce45f11fcb22369/transformed/jetified-viewbindingpropertydelegate-noreflection-1.5.3/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/d55f96140e2581644cbd30bb83a6140d/transformed/jetified-viewbindingpropertydelegate-noreflection-1.5.3/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/d55f96140e2581644cbd30bb83a6140d/transformed/jetified-viewbindingpropertydelegate-noreflection-1.5.3/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/d55f96140e2581644cbd30bb83a6140d/transformed/jetified-viewbindingpropertydelegate-noreflection-1.5.3/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/bf5d1f1a6fcb9fea6187965d49712dd2/transformed/jetified-viewbindingpropertydelegate-noreflection-1.5.3/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/bf5d1f1a6fcb9fea6187965d49712dd2/transformed/jetified-viewbindingpropertydelegate-noreflection-1.5.3/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/bf5d1f1a6fcb9fea6187965d49712dd2/transformed/jetified-viewbindingpropertydelegate-noreflection-1.5.3/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

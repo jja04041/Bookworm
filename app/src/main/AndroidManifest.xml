@@ -30,13 +30,13 @@
             android:name=".bottomMenu.challenge.board.subactivity_challenge_board"
             android:exported="false" />
         <activity
-            android:name="com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Modify"
+            android:name="com.example.bookworm.bottomMenu.feed.subActivity_Feed_Modify"
             android:exported="false" />
         <activity
-            android:name="com.example.bookworm.bottomMenu.Feed.comments.subactivity_comment"
+            android:name="com.example.bookworm.bottomMenu.feed.comments.subactivity_comment"
             android:exported="false" />
         <activity
-            android:name="com.example.bookworm.bottomMenu.Feed.ImagePicker"
+            android:name="com.example.bookworm.bottomMenu.feed.ImagePicker"
             android:exported="false" />
         <activity
             android:name="com.example.bookworm.core.dataprocessing.image.ImagePicker"
@@ -45,7 +45,6 @@
             android:name=".bottomMenu.profile.views.ProfileInfoActivity"
             android:exported="false"
             tools:ignore="AppLinkUrlError">
-
 
 
         </activity>
@@ -57,7 +56,7 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakaoKey" /> <!-- SubActivities -->
         <activity
-            android:name="com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Create"
+            android:name="com.example.bookworm.bottomMenu.feed.subActivity_Feed_Create"
             android:exported="false"
             android:parentActivityName=".appLaunch.views.MainActivity" />
         <activity
@@ -103,10 +102,16 @@
 
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="example.com"/>
-                <data android:scheme="http" android:host="example.com"/>
+
+                <data
+                    android:host="example.com"
+                    android:scheme="https" />
+                <data
+                    android:host="example.com"
+                    android:scheme="http" />
             </intent-filter>
 
         </activity> <!-- 메인 화면 -->
@@ -124,6 +129,9 @@
 
         </activity>
 
+        <activity
+            android:name=".bottomMenu.feed.temp.FeedActivity"
+            android:exported="false" />
         <activity
             android:name=".LoadingActivity"
             android:exported="true"> <!-- 로딩 화면 -->
@@ -150,8 +158,8 @@
 
         <service
             android:name=".notification.MyFCMService"
-            android:stopWithTask="false"
-            android:exported="false">
+            android:exported="false"
+            android:stopWithTask="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

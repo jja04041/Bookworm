@@ -1,6 +1,6 @@
 package com.example.bookworm.bottomMenu.profile.submenu.album
 
-import com.example.bookworm.bottomMenu.Feed.items.Feed
+import com.example.bookworm.bottomMenu.feed.items.Feed
 import java.io.Serializable
 
 //앨범 객체

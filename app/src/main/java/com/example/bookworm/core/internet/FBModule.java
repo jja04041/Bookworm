@@ -11,9 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bookworm.appLaunch.views.MainActivity;
-import com.example.bookworm.bottomMenu.Feed.Fragment_feed;
-import com.example.bookworm.bottomMenu.Feed.comments.Comment;
-import com.example.bookworm.bottomMenu.Feed.comments.subactivity_comment;
+import com.example.bookworm.bottomMenu.feed.Fragment_feed;
+import com.example.bookworm.bottomMenu.feed.comments.Comment;
+import com.example.bookworm.bottomMenu.feed.comments.subactivity_comment;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.challenge.fragment_challenge;
 import com.example.bookworm.bottomMenu.challenge.subactivity.subactivity_challenge_challengeinfo;

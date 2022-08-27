@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#f5eddc"
-    tools:context="com.example.bookworm.bottomMenu.Feed.">
+    tools:context="com.example.bookworm.bottomMenu.feed.">
 
 
     <LinearLayout

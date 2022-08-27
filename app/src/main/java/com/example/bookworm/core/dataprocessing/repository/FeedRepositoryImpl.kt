@@ -1,6 +1,6 @@
 package com.example.bookworm.core.dataprocessing.repository
 
-import com.example.bookworm.bottomMenu.Feed.items.Feed
+import com.example.bookworm.bottomMenu.feed.items.Feed
 
 class FeedRepositoryImpl : DataRepository.HandleFeed {
     override fun getFeedList(lastVisible: String?) {
