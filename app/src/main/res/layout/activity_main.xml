@@ -22,6 +22,7 @@
         app:itemBackground="@color/maincolor"
         app:itemIconTint="@color/black"
         app:itemTextColor="@color/black"
+        app:itemIconSize="26dp"
         app:labelVisibilityMode="selected"
         app:menu="@menu/menu_bottom" />
 

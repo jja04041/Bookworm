@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom);
 
-        //bottomNavigationView.setItemIconTintList(null);
+        bottomNavigationView.setItemIconTintList(null);
 
 
         //딥링크로 연결되는 경우 처리되는 코드들
