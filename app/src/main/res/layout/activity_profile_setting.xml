@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="20dp"
+            android:padding="5dp"
             android:background="@drawable/ripplebutton_none">
 
             <ImageView
@@ -38,10 +39,15 @@
             android:textSize="13dp" />
     </FrameLayout>
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@drawable/square_button"
         android:orientation="horizontal">
 
         <Button
@@ -68,65 +74,71 @@
 
     </FrameLayout>
 
-    <FrameLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@drawable/square_button"
-        android:orientation="horizontal">
+        android:layout_height="1dp"
+        android:background="@color/gray" />
 
-        <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@drawable/ripplebutton_none"
-            android:orientation="horizontal" />
+<!--    <FrameLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:background="@drawable/square_button"-->
+<!--        android:orientation="horizontal">-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="20dp"
-            android:text="로그아웃"
-            android:textSize="17dp" />
+<!--        <Button-->
+<!--            android:id="@+id/btnLogout"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:background="@drawable/ripplebutton_none"-->
+<!--            android:orientation="horizontal" />-->
 
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center_vertical|right"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/ic_baseline_chevron_right_24" />
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center_vertical"-->
+<!--            android:layout_marginLeft="20dp"-->
+<!--            android:text="로그아웃"-->
+<!--            android:textSize="17dp" />-->
 
-    </FrameLayout>
+<!--        <ImageView-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:layout_gravity="center_vertical|right"-->
+<!--            android:layout_marginRight="10dp"-->
+<!--            android:src="@drawable/ic_baseline_chevron_right_24" />-->
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@drawable/square_button"
-        android:orientation="horizontal">
+<!--    </FrameLayout>-->
 
-        <Button
-            android:id="@+id/btnSignout"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@drawable/ripplebutton_none"
-            android:orientation="horizontal" />
+<!--    <FrameLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:background="@drawable/square_button"-->
+<!--        android:orientation="horizontal">-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="20dp"
-            android:text="회원 탈퇴"
-            android:textSize="17dp" />
+<!--        <Button-->
+<!--            android:id="@+id/btnSignout"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:background="@drawable/ripplebutton_none"-->
+<!--            android:orientation="horizontal" />-->
 
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center_vertical|right"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/ic_baseline_chevron_right_24" />
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center_vertical"-->
+<!--            android:layout_marginLeft="20dp"-->
+<!--            android:text="회원 탈퇴"-->
+<!--            android:textSize="17dp" />-->
 
-    </FrameLayout>
+<!--        <ImageView-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:layout_gravity="center_vertical|right"-->
+<!--            android:layout_marginRight="10dp"-->
+<!--            android:src="@drawable/ic_baseline_chevron_right_24" />-->
+
+<!--    </FrameLayout>-->
 
 
 </LinearLayout>

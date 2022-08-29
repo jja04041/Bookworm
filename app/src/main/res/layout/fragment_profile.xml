@@ -40,16 +40,12 @@
             android:textSize="13dp" />
 
         <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/btnChatlist"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_gravity="end|center_vertical"
+            android:background="@drawable/ripplebutton_none"
             android:layout_marginEnd="15dp">
-
-            <Button
-                android:id="@+id/btnChatlist"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:background="@drawable/ripplebutton_none" />
 
             <ImageView
                 android:layout_width="35dp"

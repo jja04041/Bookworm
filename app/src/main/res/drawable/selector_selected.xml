@@ -7,7 +7,7 @@
 
             <!--도형안에 채워질 색을 정의한다.-->
             <solid
-                android:color="#A3CCA3" />
+                android:color="#FFFF00" />
 
             <!-- width = 테두리 선의 굵기, color = 테두리 선의 색을 정의한다.-->
             <stroke

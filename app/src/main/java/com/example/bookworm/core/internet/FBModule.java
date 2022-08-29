@@ -17,6 +17,7 @@ import com.example.bookworm.bottomMenu.Feed.comments.subactivity_comment;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.challenge.fragment_challenge;
 import com.example.bookworm.bottomMenu.challenge.subactivity.subactivity_challenge_challengeinfo;
+import com.example.bookworm.bottomMenu.profile.views.ProfileModifyActivity;
 import com.example.bookworm.bottomMenu.profile.views.ProfileSettingActivity;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -319,7 +320,7 @@ public class FBModule {
     private void successDelete(int idx) {
         switch (idx) {
             case 0:
-                (((ProfileSettingActivity) context)).moveToLogin();
+                (((ProfileModifyActivity) context)).moveToLogin();
                 break;
         }
     }
