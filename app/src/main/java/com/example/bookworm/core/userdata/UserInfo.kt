@@ -83,6 +83,14 @@ class UserInfo : Serializable {
             medalAppear = document["medalAppear"] as Boolean?
     }
 
+    fun setUserData(data: Map<*, *>){
+
+        this.token = data.get("token") as String;
+        this.username = data.get("name") as String;
+        this.profileimg = data.get("profileimg") as String;
+
+    }
+
     //장르 설정
     fun setGenre(categoryname: String?, context: Context?) {
         val tokenizer = StringTokenizer(categoryname, ">")

@@ -65,11 +65,11 @@
             android:exported="false"
             android:parentActivityName=".appLaunch.views.MainActivity" />
         <activity
-            android:name=".bottomMenu.search.subactivity.search_fragment_subActivity_result"
+            android:name=".bottomMenu.search.subactivity.result.search_fragment_subActivity_result"
             android:exported="false"
-            android:parentActivityName=".bottomMenu.search.subactivity.search_fragment_subActivity_main" />
+            android:parentActivityName=".bottomMenu.search.subactivity.main.search_fragment_subActivity_main" />
         <activity
-            android:name=".bottomMenu.search.subactivity.search_fragment_subActivity_main"
+            android:name=".bottomMenu.search.subactivity.main.search_fragment_subActivity_main"
             android:exported="false"
             android:parentActivityName=".appLaunch.views.MainActivity" />
         <activity

@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.search.subactivity;
+package com.example.bookworm.bottomMenu.search.subactivity.result;
 
 import android.view.View;
 

@@ -1,7 +1,7 @@
 package com.example.bookworm.bottomMenu.bookworm;
 
 import com.example.bookworm.R;
-import com.example.bookworm.bottomMenu.search.items.Book;
+import com.example.bookworm.bottomMenu.search.items.book.Book;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,7 +1,7 @@
 package com.example.bookworm.bottomMenu.challenge.board;
 
 
-import com.example.bookworm.bottomMenu.search.items.Book;
+import com.example.bookworm.bottomMenu.search.items.book.Book;
 
 import java.io.Serializable;
 import java.util.Map;

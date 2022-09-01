@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.search.subactivity;
+package com.example.bookworm.bottomMenu.search.subactivity.result;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

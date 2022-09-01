@@ -1,6 +1,6 @@
 package com.example.bookworm.bottomMenu.challenge.items;
 
-import com.example.bookworm.bottomMenu.search.items.Book;
+import com.example.bookworm.bottomMenu.search.items.book.Book;
 
 import java.io.Serializable;
 import java.util.ArrayList;

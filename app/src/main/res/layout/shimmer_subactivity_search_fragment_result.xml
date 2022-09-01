@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".bottomMenu.search.subactivity.search_fragment_subActivity_result">
+    tools:context=".bottomMenu.search.subactivity.result.search_fragment_subActivity_result">
 
     <ScrollView
         android:layout_width="match_parent"

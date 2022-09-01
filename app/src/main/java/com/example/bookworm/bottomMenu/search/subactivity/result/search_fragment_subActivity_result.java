@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.search.subactivity;
+package com.example.bookworm.bottomMenu.search.subactivity.result;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,9 +22,9 @@ import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.Feed.items.Feed;
 import com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Create;
-import com.example.bookworm.bottomMenu.bookworm.bookworm_pages.bookworm_record.RecordAdapter;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
-import com.example.bookworm.bottomMenu.search.items.Book;
+import com.example.bookworm.bottomMenu.search.Modules.SearchResultFB;
+import com.example.bookworm.bottomMenu.search.items.book.Book;
 import com.example.bookworm.core.internet.Module;
 import com.example.bookworm.databinding.SubactivitySearchFragmentResultBinding;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -88,7 +88,7 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
         thisContext = this;
 
         searchResultFB = new SearchResultFB(thisContext);
-        searchResultFB.getData(map, itemId);
+        searchResultFB.getBook(map, itemId);
 
         pv = new UserInfoViewModel(thisContext);
         uv = new ViewModelProvider(this, new UserInfoViewModel.Factory(thisContext)).get(UserInfoViewModel.class);

@@ -1,10 +1,11 @@
-package com.example.bookworm.bottomMenu.search.subactivity;
+package com.example.bookworm.bottomMenu.search.subactivity.main;
+
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import java.util.ArrayList;
 
@@ -21,6 +22,7 @@ public class SearchPageAdapter extends FragmentPagerAdapter {
         arrayList.add(new SearchPageFeedFragment());
         arrayList.add(new SearchPageChallengeFragment());
         arrayList.add(new SearchPageUserFragment());
+
     }
 
 
@@ -36,5 +38,9 @@ public class SearchPageAdapter extends FragmentPagerAdapter {
         return arrayList.size();
     }
 
-
+    @NonNull
+    @Override
+    public Object instantiateItem(@NonNull ViewGroup container, int position) {
+        return super.instantiateItem(container, position);
+    }
 }

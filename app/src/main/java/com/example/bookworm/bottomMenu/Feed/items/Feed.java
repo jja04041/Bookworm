@@ -1,7 +1,7 @@
 package com.example.bookworm.bottomMenu.Feed.items;
 
 import com.example.bookworm.bottomMenu.Feed.comments.Comment;
-import com.example.bookworm.bottomMenu.search.items.Book;
+import com.example.bookworm.bottomMenu.search.items.book.Book;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.google.firebase.firestore.Exclude;
 

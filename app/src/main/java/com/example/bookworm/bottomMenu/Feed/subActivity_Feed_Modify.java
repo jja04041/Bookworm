@@ -28,8 +28,8 @@ import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.example.bookworm.bottomMenu.Feed.items.Feed;
 import com.example.bookworm.R;
-import com.example.bookworm.bottomMenu.search.items.Book;
-import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_main;
+import com.example.bookworm.bottomMenu.search.items.book.Book;
+import com.example.bookworm.bottomMenu.search.subactivity.main.search_fragment_subActivity_main;
 
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.databinding.SubactivityFeedModifyBinding;

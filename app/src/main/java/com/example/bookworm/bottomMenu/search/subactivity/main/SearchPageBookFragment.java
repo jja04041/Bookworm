@@ -1,9 +1,14 @@
-package com.example.bookworm.bottomMenu.search.subactivity;
+package com.example.bookworm.bottomMenu.search.subactivity.main;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -11,21 +16,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.example.bookworm.R;
-import com.example.bookworm.bottomMenu.search.items.Book;
-import com.example.bookworm.bottomMenu.search.items.BookAdapter;
-import com.example.bookworm.bottomMenu.search.items.OnBookItemClickListener;
-import com.example.bookworm.bottomMenu.search.items.RecomBookAdapter;
+import com.example.bookworm.bottomMenu.search.items.book.Book;
+import com.example.bookworm.bottomMenu.search.items.book.BookAdapter;
+import com.example.bookworm.bottomMenu.search.items.book.OnBookItemClickListener;
+import com.example.bookworm.bottomMenu.search.items.book.RecomBookAdapter;
+import com.example.bookworm.bottomMenu.search.subactivity.result.search_fragment_subActivity_result;
 import com.example.bookworm.core.internet.Module;
 import com.example.bookworm.databinding.FragmentSearchPageBookBinding;
 
@@ -34,7 +29,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 public class SearchPageBookFragment extends Fragment {
@@ -199,4 +193,7 @@ public class SearchPageBookFragment extends Fragment {
         }
 
     }
+
+
+
 }

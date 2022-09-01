@@ -26,7 +26,7 @@ import com.example.bookworm.bottomMenu.Feed.comments.subactivity_comment
 import com.example.bookworm.bottomMenu.Feed.items.Feed
 import com.example.bookworm.bottomMenu.Feed.likeCounter
 import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
-import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_result
+import com.example.bookworm.bottomMenu.search.subactivity.result.search_fragment_subActivity_result
 import com.example.bookworm.core.internet.FBModule
 import com.example.bookworm.core.userdata.PersonalD
 import com.example.bookworm.core.userdata.UserInfo

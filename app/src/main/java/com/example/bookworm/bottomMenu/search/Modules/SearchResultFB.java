@@ -1,9 +1,12 @@
-package com.example.bookworm.bottomMenu.search.subactivity;
+package com.example.bookworm.bottomMenu.search.Modules;
 
 import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import com.example.bookworm.bottomMenu.search.subactivity.main.SearchPageFeedFragment;
+import com.example.bookworm.bottomMenu.search.subactivity.main.SearchPageUserFragment;
+import com.example.bookworm.bottomMenu.search.subactivity.result.search_fragment_subActivity_result;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -17,10 +20,12 @@ public class SearchResultFB {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     Context context;
     private int LIMIT = 10;
-    CollectionReference collectionReference;
+    SearchPageFeedFragment searchPageFeedFragment;
+    SearchPageUserFragment searchPageUserFragment;
 
 
-    SearchResultFB(Context context) {
+
+    public SearchResultFB(Context context) {
         this.context = context;
     }
 
@@ -28,8 +33,8 @@ public class SearchResultFB {
         this.LIMIT = LIMIT;
     }
 
-    public void getData(Map map, String itemId) {//itemId = 책 id 값
-        collectionReference = db.collection("feed");
+    public void getBook(Map map, String itemId) {//itemId = 책 id 값
+        CollectionReference collectionReference = db.collection("feed");
         Query query = collectionReference.whereEqualTo("book.itemId", itemId).orderBy("FeedID", Query.Direction.DESCENDING).limit(LIMIT);
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override

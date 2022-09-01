@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.search.items;
+package com.example.bookworm.bottomMenu.search.items.book;
 
 import java.io.Serializable;
 import java.util.Map;

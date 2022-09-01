@@ -1,25 +1,21 @@
 package com.example.bookworm.core.internet;
 
 import android.content.Context;
-
 import android.util.Log;
 import android.widget.Toast;
 
-
-import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.bookworm.R;
-import com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Create;
 import com.example.bookworm.appLaunch.views.MainActivity;
+import com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Create;
 import com.example.bookworm.bottomMenu.profile.views.ProfileModifyActivity;
-import com.example.bookworm.bottomMenu.search.subactivity.SearchPageAdapter;
-import com.example.bookworm.bottomMenu.search.subactivity.SearchPageBookFragment;
-import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_main;
-import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_result;
 import com.example.bookworm.bottomMenu.search.fragment_search;
+import com.example.bookworm.bottomMenu.search.subactivity.main.SearchPageAdapter;
+import com.example.bookworm.bottomMenu.search.subactivity.main.SearchPageBookFragment;
+import com.example.bookworm.bottomMenu.search.subactivity.main.search_fragment_subActivity_main;
+import com.example.bookworm.bottomMenu.search.subactivity.result.search_fragment_subActivity_result;
 import com.example.bookworm.core.internet.interfaces.GetDataInterface;
-import com.example.bookworm.databinding.FragmentSearchPageBookBinding;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -146,5 +146,8 @@ dependencies {
 
     //implementation 'com.sackcentury:shinebutton:1.0.0'
 
+
+    // 검색 api
+    implementation 'com.algolia:algoliasearch-android:3.+'
 }
 

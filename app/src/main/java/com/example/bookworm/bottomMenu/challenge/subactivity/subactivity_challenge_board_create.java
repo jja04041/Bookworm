@@ -7,7 +7,6 @@ import androidx.core.content.ContextCompat;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,11 +21,10 @@ import com.example.bookworm.achievement.Achievement;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.challenge.items.Challenge;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
-import com.example.bookworm.bottomMenu.search.items.Book;
+import com.example.bookworm.bottomMenu.search.items.book.Book;
 
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing;
 import com.example.bookworm.core.internet.FBModule;
-import com.example.bookworm.core.internet.Module;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.databinding.SubactivityChallengeBoardCreateBinding;
 
