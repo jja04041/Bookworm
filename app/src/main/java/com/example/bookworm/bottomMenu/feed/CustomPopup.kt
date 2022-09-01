@@ -20,16 +20,17 @@ import com.example.bookworm.bottomMenu.challenge.board.Board
 import com.example.bookworm.bottomMenu.challenge.board.BoardFB
 import com.example.bookworm.bottomMenu.challenge.board.Board_CommentsCounter
 import com.example.bookworm.bottomMenu.challenge.board.subactivity_challenge_board_comment
+import com.example.bookworm.bottomMenu.feed.temp.FeedActivity
 import com.example.bookworm.core.internet.FBModule
 
 class CustomPopup(context: Context?, anchor: View?) : PopupMenu(context, anchor),
     PopupMenu.OnMenuItemClickListener {
     var context: Context? = context  //종료할 액티비티의 context , ?이 붙여지면 nullable한 변수
-    var context2: Context? = null //
+    var context2: Context? = null // 
     var fbModule: FBModule? = null
     var layout: Int? = null
-    var item: Feed? = null
-    var item2: com.example.bookworm.bottomMenu.feed.temp.Feed? =null
+    var item2: Feed? = null
+    var item: com.example.bookworm.bottomMenu.feed.temp.Feed? =null
     var boardItem: Board? = null
     var commentitem: Comment? = null
     var boardFB: BoardFB? = null
@@ -37,7 +38,7 @@ class CustomPopup(context: Context?, anchor: View?) : PopupMenu(context, anchor)
     fun setItems(context: Context, fbModule: FBModule, feed: Feed) { //피드탭
         this.fbModule = fbModule
         this.context2 = context
-        this.item = feed
+        this.item2 = feed
         this.layout = R.menu.feed_menu
         this.menuInflater.inflate(R.menu.feed_menu, this.menu) //레이아웃에 inflate
     }
@@ -45,7 +46,7 @@ class CustomPopup(context: Context?, anchor: View?) : PopupMenu(context, anchor)
     fun setItems(context: Context, fbModule: FBModule, feed: com.example.bookworm.bottomMenu.feed.temp.Feed) { //피드탭
         this.fbModule = fbModule
         this.context2 = context
-        this.item2 = feed
+        this.item = feed
         this.layout = R.menu.feed_menu
         this.menuInflater.inflate(R.menu.feed_menu, this.menu) //레이아웃에 inflate
     }
@@ -60,7 +61,7 @@ class CustomPopup(context: Context?, anchor: View?) : PopupMenu(context, anchor)
     fun setItems(context: Context, fbModule: FBModule, comment: Comment, feed: Feed) { //피드 댓글화면
         this.fbModule = fbModule
         this.context2 = context
-        this.item = feed
+        this.item2 = feed
         this.commentitem = comment
         this.layout = R.menu.comment_menu
         this.menuInflater.inflate(R.menu.comment_menu, this.menu) //레이아웃에 inflate
@@ -83,9 +84,9 @@ class CustomPopup(context: Context?, anchor: View?) : PopupMenu(context, anchor)
 
     override fun onMenuItemClick(p0: MenuItem?): Boolean {
         if (layout == R.menu.feed_menu) { //피드의 메뉴 팝업
-            var pos: Int = item2!!.position
+            var pos: Int = item!!.position
             var ff: Fragment_feed? =
-                (context2 as MainActivity).supportFragmentManager.findFragmentByTag("0") as Fragment_feed?
+                (context2 as FeedActivity).supportFragmentManager.findFragmentByTag("0") as Fragment_feed?
             var oldList: ArrayList<Feed?> = ArrayList()
             oldList!!.addAll(ff!!.feedList)
             when (p0?.itemId) {
@@ -93,13 +94,13 @@ class CustomPopup(context: Context?, anchor: View?) : PopupMenu(context, anchor)
                     //현재 화면이 댓글 화면이라면
                     if (context is subactivity_comment) {
                         var intent: Intent? = Intent(context, subActivity_Feed_Modify::class.java)
-                        intent?.putExtra("Feed", item2)
+                        intent?.putExtra("Feed", item)
                         (context as (subactivity_comment)).startActivityResult.launch(intent)
                     }
                     //현재 화면이 피드 화면이라면
                     else {
                         var intent: Intent? = Intent(context, subActivity_Feed_Modify::class.java)
-                        intent?.putExtra("Feed", item2)
+                        intent?.putExtra("Feed", item)
                         ff.startActivityResult.launch(intent)//이렇게 하면 피드에서 값 세팅은 될지 모르겠지만,,,
 
                     }
@@ -110,7 +111,7 @@ class CustomPopup(context: Context?, anchor: View?) : PopupMenu(context, anchor)
                         .setMessage("정말 삭제하시겠습니까?")
                         .setPositiveButton("네") { dialog: DialogInterface, which: Int ->
                             dialog.dismiss()
-                            fbModule!!.deleteData(1, item!!.feedID) //삭제
+                            fbModule!!.deleteData(1, item!!.FeedID) //삭제
                             oldList?.removeAt(pos)
                             ff.feedAdapter!!.submitList(oldList)
                             //만약 댓글을 모아보는 액티비티(subactivity_comment)에 있는 경우, 해당 액티비티를 종료
@@ -131,11 +132,11 @@ class CustomPopup(context: Context?, anchor: View?) : PopupMenu(context, anchor)
                         .setMessage("정말 삭제하시겠습니까?")
                         .setPositiveButton("네") { dialog: DialogInterface, which: Int ->
                             dialog.dismiss()
-                            fbModule!!.deleteData(1, item!!.feedID, commentitem!!.commentID) //삭제
+                            fbModule!!.deleteData(1, item!!.FeedID, commentitem!!.commentID) //삭제
                             val data = HashMap<String, Comment>()
                             data.put("comment", commentitem!!)
                             CommentsCounter()
-                                .removeCounter(data, context, item!!.feedID)
+                                .removeCounter(data, context, item!!.FeedID)
 
                             oldList?.removeAt(pos)
                             (context as (subactivity_comment)).replaceItem(oldList)

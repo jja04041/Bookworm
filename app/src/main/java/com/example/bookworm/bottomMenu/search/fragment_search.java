@@ -60,7 +60,7 @@ public class fragment_search extends Fragment {
         binding.edtSearchBtn.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if (b == true) {
+                if (b) {
                     Intent intent = new Intent(getActivity(), search_fragment_subActivity_main.class);
                     startActivity(intent);
                     binding.edtSearchBtn.clearFocus();

@@ -117,7 +117,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             tvCTitle = itemView.findViewById(R.id.tvCtitle);
             ivThumb = itemView.findViewById(R.id.ivThumb);
             tvChallengeStartDate = itemView.findViewById(R.id.tvChallengeStartDate);
-            tvChallengeEndDate = itemView.findViewById(R.id.tvChallengeEndDateDate);
+            tvChallengeEndDate = itemView.findViewById(R.id.tvChallengeEndDate);
             tvPerson = itemView.findViewById(R.id.tvPerson);
             tvDday = itemView.findViewById(R.id.tvDday);
             //아이템 선택 시 리스너

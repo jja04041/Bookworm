@@ -22,7 +22,7 @@ class FeedActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         dataBinding = TmpcanactivityBinding.inflate(layoutInflater)
         setContentView(dataBinding.root)
-            supportFragmentManager.beginTransaction().replace(dataBinding.container.id,fragmentFeed()).commitAllowingStateLoss()
+            supportFragmentManager.beginTransaction().replace(dataBinding.container.id,fragmentFeed(),"0").commitAllowingStateLoss()
     }
 
 }

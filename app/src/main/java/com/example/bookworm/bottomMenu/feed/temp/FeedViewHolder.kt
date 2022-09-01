@@ -10,7 +10,6 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
@@ -22,10 +21,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.bookworm.Feed.CustomPopup
 import com.example.bookworm.R
-import com.example.bookworm.achievement.Achievement
 import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.feed.comments.Comment
 import com.example.bookworm.bottomMenu.feed.comments.CommentsCounter
@@ -42,9 +39,12 @@ import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
+
+//데이터 바인딩을 위한 어댑터
 object bindingAdapter {
     @JvmStatic
     @BindingAdapter("app:imgUrl", "app:placeholder")
@@ -54,27 +54,27 @@ object bindingAdapter {
                     .error(placeholder)
                     .circleCrop()
                     .into(v)
+
     @SuppressLint("ResourceType")
     @JvmStatic
     @BindingAdapter("app:feedImgUrl")
     fun setFeedImage(v: ImageView, url: String) {
         Glide.with(v.context).load(url).error(Color.TRANSPARENT).into(v)
     }
+
 }
 
 class FeedViewHolder(private val binding: FeedDataBinding, val context: Context) : RecyclerView.ViewHolder(binding.root) {
-
-
     var nowUser: UserInfo = UserInfo()
     var strings: ArrayList<String>? = null
     var limit = 0
     var restricted = false
     var fbModule = FBModule(context)
     private var myFCMService: MyFCMService? = null
-    val pv = ViewModelProvider(context as FeedActivity, UserInfoViewModel.Factory(context)).get(
+    val pv = ViewModelProvider(context as MainActivity, UserInfoViewModel.Factory(context)).get(
             UserInfoViewModel::class.java
     )
-    val fv = ViewModelProvider(context as FeedActivity).get(
+    val fv = ViewModelProvider(context as MainActivity).get(
             FeedViewModel::class.java
     )
     private val nowUserInfo: MutableLiveData<UserInfo> = MutableLiveData()
@@ -82,14 +82,17 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context)
     private val commentUserInfo: MutableLiveData<UserInfo> = MutableLiveData()
     private var feedUserFcmtoken: String? = null
 
+
     //생성자를 만든다.
     init {
         //현재 사용자의 데이터를 가져온다.
         pv.getUser(null, nowUserInfo)
-        nowUserInfo.observe(context as FeedActivity) {
+
+        nowUserInfo.observe(context as MainActivity) {
             nowUser = it
         }
-        myFCMService = MyFCMService()
+        //FCMService 객체를 생성한다 .
+        myFCMService = MyFCMService.getInstance()
     }
 
 
@@ -104,9 +107,20 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context)
         //최상단 댓글 라이브데이터
         var lastCommentLiveData = MutableLiveData<Comment>()
 
+        //책 제목과 책 저자에 적힌 &lt, &gt 문제 해결
+        feed.book!!.title = feed.book!!.title.replace("&lt;", "<")
+                .replace("&gt;", ">")
+                .replace("&lt", "<")
+                .replace("&gt", ">")
+        feed.book!!.author = feed.book!!.author.replace("&lt;", "<")
+                .replace("&gt;", ">")
+                .replace("&lt", "<")
+                .replace("&gt", ">")
+
+
         pv.getUser(feed.UserToken, feedUserInfo) //피드 작성자의 데이터를 가져온다
         //감시
-        feedUserInfo.observe(context as FeedActivity) { creator ->
+        feedUserInfo.observe(context as MainActivity) { creator ->
             feed.Creator = creator
 
             //피드 내용 채우기
@@ -123,8 +137,17 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context)
                     pv.getUser(comment.userToken, commentUserInfo)//최상단 댓글 작성자의 데이터를 가져옴
                     commentUserInfo.observe(context) {
                         feed.comment!!.creator = it
-                        binding.feed =feed
+                        binding.feed = feed
                         binding.executePendingBindings()
+                    }
+                }
+                //피드 내용 클릭시 이벤트
+                binding.flFeedContent.setOnClickListener{
+                    if(binding.llLastComment.visibility!=View.GONE){
+                        val intent = Intent(context, subactivity_comment::class.java)
+                        intent.putExtra("item",feed)
+                        intent.putExtra("position", bindingAdapterPosition)
+                        context.startActivity(intent)
                     }
                 }
 
@@ -149,7 +172,7 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context)
             }
             //댓글창을 클릭했을때
             binding.llComments.setOnClickListener {
-                if (binding.tvCommentNickname.visibility != View.GONE) {
+                if (binding.llLastComment.visibility != View.GONE) {
                     val intent = Intent(context, subactivity_comment::class.java)
                     feed.position = bindingAdapterPosition
                     intent.putExtra("feed", feed)
@@ -159,8 +182,8 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context)
             //댓글 빠르게 달기
             binding.btnWriteComment.setOnClickListener {
                 var item = binding.feed
-                val userComment: String = binding.edtComment.text.toString()
-                if (userComment != "" && userComment != null) {
+                val userComment = binding.edtComment.text.toString() //항상 Non-Null
+                if (userComment != "") {
                     item!!.commentsCount += 1L
                     item!!.comment = addComment(feed.FeedID!!)//현재 입력한 값으로 변경
                     item.comment!!.duration = getDateDuration(item.comment!!.madeDate)
@@ -176,7 +199,7 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context)
                 intent.putExtra("feed", feed)
                 context.startActivity(intent)
             }
-            // 공유하기 버튼 눌렀을 때
+            // 공유하기 버튼 눌렀을 때 (게시물 공유)
             binding.btnShare.setOnClickListener {
 
 
@@ -186,13 +209,15 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context)
             //메뉴 선택 시
             binding.btnFeedMenu.setOnClickListener { view ->
                 feed.position = bindingAdapterPosition
-                val popup1 = CustomPopup(context, view)
-                popup1.setItems(context, fbModule, feed)
-                popup1.setOnMenuItemClickListener(popup1)
-                popup1.setVisible(nowUser.token == feed.UserToken)
-                popup1.show()
+//                val popup1 = CustomPopup(context, view)
+//                popup1.setItems(context, fbModule, feed)
+//                popup1.setOnMenuItemClickListener(popup1)
+//                popup1.setVisible(nowUser.token == feed.UserToken)
+//                popup1.show()
+                val popupMenu = customMenuPopup(context,view)
+                popupMenu.setItem(feed)
             }
-            //프로필을 눌렀을때 그 사람의 프로필 정보 화면으로 이동
+            //프로필을 눌렀을때 그 사용자의 프로필 정보 화면으로 이동
             binding.llProfile.setOnClickListener {
                 val intent = Intent(context, ProfileInfoActivity::class.java)
                 intent.putExtra("userID", feed.UserToken)
@@ -214,8 +239,11 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context)
         comment.getData(
                 nowUser.token,
                 binding.edtComment.text.toString(),
-                LocalDateTime.now().toLocalTime()
-                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                LocalDateTime.now()
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")
+                                .withLocale(Locale.KOREA)
+                                .withZone(ZoneId.of("Asia/Seoul")))
+
         )
         data["comment"] = comment
 
@@ -266,7 +294,7 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context)
             likeCounter().updateCounter(map, feed.FeedID)
 
             pv.getBookWorm(nowUser.token)
-            pv.bwdata.observe(context as FeedActivity) {
+            pv.bwdata.observe(context as MainActivity) {
 //                val achievement = Achievement(context, fbModule, nowUser, it)
 //                achievement.CompleteAchievement(nowUser, context)
             }
@@ -301,7 +329,7 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context)
             val tv = TextView(context)
             tv.text = label[i] //라벨에 텍스트 삽입
             tv.background = context.getDrawable(R.drawable.label_design) //디자인 적용
-            tv.setBackgroundColor((context as FeedActivity).getColor(R.color.subcolor_2)) //배경색 적용
+            tv.setBackgroundColor((context as MainActivity).getColor(R.color.subcolor_2)) //배경색 적용
             val params = LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
@@ -334,7 +362,7 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context)
                 (duration / 1000 / 60 / 60 / 24 / 30).toString() + "개월 전"
             } else {
 //                (duration / 1000 / 60 / 60 / 24 / 30 / 12).toString() + "년 전"
-                  SimpleDateFormat("yyyy-MM-dd").format(duration)
+                SimpleDateFormat("yyyy-MM-dd").format(duration)
             }
             return dateDuration
         } catch (e: ParseException) {

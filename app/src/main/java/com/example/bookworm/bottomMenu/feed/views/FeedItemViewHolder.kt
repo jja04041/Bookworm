@@ -1,16 +1,20 @@
 package com.example.bookworm.bottomMenu.feed.views
 
 import android.app.AlertDialog
+import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -115,6 +119,15 @@ class FeedItemViewHolder(itemView: View, context: Context?) : RecyclerView.ViewH
         } else {
             setViewV(false)
             binding!!.llCommentInfo.visibility = View.GONE //댓글이 0개인 경우, 몇개 더보기 지움.
+        }
+
+        binding!!.flContent.setOnClickListener {
+            if (binding!!.tvCommentNickname.visibility != View.GONE) {
+                val intent = Intent(context, subactivity_comment::class.java)
+                intent.putExtra("item", item)
+                intent.putExtra("position", absoluteAdapterPosition)
+                context!!.startActivity(intent)
+            }
         }
 
         //댓글창을 클릭했을때

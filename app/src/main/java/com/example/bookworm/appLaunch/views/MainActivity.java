@@ -1,6 +1,7 @@
 package com.example.bookworm.appLaunch.views;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import androidx.fragment.app.FragmentManager;
 import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.feed.Fragment_feed;
 import com.example.bookworm.bottomMenu.feed.comments.subactivity_comment;
+import com.example.bookworm.bottomMenu.feed.temp.fragmentFeed;
 import com.example.bookworm.core.MoveFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -72,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         //딥링크 코드 end
 
         // 초기화면 설정
-        fragments[0] = new Fragment_feed();
+        fragments[0] = new fragmentFeed();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.container, fragments[0], "0").commitAllowingStateLoss();
 

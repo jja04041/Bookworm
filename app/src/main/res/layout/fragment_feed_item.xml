@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/maincolor"
+        android:background="@color/white"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -80,7 +80,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="15dp"
-        android:background="@drawable/bg_rounded"
+        android:background="@drawable/ripplebutton"
         android:elevation="10dp"
         android:orientation="horizontal"
         android:paddingHorizontal="10dp">
@@ -158,11 +158,12 @@
             android:visibility="gone" />
 
         <FrameLayout
+            android:id="@+id/flContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"
             android:layout_marginVertical="10dp"
-            android:background="@drawable/bg_rounded"
+            android:background="@drawable/ripplebutton"
             android:elevation="10dp"
             android:orientation="vertical"
             android:paddingHorizontal="5dp">
@@ -261,6 +262,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="5dp"
+                android:background="@drawable/ripplebutton_none"
                 android:orientation="vertical"
                 android:paddingHorizontal="5dp">
 

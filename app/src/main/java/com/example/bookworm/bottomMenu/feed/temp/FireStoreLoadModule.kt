@@ -11,7 +11,6 @@ import javax.inject.Singleton
 object FireStoreLoadModule {
     @Provides
     @Singleton
-
     //피드 내용 불러오는 쿼리
     fun provideQueryPostsByUserID(pageSize: Int) =
             FirebaseFirestore
@@ -20,7 +19,7 @@ object FireStoreLoadModule {
                     .orderBy("FeedID", Query.Direction.DESCENDING)
                     .limit(pageSize.toLong())
 
-    fun provideQueryCommentsLately( id: String) =
+    fun provideQueryCommentsLately(id: String) =
             FirebaseFirestore
                     .getInstance()
                     .collection("feed")
@@ -28,4 +27,18 @@ object FireStoreLoadModule {
                     .collection("comments")
                     .orderBy("commentID", Query.Direction.DESCENDING)
                     .limit(1)
+
+    //FeedId로 피드 문서 검색하는 쿼리
+    fun provideQueryPostByFeedID(feedId: String) =
+            FirebaseFirestore
+                    .getInstance()
+                    .collection("feed")
+                    .document(feedId)
+
+    fun provideQueryCommentsInFeedByFeedID(feedId: String) =
+            FirebaseFirestore
+                    .getInstance()
+                    .collection("feed")
+                    .document(feedId)
+                    .collection("comments")
 }

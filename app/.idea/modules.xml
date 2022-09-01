@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Bookworm.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/Bookworm.app.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Bookworm.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Bookworm.app.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Bookworm.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/Bookworm.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1696110299/Bookworm.bookwormlib.iml" filepath="$PROJECT_DIR$/.idea/modules/-1696110299/Bookworm.bookwormlib.iml" />
     </modules>
   </component>
 </project>

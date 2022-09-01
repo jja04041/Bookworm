@@ -52,12 +52,23 @@
                 android:layout_marginEnd="10dp"
                 android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/btnchatting"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/icon_chat" />
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
+                    <Button
+                        android:id="@+id/btnchatting"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:background="@drawable/ripplebutton_none" />
+
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/icon_chat" />
+
+                </FrameLayout>
 
                 <TextView
                     android:id="@+id/tvFollow"
@@ -249,6 +260,7 @@
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:tabIndicatorColor="@color/black"
             android:elevation="10dp">
 
             <com.google.android.material.tabs.TabItem

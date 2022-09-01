@@ -32,6 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:layout_weight="1"
+                android:background="@drawable/ripplebutton_none"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -40,6 +41,7 @@
                     android:layout_height="40dp"
                     android:layout_marginHorizontal="15dp"
                     android:layout_marginVertical="5dp"
+                    android:src="@drawable/profile"
                     app:imgUrl='@{feed.creator.profileimg != null ? feed.creator.profileimg:""}'
                     app:placeholder="@{@drawable/profile}" />
 
@@ -55,7 +57,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:maxLength="15"
-                        android:text="@{feed.creator.username}"
+                        android:text="@{feed.creator.username,default = 사용자}"
                         android:textColor="#000000"
                         android:textSize="18dp"
                         android:textStyle="bold" />
@@ -90,11 +92,12 @@
         </LinearLayout>
 
         <LinearLayout
+
             android:id="@+id/llbook"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"
-            android:background="@drawable/bg_rounded"
+            android:background="@drawable/ripplebutton"
             android:elevation="10dp"
             android:orientation="horizontal"
             android:paddingHorizontal="10dp">
@@ -104,8 +107,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
-                app:feedImgUrl='@{feed.book.img_url != null ? feed.book.img_url:""}'
-                />
+                app:feedImgUrl='@{feed.book.img_url != null ? feed.book.img_url:""}' />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -122,23 +124,23 @@
                     android:layout_marginVertical="5dp"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="도서명: "
-                        android:textColor="@color/black"
-                        android:textSize="15dp"
-                        android:textStyle="bold" />
+                    <!--                    <TextView-->
+                    <!--                        android:layout_width="wrap_content"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:text="도서명: "-->
+                    <!--                        android:textColor="@color/black"-->
+                    <!--                        android:textSize="15dp"-->
+                    <!--                        android:textStyle="bold" />-->
 
                     <TextView
                         android:id="@+id/feedBookTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
-                        android:layout_marginVertical="5dp"
+                        android:layout_marginTop="3dp"
                         android:ellipsize="end"
                         android:maxLines="2"
-                        android:text="@{feed.book.title}"
+                        android:text="@{feed.book.title,default=도서명}"
                         android:textColor="@color/black"
                         android:textSize="15dp" />
                 </LinearLayout>
@@ -166,7 +168,7 @@
                         android:layout_marginStart="5dp"
                         android:ellipsize="end"
                         android:maxLines="1"
-                        android:text="@{String.valueOf(feed.book.author)}" />
+                        android:text='@{feed.book.author != null? String.valueOf(feed.book.author) : "",default = ""}' />
 
                 </LinearLayout>
 
@@ -175,7 +177,6 @@
         </LinearLayout>
 
         <LinearLayout
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -186,14 +187,16 @@
                 android:layout_height="360dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="15dp"
-                app:feedImgUrl='@{feed.imgurl != null ? feed.imgurl:""}'
-                android:visibility='@{feed.imgurl!=""? View.VISIBLE:View.GONE,default=gone}' />
+                android:visibility='@{(feed.imgurl!="" &amp;&amp; feed.imgurl != null)? View.VISIBLE:View.GONE,default=gone}'
+                app:feedImgUrl='@{(feed.imgurl!="" &amp;&amp; feed.imgurl != null) ? feed.imgurl:""}' />
+
             <FrameLayout
+            android:id="@+id/flFeedContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="15dp"
                 android:layout_marginVertical="10dp"
-                android:background="@drawable/bg_rounded"
+                android:background="@drawable/ripplebutton"
                 android:elevation="10dp"
                 android:orientation="vertical"
                 android:paddingHorizontal="5dp">
@@ -247,7 +250,7 @@
                         android:layout_height="25dp"
                         android:layout_gravity="start"
                         android:layout_marginHorizontal="10dp"
-                        android:background="@{feed.userLiked?  @drawable/icon_like_red : @drawable/icon_like }"
+                        android:background="@{feed.userLiked?  @drawable/icon_like_red : @drawable/icon_like,default=@drawable/icon_like }"
                         android:clickable="false" />
 
                     <TextView
@@ -293,94 +296,101 @@
                     android:id="@+id/llComments"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="5dp"
                     android:orientation="vertical"
-                    android:paddingHorizontal="5dp">
+                    android:paddingHorizontal="15dp">
 
                     <LinearLayout
-                        android:visibility="@{feed.commentsCount>0 ? View.VISIBLE : View.GONE}"
+                        android:id="@+id/llLastComment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:orientation="horizontal"
-                        android:paddingHorizontal="10dp">
-
-                        <ImageView
-                            android:id="@+id/ivCommentProfileImage"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            app:imgUrl='@{feed.comment.creator.profileimg!=null? feed.comment.creator.profileimg:""}'
-                            app:placeholder="@{@drawable/profile}"
-                          />
+                        android:orientation="vertical"
+                        android:background="@drawable/ripplebutton_none"
+                        android:visibility="@{feed.commentsCount>0 ? View.VISIBLE : View.GONE}">
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:orientation="horizontal">
+                            android:layout_marginTop="5dp"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="10dp">
 
-                            <TextView
-                                android:id="@+id/tvCommentNickname"
+                            <ImageView
+                                android:id="@+id/ivCommentProfileImage"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                app:imgUrl='@{feed.comment.creator.profileimg!=null? feed.comment.creator.profileimg:""}'
+                                app:placeholder="@{@drawable/profile}" />
+
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:layout_marginStart="10dp"
-                                android:text="@{feed.comment.creator.username}"
-                                android:textColor="#000000"
-                                android:textSize="15dp"
-                                android:textStyle="bold" />
+                                android:orientation="horizontal">
 
-                            <ImageView
-                                android:id="@+id/ivCommentMedal"
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:layout_gravity="center"
-                                android:visibility="gone" />
+                                <TextView
+                                    android:id="@+id/tvCommentNickname"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginStart="10dp"
+                                    android:text="@{feed.comment.creator.username}"
+                                    android:textColor="#000000"
+                                    android:textSize="15dp"
+                                    android:textStyle="bold" />
+
+                                <ImageView
+                                    android:id="@+id/ivCommentMedal"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_gravity="center"
+                                    android:visibility="gone" />
+
+                            </LinearLayout>
+
+
+                            <TextView
+                                android:id="@+id/tvCommentDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_weight="3"
+                                android:text="@{feed.comment.duration}" />
+
+                            <LinearLayout
+                                android:id="@+id/llCommentInfo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center|end"
+                                android:layout_weight="1"
+                                android:visibility="@{feed.commentsCount>0 ?  View.VISIBLE:View.GONE}">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="댓글 "
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text='@{String.format("%s개 더보기...",String.valueOf(feed.commentsCount))}'
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
 
                         </LinearLayout>
-
 
                         <TextView
-                            android:id="@+id/tvCommentDate"
-                            android:layout_width="wrap_content"
+                            android:id="@+id/tvCommentContent"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_weight="3"
-                            android:text="@{feed.comment.duration}" />
-
-                        <LinearLayout
-                            android:id="@+id/llCommentInfo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center|end"
-                            android:layout_weight="1"
-                            android:visibility="@{feed.commentsCount>0 ?  View.VISIBLE:View.GONE}">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="댓글 "
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text='@{String.format("%s개 더보기...",String.valueOf(feed.commentsCount))}'
-                                android:textStyle="bold" />
-
-                        </LinearLayout>
+                            android:padding="5dp"
+                            android:text="@{feed.comment.contents}"
+                            android:textColor="#CC000000"
+                            android:visibility="@{feed.commentsCount>0 ? View.VISIBLE : View.GONE}" />
                     </LinearLayout>
-
-                    <TextView
-                        android:visibility="@{feed.commentsCount>0 ? View.VISIBLE : View.GONE}"
-                        android:id="@+id/tvCommentContent"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="5dp"
-                        android:text="@{feed.comment.contents}"
-                        android:textColor="#CC000000" />
 
                     <FrameLayout
                         android:layout_width="match_parent"

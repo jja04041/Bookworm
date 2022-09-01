@@ -2,11 +2,10 @@
 
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f5eddc"
     android:orientation="vertical">
-
 
 
     <FrameLayout
@@ -22,6 +21,13 @@
             android:layout_height="35dp"
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="15dp"
+            android:background="@drawable/ripplebutton_none" />
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="15dp"
             android:background="@drawable/setting" />
 
 
@@ -33,13 +39,25 @@
             android:textColor="@color/black"
             android:textSize="13dp" />
 
-        <Button
-            android:id="@+id/btnChatlist"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="15dp"
-            android:background="@drawable/icon_chat" />
+            android:layout_marginEnd="15dp">
+
+            <Button
+                android:id="@+id/btnChatlist"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@drawable/ripplebutton_none" />
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:background="@drawable/icon_chat" />
+
+        </FrameLayout>
 
     </FrameLayout>
 
@@ -108,7 +126,7 @@
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-
+                    android:background="@drawable/ripplebutton_none"
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
 
@@ -135,6 +153,7 @@
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
+                    android:background="@drawable/ripplebutton_none"
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
 
@@ -161,6 +180,7 @@
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
+                    android:background="@drawable/ripplebutton_none"
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
 
@@ -230,8 +250,8 @@
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/navicolor"
-            android:elevation="10dp">
+            android:elevation="10dp"
+            app:tabIndicatorColor="@color/black">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"

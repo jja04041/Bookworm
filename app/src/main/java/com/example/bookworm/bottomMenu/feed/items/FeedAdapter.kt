@@ -43,6 +43,7 @@ class FeedAdapter(c: Context) :
         return currentList[position].hashCode().toLong()
     }
 
+
     //Arraylist에 있는 아이템을 뷰 홀더에 바인딩 하는 메소드
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val safePosition = holder.bindingAdapterPosition

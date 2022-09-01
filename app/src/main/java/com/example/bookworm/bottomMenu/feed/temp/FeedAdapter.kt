@@ -10,6 +10,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.bumptech.glide.Glide
 import com.example.bookworm.R
+import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.databinding.FeedDataBinding
 
 class FeedAdapter : PagingDataAdapter<Feed, FeedViewHolder>(Companion) {
@@ -19,7 +20,7 @@ class FeedAdapter : PagingDataAdapter<Feed, FeedViewHolder>(Companion) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedViewHolder {
 
         dataBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.feed_data, parent,false)
-        dataBinding.lifecycleOwner = parent.context as FeedActivity
+        dataBinding.lifecycleOwner = parent.context as MainActivity
 
 
         return FeedViewHolder(dataBinding, parent.context)
@@ -32,7 +33,7 @@ class FeedAdapter : PagingDataAdapter<Feed, FeedViewHolder>(Companion) {
 
 
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
-        val feed = getItem(position) ?: return
+        var feed = getItem(position) ?: return
         holder.bindFeed(feed)
     }
 

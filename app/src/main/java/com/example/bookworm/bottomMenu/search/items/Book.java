@@ -57,6 +57,14 @@ public class Book implements Serializable {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
     public String getContent() {
         return content;
     }

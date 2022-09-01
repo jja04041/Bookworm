@@ -14,13 +14,20 @@
         android:background="@drawable/feed_bottom_border_only"
         android:orientation="horizontal">
 
-        <Button
+        <LinearLayout
             android:id="@+id/btnBack"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="20dp"
-            android:background="@drawable/back_icon" />
+            android:background="@drawable/ripplebutton_none">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/back_icon" />
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -41,7 +48,7 @@
             android:id="@+id/btnModify"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="@drawable/square_button"
+            android:background="@drawable/ripplebutton_none"
             android:orientation="horizontal" />
 
         <TextView
@@ -71,8 +78,8 @@
             android:id="@+id/btnLogout"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="@drawable/square_button"
-            android:orientation="horizontal"></Button>
+            android:background="@drawable/ripplebutton_none"
+            android:orientation="horizontal" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -101,8 +108,8 @@
             android:id="@+id/btnSignout"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="@drawable/square_button"
-            android:orientation="horizontal"></Button>
+            android:background="@drawable/ripplebutton_none"
+            android:orientation="horizontal" />
 
         <TextView
             android:layout_width="wrap_content"
