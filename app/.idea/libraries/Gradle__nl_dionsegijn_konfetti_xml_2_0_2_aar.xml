@@ -3,9 +3,10 @@
     <CLASSES>
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/1fdad1ed89194de14199c0de3620fc79/transformed/jetified-konfetti-xml-2.0.2/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/2ef68cb540dc158c5fdc0a6cb8f688e0/transformed/jetified-konfetti-xml-2.0.2/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/0b4c531f8d5d15e465d7df01de5ec883/transformed/jetified-konfetti-xml-2.0.2/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/0b4c531f8d5d15e465d7df01de5ec883/transformed/jetified-konfetti-xml-2.0.2/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/0b4c531f8d5d15e465d7df01de5ec883/transformed/jetified-konfetti-xml-2.0.2/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/d0b327bbea412a314c72dfe207f24948/transformed/jetified-konfetti-xml-2.0.2/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/d0b327bbea412a314c72dfe207f24948/transformed/jetified-konfetti-xml-2.0.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/d0b327bbea412a314c72dfe207f24948/transformed/jetified-konfetti-xml-2.0.2/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

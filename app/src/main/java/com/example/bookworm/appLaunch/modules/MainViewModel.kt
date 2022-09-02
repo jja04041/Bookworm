@@ -22,7 +22,7 @@ class MainViewModel(val context: Context) : ViewModel() {
     val userInfo: MutableLiveData<UserInfo> = MutableLiveData()
 
     class Factory(val context: Context) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return MainViewModel(context) as T
         }
     }

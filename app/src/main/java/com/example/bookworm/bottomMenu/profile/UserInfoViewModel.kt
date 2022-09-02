@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.bookworm.bottomMenu.feed.items.Feed
 import com.example.bookworm.bottomMenu.bookworm.BookWorm
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumData
@@ -36,7 +37,7 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
     var feedList = MutableLiveData<ArrayList<Feed>>()
 
     class Factory(val context: Context) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+       override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
             return UserInfoViewModel(context) as T
         }
     }
@@ -58,6 +59,7 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
             data.value = repo.getUser(token, getFromExt) //데이터 변경을 감지하면, 값이 업데이트 된다.
         }
     }
+    suspend fun suspendGetUser(token: String)= repo.getUser(token,true)
     //사용자 가져오기
     fun getUser(token: String?, liveData: MutableLiveData<UserInfo>) {
         data = liveData

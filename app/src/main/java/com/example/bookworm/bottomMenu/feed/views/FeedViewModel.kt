@@ -5,13 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.bookworm.core.dataprocessing.repository.UserRepositoryImpl
 import com.example.bookworm.core.userdata.UserInfo
 import kotlinx.coroutines.launch
 
 class FeedViewModel(val context: Context) : ViewModel() {
     class Factory(val context: Context) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
             return FeedViewModel(context) as T
         }
     }

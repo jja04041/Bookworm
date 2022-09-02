@@ -74,12 +74,10 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context)
     val pv = ViewModelProvider(context as MainActivity, UserInfoViewModel.Factory(context)).get(
             UserInfoViewModel::class.java
     )
-    val fv = ViewModelProvider(context as MainActivity).get(
+    val fv = ViewModelProvider(context as MainActivity, FeedViewModel.Factory(context)).get(
             FeedViewModel::class.java
     )
     private val nowUserInfo: MutableLiveData<UserInfo> = MutableLiveData()
-    private val feedUserInfo: MutableLiveData<UserInfo> = MutableLiveData()
-    private val commentUserInfo: MutableLiveData<UserInfo> = MutableLiveData()
     private var feedUserFcmtoken: String? = null
 
 
@@ -104,9 +102,6 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context)
         // 3. 아이템을 캐싱함.
         // 4. 기타 뷰 처리 진행
 
-        //최상단 댓글 라이브데이터
-        var lastCommentLiveData = MutableLiveData<Comment>()
-
         //책 제목과 책 저자에 적힌 &lt, &gt 문제 해결
         feed.book!!.title = feed.book!!.title.replace("&lt;", "<")
                 .replace("&gt;", ">")
@@ -118,116 +113,94 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context)
                 .replace("&gt", ">")
 
 
-        pv.getUser(feed.UserToken, feedUserInfo) //피드 작성자의 데이터를 가져온다
-        //감시
-        feedUserInfo.observe(context as MainActivity) { creator ->
-            feed.Creator = creator
-
-            //피드 내용 채우기
-
-            //피드 작성 시간
-            feed.duration = getDateDuration(feed.date)
-
-            // 댓글이 있는 경우
-            if (feed.commentsCount > 0L) {
-                fv.getLastComment(feed.FeedID!!, lastCommentLiveData)
-                lastCommentLiveData.observe(context) { comment ->
-                    binding.feed!!.comment = comment
-                    binding.feed!!.comment!!.duration = getDateDuration(feed.comment!!.madeDate)
-                    pv.getUser(comment.userToken, commentUserInfo)//최상단 댓글 작성자의 데이터를 가져옴
-                    commentUserInfo.observe(context) {
-                        feed.comment!!.creator = it
-                        binding.feed = feed
-                        binding.executePendingBindings()
-                    }
-                }
-                //피드 내용 클릭시 이벤트
-                binding.flFeedContent.setOnClickListener{
-                    if(binding.llLastComment.visibility!=View.GONE){
-                        val intent = Intent(context, subactivity_comment::class.java)
-                        intent.putExtra("item",feed)
-                        intent.putExtra("position", bindingAdapterPosition)
-                        context.startActivity(intent)
-                    }
-                }
-
-            }
-
-            //사용자가 좋아하는 피드인지 확인하는 값 세팅
-            feed.isUserLiked = try {
-                nowUser.likedPost!!.contains(feed.FeedID)
-            } catch (e: java.lang.NullPointerException) {
-                false
-            }
-            //라벨표시
-            if (feed.label!![0] != "") setLabel(feed.label!!)
-            else binding.lllabel.visibility = View.GONE
-            //리스너 부착
-            //책 정보 확인 시
-            binding.llbook.setOnClickListener {
-                val intent = Intent(context, search_fragment_subActivity_result::class.java)
-                intent.putExtra("itemid", feed.book!!.itemId)
-                intent.putExtra("data", feed.book!!)
-                context.startActivity(intent)
-            }
-            //댓글창을 클릭했을때
-            binding.llComments.setOnClickListener {
+        // 댓글이 있는 경우
+        if (feed.commentsCount > 0L) {
+            //피드 내용 클릭시 이벤트
+            binding.flFeedContent.setOnClickListener {
                 if (binding.llLastComment.visibility != View.GONE) {
                     val intent = Intent(context, subactivity_comment::class.java)
-                    feed.position = bindingAdapterPosition
-                    intent.putExtra("feed", feed)
+                    intent.putExtra("item", feed)
+                    intent.putExtra("position", bindingAdapterPosition)
                     context.startActivity(intent)
                 }
             }
-            //댓글 빠르게 달기
-            binding.btnWriteComment.setOnClickListener {
-                var item = binding.feed
-                val userComment = binding.edtComment.text.toString() //항상 Non-Null
-                if (userComment != "") {
-                    item!!.commentsCount += 1L
-                    item!!.comment = addComment(feed.FeedID!!)//현재 입력한 값으로 변경
-                    item.comment!!.duration = getDateDuration(item.comment!!.madeDate)
-                    item.comment!!.creator = nowUser
-                    binding.feed = item
-                    binding.executePendingBindings() // 변경된 값을 뷰에 적용
-                }
-            }
-            //댓글 아이콘을 눌렀을 때
-            binding.btnComment.setOnClickListener {
+        }
+
+        //사용자가 좋아하는 피드인지 확인하는 값 세팅
+        feed.isUserLiked = try {
+            nowUser.likedPost!!.contains(feed.FeedID)
+        } catch (e: java.lang.NullPointerException) {
+            false
+        }
+        //라벨표시
+        if (feed.label!![0] != "") setLabel(feed.label!!)
+        else binding.lllabel.visibility = View.GONE
+        //리스너 부착
+        //책 정보 확인 시
+        binding.llbook.setOnClickListener {
+            val intent = Intent(context, search_fragment_subActivity_result::class.java)
+            intent.putExtra("itemid", feed.book!!.itemId)
+            intent.putExtra("data", feed.book!!)
+            context.startActivity(intent)
+        }
+        //댓글창을 클릭했을때
+        binding.llComments.setOnClickListener {
+            if (binding.llLastComment.visibility != View.GONE) {
                 val intent = Intent(context, subactivity_comment::class.java)
                 feed.position = bindingAdapterPosition
                 intent.putExtra("feed", feed)
                 context.startActivity(intent)
             }
-            // 공유하기 버튼 눌렀을 때 (게시물 공유)
-            binding.btnShare.setOnClickListener {
-
-
+        }
+        //댓글 빠르게 달기
+        binding.btnWriteComment.setOnClickListener {
+            var item = binding.feed
+            val userComment = binding.edtComment.text.toString() //항상 Non-Null
+            if (userComment != "") {
+                item!!.commentsCount += 1L
+                item!!.comment = addComment(feed.FeedID!!)//현재 입력한 값으로 변경
+                item.comment!!.duration = fv.getDateDuration(item.comment!!.madeDate)
+                item.comment!!.creator = nowUser
+                binding.feed = item
+                binding.executePendingBindings() // 변경된 값을 뷰에 적용
             }
-            //좋아요 표시 관리
-            binding.lllike.setOnClickListener { controlLike(feed) }
-            //메뉴 선택 시
-            binding.btnFeedMenu.setOnClickListener { view ->
-                feed.position = bindingAdapterPosition
+        }
+        //댓글 아이콘을 눌렀을 때
+        binding.btnComment.setOnClickListener {
+            val intent = Intent(context, subactivity_comment::class.java)
+            feed.position = bindingAdapterPosition
+            intent.putExtra("feed", feed)
+            context.startActivity(intent)
+        }
+        // 공유하기 버튼 눌렀을 때 (게시물 공유)
+        binding.btnShare.setOnClickListener {
+
+
+        }
+        //좋아요 표시 관리
+        binding.lllike.setOnClickListener { controlLike(feed) }
+        //메뉴 선택 시
+        binding.btnFeedMenu.setOnClickListener { view ->
+            feed.position = bindingAdapterPosition
 //                val popup1 = CustomPopup(context, view)
 //                popup1.setItems(context, fbModule, feed)
 //                popup1.setOnMenuItemClickListener(popup1)
 //                popup1.setVisible(nowUser.token == feed.UserToken)
 //                popup1.show()
-                val popupMenu = customMenuPopup(context,view)
-                popupMenu.setItem(feed)
-            }
-            //프로필을 눌렀을때 그 사용자의 프로필 정보 화면으로 이동
-            binding.llProfile.setOnClickListener {
-                val intent = Intent(context, ProfileInfoActivity::class.java)
-                intent.putExtra("userID", feed.UserToken)
-                context.startActivity(intent)
-            }
-
-            //뷰에 피드 반영
-            binding.feed = feed
-            binding.executePendingBindings()
+            val popupMenu = customMenuPopup(context, view)
+            popupMenu.setItem(feed)
         }
+        //프로필을 눌렀을때 그 사용자의 프로필 정보 화면으로 이동
+        binding.llProfile.setOnClickListener {
+            val intent = Intent(context, ProfileInfoActivity::class.java)
+            intent.putExtra("userID", feed.UserToken)
+            context.startActivity(intent)
+        }
+
+        //뷰에 피드 반영
+        binding.feed = feed
+        binding.executePendingBindings()
+//        }
     }
 
     //댓글 추가
@@ -340,36 +313,6 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context)
         }
     }
 
-
-    //시간차 구하기 n분 전, n시간 전 등등
-    private fun getDateDuration(createdTime: String?): String {
-        var dateDuration = ""
-        val now = System.currentTimeMillis()
-        val dateNow = Date(now) //현재시각
-        val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        try {
-            val dateCreated = dateFormat.parse(createdTime)
-            val duration = dateNow.time - dateCreated.time //시간차이 mills
-            dateDuration = if (duration / 1000 / 60 == 0L) {
-                "방금"
-            } else if (duration / 1000 / 60 <= 59) {
-                (duration / 1000 / 60).toString() + "분 전"
-            } else if (duration / 1000 / 60 / 60 <= 23) {
-                (duration / 1000 / 60 / 60).toString() + "시간 전"
-            } else if (duration / 1000 / 60 / 60 / 24 <= 29) {
-                (duration / 1000 / 60 / 60 / 24).toString() + "일 전"
-            } else if (duration / 1000 / 60 / 60 / 24 / 30 <= 12) {
-                (duration / 1000 / 60 / 60 / 24 / 30).toString() + "개월 전"
-            } else {
-//                (duration / 1000 / 60 / 60 / 24 / 30 / 12).toString() + "년 전"
-                SimpleDateFormat("yyyy-MM-dd").format(duration)
-            }
-            return dateDuration
-        } catch (e: ParseException) {
-            e.printStackTrace()
-            return ""
-        }
-    }
 
     //메달 표시 유무에 따른 세팅
     //댓글창 메달도 있기때문에 여기는 인자를 userInfo, bool 이렇게 2개 받음

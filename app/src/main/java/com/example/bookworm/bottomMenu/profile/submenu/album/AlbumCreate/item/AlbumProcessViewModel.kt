@@ -8,6 +8,7 @@ import android.os.Build
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.lifecycle.*
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.bookworm.bottomMenu.feed.items.Feed
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumContentActivity
@@ -32,7 +33,7 @@ class AlbumProcessViewModel(val context: Context, val pv: UserInfoViewModel) : V
 
     class Factory(val context: Context, val userInfoViewModel: UserInfoViewModel) :
         ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
             return AlbumProcessViewModel(context, userInfoViewModel) as T
         }
     }

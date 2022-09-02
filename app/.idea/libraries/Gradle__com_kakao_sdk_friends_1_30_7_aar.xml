@@ -6,8 +6,9 @@
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/36bfb127840b9d6eeda595dbc0f5531d/transformed/jetified-friends-1.30.7/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/9ebd7ff1a1e33b036d01eb59364f07e7/transformed/jetified-friends-1.30.7/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/beac7cd3e7b80a2e0fe225dc9f352ee5/transformed/jetified-friends-1.30.7/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/beac7cd3e7b80a2e0fe225dc9f352ee5/transformed/jetified-friends-1.30.7/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/beac7cd3e7b80a2e0fe225dc9f352ee5/transformed/jetified-friends-1.30.7/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/acee6d2f6087654226b36ab22a434ee1/transformed/jetified-friends-1.30.7/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/acee6d2f6087654226b36ab22a434ee1/transformed/jetified-friends-1.30.7/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/acee6d2f6087654226b36ab22a434ee1/transformed/jetified-friends-1.30.7/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

@@ -1,5 +1,6 @@
 package com.example.bookworm.bottomMenu.feed.temp
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.google.firebase.firestore.Query
@@ -18,11 +19,13 @@ class FirebasePagingSource(private val queryPostsByName: Query) :
             val currentPage = params.key ?: queryPostsByName.get().await()
             val lastVisibleFeed = currentPage.documents[currentPage.size() - 1] //마지막으로 가져온 게시물
             val nextPage = queryPostsByName.startAfter(lastVisibleFeed).get().await()
-            LoadResult.Page(
+            val result = LoadResult.Page(
                 data = currentPage.toObjects(Feed::class.java),
                 prevKey = null,
                 nextKey = nextPage
             )
+            Log.d("불러온 데이터",result.data.size.toString())
+            result
         } catch (e: Exception) {
             LoadResult.Error(e)
         }

@@ -5,9 +5,10 @@
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/08b8a826b9dee9fa4626e1e0cf8444f5/transformed/jetified-kakaotalk-1.30.7/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/cfdd6c8730f61917f2fb1c70f16b6544/transformed/jetified-kakaotalk-1.30.7/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/50d3254a3855dba4d731b38100b9e7eb/transformed/jetified-kakaotalk-1.30.7/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/ed3263c2328bda73002bec96a59c0fe5/transformed/jetified-kakaotalk-1.30.7/AndroidManifest.xml" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/ed3263c2328bda73002bec96a59c0fe5/transformed/jetified-kakaotalk-1.30.7/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/ed3263c2328bda73002bec96a59c0fe5/transformed/jetified-kakaotalk-1.30.7/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/76103b48d7bc9e5596f74db4a6ac7f98/transformed/jetified-kakaotalk-1.30.7/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/76103b48d7bc9e5596f74db4a6ac7f98/transformed/jetified-kakaotalk-1.30.7/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/76103b48d7bc9e5596f74db4a6ac7f98/transformed/jetified-kakaotalk-1.30.7/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
