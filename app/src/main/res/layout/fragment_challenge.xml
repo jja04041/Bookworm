@@ -94,7 +94,7 @@
                 android:id="@+id/btn_create_challenge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/maincolor"
+                android:background="@drawable/ripplebutton_none"
                 android:text="챌린지 생성" />
 
         </LinearLayout>

@@ -1,6 +1,7 @@
 package com.example.bookworm.bottomMenu.challenge.subactivity;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,8 +10,10 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +22,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.bookworm.appLaunch.views.MainActivity;
+import com.example.bookworm.bottomMenu.challenge.NumberPickerDialog;
 import com.example.bookworm.core.userdata.PersonalD;
 import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.search.items.book.Book;
@@ -35,18 +40,31 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class subactivity_challenge_createchallenge extends AppCompatActivity {
+public class subactivity_challenge_createchallenge extends AppCompatActivity implements NumberPicker.OnValueChangeListener {
     SubactivityChallengeCreatechallengeBinding binding;
     UserInfo userInfo;
     Button btn_back;
-    TextView tv_bookname, tv_challenge_start, tv_challenge_end;
-    EditText et_challenge_date, et_challenge_name, et_challenge_max, et_challenge_info;
-    Button btn_confirm, btn_start_challenge;
+    TextView tv_bookname;
+    EditText et_challenge_name, et_challenge_max, et_challenge_info;
+    Button btn_start_challenge;
     ImageView Thumbnail;
-    String strBookname, strChallengeName, strChallengeInfo, strChallengeStartDate, strChallengeEndDate, strCurrentParticipation, strMaxParticipation, strChallengeDate;
+    String strBookname, strChallengeName, strChallengeInfo, strChallengeStartDate, strChallengeEndDate, strCurrentParticipation, strMaxParticipation;
     Book selected_book; //선택한 책 객체
     private FBModule fbModule;
     Context mContext;
+    String challengeStartDay; // 챌린지 시작일 기록
+
+    Calendar myCalendar = Calendar.getInstance();
+
+    DatePickerDialog.OnDateSetListener myDatePicker = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, month);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateLabel();
+        }
+    };
 
     //액티비티 간 데이터 전달 핸들러(검색한 데이터의 값을 전달받는 매개체가 된다.)
     ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
@@ -74,11 +92,8 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity {
         tv_bookname.setEllipsize(TextUtils.TruncateAt.MARQUEE); // 흐르게 만들기
         tv_bookname.setSelected(true);      // 선택하기
 
-        tv_challenge_start = findViewById(R.id.tv_createchallenge_start);
-        tv_challenge_end = findViewById(R.id.tv_createchallenge_end);
-        et_challenge_date = findViewById(R.id.et_createchallenge_challengedate);
         et_challenge_name = findViewById(R.id.et_createchallenge_challengename);
-        et_challenge_max = findViewById(R.id.etMax);
+//        et_challenge_max = findViewById(R.id.etMax);
         et_challenge_info = findViewById(R.id.et_createchallenge_challengeinfo);
         Thumbnail = findViewById(R.id.ivThumbnail);
 
@@ -92,42 +107,59 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity {
         cal.setTime(new Date());
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-        tv_challenge_start.setText(df.format(cal.getTime()));
+        challengeStartDay = df.format(cal.getTime());
+
+        binding.datePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(mContext, myDatePicker, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis() - 1000 + (1000L * 60 * 60 * 24 * 30)); //최대 30일로 설정
+                datePickerDialog.show();
+            }
+        });
+
+        binding.numberPicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showNumberPicker(view, "인원 선택", "", 30, 2, 1, 10);
+            }
+        });
 
 
         //챌린지 기간설정 EditText의 내용이 바뀔때 이벤트
-        et_challenge_date.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //바뀌기 전 이벤트
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //바뀌는 동시에 이벤트
-                String addDate = et_challenge_date.getText().toString();
-
-                if (!addDate.equals("")) { //EditText가 공백이 아니면 적힌 값만큼 날짜를 더해서 출력
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(new Date());
-                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                    if (Integer.parseInt(addDate) == 0) { //챌린지 기간을 0일로 설정하려 했을 때
-                        Toast.makeText(getApplicationContext(), "챌린지 기간은 최소 1일 입니다.", Toast.LENGTH_SHORT).show();
-                        et_challenge_date.setText(null); // 챌린지 기간 항목 비우기
-                    } else {
-                        cal.add(Calendar.DATE, (Integer.parseInt(addDate) - 1));
-                    }
-                    tv_challenge_end.setText(df.format(cal.getTime()));
-                } else { //EditText가 공백이면 종료일이라고 출력
-                    tv_challenge_end.setText("종료일");
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                //바뀌고 나서 이벤트
-            }
-        });
+//        et_challenge_date.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                //바뀌기 전 이벤트
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                //바뀌는 동시에 이벤트
+//                String addDate = et_challenge_date.getText().toString();
+//
+//                if (!addDate.equals("")) { //EditText가 공백이 아니면 적힌 값만큼 날짜를 더해서 출력
+//                    Calendar cal = Calendar.getInstance();
+//                    cal.setTime(new Date());
+//                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+//                    if (Integer.parseInt(addDate) == 0) { //챌린지 기간을 0일로 설정하려 했을 때
+//                        Toast.makeText(getApplicationContext(), "챌린지 기간은 최소 1일 입니다.", Toast.LENGTH_SHORT).show();
+//                        et_challenge_date.setText(null); // 챌린지 기간 항목 비우기
+//                    } else {
+//                        cal.add(Calendar.DATE, (Integer.parseInt(addDate) - 1));
+//                    }
+//                    tv_challenge_end.setText(df.format(cal.getTime()));
+//                } else { //EditText가 공백이면 종료일이라고 출력
+//                    tv_challenge_end.setText("종료일");
+//                }
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//                //바뀌고 나서 이벤트
+//            }
+//        });
 
         tv_bookname.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,14 +209,14 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity {
         strBookname = tv_bookname.getText().toString();
         strChallengeName = et_challenge_name.getText().toString().trim();
         strChallengeInfo = et_challenge_info.getText().toString();
-        strChallengeStartDate = tv_challenge_start.getText().toString();
-        strChallengeEndDate = tv_challenge_end.getText().toString();
+        strChallengeStartDate = challengeStartDay;
+        strChallengeEndDate = binding.tvEndDate.getText().toString();
         strCurrentParticipation = "0";
-        strMaxParticipation = et_challenge_max.getText().toString();
-        strChallengeDate = et_challenge_date.getText().toString();
+        strMaxParticipation = binding.tvMax.getText().toString();
+//        strChallengeDate = et_challenge_date.getText().toString();
 
         //입력 안한 항목 있는지 찾기
-        if (strBookname.equals("") || strChallengeName.equals("") || strChallengeInfo.equals("") || strMaxParticipation.equals("") || strChallengeDate.equals("")) {
+        if (strBookname.equals("") || strChallengeName.equals("") || strChallengeInfo.equals("") || strMaxParticipation.equals("")) {
             Toast.makeText(this, "입력하지 않은 항목이 있습니다.", Toast.LENGTH_SHORT).show();
         } else {//다 입력 했다면
             HashMap<String, Object> map = new HashMap<>();
@@ -214,4 +246,33 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity {
         }
     }
 
+    private void updateLabel() {
+        String myFormat = "yyyy-MM-dd";    // 출력형식
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.KOREA);
+
+        binding.tvEndDate.setText(sdf.format(myCalendar.getTime()));
+    }
+
+    @Override
+    public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+        binding.tvMax.setText(String.valueOf(numberPicker.getValue() + 2));
+    }
+
+    //Dialog를 시작하는 함수, 특정 버튼을 눌렀을 때 이 함수를 실행 시키면 된다
+    public void showNumberPicker(View view, String title, String subtitle, int maxvalue, int minvalue, int step, int defvalue) {
+        NumberPickerDialog newFragment = new NumberPickerDialog();
+
+        //Dialog에는 bundle을 이용해서 파라미터를 전달한다
+        Bundle bundle = new Bundle(6); // 파라미터는 전달할 데이터 개수
+        bundle.putString("title", title); // key , value
+        bundle.putString("subtitle", subtitle); // key , value
+        bundle.putInt("maxvalue", maxvalue); // key , value
+        bundle.putInt("minvalue", minvalue); // key , value
+        bundle.putInt("step", step); // key , value
+        bundle.putInt("defvalue", defvalue); // key , value
+        newFragment.setArguments(bundle);
+        //class 자신을 Listener로 설정한다
+        newFragment.setValueChangeListener(this);
+        newFragment.show(getFragmentManager(), "number picker");
+    }
 }
