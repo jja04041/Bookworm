@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.bookworm.Feed.CustomPopup;
 import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.feed.comments.Comment;
 import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity;
@@ -140,12 +139,12 @@ public class Board_CommentAdapter extends RecyclerView.Adapter<RecyclerView.View
             binding.ivFeedMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    item.setPosition(getAdapterPosition());
-                    CustomPopup popup1 = new CustomPopup(context, view);
-                    popup1.setItems(subactivity_challenge_board.context, boardFB, item, board);
-                    popup1.setVisible(nowUser.getToken().equals(item.getUserToken()));
-                    popup1.setOnMenuItemClickListener(popup1);
-                    popup1.show();
+//                    item.setPosition(getAdapterPosition());
+//                    CustomPopup popup1 = new CustomPopup(context, view);
+//                    popup1.setItems(subactivity_challenge_board.context, boardFB, item, board);
+//                    popup1.setVisible(nowUser.getToken().equals(item.getUserToken()));
+//                    popup1.setOnMenuItemClickListener(popup1);
+//                    popup1.show();
                 }
             });
         }

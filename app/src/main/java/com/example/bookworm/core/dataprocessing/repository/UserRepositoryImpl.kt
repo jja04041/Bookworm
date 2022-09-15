@@ -52,18 +52,18 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
                 return userInfo
             }
             //로컬에 해당 토큰이 없는 경우 or 서버의 유저 정보를 가지고 오고 싶은 경우=>  서버에서 가져옴
-            else return if (token == null) userInfo.token.let {
+            else return token?.let {
                 var data = getUserInFB(it).await()
-                updateInLocal(data!!)
-                data.isMainUser = true
-                data
-            }
-            else token.let {
-                var data = getUserInFB(it).await()
-                if (data != null && data!!.token == userInfo.token) data!!.isMainUser = true
+                if (data != null && data.token == userInfo.token) data.isMainUser = true
                 if (data == null) data = UserInfo()
                 data
             }
+                    ?: userInfo.token.let {
+                        var data = getUserInFB(it).await()
+                        updateInLocal(data!!)
+                        data!!.isMainUser = true
+                        data
+                    }
         }
 
         //로컬에 아직 메인 사용자가 등록되지 않은 경우 ,서버에서 값을 가져옴.
@@ -97,7 +97,7 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
                 getUser(token, false)
             }.await()!!.token
             var albumReference =
-                collectionReference.document(token!!).collection("albums").get().await()
+                    collectionReference.document(token!!).collection("albums").get().await()
             for (i in albumReference.documents) {
                 var data = AlbumData()
                 data.addData(i.data as Map<String, Any>)
@@ -196,7 +196,7 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
         //현재 유저의 팔로잉 목록에서 인자로 넘겨받은 유저의 토큰이 있는지 확인
 
         var query = collectionReference.document(localUser!!.token).collection("following")
-            .whereEqualTo(FieldPath.documentId(), user.token)
+                .whereEqualTo(FieldPath.documentId(), user.token)
         async {
             var it = query.get().await()
             !it.isEmpty //리턴 값
@@ -225,7 +225,7 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
     private suspend fun saveInFB(user: UserInfo, bookworm: BookWorm): Boolean {
         var map = mapOf("BookWorm" to bookworm, "UserInfo" to user)
         collectionReference.document(user.token).set(map)
-            .await()
+                .await()
         return true
     }
 
@@ -239,14 +239,15 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
 
     //파이어 스토어에서 업데이트
     private suspend fun updateInFB(user: UserInfo) {
-        collectionReference.document(user.token)
-            .update("UserInfo", user)
-            .addOnSuccessListener {
-                Log.d("사용자데이터 업데이트 성공", "파이어스토어 서버에 사용자 데이터가  업데이트 되었습니다.");
-            }.addOnFailureListener {
-                Log.e("사용자데이터 업데이트 실패", "파이어스토어 서버에 사용자 데이터가 업데이트 되지 않았습니다.");
-            }
-            .await()
+        collectionReference
+                .document(user.token)
+                .update("UserInfo", user)
+                .addOnSuccessListener {
+                    Log.d("사용자데이터 업데이트 성공", "파이어스토어 서버에 사용자 데이터가  업데이트 되었습니다.");
+                }.addOnFailureListener {
+                    Log.e("사용자데이터 업데이트 실패", "파이어스토어 서버에 사용자 데이터가 업데이트 되지 않았습니다.");
+                }
+                .await()
     }
 
     private fun getUserInFB(token: String) = CoroutineScope(Dispatchers.IO).async {
@@ -255,8 +256,8 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
         // 현재 사용자의 결과값에 일부 수정이 이루어진 채로 값이 리턴되기 때문
         var userInfo = UserInfo()
         var it = collectionReference
-            .document(token!!)
-            .get().await()
+                .document(token!!)
+                .get().await()
         try {
             var map = it.get("UserInfo") as MutableMap<String, String>
             userInfo.add(map)
@@ -270,13 +271,13 @@ class UserRepositoryImpl(val context: Context) : DataRepository.HandleUser {
 
     private suspend fun updateBwInFB(token: String, bookworm: BookWorm) {
         collectionReference.document(token)
-            .update("BookWorm", bookworm)
-            .addOnSuccessListener {
-                Log.d("책볼레 데이터  업데이트 성공", "파이어스토어 서버에 책볼레 데이터가  업데이트 되었습니다.");
-            }.addOnFailureListener {
-                Log.e("책볼레 데이터 업데이트 실패", "파이어스토어 서버에 책볼레 데이터 업데이트를 실패하였습니다.");
-            }
-            .await()
+                .update("BookWorm", bookworm)
+                .addOnSuccessListener {
+                    Log.d("책볼레 데이터  업데이트 성공", "파이어스토어 서버에 책볼레 데이터가  업데이트 되었습니다.");
+                }.addOnFailureListener {
+                    Log.e("책볼레 데이터 업데이트 실패", "파이어스토어 서버에 책볼레 데이터 업데이트를 실패하였습니다.");
+                }
+                .await()
     }
 
     private fun updateBwInLocal(bookworm: BookWorm) {

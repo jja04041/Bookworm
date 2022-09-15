@@ -11,9 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bookworm.appLaunch.views.MainActivity;
-import com.example.bookworm.bottomMenu.feed.Fragment_feed;
-import com.example.bookworm.bottomMenu.feed.comments.Comment;
-import com.example.bookworm.bottomMenu.feed.comments.subactivity_comment;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.challenge.fragment_challenge;
 import com.example.bookworm.bottomMenu.challenge.subactivity.subactivity_challenge_challengeinfo;
@@ -145,10 +142,6 @@ public class FBModule {
                 }
             }
 
-            //피드 관련
-            if (idx == 1) {
-                db.collection(location[idx]).document((String) map.get("FeedID")).collection("comments").document(((Comment) map.get("comment")).getCommentID()).set(map);
-            }
             //챌린지 관련
             if (idx == 2) {
                 //챌린지 참여용
@@ -190,54 +183,16 @@ public class FBModule {
 
         //fragment_challenge에 있는 메소드를 사용하기 위함.
         fragment_challenge fc;
-        //Fragment_feed에 있는 메소드를 사용하기 위함.
-        Fragment_feed ff;
-        if (querySnapshot.isEmpty()) {
-            //피드 조회
-            if (idx == 1) {
-                if (map.get("FeedID") != null) {
-                    ((subactivity_comment) context).moduleUpdated(null);
-                } else {
-                    ff = ((Fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
-                    ff.moduleUpdated(null, null); //찾은 피드 목록을 반환
-                }
-            }
-            if (idx == 2) {
-                fc = ((fragment_challenge) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("3"));
-                fc.moduleUpdated(null); //빈값을 반환하여, 찾는 값이 없음을 사용자에게 알림.
-            }
-        } else {
-            if (idx == 1) {
-                if (map.get("FeedID") != null) {
-                    ((subactivity_comment) context).moduleUpdated(querySnapshot.getDocuments());
-                } else {
-                    ff = ((Fragment_feed) ((AppCompatActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
-                    List<DocumentSnapshot> documents = querySnapshot.getDocuments();
-                    ArrayList<DocumentSnapshot> data = new ArrayList<>(documents);
-                    final int[] count = {0};
-                    for (DocumentSnapshot document : documents) {
-                        document.getReference().collection("comments").limit(1).orderBy("commentID", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                count[0]++;
-                                List<DocumentSnapshot> shot = task.getResult().getDocuments();
-                                int pos = documents.indexOf(document); //for문으로 돌린 문서에 맞는 위치에 데이터를 세팅할 수 있도록 하기 위하여 위치값을 미리 가진다.
-                                //해당 위치에 데이터를 세팅한다.
-                                if (shot.size() > 0) data.set(pos, shot.get(0));
-                                else data.set(pos, null);
-                                if (count[0] == documents.size()) {
-                                    ff.moduleUpdated(documents, data); //찾은 피드 목록을 반환
-                                }
-                            }
-                        });
-                    }
-                }
-            }
-            if (idx == 2) {
-                //챌린지 검색
-                fc = ((fragment_challenge) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("3"));
-                fc.moduleUpdated(querySnapshot.getDocuments()); //찾은 챌린지 목록을 반환함.
-            }
+
+        if (idx == 2) {
+            fc = ((fragment_challenge) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("3"));
+            fc.moduleUpdated(null); //빈값을 반환하여, 찾는 값이 없음을 사용자에게 알림.
+
+        }
+        if (idx == 2) {
+            //챌린지 검색
+            fc = ((fragment_challenge) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("3"));
+            fc.moduleUpdated(querySnapshot.getDocuments()); //찾은 챌린지 목록을 반환함.
         }
     }
 

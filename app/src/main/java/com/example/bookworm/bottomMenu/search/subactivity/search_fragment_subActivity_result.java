@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
-import com.example.bookworm.bottomMenu.feed.items.Feed;
+import com.example.bookworm.bottomMenu.feed.Feed;
 import com.example.bookworm.bottomMenu.feed.subActivity_Feed_Create;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
 import com.example.bookworm.bottomMenu.search.items.Book;
@@ -99,12 +99,9 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
         showShimmer(true);
 
         //제목,저자,출판사가 나오는 스크롤뷰를 터치해도 부모 스크롤뷰가 반응하지 않게 함
-        ScrChild.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                ScrParents.requestDisallowInterceptTouchEvent(true);
-                return false;
-            }
+        ScrChild.setOnTouchListener((view, motionEvent) -> {
+            ScrParents.requestDisallowInterceptTouchEvent(true);
+            return false;
         });
 
         //뒤로가기 버튼
@@ -209,12 +206,10 @@ public class search_fragment_subActivity_result extends AppCompatActivity {
 
     //RecordFB에서 사용할 함수
     public void moduleUpdated(List<DocumentSnapshot> a) {
-        feedList = new ArrayList<>();
+        feedList = new ArrayList<Feed>();
         try {
             for (DocumentSnapshot snapshot : a) {
-                Map data = snapshot.getData();
-                Feed feed = new Feed();
-                feed.setFeedData(data);
+                Feed feed = snapshot.toObject(Feed.class);
                 feedList.add(feed);
             }
             //가져온 값의 마지막 snapshot부터 이어서 가져올 수 있도록 하기 위함.

@@ -139,7 +139,7 @@ class search_fragment_subActivity_main : AppCompatActivity() {
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(binding!!.edtSearch.windowToken, 0)
         binding!!.edtSearch.clearFocus()
-        if (!(binding!!.edtSearch.text.toString().replace(" ".toRegex(), "") == "")) {
+        if (binding!!.edtSearch.text.toString().replace(" ".toRegex(), "") != "") {
             querys = HashMap()
             querys!!["Query"] = binding!!.edtSearch.text.toString()
             querys!!["QueryType"] = type[option_idx]

@@ -25,7 +25,7 @@ class UserInfo : Serializable {
     var isFollowed = false //팔로우 여부 확인 하는 변수
 
     var fCMtoken: String? = null
-    lateinit var token: String
+    var token: String =""
     var likedPost: ArrayList<String>?
     var followerCounts = 0
     var followingCounts = 0

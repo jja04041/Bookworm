@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.bookworm.bottomMenu.feed.items.Feed;
+import com.example.bookworm.bottomMenu.feed.Feed;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
     import com.example.bookworm.databinding.FragmentRecordBinding;
     import com.google.firebase.firestore.DocumentSnapshot;
@@ -121,9 +121,7 @@ public class fragment_record extends Fragment {
         feedList = new ArrayList<>();
         try {
             for (DocumentSnapshot snapshot : a) {
-                Map data = snapshot.getData();
-                Feed feed = new Feed();
-                feed.setFeedData(data);
+                Feed feed = snapshot.toObject(Feed.class);
                 feedList.add(feed);
             }
             //가져온 값의 마지막 snapshot부터 이어서 가져올 수 있도록 하기 위함.

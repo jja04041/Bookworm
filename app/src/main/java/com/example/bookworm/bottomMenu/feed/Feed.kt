@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.feed.temp
+package com.example.bookworm.bottomMenu.feed
 
 import android.os.Parcelable
 import com.example.bookworm.bottomMenu.feed.comments.Comment
@@ -15,11 +15,11 @@ data class Feed(
         //라벨 Array 추가
         var FeedID //피드 ID
         : String? = null,
-        val imgurl //업로드 이미지 url
+        var imgurl //업로드 이미지 url
         : String = "",
         var commentsCount //사용자 댓글 수
         : Long = 0,
-        val feedText: //피드의 내용
+        var feedText: //피드의 내용
         String? = null,
 
         val date //현재 날짜
@@ -50,6 +50,10 @@ data class Feed(
 
         @Exclude
         var isUserLiked // 현재 사용하는 유저가 좋아하는 포스트인지 판단하는  Boolean
+        : Boolean = false,
+
+        @Exclude
+        var isUserPost //이것이 현재 사용자의 게시물인지 확인하는 변수
         : Boolean = false
 ) : Parcelable
 

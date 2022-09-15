@@ -26,28 +26,15 @@ public class likeCounter {
         final DocumentReference ref = db.collection("feed").document(feedID);
         final DocumentReference ref2 = db.collection("users").document(((UserInfo) map.get("nowUser")).getToken());
 
-        db.runTransaction(new Transaction.Function<Void>() {
-            @Override
-            public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
-                DocumentSnapshot snapshot = transaction.get(ref);
-                long likecount = snapshot.getLong("likeCount");
-                if ((Boolean) map.get("liked")) likecount += 1;
-                else likecount -= 1;
-                transaction.update(ref, "likeCount", likecount).update(ref2, "UserInfo.likedPost", ((UserInfo) map.get("nowUser")).getLikedPost());
-                return null;
-            }
-        }).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d("Success", "Transaction success!");
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w("Failed", "Transaction failure.", e);
-            }
-        });
+        db.runTransaction((Transaction.Function<Void>) transaction -> {
+                    DocumentSnapshot snapshot = transaction.get(ref);
+                    long likecount = snapshot.getLong("likeCount");
+                    if ((Boolean) map.get("liked")) likecount += 1;
+                    else likecount -= 1;
+                    transaction.update(ref, "likeCount", likecount).update(ref2, "UserInfo.likedPost", ((UserInfo) map.get("nowUser")).getLikedPost());
+                    return null;
+                }).addOnSuccessListener(aVoid -> Log.d("Success", "Transaction success!"))
+                .addOnFailureListener(e -> Log.w("Failed", "Transaction failure.", e));
     }
 
 }

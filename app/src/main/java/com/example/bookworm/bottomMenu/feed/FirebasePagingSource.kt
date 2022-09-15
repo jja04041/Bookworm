@@ -1,15 +1,15 @@
-package com.example.bookworm.bottomMenu.feed.temp
+package com.example.bookworm.bottomMenu.feed
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
 
 //파이어베이스에서 데이터를 가져오는 코드(피드 전용)
-class FirebasePagingSource(private val queryPostsByName: Query) :
+class FirebasePagingSource(PAGE_SIZE:Int) :
     PagingSource<QuerySnapshot, Feed>() {
+
+    private val queryPostsByName = FireStoreLoadModule.provideQueryLoadPostsOrderByFeedID(pageSize = PAGE_SIZE)
     override fun getRefreshKey(state: PagingState<QuerySnapshot, Feed>): QuerySnapshot? {
         return null
     }
@@ -24,7 +24,6 @@ class FirebasePagingSource(private val queryPostsByName: Query) :
                 prevKey = null,
                 nextKey = nextPage
             )
-            Log.d("불러온 데이터",result.data.size.toString())
             result
         } catch (e: Exception) {
             LoadResult.Error(e)

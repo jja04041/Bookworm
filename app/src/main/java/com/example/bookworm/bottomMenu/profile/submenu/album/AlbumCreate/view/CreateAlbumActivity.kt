@@ -5,7 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.example.bookworm.R
-import com.example.bookworm.bottomMenu.feed.items.Feed
+import com.example.bookworm.bottomMenu.feed.Feed
+
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.item.AlbumProcessViewModel
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing

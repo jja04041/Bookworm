@@ -45,68 +45,68 @@ import java.io.IOException
 class ImageProcessing(val context: Context) {
     var startActivityResult: ActivityResultLauncher<Intent>;
     val bitmap: MutableLiveData<Bitmap> = MutableLiveData()
-    val bitmapUri: MutableLiveData<Uri> = MutableLiveData()
+    val bitmapUri: MutableLiveData<Uri?> = MutableLiveData()
     val imgData: MutableLiveData<String> = MutableLiveData()
     //라벨은 알럿 다이어그램을 통해 입력을 받고, 선택한 값으로 라벨이 지정됨 => 구현 예정
 
 
     init {
         startActivityResult = (context as AppCompatActivity)
-            .registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-                result.let {
-                    val code = it.resultCode
-                    if (code == Activity.RESULT_OK) {
-                        val uri =
-                            result.data!!.getParcelableExtra<Uri>("path")
-                        try {
-                            // You can update this bitmap to your server
-                            uri?.let {
-                                if (Build.VERSION.SDK_INT < 28) {
-                                    bitmap.value = MediaStore.Images.Media.getBitmap(
-                                        context.contentResolver,
-                                        uri
-                                    )
-                                    bitmapUri.value = uri
-                                } else {
-                                    val source =
-                                        ImageDecoder.createSource(context.contentResolver, uri)
-                                    bitmapUri.value = uri
-                                    bitmap.value = ImageDecoder.decodeBitmap(source)
+                .registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                    result.let {
+                        val code = it.resultCode
+                        if (code == Activity.RESULT_OK) {
+                            val uri =
+                                    result.data!!.getParcelableExtra<Uri>("path")
+                            try {
+                                // You can update this bitmap to your server
+                                uri?.let {
+                                    if (Build.VERSION.SDK_INT < 28) {
+                                        bitmap.value = MediaStore.Images.Media.getBitmap(
+                                                context.contentResolver,
+                                                uri
+                                        )
+                                        bitmapUri.value = uri
+                                    } else {
+                                        val source =
+                                                ImageDecoder.createSource(context.contentResolver, uri)
+                                        bitmapUri.value = uri
+                                        bitmap.value = ImageDecoder.decodeBitmap(source)
+                                    }
                                 }
+                            } catch (e: IOException) {
+                                e.printStackTrace()
                             }
-                        } catch (e: IOException) {
-                            e.printStackTrace()
                         }
                     }
                 }
-            }
     }
 
     fun initProcess() {
         //권한이 설정되었는지 확인 후, 사진을 불러오거나 찍는다.
         Dexter.withActivity(context as Activity?)
-            .withPermissions(
-                Manifest.permission.CAMERA,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            )
-            .withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(report: MultiplePermissionsReport) {
-                    if (report.areAllPermissionsGranted()) {
-                        showImagePickerOptions()
+                .withPermissions(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionsChecked(report: MultiplePermissionsReport) {
+                        if (report.areAllPermissionsGranted()) {
+                            showImagePickerOptions()
+                        }
+                        if (report.isAnyPermissionPermanentlyDenied) {
+                            showSettingsDialog()
+                        }
                     }
-                    if (report.isAnyPermissionPermanentlyDenied) {
-                        showSettingsDialog()
-                    }
-                }
 
-                override fun onPermissionRationaleShouldBeShown(
-                    permissions: List<PermissionRequest>,
-                    token: PermissionToken
-                ) {
-                    token.continuePermissionRequest()
-                }
-            }).check()
+                    override fun onPermissionRationaleShouldBeShown(
+                            permissions: List<PermissionRequest>,
+                            token: PermissionToken,
+                    ) {
+                        token.continuePermissionRequest()
+                    }
+                }).check()
     }
 
 
@@ -154,13 +154,13 @@ class ImageProcessing(val context: Context) {
         builder.setTitle(context.getString(R.string.dialog_permission_title))
         builder.setMessage(context.getString(R.string.dialog_permission_message))
         builder.setPositiveButton(
-            context.getString(R.string.go_to_settings)
+                context.getString(R.string.go_to_settings)
         ) { dialog: DialogInterface, which: Int ->
             dialog.cancel()
             openSettings()
         }
         builder.setNegativeButton(
-            context.getString(R.string.cancel)
+                context.getString(R.string.cancel)
         ) { dialog: DialogInterface, which: Int -> dialog.cancel() }
         builder.show()
     }
@@ -179,9 +179,9 @@ class ImageProcessing(val context: Context) {
         val query = uploadBase(data, fileName)
         CoroutineScope(Dispatchers.IO).launch {
             var retrofit = Retrofit.Builder()
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .baseUrl(imgurl)
-                .build()
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .baseUrl(imgurl)
+                    .build()
             var mainInterface = retrofit.create(GetDataInterface::class.java)
             val name = query.get("rqname") as RequestBody
             val body = query.get("rqbody") as MultipartBody.Part
@@ -218,13 +218,14 @@ class ImageProcessing(val context: Context) {
         var imgurl = context.getString(R.string.serverUrl) //이미지 서버의 주소
         val query = uploadBase(bitmap, string)
         var retrofit = Retrofit.Builder()
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .baseUrl(imgurl)
-            .build()
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .baseUrl(imgurl)
+                .build()
         var mainInterface = retrofit.create(GetDataInterface::class.java)
         val name = query.get("rqname") as RequestBody
         val body = query.get("rqbody") as MultipartBody.Part
         val response = mainInterface.uploadImage(body, name)
-        imgurl + response!!.body()
+        if (response!!.isSuccessful) imgurl + response.body()
+        else null
     }.await()
 }

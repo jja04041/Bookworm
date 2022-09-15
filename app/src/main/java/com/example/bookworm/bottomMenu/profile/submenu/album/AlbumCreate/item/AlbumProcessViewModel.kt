@@ -9,7 +9,7 @@ import android.provider.MediaStore
 import android.widget.Toast
 import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.example.bookworm.bottomMenu.feed.items.Feed
+import com.example.bookworm.bottomMenu.feed.Feed
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumContentActivity
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumData
@@ -106,7 +106,7 @@ class AlbumProcessViewModel(val context: Context, val pv: UserInfoViewModel) : V
             ).show()
             return false
         } else
-           return withContext(viewModelScope.coroutineContext, {
+           return withContext(viewModelScope.coroutineContext) {
                var result = collectionReference.whereEqualTo("albumName", name).get().await()
                if (result.isEmpty) {
                    parentActivity.albumProcessViewModel.modifyName(name)
@@ -115,13 +115,13 @@ class AlbumProcessViewModel(val context: Context, val pv: UserInfoViewModel) : V
 //                    parentActivity.switchTab(1)
                } else {
                    Toast.makeText(
-                       context,
-                       "앨범명이 중복되었습니다. \n 다른 이름으로 시도해주세요",
-                       Toast.LENGTH_SHORT
+                           context,
+                           "앨범명이 중복되었습니다. \n 다른 이름으로 시도해주세요",
+                           Toast.LENGTH_SHORT
                    ).show()
                    false
                }
-           })
+           }
 
     }
     //서버에 앨범 업로드

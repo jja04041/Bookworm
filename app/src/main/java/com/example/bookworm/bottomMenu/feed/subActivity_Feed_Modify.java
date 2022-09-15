@@ -26,7 +26,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
-import com.example.bookworm.bottomMenu.feed.items.Feed;
 import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.search.items.Book;
 import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_main;
@@ -123,7 +122,7 @@ public class subActivity_Feed_Modify extends AppCompatActivity {
 
         binding.btnImageUpload.setVisibility(View.INVISIBLE); //피드 수정 화면에서는 사진 수정 불가능
 
-        feed = (Feed) getIntent().getSerializableExtra("Feed");
+        feed = getIntent().getParcelableExtra("Feed");
         this.selected_book = feed.getBook();
         binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목 세팅한다.
         binding.edtFeedText.setText(feed.getFeedText()); //피드 내용 세팅
@@ -504,7 +503,7 @@ public class subActivity_Feed_Modify extends AppCompatActivity {
             map.put("likeCount", feed.getLikeCount());
             if (feed.getImgurl() != null) map.put("imgurl", feed.getImgurl()); //이미지 url
 
-            feed.setData(map, null);
+
             Intent intent = new Intent();
             intent.putExtra("modifiedFeed", feed);
             fbModule.readData(1, map, FeedID);

@@ -1,6 +1,5 @@
 package com.example.bookworm.bottomMenu.profile.submenu.album
-
-import com.example.bookworm.bottomMenu.feed.items.Feed
+import com.example.bookworm.bottomMenu.feed.Feed
 import java.io.Serializable
 
 //앨범 객체
@@ -18,11 +17,11 @@ class AlbumData : Serializable {
         albumName = data["albumName"] as String?
         albumId = data["albumId"] as String?
         if("creater" in data) creater = data["creater"] as String?
-
-        for(i in data["containsList"] as ArrayList<HashMap<*,*>>){
-            var item = Feed()
-            item.setFeedData(i)
-            containsList.add(item)
-        }
+//
+//        for(i in data["containsList"] as ArrayList<HashMap<*,*>>){
+//            var item = Feed()
+//            item.setFeedData(i)
+//            containsList.add(item)
+//        }
     }
 }

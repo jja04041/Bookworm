@@ -19,7 +19,8 @@
         android:roundIcon="@mipmap/appicon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:replace="android:label">
         <activity
             android:name=".bottomMenu.challenge.board.subactivity_challenge_board_comment"
             android:exported="false" />
@@ -33,9 +34,6 @@
             android:name="com.example.bookworm.bottomMenu.feed.subActivity_Feed_Modify"
             android:exported="false" />
         <activity
-            android:name="com.example.bookworm.bottomMenu.feed.comments.subactivity_comment"
-            android:exported="false" />
-        <activity
             android:name="com.example.bookworm.bottomMenu.feed.ImagePicker"
             android:exported="false" />
         <activity
@@ -44,10 +42,11 @@
         <activity
             android:name=".bottomMenu.profile.views.ProfileInfoActivity"
             android:exported="false"
-            tools:ignore="AppLinkUrlError">
+            tools:ignore="AppLinkUrlError"></activity>
+        <activity
+            android:name="com.example.bookworm.bottomMenu.feed.comments.SubActivityComment"
+            android:exported="false" />
 
-
-        </activity>
 
         <activity
             android:name="com.example.bookworm.extension.follow.view.FollowerActivity"
@@ -129,9 +128,6 @@
 
         </activity>
 
-        <activity
-            android:name=".bottomMenu.feed.temp.FeedActivity"
-            android:exported="false" />
         <activity
             android:name=".LoadingActivity"
             android:exported="true"> <!-- 로딩 화면 -->

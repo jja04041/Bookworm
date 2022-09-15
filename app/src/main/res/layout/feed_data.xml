@@ -8,12 +8,13 @@
 
         <variable
             name="feed"
-            type="com.example.bookworm.bottomMenu.feed.temp.Feed" />
+            type="com.example.bookworm.bottomMenu.feed.Feed" />
 
 
     </data>
 
     <LinearLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -191,7 +192,7 @@
                 app:feedImgUrl='@{(feed.imgurl!="" &amp;&amp; feed.imgurl != null) ? feed.imgurl:""}' />
 
             <FrameLayout
-            android:id="@+id/flFeedContent"
+                android:id="@+id/flFeedContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="15dp"
@@ -240,7 +241,7 @@
 
                 <LinearLayout
                     android:id="@+id/lllike"
-                    android:layout_width="wrap_content"
+                    android:layout_width="38dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
@@ -250,7 +251,7 @@
                         android:layout_height="25dp"
                         android:layout_gravity="start"
                         android:layout_marginHorizontal="10dp"
-                        android:background="@{feed.userLiked?  @drawable/icon_like_red : @drawable/icon_like,default=@drawable/icon_like }"
+                        android:background="@{feed.userLiked ?  @drawable/icon_like_red : @drawable/icon_like,default=@drawable/icon_like }"
                         android:clickable="false" />
 
                     <TextView
@@ -304,8 +305,8 @@
                         android:id="@+id/llLastComment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:background="@drawable/ripplebutton_none"
+                        android:orientation="vertical"
                         android:visibility="@{feed.commentsCount>0 ? View.VISIBLE : View.GONE}">
 
                         <LinearLayout
@@ -364,7 +365,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center|end"
                                 android:layout_weight="1"
-                                android:visibility="@{feed.commentsCount>0 ?  View.VISIBLE:View.GONE}">
+                                android:visibility="@{feed.commentsCount>1 ? View.VISIBLE:View.GONE ,default = visible}">
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -375,7 +376,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text='@{String.format("%s개 더보기...",String.valueOf(feed.commentsCount))}'
+                                    android:text='@{String.format("%s개 더보기...",String.valueOf(feed.commentsCount-1))}'
                                     android:textStyle="bold" />
 
                             </LinearLayout>

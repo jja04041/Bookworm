@@ -7,9 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.CreationExtras
-import com.example.bookworm.bottomMenu.feed.items.Feed
 import com.example.bookworm.bottomMenu.bookworm.BookWorm
+import com.example.bookworm.bottomMenu.feed.Feed
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumData
 import com.example.bookworm.core.dataprocessing.repository.UserRepositoryImpl
 import com.example.bookworm.core.userdata.UserInfo
@@ -37,7 +36,7 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
     var feedList = MutableLiveData<ArrayList<Feed>>()
 
     class Factory(val context: Context) : ViewModelProvider.Factory {
-       override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
+       override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return UserInfoViewModel(context) as T
         }
     }
@@ -59,7 +58,7 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
             data.value = repo.getUser(token, getFromExt) //데이터 변경을 감지하면, 값이 업데이트 된다.
         }
     }
-    suspend fun suspendGetUser(token: String)= repo.getUser(token,true)
+    suspend fun suspendGetUser(token: String?)= repo.getUser(token, token!=null)
     //사용자 가져오기
     fun getUser(token: String?, liveData: MutableLiveData<UserInfo>) {
         data = liveData
@@ -85,9 +84,9 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
                         isDuplicated.value = !it.isEmpty //비어있다면(isEmpty=true) 중복이 아닌 것이고,
                         Log.d("result", Arrays.toString(it.documents.toTypedArray()))
                         //비어 있지 않다면 (isEmpty=false) 중복인 것.
-                    }.addOnFailureListener({
-                        Log.e("resultErr", "cannot get result ")
-                    })
+                    }.addOnFailureListener {
+                            Log.e("resultErr", "cannot get result ")
+                        }
             }.join()
         }
     }
@@ -127,8 +126,7 @@ class UserInfoViewModel(val context: Context) : ViewModel() {
                     .get().await()
             var arrayList = ArrayList<Feed>()
             data.documents.forEach {
-                var feed = Feed()
-                feed.setFeedData(it.getData())
+                var feed = it.toObject(Feed::class.java)!!
                 arrayList.add(feed)
             }
             feedList.value = arrayList

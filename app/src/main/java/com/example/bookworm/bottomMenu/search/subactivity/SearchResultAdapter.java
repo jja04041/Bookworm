@@ -15,10 +15,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
-import com.example.bookworm.bottomMenu.feed.comments.subactivity_comment;
-import com.example.bookworm.bottomMenu.feed.items.Feed;
-import com.example.bookworm.bottomMenu.feed.views.FeedViewModel;
+import com.example.bookworm.bottomMenu.feed.Feed;
+import com.example.bookworm.bottomMenu.feed.FeedViewModel;
+import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment;
 import com.example.bookworm.bottomMenu.challenge.board.Board;
+import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.core.userdata.interfaces.UserContract;
 import com.example.bookworm.databinding.SearchFragmentResultFeedBinding;
@@ -34,14 +35,14 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     ArrayList<Feed> feedList;
     Context context;
     OnSearchResultItemClickListener listener;
-    FeedViewModel pv;
+    UserInfoViewModel pv;
     LifecycleOwner lifecycleOwner;
     String dateDuration; //작성시간 n분, n시간, 등 으로 표시
 
     public SearchResultAdapter(ArrayList<Feed> data, Context c, LifecycleOwner owner) {
         feedList = data;
         context = c;
-        pv = new FeedViewModel(context);
+        pv = new UserInfoViewModel(context);
         lifecycleOwner = owner;
     }
 
@@ -107,7 +108,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             binding.llview.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, subactivity_comment.class);
+                    Intent intent = new Intent(context, SubActivityComment.class);
                     intent.putExtra("item", item);
                     intent.putExtra("position", getAbsoluteAdapterPosition());
                     context.startActivity(intent);

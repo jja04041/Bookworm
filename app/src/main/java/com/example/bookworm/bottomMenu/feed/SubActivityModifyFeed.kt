@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.feed.temp
+package com.example.bookworm.bottomMenu.feed
 
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -22,7 +22,7 @@ object ModifyPostBindingAdapter {
 }
 
 //게시물수정 액티비티
-class subActivityModifyFeed : AppCompatActivity() {
+class SubActivityModifyFeed : AppCompatActivity() {
     private var binding: SubactivityModifyPostBinding? = null
     private lateinit var feed: Feed
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {

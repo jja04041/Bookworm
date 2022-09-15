@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         android:background="#f5eddc"
         android:orientation="vertical"
-        tools:context="com.example.bookworm.bottomMenu.feed.temp.FeedActivity">
+        tools:context="com.example.bookworm.bottomMenu.feed.temp.testFeed.FeedActivity">
 
 
         <LinearLayout
@@ -61,21 +61,6 @@
 
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-            <!--        <ProgressBar-->
-            <!--            android:id="@+id/progress_bar"-->
-            <!--            android:layout_width="20dp"-->
-            <!--            android:layout_height="20dp" />-->
-            <!--        <com.github.ybq.android.spinkit.SpinKitView-->
-            <!--            android:id="@+id/progress_bar"-->
-            <!--            style="@style/SpinKitView.ThreeBounce"-->
-            <!--            android:layout_width="wrap_content"-->
-            <!--            android:layout_height="wrap_content"-->
-            <!--            android:layout_centerInParent="true"-->
-            <!--            android:layout_gravity="center_horizontal"-->
-            <!--            android:paddingLeft="8dp"-->
-            <!--            android:paddingRight="8dp"-->
-            <!--            android:visibility="gone"-->
-            <!--            app:SpinKit_Color="@color/brown" />-->
         </LinearLayout>
 
     </LinearLayout>
