@@ -88,12 +88,11 @@ class UserInfo : Serializable {
             document["prefergenre"] as ArrayList<String>? else prefergenre = ArrayList()
     }
 
-    fun setPreferGenre_(data: ArrayList<String>)
-    {
+    fun setPreferGenre_(data: ArrayList<String>) {
         this.prefergenre = data
     }
 
-    fun setUserData(data: Map<*, *>){
+    fun setUserData(data: Map<*, *>) {
 
         this.token = data.get("token") as String;
         this.username = data.get("name") as String;
@@ -102,7 +101,7 @@ class UserInfo : Serializable {
     }
 
     //장르 설정
-    fun setGenre(categoryname: String?, context: Context?) {
+    fun setGenre(categoryname: String?, context: Context?): String {
         val tokenizer = StringTokenizer(categoryname, ">")
         tokenizer.nextToken() // 두번째 분류를 원하기 때문에 맨 앞 분류 꺼냄
         var category = tokenizer.nextToken()
@@ -131,6 +130,7 @@ class UserInfo : Serializable {
             unboxint++
             genre!!.replace(category, unboxint)
         }
+        return category
     }
 
 

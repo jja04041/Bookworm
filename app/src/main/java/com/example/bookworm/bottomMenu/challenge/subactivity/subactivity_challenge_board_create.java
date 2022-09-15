@@ -185,6 +185,9 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String formatTime = dateFormat.format(System.currentTimeMillis());
 
+            // 장르 처리
+            selected_book.setCategoryname(userInfo.setGenre(selected_book.getCategoryname(), current_context));
+
             map.put("UserToken", userInfo.getToken()); //유저 정보
             map.put("book", selected_book); //책 정보
             map.put("boardText", binding.edtFeedText.getText().toString()); //피드 내용
@@ -200,8 +203,6 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
             //챌린지 인증글 업로드
             fbModule.uploadChallengeBoard(2, challenge.getTitle(), BoardID, map);
 
-            // 장르 처리
-            userInfo.setGenre(selected_book.getCategoryname(), current_context);
 
 //            int count = userBw.getReadcount();
 //            userBw.setReadcount(++count);

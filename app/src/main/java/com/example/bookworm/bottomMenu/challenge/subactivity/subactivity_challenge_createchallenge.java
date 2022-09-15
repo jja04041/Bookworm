@@ -109,6 +109,7 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity imp
 
         challengeStartDay = df.format(cal.getTime());
 
+        //날짜 고르기
         binding.datePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,6 +120,7 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity imp
             }
         });
 
+        //인원수 고르기
         binding.numberPicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

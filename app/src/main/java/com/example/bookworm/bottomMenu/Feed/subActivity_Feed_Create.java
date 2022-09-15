@@ -343,6 +343,8 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String formatTime = dateFormat.format(System.currentTimeMillis());
 
+            selected_book.setCategoryname(userInfo.setGenre(selected_book.getCategoryname(), current_context));
+
             map.put("UserToken", userInfo.getToken()); //유저 정보
             map.put("book", selected_book); //책 정보
             map.put("feedText", binding.edtFeedText.getText().toString()); //피드 내용
@@ -354,7 +356,6 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             if (imgUrl != null) map.put("imgurl", imgUrl); //이미지 url
 
             fbModule.readData(1, map, FeedID);
-            userInfo.setGenre(selected_book.getCategoryname(), current_context);
 
             int count = userBw.getReadcount();
             userBw.setReadcount(++count);
