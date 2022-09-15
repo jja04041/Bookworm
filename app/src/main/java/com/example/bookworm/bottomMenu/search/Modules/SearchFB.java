@@ -37,7 +37,7 @@ public class SearchFB {
     public void getUser(String Keyword, SearchPageUserFragment searchPageUserFragment) {
         CollectionReference collectionReference = db.collection("users");
 
-        Query query = collectionReference.whereEqualTo("UserInfo.username", Keyword);
+        Query query = collectionReference.whereEqualTo("UserInfo.username", Keyword).orderBy("UserInfo.followerCounts", Query.Direction.DESCENDING).limit(LIMIT);
 
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -51,6 +51,8 @@ public class SearchFB {
                     }
                 }
             }
+        }).addOnFailureListener(it->{
+            Log.d("확인합니다.", it.getMessage());
         });
     }
 
@@ -94,8 +96,6 @@ public class SearchFB {
                     }
                 }
             }
-        }).addOnFailureListener(it->{
-            Log.d("확인합니다.", it.getMessage());
         });
     }
 

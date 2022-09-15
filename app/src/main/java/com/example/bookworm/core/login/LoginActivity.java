@@ -13,8 +13,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bookworm.R;
 import com.example.bookworm.appLaunch.modules.MainViewModel;
-import com.example.bookworm.appLaunch.views.MainActivity;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
+import com.example.bookworm.bottomMenu.profile.views.PreferGenreActivity;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -138,7 +138,8 @@ public class LoginActivity extends AppCompatActivity {
 
     //메인액티비티로 이동
     public void move() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, PreferGenreActivity.class);
+        intent.putExtra("Login", 1);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         this.finish();
@@ -175,7 +176,6 @@ public class LoginActivity extends AppCompatActivity {
                         if (et) move();
                     });
                 }
-
             } else {
                 Log.d("function signup", "nono token ");
             }

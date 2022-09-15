@@ -33,5 +33,9 @@
     <string name="scheme_host_main">main</string>
     <string name="scheme_host_profile">profile</string>
 
+    <string name="Algolia_appid">OA5097NS7Y</string>
+    <string name="Algolia_apiKey">10009a947514e0b1e48c53b95767acd9</string>
+
+
 
 </resources>

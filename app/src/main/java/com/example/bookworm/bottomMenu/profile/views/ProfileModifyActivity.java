@@ -74,7 +74,8 @@ public class ProfileModifyActivity extends AppCompatActivity {
                     .into(binding.ivProfileImage);
 
             binding.btnFavGenre.setOnClickListener(it -> {
-                cv.getChallengeList(userInfo.getToken());
+                Intent intent = new Intent(context, PreferGenreActivity.class);
+                startActivity(intent);
             });
             //프로필 이미지 변경
             imageProcess.getBitmapUri().observe(this, observer -> {
