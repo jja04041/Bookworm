@@ -18,6 +18,7 @@ class UserInfo : Serializable {
     var tier: Long? = 0 //인증 완료된 챌린지에 따른 티어(닉네임 옆 메달 표시용)
     var medalAppear: Boolean? = true
 
+
     @get:Exclude
     var isMainUser = false //메인 유저인지 확인하는 변수
 
@@ -30,7 +31,7 @@ class UserInfo : Serializable {
     var followerCounts = 0
     var followingCounts = 0
     var genre: HashMap<String, Int?>? = null
-
+    var prefergenre: ArrayList<String>? = null
 
     init {
         genre = HashMap()
@@ -81,6 +82,15 @@ class UserInfo : Serializable {
             tier = document["tier"] as Long?
         if (document["medalAppear"] as Boolean? != null) //파이어베이스의 유저인포에 모두가 medalAppear을 포함하게 되면 지워도 되는 if문. 현재 오류 방지용으로 삽입해놓음
             medalAppear = document["medalAppear"] as Boolean?
+
+        // 선호장르 List
+        if (document["prefergenre"] as ArrayList<String?>? != null) prefergenre =
+            document["prefergenre"] as ArrayList<String>? else prefergenre = ArrayList()
+    }
+
+    fun setPreferGenre_(data: ArrayList<String>)
+    {
+        this.prefergenre = data
     }
 
     fun setUserData(data: Map<*, *>){

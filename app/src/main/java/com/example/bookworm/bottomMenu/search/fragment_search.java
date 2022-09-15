@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity;
+import com.example.bookworm.bottomMenu.search.Modules.AlgoliaModule;
 import com.example.bookworm.bottomMenu.search.items.book.Book;
 import com.example.bookworm.bottomMenu.search.items.book.BookAdapter;
 import com.example.bookworm.bottomMenu.search.items.book.OnBookItemClickListener;
@@ -44,11 +45,17 @@ public class fragment_search extends Fragment {
     RankFB rankFB;
     FragmentSearchBinding binding;
 
+    // 알고리아 지워도됨
+    AlgoliaModule algoliaModule;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentSearchBinding.inflate(getLayoutInflater());
+        algoliaModule = new AlgoliaModule();
+
+        algoliaModule.Input();
 
         rankFB = new RankFB(getContext());
         rankFB.getData();

@@ -149,5 +149,6 @@ dependencies {
 
     // 검색 api
     implementation 'com.algolia:algoliasearch-android:3.+'
+    //implementation "com.algolia:algoliasearch-client-kotlin-common:1.4.0"
 }
 

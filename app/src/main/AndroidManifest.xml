@@ -120,9 +120,10 @@
             android:exported="false" /> <!-- 채팅리스트 화면 -->
         <activity
             android:name=".chat.newchat.MessageActivity"
-            android:exported="false">
-
-        </activity>
+            android:exported="false"> </activity>
+        <activity
+            android:name=".bottomMenu.profile.views.PreferGenreActivity"
+            android:exported="false"> </activity>
 
         <activity
             android:name=".LoadingActivity"
