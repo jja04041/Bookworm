@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.text.TextUtils
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -12,8 +13,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.example.bookworm.bottomMenu.search.items.Book
-import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_main
+import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
+
+import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
+
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.SubactivityCreatePostBinding
@@ -38,7 +41,7 @@ class SubActivityCreatePost : AppCompatActivity() {
 
 
     private val mainUser by lazy {
-        intent.getSerializableExtra("mainUser") as UserInfo
+        intent.getParcelableExtra<UserInfo>("mainUser")
     }
 
     //액티비티 간 데이터 전달 핸들러(검색한 데이터의 값을 전달받는 매개체가 된다.) [책 데이터 이동]
@@ -52,8 +55,9 @@ class SubActivityCreatePost : AppCompatActivity() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(dataBinding.root)
         imageProcess.bitmap.observe(this) {
             feedImageBitmap = it
@@ -61,8 +65,8 @@ class SubActivityCreatePost : AppCompatActivity() {
         }
         dataBinding.apply {
             btnBack.setOnClickListener { this@SubActivityCreatePost.finish() }
-            mainUser.apply {
-                tvNickname.text = username
+            mainUser?.apply {
+                tvNickname.text = username!!
                 Glide.with(this@SubActivityCreatePost)
                         .load(profileimg)
                         .circleCrop()
@@ -103,7 +107,7 @@ class SubActivityCreatePost : AppCompatActivity() {
                 isSelected = true // 선택하기
                 setOnClickListener {
                     //책가져오는 메소드 작성
-                    var intent = Intent(this@SubActivityCreatePost, search_fragment_subActivity_main::class.java)
+                    var intent = Intent(this@SubActivityCreatePost,SearchMainActivity::class.java)
                     intent.putExtra("classindex", 2)
                     bookResult.launch(intent)
                 }

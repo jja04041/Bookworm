@@ -16,6 +16,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +28,6 @@ import com.example.bookworm.bottomMenu.feed.comments.Comment
 import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
-import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_result
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.FeedDataBinding
 import com.example.bookworm.notification.MyFCMService
@@ -48,18 +48,17 @@ object bindingAdapter {
                     .circleCrop()
                     .into(v)
 
-    @SuppressLint("ResourceType")
     @JvmStatic
     @BindingAdapter("app:feedImgUrl")
     fun setFeedImage(v: ImageView, url: String) {
-        var circularProgressDrawable = CircularProgressDrawable(v.context)
+        val circularProgressDrawable = CircularProgressDrawable(v.context)
         circularProgressDrawable.apply {
             strokeWidth = 5f
             centerRadius = 30f
             start()
             Glide.with(v.context).load(url)
                     .placeholder(this)
-                    .error(Color.TRANSPARENT).into(v)
+                    .error(0).into(v)
         }
     }
 
@@ -108,7 +107,7 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
         else binding.lllabel.visibility = View.GONE
         //리스너 부착
         //책 정보 확인 시
-        pv.data.observe(context as MainActivity) { mainUser ->
+        pv.userInfoLiveData.observe(context as MainActivity) { mainUser ->
             binding.apply {
                 // 댓글이 있는 경우
                 if (feed.commentsCount > 0L) {
@@ -124,10 +123,10 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
                 }
                 //책 정보 확인 시
                 llbook.setOnClickListener {
-                    val intent = Intent(context, search_fragment_subActivity_result::class.java)
-                    intent.putExtra("itemid", feed.book!!.itemId)
-                    intent.putExtra("data", feed.book!!)
-                    context.startActivity(intent)
+//                    val intent = Intent(context, search_fragment_subActivity_result::class.java)
+//                    intent.putExtra("itemid", feed.book!!.itemId)
+//                    intent.putExtra("data", feed.book!!)
+//                    context.startActivity(intent)
                 }
                 //댓글창 클릭 시
                 llComments.setOnClickListener {
@@ -167,7 +166,7 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
                         popupMenu.setItem(feed)
                         popupMenu.liveState.observe(context) {
                             if (it == popupMenu.FEED_DELETE) {
-                                var tmp = adapter.currentList.toMutableList()
+                                val tmp = adapter.currentList.toMutableList()
                                 tmp.removeAt(feed.position)
                                 adapter.submitList(tmp)
                             }
@@ -200,7 +199,7 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
         }
         //댓글의 내용이 없는 경우 업로드 하지 않음.
         if (commentText.replace(" ", "") != "") {
-            var madeDate = LocalDateTime.now()
+            val madeDate = LocalDateTime.now()
                     .format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")
                             .withLocale(Locale.KOREA)
                             .withZone(ZoneId.of("Asia/Seoul")))
@@ -239,11 +238,11 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
             if (!feed.isUserLiked) {
                 //현재 좋아요를 누르지 않은 상태
                 feed.isUserLiked = true
-                feed.FeedID?.let { nowUser.likedPost!!.add(it) }
+                feed.FeedID?.let { nowUser.likedPost.add(it) }
             } else {
                 //현재 좋아요를 누른 상태
                 feed.isUserLiked = false
-                feed.FeedID?.let { nowUser.likedPost!!.remove(it) }
+                feed.FeedID?.let { nowUser.likedPost.remove(it) }
             }
             binding.apply {
                 tvLike.apply {
@@ -294,7 +293,7 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
             //뷰 생성
             val tv = TextView(context)
             tv.text = label[i] //라벨에 텍스트 삽입
-            tv.background = context.getDrawable(R.drawable.label_design) //디자인 적용
+            tv.background = AppCompatResources.getDrawable(context, R.drawable.label_design) //디자인 적용
             tv.setBackgroundColor((context as MainActivity).getColor(R.color.subcolor_2)) //배경색 적용
             val params = LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,

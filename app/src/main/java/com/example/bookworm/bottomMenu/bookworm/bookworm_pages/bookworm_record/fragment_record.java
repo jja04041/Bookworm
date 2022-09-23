@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -55,7 +54,7 @@ public class fragment_record extends Fragment {
         pv.getUser(null, false);
 
         //데이터 수정을 감지함
-        pv.getData().observe(getViewLifecycleOwner(), userinfo -> {
+        pv.getUserInfoLiveData().observe(getViewLifecycleOwner(), userinfo -> {
 
             recordFB.getData(map, userinfo.getToken());
 

@@ -45,7 +45,7 @@ class AlbumProcessViewModel(val context: Context, val pv: UserInfoViewModel) : V
         var job1 = viewModelScope.launch { pv.getUser(null, false) } //사용자 정보를 가져오는 작업
         var job2 = viewModelScope.launch {
             job1.join()
-            token = pv.data.value!!.token
+            token = pv.userInfoLiveData.value!!.token
         }
         viewModelScope.launch {
             job2.join()

@@ -95,7 +95,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
     public int getItemViewType(int pos) {
-        if (ChallengeList.get(pos).getTitle() != null) return 0;
+        if (ChallengeList.get(pos).getTitle().equals("")) return 0;
         else return 1;
     }
 
@@ -121,16 +121,13 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             tvPerson = itemView.findViewById(R.id.tvPerson);
             tvDday = itemView.findViewById(R.id.tvDday);
             //아이템 선택 시 리스너
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int position = getAdapterPosition();
-                    //리스너 인터페이스 구현
-                    if (position != RecyclerView.NO_POSITION) {
-                        if (listener != null) {
-                            listener.onItemClick(ItemViewHolder.this, view, position);
-                            notifyItemChanged(position);
-                        }
+            itemView.setOnClickListener(view -> {
+                int position = getBindingAdapterPosition();
+                //리스너 인터페이스 구현
+                if (position != RecyclerView.NO_POSITION) {
+                    if (listener != null) {
+                        listener.onItemClick(ItemViewHolder.this, view, position);
+                        notifyItemChanged(position);
                     }
                 }
             });
@@ -146,7 +143,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             tvPerson.setText(String.valueOf(item.getCurrentPart().size()));
             tvBookTitle.setText(item.getBook().getTitle());
             tvDday.setText(countDday(item.getEndDate()));
-            Glide.with(itemView).load(item.getBook().getImg_url()).into(ivThumb); //책 썸네일 설정
+            Glide.with(itemView).load(item.getBook().getImgUrl()).into(ivThumb); //책 썸네일 설정
         }
     }
 

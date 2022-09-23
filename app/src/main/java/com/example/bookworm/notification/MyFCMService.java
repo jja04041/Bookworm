@@ -65,7 +65,7 @@ public class MyFCMService extends FirebaseMessagingService {
 
         builder.setContentTitle(title)
                 .setContentText(body)
-                .setSmallIcon(R.drawable.appicon_bookworm);
+                .setSmallIcon(R.drawable.icon_bookworm);
 
         Notification notification = builder.build();
         notificationManager.notify(1, notification);

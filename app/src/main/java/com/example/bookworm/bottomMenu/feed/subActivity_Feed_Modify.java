@@ -27,8 +27,6 @@ import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
-import com.example.bookworm.bottomMenu.search.items.Book;
-import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_main;
 
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.core.internet.FBModule;
@@ -55,7 +53,7 @@ import java.util.Map;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-
+//사용하지 않지만, 참고용으로 둔 상태
 public class subActivity_Feed_Modify extends AppCompatActivity {
 
     public static int MODIFY_OK = 26;
@@ -69,7 +67,7 @@ public class subActivity_Feed_Modify extends AppCompatActivity {
     Dialog customDialog;
     String FeedID;
     Feed feed;
-    Book selected_book; //선택한 책 객체
+//    Book selected_book; //선택한 책 객체
     //라벨은 알럿 다이어그램을 통해 입력을 받고, 선택한 값으로 라벨이 지정됨 => 구현 예정
 
     //사용자가 선택한 어플로 이어서 사진을 선택할 수 있게 함.
@@ -99,8 +97,8 @@ public class subActivity_Feed_Modify extends AppCompatActivity {
             result -> {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent intent = result.getData();
-                    this.selected_book = (Book) intent.getSerializableExtra("data");
-                    binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목만 세팅한다.
+//                    this.selected_book = (Book) intent.getSerializableExtra("data");
+//                    binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목만 세팅한다.
                 }
             });
 
@@ -122,10 +120,10 @@ public class subActivity_Feed_Modify extends AppCompatActivity {
 
         binding.btnImageUpload.setVisibility(View.INVISIBLE); //피드 수정 화면에서는 사진 수정 불가능
 
-        feed = getIntent().getParcelableExtra("Feed");
-        this.selected_book = feed.getBook();
-        binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목 세팅한다.
-        binding.edtFeedText.setText(feed.getFeedText()); //피드 내용 세팅
+//        feed = getIntent().getParcelableExtra("Feed");
+//        this.selected_book = feed.getBook();
+//        binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목 세팅한다.
+//        binding.edtFeedText.setText(feed.getFeedText()); //피드 내용 세팅
         Glide.with(this).load(feed.getImgurl()).into(binding.ivpicture); //피드 사진 세팅(수정 불가)
 
         //프로필 세팅
@@ -468,9 +466,9 @@ public class subActivity_Feed_Modify extends AppCompatActivity {
 
     //책 검색해서 선택하는 함수
     public void getBook() {
-        Intent intent = new Intent(this, search_fragment_subActivity_main.class);
-        intent.putExtra("classindex", 2);
-        bookResult.launch(intent); //검색 결과를 받는 핸들러를 작동한다.
+//        Intent intent = new Intent(this, search_fragment_subActivity_main.class);
+//        intent.putExtra("classindex", 2);
+//        bookResult.launch(intent); //검색 결과를 받는 핸들러를 작동한다.
     }
 
     //피드 업로드
@@ -494,7 +492,7 @@ public class subActivity_Feed_Modify extends AppCompatActivity {
             String formatTime = dateFormat.format(System.currentTimeMillis());
 
             map.put("UserToken", userInfo.getToken()); //사용자 토큰
-            map.put("book", selected_book); //책 정보
+//            map.put("book", selected_book); //책 정보
             map.put("feedText", binding.edtFeedText.getText().toString()); //피드 내용
             map.put("label", labelAdd(labelList)); //라벨 리스트
             map.put("date", feed.getDate()); //현재 시간 millis로

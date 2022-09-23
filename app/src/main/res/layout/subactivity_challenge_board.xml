@@ -224,7 +224,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="2.5dp"
-        android:background="@color/subcolor_0" />
+        android:background="@color/black" />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/SFLBoard"

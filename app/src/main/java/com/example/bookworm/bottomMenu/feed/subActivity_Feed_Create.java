@@ -24,8 +24,8 @@ import com.example.bookworm.R;
 import com.example.bookworm.achievement.Achievement;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
-import com.example.bookworm.bottomMenu.search.items.Book;
-import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_main;
+
+import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book;
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.UserInfo;
@@ -35,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+//사용하지 않지만, 참고용으로 둔 상태
 public class subActivity_Feed_Create extends AppCompatActivity {
 
 
@@ -58,7 +59,8 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             result -> {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent intent = result.getData();
-                    this.selected_book = (Book) intent.getSerializableExtra("data");
+                    selected_book = new Book();
+//                    this.selected_book = (Book) intent.getSerializableExtra("data");
                     binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목만 세팅한다.
                 }
             });
@@ -101,7 +103,7 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         //이미지 업로드 버튼
         binding.btnImageUpload.setOnClickListener(view -> imageProcess.initProcess());
 
-        uv.getData().observe(this, userinfo -> {
+        uv.getUserInfoLiveData().observe(this, userinfo -> {
             uv.getBookWorm(userinfo.getToken());
             userInfo = userinfo;
             Glide.with(this).load(userinfo.getProfileimg()).circleCrop().into(binding.ivProfileImage); //프로필사진 로딩후 삽입.
@@ -147,7 +149,8 @@ public class subActivity_Feed_Create extends AppCompatActivity {
         if (getIntent() != null) {
             intent = getIntent();
             if (intent.getSerializableExtra("data") != null) {
-                selected_book = (Book) intent.getSerializableExtra("data");
+//                selected_book = (Book) intent.getSerializableExtra("data");
+                selected_book = new Book();
                 binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목만 세팅한다.
             }
         }
@@ -322,9 +325,10 @@ public class subActivity_Feed_Create extends AppCompatActivity {
 
     //책 검색해서 선택하는 함수
     public void getBook() {
-        intent = new Intent(this, search_fragment_subActivity_main.class);
-        intent.putExtra("classindex", 2);
-        bookResult.launch(intent); //검색 결과를 받는 핸들러를 작동한다.
+
+//        intent = new Intent(this, search_fragment_subActivity_main.class);
+//        intent.putExtra("classindex", 2);
+//        bookResult.launch(intent); //검색 결과를 받는 핸들러를 작동한다.
     }
 
     //피드 업로드
@@ -343,6 +347,8 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String formatTime = dateFormat.format(System.currentTimeMillis());
 
+//            selected_book.setCategoryname(userInfo.setGenre(selected_book.getCategoryname(), current_context));
+
             map.put("UserToken", userInfo.getToken()); //유저 정보
             map.put("book", selected_book); //책 정보
             map.put("feedText", binding.edtFeedText.getText().toString()); //피드 내용
@@ -354,10 +360,9 @@ public class subActivity_Feed_Create extends AppCompatActivity {
             if (imgUrl != null) map.put("imgurl", imgUrl); //이미지 url
 
             fbModule.readData(1, map, FeedID);
-            userInfo.setGenre(selected_book.getCategoryname(), current_context);
 
-            int count = userBw.getReadcount();
-            userBw.setReadcount(++count);
+            int count = userBw.getReadCount();
+            userBw.setReadCount(++count);
             uv.updateUser(userInfo);
             uv.updateBw(userInfo.getToken(), userBw);
 

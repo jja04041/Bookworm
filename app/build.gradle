@@ -88,8 +88,7 @@ dependencies {
 
 
     // 카카오 SDK 모듈 설정
-    implementation group: 'com.kakao.sdk', name: 'usermgmt', version: '1.30.7' // 카카오 로그인
-    implementation group: 'com.kakao.sdk', name: 'kakaotalk', version: '1.30.7' // 친구, 메시지(카카오톡)
+    implementation "com.kakao.sdk:v2-user:2.11.1" // 카카오 로그인
 
 
     // 구글 로그인
@@ -160,5 +159,9 @@ dependencies {
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 
 
+
+    // 검색 api
+    implementation 'com.algolia:algoliasearch-android:3.+'
+    //implementation "com.algolia:algoliasearch-client-kotlin-common:1.4.0"
 }
 

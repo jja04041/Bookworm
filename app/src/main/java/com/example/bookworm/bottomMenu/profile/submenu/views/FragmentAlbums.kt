@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
-import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumActivity
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumContentActivity
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumDisplay.item.AlbumDisplayAdapter
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumDisplay.view.ShowAlbumContentActivity
@@ -38,7 +37,7 @@ class FragmentAlbums(val token: String?) : Fragment() {
         //implements
 
         //감지 센서 부착
-        pv!!.data.observe(viewLifecycleOwner) { userinfo ->
+        pv!!.userInfoLiveData.observe(viewLifecycleOwner) { userinfo ->
             if (NowUser == null) NowUser = userinfo
             if (token != null && userinfo.token != token) {
                 pv!!.getFeedList(token!!)

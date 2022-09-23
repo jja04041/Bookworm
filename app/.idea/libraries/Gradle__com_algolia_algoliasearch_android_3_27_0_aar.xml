@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.algolia:algoliasearch-android:3.27.0@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/d0bb51a4a29216e728c1787a04a1e456/transformed/jetified-algoliasearch-android-3.27.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/d0bb51a4a29216e728c1787a04a1e456/transformed/jetified-algoliasearch-android-3.27.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/d0bb51a4a29216e728c1787a04a1e456/transformed/jetified-algoliasearch-android-3.27.0/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.algolia/algoliasearch-android/3.27.0/282b833b47b6f4f767d6b8d2d11b97e51d7f11c6/algoliasearch-android-3.27.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>

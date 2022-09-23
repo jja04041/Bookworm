@@ -2,13 +2,13 @@ package com.example.bookworm.bottomMenu.feed
 
 import android.os.Parcelable
 import com.example.bookworm.bottomMenu.feed.comments.Comment
-import com.example.bookworm.bottomMenu.search.items.Book
+
+import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
 import com.example.bookworm.core.userdata.UserInfo
 import com.google.firebase.firestore.Exclude
 import kotlinx.parcelize.Parcelize
 
-//Feed에 대한 데이터 클래스
-
+//게시물 DTO
 @Parcelize
 data class Feed(
         var book: Book? = null,
@@ -54,6 +54,6 @@ data class Feed(
 
         @Exclude
         var isUserPost //이것이 현재 사용자의 게시물인지 확인하는 변수
-        : Boolean = false
+        : Boolean = false,
 ) : Parcelable
 

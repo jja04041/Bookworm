@@ -19,7 +19,7 @@ class AlbumProcessViewHolder(
         feed = item
         binding!!.feedBookTitle.setText(item.book!!.title)
         binding!!.tvFeedtext.setText(item.feedText)
-        Glide.with(binding!!.root).load(item.book!!.img_url).into(binding!!.ivBookThumb)
+        Glide.with(binding!!.root).load(item.book!!.imgUrl).into(binding!!.ivBookThumb)
         binding!!.tvFeedDate.setText(item.date)
         binding!!.root.setOnClickListener {
             (bindingAdapter as AlbumProcessAdapter).applySelection(binding!!, item)

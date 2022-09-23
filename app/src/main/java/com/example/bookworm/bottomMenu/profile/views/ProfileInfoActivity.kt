@@ -1,7 +1,6 @@
 package com.example.bookworm.bottomMenu.profile.views
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -20,7 +19,6 @@ import com.example.bookworm.databinding.ActivityProfileInfoBinding
 import com.example.bookworm.extension.follow.view.FollowViewModelImpl
 import com.example.bookworm.notification.MyFCMService
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
@@ -32,7 +30,7 @@ class ProfileInfoActivity : AppCompatActivity() {
             : UserInfo? = null
     lateinit var userID: String
     lateinit var fv: FollowViewModelImpl
-    lateinit var pv: UserInfoViewModel
+    lateinit var userViewModel: UserInfoViewModel
     var cache: Boolean? = null
     lateinit var menuPagerAdapter: SubMenuPagerAdapter
     private var myFCMService: MyFCMService? = null
@@ -46,7 +44,7 @@ class ProfileInfoActivity : AppCompatActivity() {
         binding = ActivityProfileInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
         fv = FollowViewModelImpl(this)
-        pv = ViewModelProvider(
+        userViewModel = ViewModelProvider(
             this,
             UserInfoViewModel.Factory(this)
         ).get(UserInfoViewModel::class.java)
@@ -70,10 +68,10 @@ class ProfileInfoActivity : AppCompatActivity() {
 
             SubUserData!!.let {
                 it.isFollowed = async { fv.isFollowNow(it) }.await()
-                pv.getBookWorm(SubUserData.token).join()
+                userViewModel.getBookWorm(SubUserData.token).join()
                 menuPagerAdapter = SubMenuPagerAdapter(it.token, supportFragmentManager)
-                Log.d("현재 읽은 도서 수 ", pv.bwdata.value!!.readcount!!.toString())
-                setUI(SubUserData, pv.bwdata.value!!)
+                Log.d("현재 읽은 도서 수 ", userViewModel.bwdata.value!!.readCount!!.toString())
+                setUI(SubUserData, userViewModel.bwdata.value!!)
             }
         }
 
@@ -139,10 +137,10 @@ class ProfileInfoActivity : AppCompatActivity() {
         if (user.isMainUser) binding.tvFollow.visibility = View.GONE
         binding.tvFollowerCount.text = user.followerCounts.toString()
         binding.tvFollowingCount.text = user.followingCounts.toString()
-        binding.tvReadBookCount.text = bookWorm.readcount.toString()
+        binding.tvReadBookCount.text = bookWorm.readCount.toString()
         binding.ivBookworm.setImageResource(
             this.resources.getIdentifier(
-                "bw_${bookWorm.wormtype}",
+                "bw_${bookWorm.wormType}",
                 "drawable",
                 this.packageName
             )

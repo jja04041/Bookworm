@@ -85,7 +85,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
 
         public void setItem(Feed item) {
-            Glide.with(context).load(item.getBook().getImg_url()).into(binding.ivBookThumb);
+            Glide.with(context).load(item.getBook().getImgUrl()).into(binding.ivBookThumb);
             binding.feedBookTitle.setText(item.getBook().getTitle());
             binding.tvFeedtext.setText(item.getFeedText());
             binding.tvFeedDate.setText(item.getDate().substring(5, 10));

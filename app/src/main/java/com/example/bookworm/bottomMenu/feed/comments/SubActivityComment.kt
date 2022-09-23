@@ -40,7 +40,7 @@ class SubActivityComment : AppCompatActivity() {
         intent.getParcelableExtra("Feed")!!
     }
     val nowUser by lazy {
-        intent.getSerializableExtra("NowUser") as UserInfo
+        intent.getParcelableExtra<UserInfo>("NowUser")
     }
     private val commentAdapter = CommentsAdapter()
 
@@ -75,7 +75,7 @@ class SubActivityComment : AppCompatActivity() {
 
                     //게시물 작성자에게 댓글이 달렸다는 알림을 보냄
                     myFCMService.sendPostToFCM(this@SubActivityComment, feedItem.Creator!!.fCMtoken,
-                            "${nowUser.username}님이 댓글을 남겼습니다. \"${text}\" ")
+                            "${nowUser!!.username}님이 댓글을 남겼습니다. \"${text}\" ")
                 }
                 mRecyclerView.apply {
                     smoothScrollToPosition(0) //맨 위 아이템으로 포커스를 이동 (본인 댓글 확인을 위해)

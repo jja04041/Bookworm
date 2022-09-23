@@ -8,6 +8,7 @@ import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.feed.comments.Comment
 import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
+import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing
 import com.example.bookworm.core.userdata.UserInfo
 import com.google.firebase.firestore.FieldValue
@@ -23,7 +24,8 @@ class FeedViewModel(@SuppressLint("StaticFieldLeak") private val context: Contex
     private val userInfoViewModel = ViewModelProvider(
             when (context) {
                 is MainActivity -> context
-                else -> context as SubActivityComment
+                is SubActivityComment -> context
+                else -> context as SearchMainActivity
             },
             UserInfoViewModel.Factory(context))[UserInfoViewModel::class.java]
     var postsData: List<Feed>? = emptyList() //불러오는 피드 데이터 목록을 저장
@@ -64,11 +66,11 @@ class FeedViewModel(@SuppressLint("StaticFieldLeak") private val context: Contex
                         .addOnSuccessListener {    //정상적으로 업로드 되는 경우
                             //유저의 정보 업데이트
                             feed.Creator!!.apply {
-                                setGenre(feed.book!!.categoryname, context) //장르 설정
+//                                setGenre(feed.book!!.categoryname, context) //장르 설정
                                 CoroutineScope(Dispatchers.IO).launch {
                                     userInfoViewModel.getBookWorm(token).join().apply {
                                         var data = userInfoViewModel.bwdata.value
-                                        data!!.readcount++
+                                        data!!.readCount++
                                         userInfoViewModel.updateBw(token, data)
                                     }
                                     userInfoViewModel.updateUser(this@apply)

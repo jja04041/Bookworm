@@ -64,7 +64,7 @@ public class subactivity_challenge_board_comment extends AppCompatActivity {
         binding = SubactivityChallengeBoardCommentBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         item = (Board) getIntent().getSerializableExtra("board");
-        challenge = (Challenge) getIntent().getSerializableExtra("challenge");
+        challenge = (Challenge) getIntent().getParcelableExtra("challenge");
         nowUser = new PersonalD(this).getUserInfo();
         context = this;
         boardFB = new BoardFB(context);
@@ -90,7 +90,7 @@ public class subactivity_challenge_board_comment extends AppCompatActivity {
         initComment();
         loadData();
         uv.getUser(item.getUserToken(), true);
-        uv.getData().observe(this, userInfo -> {
+        uv.getUserInfoLiveData().observe(this, userInfo -> {
             creatorUser = userInfo;
         });
     }

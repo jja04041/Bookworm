@@ -91,7 +91,7 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
         fv.WithoutSuspendgetUser(null);
 
         //데이터 수정을 감지함
-        pv.getData().observe(getViewLifecycleOwner(), userinfo -> {
+        pv.getUserInfoLiveData().observe(getViewLifecycleOwner(), userinfo -> {
             NowUser = userinfo;
             pv.getBookWorm(NowUser.getToken());
             achievement = new Achievement(current_context, fbModule, NowUser, bookworm);
@@ -104,8 +104,8 @@ public class fragment_profile extends Fragment implements LifecycleObserver {
             binding.tvFollowingCount.setText(String.valueOf(userInfo.getFollowingCounts()));
         });
         pv.getBwdata().observe(getViewLifecycleOwner(), bookWorm -> {
-            binding.tvReadBookCount.setText(String.valueOf(bookWorm.getReadcount()));
-            int id = current_context.getResources().getIdentifier("bw_" + bookWorm.getWormtype(), "drawable", current_context.getPackageName());
+            binding.tvReadBookCount.setText(String.valueOf(bookWorm.getReadCount()));
+            int id = current_context.getResources().getIdentifier("bw_" + bookWorm.getWormType(), "drawable", current_context.getPackageName());
             binding.ivBookworm.setImageResource(id);
         });
 

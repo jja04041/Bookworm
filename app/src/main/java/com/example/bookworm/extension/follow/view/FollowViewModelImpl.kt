@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.example.bookworm.core.dataprocessing.repository.UserRepositoryImpl
+import com.example.bookworm.core.dataprocessing.repository.UserRepository
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.extension.follow.interfaces.FollowViewModel
 import com.google.android.gms.tasks.Task
@@ -24,7 +24,7 @@ class FollowViewModelImpl(val context: Context) : ViewModel(), FollowViewModel {
     var followList = MutableLiveData<ArrayList<UserInfo>>()
     var data = MutableLiveData<UserInfo?>()
     var lastVisibleUser: String? = null
-    val repo = UserRepositoryImpl(context)
+    val repo = UserRepository(context)
 
     class Factory(val context: Context) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {

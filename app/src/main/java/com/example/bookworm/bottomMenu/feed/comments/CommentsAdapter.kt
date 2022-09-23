@@ -111,7 +111,7 @@ class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
                 item.book!!.apply {
                     feedBookAuthor.text = author
                     feedBookTitle.text = title
-                    Glide.with(itemView.context).load(img_url).into(feedBookThumb)
+                    Glide.with(itemView.context).load(imgUrl).into(feedBookThumb)
                 }
                 //피드 내용
                 tvFeedText.text = item.feedText

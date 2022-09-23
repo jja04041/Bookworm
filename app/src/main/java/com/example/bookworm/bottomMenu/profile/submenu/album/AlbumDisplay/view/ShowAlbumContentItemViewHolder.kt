@@ -16,7 +16,7 @@ class ShowAlbumContentItemViewHolder(
         binding.tvBookTitle.text = data.book!!.title
         binding.tvFeedDate.text = data.date
         binding.tvFeedDesc.text = data.feedText
-        Glide.with(binding.root).load(data.book!!.img_url).into(binding.ivBookThumb)
+        Glide.with(binding.root).load(data.book!!.imgUrl).into(binding.ivBookThumb)
 
     }
 }

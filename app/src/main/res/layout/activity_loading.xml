@@ -20,7 +20,7 @@
             android:layout_height="80dp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:src="@drawable/appicon_bookworm"
+            android:src="@drawable/icon_bookworm"
             android:textSize="15pt" />
 
     </LinearLayout>

@@ -28,9 +28,9 @@ class FragmentPosts(val token: String?) : Fragment() {
         initRecyclerView()
         //감지 센서 부착
 
-        pv!!.data.observe(viewLifecycleOwner, { userinfo ->
+        pv!!.userInfoLiveData.observe(viewLifecycleOwner) { userinfo ->
             pv!!.getFeedList(userinfo.token)
-        })
+        }
         if (token != null) pv!!.getFeedList(token)
         pv!!.feedList.observe(viewLifecycleOwner) { list ->
             adapter.submitList(list.toList()) {

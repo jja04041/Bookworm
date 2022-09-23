@@ -80,7 +80,7 @@
                     android:elevation="10dp"
                     android:gravity="center"
                     android:text="팔로우"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="17dp" />
 
             </LinearLayout>

@@ -64,8 +64,7 @@ class FragmentFeed : Fragment() {
             val mainUser = data.suspendGetUser(null)
             FragmentFeedTopbarBinding.bind(binding.root).apply {
                 imgCreatefeed.setOnClickListener {
-                    val intent = Intent(context, subActivity_Feed_Create::class.java)
-//                        val intent = Intent(context, SubActivityCreatePost::class.java)
+                    val intent = Intent(context, SubActivityCreatePost::class.java)
                     intent.putExtra("mainUser", mainUser)
                     startActivityResult.launch(intent)
                 }

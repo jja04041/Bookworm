@@ -14,6 +14,7 @@ import com.example.bookworm.appLaunch.views.MainActivity;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.challenge.fragment_challenge;
 import com.example.bookworm.bottomMenu.challenge.subactivity.subactivity_challenge_challengeinfo;
+import com.example.bookworm.bottomMenu.profile.views.ProfileModifyActivity;
 import com.example.bookworm.bottomMenu.profile.views.ProfileSettingActivity;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -133,10 +134,6 @@ public class FBModule {
                 }
                 //회원인 경우, 로그인 처리
                 else {
-                    UserInfo userInfo = new UserInfo();
-                    BookWorm bookworm = new BookWorm();
-                    userInfo.add((Map) document.get("UserInfo"));
-                    bookworm.add((Map) document.get("BookWorm"));
 
 //                    ((LoginActivity) context).signIn(Boolean.FALSE, userInfo, bookworm);
                 }
@@ -274,7 +271,7 @@ public class FBModule {
     private void successDelete(int idx) {
         switch (idx) {
             case 0:
-                (((ProfileSettingActivity) context)).moveToLogin();
+                (((ProfileModifyActivity) context)).moveToLogin();
                 break;
         }
     }

@@ -26,22 +26,18 @@ const {firebaseAdmin} = require("../firebaseProcess");
 //for firebase
 //커스텀 토큰 생성 
 
-
-
-function createFirebaseToken(AccessToken, platform) {
 //구글 계정인 경우 
 
+//카카오 계정인 경우 
+function createFirebaseToken(AccessToken, platform) {
     if (platform == "google") {
 
-    } 
-    
-//카카오 계정인 경우 
-    else if (platform == "kakao") {
+    } else if (platform == "kakao") {
         return requestMe(AccessToken).then((response) => {
             const body = JSON.parse(response);
             console.log(body);
             const userId = `kakao:${body.id}`;
-            if (!body.id) {
+            if (!userId) {
                 return res.status(404)
                     .send({
                         message: 'There was no user with the given access token.'
