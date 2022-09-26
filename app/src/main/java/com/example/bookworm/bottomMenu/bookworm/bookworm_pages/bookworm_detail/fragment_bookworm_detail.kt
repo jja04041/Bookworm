@@ -3,13 +3,10 @@ package com.example.bookworm.bottomMenu.bookworm.bookworm_pages.bookworm_detail
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -45,14 +42,14 @@ class fragment_bookworm_detail : Fragment() {
         initAdapter()
         val bwImgList = resources.getStringArray(R.array.bookworm_char)
         val bwNameList = resources.getStringArray(R.array.bookworm_name) //전체 책볼레 리스트 생성
-        for (i: Int in 0..bwImgList.size - 1) {
+        for (i: Int in bwImgList.indices) {
             var bookwormData = BookwormData()
             bookwormData.setBwData(bwImgList[i], bwNameList[i], false)
             bwDataList.add(bookwormData)
         }
         uv.getUser(null, false)
         //사용자 데이터를 추적
-        uv.data.observe(this.viewLifecycleOwner) { userInfo: UserInfo ->
+        uv.userInfoLiveData.observe(this.viewLifecycleOwner) { userInfo: UserInfo ->
             this.userInfo = userInfo
             uv.getBookWorm(userInfo.token) //책볼레 데이터를 불러오도록 한다.
         }
@@ -64,14 +61,14 @@ class fragment_bookworm_detail : Fragment() {
         uv.getBookWorm(userInfo.token) //책볼레 데이터를 불러오도록 한다.
         //책벌레 데이터의 도착 여부 추적
         uv.bwdata.observe(this) { bw: BookWorm ->
-            for (i: Int in 0..bwDataList.size - 1) {
-                bwDataList[i].hasBw = bw.wormvec.contains(bwDataList[i].id)
-                if(bwDataList[i].id==bw.wormtype) bwAdapter.lastPos = i
+            for (i: Int in 0 until bwDataList.size) {
+                bwDataList[i].hasBw = bw.wormList.contains(bwDataList[i].id)
+                if(bwDataList[i].id==bw.wormType) bwAdapter.lastPos = i
             }
             bwAdapter.submitList(bwDataList)
 //            //데이터가 도착한 경우 , 사용자가 뷰홀더에서 선택한 경우에만 세팅을 한다.
-            binding!!.ivBookworm.setImageResource(requireContext().resources.getIdentifier("bw_${bw.wormtype}","drawable",requireContext().packageName))
-            binding!!.ivBg.setImageResource(bw.bgtype)
+            binding!!.ivBookworm.setImageResource(requireContext().resources.getIdentifier("bw_${bw.wormType}","drawable",requireContext().packageName))
+            binding!!.ivBg.setImageResource(bw.bgType)
 
 
         }

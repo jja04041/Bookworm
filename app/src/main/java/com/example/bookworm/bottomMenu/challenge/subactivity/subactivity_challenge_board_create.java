@@ -21,8 +21,8 @@ import com.example.bookworm.achievement.Achievement;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.challenge.items.Challenge;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
-import com.example.bookworm.bottomMenu.search.items.book.Book;
 
+import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book;
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.UserInfo;
@@ -76,7 +76,7 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
 
         Intent intent = getIntent();
         //넘겨받은 값 챌린지 객체에 넣음
-        challenge = (Challenge) intent.getSerializableExtra("challenge");
+        challenge = intent.getParcelableExtra("challenge");
 
         selected_book = challenge.getBook();
 
@@ -92,7 +92,7 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
         //이미지 업로드 버튼
         binding.btnImageUpload.setOnClickListener(view -> imageProcess.initProcess());
 
-        uv.getData().observe(this, userinfo -> {
+        uv.getUserInfoLiveData().observe(this, userinfo -> {
             uv.getBookWorm(userinfo.getToken());
             userInfo = userinfo;
             Glide.with(this).load(userinfo.getProfileimg()).circleCrop().into(binding.ivProfileImage); //프로필사진 로딩후 삽입.
@@ -185,6 +185,9 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String formatTime = dateFormat.format(System.currentTimeMillis());
 
+            // 장르 처리
+//            selected_book.setCategoryname(userInfo.setGenre(selected_book.getCategoryname(), current_context));
+
             map.put("UserToken", userInfo.getToken()); //유저 정보
             map.put("book", selected_book); //책 정보
             map.put("boardText", binding.edtFeedText.getText().toString()); //피드 내용
@@ -200,8 +203,6 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
             //챌린지 인증글 업로드
             fbModule.uploadChallengeBoard(2, challenge.getTitle(), BoardID, map);
 
-            // 장르 처리
-            userInfo.setGenre(selected_book.getCategoryname(), current_context);
 
 //            int count = userBw.getReadcount();
 //            userBw.setReadcount(++count);

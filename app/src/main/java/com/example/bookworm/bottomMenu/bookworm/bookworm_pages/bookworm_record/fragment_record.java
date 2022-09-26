@@ -4,16 +4,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.bookworm.bottomMenu.Feed.items.Feed;
+import com.example.bookworm.bottomMenu.feed.Feed;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
-import com.example.bookworm.databinding.FragmentRecordBinding;
-import com.google.firebase.firestore.DocumentSnapshot;
+    import com.example.bookworm.databinding.FragmentRecordBinding;
+    import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +54,7 @@ public class fragment_record extends Fragment {
         pv.getUser(null, false);
 
         //데이터 수정을 감지함
-        pv.getData().observe(getViewLifecycleOwner(), userinfo -> {
+        pv.getUserInfoLiveData().observe(getViewLifecycleOwner(), userinfo -> {
 
             recordFB.getData(map, userinfo.getToken());
 
@@ -121,9 +120,7 @@ public class fragment_record extends Fragment {
         feedList = new ArrayList<>();
         try {
             for (DocumentSnapshot snapshot : a) {
-                Map data = snapshot.getData();
-                Feed feed = new Feed();
-                feed.setFeedData(data);
+                Feed feed = snapshot.toObject(Feed.class);
                 feedList.add(feed);
             }
             //가져온 값의 마지막 snapshot부터 이어서 가져올 수 있도록 하기 위함.

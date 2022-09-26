@@ -2,8 +2,9 @@ package com.example.bookworm.core.login;
 
 import android.app.Application;
 
+import com.example.bookworm.R;
 import com.example.bookworm.notification.MyFCMService;
-import com.kakao.auth.KakaoSDK;
+import com.kakao.sdk.common.KakaoSdk;
 
 
 //애플리케이션 전역을 다 접근 가능한 객체
@@ -25,7 +26,7 @@ public class GlobalApplication extends Application {
         super.onCreate();
         setItem();
         // Kakao Sdk 초기화
-        KakaoSDK.init(new KakaoSDKAdapter());
+       KakaoSdk.init(this,getString(R.string.kakaoKey));
     }
 
     @Override

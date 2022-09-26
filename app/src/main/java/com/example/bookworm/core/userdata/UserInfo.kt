@@ -1,137 +1,44 @@
 package com.example.bookworm.core.userdata
 
-import android.content.Context
-import android.util.Log
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import android.os.Parcelable
 import com.google.firebase.firestore.Exclude
-import com.kakao.usermgmt.response.model.UserAccount
-import java.io.Serializable
-import java.util.*
-
-class UserInfo : Serializable {
-    var profileimg: String? = null // 회원가입시 프로필사진
-    var username = "(알 수 없음)" // 회원가입시 닉네임
-    private var email: String? = null // 로그인한 이메일
-    var platform: String? = null //플랫폼 확인
-    var introduce = "안녕하세요~"
-    var completedChallenge: Long? = 0 //인증 완료된 챌린지 개수
-    var tier: Long? = 0 //인증 완료된 챌린지에 따른 티어(닉네임 옆 메달 표시용)
-    var medalAppear: Boolean? = true
+import kotlinx.parcelize.Parcelize
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
-    @get:Exclude
-    var isMainUser = false //메인 유저인지 확인하는 변수
+//사용자 정보를 담는 객체
+@Parcelize
+data class UserInfo(
+        var profileimg // 회원가입시 프로필사진
+        : String = "",
+        var username // 회원가입시 닉네임
+        : String = "(알 수 없음)",
+        var email// 로그인한 이메일
+        : String? = null,
+        var platform //플랫폼 확인
+        : String? = null,
+        var introduce // 자기소개
+        : String = "안녕하세요~",
+        var completedChallenge //인증 완료된 챌린지 개수
+        : Long? = 0,
+        var tier //인증 완료된 챌린지에 따른 티어(닉네임 옆 메달 표시용)
+        : Long? = 0,
+        var medalAppear: Boolean? = true,
+        var fCMtoken: String? = null,
+        var token: String = "",
+        var likedPost: ArrayList<String> = ArrayList(),
+        var followerCounts: Int = 0,
+        var followingCounts: Int = 0,
 
-    @get:Exclude
-    var isFollowed = false //팔로우 여부 확인 하는 변수
+        var genre: HashMap<String, Int?>? = HashMap(),
+        var prefergenre: ArrayList<String> = ArrayList(),
 
-    var fCMtoken: String? = null
-    lateinit var token: String
-    var likedPost: ArrayList<String>?
-    var followerCounts = 0
-    var followingCounts = 0
-    var genre: HashMap<String, Int?>? = null
-    var prefergenre: ArrayList<String>? = null
+        @Exclude
+        var isMainUser //메인 유저인지 확인하는 변수
+        : Boolean = false,
 
-    init {
-        genre = HashMap()
-        likedPost = ArrayList()
-
-    }
-
-
-    //구글 계정 데이터
-    fun add(account: GoogleSignInAccount) {
-        try {
-            Log.d("profile", account.photoUrl.toString())
-            profileimg = account.photoUrl.toString()
-        } catch (e: NullPointerException) {
-            Log.d("profile", "Null")
-        }
-        username = account.displayName!!
-        email = account.email
-        platform = "Google"
-    }
-
-    //카카오 계정 데이터
-    fun add(kakaoAccount: UserAccount) {
-        val profile = kakaoAccount.profile
-        profileimg = profile.profileImageUrl
-        username = profile.nickname
-        email = kakaoAccount.email
-        platform = "Kakao"
-    }
-
-    //파이어베이스에서 값을 가져옴
-    fun add(document: Map<*, *>) {
-        username = document["username"] as String
-        email = document["email"] as String?
-        profileimg = document["profileimg"] as String?
-        token = document["token"] as String
-        platform = document["platform"] as String?
-        followerCounts = document["followerCounts"].toString().toInt()
-        followingCounts = document["followingCounts"].toString().toInt()
-        genre = HashMap(document["genre"] as HashMap<String, Int?>?)
-        if (document["likedPost"] as ArrayList<String?>? != null) likedPost =
-            document["likedPost"] as ArrayList<String>? else likedPost = ArrayList()
-        fCMtoken = document["fcmtoken"] as String
-        if (document["introduce"] as String? != null)
-            introduce = (document["introduce"] as String?)!!
-        completedChallenge = document["completedChallenge"] as Long?
-        if (document["tier"] as Long? != null) //파이어베이스의 유저인포에 모두가 tier를 포함하게 되면 지워도 되는 if문. 현재 오류 방지용으로 삽입해놓음
-            tier = document["tier"] as Long?
-        if (document["medalAppear"] as Boolean? != null) //파이어베이스의 유저인포에 모두가 medalAppear을 포함하게 되면 지워도 되는 if문. 현재 오류 방지용으로 삽입해놓음
-            medalAppear = document["medalAppear"] as Boolean?
-
-        // 선호장르 List
-        if (document["prefergenre"] as ArrayList<String?>? != null) prefergenre =
-            document["prefergenre"] as ArrayList<String>? else prefergenre = ArrayList()
-    }
-
-    fun setPreferGenre_(data: ArrayList<String>)
-    {
-        this.prefergenre = data
-    }
-
-    fun setUserData(data: Map<*, *>){
-
-        this.token = data.get("token") as String;
-        this.username = data.get("name") as String;
-        this.profileimg = data.get("profileimg") as String;
-
-    }
-
-    //장르 설정
-    fun setGenre(categoryname: String?, context: Context?) {
-        val tokenizer = StringTokenizer(categoryname, ">")
-        tokenizer.nextToken() // 두번째 분류를 원하기 때문에 맨 앞 분류 꺼냄
-        var category = tokenizer.nextToken()
-        if (category == "자기계발" || category == "에세이" || category == "예술/대중문화") {
-            category = "자기계발"
-        } else if (category == "소설/시/희곡" || category == "장르소설" || category == "전집/중고전집") {
-            category = "소설"
-        } else if (category == "좋은부모") {
-            category = "육아"
-        } else if (category == "사회과학" || category == "경제경영") {
-            category = "사회"
-        } else if (category == "어린이" || category == "유아") {
-            category = "어린이"
-        } else if (category == "종교/역학" || category == "인문학" || category == "역사" || category == "고전") {
-            category = "인문"
-        } else if (category == "가정/요리/뷰티" || category == "건강/취미/레저" || category == "여행" || category == "잡지" || category == "달력/기타") {
-            category = "생활"
-        } else if (category == "외국어" || category == "대학교재" || category == "초중고참고서" || category == "수험서/자격증" || category == "공무원 수험서" || category == "컴퓨터/모바일") {
-            category = "공부"
-        }
-        var unboxint = 0
-        if (null == genre!![category]) {
-            genre!![category] = 1
-        } else {
-            unboxint = genre!![category]!!
-            unboxint++
-            genre!!.replace(category, unboxint)
-        }
-    }
-
-
-}
+        @Exclude
+        var isFollowed//팔로우 여부 확인 하는 변수
+        : Boolean = false,
+) : Parcelable

@@ -3,12 +3,11 @@ package com.example.bookworm.bottomMenu.profile.submenu.album.AlbumDisplay.item
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bookworm.bottomMenu.Feed.items.Feed
+import com.example.bookworm.bottomMenu.feed.Feed
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.AddAlbumPostViewholder
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumDisplay.view.ShowAlbumContentItemViewHolder
 import com.example.bookworm.databinding.SubactivityCreatealbumcontentAddalbumpostLayoutBinding
@@ -48,7 +47,7 @@ class ShowAlbumContentAdapter(val context: Context) :
             oldItem: Feed,
             newItem: Feed
         ): Boolean {
-            return oldItem.feedID == newItem.feedID
+            return oldItem.FeedID == newItem.FeedID
         }
 
         @SuppressLint("DiffUtilEquals")

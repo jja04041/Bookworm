@@ -31,10 +31,13 @@ import com.example.bookworm.bottomMenu.challenge.subactivity.subactivity_challen
 import com.example.bookworm.bottomMenu.challenge.items.ChallengeAdapter;
 import com.example.bookworm.bottomMenu.challenge.items.OnChallengeItemClickListener;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
+import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.databinding.FragmentChallengeBinding;
 import com.example.bookworm.core.internet.FBModule;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 
 import java.util.ArrayList;
@@ -88,7 +91,7 @@ public class fragment_challenge extends Fragment {
         uv = new UserInfoViewModel(getContext());
         uv.getUser(null, false);
 
-        uv.getData().observe(getViewLifecycleOwner(), userinfo -> {
+        uv.getUserInfoLiveData().observe(getViewLifecycleOwner(), userinfo -> {
             userInfo = userinfo;
             uv.updateUser(userInfo);
 
@@ -274,8 +277,7 @@ public class fragment_challenge extends Fragment {
             //가져온 데이터를 for문을 이용하여, challenge리스트에 차곡차곡 담는다.
             try {
                 for (DocumentSnapshot snapshot : a) {
-                    Map data = snapshot.getData();
-                    Challenge challenge = new Challenge(data);
+                    Challenge challenge = snapshot.toObject(Challenge.class);
                     challengeList.add(challenge);
                 }
                 //가져온 값의 마지막 snapshot부터 이어서 가져올 수 있도록 하기 위함.
@@ -301,7 +303,7 @@ public class fragment_challenge extends Fragment {
             }
             //더 불러올 데이터가 있는 경우
             else {
-                challengeList.add(new Challenge(null)); //로딩바 표시를 위한 빈 값
+                challengeList.add(new Challenge()); //로딩바 표시를 위한 빈 값
                 if (page > 1) {
                     isLoading = false;
                     challengeAdapter.notifyItemRangeChanged(beforesize, challengeList.size() - beforesize);

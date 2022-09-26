@@ -8,14 +8,13 @@ import android.os.Build
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.lifecycle.*
-import com.example.bookworm.bottomMenu.Feed.items.Feed
+import androidx.lifecycle.viewmodel.CreationExtras
+import com.example.bookworm.bottomMenu.feed.Feed
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
-import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumActivity
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumContentActivity
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumData
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -34,7 +33,7 @@ class AlbumProcessViewModel(val context: Context, val pv: UserInfoViewModel) : V
 
     class Factory(val context: Context, val userInfoViewModel: UserInfoViewModel) :
         ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
             return AlbumProcessViewModel(context, userInfoViewModel) as T
         }
     }
@@ -46,7 +45,7 @@ class AlbumProcessViewModel(val context: Context, val pv: UserInfoViewModel) : V
         var job1 = viewModelScope.launch { pv.getUser(null, false) } //사용자 정보를 가져오는 작업
         var job2 = viewModelScope.launch {
             job1.join()
-            token = pv.data.value!!.token
+            token = pv.userInfoLiveData.value!!.token
         }
         viewModelScope.launch {
             job2.join()
@@ -107,7 +106,7 @@ class AlbumProcessViewModel(val context: Context, val pv: UserInfoViewModel) : V
             ).show()
             return false
         } else
-           return withContext(viewModelScope.coroutineContext, {
+           return withContext(viewModelScope.coroutineContext) {
                var result = collectionReference.whereEqualTo("albumName", name).get().await()
                if (result.isEmpty) {
                    parentActivity.albumProcessViewModel.modifyName(name)
@@ -116,13 +115,13 @@ class AlbumProcessViewModel(val context: Context, val pv: UserInfoViewModel) : V
 //                    parentActivity.switchTab(1)
                } else {
                    Toast.makeText(
-                       context,
-                       "앨범명이 중복되었습니다. \n 다른 이름으로 시도해주세요",
-                       Toast.LENGTH_SHORT
+                           context,
+                           "앨범명이 중복되었습니다. \n 다른 이름으로 시도해주세요",
+                           Toast.LENGTH_SHORT
                    ).show()
                    false
                }
-           })
+           }
 
     }
     //서버에 앨범 업로드

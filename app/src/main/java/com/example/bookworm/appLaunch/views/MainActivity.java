@@ -12,8 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.bookworm.R;
-import com.example.bookworm.bottomMenu.Feed.Fragment_feed;
-import com.example.bookworm.bottomMenu.Feed.comments.subactivity_comment;
+import com.example.bookworm.bottomMenu.feed.FragmentFeed;
+import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment;
 import com.example.bookworm.core.MoveFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                         if (pendingDynamicLinkData != null) {
                             deepLink = pendingDynamicLinkData.getLink();
                             if(deepLink.getLastPathSegment().equals("profile")) {
-                                intent = new Intent(MainActivity.this, subactivity_comment.class);
+                                intent = new Intent(MainActivity.this, SubActivityComment.class);
                                 intent.putExtra("userID",deepLink.getQueryParameter("uid"));
                                 Log.d("params",deepLink.getQueryParameter("uid"));
                                 startActivity(intent);
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         //딥링크 코드 end
 
         // 초기화면 설정
-        fragments[0] = new Fragment_feed();
+        fragments[0] = new FragmentFeed();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.container, fragments[0], "0").commitAllowingStateLoss();
 
@@ -105,15 +105,8 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.tab_profile:
                             MoveFragment.show_fragment(fragments, fragmentManager, 4);
                             return true;
-
-
                     }
-
-
                     return false;
                 });
-
     }
-
-
 }

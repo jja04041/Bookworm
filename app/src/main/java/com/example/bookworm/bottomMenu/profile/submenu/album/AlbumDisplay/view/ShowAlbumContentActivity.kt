@@ -6,7 +6,6 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
@@ -18,7 +17,6 @@ import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumData
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumDisplay.item.ShowAlbumContentAdapter
-import com.example.bookworm.core.login.LoginActivity.mContext
 import com.example.bookworm.databinding.SubactivityShowalbumcontentBinding
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
@@ -71,7 +69,7 @@ class ShowAlbumContentActivity : AppCompatActivity() {
 
         binding!!.tvPostCnt.text = "${data.containsList.size} 게시물"
         //사용자명 보이기
-        uv.data.observe(this, { userinfo ->
+        uv.userInfoLiveData.observe(this, { userinfo ->
             Glide.with(binding!!.root).load(userinfo.profileimg).circleCrop()
                 .into(binding!!.ivUserProfilePic) //이미지 삽입
             binding!!.tvUserName.setText(userinfo.username)

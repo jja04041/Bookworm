@@ -20,10 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
 public class ProfileSettingActivity extends AppCompatActivity {
 
-    private UserInfo userInfo;
     private ActivityProfileSettingBinding binding;
-
-
     Context current_context;
     UserInfoViewModel pv;
 
@@ -67,8 +64,6 @@ public class ProfileSettingActivity extends AppCompatActivity {
                 .build();
         gsi = GoogleSignIn.getClient(ProfileSettingActivity.this, gso);
         current_context = this;
-
-        userInfo = new PersonalD(current_context).getUserInfo();
         //설정 버튼
         binding.btnModify.setOnClickListener(view -> {
             Intent intent = new Intent(current_context, ProfileModifyActivity.class);
@@ -77,12 +72,7 @@ public class ProfileSettingActivity extends AppCompatActivity {
         });
 
         //뒤로가기 버튼
-        binding.btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        binding.btnBack.setOnClickListener(view -> finish());
 
 
         //로그아웃 버튼

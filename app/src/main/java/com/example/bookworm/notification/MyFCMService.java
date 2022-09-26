@@ -16,8 +16,10 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.net.MalformedURLException;
 
-public class MyFCMService extends FirebaseMessagingService {
+//싱글톤으로 구성
 
+public class MyFCMService extends FirebaseMessagingService {
+    private static MyFCMService myFCMService = new MyFCMService();
     final String CHANNEL_ID = "ChannerID";
     final String CHANNEL_NAME = "ChannerName";
     final String CHANNEL_DESCRIPTION = "ChannerDescription";
@@ -31,6 +33,10 @@ public class MyFCMService extends FirebaseMessagingService {
         //token을 서버로 전송
     }
 
+    //인스턴스 생성
+    public static MyFCMService getInstance(){
+        return myFCMService;
+    }
 
     // 클라우드 서버에서 메시지 전송하면 호출
     @Override
@@ -59,7 +65,7 @@ public class MyFCMService extends FirebaseMessagingService {
 
         builder.setContentTitle(title)
                 .setContentText(body)
-                .setSmallIcon(R.drawable.appicon_bookworm);
+                .setSmallIcon(R.drawable.icon_bookworm);
 
         Notification notification = builder.build();
         notificationManager.notify(1, notification);

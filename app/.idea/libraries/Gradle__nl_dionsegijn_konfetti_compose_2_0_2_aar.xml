@@ -1,9 +1,12 @@
 <component name="libraryTable">
   <library name="Gradle: nl.dionsegijn:konfetti-compose:2.0.2@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/9a21eef9cdf2e2696f91b812d40f3331/transformed/jetified-konfetti-compose-2.0.2/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/9a21eef9cdf2e2696f91b812d40f3331/transformed/jetified-konfetti-compose-2.0.2/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/9a21eef9cdf2e2696f91b812d40f3331/transformed/jetified-konfetti-compose-2.0.2/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/d00ead38916766f844202f2d8c104d12/transformed/jetified-konfetti-compose-2.0.2/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/d5559f601158dc0d9ce5579a59929d82/transformed/jetified-konfetti-compose-2.0.2/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/3c1a085b2aa91bb9b2a2f648b2560e20/transformed/jetified-konfetti-compose-2.0.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/3c1a085b2aa91bb9b2a2f648b2560e20/transformed/jetified-konfetti-compose-2.0.2/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/3c1a085b2aa91bb9b2a2f648b2560e20/transformed/jetified-konfetti-compose-2.0.2/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

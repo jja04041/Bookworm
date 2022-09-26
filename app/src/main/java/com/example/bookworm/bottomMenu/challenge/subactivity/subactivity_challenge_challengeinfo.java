@@ -87,22 +87,22 @@ public class subactivity_challenge_challengeinfo extends AppCompatActivity {
         sendMap = new HashMap();//fb모듈에 전달할 맵 값
         Intent intent = getIntent();
         //넘겨받은 값 챌린지 객체에 넣음
-        challenge = (Challenge) intent.getSerializableExtra("challengeInfo");
+        challenge = (Challenge) intent.getParcelableExtra("challengeInfo");
         userInfo = new PersonalD(mContext).getUserInfo(); //저장된 UserInfo값을 가져온다.
     }
 
     //화면 갱신
     private void UpdateUI() {
         //책 썸네일 설정
-        Glide.with(this).load(challenge.getBook().getImg_url()).into(binding.ivThumbnail);
+        Glide.with(this).load(challenge.getBook().getImgUrl()).into(binding.ivThumbnail);
         binding.tvChallengeTitle.setText(challenge.getTitle());
         binding.tvDday.setText(countDday(challenge.getEndDate()));
         binding.tvChallengeinfoCurrentParticipants.setText(String.valueOf(challenge.getCurrentPart().size())); // 받아온 ArrayList 의 길이를 넣음 (현재 참여 인원 수 )
         binding.tvMaxParticipants.setText(String.valueOf(challenge.getMaxPart()));
         binding.tvChallengeinfoEnd.setText(challenge.getEndDate());
         binding.tvCurrentParticipants.setText(String.valueOf(challenge.getCurrentPart().size()));
-        binding.tvChallengeinfoCreator.setText(challenge.getMaster());
-        binding.tvChallengeDescription.setText(challenge.getChallengeDescription());
+//        binding.tvChallengeinfoCreator.setText(challenge.getMaster());
+        binding.tvChallengeDescription.setText(challenge.getDescription());
 
         binding.tvChallengeinfoBookname.setText(challenge.getBook().getTitle()); // 책 제목
         binding.tvChallengeinfoBookname.setSingleLine(true);    // 한줄로 표시하기

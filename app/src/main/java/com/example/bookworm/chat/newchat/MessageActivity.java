@@ -77,7 +77,7 @@ public class MessageActivity extends AppCompatActivity {
         context = MessageActivity.this;
 
         Intent intent = getIntent();
-        opponent = (UserInfo) intent.getSerializableExtra("opponent");
+        opponent = intent.getParcelableExtra("opponent");
 
 
         TextView tv = findViewById(R.id.tv_chatroomtopbar);
@@ -87,7 +87,7 @@ public class MessageActivity extends AppCompatActivity {
 
         pv.getUser(null, false);
 
-        pv.getData().observe(this, userInfo -> {
+        pv.getUserInfoLiveData().observe(this, userInfo -> {
             userinfo = userInfo;
 
             //Firebase DB관리 객체와 chat노드 참조객체 얻어오기
@@ -95,16 +95,14 @@ public class MessageActivity extends AppCompatActivity {
 
             myuid = userinfo.getToken();
 
-            if(opponent != null) {
+            if (opponent != null) {
                 destUid = opponent.getToken();
                 tv.setText(opponent.getUsername());
-            }
-            else
-            {
+            } else {
                 destUid = (String) intent.getSerializableExtra("destuid");
 
                 uv.getUser(destUid, true);
-                uv.getData().observe(this, oppo -> {
+                uv.getUserInfoLiveData().observe(this, oppo -> {
                     opponent = oppo;
                     tv.setText(opponent.getUsername());
                 });
@@ -136,38 +134,35 @@ public class MessageActivity extends AppCompatActivity {
 
     }
 
-    private void init()
-    {
+    private void init() {
         //myuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         //destUid = getIntent().getStringExtra("destUid");        //채팅 상대
 
-        recyclerView = (RecyclerView)findViewById(R.id.message_recyclerview);
-        button=(Button)findViewById(R.id.message_btn);
-        editText = (EditText)findViewById(R.id.message_editText);
+        recyclerView = (RecyclerView) findViewById(R.id.message_recyclerview);
+        button = (Button) findViewById(R.id.message_btn);
+        editText = (EditText) findViewById(R.id.message_editText);
 
-        button2 = (Button)findViewById(R.id.btnsharee);
+        button2 = (Button) findViewById(R.id.btnsharee);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
 
-        if(editText.getText().toString() == null) button.setEnabled(false);
+        if (editText.getText().toString() == null) button.setEnabled(false);
         else button.setEnabled(true);
 
         checkChatRoom();
     }
 
 
-
-    private void sendMsg()
-    {
+    private void sendMsg() {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ChatModel chatModel = new ChatModel();
-                chatModel.users.put(myuid,true);
-                chatModel.users.put(destUid,true);
+                chatModel.users.put(myuid, true);
+                chatModel.users.put(destUid, true);
 
                 //push() 데이터가 쌓이기 위해 채팅방 key가 생성
-                if(chatRoomUid == null){
+                if (chatRoomUid == null) {
                     Toast.makeText(MessageActivity.this, "채팅방 생성", Toast.LENGTH_SHORT).show();
                     button.setEnabled(false);
                     firebaseDatabase.getReference().child("chatrooms").push().setValue(chatModel).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -176,17 +171,16 @@ public class MessageActivity extends AppCompatActivity {
                             checkChatRoom();
                         }
                     });
-                }else{
+                } else {
                     sendMsgToDataBase();
                 }
             }
         });
     }
+
     //작성한 메시지를 데이터베이스에 보낸다.
-    private void sendMsgToDataBase()
-    {
-        if(!editText.getText().toString().equals(""))
-        {
+    private void sendMsgToDataBase() {
+        if (!editText.getText().toString().equals("")) {
             ChatModel.Comment comment = new ChatModel.Comment();
             comment.uid = myuid;
             comment.message = editText.getText().toString();
@@ -200,20 +194,19 @@ public class MessageActivity extends AppCompatActivity {
         }
     }
 
-    private void checkChatRoom()
-    {
+    private void checkChatRoom() {
         //자신 key == true 일때 chatModel 가져온다.
         /* chatModel
         public Map<String,Boolean> users = new HashMap<>(); //채팅방 유저
         public Map<String, ChatModel.Comment> comments = new HashMap<>(); //채팅 메시지
         */
-        firebaseDatabase.getReference().child("chatrooms").orderByChild("users/"+myuid).equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
+        firebaseDatabase.getReference().child("chatrooms").orderByChild("users/" + myuid).equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot dataSnapshot:snapshot.getChildren()) //나, 상대방 id 가져온다.
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) //나, 상대방 id 가져온다.
                 {
                     ChatModel chatModel = dataSnapshot.getValue(ChatModel.class);
-                    if(chatModel.users.containsKey(destUid)){           //상대방 id 포함돼 있을때 채팅방 key 가져옴
+                    if (chatModel.users.containsKey(destUid)) {           //상대방 id 포함돼 있을때 채팅방 key 가져옴
                         chatRoomUid = dataSnapshot.getKey();
                         //opponent = snapshot.getValue(UserInfo.class);
                         button.setEnabled(true);
@@ -235,19 +228,17 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     //===============채팅 창===============//
-    class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>
-    {
+    class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
         List<ChatModel.Comment> comments;
 
-        public RecyclerViewAdapter(){
+        public RecyclerViewAdapter() {
             comments = new ArrayList<>();
 
             getDestUid();
         }
 
         //상대방 uid 하나(single) 읽기
-        private void getDestUid()
-        {
+        private void getDestUid() {
             firebaseDatabase.getReference().child("users").child(destUid).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -264,23 +255,23 @@ public class MessageActivity extends AppCompatActivity {
         }
 
         //채팅 내용 읽어들임
-        private void getMessageList()
-        {
+        private void getMessageList() {
             FirebaseDatabase.getInstance().getReference().child("chatrooms").child(chatRoomUid).child("comments").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     comments.clear();
 
-                    for(DataSnapshot dataSnapshot : snapshot.getChildren())
-                    {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         comments.add(dataSnapshot.getValue(ChatModel.Comment.class));
                     }
                     notifyDataSetChanged();
 
-                    recyclerView.scrollToPosition(comments.size()-1);
+                    recyclerView.scrollToPosition(comments.size() - 1);
                 }
+
                 @Override
-                public void onCancelled(@NonNull DatabaseError error) { }
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
             });
         }
 
@@ -289,16 +280,15 @@ public class MessageActivity extends AppCompatActivity {
         public RecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
 
-
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_messagebox,parent,false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_messagebox, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerViewAdapter.ViewHolder holder, int position) {
-            ViewHolder viewHolder = ((ViewHolder)holder);
+            ViewHolder viewHolder = ((ViewHolder) holder);
 
-            if(comments.get(position).uid.equals(myuid)) //나의 uid 이면
+            if (comments.get(position).uid.equals(myuid)) //나의 uid 이면
             {
                 //나의 말풍선 오른쪽으로
                 viewHolder.textViewMsg.setText(comments.get(position).message);
@@ -307,7 +297,7 @@ public class MessageActivity extends AppCompatActivity {
                 viewHolder.linearLayoutRoot.setGravity(Gravity.RIGHT);
                 viewHolder.linearLayoutTime.setGravity(Gravity.RIGHT);
 
-            }else{
+            } else {
                 //상대방 말풍선 왼쪽
                 Glide.with(holder.itemView.getContext())
                         .load(opponent.getProfileimg())
@@ -324,9 +314,8 @@ public class MessageActivity extends AppCompatActivity {
 
         }
 
-        public String getDateTime(int position)
-        {
-            long unixTime=(long) comments.get(position).timestamp;
+        public String getDateTime(int position) {
+            long unixTime = (long) comments.get(position).timestamp;
             Date date = new Date(unixTime);
             simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
             String time = simpleDateFormat.format(date);
@@ -338,8 +327,7 @@ public class MessageActivity extends AppCompatActivity {
             return comments.size();
         }
 
-        private class ViewHolder extends RecyclerView.ViewHolder
-        {
+        private class ViewHolder extends RecyclerView.ViewHolder {
             public TextView textViewMsg;   //메시지 내용
             public TextView textViewName;
             public TextView textViewTimeStamp;
@@ -351,57 +339,56 @@ public class MessageActivity extends AppCompatActivity {
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
 
-                textViewMsg = (TextView)itemView.findViewById(R.id.item_messagebox_textview_msg);
-                textViewName = (TextView)itemView.findViewById(R.id.item_messagebox_TextView_name);
-                textViewTimeStamp = (TextView)itemView.findViewById(R.id.item_messagebox_textview_timestamp);
-                imageViewProfile = (ImageView)itemView.findViewById(R.id.item_messagebox_ImageView_profile);
-                linearLayoutDest = (LinearLayout)itemView.findViewById(R.id.item_messagebox_LinearLayout);
-                linearLayoutRoot = (LinearLayout)itemView.findViewById(R.id.item_messagebox_root);
-                linearLayoutTime = (LinearLayout)itemView.findViewById(R.id.item_messagebox_layout_timestamp);
+                textViewMsg = (TextView) itemView.findViewById(R.id.item_messagebox_textview_msg);
+                textViewName = (TextView) itemView.findViewById(R.id.item_messagebox_TextView_name);
+                textViewTimeStamp = (TextView) itemView.findViewById(R.id.item_messagebox_textview_timestamp);
+                imageViewProfile = (ImageView) itemView.findViewById(R.id.item_messagebox_ImageView_profile);
+                linearLayoutDest = (LinearLayout) itemView.findViewById(R.id.item_messagebox_LinearLayout);
+                linearLayoutRoot = (LinearLayout) itemView.findViewById(R.id.item_messagebox_root);
+                linearLayoutTime = (LinearLayout) itemView.findViewById(R.id.item_messagebox_layout_timestamp);
             }
         }
     }
 
 
-        // (subject = 들어갈 문구, pageurl =
-        public void Create_DynamicLink (final String subject){
+    // (subject = 들어갈 문구, pageurl =
+    public void Create_DynamicLink(final String subject) {
 
-            // 다른 이미지 넣고싶으면 함수 인자로 이미지 받기
-            Uri appiconuri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, R.drawable.appicon_bookworm);
+        // 다른 이미지 넣고싶으면 함수 인자로 이미지 받기
+        Uri appiconuri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, R.drawable.icon_bookworm);
 
-            Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
-                    .setLink(Uri.parse("www.google.com")) // pageurl
-                    .setDomainUriPrefix("https://b00kworm.page.link/TG78")
-                    .setAndroidParameters(
-                            new DynamicLink.AndroidParameters.Builder(getPackageName())
-                                    .build())
-                    .setSocialMetaTagParameters(
-                            new DynamicLink.SocialMetaTagParameters.Builder()
-                                    .setTitle("공유하기 테스트")
-                                    .setImageUrl(appiconuri)
-                                    .build())
-                    .buildShortDynamicLink()
-                    .addOnCompleteListener(this, new OnCompleteListener<ShortDynamicLink>() {
-                        @Override
-                        public void onComplete(@NonNull Task<ShortDynamicLink> task) {
-                            if (task.isSuccessful()) {
-                                Uri ShortLink = task.getResult().getShortLink();
-                                try {
-                                    Intent Sharing_Intent = new Intent();
-                                    Sharing_Intent.setAction(Intent.ACTION_SEND);
-                                    Sharing_Intent.putExtra(Intent.EXTRA_SUBJECT, subject);
-                                    Sharing_Intent.putExtra(Intent.EXTRA_TEXT, ShortLink.toString());
-                                    Sharing_Intent.setType("text/plain");
-                                    startActivity(Intent.createChooser(Sharing_Intent, "sharing"));
-                                }
-                                catch (Exception e) {
-                                }
+        Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(Uri.parse("www.google.com")) // pageurl
+                .setDomainUriPrefix("https://b00kworm.page.link/TG78")
+                .setAndroidParameters(
+                        new DynamicLink.AndroidParameters.Builder(getPackageName())
+                                .build())
+                .setSocialMetaTagParameters(
+                        new DynamicLink.SocialMetaTagParameters.Builder()
+                                .setTitle("공유하기 테스트")
+                                .setImageUrl(appiconuri)
+                                .build())
+                .buildShortDynamicLink()
+                .addOnCompleteListener(this, new OnCompleteListener<ShortDynamicLink>() {
+                    @Override
+                    public void onComplete(@NonNull Task<ShortDynamicLink> task) {
+                        if (task.isSuccessful()) {
+                            Uri ShortLink = task.getResult().getShortLink();
+                            try {
+                                Intent Sharing_Intent = new Intent();
+                                Sharing_Intent.setAction(Intent.ACTION_SEND);
+                                Sharing_Intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+                                Sharing_Intent.putExtra(Intent.EXTRA_TEXT, ShortLink.toString());
+                                Sharing_Intent.setType("text/plain");
+                                startActivity(Intent.createChooser(Sharing_Intent, "sharing"));
+                            } catch (Exception e) {
                             }
                         }
-                    });
+                    }
+                });
 
 
-        }
+    }
 
 
 }

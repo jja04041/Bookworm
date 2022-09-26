@@ -1,9 +1,12 @@
 <component name="libraryTable">
   <library name="Gradle: com.google.firebase:firebase-database-collection:18.0.1@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/1ef3ce606c9827c194264d5d8a181ae4/transformed/jetified-firebase-database-collection-18.0.1/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/1ef3ce606c9827c194264d5d8a181ae4/transformed/jetified-firebase-database-collection-18.0.1/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/1ef3ce606c9827c194264d5d8a181ae4/transformed/jetified-firebase-database-collection-18.0.1/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/a5b244669f2f0ba3215ac6ec5c4c993a/transformed/jetified-firebase-database-collection-18.0.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/38eae3f16f691ebeb94546754b910544/transformed/jetified-firebase-database-collection-18.0.1/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/b7211e23ecc59f06fa50f49a151716b2/transformed/jetified-firebase-database-collection-18.0.1/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/b7211e23ecc59f06fa50f49a151716b2/transformed/jetified-firebase-database-collection-18.0.1/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/b7211e23ecc59f06fa50f49a151716b2/transformed/jetified-firebase-database-collection-18.0.1/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.firebase/firebase-database-collection/18.0.1/641c828ba56aad8e1c54d66e4d7c63db27c19033/firebase-database-collection-18.0.1-javadoc.jar!/" />

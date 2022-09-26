@@ -24,10 +24,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.bookworm.appLaunch.views.MainActivity;
 import com.example.bookworm.bottomMenu.challenge.NumberPickerDialog;
+import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book;
 import com.example.bookworm.core.userdata.PersonalD;
 import com.example.bookworm.R;
-import com.example.bookworm.bottomMenu.search.items.book.Book;
-import com.example.bookworm.bottomMenu.search.subactivity.main.search_fragment_subActivity_main;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.databinding.SubactivityChallengeCreatechallengeBinding;
@@ -72,9 +71,10 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity imp
             result -> {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent intent = result.getData();
-                    this.selected_book = (Book) intent.getSerializableExtra("data");
+                    assert intent != null;
+                    this.selected_book = intent.getParcelableExtra("data");
                     tv_bookname.setText(selected_book.getTitle()); //책 제목만 세팅한다.
-                    Glide.with(this).load(selected_book.getImg_url()).into(Thumbnail); //책 표지 로딩후 삽입.
+                    Glide.with(this).load(selected_book.getImgUrl()).into(Thumbnail); //책 표지 로딩후 삽입.
                 }
             });
 
@@ -109,6 +109,7 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity imp
 
         challengeStartDay = df.format(cal.getTime());
 
+        //날짜 고르기
         binding.datePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,6 +120,7 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity imp
             }
         });
 
+        //인원수 고르기
         binding.numberPicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -193,9 +195,9 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity imp
 
     //검색창을 열어서 책을 검색한다.
     public void getBook() {
-        Intent intent = new Intent(this, search_fragment_subActivity_main.class);
-        intent.putExtra("classindex", 2);
-        startActivityResult.launch(intent); //검색 결과를 받는 핸들러를 작동한다.
+//        Intent intent = new Intent(this, search_fragment_subActivity_main.class);
+//        intent.putExtra("classindex", 2);
+//        startActivityResult.launch(intent); //검색 결과를 받는 핸들러를 작동한다.
     }
 
     private void updateLabel(TextView tv, Calendar calendar) {

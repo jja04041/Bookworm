@@ -19,7 +19,8 @@
         android:roundIcon="@mipmap/appicon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:replace="android:label">
         <activity
             android:name=".bottomMenu.challenge.board.subactivity_challenge_board_comment"
             android:exported="false" />
@@ -30,13 +31,10 @@
             android:name=".bottomMenu.challenge.board.subactivity_challenge_board"
             android:exported="false" />
         <activity
-            android:name="com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Modify"
+            android:name="com.example.bookworm.bottomMenu.feed.subActivity_Feed_Modify"
             android:exported="false" />
         <activity
-            android:name="com.example.bookworm.bottomMenu.Feed.comments.subactivity_comment"
-            android:exported="false" />
-        <activity
-            android:name="com.example.bookworm.bottomMenu.Feed.ImagePicker"
+            android:name="com.example.bookworm.bottomMenu.feed.ImagePicker"
             android:exported="false" />
         <activity
             android:name="com.example.bookworm.core.dataprocessing.image.ImagePicker"
@@ -44,32 +42,38 @@
         <activity
             android:name=".bottomMenu.profile.views.ProfileInfoActivity"
             android:exported="false"
-            tools:ignore="AppLinkUrlError">
-
-
-
-        </activity>
+            tools:ignore="AppLinkUrlError"></activity>
+        <activity
+            android:name="com.example.bookworm.bottomMenu.feed.comments.SubActivityComment"
+            android:exported="false" />
 
         <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="oauth"
+                    android:scheme="@string/kakaoKeyForAuth" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name="com.example.bookworm.extension.follow.view.FollowerActivity"
-            android:exported="false" /> <!-- 카카오 계정 연동을 위한 AppKey -->
+            android:exported="false" />
+        <!-- 카카오 계정 연동을 위한 AppKey -->
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakaoKey" /> <!-- SubActivities -->
         <activity
-            android:name="com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Create"
+            android:name="com.example.bookworm.bottomMenu.feed.subActivity_Feed_Create"
             android:exported="false"
             android:parentActivityName=".appLaunch.views.MainActivity" />
         <activity
             android:name=".bottomMenu.profile.submenu.album.AlbumDisplay.view.ShowAlbumContentActivity"
-            android:exported="false"
-            android:parentActivityName=".appLaunch.views.MainActivity" />
-        <activity
-            android:name=".bottomMenu.search.subactivity.result.search_fragment_subActivity_result"
-            android:exported="false"
-            android:parentActivityName=".bottomMenu.search.subactivity.main.search_fragment_subActivity_main" />
-        <activity
-            android:name=".bottomMenu.search.subactivity.main.search_fragment_subActivity_main"
             android:exported="false"
             android:parentActivityName=".appLaunch.views.MainActivity" />
         <activity
@@ -103,27 +107,33 @@
 
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="example.com"/>
-                <data android:scheme="http" android:host="example.com"/>
+
+                <data
+                    android:host="example.com"
+                    android:scheme="https" />
+                <data
+                    android:host="example.com"
+                    android:scheme="http" />
             </intent-filter>
 
         </activity> <!-- 메인 화면 -->
 
         <activity
             android:name=".core.login.LoginActivity"
-            android:exported="false"></activity><!-- 로그인 화면 -->
+            android:exported="false" /><!-- 로그인 화면 -->
         <!-- 채팅 화면 -->
         <activity
             android:name=".chat.newchat.Activity_chatlist"
             android:exported="false" /> <!-- 채팅리스트 화면 -->
         <activity
             android:name=".chat.newchat.MessageActivity"
-            android:exported="false"> </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".bottomMenu.profile.views.PreferGenreActivity"
-            android:exported="false"> </activity>
+            android:exported="false"></activity>
 
         <activity
             android:name=".LoadingActivity"
@@ -137,7 +147,9 @@
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" /> <!-- cache directory file provider paths -->
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".bottomMenu.search.searchtest.views.SearchMainActivity" />
+        <activity android:name=".bottomMenu.feed.SubActivityCreatePost" /> <!-- cache directory file provider paths -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -151,8 +163,8 @@
 
         <service
             android:name=".notification.MyFCMService"
-            android:stopWithTask="false"
-            android:exported="false">
+            android:exported="false"
+            android:stopWithTask="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

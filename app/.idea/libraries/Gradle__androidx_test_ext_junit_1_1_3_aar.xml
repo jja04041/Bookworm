@@ -3,9 +3,12 @@
     <CLASSES>
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/f983bbc9847c14311eefdabc841667c6/transformed/jetified-junit-1.1.3/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/0c072d0fd35da102a2c7aeb6b38fe468/transformed/jetified-junit-1.1.3/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/a1ff179deb69f0893aa50f099524ccce/transformed/jetified-junit-1.1.3/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/a1ff179deb69f0893aa50f099524ccce/transformed/jetified-junit-1.1.3/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/a1ff179deb69f0893aa50f099524ccce/transformed/jetified-junit-1.1.3/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/5e91439d52e4413e5a87e2c4d9557379/transformed/jetified-junit-1.1.3/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/fb625bdb0bbffcd214ff3da34c18b26f/transformed/jetified-junit-1.1.3/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/b8dd151e459ca9a960724125611fcdf4/transformed/jetified-junit-1.1.3/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/b8dd151e459ca9a960724125611fcdf4/transformed/jetified-junit-1.1.3/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/b8dd151e459ca9a960724125611fcdf4/transformed/jetified-junit-1.1.3/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.test.ext/junit/1.1.3/f138cf897cc1e024dd714073df04f2425d845104/junit-1.1.3-javadoc.jar!/" />

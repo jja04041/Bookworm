@@ -2,11 +2,9 @@ package com.example.bookworm.bottomMenu.challenge.board;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.bookworm.bottomMenu.Feed.comments.Comment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

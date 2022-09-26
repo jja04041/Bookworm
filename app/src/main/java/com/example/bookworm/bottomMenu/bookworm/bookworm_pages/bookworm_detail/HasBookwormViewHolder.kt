@@ -1,8 +1,6 @@
 package com.example.bookworm.bottomMenu.bookworm.bookworm_pages.bookworm_detail
 
 import android.content.Context
-import android.graphics.Color
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
@@ -34,10 +32,10 @@ class HasBookwormViewHolder(
         binding = FragmentBwItemBinding.bind(itemView)
         uv = UserInfoViewModel(context)
         uv.getUser(null, false)
-        uv.data.observe(context as MainActivity, {
+        uv.userInfoLiveData.observe(context as MainActivity) {
             user = it
             uv.getBookWorm(user.token)
-        })
+        }
 
     }
 
@@ -53,7 +51,7 @@ class HasBookwormViewHolder(
         binding!!.tvGenre.setText(data.name)
         uv.bwdata.observe(context as MainActivity) {
             bwData = it
-            if(it.wormtype == data.id) liveData.value=bindingAdapterPosition
+            if(it.wormType == data.id) liveData.value=bindingAdapterPosition
         }
 
 
@@ -69,14 +67,14 @@ class HasBookwormViewHolder(
         uv.getBookWorm(user.token)
         var position = bindingAdapterPosition
         listener.onItemClick(itemView, position)
-        uv.bwdata.observe(context as AppCompatActivity, {
-            if (it.wormtype != data.id) {
-                it.wormtype = data.id
+        uv.bwdata.observe(context as AppCompatActivity) {
+            if (it.wormType != data.id) {
+                it.wormType = data.id
                 CoroutineScope(Dispatchers.IO).launch {
                     uv.updateBw(null, it)
                 }
             }
-        })
+        }
 
 //        liveData.observe(context, {
 //            Log.d("볼레 값", it.toString() + "--" + bindingAdapterPosition)

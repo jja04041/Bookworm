@@ -58,7 +58,7 @@ class CreateAlbumContentActivity : AppCompatActivity() {
         albumProcessViewModel.albumData = albumData!!
 
         //사용자 프로필 가져오기
-        uv.data.observe(this, {
+        uv.userInfoLiveData.observe(this, {
             albumData!!.creater = it.token
             Glide.with(this).load(it.profileimg).circleCrop().into(binding!!.ivUserProfilePic)
             binding!!.tvUserName.text = it.username
