@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.bookworm.LoadState
 import com.example.bookworm.R
 import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
@@ -131,9 +132,9 @@ class FragmentFeed : Fragment() {
                 //피드를 새로 불러올 때 활성화
                 showShimmer(
                         if (!refreshing) false
-                        else nowState == FeedViewModel.State.Loading)
+                        else nowState == LoadState.Loading)
                 //데이터 로딩이 다 되었다면
-                if (nowState == FeedViewModel.State.Done) {
+                if (nowState == LoadState.Done) {
                     var current = feedAdapter.currentList.toMutableList() //기존에 가지고 있던 아이템 목록
                     if (refreshing) {
                         current.clear()
@@ -143,7 +144,14 @@ class FragmentFeed : Fragment() {
                     if (current.isNotEmpty() && current.last().FeedID == null) current.removeLast()
                     //데이터의 끝에 다다르지 않았다면, 현재 목록에 불러온 아이템을 추가한다.
                     if (viewModel.postsData != null && !current.containsAll(viewModel.postsData!!)) {
-                        current.addAll(viewModel.postsData!!)
+                        val resultData =viewModel.postsData!!.toMutableList()
+                        var index =0
+                        while(true){
+                            if(index>resultData.size) break
+                            if(current.contains(resultData[index])) resultData.removeAt(index)
+                            index++
+                        }
+                        current.addAll(resultData)
                         current.add(Feed())
                     }
                     //데이터의 끝에 다다랐다면 끝이라는 것을 변수에 저장

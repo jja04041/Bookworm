@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.bookworm.LoadState
 import com.example.bookworm.bottomMenu.feed.Feed
 import com.example.bookworm.bottomMenu.feed.FeedViewModel
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
@@ -98,7 +99,7 @@ class SubActivityComment : AppCompatActivity() {
             feedViewModel.loadComment(feedItem.FeedID!!, isRefreshing)
             feedViewModel.nowCommentLoadState.observe(this) { nowState ->
                 //데이터 로딩이 다 되었다면
-                if (nowState == FeedViewModel.State.Done) {
+                if (nowState == LoadState.Done) {
                     var current = commentAdapter.currentList.toMutableList() //기존에 가지고 있던 아이템 목록
                     if (isRefreshing) {
                         current.clear()
