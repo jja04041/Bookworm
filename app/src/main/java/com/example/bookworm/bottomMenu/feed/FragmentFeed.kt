@@ -38,10 +38,10 @@ class FragmentFeed : Fragment() {
     private var storiesBar: RecyclerView? = null
 
 
-    //다른 액티비티로부터의 결과값을 받기 위함
-    var startActivityResult = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-    ) { result: ActivityResult ->
+//    //다른 액티비티로부터의 결과값을 받기 위함
+//    var startActivityResult = registerForActivityResult(
+//            ActivityResultContracts.StartActivityForResult()
+//    ) { result: ActivityResult ->
 //        if (result.resultCode == subActivity_Feed_Create.CREATE_OK) {
 //
 //        }
@@ -50,7 +50,7 @@ class FragmentFeed : Fragment() {
 //            val item = result.data!!.getParcelableExtra<Feed>("modifiedFeed")
 ////            binding.recyclerView.smoothScrollToPosition(item!!.position)
 //        }
-    }
+//    }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -67,7 +67,7 @@ class FragmentFeed : Fragment() {
                 imgCreatefeed.setOnClickListener {
                     val intent = Intent(context, SubActivityCreatePost::class.java)
                     intent.putExtra("mainUser", mainUser)
-                    startActivityResult.launch(intent)
+//                    startActivityResult.launch(intent)
                 }
                 tvLogo.setOnClickListener {
                     binding.recyclerView.smoothScrollToPosition(0)
@@ -144,13 +144,19 @@ class FragmentFeed : Fragment() {
                     if (current.isNotEmpty() && current.last().FeedID == null) current.removeLast()
                     //데이터의 끝에 다다르지 않았다면, 현재 목록에 불러온 아이템을 추가한다.
                     if (viewModel.postsData != null && !current.containsAll(viewModel.postsData!!)) {
-                        val resultData =viewModel.postsData!!.toMutableList()
-                        var index =0
-                        while(true){
-                            if(index>resultData.size) break
-                            if(current.contains(resultData[index])) resultData.removeAt(index)
+                        val resultData = viewModel.postsData!!.toMutableList()
+                        var index = 0
+                        while (true) {
+                            if (index > resultData.size - 1) break
+                            if (current.contains(resultData[index])) resultData.removeAt(index)
+//                            if (viewModel.postsData!!.contains(resultData[index]))
                             index++
                         }
+
+//                        for (i in 0 until resultData.size)
+//                        {
+//                            if(current.contains(resultData[i])) resultData.removeAt(i)
+//                        }
                         current.addAll(resultData)
                         current.add(Feed())
                     }

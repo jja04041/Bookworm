@@ -9,7 +9,7 @@ import android.widget.Toast;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.bookworm.R;
-import com.example.bookworm.bottomMenu.feed.subActivity_Feed_Create;
+import com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Create;
 import com.example.bookworm.appLaunch.views.MainActivity;
 import com.example.bookworm.bottomMenu.profile.views.ProfileModifyActivity;
 import com.example.bookworm.core.internet.interfaces.GetDataInterface;

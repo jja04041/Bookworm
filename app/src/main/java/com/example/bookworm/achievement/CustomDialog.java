@@ -14,7 +14,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bookworm.R;
-import com.example.bookworm.bottomMenu.feed.subActivity_Feed_Create;
+import com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Create;
 
 import java.util.Arrays;
 import java.util.List;
