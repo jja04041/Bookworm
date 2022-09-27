@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
+import com.example.bookworm.LoadState
 import com.example.bookworm.R
 import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.feed.comments.Comment
@@ -103,7 +104,7 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
                 .replace("&gt", ">")
 
         //라벨표시
-        if (feed.label!![0] != "") setLabel(feed.label!!)
+        if (feed.label!![0] != "") setLabel(feed.label)
         else binding.lllabel.visibility = View.GONE
         //리스너 부착
         //책 정보 확인 시
@@ -211,7 +212,7 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
             feedViewModel.manageComment(comment, feed.FeedID!!, true) //서버에 댓글 추가
             feedViewModel.nowCommentLoadState.observe(context as MainActivity) { state ->
                 //서버에 업로드 되면 화면에 해당 내용을 반영함.
-                if (state == FeedViewModel.State.Done) {
+                if (state == LoadState.Done) {
                     feed.commentsCount += 1L
                     feed.comment = comment
                     feed.comment!!.duration = feedViewModel.getDateDuration(feed.comment!!.madeDate)
@@ -256,7 +257,7 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
             feedViewModel.manageLike(feed.FeedID!!, nowUser, feed.isUserLiked)
             feedViewModel.nowLikeState.observe(context as MainActivity) { state ->
                 when (state) {
-                    FeedViewModel.State.Done -> {
+                   LoadState.Done -> {
                         myFCMService!!.sendPostToFCM(
                                 context,
                                 feedUserFcmtoken, "${nowUser.username}님이 좋아요를 표시했습니다."

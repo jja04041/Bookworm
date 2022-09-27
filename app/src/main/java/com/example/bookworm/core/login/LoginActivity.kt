@@ -1,5 +1,6 @@
 package com.example.bookworm.core.login
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -30,20 +31,24 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import java.io.IOException
 
+/**
+ * 로그인을 진행하는 액티비티.
+ *
+ * 구글 및 카카오 계정을 사용하여 로그인이 가능하다.
+ * */
 class LoginActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivityLoginBinding.inflate(layoutInflater)
     }
     private var mAuth: FirebaseAuth? = null
     private var gsa: GoogleSignInAccount? = null
-    var userInfo: UserInfo? = null
-    var isLogined: Boolean = java.lang.Boolean.FALSE
+    private var userInfo = UserInfo()
     private val userViewModel by lazy {
         ViewModelProvider(
                 this, UserInfoViewModel.Factory(this)
         )[UserInfoViewModel::class.java]
     }
-    var startActivityResult = registerForActivityResult<Intent, ActivityResult>(
+    private val startActivityResult = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
         if (result.resultCode == RESULT_OK) {
@@ -62,10 +67,11 @@ class LoginActivity : AppCompatActivity() {
                         } catch (e: NullPointerException) {
                             ""
                         },
+                        email = account.email,
                         platform = "Google"
                 )
                 //회원 가입 함수로 데이터를 전달
-                signUp(userInfo!!)
+                signUp(userInfo)
             }
         }
     }
@@ -94,7 +100,6 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(binding.root)
         super.onCreate(savedInstanceState)
-        isLogined = java.lang.Boolean.FALSE //카카오 이중로그인 방지
         mAuth = FirebaseAuth.getInstance()
         startLogin()
 
@@ -122,13 +127,14 @@ class LoginActivity : AppCompatActivity() {
             }
             btnLoginKakao.setOnClickListener {
                 if (UserApiClient.instance.isKakaoTalkLoginAvailable(this@LoginActivity)) {
-                    UserApiClient.instance.loginWithKakaoAccount(this@LoginActivity) { token, error ->
+                    //loginWithKaKaoTalk() -> 카카오톡으로 로그인
+                    UserApiClient.instance.loginWithKakaoTalk(this@LoginActivity) { token, error ->
                         if (error != null) {
 
-                            //사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
+                            // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
                             // 의도적인 로그인 취소로 보고 카카오 계저응로 로그인 시도 없이 로그인 취소로 처리
                             if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
-                                return@loginWithKakaoAccount
+                                return@loginWithKakaoTalk
                             }
 
                             //카카오톡에 연결된 카카오 계정이 없는 경우, 카카오 계정으로 로그인 시도
@@ -151,6 +157,7 @@ class LoginActivity : AppCompatActivity() {
                     username = user!!.kakaoAccount!!.profile!!.nickname!!,
                     token = user.id.toString(),
                     profileimg = user.kakaoAccount!!.profile!!.profileImageUrl!!,
+                    email = user.kakaoAccount!!.email,
                     platform = "Kakao"
             ))
         }
@@ -171,8 +178,11 @@ class LoginActivity : AppCompatActivity() {
         if (gsa != null) {
             val accessToken = gsa!!.idToken
             val credential = GoogleAuthProvider.getCredential(accessToken, null)
+            Log.d("구글 토큰", accessToken.toString());
             mAuth!!.signInWithCredential(credential).addOnCompleteListener { task: Task<AuthResult> -> Log.d("로그인 완료", task.result.toString()) }
         }
+
+
         userViewModel.getUser(userInfo.token, true) //회원 여부 확인을 위한 회원정보 조회
         userViewModel.userInfoLiveData.observe(this) { userinfo: UserInfo? ->
             //회원인 경우
@@ -195,6 +205,7 @@ class LoginActivity : AppCompatActivity() {
 
     companion object {
 
+        @SuppressLint("StaticFieldLeak")
         @JvmField
         var gsi: GoogleSignInClient? = null
     }

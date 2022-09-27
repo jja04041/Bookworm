@@ -30,10 +30,15 @@ class ProfileInfoActivity : AppCompatActivity() {
             : UserInfo? = null
     lateinit var userID: String
     lateinit var fv: FollowViewModelImpl
-    lateinit var userViewModel: UserInfoViewModel
+    private val userViewModel by lazy {
+        ViewModelProvider(
+                this,
+                UserInfoViewModel.Factory(this)
+        )[UserInfoViewModel::class.java]
+    }
     var cache: Boolean? = null
     lateinit var menuPagerAdapter: SubMenuPagerAdapter
-    private var myFCMService: MyFCMService? = null
+    private var myFCMService: MyFCMService = MyFCMService()
     private var mFirebaseDatabase: FirebaseDatabase? = null
 
     //자신이나 타인의 프로필을 클릭했을때 나오는 화면
@@ -44,12 +49,6 @@ class ProfileInfoActivity : AppCompatActivity() {
         binding = ActivityProfileInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
         fv = FollowViewModelImpl(this)
-        userViewModel = ViewModelProvider(
-            this,
-            UserInfoViewModel.Factory(this)
-        ).get(UserInfoViewModel::class.java)
-
-        myFCMService = MyFCMService()
         mFirebaseDatabase = FirebaseDatabase.getInstance()
 
         //shimmer 적용을 위해 기존 뷰는 일단 안보이게, shimmer는 보이게

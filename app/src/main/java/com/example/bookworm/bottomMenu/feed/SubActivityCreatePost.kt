@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.example.bookworm.LoadState
 import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
 
 import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
@@ -80,13 +81,13 @@ class SubActivityCreatePost : AppCompatActivity() {
                             feedViewModel.uploadFeed(feedData, feedImageBitmap!!,imageProcess)
                             feedViewModel.nowFeedUploadState.observe(this@SubActivityCreatePost) {
                                 when (it) {
-                                    FeedViewModel.State.Done -> {
+                                    LoadState.Done -> {
                                         Toast.makeText(this@SubActivityCreatePost,
                                                 "게시물이 업로드 되었습니다.", Toast.LENGTH_SHORT)
                                                 .show()
                                         this@SubActivityCreatePost.finish()
                                     }
-                                    FeedViewModel.State.Error ->
+                                    LoadState.Error ->
                                         Toast.makeText(this@SubActivityCreatePost,
                                                 "게시물 업로드에 실패했습니다. \n 다시 시도해 주세요", Toast.LENGTH_SHORT)
                                                 .show()
