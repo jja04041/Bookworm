@@ -41,14 +41,14 @@ class FragmentFeed : Fragment() {
     var startActivityResult = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
-        if (result.resultCode == subActivity_Feed_Create.CREATE_OK) {
-
-        }
-        if (result.resultCode == subActivity_Feed_Modify.MODIFY_OK) {
-            //수정된 아이템
-            val item = result.data!!.getParcelableExtra<Feed>("modifiedFeed")
-//            binding.recyclerView.smoothScrollToPosition(item!!.position)
-        }
+//        if (result.resultCode == subActivity_Feed_Create.CREATE_OK) {
+//
+//        }
+//        if (result.resultCode == subActivity_Feed_Modify.MODIFY_OK) {
+//            //수정된 아이템
+//            val item = result.data!!.getParcelableExtra<Feed>("modifiedFeed")
+////            binding.recyclerView.smoothScrollToPosition(item!!.position)
+//        }
     }
 
     override fun onCreateView(
