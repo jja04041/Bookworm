@@ -20,6 +20,8 @@ import com.kakao.sdk.auth.AuthApiClient;
 import com.kakao.sdk.common.model.KakaoSdkError;
 import com.kakao.sdk.user.UserApiClient;
 
+import java.util.Objects;
+
 
 public class LoadingActivity extends AppCompatActivity {
 
@@ -40,9 +42,8 @@ public class LoadingActivity extends AppCompatActivity {
         Handler mHander = new Handler();
         mHander.postDelayed(() -> {
             ConnectivityManager cm = (ConnectivityManager) LoadingActivity.this.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-            if (activeNetwork != null) {
-
+            if (cm.isDefaultNetworkActive()) {
+                //자동 로그인 작업
                 if (AuthApiClient.getInstance().hasToken()) {
                     //카카오 자동 로그인 -> 유효한 토큰이 있다면 자동 로그인 수행
                     UserApiClient.getInstance().accessTokenInfo((token, error) -> {
@@ -55,14 +56,14 @@ public class LoadingActivity extends AppCompatActivity {
                                 Log.e("카카오 자동로그인 중 에러 발생", "기타오류");
                             }
                         } else {
-                            Log.d("카카오 아이디", token.getId().toString());
+                            Log.d("카카오토큰", Objects.requireNonNull(AuthApiClient.getInstance().getTokenManagerProvider().getManager().getToken()).getAccessToken());
                             //토큰 유효성 체크 성공(필요 시 토큰 갱신됨)
                             moveToMain();
                         }
                         return null;
                     });
                 } else {
-                    if (gsa != null)
+                    if (gsa != null) //만약 구글로 로그인한 기록이 남아 있다면
                         moveToMain();
                     else moveToLogin();
                 }

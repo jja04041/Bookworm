@@ -9,7 +9,7 @@ require('dotenv').config({
 
 // 구글 토큰 검증 
 const {
-    OAuth2Client
+    client
 } = require('google-auth-library');
 
 
@@ -19,45 +19,60 @@ const request = require('request-promise');
 
 //파이어 베이스 초기화 
 
-const {firebaseAdmin} = require("../firebaseProcess");
+const { firebaseAdmin } = require("../firebaseProcess");
 
 
 
 //for firebase
 //커스텀 토큰 생성 
-
-//구글 계정인 경우 
-
-//카카오 계정인 경우 
 function createFirebaseToken(AccessToken, platform) {
-    if (platform == "google") {
-
-    } else if (platform == "kakao") {
-        return requestMe(AccessToken).then((response) => {
-            const body = JSON.parse(response);
-            console.log(body);
-            const userId = `kakao:${body.id}`;
-            if (!userId) {
-                return res.status(404)
-                    .send({
-                        message: 'There was no user with the given access token.'
-                    });
-            }
-            let nickname = null;
-            let profileImage = null;
-            if (body.properties) {
-                nickname = body.properties.nickname;
-                profileImage = body.properties.profile_image;
-            }
-            return updateOrCreateUser(userId, body.kaccount_email, nickname,
-                profileImage, platform);
-        }).then((userRecord) => {
-            const userId = userRecord.uid;
-            console.log(`creating a custom firebase token based on uid ${userId}`);
-            return firebaseAdmin.auth().createCustomToken(userId, {
-                provider: platform
+    switch (platform) {
+        case "Kakao": //카카오 계정인 경우
+            return requestMe(AccessToken).then((response) => {
+                const body = JSON.parse(response);
+                console.log(body);
+                const userId = `${body.id}`;
+                if (!userId) {
+                    return res.status(404)
+                        .send({
+                            message: 'There was no user with the given access token.'
+                        });
+                }
+                let nickname = null;
+                let profileImage = null;
+                if (body.properties) {
+                    nickname = body.properties.nickname;
+                    profileImage = body.properties.profile_image;
+                }
+                return updateOrCreateUser(userId, body.kaccount_email, nickname,
+                    profileImage, platform);
+            }).then((userRecord) => {
+                const userId = userRecord.uid;
+                console.log(`creating a custom firebase token based on uid ${userId}`);
+                return firebaseAdmin.auth().createCustomToken(userId, {
+                    provider: platform
+                });
+            })
+        default:
+            return validateGoogleToken(AccessToken).then((userData) => {
+                const userEmail = userData["email"];
+                const userName = userData['name'];
+                const userPhotoUrl = userData["picture"];
+                const userId = userData['sub'];
+                console.log("현재 구글 토큰 검증까지 완료함");
+                return updateOrCreateUser(userId,userEmail,userName,userPhotoUrl,platform);
+            }).catch(
+                //에러 처리 
+                console.log("에러남")
+            ).then((userRecord)=>{
+                const userId = userRecord.uid;
+                console.log(`creating a custom firebase token based on uid ${userId}`);
+                return firebaseAdmin.auth().createCustomToken(userId, {
+                    provider: platform
+                });
             });
-        })
+        //구글 토큰 검증 부분 들어가야함
+
     }
 };
 
@@ -67,15 +82,8 @@ function updateOrCreateUser(userId, email, displayName, photoURL, platform) {
     const updateParams = {
         provider: platform,
         displayName: displayName,
+        photoURL : photoURL
     };
-    if (displayName) {
-        updateParams['displayName'] = displayName;
-    } else {
-        updateParams['displayName'] = email;
-    }
-    if (photoURL) {
-        updateParams['photoURL'] = photoURL;
-    }
     console.log(updateParams);
     //파이어베이스에 사용자 등록 
     return firebaseAdmin.auth().updateUser(userId, updateParams)
@@ -105,6 +113,17 @@ function requestMe(kakaoAccessToken) {
         url: requestMeUrl,
     });
 };
+
+//토큰값 검증 (구글)
+async function validateGoogleToken(googleToken) {
+    const ticket = await client.verifyIdToken({
+        idToken: googleToken,
+        audience: CLIENT_ID,
+    });
+    console.log(ticket)
+    const payload = ticket.getPayload();
+    return payload
+}
 
 module.exports = {
     createFirebaseToken

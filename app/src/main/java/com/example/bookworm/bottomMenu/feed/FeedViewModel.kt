@@ -1,9 +1,10 @@
 package com.example.bookworm.bottomMenu.feed
 
-import android.annotation.SuppressLint
+
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.lifecycle.*
+import com.example.bookworm.LoadState
 import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.feed.comments.Comment
 import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
@@ -19,7 +20,7 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FeedViewModel(@SuppressLint("StaticFieldLeak") private val context: Context) : ViewModel() {
+class FeedViewModel(context: Context) : ViewModel() {
     private val loadPagingRepo = LoadPagingDataRepository()
     private val userInfoViewModel = ViewModelProvider(
             when (context) {
@@ -30,12 +31,11 @@ class FeedViewModel(@SuppressLint("StaticFieldLeak") private val context: Contex
             UserInfoViewModel.Factory(context))[UserInfoViewModel::class.java]
     var postsData: List<Feed>? = emptyList() //불러오는 피드 데이터 목록을 저장
     var commentsData: List<Comment>? = emptyList() //불러오는 댓글 데이터 목록을 저장
-    val nowFeedLoadState = MutableLiveData<State>() //현재 피드 로드 상태를 추적하는 LiveData
-    val nowCommentLoadState = MutableLiveData<State>() //현재 댓글 로드 상태를 추적하는 LiveData
-    val nowFeedUploadState = MutableLiveData<State>() //현재 피드 업로드 상태를 추적하는 LiveData
-    val nowLikeState = MutableLiveData<State>()
+    val nowFeedLoadState = MutableLiveData<LoadState>() //현재 피드 로드 상태를 추적하는 LiveData
+    val nowCommentLoadState = MutableLiveData<LoadState>() //현재 댓글 로드 상태를 추적하는 LiveData
+    val nowFeedUploadState = MutableLiveData<LoadState>() //현재 피드 업로드 상태를 추적하는 LiveData
+    val nowLikeState = MutableLiveData<LoadState>()
 
-    enum class State { Loading, Done, Error } //로딩중 , 로딩 끝 , 에러
 
 
     class Factory(val context: Context) : ViewModelProvider.Factory {
@@ -47,7 +47,7 @@ class FeedViewModel(@SuppressLint("StaticFieldLeak") private val context: Contex
     //피드를 업로드할 때 사용하는 함수
     //선택한 이미지 비트맵을 URI로 변경 후, 서버에 업로드 => 파이어베이스에 피드 등록
     fun uploadFeed(feed: Feed, imgBitmap: Bitmap?, imageProcess: ImageProcessing) {
-        nowFeedUploadState.value = State.Loading
+        nowFeedUploadState.value = LoadState.Loading
 
         val imageJob =  //이미지 처리 작업
                 viewModelScope.async {
@@ -58,7 +58,7 @@ class FeedViewModel(@SuppressLint("StaticFieldLeak") private val context: Contex
                     } else ""
                 }
         viewModelScope.launch {
-            var url = imageJob.await()
+            val url = imageJob.await()
             if (url != null) {
                 feed.imgurl = url
                 //파이어스토어에 피드 업로드
@@ -74,14 +74,14 @@ class FeedViewModel(@SuppressLint("StaticFieldLeak") private val context: Contex
                                         userInfoViewModel.updateBw(token, data)
                                     }
                                     userInfoViewModel.updateUser(this@apply)
-                                    nowFeedUploadState.value = State.Done
+                                    nowFeedUploadState.value = LoadState.Done
                                 }
                             }
                             // 업적 업데이트
 
 
-                        }.addOnFailureListener { nowFeedUploadState.value = State.Error }
-            } else nowFeedUploadState.value = State.Error
+                        }.addOnFailureListener { nowFeedUploadState.value = LoadState.Error }
+            } else nowFeedUploadState.value = LoadState.Error
         }
     }
 
@@ -91,16 +91,16 @@ class FeedViewModel(@SuppressLint("StaticFieldLeak") private val context: Contex
         val commentRef = feedRef.collection("comments").document(comment.commentID!!)
 
         viewModelScope.launch {
-            nowCommentLoadState.value = State.Loading
+            nowCommentLoadState.value = LoadState.Loading
             FireStoreLoadModule.provideFirebaseInstance().apply {
                 runTransaction { transaction ->
                     transaction.set(commentRef, comment)
                             .update(feedRef, "commentsCount", FieldValue
                                     .increment(if (isAdd) 1L else -1L))
                 }.addOnSuccessListener {
-                    nowCommentLoadState.value = State.Done
+                    nowCommentLoadState.value = LoadState.Done
                 }.addOnFailureListener {
-                    nowCommentLoadState.value = State.Error
+                    nowCommentLoadState.value = LoadState.Error
                 }
             }
         }
@@ -110,7 +110,7 @@ class FeedViewModel(@SuppressLint("StaticFieldLeak") private val context: Contex
     fun manageLike(feedId: String, nowUser: UserInfo, isLiked: Boolean) {
         val feedRef = FireStoreLoadModule.provideQueryPostByFeedID(feedId)
         val nowUserRef = FireStoreLoadModule.provideUserByUserToken(nowUser.token)
-        nowLikeState.value = State.Loading
+        nowLikeState.value = LoadState.Loading
         viewModelScope.launch {
             FireStoreLoadModule.provideFirebaseInstance() // Base For Query
                     .runTransaction { transaction ->
@@ -126,10 +126,10 @@ class FeedViewModel(@SuppressLint("StaticFieldLeak") private val context: Contex
                             //업적 처리
 //                        userInfoViewModel.getBookWorm(nowUser.token)
 //                        userInfoViewModel.bwdata.value
-                            nowLikeState.value = State.Done
+                            nowLikeState.value = LoadState.Done
                         }
                     }.addOnFailureListener {
-                        nowLikeState.value = State.Error
+                        nowLikeState.value = LoadState.Error
                     }
         }
     }
@@ -137,7 +137,7 @@ class FeedViewModel(@SuppressLint("StaticFieldLeak") private val context: Contex
     //피드를 불러오는 함수
     fun loadPosts(isRefresh: Boolean = false) {
 
-        nowFeedLoadState.value = State.Loading //로딩 상태로 변경
+        nowFeedLoadState.value = LoadState.Loading //로딩 상태로 변경
         viewModelScope.launch {
             //새로고침 또는 첫 로드 시에는 변수 리셋과 쿼리 재장착
             if (isRefresh) {
@@ -149,31 +149,30 @@ class FeedViewModel(@SuppressLint("StaticFieldLeak") private val context: Contex
                 postsData =
                         (loadedData as MutableList<Feed>).map { feed: Feed ->
                             return@map withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-                                var it = feed
-                                var tempUserInfo = userInfoViewModel.suspendGetUser(null)?.apply {
-                                    it.isUserLiked = likedPost!!.contains(it.FeedID)
+                                val tempUserInfo = userInfoViewModel.suspendGetUser(null)?.apply {
+                                    feed.isUserLiked = likedPost.contains(feed.FeedID)
                                 }
-                                it.Creator = userInfoViewModel.suspendGetUser(it.UserToken!!)
-                                it.isUserPost = (tempUserInfo!!.token == it.UserToken)
-                                it.duration = getDateDuration(it.date)
-                                if (it.commentsCount > 0L) {
-                                    it.comment = FireStoreLoadModule.provideQueryCommentsLately(it.FeedID!!)
+                                feed.Creator = userInfoViewModel.suspendGetUser(feed.UserToken!!)
+                                feed.isUserPost = (tempUserInfo!!.token == feed.UserToken)
+                                feed.duration = getDateDuration(feed.date)
+                                if (feed.commentsCount > 0L) {
+                                    feed.comment = FireStoreLoadModule.provideQueryCommentsLately(feed.FeedID!!)
                                             .get().await()
                                             .toObjects(Comment::class.java)[0] //형변환을 자동으로 해줌.
-                                    it.comment!!.creator = userInfoViewModel.suspendGetUser(it.comment!!.userToken)!!
-                                    it.comment!!.duration = getDateDuration(it.comment!!.madeDate)
+                                    feed.comment!!.creator = userInfoViewModel.suspendGetUser(feed.comment!!.userToken)!!
+                                    feed.comment!!.duration = getDateDuration(feed.comment!!.madeDate)
                                 }
-                                return@withContext it
+                                return@withContext feed
                             }
                         }
             } else postsData = null
 
-            nowFeedLoadState.value = State.Done
+            nowFeedLoadState.value = LoadState.Done
         }
     }
 
     fun loadComment(feedId: String, isRefresh: Boolean) {
-        nowCommentLoadState.value = State.Loading
+        nowCommentLoadState.value = LoadState.Loading
         viewModelScope.launch {
             if (isRefresh) {
                 loadPagingRepo.reset()
@@ -188,7 +187,7 @@ class FeedViewModel(@SuppressLint("StaticFieldLeak") private val context: Contex
                     }
                 }
             } else null
-            nowCommentLoadState.value = State.Done
+            nowCommentLoadState.value = LoadState.Done
         }
     }
 
@@ -202,10 +201,10 @@ class FeedViewModel(@SuppressLint("StaticFieldLeak") private val context: Contex
         var dateDuration = ""
         val now = System.currentTimeMillis()
         val dateNow = Date(now) //현재시각
-        val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.getDefault())
         try {
-            val dateCreated = dateFormat.parse(createdTime)
-            val duration = dateNow.time - dateCreated.time //시간차이 mills
+            val dateCreated = createdTime?.let { dateFormat.parse(it) }
+            val duration = dateNow.time - dateCreated!!.time //시간차이 mills
             dateDuration = if (duration / 1000 / 60 == 0L) {
                 "방금"
             } else if (duration / 1000 / 60 <= 59) {
@@ -218,7 +217,7 @@ class FeedViewModel(@SuppressLint("StaticFieldLeak") private val context: Contex
                 (duration / 1000 / 60 / 60 / 24 / 30).toString() + "개월 전"
             } else {
 //                (duration / 1000 / 60 / 60 / 24 / 30 / 12).toString() + "년 전"
-                SimpleDateFormat("yyyy-MM-dd").format(duration)
+                SimpleDateFormat("yyyy-MM-dd",Locale.getDefault()).format(duration)
             }
             return dateDuration
         } catch (e: ParseException) {
