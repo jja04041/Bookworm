@@ -66,7 +66,7 @@ class AlbumProcessAdapter(val context: Context) :
             oldItem: Feed,
             newItem: Feed
         ): Boolean {
-            return oldItem.FeedID==newItem.FeedID
+            return oldItem.feedID==newItem.feedID
         }
 
         @SuppressLint("DiffUtilEquals")

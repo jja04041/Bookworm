@@ -32,10 +32,6 @@ class UserInfoViewModel(context: Context) : ViewModel() {
     var albumdata = MutableLiveData<ArrayList<AlbumData>>()
     var isDuplicated = MutableLiveData<Boolean>() //중복 여부를 체크 하는 LiveData
     val repo = UserRepository(context)
-    var fv: FollowViewModelImpl = ViewModelProvider(
-            context as AppCompatActivity,
-            FollowViewModelImpl.Factory(context)
-    )[FollowViewModelImpl::class.java]
     var feedList = MutableLiveData<ArrayList<Feed>>()
 
     enum class State { Loading, Done, Error } //로딩중 , 로딩 끝 , 에러
@@ -119,9 +115,9 @@ class UserInfoViewModel(context: Context) : ViewModel() {
     fun getFeedList(token: String) {
         viewModelScope.launch {
             var data =
-                    FirebaseFirestore.getInstance().collection("feed").whereEqualTo("UserToken", token)
+                    FirebaseFirestore.getInstance().collection("feed").whereEqualTo("userToken", token)
                             .orderBy(
-                                    "FeedID",
+                                    "feedID",
                                     Query.Direction.DESCENDING
                             )
                             .get().await()

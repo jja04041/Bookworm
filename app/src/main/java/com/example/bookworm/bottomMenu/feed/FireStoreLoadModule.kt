@@ -4,7 +4,6 @@ import com.google.android.datatransport.runtime.dagger.Module
 import com.google.android.datatransport.runtime.dagger.Provides
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.Transaction
 import javax.inject.Singleton
 
 // FireStore에서 검색하는 쿼리를 담은 Object
@@ -37,12 +36,12 @@ object FireStoreLoadModule {
 
     fun provideQueryLoadPostsOrderByFeedID(pageSize: Int = 5) =
             provideQueryPathToFeedCollection()
-                    .orderBy("FeedID", Query.Direction.DESCENDING)
+                    .orderBy("feedID", Query.Direction.DESCENDING)
                     .limit(pageSize.toLong())
 
     fun provideQueryLoadPostsOrderByFeedID() =
             provideQueryPathToFeedCollection()
-                    .orderBy("FeedID", Query.Direction.DESCENDING)
+                    .orderBy("feedID", Query.Direction.DESCENDING)
 
     //피드 내용 불러오는 쿼리
     fun provideUserByUserToken(userToken: String) =
@@ -59,7 +58,7 @@ object FireStoreLoadModule {
     //피드 업로드에 사용하는 쿼리
     fun provideQueryUploadPost(item: Feed) =
             provideQueryPathToFeedCollection()
-                    .add(item)
+                    .document(item.feedID!!).set(item)
 
     //FeedId로 피드 문서 검색하는 쿼리
     fun provideQueryPostByFeedID(feedId: String) =

@@ -42,8 +42,12 @@ class FragmentFeed : Fragment() {
     var startActivityResult = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
-        if (result.resultCode == subActivity_Feed_Create.CREATE_OK) {
-
+        if (result.resultCode == SubActivityCreatePost.CREATE_OK) {
+            val item = result.data!!.getParcelableExtra<Feed>("feedData")
+            val list = feedAdapter.currentList.toMutableList()
+            list.add(0, item)
+            feedAdapter.submitList(list)
+            binding.recyclerView.smoothScrollToPosition(0)
         }
         if (result.resultCode == subActivity_Feed_Modify.MODIFY_OK) {
             //수정된 아이템
@@ -141,15 +145,15 @@ class FragmentFeed : Fragment() {
                         binding.swiperefresh.isRefreshing = false //새로고침인 경우, 데이터가 다 로딩 된 후 새로고침 표시 없애기
                     }
                     //만약 현재 목록이 비어있지 않고, 마지막 아이템이 로딩 아이템 이라면 마지막 아이템을 제거
-                    if (current.isNotEmpty() && current.last().FeedID == null) current.removeLast()
+                    if (current.isNotEmpty() && current.last().feedID == null) current.removeLast()
                     //데이터의 끝에 다다르지 않았다면, 현재 목록에 불러온 아이템을 추가한다.
                     if (viewModel.postsData != null && !current.containsAll(viewModel.postsData!!)) {
-                        val resultData =viewModel.postsData!!.toMutableList()
-                        var index =0
-                        while(true){
-                            if(index>resultData.size) break
-                            if(current.contains(resultData[index])) resultData.removeAt(index)
+                        val resultData = viewModel.postsData!!.toMutableList()
+                        var index = 0
+                        while (true) {
+                            if (current.contains(resultData[index])) resultData.removeAt(index)
                             index++
+                            if (index > resultData.size - 1) break
                         }
                         current.addAll(resultData)
                         current.add(Feed())

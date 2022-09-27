@@ -37,7 +37,7 @@ class LoadPagingDataRepository() {
             if (lastVisibleData != null)
                 query.startAfter(
                         when (type) {
-                            DataType.FeedType -> lastVisibleData!!.data!!["FeedID"]
+                            DataType.FeedType -> lastVisibleData!!.data!!["feedID"]
                             DataType.CommentType -> lastVisibleData!!.data!!["CommentID"]
                             else -> {}
                         }

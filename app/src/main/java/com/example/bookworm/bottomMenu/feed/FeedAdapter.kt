@@ -65,7 +65,7 @@ class FeedAdapter(private val context: Context) :
     }
 
     override fun getItemViewType(pos: Int): Int {
-        return if (currentList[pos].FeedID != null) 1 else 2
+        return if (currentList[pos].feedID != null) 1 else 2
     }
 
     companion object : DiffUtil.ItemCallback<Feed>() {
@@ -74,7 +74,7 @@ class FeedAdapter(private val context: Context) :
         }
 
         override fun areContentsTheSame(oldItem: Feed, newItem: Feed): Boolean {
-            return oldItem.FeedID == newItem.FeedID
+            return oldItem.feedID == newItem.feedID
 
         }
     }

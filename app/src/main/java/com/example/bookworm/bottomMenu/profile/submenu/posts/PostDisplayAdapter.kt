@@ -30,7 +30,7 @@ class PostDisplayAdapter :
     //값 업데이트를 위한 비교 콜백
     object PostDiffCallback : DiffUtil.ItemCallback<Feed>() {
         override fun areItemsTheSame(oldItem: Feed, newItem: Feed): Boolean =
-            (oldItem.FeedID == newItem.FeedID)
+            (oldItem.feedID == newItem.feedID)
 
         @SuppressLint("DiffUtilEquals")
         override fun areContentsTheSame(oldItem: Feed, newItem: Feed): Boolean =

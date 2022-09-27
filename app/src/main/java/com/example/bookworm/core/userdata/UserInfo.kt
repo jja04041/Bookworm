@@ -33,12 +33,11 @@ data class UserInfo(
 
         var genre: HashMap<String, Int?>? = HashMap(),
         var prefergenre: ArrayList<String> = ArrayList(),
-
-        @Exclude
+        @Exclude @get:Exclude @set:Exclude
         var isMainUser //메인 유저인지 확인하는 변수
         : Boolean = false,
 
-        @Exclude
+        @Exclude @get:Exclude @set:Exclude
         var isFollowed//팔로우 여부 확인 하는 변수
         : Boolean = false,
 ) : Parcelable

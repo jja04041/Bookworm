@@ -17,6 +17,7 @@ import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivit
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
+import java.lang.Exception
 
 //전반적인 검색에 사용될 뷰모델 -> 데이터 가공, 처리 담당
 class SearchViewModel(context: Context) : ViewModel() {
@@ -93,12 +94,17 @@ class SearchViewModel(context: Context) : ViewModel() {
             val result = searchDataRepository.loadSearchedBooks(keyword, page)
             when (result.isSuccessful) {
                 true -> {
-                    val data = result.body()?.let { JSONObject(it)["item"] as JSONArray }
-                    for (i in 0 until data!!.length()) {
-                        val item = data.getJSONObject(i)
-                        resultBookList.add(convertToBook(item, false))
+                    try {
+                        val data = result.body()?.let { JSONObject(it)["item"] as JSONArray }
+                        for (i in 0 until data!!.length()) {
+                            val item = data.getJSONObject(i)
+                            resultBookList.add(convertToBook(item, false))
+                        }
+                        loadDataState!!.value = State.Done
+                    }catch (e:Exception){
+                        loadDataState!!.value = State.Error
                     }
-                    loadDataState!!.value = State.Done
+
                 }
                 else -> {
                     loadDataState!!.value = State.Error
