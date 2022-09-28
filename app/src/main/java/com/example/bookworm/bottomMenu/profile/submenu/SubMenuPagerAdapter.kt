@@ -6,15 +6,17 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import com.example.bookworm.bottomMenu.profile.submenu.views.FragmentAlbums
 import com.example.bookworm.bottomMenu.profile.submenu.views.FragmentPosts
 
-class SubMenuPagerAdapter : FragmentStatePagerAdapter {
-    private val pageList = ArrayList<Fragment>()
-
-    constructor(token: String?, fragmentManager: FragmentManager) : super(
+class SubMenuPagerAdapter//포스트 탭
+//앨범 탭
+(token: String?, fragmentManager: FragmentManager) : FragmentStatePagerAdapter(
         fragmentManager,
         BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
-    ) {
-        pageList.add(FragmentPosts(token)) //포스트 탭
-        pageList.add(FragmentAlbums(token)) //앨범 탭
+) {
+    private val pageList = ArrayList<Fragment>()
+
+    init {
+        pageList.add(FragmentPosts(token))
+        pageList.add(FragmentAlbums(token))
     }
 
     override fun getCount(): Int {

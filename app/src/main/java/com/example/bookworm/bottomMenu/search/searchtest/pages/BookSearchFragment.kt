@@ -1,5 +1,6 @@
 package com.example.bookworm.bottomMenu.search.searchtest.pages
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -53,7 +54,12 @@ class BookSearchFragment : Fragment() {
 //                    val intent = Intent(context, SearchDetailActivity::class.java)
 //                    intent.putExtra("Book", bookAdapter.currentList[position])
 //                    startActivity(intent)
-                    if (activity!!.callingActivity != null) Log.d("부모", activity!!.callingActivity!!.className)
+                    if (activity!!.callingActivity != null) {
+                        val intent = activity!!.intent
+                        intent.putExtra("bookData", bookAdapter.currentList[position])
+                        activity!!.setResult(Activity.RESULT_OK, intent)
+                        activity!!.finish()
+                    }
                 }
             }
         })
@@ -64,10 +70,6 @@ class BookSearchFragment : Fragment() {
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                         val imm = context.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
                         val edtSearch = activity!!.findViewById<EditText>(R.id.edtSearch)
-                        if (edtSearch.hasFocus()) {
-                            imm.hideSoftInputFromWindow(activity!!.currentFocus!!.windowToken, 0)
-                            edtSearch.clearFocus()
-                        }
 
                         super.onScrolled(recyclerView, dx, dy)
                         val layoutManager = recyclerView.layoutManager as LinearLayoutManager?

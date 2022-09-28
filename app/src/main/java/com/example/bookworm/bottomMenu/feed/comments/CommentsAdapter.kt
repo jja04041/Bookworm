@@ -29,7 +29,7 @@ class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
 
         override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
             return if (oldItem is Feed && newItem is Feed)
-                oldItem.FeedID == newItem.FeedID
+                oldItem.feedID == newItem.feedID
             else
                 (oldItem as Comment).commentID == (newItem as Comment).commentID
         }
@@ -99,7 +99,7 @@ class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
         fun bind(item: Feed) {
             binding.apply {
                 //작성자 관련
-                item.Creator!!.apply {
+                item.creatorInfo!!.apply {
                     tvNickname.text = username
                     Glide.with(itemView.context)
                             .load(profileimg)

@@ -24,15 +24,16 @@ object ModifyPostBindingAdapter {
 //게시물수정 액티비티
 class SubActivityModifyFeed : AppCompatActivity() {
     private var binding: SubactivityModifyPostBinding? = null
-    private lateinit var feed: Feed
+    private val originData by lazy {
+        intent!!.getParcelableExtra<Feed>("Feed")
+    }
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState)
         binding = SubactivityModifyPostBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
-        feed = intent!!.getSerializableExtra("Feed") as Feed
 
 
-        val modifyLabel = feed.label!! //수정화면의 라벨 세팅
+
 
     }
 

@@ -18,14 +18,20 @@ import kotlinx.coroutines.tasks.await
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class FeedViewModel(context: Context) : ViewModel() {
     private val loadPagingRepo = LoadPagingDataRepository()
+    private val feedDataRepository = FeedDataRepository(context)
     private val userInfoViewModel = ViewModelProvider(
             when (context) {
                 is MainActivity -> context
                 is SubActivityComment -> context
+                is SubActivityCreatePost -> context
+                is SubActivityModifyFeed -> context
                 else -> context as SearchMainActivity
             },
             UserInfoViewModel.Factory(context))[UserInfoViewModel::class.java]
@@ -37,10 +43,22 @@ class FeedViewModel(context: Context) : ViewModel() {
     val nowLikeState = MutableLiveData<LoadState>()
 
 
-
     class Factory(val context: Context) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return FeedViewModel(context) as T
+        }
+    }
+
+    fun deleteFeed(feed: Feed, liveData: MutableLiveData<LoadState>) {
+        liveData.value = LoadState.Loading
+        viewModelScope.launch {
+            try {
+                feedDataRepository.deleteFeed(feed)
+                LoadState.Done
+            } catch (e: Exception) {
+                LoadState.Error
+            }
+
         }
     }
 
@@ -48,11 +66,13 @@ class FeedViewModel(context: Context) : ViewModel() {
     //선택한 이미지 비트맵을 URI로 변경 후, 서버에 업로드 => 파이어베이스에 피드 등록
     fun uploadFeed(feed: Feed, imgBitmap: Bitmap?, imageProcess: ImageProcessing) {
         nowFeedUploadState.value = LoadState.Loading
-
+        feed.date = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+        feed.feedID = System.currentTimeMillis().toString() + "_" + feed.userToken //현재 시각 + 사용자 토큰을 FeedID로 설정
         val imageJob =  //이미지 처리 작업
                 viewModelScope.async {
                     if (imgBitmap != null) {
-                        val imageName = "feed_ ${feed.FeedID}.jpg"
+                        val imageName = "feed_ ${feed.feedID}.jpg"
                         val imgUrl = imageProcess.uploadImg(imgBitmap, imageName)
                         imgUrl //null값인 경우, 업로드 실패, 아닌 경우 제대로 처리 된 것
                     } else ""
@@ -65,22 +85,20 @@ class FeedViewModel(context: Context) : ViewModel() {
                 FireStoreLoadModule.provideQueryUploadPost(feed)
                         .addOnSuccessListener {    //정상적으로 업로드 되는 경우
                             //유저의 정보 업데이트
-                            feed.Creator!!.apply {
+                            feed.creatorInfo!!.apply {
 //                                setGenre(feed.book!!.categoryname, context) //장르 설정
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    userInfoViewModel.getBookWorm(token).join().apply {
-                                        var data = userInfoViewModel.bwdata.value
-                                        data!!.readCount++
-                                        userInfoViewModel.updateBw(token, data)
-                                    }
-                                    userInfoViewModel.updateUser(this@apply)
-                                    nowFeedUploadState.value = LoadState.Done
-                                }
+                                userInfoViewModel.getBookWorm(token).onJoin
+                                var data = userInfoViewModel.bwdata.value
+                                data!!.readCount++
+                                userInfoViewModel.updateBw(token, data)
+                                userInfoViewModel.updateUser(this)
                             }
-                            // 업적 업데이트
+                            nowFeedUploadState.value = LoadState.Done
+                        }
+                        // 업적 업데이트
 
 
-                        }.addOnFailureListener { nowFeedUploadState.value = LoadState.Error }
+                        .addOnFailureListener { nowFeedUploadState.value = LoadState.Error }
             } else nowFeedUploadState.value = LoadState.Error
         }
     }
@@ -153,13 +171,13 @@ class FeedViewModel(context: Context) : ViewModel() {
                         (loadedData as MutableList<Feed>).map { feed: Feed ->
                             return@map withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
                                 val tempUserInfo = userInfoViewModel.suspendGetUser(null)?.apply {
-                                    feed.isUserLiked = likedPost.contains(feed.FeedID)
+                                    feed.isUserLiked = likedPost.contains(feed.feedID)
                                 }
-                                feed.Creator = userInfoViewModel.suspendGetUser(feed.UserToken!!)
-                                feed.isUserPost = (tempUserInfo!!.token == feed.UserToken)
+                                feed.creatorInfo = userInfoViewModel.suspendGetUser(feed.userToken!!)
+                                feed.isUserPost = (tempUserInfo!!.token == feed.userToken)
                                 feed.duration = getDateDuration(feed.date)
                                 if (feed.commentsCount > 0L) {
-                                    feed.comment = FireStoreLoadModule.provideQueryCommentsLately(feed.FeedID!!)
+                                    feed.comment = FireStoreLoadModule.provideQueryCommentsLately(feed.feedID!!)
                                             .get().await()
                                             .toObjects(Comment::class.java)[0] //형변환을 자동으로 해줌.
                                     feed.comment!!.creator = userInfoViewModel.suspendGetUser(feed.comment!!.userToken)!!
@@ -204,7 +222,7 @@ class FeedViewModel(context: Context) : ViewModel() {
         var dateDuration = ""
         val now = System.currentTimeMillis()
         val dateNow = Date(now) //현재시각
-        val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.getDefault())
+        val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         try {
             val dateCreated = createdTime?.let { dateFormat.parse(it) }
             val duration = dateNow.time - dateCreated!!.time //시간차이 mills
@@ -220,7 +238,7 @@ class FeedViewModel(context: Context) : ViewModel() {
                 (duration / 1000 / 60 / 60 / 24 / 30).toString() + "개월 전"
             } else {
 //                (duration / 1000 / 60 / 60 / 24 / 30 / 12).toString() + "년 전"
-                SimpleDateFormat("yyyy-MM-dd",Locale.getDefault()).format(duration)
+                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(duration)
             }
             return dateDuration
         } catch (e: ParseException) {

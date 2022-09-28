@@ -6,10 +6,12 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.bookworm.LoadState
 import com.example.bookworm.R
 import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
@@ -86,15 +88,18 @@ class customMenuPopup(val context: Context, val anchor: View) : PopupMenu(contex
                             if (code == FEED_DELETE) {
                                 //뷰모델 생성
                                 vm = ViewModelProvider(if (context is MainActivity) context
-                                else context as SubActivityComment)
-                                        .get(FeedViewModel::class.java)
+                                else context as SubActivityComment)[FeedViewModel::class.java]
 
                                 //뷰모델을 이용하여 서버에서 피드 데이터 삭제 진행
-//                                (vm as newFeedViewModel).deleteFeed(data as Feed)
+                                val state = MutableLiveData<LoadState>()
+                                (vm as FeedViewModel).deleteFeed(data as Feed,state)
                                 //어댑터 Refresh
                                 //삭제된 내용을 현재 액티비티에 반영해야함.
-                                if (context is SubActivityComment) context.finish()
-                                else liveState.value = FEED_DELETE
+                                state.observe(context as AppCompatActivity) {
+                                    if (context is SubActivityComment) context.finish()
+                                    else liveState.value = FEED_DELETE
+                                }
+
 
                             }
                         }.setNegativeButton("아니오") { dialog: DialogInterface, which: Int ->

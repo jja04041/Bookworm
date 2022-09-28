@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 
 import android.graphics.drawable.Drawable
 import android.os.Handler
@@ -17,6 +16,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -102,10 +102,11 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
                 .replace("&gt;", ">")
                 .replace("&lt", "<")
                 .replace("&gt", ">")
+      if(feed.imgurl=="") binding.feedImage.isVisible = false
 
-        //라벨표시
-        if (feed.label!![0] != "") setLabel(feed.label)
-        else binding.lllabel.visibility = View.GONE
+//        //라벨표시
+//        if (feed.label!![0] != "") setLabel(feed.label)
+//        else binding.lllabel.visibility = View.GONE
         //리스너 부착
         //책 정보 확인 시
         pv.userInfoLiveData.observe(context as MainActivity) { mainUser ->
@@ -177,7 +178,7 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
                 //프로필을 눌렀을때 그 사용자의 프로필 정보 화면으로 이동
                 llProfile.setOnClickListener {
                     val intent = Intent(context, ProfileInfoActivity::class.java)
-                    intent.putExtra("userID", feed.UserToken)
+                    intent.putExtra("userID", feed.userToken)
                     context.startActivity(intent)
                 }
 
@@ -209,7 +210,7 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
                     userToken = nowUser.token,
                     madeDate = madeDate
             )
-            feedViewModel.manageComment(comment, feed.FeedID!!, true) //서버에 댓글 추가
+            feedViewModel.manageComment(comment, feed.feedID!!, true) //서버에 댓글 추가
             feedViewModel.nowCommentLoadState.observe(context as MainActivity) { state ->
                 //서버에 업로드 되면 화면에 해당 내용을 반영함.
                 if (state == LoadState.Done) {
@@ -239,11 +240,11 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
             if (!feed.isUserLiked) {
                 //현재 좋아요를 누르지 않은 상태
                 feed.isUserLiked = true
-                feed.FeedID?.let { nowUser.likedPost.add(it) }
+                feed.feedID?.let { nowUser.likedPost.add(it) }
             } else {
                 //현재 좋아요를 누른 상태
                 feed.isUserLiked = false
-                feed.FeedID?.let { nowUser.likedPost.remove(it) }
+                feed.feedID?.let { nowUser.likedPost.remove(it) }
             }
             binding.apply {
                 tvLike.apply {
@@ -254,7 +255,7 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
                     else context.getDrawable(R.drawable.icon_like)
                 }
             }
-            feedViewModel.manageLike(feed.FeedID!!, nowUser, feed.isUserLiked)
+            feedViewModel.manageLike(feed.feedID!!, nowUser, feed.isUserLiked)
             feedViewModel.nowLikeState.observe(context as MainActivity) { state ->
                 when (state) {
                    LoadState.Done -> {

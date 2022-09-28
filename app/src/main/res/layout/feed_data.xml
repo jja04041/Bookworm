@@ -43,7 +43,7 @@
                     android:layout_marginHorizontal="15dp"
                     android:layout_marginVertical="5dp"
                     android:src="@drawable/profile"
-                    app:imgUrl='@{feed.creator.profileimg != null ? feed.creator.profileimg:""}'
+                    app:imgUrl='@{feed.creatorInfo.profileimg != null ? feed.creatorInfo.profileimg:""}'
                     app:placeholder="@{@drawable/profile}" />
 
                 <LinearLayout
@@ -58,7 +58,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:maxLength="15"
-                        android:text="@{feed.creator.username,default = 사용자}"
+                        android:text="@{feed.creatorInfo.username,default = 사용자}"
                         android:textColor="#000000"
                         android:textSize="18dp"
                         android:textStyle="bold" />

@@ -22,7 +22,7 @@ class DiffUtilCallback(private val oldList: ArrayList<*>, private val newList: A
         if (oldItem is Comment && newItem is Comment) {
             return oldItem.commentID === newItem.commentID
         } else if (oldItem is Feed && newItem is Feed) {
-            return oldItem.FeedID === newItem.FeedID
+            return oldItem.feedID === newItem.feedID
         } else if (oldItem is UserInfo && newItem is UserInfo) {
             return oldItem.token === newItem.token
         }

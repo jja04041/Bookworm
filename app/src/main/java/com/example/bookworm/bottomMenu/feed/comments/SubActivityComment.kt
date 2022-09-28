@@ -75,7 +75,7 @@ class SubActivityComment : AppCompatActivity() {
                     text = null
 
                     //게시물 작성자에게 댓글이 달렸다는 알림을 보냄
-                    myFCMService.sendPostToFCM(this@SubActivityComment, feedItem.Creator!!.fCMtoken,
+                    myFCMService.sendPostToFCM(this@SubActivityComment, feedItem.creatorInfo!!.fCMtoken,
                             "${nowUser!!.username}님이 댓글을 남겼습니다. \"${text}\" ")
                 }
                 mRecyclerView.apply {
@@ -96,7 +96,7 @@ class SubActivityComment : AppCompatActivity() {
     //데이터를 가져오는 메소드
     fun loadCommentData(isRefreshing: Boolean) {
         if (!isDataEnd) {
-            feedViewModel.loadComment(feedItem.FeedID!!, isRefreshing)
+            feedViewModel.loadComment(feedItem.feedID!!, isRefreshing)
             feedViewModel.nowCommentLoadState.observe(this) { nowState ->
                 //데이터 로딩이 다 되었다면
                 if (nowState == LoadState.Done) {

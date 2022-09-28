@@ -14,6 +14,6 @@ data class Book(
         var publisher: String = "",
         var author: String = "",
         var itemId: String = "",
-        @Exclude
+        @Exclude @get:Exclude @set:Exclude
         var isRecommend: Boolean = false,
 ) : Parcelable
