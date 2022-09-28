@@ -201,10 +201,8 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
         }
         //댓글의 내용이 없는 경우 업로드 하지 않음.
         if (commentText.replace(" ", "") != "") {
-            val madeDate = LocalDateTime.now()
-                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")
-                            .withLocale(Locale.KOREA)
-                            .withZone(ZoneId.of("Asia/Seoul")))
+            val madeDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
             val comment = Comment(commentID = "${madeDate}_${nowUser.token}",
                     contents = commentText,
                     userToken = nowUser.token,

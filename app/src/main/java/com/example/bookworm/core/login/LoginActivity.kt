@@ -2,13 +2,16 @@ package com.example.bookworm.core.login
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import com.example.bookworm.LoadState
 import com.example.bookworm.R
 import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
@@ -29,7 +32,7 @@ import com.kakao.sdk.common.model.AuthErrorCause
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
-
+import java.io.IOException
 
 /**
  * 로그인을 진행하는 액티비티.
@@ -198,6 +201,10 @@ class LoginActivity : AppCompatActivity() {
         userViewModel.getUser(userInfo.token, true) //회원 여부 확인을 위한 회원정보 조회
         CheckFcm(userInfo)
         userViewModel.userInfoLiveData.observe(this) { userinfo: UserInfo? ->
+        val livedata = MutableLiveData<UserInfo> ()
+        userViewModel.getUser(userInfo.token,livedata)
+        livedata.observe(this){
+            userinfo:UserInfo? ->
             //회원인 경우
             if (userinfo!!.platform != null) StartApplication(1)
             else {
