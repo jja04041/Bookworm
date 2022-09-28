@@ -1,18 +1,15 @@
 package com.example.bookworm.core.login
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import com.example.bookworm.LoadState
 import com.example.bookworm.R
+import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.profile.views.PreferGenreActivity
 import com.example.bookworm.core.userdata.UserInfo
@@ -25,6 +22,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthErrorCause
 import com.kakao.sdk.common.model.ClientError
@@ -49,7 +47,7 @@ class LoginActivity : AppCompatActivity() {
                 this, UserInfoViewModel.Factory(this)
         )[UserInfoViewModel::class.java]
     }
-    private val startActivityResult = registerForActivityResult(
+    var startActivityResult = registerForActivityResult<Intent, ActivityResult>(
             ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
         if (result.resultCode == RESULT_OK) {
@@ -158,7 +156,6 @@ class LoginActivity : AppCompatActivity() {
                     username = user!!.kakaoAccount!!.profile!!.nickname!!,
                     token = user.id.toString(),
                     profileimg = user.kakaoAccount!!.profile!!.profileImageUrl!!,
-                    email = user.kakaoAccount!!.email,
                     platform = "Kakao"
             ))
         }
@@ -166,12 +163,24 @@ class LoginActivity : AppCompatActivity() {
 
 
     //메인액티비티로 이동
-    private fun moveToMainActivity() {
-        val intent = Intent(this, PreferGenreActivity::class.java)
-        intent.putExtra("Login", 1)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-        startActivity(intent)
-        finish()
+    private fun StartApplication(_iFlag: Int) {
+
+        /** flag 0 == 가입, 1 == login */
+        if(_iFlag == 0)
+        {
+            val intent = Intent(this, PreferGenreActivity::class.java)
+            intent.putExtra("Login", 1)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            startActivity(intent)
+            finish()
+        }
+        if(_iFlag == 1)
+        {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+//            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
     }
 
     //회원가입 함수
@@ -184,19 +193,30 @@ class LoginActivity : AppCompatActivity() {
         }
 
 
-        userViewModel.getUser(userInfo.token, true) //회원 여부 확인을 위한 회원정보 조회
+
         val livedata = MutableLiveData<UserInfo> ()
         userViewModel.getUser(userInfo.token,livedata)
         livedata.observe(this){
             userinfo:UserInfo? ->
+            CheckFcm(userInfo)
             //회원인 경우
-            if (userinfo!!.platform != null) moveToMainActivity()
+            if (userinfo!!.platform != null) StartApplication(1)
             else {
                 val userInfoLiveData = MutableLiveData<Boolean>()
                 //사용자 생성
                 userViewModel.createUser(userInfo, userInfoLiveData)
                 //액티비티 이동
-                userInfoLiveData.observe(this) { et: Boolean -> if (et) moveToMainActivity() }
+                userInfoLiveData.observe(this) { et: Boolean -> if (et) StartApplication(0) }
+            }
+        }
+    }
+
+    private fun CheckFcm (userInfo: UserInfo) {
+        userViewModel.getUser(userInfo!!.token, true)
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                if(userInfo!!.fCMtoken != task.result || userInfo!!.fCMtoken == null)
+                    userInfo!!.fCMtoken = task.result
             }
         }
     }
@@ -209,7 +229,6 @@ class LoginActivity : AppCompatActivity() {
 
     companion object {
 
-        @SuppressLint("StaticFieldLeak")
         @JvmField
         var gsi: GoogleSignInClient? = null
     }

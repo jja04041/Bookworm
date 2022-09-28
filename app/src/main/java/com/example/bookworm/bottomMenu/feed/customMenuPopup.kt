@@ -58,19 +58,19 @@ class customMenuPopup(val context: Context, val anchor: View) : PopupMenu(contex
 
         //수정 메소드
         fun modifyData(item: Any) {
-            if (item is Feed) {
-                //수정을 담당하는 액티비티로 이동해야함.
-                var intent = Intent(context as MainActivity, subActivity_Feed_Modify::class.java)
-                intent.putExtra("Feed", item)
-
-                //현재 화면이 댓글 화면인 경우
-                if (context is SubActivityComment)
-//                    context.startActivityResult.launch(intent)
-                //피드화면인 경우
-                else
-                    (context.supportFragmentManager.findFragmentByTag("0") as FragmentFeed)
-                            .startActivityResult.launch(intent)
-            }
+//            if (item is Feed) {
+//                //수정을 담당하는 액티비티로 이동해야함.
+//                var intent = Intent(context as MainActivity, subActivity_Feed_Modify::class.java)
+//                intent.putExtra("Feed", item)
+//
+//                //현재 화면이 댓글 화면인 경우
+//                if (context is SubActivityComment)
+////                    context.startActivityResult.launch(intent)
+//                //피드화면인 경우
+//                else
+//                    (context.supportFragmentManager.findFragmentByTag("0") as FragmentFeed)
+//                            .startActivityResult.launch(intent)
+//            }
         }
 
         // 알림 창 만들어주는 함수
