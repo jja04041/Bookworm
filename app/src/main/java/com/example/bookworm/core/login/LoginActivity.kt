@@ -1,17 +1,13 @@
 package com.example.bookworm.core.login
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import com.example.bookworm.LoadState
 import com.example.bookworm.R
 import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
@@ -51,7 +47,7 @@ class LoginActivity : AppCompatActivity() {
                 this, UserInfoViewModel.Factory(this)
         )[UserInfoViewModel::class.java]
     }
-    private val startActivityResult = registerForActivityResult(
+    var startActivityResult = registerForActivityResult<Intent, ActivityResult>(
             ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
         if (result.resultCode == RESULT_OK) {
@@ -160,7 +156,6 @@ class LoginActivity : AppCompatActivity() {
                     username = user!!.kakaoAccount!!.profile!!.nickname!!,
                     token = user.id.toString(),
                     profileimg = user.kakaoAccount!!.profile!!.profileImageUrl!!,
-                    email = user.kakaoAccount!!.email,
                     platform = "Kakao"
             ))
         }
@@ -198,13 +193,12 @@ class LoginActivity : AppCompatActivity() {
         }
 
 
-        userViewModel.getUser(userInfo.token, true) //회원 여부 확인을 위한 회원정보 조회
-        CheckFcm(userInfo)
-        userViewModel.userInfoLiveData.observe(this) { userinfo: UserInfo? ->
+
         val livedata = MutableLiveData<UserInfo> ()
         userViewModel.getUser(userInfo.token,livedata)
         livedata.observe(this){
             userinfo:UserInfo? ->
+            CheckFcm(userInfo)
             //회원인 경우
             if (userinfo!!.platform != null) StartApplication(1)
             else {
@@ -235,7 +229,6 @@ class LoginActivity : AppCompatActivity() {
 
     companion object {
 
-        @SuppressLint("StaticFieldLeak")
         @JvmField
         var gsi: GoogleSignInClient? = null
     }
