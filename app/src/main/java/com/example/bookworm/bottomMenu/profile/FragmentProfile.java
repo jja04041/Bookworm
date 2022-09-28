@@ -31,7 +31,7 @@ import com.example.bookworm.databinding.FragmentProfileBinding;
 import com.example.bookworm.extension.follow.view.FollowViewModelImpl;
 import com.example.bookworm.extension.follow.view.FollowerActivity;
 
-public class fragment_profile extends Fragment implements LifecycleObserver {
+public class FragmentProfile extends Fragment implements LifecycleObserver {
 
     private BookWorm bookworm;
     private Achievement achievement;

@@ -7,7 +7,7 @@ import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.bookworm.fragment_bookworm;
 import com.example.bookworm.bottomMenu.challenge.fragment_challenge;
 import com.example.bookworm.bottomMenu.feed.FragmentFeed;
-import com.example.bookworm.bottomMenu.profile.fragment_profile;
+import com.example.bookworm.bottomMenu.profile.FragmentProfile;
 import com.example.bookworm.bottomMenu.search.searchtest.FragmentSearch;
 
 public class MoveFragment {
@@ -35,7 +35,7 @@ public class MoveFragment {
                             fragments[i] = new fragment_challenge();
                             break;
                         case 4:
-                            fragments[i] = new fragment_profile();
+                            fragments[i] = new FragmentProfile();
                             break;
                     }
 

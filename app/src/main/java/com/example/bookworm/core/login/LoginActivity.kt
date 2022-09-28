@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import com.example.bookworm.LoadState
 import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.profile.views.PreferGenreActivity
@@ -184,7 +185,10 @@ class LoginActivity : AppCompatActivity() {
 
 
         userViewModel.getUser(userInfo.token, true) //회원 여부 확인을 위한 회원정보 조회
-        userViewModel.userInfoLiveData.observe(this) { userinfo: UserInfo? ->
+        val livedata = MutableLiveData<UserInfo> ()
+        userViewModel.getUser(userInfo.token,livedata)
+        livedata.observe(this){
+            userinfo:UserInfo? ->
             //회원인 경우
             if (userinfo!!.platform != null) moveToMainActivity()
             else {
