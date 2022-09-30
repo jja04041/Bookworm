@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import androidx.lifecycle.*
 import com.example.bookworm.LoadState
+import com.example.bookworm.achievement.Genre
 import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.feed.comments.Comment
 import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
@@ -58,7 +59,6 @@ class FeedViewModel(context: Context) : ViewModel() {
             } catch (e: Exception) {
                 LoadState.Error
             }
-
         }
     }
 

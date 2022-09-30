@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         android:background="#FFFFFF"
         android:orientation="vertical"
-        tools:context=".bottomMenu.feed.subActivity_Feed_Modify">
+        tools:context=".bottomMenu.feed.oldItems.subActivity_Feed_Modify">
 
         <ScrollView
             android:layout_width="match_parent"

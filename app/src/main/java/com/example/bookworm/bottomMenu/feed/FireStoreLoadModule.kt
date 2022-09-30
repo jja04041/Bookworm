@@ -71,5 +71,10 @@ object FireStoreLoadModule {
                     .collection("comments")
                     .orderBy("commentID", Query.Direction.DESCENDING)
 
+    /** Select * from challenge Collection order by id;
+     * */
+    fun provideQueryChallenges() =
+            provideQueryPathToChallengeCollection()
+                    .orderBy("id")
 
 }

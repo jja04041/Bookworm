@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.bookworm.LoadState
 import com.example.bookworm.R
 import com.example.bookworm.appLaunch.views.MainActivity
+import com.example.bookworm.bottomMenu.feed.oldItems.subActivity_Feed_Modify
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.databinding.FragmentFeedTopbarBinding
 import com.example.bookworm.databinding.TmpActivityFeedBinding
@@ -59,7 +60,7 @@ class FragmentFeed : Fragment() {
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         binding = TmpActivityFeedBinding.inflate(layoutInflater)
         getFeeds(true) // 서버로부터 피드 정보를 받아옴
 

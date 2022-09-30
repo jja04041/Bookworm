@@ -104,17 +104,21 @@
         <entry key="src/main/res/layout/fragment_search_page_challenge.xml" value="0.23889392565729828" />
         <entry key="src/main/res/layout/fragment_search_page_feed.xml" value="0.29585292860196666" />
         <entry key="src/main/res/layout/fragment_search_page_user.xml" value="0.23889392565729828" />
+        <entry key="src/main/res/layout/layout_challenge_item.xml" value="0.29585292860196666" />
         <entry key="src/main/res/layout/layout_comment_item.xml" value="0.14458838278311742" />
         <entry key="src/main/res/layout/layout_comment_summary.xml" value="0.165" />
         <entry key="src/main/res/layout/layout_item_loading.xml" value="0.25" />
         <entry key="src/main/res/layout/layout_label_custom_dialog.xml" value="0.335" />
         <entry key="src/main/res/layout/layout_label_page.xml" value="0.1" />
+        <entry key="src/main/res/layout/recyclerview_item.xml" value="0.15566234851650648" />
         <entry key="src/main/res/layout/search_favoriteitem.xml" value="0.26745240253853125" />
+        <entry key="src/main/res/layout/search_fragment_result_feed.xml" value="0.15566234851650648" />
         <entry key="src/main/res/layout/search_recyclerview_item.xml" value="0.21396192203082504" />
         <entry key="src/main/res/layout/shimmer_fragment_search.xml" value="0.155622060709705" />
         <entry key="src/main/res/layout/shimmer_layout_feed.xml" value="0.23798730734360835" />
         <entry key="src/main/res/layout/shimmer_subactivity_search_fragment_result.xml" value="0.1" />
         <entry key="src/main/res/layout/subactivity_challenge_challengeinfo.xml" value="0.2869446962828649" />
+        <entry key="src/main/res/layout/subactivity_challenge_createchallenge.xml" value="0.26246600181323665" />
         <entry key="src/main/res/layout/subactivity_comment.xml" value="0.21350861287398004" />
         <entry key="src/main/res/layout/subactivity_create_post.xml" value="0.25" />
         <entry key="src/main/res/layout/subactivity_feed_create.xml" value="0.14458838278311742" />

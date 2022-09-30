@@ -2,7 +2,9 @@ package com.example.bookworm.bottomMenu.challenge;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
+
+import androidx.fragment.app.DialogFragment;
+
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,7 +32,7 @@ public class NumberPickerDialog extends DialogFragment {
         minvalue = getArguments().getInt("minvalue");
         maxvalue = getArguments().getInt("maxvalue");
         step = getArguments().getInt("step");
-        defvalue = getArguments().getInt("defvalue");
+        defvalue = getArguments().getInt("defValue");
 
         //최소값과 최대값 사이의 값들 중에서 일정한 step사이즈에 맞는 값들을 배열로 만든다.
         String[] myValues = getArrayWithSteps(minvalue, maxvalue, step);
@@ -56,26 +58,18 @@ public class NumberPickerDialog extends DialogFragment {
         builder.setTitle(title);
         //부제목 설정
         builder.setMessage(subtitle);
-
         //Ok button을 눌렀을 때 동작 설정
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        builder.setPositiveButton("설정", (dialog, which) -> {
 
-                //dialog를 종료하면서 값이 변했다는 함수는 onValuechange함수를 실행시킨다.
-                //실제 구현에서는 이 클래스의 함수를 재 정의해서 동작을 수행한다.
-
-                valueChangeListener.onValueChange(numberPicker,
-                        numberPicker.getValue(), numberPicker.getValue());
-            }
+            //dialog를 종료하면서 값이 변했다는 함수는 onValuechange함수를 실행시킨다.
+            //실제 구현에서는 이 클래스의 함수를 재 정의해서 동작을 수행한다.
+            valueChangeListener.onValueChange(numberPicker,
+                    numberPicker.getValue(), numberPicker.getValue());
         });
 
         //취소 버튼을 눌렀을 때 동작 설정
-        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        builder.setNegativeButton("취소", (dialog, which) -> {
 
-            }
         });
 
         builder.setView(numberPicker);

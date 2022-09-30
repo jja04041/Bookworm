@@ -108,15 +108,14 @@ class UserRepository(context: Context) : DataRepository.HandleUser {
     //사용자 생성과 동시에 파이어 베이스에 등록
     override suspend fun createUser(user: UserInfo): Boolean {
         val bookworm = BookWorm()
-        return CoroutineScope(Dispatchers.IO).async {
+        return withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
             bookworm.token = user.token
             // get fcm token
             var a = FirebaseMessaging.getInstance().token.await()
             user.fCMtoken = a
             saveInLocal(user, bookworm) //로컬에 저장
-            saveInFB(user, bookworm) //파이어베이스에 저장
-            true
-        }.await()
+            saveInFB(user, bookworm)
+        }
     }
     //사용자 정보 수정 => 개인만 가능
 
@@ -211,11 +210,15 @@ class UserRepository(context: Context) : DataRepository.HandleUser {
 
     //파이어스토어에 저장
     private suspend fun saveInFB(user: UserInfo, bookworm: BookWorm): Boolean {
-        FireStoreLoadModule.provideFirebaseInstance().runTransaction { transaction ->
-            transaction.set(userCollectionRef.document(user.token), user)
-                    .set(bwCollectionRef.document(user.token), bookworm)
-        }.await()
-        return true
+        return try {
+            FireStoreLoadModule.provideFirebaseInstance().runTransaction { transaction ->
+                transaction.set(userCollectionRef.document(user.token), user)
+                        .set(bwCollectionRef.document(user.token), bookworm)
+            }.await()
+            true
+        } catch (e: Exception) {
+            false
+        }
     }
 
     //사용자 정보 업데이트

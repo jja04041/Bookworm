@@ -12,7 +12,7 @@
 //import com.example.bookworm.appLaunch.views.MainActivity
 //import com.example.bookworm.bottomMenu.feed.comments.Comment
 //import com.example.bookworm.bottomMenu.feed.items.Feed
-//import com.example.bookworm.bottomMenu.feed.subActivity_Feed_Modify
+//import com.example.bookworm.bottomMenu.feed.oldItems.subActivity_Feed_Modify
 //import com.example.bookworm.bottomMenu.challenge.board.Board
 //import com.example.bookworm.bottomMenu.challenge.board.BoardFB
 //import com.example.bookworm.bottomMenu.challenge.board.Board_CommentsCounter

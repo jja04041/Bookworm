@@ -38,6 +38,7 @@ class SearchMainActivity : AppCompatActivity() {
                         .beginTransaction()
                         .replace(container.id, BookSearchFragment())
                         .commitAllowingStateLoss()
+                //이전에 검색한 데이터가 있는 경우
                 if (intent.hasExtra("prevBook")) {
                     edtSearch.setText(intent.getParcelableExtra<Book>("prevBook")!!.title)
                     excuteSearch()

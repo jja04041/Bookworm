@@ -18,6 +18,7 @@ import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
@@ -76,11 +77,11 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
             FeedViewModel::class.java
     )
     private var feedUserFcmtoken: String? = null
-
+    private val mainUserLiveData = MutableLiveData<UserInfo>()
 
     //생성자를 만든다.
     init {
-        pv.getUser(null, false)
+        pv.getUser(null, mainUserLiveData, false)
         //FCMService 객체를 생성한다 .
         myFCMService = MyFCMService.getInstance()
     }
@@ -102,14 +103,14 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
                 .replace("&gt;", ">")
                 .replace("&lt", "<")
                 .replace("&gt", ">")
-      if(feed.imgurl=="") binding.feedImage.isVisible = false
+        if (feed.imgurl == "") binding.feedImage.isVisible = false
 
 //        //라벨표시
 //        if (feed.label!![0] != "") setLabel(feed.label)
 //        else binding.lllabel.visibility = View.GONE
         //리스너 부착
         //책 정보 확인 시
-        pv.userInfoLiveData.observe(context as MainActivity) { mainUser ->
+        mainUserLiveData.observe(context as MainActivity) { mainUser ->
             binding.apply {
                 // 댓글이 있는 경우
                 if (feed.commentsCount > 0L) {
@@ -256,7 +257,7 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
             feedViewModel.manageLike(feed.feedID!!, nowUser, feed.isUserLiked)
             feedViewModel.nowLikeState.observe(context as MainActivity) { state ->
                 when (state) {
-                   LoadState.Done -> {
+                    LoadState.Done -> {
                         myFCMService!!.sendPostToFCM(
                                 context,
                                 feedUserFcmtoken, "${nowUser.username}님이 좋아요를 표시했습니다."

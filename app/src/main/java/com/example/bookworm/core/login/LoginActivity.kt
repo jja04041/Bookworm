@@ -3,6 +3,7 @@ package com.example.bookworm.core.login
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -69,7 +70,7 @@ class LoginActivity : AppCompatActivity() {
                         email = account.email,
                         platform = "Google"
                 )
-                //회원 가입 함수로 데이터를 전달
+                //회원 가입 함수로 데이터를 전달%
                 signUp(userInfo)
             }
         }
@@ -81,6 +82,7 @@ class LoginActivity : AppCompatActivity() {
             when (error.toString()) {
                 AuthErrorCause.AccessDenied.toString() -> {
                     //접근이 거부됨 (동의 취소)
+
                 }
                 else -> {
                     //기타 에러
@@ -165,17 +167,18 @@ class LoginActivity : AppCompatActivity() {
     //메인액티비티로 이동
     private fun StartApplication(_iFlag: Int) {
 
-        /** flag 0 == 가입, 1 == login */
-        if(_iFlag == 0)
-        {
+        /** flag 0 == 가입,
+         * 1 == login
+         * */
+
+        if (_iFlag == 0) {
             val intent = Intent(this, PreferGenreActivity::class.java)
             intent.putExtra("Login", 1)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             startActivity(intent)
             finish()
         }
-        if(_iFlag == 1)
-        {
+        if (_iFlag == 1) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
@@ -193,30 +196,50 @@ class LoginActivity : AppCompatActivity() {
         }
 
 
+        val livedata = MutableLiveData<UserInfo>()
+        userViewModel.getUser(userInfo.token, livedata)
+        livedata.observe(this) { userinfo: UserInfo? ->
+            try {
+                CheckFcm(userInfo)
+                //회원인 경우
+                if (userinfo!!.platform != null) StartApplication(1)
+                else {
+                    /**
+                     * 여러 액티비티에서 공용으로 뷰모델을 사용하다보니,
+                     *
+                     * 뷰모델의 라이브데이터를 사용하면 에러 발생.
+                     *
+                     * => 라이브 데이터를 생성한 뒤, 인자로 넘겨줘야 정상작동함.
+                     * */
+                    val userInfoLiveData = MutableLiveData<Boolean>()
+                    //사용자 생성
+                    userViewModel.createUser(userInfo, userInfoLiveData)
+                    //액티비티 이동
+                    userInfoLiveData.observe(this) { et: Boolean ->
+                        if (et) StartApplication(0)
+                    }
+                }
+            } catch (e: Exception) {
 
-        val livedata = MutableLiveData<UserInfo> ()
-        userViewModel.getUser(userInfo.token,livedata)
-        livedata.observe(this){
-            userinfo:UserInfo? ->
-            CheckFcm(userInfo)
-            //회원인 경우
-            if (userinfo!!.platform != null) StartApplication(1)
-            else {
-                val userInfoLiveData = MutableLiveData<Boolean>()
-                //사용자 생성
-                userViewModel.createUser(userInfo, userInfoLiveData)
-                //액티비티 이동
-                userInfoLiveData.observe(this) { et: Boolean -> if (et) StartApplication(0) }
+                /** 카카오 로그인 후 서버에서 유저 정보를 만들다가 튕긴 경우, 재접속 시 로그인 화면이 나타나지 않는 이슈 발생.
+                 *
+                 * 이를 해결하기 위해 아래 코드 사용함
+                 * */
+
+                if (userInfo.platform == "Kakao") UserApiClient.instance.logout {
+                    Toast.makeText(this, "카카오 로그인 시도 중 오류가 발생하였습니다. \n다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                }
             }
+
         }
     }
 
-    private fun CheckFcm (userInfo: UserInfo) {
-        userViewModel.getUser(userInfo!!.token, true)
+    private fun CheckFcm(userInfo: UserInfo) {
+        userViewModel.getUser(userInfo.token, true)
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (!task.isSuccessful) {
-                if(userInfo!!.fCMtoken != task.result || userInfo!!.fCMtoken == null)
-                    userInfo!!.fCMtoken = task.result
+                if (userInfo.fCMtoken != task.result || userInfo.fCMtoken == null)
+                    userInfo.fCMtoken = task.result
             }
         }
     }

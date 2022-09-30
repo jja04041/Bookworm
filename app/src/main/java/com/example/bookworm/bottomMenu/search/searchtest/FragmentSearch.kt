@@ -71,7 +71,7 @@ class FragmentSearch : Fragment() {
 
     private fun loadRecommendBooks() {
         val liveData = MutableLiveData<SearchViewModel.State>()
-        var resultList = ArrayList<Book>()
+        val resultList = ArrayList<Book>()
         searchViewModel.loadPopularBook(liveData, resultList)
         showShimmer(true)
         liveData.observe(context as MainActivity) { state ->

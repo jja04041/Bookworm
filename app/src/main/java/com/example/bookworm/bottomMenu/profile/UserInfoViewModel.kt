@@ -56,15 +56,15 @@ class UserInfoViewModel(context: Context) : ViewModel() {
     suspend fun suspendGetUser(token: String?) = repo.getUser(token, token != null)
 
     //사용자 가져오기
-    fun getUser(token: String?, liveData: MutableLiveData<UserInfo>) {
-        userInfoLiveData = liveData
+    fun getUser(token: String?, liveData: MutableLiveData<UserInfo>,getFromExt: Boolean = true) {
         viewModelScope.launch {
-            userInfoLiveData.value = repo.getUser(token, true) //데이터 변경을 감지하면, 값이 업데이트 된다.
+            liveData.value = repo.getUser(token, getFromExt) //데이터 변경을 감지하면, 값이 업데이트 된다.
         }
     }
 
     //사용자 생성
     fun createUser(userInfo: UserInfo, liveData: MutableLiveData<Boolean>) =
+
             viewModelScope.launch {
                 liveData.value = repo.createUser(userInfo) //값을 가져올 필요는 없으므로
             }
@@ -73,8 +73,8 @@ class UserInfoViewModel(context: Context) : ViewModel() {
     //이름 중복 확인
     fun checkDuplicate(name: String) {
         viewModelScope.launch {
-            var collection = FirebaseFirestore.getInstance().collection("users")
-            var query = collection.whereEqualTo("UserInfo.username", name)
+            val collection = FirebaseFirestore.getInstance().collection("users")
+            val query = collection.whereEqualTo("UserInfo.username", name)
             launch {
                 query.get()
                         .addOnSuccessListener {

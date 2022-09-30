@@ -30,8 +30,8 @@ class LoadPagingDataRepository() {
     //데이터 타입을 관리
     enum class DataType { FeedType, CommentType }
 
-    suspend fun loadFireStoreData(type: DataType): Any? {
-        var query = queryForPaging!!.limit(PAGE_SIZE.toLong())
+    suspend fun loadFireStoreData(type: DataType, pageSize: Int = PAGE_SIZE): Any? {
+        var query = queryForPaging!!.limit(pageSize.toLong())
         currentPage = withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
             //현재 페이지 그리고 마지막으로 표시된 데이터 이 세가지 요소의 조화를 이뤄야 함.
             if (lastVisibleData != null)

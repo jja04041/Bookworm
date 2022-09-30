@@ -9,7 +9,7 @@ import kotlin.collections.ArrayList
 
 @Parcelize
 data class Challenge(
-        val id
+        var id
         : String = "",
         var book // Book 객체 자체를 사용
         : Book = Book(),
@@ -23,13 +23,13 @@ data class Challenge(
         : ArrayList<String> = ArrayList(),
         var maxPart // 최대 참가 가능한 인원 수
         : Long = 0L,
-        @Exclude
+        @Exclude @set:Exclude @get:Exclude
         var masterData //방장의 유저데이터
         : UserInfo = UserInfo(),
-        @Exclude
+        @Exclude @set:Exclude @get:Exclude
         var dDay //디데이 설정
         : String = "",
-        @Exclude
+        @Exclude @set:Exclude @get:Exclude
         var isFull //인원이 가득 찼는지 확인
         : Boolean = false,
         var masterToken //방장의 토큰값
