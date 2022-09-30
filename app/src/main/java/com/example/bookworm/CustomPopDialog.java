@@ -3,9 +3,9 @@ package com.example.bookworm;
 import android.app.AlertDialog;
 import android.content.Context;
 
-public class customDialog extends AlertDialog {
+public class CustomPopDialog extends AlertDialog {
 
-    protected customDialog(Context context) {
+    protected CustomPopDialog(Context context) {
         super(context);
     }
 
