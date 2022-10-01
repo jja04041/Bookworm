@@ -7,6 +7,8 @@
     android:background="@color/white"
     android:orientation="vertical">
 
+
+
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/SFLComment"
         android:layout_width="match_parent"
