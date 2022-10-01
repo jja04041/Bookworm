@@ -1,7 +1,9 @@
 package com.example.bookworm.bottomMenu.feed
 
+import android.R
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -11,12 +13,12 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.bookworm.LoadState
-
 import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
-
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.SubactivityCreatePostBinding
@@ -61,10 +63,19 @@ class SubActivityCreatePost : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(dataBinding.root)
+
+        //파이어베이스에 피드 url이 올라갈 수 있게 해주는 코드
         imageProcess.bitmap.observe(this) {
             feedImageBitmap = it
-            Glide.with(this).load(it).into(dataBinding.ivProfileImage)
+            Glide.with(this).load(it).into(dataBinding.ivpicture)
         }
+
+        //피드 작성화면에서 사진이 보이게 해주는 코드
+        imageProcess.bitmapUri.observe(this, Observer { it: Uri? ->
+            Glide.with(this).load(it)
+                    .into(dataBinding.ivpicture)
+            dataBinding.ivpicture.setColorFilter(ContextCompat.getColor(this, R.color.transparent))
+        })
 
         dataBinding.apply {
             btnBack.setOnClickListener {

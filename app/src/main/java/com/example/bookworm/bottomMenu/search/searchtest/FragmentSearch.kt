@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.bookworm.BookWorm
 import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
@@ -57,6 +58,16 @@ class FragmentSearch : Fragment() {
                     }
                 }
             })
+
+            tv1stNickname.setText("성근")
+            tv2ndNickname.setText("이규연")
+            tv3rdNickname.setText("조세현")
+            tv1stReadCount.setText("15권")
+            tv2ndReadCount.setText("11권")
+            tv3rdReadCount.setText("5권")
+            Glide.with(requireContext()).load("https://k.kakaocdn.net/dn/b8DtBK/btqRorUTUCy/w10D6Zn5IMsop8v2BJY5VK/img_640x640.jpg").circleCrop().into(img1stProfile)
+            Glide.with(requireContext()).load("https://lh3.googleusercontent.com/a-/ACNPEu_H7Agfvs-q7d7eQU3IX8dbha5l4Awq9vgm5LoFXSI=s96-c").circleCrop().into(img2ndProfile)
+            Glide.with(requireContext()).load("https://k.kakaocdn.net/dn/qYA2k/btrJuRyOoVk/KsChdA2fMXS2xrbeArhBtk/img_640x640.jpg").circleCrop().into(img3rdProfile)
         }
         loadRecommendBooks();
 

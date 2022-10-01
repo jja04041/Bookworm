@@ -45,7 +45,7 @@ class LoadPagingDataRepository() {
             else query.get().await()
         }
         return if (currentPage != null && !currentPage!!.isEmpty) {
-            lastVisibleData = currentPage!!.documents.last()
+            lastVisibleData = currentPage!!.documents.last() //마지막 데이터를 담아놔서 그 이후의 데이터를 가져올 수 있게 함
             when (type) {
                 DataType.FeedType -> //피드 데이터인 경우
                     currentPage!!.toObjects(Feed::class.java)
