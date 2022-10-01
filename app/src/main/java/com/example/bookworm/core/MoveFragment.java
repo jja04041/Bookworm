@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.bookworm.fragment_bookworm;
+import com.example.bookworm.bottomMenu.challenge.FragmentChallenge;
 import com.example.bookworm.bottomMenu.challenge.fragment_challenge;
 import com.example.bookworm.bottomMenu.feed.FragmentFeed;
 import com.example.bookworm.bottomMenu.profile.FragmentProfile;
@@ -32,7 +33,8 @@ public class MoveFragment {
                             fragments[i] = new fragment_bookworm();
                             break;
                         case 3:
-                            fragments[i] = new fragment_challenge();
+//                            fragments[i] = new fragment_challenge();
+                            fragments[i] = new FragmentChallenge();
                             break;
                         case 4:
                             fragments[i] = new FragmentProfile();

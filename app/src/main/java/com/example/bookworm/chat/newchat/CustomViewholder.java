@@ -36,8 +36,7 @@ public class CustomViewholder extends RecyclerView.ViewHolder{
     }
     public void setItem(UserInfoViewModel uv,Context context, String destUid, String message) {
         MutableLiveData<UserInfo> data=new MutableLiveData<>();
-        uv.setUserLiveData(data); //새로운 객체를 만들어서 사용한다.
-        uv.getUser(destUid, true); //외부에서 해당 사용자에 대한 데이터를 가져온다
+        uv.getUser(destUid,data,true); //외부에서 해당 사용자에 대한 데이터를 가져온다
 //        FirebaseDatabase.getInstance()
 //                .getReference()
 //                .child("users")

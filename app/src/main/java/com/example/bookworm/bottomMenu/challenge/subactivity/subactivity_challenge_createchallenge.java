@@ -275,6 +275,6 @@ public class subactivity_challenge_createchallenge extends AppCompatActivity imp
         newFragment.setArguments(bundle);
         //class 자신을 Listener로 설정한다
         newFragment.setValueChangeListener(this);
-        newFragment.show(getFragmentManager(), "number picker");
+        newFragment.show(getSupportFragmentManager(), "number picker");
     }
 }

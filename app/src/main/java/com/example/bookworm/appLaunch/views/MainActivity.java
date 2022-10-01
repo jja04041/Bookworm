@@ -1,6 +1,7 @@
 package com.example.bookworm.appLaunch.views;
 
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -53,10 +54,10 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent;
                         if (pendingDynamicLinkData != null) {
                             deepLink = pendingDynamicLinkData.getLink();
-                            if(deepLink.getLastPathSegment().equals("profile")) {
+                            if (deepLink.getLastPathSegment().equals("profile")) {
                                 intent = new Intent(MainActivity.this, SubActivityComment.class);
-                                intent.putExtra("userID",deepLink.getQueryParameter("uid"));
-                                Log.d("params",deepLink.getQueryParameter("uid"));
+                                intent.putExtra("userID", deepLink.getQueryParameter("uid"));
+                                Log.d("params", deepLink.getQueryParameter("uid"));
                                 startActivity(intent);
 //                                bottomNavigationView.setSelectedItemId(R.id.tab_profile);
                             }
@@ -108,5 +109,20 @@ public class MainActivity extends AppCompatActivity {
                     }
                     return false;
                 });
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this).setTitle("애플리케이션을 종료하시겠습니까?")
+                .setPositiveButton(
+                        "네", (dialog, which) -> {
+                            dialog.dismiss();
+                            finish();
+                            super.onBackPressed();
+                        }
+                ).setNegativeButton("아니오", (dialog, which) -> {
+                    dialog.dismiss();
+                }).show();
     }
 }

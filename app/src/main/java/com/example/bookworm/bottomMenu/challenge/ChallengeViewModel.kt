@@ -11,19 +11,19 @@ import com.example.bookworm.LoadState
 import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.challenge.items.Challenge
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
-import com.example.bookworm.core.dataprocessing.repository.ChallengeRepository
 import com.example.bookworm.core.userdata.UserInfo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
+import kotlin.collections.ArrayList
 
 
-//Repository에서 전달받은 챌린지 데이터를 가공, 처리하는 뷰모델
+/**Repository에서 전달받은 챌린지 데이터를 가공, 처리하는 뷰모델*/
 class ChallengeViewModel(context: Context) : ViewModel() {
     private val repo by lazy {
-        ChallengeRepository(context)
+        ChallengeDataRepository(context)
     }
     val challengeList: MutableLiveData<ArrayList<Challenge>> = MutableLiveData()
     val userInfoViewModel by lazy {
@@ -31,6 +31,7 @@ class ChallengeViewModel(context: Context) : ViewModel() {
     }
     var lastVisibleDataValue: String = ""
     val alertDialog by lazy { AlertDialog.Builder(context) }
+    private val PAGESIZE = 5L
 
     class Factory(val context: Context) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
@@ -50,30 +51,44 @@ class ChallengeViewModel(context: Context) : ViewModel() {
         }
         //데이터를 불러온다.
         viewModelScope.launch {
-            val loadedData = repo.getChallenges(lastVisible = lastVisibleDataValue)
-            if (loadedData != null) {
-                //방장의 유저 데이터를 받아서 챌린지 객체에 삽입한다.
-                loadedData.map { challengeData ->
-                    return@map withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-                        var returnValue = challengeData
-                        returnValue.dDay = countDday(returnValue.endDate) //디데이 설정
-                        returnValue.masterData = try {
-                            //불러온 값을 방장 데이터로 설정
-                            userInfoViewModel.suspendGetUser(returnValue.masterToken)!!
-                        } catch (e: NullPointerException) {
-                            UserInfo() //빈 유저 데이터를 반환
+            val loadedData = repo
+                    .loadChallenges(lastVisible = lastVisibleDataValue, pageSize = PAGESIZE)
+            try {
+                result.addAll(ArrayList<Challenge>(
+                        //방장의 유저 데이터를 받아서 챌린지 객체에 삽입한다.
+                        loadedData!!.map { challengeData ->
+                            return@map withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
+                                challengeData.dDay = countDday(challengeData.endDate) //디데이 설정
+                                challengeData.masterData = try {
+                                    //불러온 값을 방장 데이터로 설정
+                                    userInfoViewModel.suspendGetUser(challengeData.masterToken)!!
+                                } catch (e: NullPointerException) {
+                                    UserInfo() //빈 유저 데이터를 반환
+                                }
+                                return@withContext challengeData
+                            }
                         }
-                        return@withContext returnValue
-                    }
-                }
+                ))
                 lastVisibleDataValue = loadedData.last().id
                 stateLiveData.value = LoadState.Done //UI에 데이터 로딩이 완료되었음을 알림
-            } else stateLiveData.value = LoadState.Error //UI에 데이터 로딩을 실패했음을 알림.
+            } catch (e: NullPointerException) {
+                stateLiveData.value = LoadState.Error //UI에 데이터 로딩을 실패했음을 알림.
+            }
         }
     }
 
+    /** Repository를 통해 Join 로직을 구현한다.
+     * */
     private fun processToJoin(challengeId: String) {
 
+    }
+
+    fun createChallenge(challenge: Challenge, stateLiveData: MutableLiveData<LoadState>) {
+        stateLiveData.value = LoadState.Loading
+        viewModelScope.launch {
+            if (repo.createChallenge(challenge)) stateLiveData.value = LoadState.Done
+            else LoadState.Error
+        }
     }
 
     //챌린지 참여 로직
@@ -87,9 +102,12 @@ class ChallengeViewModel(context: Context) : ViewModel() {
     }
 
     //챌린지에 참여가능한지 확인
-    fun canJoinChellenge() {
+    fun canJoinChallenge() {
 
     }
+
+
+    //챌린지 인증글 보상
 
     //디데이 계산 메소드
     private fun countDday(date: String): String {

@@ -74,6 +74,12 @@ class SearchViewModel(context: Context) : ViewModel() {
         }
     }
 
+    //알라딘의 추천도서 가져오는 메소드
+
+
+    /**
+     * Json데이터를 Book 객체로 변환 */
+
     private fun convertToBook(data: JSONObject, isRc: Boolean) = Book().apply {
         data.apply {
             title = getString("title")
@@ -83,6 +89,7 @@ class SearchViewModel(context: Context) : ViewModel() {
             categoryName = getString("categoryName")
             content = replaceLtgt(getString("description"))
             publisher = getString("publisher")
+            isbn = getString("isbn13")
             isRecommend = isRc
         }
     }
