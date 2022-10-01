@@ -82,36 +82,32 @@ class SubActivityComment : AppCompatActivity() {
                 edtComment.apply {
 
                     val madeDate = LocalDateTime.now()
-                        .format(
-                            DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")
-                                .withLocale(Locale.KOREA)
-                                .withZone(ZoneId.of("Asia/Seoul"))
-                        )
+                            .format(
+                                    DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")
+                                            .withLocale(Locale.KOREA)
+                                            .withZone(ZoneId.of("Asia/Seoul"))
+                            )
                     val comment = Comment(
-                        commentID = "${madeDate}_${nowUser!!.token}",
-                        contents = commentText,
-                        userToken = nowUser!!.token,
-                        madeDate = madeDate
+                            commentID = "${madeDate}_${nowUser!!.token}",
+                            contents = commentText,
+                            userToken = nowUser!!.token,
+                            madeDate = madeDate
                     )
-                    feedViewModel.manageComment(comment, feedItem.FeedID!!, true) //서버에 댓글 추가
+                    feedViewModel.manageComment(comment, feedItem.feedID!!, true) //서버에 댓글 추가
                     //게시물 작성자에게 댓글이 달렸다는 알림을 보냄
                     myFCMService.sendPostToFCM(
-                        this@SubActivityComment, feedItem.Creator!!.fCMtoken,
-                        "${nowUser!!.username}님이 댓글을 남겼습니다. \"${text}\" "
+                            this@SubActivityComment, feedItem.creatorInfo!!.fCMtoken,
+                            "${nowUser!!.username}님이 댓글을 남겼습니다. \"${text}\" "
                     )
 
                     //키보드 내리기
                     (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-                        .hideSoftInputFromWindow(windowToken, 0)
+                            .hideSoftInputFromWindow(windowToken, 0)
                     clearFocus()
                     text = null
 
-                    //게시물 작성자에게 댓글이 달렸다는 알림을 보냄
-                    myFCMService.sendPostToFCM(this@SubActivityComment, feedItem.creatorInfo!!.fCMtoken,
-                            "${nowUser!!.username}님이 댓글을 남겼습니다. \"${text}\" ")
-
                     feedViewModel.nowCommentLoadState.observe(context as SubActivityComment) { state ->
-                        if (state == FeedViewModel.State.Done) {
+                        if (state == LoadState.Done) {
                             comment.duration = feedViewModel.getDateDuration(comment!!.madeDate)
                             comment.creator = nowUser
                             binding2.comment = comment
@@ -185,9 +181,9 @@ class SubActivityComment : AppCompatActivity() {
                         super.onScrolled(recyclerView, dx, dy)
                         val layoutManager = recyclerView.layoutManager as LinearLayoutManager?
                         val lastVisibleItemPosition =
-                            layoutManager!!.findLastCompletelyVisibleItemPosition()
+                                layoutManager!!.findLastCompletelyVisibleItemPosition()
                         if ((lastVisibleItemPosition
-                                    == commentAdapter.currentList.lastIndex) && lastVisibleItemPosition > 0)
+                                        == commentAdapter.currentList.lastIndex) && lastVisibleItemPosition > 0)
                             loadCommentData(false)
                     }
                 })

@@ -16,6 +16,10 @@ import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.feed.Feed
 import com.example.bookworm.databinding.LayoutCommentItemBinding
 import com.example.bookworm.databinding.LayoutCommentSummaryBinding
+import java.text.DateFormat
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
 //댓글 불러오는 어댑터
 class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
@@ -76,7 +80,7 @@ class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
         fun bind(item: Comment) {
             binding.lifecycleOwner = itemView.context as SubActivityComment
             binding.comment=item
-//            binding.apply {
+            binding.apply {
 //                //댓글 작성자 프로필 이미지 로드
 //                Glide.with(itemView.context)
 //                        .load(item.creator!!.profileimg)
@@ -85,9 +89,9 @@ class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
 //                tvNickname.text = item.creator!!.username
 //                //댓글 내용 세팅
 //                tvCommentContent.text = item.contents
-//                //댓글 작성일자 세팅
-//                tvDate.text = item.duration
-//            }
+                //댓글 작성일자 세팅
+                tvDate.text = getDateDuration(item.madeDate)
+            }
         }
     }
 
@@ -161,5 +165,35 @@ class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
         return if (currentList[position] is Feed) vType["SummaryFeed"]!!
         else if ((currentList[position] as Comment).commentID == "") vType["Loading"]!!
         else vType["Comments"]!!
+    }
+
+    //시간차 구하기 n분 전, n시간 전 등등
+    fun getDateDuration(createdTime: String?): String {
+        var dateDuration = ""
+        val now = System.currentTimeMillis()
+        val dateNow = Date(now) //현재시각
+        val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        try {
+            val dateCreated = createdTime?.let { dateFormat.parse(it) }
+            val duration = dateNow.time - dateCreated!!.time //시간차이 mills
+            dateDuration = if (duration / 1000 / 60 == 0L) {
+                "방금"
+            } else if (duration / 1000 / 60 <= 59) {
+                (duration / 1000 / 60).toString() + "분 전"
+            } else if (duration / 1000 / 60 / 60 <= 23) {
+                (duration / 1000 / 60 / 60).toString() + "시간 전"
+            } else if (duration / 1000 / 60 / 60 / 24 <= 29) {
+                (duration / 1000 / 60 / 60 / 24).toString() + "일 전"
+            } else if (duration / 1000 / 60 / 60 / 24 / 30 <= 12) {
+                (duration / 1000 / 60 / 60 / 24 / 30).toString() + "개월 전"
+            } else {
+//                (duration / 1000 / 60 / 60 / 24 / 30 / 12).toString() + "년 전"
+                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(duration)
+            }
+            return dateDuration
+        } catch (e: ParseException) {
+            e.printStackTrace()
+            return ""
+        }
     }
 }
