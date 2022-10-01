@@ -91,6 +91,7 @@
             android:id="@+id/tvCommentContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
             android:text="@{comment.contents,default = 댓글내용}"
             android:textColor="#CC000000" />
 
