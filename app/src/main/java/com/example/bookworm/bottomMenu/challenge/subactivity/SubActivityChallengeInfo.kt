@@ -2,8 +2,13 @@ package com.example.bookworm.bottomMenu.challenge.subactivity
 
 import android.app.Activity
 import android.os.Bundle
+import android.text.TextUtils
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
+import com.example.bookworm.LoadState
 import com.example.bookworm.bottomMenu.challenge.ChallengeViewModel
 import com.example.bookworm.bottomMenu.challenge.items.Challenge
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
@@ -34,9 +39,10 @@ class SubActivityChallengeInfo : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        userViewModel.getUser(null, false)
-        userViewModel.userInfoLiveData.observe(this) { mainUser ->
-            setUI(mainUser)
+        val liveData = MutableLiveData<UserInfo>()
+        userViewModel.getUser(null, liveData = liveData, false)
+        liveData.observe(this) { userInfo ->
+            setUI(userInfo)
         }
     }
 
@@ -51,16 +57,67 @@ class SubActivityChallengeInfo : AppCompatActivity() {
         binding.apply {
             //챌린지 참여를 원하는 경우
             btnChallengeJoin.setOnClickListener {
-                challengeViewModel.joinChallenge(challengeInfo!!.id)
+                val liveData = MutableLiveData<LoadState>()
+                challengeViewModel.joinChallenge(challengeInfo!!.id, mainUser.token, liveData)
+                liveData.observe(this@SubActivityChallengeInfo) { state ->
+                    //로딩이 종료되면 실행
+                    if (state != LoadState.Loading) when (state) {
+                        //정상적으로 참여 완료
+                        LoadState.Done -> {
+                            btnChallengeJoin.apply {
+                                isEnabled = false
+                                text = "참여중인 챌린지입니다."
+                            }
+                        }
+                        //참여 제한
+                        LoadState.OverError -> {
+                            Toast.makeText(this@SubActivityChallengeInfo,
+                                    "정원이 초과되었습니다. 아쉽지만 다른 챌린지를 시도해 주세요.",
+                                    Toast.LENGTH_SHORT).show()
+                            binding.btnChallengeJoin.apply {
+                                isEnabled = false
+                                text = "정원이 초과된 챌린지입니다."
+                            }
+                        }
+                        //파베 오류
+                        else -> {
+                            Toast.makeText(this@SubActivityChallengeInfo,
+                                    "참여도중 에러가 발생하였습니다. 다시 시도해주세요.",
+                                    Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
             }
+            //뒤로 가려는 경우
             btnBack.setOnClickListener {
                 setResult(Activity.RESULT_OK)
                 finish()
             }
-            //프로그레스 바 설정
-            progress.apply {
-                progress = challengeInfo!!.currentPart.size
-                max = challengeInfo!!.maxPart.toInt()
+
+            //챌린지 데이터 세팅
+            challengeInfo!!.apply {
+                book.apply {
+                    //책 썸네일 세팅
+                    Glide.with(this@SubActivityChallengeInfo)
+                            .load(this.imgUrl).into(ivThumbnail)
+                    //책제목 세팅
+                    tvChallengeinfoBookname.text = title
+                    tvChallengeinfoBookname.isSingleLine = true
+                    tvChallengeinfoBookname.ellipsize = TextUtils.TruncateAt.MARQUEE //흐르게 만들기
+                    tvChallengeinfoBookname.isSelected = true //선택하기
+                }
+                //프로그레스 바 설정
+                progress.apply {
+                    progress = currentPart.size
+                    max = maxPart.toInt()
+                }
+                //챌린지 정보 설정
+                tvChallengeTitle.text = title //챌린지 제목
+                tvChallengeDescription.text = description //챌린지 설명
+                tvChallengeinfoEnd.text = endDate //종료 일자
+                tvCurrentParticipants.text = currentPart.size.toString() //현재 참여자 수
+
+
             }
 
         }

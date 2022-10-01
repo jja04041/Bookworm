@@ -1,7 +1,9 @@
 package com.example.bookworm.bottomMenu.challenge
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -21,7 +23,8 @@ import kotlin.collections.ArrayList
 
 
 /**Repository에서 전달받은 챌린지 데이터를 가공, 처리하는 뷰모델*/
-class ChallengeViewModel(context: Context) : ViewModel() {
+@SuppressLint("StaticFieldLeak")
+class ChallengeViewModel(val context: Context) : ViewModel() {
     private val repo by lazy {
         ChallengeDataRepository(context)
     }
@@ -31,6 +34,7 @@ class ChallengeViewModel(context: Context) : ViewModel() {
     }
     var lastVisibleDataValue: String = ""
     val alertDialog by lazy { AlertDialog.Builder(context) }
+
     private val PAGESIZE = 5L
 
     class Factory(val context: Context) : ViewModelProvider.Factory {
@@ -79,8 +83,22 @@ class ChallengeViewModel(context: Context) : ViewModel() {
 
     /** Repository를 통해 Join 로직을 구현한다.
      * */
-    private fun processToJoin(challengeId: String) {
-
+    private fun processToJoin(challengeId: String, userToken: String, liveData: MutableLiveData<LoadState>) {
+        liveData.value = LoadState.Loading
+        try {
+            viewModelScope.launch {
+                repo.joinChallenge(challengeId, userToken = userToken)
+                liveData.value = LoadState.Done
+            }
+        }
+        //참여 초과 오류
+        catch (e: ArrayIndexOutOfBoundsException) {
+            liveData.value = LoadState.OverError
+        }
+        //파베 오류
+        catch (e: Exception) {
+            liveData.value = LoadState.Error
+        }
     }
 
     fun createChallenge(challenge: Challenge, stateLiveData: MutableLiveData<LoadState>) {
@@ -92,10 +110,10 @@ class ChallengeViewModel(context: Context) : ViewModel() {
     }
 
     //챌린지 참여 로직
-    fun joinChallenge(id: String) {
+    fun joinChallenge(id: String, userToken: String, liveData: MutableLiveData<LoadState>) {
         alertDialog.setMessage("챌린지에 참여하시겠습니까? (참여 후 탈퇴 불가)")
                 .setPositiveButton("네") { dialog, which ->
-                    processToJoin(id)
+                    processToJoin(id, userToken, liveData)
                 }.setNegativeButton("아니요") { dialog, which ->
                     dialog.dismiss()
                 }.show()

@@ -32,8 +32,20 @@ class ChallengeDataRepository(context: Context) : ContractChallengeRepo {
 
     }
 
-    override suspend fun allowToJoinChallenge(challengeID: String) {
-        TODO("Not yet implemented")
+    //참여 가능한 경우에는 정상적으로 참여가 되게 하고, 안되는 경우에는 에러를 띄워준다.
+    override suspend fun joinChallenge(challengeID: String, userToken: String) {
+        val challengeRef = FireStoreLoadModule
+                .provideQueryPathToChallengeCollection().document(challengeID)
+        FireStoreLoadModule.provideFirebaseInstance().runTransaction { transaction ->
+            transaction.apply {
+                val doc = get(challengeRef)
+                val currentList = doc["currentPart"] as MutableList<String>
+                if (currentList.size < doc["maxPart"] as Long) {
+                    currentList.add(userToken)
+                    update(challengeRef, "currentPart", currentList)
+                } else throw ArrayIndexOutOfBoundsException() //배열 초과 에러를 출력
+            }
+        }.await()
     }
 
     override suspend fun loadBoards() {

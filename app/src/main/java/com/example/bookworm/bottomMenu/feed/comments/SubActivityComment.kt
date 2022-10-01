@@ -93,10 +93,10 @@ class SubActivityComment : AppCompatActivity() {
                         userToken = nowUser!!.token,
                         madeDate = madeDate
                     )
-                    feedViewModel.manageComment(comment, feedItem.FeedID!!, true) //서버에 댓글 추가
+                    feedViewModel.manageComment(comment, feedItem.feedID!!, true) //서버에 댓글 추가
                     //게시물 작성자에게 댓글이 달렸다는 알림을 보냄
                     myFCMService.sendPostToFCM(
-                        this@SubActivityComment, feedItem.Creator!!.fCMtoken,
+                        this@SubActivityComment, feedItem.creatorInfo!!.fCMtoken,
                         "${nowUser!!.username}님이 댓글을 남겼습니다. \"${text}\" "
                     )
 
@@ -107,7 +107,7 @@ class SubActivityComment : AppCompatActivity() {
                     text = null
 
                     feedViewModel.nowCommentLoadState.observe(context as SubActivityComment) { state ->
-                        if (state == FeedViewModel.State.Done) {
+                        if (state == LoadState.Done) {
                             comment.duration = feedViewModel.getDateDuration(comment!!.madeDate)
                             comment.creator = nowUser
                             binding2.comment = comment
@@ -138,10 +138,10 @@ class SubActivityComment : AppCompatActivity() {
     //데이터를 가져오는 메소드
     fun loadCommentData(isRefreshing: Boolean) {
         if (!isDataEnd) {
-            feedViewModel.loadComment(feedItem.FeedID!!, isRefreshing)
+            feedViewModel.loadComment(feedItem.feedID!!, isRefreshing)
             feedViewModel.nowCommentLoadState.observe(this) { nowState ->
                 //데이터 로딩이 다 되었다면
-                if (nowState == FeedViewModel.State.Done) {
+                if (nowState == LoadState.Done) {
                     var current = commentAdapter.currentList.toMutableList() //기존에 가지고 있던 아이템 목록
                     if (isRefreshing) {
                         current.clear()

@@ -32,6 +32,9 @@ data class Challenge(
         @Exclude @set:Exclude @get:Exclude
         var isFull //인원이 가득 찼는지 확인
         : Boolean = false,
+        @Exclude @set:Exclude @get:Exclude
+        var isUserJoined //사용자가 참여한 챌린지 인지 확인
+        : Boolean = false,
         var masterToken //방장의 토큰값
         : String = "",
         var description //챌린지 설명
