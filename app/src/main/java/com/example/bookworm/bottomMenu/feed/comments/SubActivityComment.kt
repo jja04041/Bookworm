@@ -7,12 +7,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.bookworm.LoadState
+import com.example.bookworm.appLaunch.views.MainActivity
+import com.example.bookworm.bottomMenu.challenge.board.subactivity_challenge_board.context
 import com.example.bookworm.bottomMenu.feed.Feed
 import com.example.bookworm.bottomMenu.feed.FeedViewModel
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.core.userdata.UserInfo
+import com.example.bookworm.databinding.LayoutCommentItemBinding
 import com.example.bookworm.databinding.SubactivityCommentBinding
 import com.example.bookworm.notification.MyFCMService
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 //메커니즘 순서
 //1. 이전 화면(fragmentFeed)에서 넘어온 Feed데이터를 가지고 화면애 세팅해준다.
@@ -27,6 +36,9 @@ import com.example.bookworm.notification.MyFCMService
 class SubActivityComment : AppCompatActivity() {
     private val binding by lazy {
         SubactivityCommentBinding.inflate(layoutInflater)
+    }
+    private val binding2 by lazy {
+        LayoutCommentItemBinding.inflate(layoutInflater)
     }
     private val userInfoViewModel by lazy {
         ViewModelProvider(this, UserInfoViewModel.Factory(this))[UserInfoViewModel::class.java]
@@ -64,21 +76,52 @@ class SubActivityComment : AppCompatActivity() {
 
     //댓글 추가 메소드 구현
     private fun addComment() {
+        val commentText = binding.edtComment.text.toString() //댓글 내용
         binding.apply {
-            if (edtComment.text.toString() != "") {//내용이 비어있지 않을 때만 이 메소드가 작동하도록 함
+            if (commentText != "") {//내용이 비어있지 않을 때만 이 메소드가 작동하도록 함
                 edtComment.apply {
+
+                    val madeDate = LocalDateTime.now()
+                        .format(
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")
+                                .withLocale(Locale.KOREA)
+                                .withZone(ZoneId.of("Asia/Seoul"))
+                        )
+                    val comment = Comment(
+                        commentID = "${madeDate}_${nowUser!!.token}",
+                        contents = commentText,
+                        userToken = nowUser!!.token,
+                        madeDate = madeDate
+                    )
+                    feedViewModel.manageComment(comment, feedItem.FeedID!!, true) //서버에 댓글 추가
+                    //게시물 작성자에게 댓글이 달렸다는 알림을 보냄
+                    myFCMService.sendPostToFCM(
+                        this@SubActivityComment, feedItem.Creator!!.fCMtoken,
+                        "${nowUser!!.username}님이 댓글을 남겼습니다. \"${text}\" "
+                    )
+
                     //키보드 내리기
                     (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-                            .hideSoftInputFromWindow(windowToken, 0)
+                        .hideSoftInputFromWindow(windowToken, 0)
                     clearFocus()
                     text = null
 
-                    //게시물 작성자에게 댓글이 달렸다는 알림을 보냄
-                    myFCMService.sendPostToFCM(this@SubActivityComment, feedItem.Creator!!.fCMtoken,
-                            "${nowUser!!.username}님이 댓글을 남겼습니다. \"${text}\" ")
-                }
-                mRecyclerView.apply {
-                    smoothScrollToPosition(0) //맨 위 아이템으로 포커스를 이동 (본인 댓글 확인을 위해)
+                    feedViewModel.nowCommentLoadState.observe(context as SubActivityComment) { state ->
+                        if (state == FeedViewModel.State.Done) {
+                            comment.duration = feedViewModel.getDateDuration(comment!!.madeDate)
+                            comment.creator = nowUser
+                            binding2.comment = comment
+
+                            binding2.executePendingBindings() // 변경된 값을 뷰에 적용
+                            var TempList = commentAdapter.currentList.toMutableList()
+                            TempList.add(comment)
+                            commentAdapter.submitList(TempList)
+                        }
+
+                        binding.mRecyclerView.apply {
+                            smoothScrollToPosition(0) //맨 위 아이템으로 포커스를 이동 (본인 댓글 확인을 위해)
+                        }
+                    }
                 }
             }
         }
@@ -110,7 +153,7 @@ class SubActivityComment : AppCompatActivity() {
                     val loadedData = feedViewModel.commentsData
                     if (loadedData != null && !current.containsAll(loadedData)) {
                         current.addAll(loadedData)
-                        current.add(Comment())
+                        //current.add(Comment())
                     }
                     //데이터의 끝에 다다랐다면 끝이라는 것을 변수에 저장
                     else isDataEnd = true
@@ -138,24 +181,13 @@ class SubActivityComment : AppCompatActivity() {
                         super.onScrolled(recyclerView, dx, dy)
                         val layoutManager = recyclerView.layoutManager as LinearLayoutManager?
                         val lastVisibleItemPosition =
-                                layoutManager!!.findLastCompletelyVisibleItemPosition()
+                            layoutManager!!.findLastCompletelyVisibleItemPosition()
                         if ((lastVisibleItemPosition
-                                        == commentAdapter.currentList.lastIndex) && lastVisibleItemPosition > 0)
+                                    == commentAdapter.currentList.lastIndex) && lastVisibleItemPosition > 0)
                             loadCommentData(false)
                     }
                 })
             }
         }
     }
-
-
-//    //Shimmer를 켜고 끄고 하기 위함
-//
-//    private fun showShimmer(bool: Boolean) =
-//            binding.apply {
-//                llComment.isVisible = !bool
-//                SFLComment.isVisible = bool
-//                if (bool) SFLComment.startShimmer()
-//                else SFLComment.stopShimmer()
-//            }
 }
