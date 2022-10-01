@@ -8,7 +8,6 @@
     android:orientation="vertical">
 
 
-
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/SFLComment"
         android:layout_width="match_parent"
@@ -25,10 +24,55 @@
         android:background="@color/white"
         android:orientation="vertical">
 
+        <FrameLayout
+            android:id="@+id/flFeedDetail"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/feed_bottom_border_only"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnBefore"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/back_icon" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="게시물 상세"
+                    android:textColor="@color/black"
+                    android:textSize="13dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvTopName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingTop="5dp"
+                    android:textColor="@color/black"
+                    android:textSize="10dp" />
+            </LinearLayout>
+
+
+        </FrameLayout>
+
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swiperefresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginVertical="50dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/mRecyclerView"
@@ -55,38 +99,44 @@
             android:textSize="20dp"
             android:visibility="invisible" />
 
-        <FrameLayout
-            android:id="@+id/flComment"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/writing_comment"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:paddingTop="10dp">
 
-            <EditText
-                android:id="@+id/edtComment"
+            <FrameLayout
+                android:id="@+id/flComment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="#00000000"
-                android:hint="댓글을 입력하세요."
-                android:paddingHorizontal="10dp"
-                android:paddingVertical="3dp"
-                android:textSize="15dp" />
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/writing_comment"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btnWriteComment"
-                android:layout_width="33dp"
-                android:layout_height="33dp"
-                android:layout_gravity="end|center_vertical"
-                android:layout_marginEnd="5dp"
-                android:background="@drawable/ic_round_near_me_24"
-                android:backgroundTint="#000000" />
+                <EditText
+                    android:id="@+id/edtComment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="#00000000"
+                    android:hint="댓글을 입력하세요."
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="3dp"
+                    android:textSize="15dp" />
 
-        </FrameLayout>
+                <Button
+                    android:id="@+id/btnWriteComment"
+                    android:layout_width="33dp"
+                    android:layout_height="33dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/ic_round_near_me_24"
+                    android:backgroundTint="#000000" />
+
+            </FrameLayout>
+        </LinearLayout>
 
     </RelativeLayout>
 
