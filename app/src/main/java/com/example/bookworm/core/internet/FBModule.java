@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bookworm.appLaunch.views.MainActivity;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
-import com.example.bookworm.bottomMenu.challenge.fragment_challenge;
+//import com.example.bookworm.bottomMenu.challenge.fragment_challenge;
 import com.example.bookworm.bottomMenu.challenge.subactivity.subactivity_challenge_challengeinfo;
 import com.example.bookworm.bottomMenu.profile.views.ProfileModifyActivity;
 import com.example.bookworm.bottomMenu.profile.views.ProfileSettingActivity;
@@ -179,18 +179,18 @@ public class FBModule {
     private void successRead(QuerySnapshot querySnapshot, int idx, Map map) {
 
         //fragment_challenge에 있는 메소드를 사용하기 위함.
-        fragment_challenge fc;
-
-        if (idx == 2) {
-            fc = ((fragment_challenge) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("3"));
-            fc.moduleUpdated(null); //빈값을 반환하여, 찾는 값이 없음을 사용자에게 알림.
-
-        }
-        if (idx == 2) {
-            //챌린지 검색
-            fc = ((fragment_challenge) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("3"));
-            fc.moduleUpdated(querySnapshot.getDocuments()); //찾은 챌린지 목록을 반환함.
-        }
+//        fragment_challenge fc;
+//
+//        if (idx == 2) {
+//            fc = ((fragment_challenge) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("3"));
+//            fc.moduleUpdated(null); //빈값을 반환하여, 찾는 값이 없음을 사용자에게 알림.
+//
+//        }
+//        if (idx == 2) {
+//            //챌린지 검색
+//            fc = ((fragment_challenge) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("3"));
+//            fc.moduleUpdated(querySnapshot.getDocuments()); //찾은 챌린지 목록을 반환함.
+//        }
     }
 
 

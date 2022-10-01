@@ -114,15 +114,16 @@
                             android:text="챌린지 명"
                             android:textColor="@color/black"
                             android:textSize="17dp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold|italic" />
 
                         <TextView
                             android:id="@+id/tvDday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:text="##"
-                            android:textSize="14dp" />
+                            android:text="##일 남음"
+                            android:textStyle="bold"
+                            android:textSize="12sp" />
 
                     </FrameLayout>
 
@@ -152,8 +153,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="20dp"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -200,8 +200,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="15dp"
                     android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="10dp"
-                    android:visibility="gone" />
+                    android:layout_marginTop="10dp" />
 
                 <FrameLayout
                     android:id="@+id/FL_board"
@@ -316,7 +315,7 @@
                             <TextView
                                 android:id="@+id/tv_challengeinfo_Current_participants"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:text="##" />
 
                             <TextView

@@ -18,9 +18,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.bookworm.DdayCounter
 import com.example.bookworm.LoadState
 import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.challenge.items.Challenge
+import com.example.bookworm.bottomMenu.challenge.subactivity.SubActivityChallengeInfo
 import com.example.bookworm.bottomMenu.challenge.subactivity.SubActivityCreateChallenge
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.item.AlbumProcessViewModel
 import com.example.bookworm.databinding.FragmentChallengeBinding
@@ -54,7 +56,9 @@ class FragmentChallenge : Fragment() {
         //챌린지 생성 완료 시
         if (result.resultCode == AppCompatActivity.RESULT_OK) {
             val data = result.data!!.getParcelableExtra<Challenge>("challengeData")!!
-
+            challengeAdapter.submitList(challengeAdapter.currentList.toMutableList().apply {
+                this[data.pos] = data
+            })
         }
     }
 
@@ -150,6 +154,15 @@ class FragmentChallenge : Fragment() {
 
     /**어댑터 설정*/
     private fun setAdapter() {
+        challengeAdapter.setListener { holder, view, pos ->
+            if (DdayCounter(challengeAdapter.currentList[pos].dDay).dDayByDash != "종료됨")
+                Intent(activity, SubActivityChallengeInfo::class.java).apply {
+                    putExtra("challengeInfo", challengeAdapter.currentList[pos].apply {
+                        this.pos = pos
+                    })
+                    activityResult.launch(this)
+                }
+        }
         binding.mRecyclerView.apply {
             adapter = challengeAdapter
             itemAnimator = null //리사이클러뷰 애니메이션 제거

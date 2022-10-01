@@ -102,10 +102,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_above="@+id/swiperefresh"
             android:layout_alignParentBottom="true"
             android:paddingTop="10dp">
 
             <FrameLayout
+
                 android:id="@+id/flComment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

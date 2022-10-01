@@ -110,15 +110,10 @@ class SubActivityComment : AppCompatActivity() {
                         if (state == LoadState.Done) {
                             comment.duration = feedViewModel.getDateDuration(comment!!.madeDate)
                             comment.creator = nowUser
-//                            binding2.comment = comment
-//
-//                            binding2.executePendingBindings() // 변경된 값을 뷰에 적용
                             commentAdapter.currentList.toMutableList().apply {
                                 add(1, comment)
                                 commentAdapter.submitList(this)
                             }
-//                            TempList.add(comment)
-//                            commentAdapter.submitList(TempList)
                         }
 
                         binding.mRecyclerView.apply {
@@ -157,10 +152,11 @@ class SubActivityComment : AppCompatActivity() {
                     val loadedData = feedViewModel.commentsData
                     if (loadedData != null && !current.containsAll(loadedData)) {
                         current.addAll(loadedData)
-                        //current.add(Comment())
+                        if (loadedData.size == 10) current.add(Comment())
+                        else isDataEnd =true
                     }
-                    //데이터의 끝에 다다랐다면 끝이라는 것을 변수에 저장
-                    else isDataEnd = true
+//                    //데이터의 끝에 다다랐다면 끝이라는 것을 변수에 저장
+//                    else isDataEnd = true
 
                     //변경된 리스트를 어댑터에 반영
                     commentAdapter.submitList(current)

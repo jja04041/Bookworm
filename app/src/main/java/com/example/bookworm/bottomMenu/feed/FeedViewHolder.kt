@@ -118,8 +118,9 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
                     flFeedContent.setOnClickListener {
                         if (llLastComment.visibility != View.GONE) {
                             val intent = Intent(context, SubActivityComment::class.java)
-                            intent.putExtra("item", feed)
-                            intent.putExtra("position", bindingAdapterPosition)
+                            feed.position = bindingAdapterPosition
+                            intent.putExtra("Feed", feed)
+                            intent.putExtra("NowUser", mainUser)
                             context.startActivity(intent)
                         }
                     }
@@ -147,7 +148,6 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
                 }
                 //댓글 아이콘을 눌렀을 때
                 btnComment.setOnClickListener {
-//                    val intent = Intent(context, SubActivityComment::class.java)
                     val intent = Intent(context, SubActivityComment::class.java)
                     feed.position = bindingAdapterPosition
                     intent.putExtra("Feed", feed)

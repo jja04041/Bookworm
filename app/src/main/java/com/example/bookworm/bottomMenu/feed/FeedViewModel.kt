@@ -160,7 +160,7 @@ class FeedViewModel(context: Context) : ViewModel() {
             //새로고침 또는 첫 로드 시에는 변수 리셋과 쿼리 재장착
             if (isRefresh) {
                 loadPagingRepo.reset()
-                loadPagingRepo.setQuery(FireStoreLoadModule.provideQueryLoadPostsOrderByFeedID().whereIn("book.categoryname", listOf("국내도서>컴퓨터/모바일>컴퓨터 공학>자료구조/알고리즘","사회","국내도서>소설/시/희곡>역사소설>한국 역사소설"))) //쿼리 세팅
+                loadPagingRepo.setQuery(FireStoreLoadModule.provideQueryLoadPostsOrderByFeedID().whereIn("book.categoryname", listOf("국내도서>컴퓨터/모바일>컴퓨터 공학>자료구조/알고리즘", "사회", "국내도서>소설/시/희곡>역사소설>한국 역사소설"))) //쿼리 세팅
             } else {
                 loadPagingRepo.reset()
                 loadPagingRepo.setQuery(FireStoreLoadModule.provideQueryLoadPostsOrderByFeedID())
@@ -199,7 +199,7 @@ class FeedViewModel(context: Context) : ViewModel() {
                 loadPagingRepo.reset()
                 loadPagingRepo.setQuery(FireStoreLoadModule.provideQueryCommentsInFeedByFeedID(feedId))
             }
-            val loadedData = loadPagingRepo.loadFireStoreData(LoadPagingDataRepository.DataType.CommentType)
+            val loadedData = loadPagingRepo.loadFireStoreData(LoadPagingDataRepository.DataType.CommentType, 10)
             commentsData = if (loadedData != null) {
                 (loadedData as MutableList<Comment>).map { comment: Comment ->
                     return@map withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {

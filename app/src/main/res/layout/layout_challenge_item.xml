@@ -48,16 +48,10 @@
                         android:id="@+id/tvPerson"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="##"
+                        android:text="##/##"
                         android:textColor="#FFFFFF"
                         android:textSize="15dp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="명"
-                        android:textColor="#FFFFFF"
-                        android:textSize="15dp" />
                 </LinearLayout>
 
                 <TextView
@@ -85,10 +79,12 @@
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
+                android:paddingStart="10dp"
                 android:text="챌린지 제목"
+
                 android:textColor="#000000"
                 android:textSize="17dp"
-                android:textStyle="bold" />
+                android:textStyle="bold|italic" />
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -97,7 +93,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="26dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingStart="10dp">
 
                     <TextView
                         android:id="@+id/tvChallengeStartDate"
@@ -106,7 +103,7 @@
                         android:layout_gravity="left"
                         android:background="@drawable/textview_design"
                         android:paddingHorizontal="5dp"
-                        android:text="## - ##" />
+                        android:text="##-##" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -120,18 +117,22 @@
                         android:layout_gravity="left"
                         android:background="@drawable/textview_design"
                         android:paddingHorizontal="5dp"
-                        android:text="## - ##" />
+                        android:text="##-##" />
 
 
                 </LinearLayout>
 
                 <TextView
                     android:id="@+id/tvDday"
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_marginEnd="5dp"
-                    android:text="D-##" />
+                    android:paddingTop="3sp"
+                    android:text="##일 남음"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
 
 
             </FrameLayout>

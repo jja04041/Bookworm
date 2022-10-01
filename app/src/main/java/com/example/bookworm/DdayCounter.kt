@@ -23,7 +23,7 @@ class DdayCounter(stdDate: String) {
                 val count = (ddayCal.timeInMillis - todaCal.timeInMillis) / 86400000
                 if (count < 0)
                     "종료됨"
-                else "D-${count}"
+                else "${count}일 남음"
             } catch (e: Exception) {
                 Log.e("에러", "Error in GetDday at DdayCounter")
                 ""
