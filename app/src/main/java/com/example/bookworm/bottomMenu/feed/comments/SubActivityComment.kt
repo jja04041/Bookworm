@@ -37,9 +37,7 @@ class SubActivityComment : AppCompatActivity() {
     private val binding by lazy {
         SubactivityCommentBinding.inflate(layoutInflater)
     }
-    private val binding2 by lazy {
-        LayoutCommentItemBinding.inflate(layoutInflater)
-    }
+
     private val userInfoViewModel by lazy {
         ViewModelProvider(this, UserInfoViewModel.Factory(this))[UserInfoViewModel::class.java]
     }
@@ -60,11 +58,13 @@ class SubActivityComment : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding.apply {
             setContentView(root)
+            tvTopName.text = "${feedItem.creatorInfo!!.username}님의 게시물"
             mRecyclerView.isNestedScrollingEnabled = false
             btnWriteComment.setOnClickListener {
                 //댓글 추가
                 addComment()
             }
+            btnBefore.setOnClickListener { finish() }
             setRecyclerView()
             loadCommentData(true)
         }
@@ -110,12 +110,15 @@ class SubActivityComment : AppCompatActivity() {
                         if (state == LoadState.Done) {
                             comment.duration = feedViewModel.getDateDuration(comment!!.madeDate)
                             comment.creator = nowUser
-                            binding2.comment = comment
-
-                            binding2.executePendingBindings() // 변경된 값을 뷰에 적용
-                            var TempList = commentAdapter.currentList.toMutableList()
-                            TempList.add(comment)
-                            commentAdapter.submitList(TempList)
+//                            binding2.comment = comment
+//
+//                            binding2.executePendingBindings() // 변경된 값을 뷰에 적용
+                            commentAdapter.currentList.toMutableList().apply {
+                                add(1, comment)
+                                commentAdapter.submitList(this)
+                            }
+//                            TempList.add(comment)
+//                            commentAdapter.submitList(TempList)
                         }
 
                         binding.mRecyclerView.apply {
@@ -142,13 +145,14 @@ class SubActivityComment : AppCompatActivity() {
             feedViewModel.nowCommentLoadState.observe(this) { nowState ->
                 //데이터 로딩이 다 되었다면
                 if (nowState == LoadState.Done) {
-                    var current = commentAdapter.currentList.toMutableList() //기존에 가지고 있던 아이템 목록
+                    val current = commentAdapter.currentList.toMutableList() //기존에 가지고 있던 아이템 목록
                     if (isRefreshing) {
                         current.clear()
                         binding.swiperefresh.isRefreshing = false //새로고침인 경우, 데이터가 다 로딩 된 후 새로고침 표시 없애기
+                        current.add(0, feedItem) //피드 데이터를 가져온다.
                     }
                     //만약 현재 목록이 비어있지 않고, 마지막 아이템이 로딩 아이템 이라면 마지막 아이템을 제거
-                    if (current.size > 1 && (current.last() as Comment).commentID == null) current.removeLast()
+                    if (current.size > 1 && (current.last() as Comment).commentID == "") current.removeLast()
                     //데이터의 끝에 다다르지 않았다면, 현재 목록에 불러온 아이템을 추가한다.
                     val loadedData = feedViewModel.commentsData
                     if (loadedData != null && !current.containsAll(loadedData)) {

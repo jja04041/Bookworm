@@ -123,23 +123,6 @@ class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
                 ivFeedImage.isVisible = (item.imgurl != "")
                 tvCommentCount.text = "댓글 ${item.commentsCount}개"
                 tvDate.text = item.duration
-                //라벨 세팅
-                llLabel.removeAllViews() //기존에 설정된 값을 초기화 시켜줌.
-                val idx = item.label!!.indexOf("")
-                for (i in 0 until idx) {
-                    //뷰 생성
-                    val tv = TextView(itemView.context)
-                    tv.text = item.label[i] //라벨에 텍스트 삽입
-                    tv.background = itemView.context.getDrawable(R.drawable.label_design) //디자인 적용
-                    tv.setBackgroundColor((itemView.context as MainActivity).getColor(R.color.subcolor_2)) //배경색 적용
-                    val params = LinearLayout.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT
-                    ) //사이즈 설정
-                    params.setMargins(10, 0, 10, 0) //마진 설정
-                    tv.layoutParams = params //설정값 뷰에 저장
-                    llLabel.addView(tv) //레이아웃에 뷰 세팅
-                }
             }
         }
     }
