@@ -29,6 +29,7 @@ import com.example.bookworm.R;
 
 import com.example.bookworm.bottomMenu.feed.Feed;
 import com.example.bookworm.bottomMenu.feed.ImagePicker;
+import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.internet.Module;
@@ -68,7 +69,7 @@ public class subActivity_Feed_Modify extends AppCompatActivity {
     Dialog customDialog;
     String FeedID;
     Feed feed;
-//    Book selected_book; //선택한 책 객체
+    Book selected_book; //선택한 책 객체
     //라벨은 알럿 다이어그램을 통해 입력을 받고, 선택한 값으로 라벨이 지정됨 => 구현 예정
 
     //사용자가 선택한 어플로 이어서 사진을 선택할 수 있게 함.
@@ -98,8 +99,8 @@ public class subActivity_Feed_Modify extends AppCompatActivity {
             result -> {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent intent = result.getData();
-//                    this.selected_book = (Book) intent.getSerializableExtra("data");
-//                    binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목만 세팅한다.
+                    this.selected_book = (Book) intent.getParcelableExtra("data");
+                    binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목만 세팅한다.
                 }
             });
 
@@ -111,17 +112,17 @@ public class subActivity_Feed_Modify extends AppCompatActivity {
 
         binding.btnImageUpload.setVisibility(View.INVISIBLE); //피드 수정 화면에서는 사진 수정 불가능
 
-//        feed = getIntent().getParcelableExtra("Feed");
-//        this.selected_book = feed.getBook();
-//        binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목 세팅한다.
-//        binding.edtFeedText.setText(feed.getFeedText()); //피드 내용 세팅
-        Glide.with(this).load(feed.getImgurl()).into(binding.ivpicture); //피드 사진 세팅(수정 불가)
+        feed = getIntent().getParcelableExtra("Feed");
+        this.selected_book = feed.getBook();
+        binding.tvFeedBookTitle.setText(selected_book.getTitle()); //책 제목 세팅한다.
+        binding.edtFeedText.setText(feed.getFeedText()); //피드 내용 세팅
+        if (!feed.getImgurl().equals("")) Glide.with(this).load(feed.getImgurl()).into(binding.ivpicture); //피드 사진 세팅(수정 불가)
 
         //프로필 세팅
 
 
-        ArrayList<String> modifyLabel; //수정화면의 라벨 세팅
-        modifyLabel = feed.getLabel();
+//        ArrayList<String> modifyLabel; //수정화면의 라벨 세팅
+//        modifyLabel = feed.getLabel();
 
         //뒤로가기
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
@@ -336,11 +337,11 @@ public class subActivity_Feed_Modify extends AppCompatActivity {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String formatTime = dateFormat.format(System.currentTimeMillis());
 
-            map.put("UserToken", userInfo.getToken()); //사용자 토큰
-//            map.put("book", selected_book); //책 정보
+            map.put("userToken", userInfo.getToken()); //사용자 토큰
+            map.put("book", selected_book); //책 정보
             map.put("feedText", binding.edtFeedText.getText().toString()); //피드 내용
             map.put("date", feed.getDate()); //현재 시간 millis로
-            map.put("FeedID", feed.getFeedID()); //피드 아이디
+            map.put("feedID", feed.getFeedID()); //피드 아이디
             map.put("commentsCount", feed.getCommentsCount());
             map.put("likeCount", feed.getLikeCount());
             if (feed.getImgurl() != null) map.put("imgurl", feed.getImgurl()); //이미지 url
