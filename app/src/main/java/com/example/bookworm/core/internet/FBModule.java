@@ -115,23 +115,23 @@ public class FBModule {
                     document.getReference().update("UserInfo.genre", map.get("userinfo_genre"));
                 }
                 // 업적, 인벤토리 업데이트
-                else if (map.get("bookworm_achievementmap") != null) {
-                    if (map.get("bookworm_wormvec") != null) {
-                        document.getReference().update("BookWorm.achievementmap", map.get("bookworm_achievementmap"));
-                        document.getReference().update("BookWorm.wormvec", map.get("bookworm_wormvec"));
-                    } else if (map.get("bookworm_bgvec") != null) {
-                        document.getReference().update("BookWorm.achievementmap", map.get("bookworm_achievementmap"));
-                        document.getReference().update("BookWorm.bgvec", map.get("bookworm_bgvec"));
-                    }
-                    // wormtype update
-                } else if (map.get("bookworm_wormtype") != null) {
-                    document.getReference().update("BookWorm.wormtype", map.get("bookworm_wormtype"));
-                    // bg update
-                } else if (map.get("bookworm_bgtype") != null) {
-                    document.getReference().update("BookWorm.bgtype", map.get("bookworm_bgtype"));
-                } else if (map.get("bookworm_readcount") != null) {
-                    document.getReference().update("BookWorm.readcount", map.get("bookworm_readcount"));
-                }
+//                else if (map.get("bookworm_achievementmap") != null) {
+//                    if (map.get("bookworm_wormvec") != null) {
+//                        document.getReference().update("BookWorm.achievementmap", map.get("bookworm_achievementmap"));
+//                        document.getReference().update("BookWorm.wormvec", map.get("bookworm_wormvec"));
+//                    } else if (map.get("bookworm_bgvec") != null) {
+//                        document.getReference().update("BookWorm.achievementmap", map.get("bookworm_achievementmap"));
+//                        document.getReference().update("BookWorm.bgvec", map.get("bookworm_bgvec"));
+//                    }
+//                    // wormtype update
+//                } else if (map.get("bookworm_wormtype") != null) {
+//                    document.getReference().update("BookWorm.wormtype", map.get("bookworm_wormtype"));
+//                    // bg update
+//                } else if (map.get("bookworm_bgtype") != null) {
+//                    document.getReference().update("BookWorm.bgtype", map.get("bookworm_bgtype"));
+//                } else if (map.get("bookworm_readcount") != null) {
+//                    document.getReference().update("BookWorm.readcount", map.get("bookworm_readcount"));
+//                }
                 //회원인 경우, 로그인 처리
                 else {
 

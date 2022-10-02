@@ -3,15 +3,22 @@ package com.example.bookworm.bottomMenu.feed
 
 import android.content.Context
 import android.graphics.Bitmap
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.bookworm.LoadState
-import com.example.bookworm.achievement.Genre
+import com.example.bookworm.achievement.Achievement
 import com.example.bookworm.appLaunch.views.MainActivity
+import com.example.bookworm.bottomMenu.bookworm.BookWorm
+import com.example.bookworm.bottomMenu.feed.SubActivityCreatePost.Companion.CREATE_OK
 import com.example.bookworm.bottomMenu.feed.comments.Comment
 import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
+import com.example.bookworm.bottomMenu.feed.oldItems.subActivity_Feed_Create
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing
+import com.example.bookworm.core.internet.FBModule
 import com.example.bookworm.core.userdata.UserInfo
 import com.google.firebase.firestore.FieldValue
 import kotlinx.coroutines.*
@@ -24,7 +31,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class FeedViewModel(context: Context) : ViewModel() {
+class FeedViewModel(val context: Context) : ViewModel() {
     private val loadPagingRepo = LoadPagingDataRepository()
     private val feedDataRepository = FeedDataRepository(context)
     private val userInfoViewModel = ViewModelProvider(
@@ -43,6 +50,7 @@ class FeedViewModel(context: Context) : ViewModel() {
     val nowFeedUploadState = MutableLiveData<LoadState>() //현재 피드 업로드 상태를 추적하는 LiveData
     val nowLikeState = MutableLiveData<LoadState>()
 
+    val fbModule = FBModule(context)
 
     class Factory(val context: Context) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -87,11 +95,22 @@ class FeedViewModel(context: Context) : ViewModel() {
                             //유저의 정보 업데이트
                             feed.creatorInfo!!.apply {
 //                                setGenre(feed.book!!.categoryname, context) //장르 설정
+                                userInfoViewModel.setGenre(feed.book!!.categoryName,this)
+
+
                                 userInfoViewModel.getBookWorm(token).onJoin
                                 var data = userInfoViewModel.bwdata.value
+
+//                                achievement.canreturn()
+
                                 data!!.readCount++
                                 userInfoViewModel.updateBw(token, data)
                                 userInfoViewModel.updateUser(this)
+
+                                val achievement = Achievement(context, fbModule, this, data)
+                                achievement.CompleteAchievement(this, context)
+
+
                             }
                             nowFeedUploadState.value = LoadState.Done
                         }
