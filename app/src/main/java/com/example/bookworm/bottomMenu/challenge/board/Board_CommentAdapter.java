@@ -122,7 +122,8 @@ public class Board_CommentAdapter extends RecyclerView.Adapter<RecyclerView.View
             Board board = ((subactivity_challenge_board_comment) context).item;
             UserInfo nowUser = new PersonalD(context).getUserInfo();
             user.getData(item.getUserToken(), null);
-            binding.tvCommentContent.setText(item.getContents());
+//            binding.tvCommentContent.setText(item.getContents());
+            binding.setComment(item);
 
             getDateDuration(item.getMadeDate());
 

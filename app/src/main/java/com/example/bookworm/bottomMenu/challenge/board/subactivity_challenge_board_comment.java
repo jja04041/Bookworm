@@ -23,6 +23,7 @@ import com.example.bookworm.notification.MyFCMService;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.net.MalformedURLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,7 +64,7 @@ public class subactivity_challenge_board_comment extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = SubactivityChallengeBoardCommentBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        item = (Board) getIntent().getSerializableExtra("board");
+        item = (Board) getIntent().getParcelableExtra("board");
         challenge = (Challenge) getIntent().getParcelableExtra("challenge");
         nowUser = new PersonalD(this).getUserInfo();
         context = this;
@@ -172,6 +173,11 @@ public class subactivity_challenge_board_comment extends AppCompatActivity {
         if (!string.equals("") && !string.equals(null)) {
             //유저정보, 댓글내용, 작성시간
             Comment comment = new Comment();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            comment.setCommentID(System.currentTimeMillis() + "_" + nowUser.getToken());
+            comment.setUserToken(nowUser.getToken());
+            comment.setContents(string);
+            comment.setMadeDate(dateFormat.format(System.currentTimeMillis()));
 //            comment.getData(nowUser.getToken(), string, System.currentTimeMillis());
             data.put("comment", comment);
             //입력한 댓글 화면에 표시하기

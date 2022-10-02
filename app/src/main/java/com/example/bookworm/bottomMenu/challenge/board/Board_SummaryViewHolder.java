@@ -41,11 +41,11 @@ public class Board_SummaryViewHolder extends RecyclerView.ViewHolder implements 
         //현재 로그인중인 유저
         UserInfo nowUser = new PersonalD(context).getUserInfo();
         //피드 요약
-//        binding.tvFeedtext.setText(item.getBoardText());
-//        if (item.getImgurl() != "") {
-//            Glide.with(context).load(item.getImgurl()).into(binding.feedImage);
-//            binding.feedImage.setVisibility(View.VISIBLE);
-//        } else binding.feedImage.setVisibility(View.INVISIBLE);
+        binding.tvFeedText.setText(item.getBoardText());
+        if (item.getImgurl() != "") {
+            Glide.with(context).load(item.getImgurl()).into(binding.ivFeedImage);
+            binding.ivFeedImage.setVisibility(View.VISIBLE);
+        } else binding.ivFeedImage.setVisibility(View.INVISIBLE);
 
         binding.llbook.setOnClickListener(new View.OnClickListener() {
             @Override

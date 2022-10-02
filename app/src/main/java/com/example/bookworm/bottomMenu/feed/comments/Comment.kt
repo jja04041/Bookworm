@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Comment(
-        val commentID: String = "", //댓글 ID
+        var commentID: String = "", //댓글 ID
         var userToken: String ?= "", //댓글 작성자 토큰
         var contents: String ?= "", // 댓글 내용
         var madeDate: String ?= "", // 댓글 생성일자
