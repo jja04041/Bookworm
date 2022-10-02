@@ -200,7 +200,7 @@ class FeedViewModel(context: Context) : ViewModel() {
                 loadPagingRepo.reset()
                 loadPagingRepo.setQuery(FireStoreLoadModule.provideQueryCommentsInFeedByFeedID(feedId))
             }
-            val loadedData = loadPagingRepo.loadFireStoreData(LoadPagingDataRepository.DataType.CommentType)
+            val loadedData = loadPagingRepo.loadFireStoreData(LoadPagingDataRepository.DataType.CommentType, 10)
             commentsData = if (loadedData != null) {
                 (loadedData as MutableList<Comment>).map { comment: Comment ->
                     return@map withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {

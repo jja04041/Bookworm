@@ -24,6 +24,9 @@ data class Challenge(
         var maxPart // 최대 참가 가능한 인원 수
         : Long = 0L,
         @Exclude @set:Exclude @get:Exclude
+        var pos
+        : Int = 0,
+        @Exclude @set:Exclude @get:Exclude
         var masterData //방장의 유저데이터
         : UserInfo = UserInfo(),
         @Exclude @set:Exclude @get:Exclude

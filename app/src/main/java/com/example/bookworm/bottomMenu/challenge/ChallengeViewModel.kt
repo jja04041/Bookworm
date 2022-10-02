@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.example.bookworm.DdayCounter
 import com.example.bookworm.LoadState
 import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.challenge.items.Challenge
@@ -62,12 +63,17 @@ class ChallengeViewModel(val context: Context) : ViewModel() {
                         //방장의 유저 데이터를 받아서 챌린지 객체에 삽입한다.
                         loadedData!!.map { challengeData ->
                             return@map withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-                                challengeData.dDay = countDday(challengeData.endDate) //디데이 설정
+                                challengeData.dDay = DdayCounter(challengeData.endDate).dDayByDash //디데이 설정
                                 challengeData.masterData = try {
                                     //불러온 값을 방장 데이터로 설정
                                     userInfoViewModel.suspendGetUser(challengeData.masterToken)!!
                                 } catch (e: NullPointerException) {
                                     UserInfo() //빈 유저 데이터를 반환
+                                }
+                                challengeData.isUserJoined = try {
+                                    challengeData.currentPart.contains(userInfoViewModel.suspendGetUser(null)!!.token)
+                                } catch (e: Exception) {
+                                    false
                                 }
                                 return@withContext challengeData
                             }

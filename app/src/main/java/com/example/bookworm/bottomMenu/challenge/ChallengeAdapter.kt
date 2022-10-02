@@ -1,5 +1,6 @@
 package com.example.bookworm.bottomMenu.challenge
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.example.bookworm.DdayCounter
 import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.challenge.items.Challenge
+import com.example.bookworm.bottomMenu.challenge.items.OnChallengeItemClickListener
 import com.example.bookworm.databinding.LayoutChallengeItemBinding
 import com.example.bookworm.databinding.LayoutItemLoadingBinding
 import com.github.ybq.android.spinkit.style.Circle
@@ -18,8 +20,9 @@ import com.github.ybq.android.spinkit.style.Circle
 
 /** 챌린지 객체를 리사이클러뷰에 표시할 수 있는 아이템으로 변환하여 리사이클러뷰와 연결 시켜주는 어댑터
  * */
-class ChallengeAdapter(val context: Context) : ListAdapter<Challenge, RecyclerView.ViewHolder>(Companion) {
+class ChallengeAdapter(val context: Context) : ListAdapter<Challenge, RecyclerView.ViewHolder>(Companion), OnChallengeItemClickListener {
 
+    lateinit var itemListener: OnChallengeItemClickListener
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(context)
         return when (viewType) {
@@ -31,6 +34,10 @@ class ChallengeAdapter(val context: Context) : ListAdapter<Challenge, RecyclerVi
 
             }
         }
+    }
+
+    fun setListener(listener: OnChallengeItemClickListener) {
+        itemListener = listener
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -48,11 +55,12 @@ class ChallengeAdapter(val context: Context) : ListAdapter<Challenge, RecyclerVi
     /**
      * 챌린지 아이템을 그려주는 뷰홀더
      * */
-    private inner class ChallengeItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ChallengeItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding by lazy {
             LayoutChallengeItemBinding.bind(itemView)
         }
 
+        @SuppressLint("SetTextI18n")
         fun bindItem(challenge: Challenge) {
             binding.apply {
                 challenge.apply {
@@ -63,7 +71,7 @@ class ChallengeAdapter(val context: Context) : ListAdapter<Challenge, RecyclerVi
                                 .load(imgUrl)
                                 .into(ivThumb)
                     }
-                    tvPerson.text = currentPart.size.toString() //현재 참여자 수
+                    tvPerson.text = "${currentPart.size}/${maxPart}" //현재 참여자 수
                     tvDday.text = DdayCounter(challenge.endDate).dDayByDash //디데이 설정
                     tvChallengeStartDate.text = challenge.startDate.substring(5) //시작 일자
                     tvChallengeEndDate.text = challenge.endDate.substring(5) //마감 일자
@@ -72,7 +80,9 @@ class ChallengeAdapter(val context: Context) : ListAdapter<Challenge, RecyclerVi
                 //챌린지 아이템 선택 감지
                 root.setOnClickListener {
                     val pos = bindingAdapterPosition
-
+                    if (pos != RecyclerView.NO_POSITION) {
+                        itemListener.onItemClick(this@ChallengeItemViewHolder, it, pos)
+                    }
                 }
             }
         }
@@ -113,5 +123,9 @@ class ChallengeAdapter(val context: Context) : ListAdapter<Challenge, RecyclerVi
         override fun areContentsTheSame(oldItem: Challenge, newItem: Challenge): Boolean {
             return oldItem.id == newItem.id
         }
+    }
+
+    override fun onItemClick(holder: ChallengeItemViewHolder, view: View, position: Int) {
+        itemListener.onItemClick(holder, view, position)
     }
 }

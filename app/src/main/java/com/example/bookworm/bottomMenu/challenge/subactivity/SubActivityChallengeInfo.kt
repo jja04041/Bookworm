@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.example.bookworm.DdayCounter
 import com.example.bookworm.LoadState
 import com.example.bookworm.bottomMenu.challenge.ChallengeViewModel
 import com.example.bookworm.bottomMenu.challenge.items.Challenge
@@ -64,6 +65,7 @@ class SubActivityChallengeInfo : AppCompatActivity() {
                     if (state != LoadState.Loading) when (state) {
                         //정상적으로 참여 완료
                         LoadState.Done -> {
+                            challengeInfo!!.isUserJoined = true
                             btnChallengeJoin.apply {
                                 isEnabled = false
                                 text = "참여중인 챌린지입니다."
@@ -90,7 +92,9 @@ class SubActivityChallengeInfo : AppCompatActivity() {
             }
             //뒤로 가려는 경우
             btnBack.setOnClickListener {
-                setResult(Activity.RESULT_OK)
+                setResult(Activity.RESULT_OK, intent.apply {
+                    putExtra("challengeData", challengeInfo)
+                })
                 finish()
             }
 
@@ -112,12 +116,23 @@ class SubActivityChallengeInfo : AppCompatActivity() {
                     max = maxPart.toInt()
                 }
                 //챌린지 정보 설정
+                tvDday.text = dDay
                 tvChallengeTitle.text = title //챌린지 제목
                 tvChallengeDescription.text = description //챌린지 설명
                 tvChallengeinfoEnd.text = endDate //종료 일자
                 tvCurrentParticipants.text = currentPart.size.toString() //현재 참여자 수
-
-
+                tvChallengeinfoCreator.text = masterData.username
+                tvChallengeinfoCurrentParticipants.text = currentPart.size.toString()
+                tvMaxParticipants.text = maxPart.toString()
+                btnChallengeJoin.apply {
+                    if (isUserJoined) {
+                        text = "참여중인 챌린지입니다."
+                        isEnabled = false
+                    } else if (tvDday.text.toString() == "종료됨") {
+                        text = "종료된 챌린지 입니다."
+                        isEnabled = false
+                    }
+                }
             }
 
         }
