@@ -1,6 +1,7 @@
 package com.example.bookworm.bottomMenu.challenge.subactivity
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Toast
@@ -8,9 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.example.bookworm.DdayCounter
 import com.example.bookworm.LoadState
 import com.example.bookworm.bottomMenu.challenge.ChallengeViewModel
+import com.example.bookworm.bottomMenu.challenge.board.subactivity_challenge_board
 import com.example.bookworm.bottomMenu.challenge.items.Challenge
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.core.userdata.UserInfo
@@ -89,6 +90,12 @@ class SubActivityChallengeInfo : AppCompatActivity() {
                         }
                     }
                 }
+            }
+
+            FLBoard.setOnClickListener{
+                val intent = Intent(this@SubActivityChallengeInfo, subactivity_challenge_board::class.java)
+                intent.putExtra("challenge", challengeInfo)
+                this@SubActivityChallengeInfo.startActivity(intent)
             }
             //뒤로 가려는 경우
             btnBack.setOnClickListener {

@@ -74,7 +74,7 @@ public class subactivity_challenge_board extends AppCompatActivity {
             }
         });
 
-        boardFB.getData(map, challenge.getTitle());
+        boardFB.getData(map, challenge.getId());
 
 
     }

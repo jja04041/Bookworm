@@ -178,7 +178,7 @@ public class subactivity_challenge_board_comment extends AppCompatActivity {
             ArrayList a = new ArrayList(commentList);
             a.add(1, comment);
             replaceItem(a);
-            new Board_CommentsCounter().addCounter(data, context, challenge.getTitle(), item.getBoardID());
+            new Board_CommentsCounter().addCounter(data, context, challenge.getId(), item.getBoardID());
 
             //키보드 내리기
             InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);

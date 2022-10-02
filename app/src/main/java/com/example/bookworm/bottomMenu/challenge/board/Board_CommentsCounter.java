@@ -25,17 +25,17 @@ public class Board_CommentsCounter {
     }
 
 
-    public void addCounter(Map map, Context context, String challengeName, String BoardID) {
-        initialize(map, challengeName, BoardID, 1);
+    public void addCounter(Map map, Context context, String challengeID, String BoardID) {
+        initialize(map, challengeID, BoardID, 1);
     }
 
-    public void removeCounter(Map map, Context context, String challengeName, String BoardID) {
-        initialize(map, challengeName, BoardID, -1);
+    public void removeCounter(Map map, Context context, String challengeID, String BoardID) {
+        initialize(map, challengeID, BoardID, -1);
     }
 
 
-    public void initialize(Map map, String challengeName, String BoardID, int count) {
-        final DocumentReference ref = db.collection("challenge").document(challengeName).collection("feed").document(BoardID);
+    public void initialize(Map map, String challengeID, String BoardID, int count) {
+        final DocumentReference ref = db.collection("challenge").document(challengeID).collection("feed").document(BoardID);
         Comment comment = (Comment) map.get("comment");
         final DocumentReference ref2 = ref.collection("comments").document(comment.getCommentID());
 
