@@ -59,9 +59,9 @@ public class FBModule {
             //피드 표시(토큰)
         else if (idx == 1) {
             //map객체: 팔로워 목록
-            query = query.orderBy("FeedID", Query.Direction.DESCENDING);
-            if (map.get("FeedID") != null) {
-                query = collectionReference.document((String) map.get("FeedID")).collection("comments").orderBy("commentID", Query.Direction.DESCENDING);
+            query = query.orderBy("feedID", Query.Direction.DESCENDING);
+            if (map.get("feedID") != null) {
+                query = collectionReference.document((String) map.get("feedID")).collection("comments").orderBy("commentID", Query.Direction.DESCENDING);
             }
 
             if (map.get("lastVisible") != null) {
@@ -198,7 +198,7 @@ public class FBModule {
         switch (idx) {
 
             case 1: //피드 작성
-                db.collection(location[idx]).document((String) data.get("FeedID")).set(data);
+                db.collection(location[idx]).document((String) data.get("feedID")).set(data);
                 break;
 
             case 2://챌린지 생성
@@ -249,10 +249,10 @@ public class FBModule {
     }
 
     //챌린지 인증게시판 업로드를 위한 함수
-    public void uploadChallengeBoard(int idx, String token, String FeedID, Map data) {
+    public void uploadChallengeBoard(int idx, String token, String feedID, Map data) {
         collectionReference = db.collection(location[idx]).document(token).collection("feed");
         //task 결정
-        task = collectionReference.document(FeedID).set(data);
+        task = collectionReference.document(feedID).set(data);
         //task 실행
         task.addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

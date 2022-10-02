@@ -32,7 +32,7 @@ public class RecordFB {
 
     public void getData(Map map, String UserToken) {//token = 유저 토큰
         collectionReference = db.collection("feed");
-        Query query = collectionReference.whereEqualTo("UserToken", UserToken).orderBy("FeedID", Query.Direction.DESCENDING).limit(LIMIT);
+        Query query = collectionReference.whereEqualTo("UserToken", UserToken).orderBy("feedID", Query.Direction.DESCENDING).limit(LIMIT);
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
