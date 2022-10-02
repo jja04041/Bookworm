@@ -202,7 +202,7 @@ public class subactivity_challenge_board_comment extends AppCompatActivity {
         map = new HashMap();
         if (map.get("lastVisible") != null) map.remove("lastVisible");
         map.put("BoardID", item.getBoardID());
-        map.put("challengeName", challenge.getTitle());
+        map.put("challengeID", challenge.getId());
         boardFB.setLIMIT(LIMIT);
         boardFB.getCommentData(map, item.getBoardID());
     }
