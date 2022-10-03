@@ -40,20 +40,18 @@ class AlbumOptionMenu(context: Context?, anchor: View?, val data: AlbumData) :
                 AlertDialog.Builder(context)
                     .setTitle("앨범 삭제")
                     .setMessage("앨범을 삭제하시겠습니까?")
-                    .setPositiveButton("예",
-                        object : DialogInterface.OnClickListener {
-                            //예를 선택할 때 적용할 메커니즘
-                            override fun onClick(p0: DialogInterface?, p1: Int) {
-                                //서버에서 앨범을 삭제하는 작업을 거친다.
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    FirebaseFirestore.getInstance().collection("users")
-                                        .document(data.creater!!)
-                                        .collection("albums").document(data.albumName!!).delete()
-                                }
-                                (context as ShowAlbumContentActivity).finish()
-                            }
-                        })
-                    .setNegativeButton("아니오",
+                    .setPositiveButton("예"
+                    ) { p0, p1 ->
+                        //예를 선택할 때 적용할 메커니즘
+                        //서버에서 앨범을 삭제하는 작업을 거친다.
+                        CoroutineScope(Dispatchers.IO).launch {
+                            FirebaseFirestore.getInstance().collection("users")
+                                    .document(data.creatorToken!!)
+                                    .collection("albums").document(data.albumName!!).delete()
+                        }
+                        (context as ShowAlbumContentActivity).finish()
+                    }
+                        .setNegativeButton("아니오",
                         object : DialogInterface.OnClickListener {
                             //아니오를 선택할 때 적용할 메커니즘
                             override fun onClick(p0: DialogInterface?, p1: Int) {

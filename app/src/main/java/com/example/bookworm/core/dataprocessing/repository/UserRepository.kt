@@ -10,6 +10,7 @@ import com.example.bookworm.core.userdata.UserInfo
 import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.Query
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import kotlinx.coroutines.*
@@ -88,11 +89,9 @@ class UserRepository(context: Context) : DataRepository.HandleUser {
                 getUser(token, false)
             }.await()!!.token
             var albumReference =
-                    userCollectionRef.document(token!!).collection("albums").get().await()
+                    userCollectionRef.document(token!!).collection("albums").orderBy("albumId",Query.Direction.DESCENDING).get().await()
             for (i in albumReference.documents) {
-                var data = AlbumData()
-                data.addData(i.data as Map<String, Any>)
-                resultArray.add(data)
+                resultArray.add(i.toObject(AlbumData::class.java)!!)
             }
             resultArray
         }.await()

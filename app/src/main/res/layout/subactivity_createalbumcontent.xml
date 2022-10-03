@@ -138,7 +138,7 @@
                     android:layout_height="30dp"
                     android:layout_margin="30dp"
                     android:background="@android:color/transparent"
-                    android:text="취소"
+                    android:text="이전"
                     android:textColor="@color/white"
                     android:textSize="20dp" />
                 <!--[2] End-->

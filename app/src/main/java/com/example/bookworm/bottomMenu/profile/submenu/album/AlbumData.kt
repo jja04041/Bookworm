@@ -1,27 +1,29 @@
 package com.example.bookworm.bottomMenu.profile.submenu.album
+
+import android.os.Parcelable
 import com.example.bookworm.bottomMenu.feed.Feed
+import com.example.bookworm.core.userdata.UserInfo
+import com.google.firebase.firestore.Exclude
+import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 
 //앨범 객체
+@Parcelize
+data class AlbumData(
+        var albumId //앨범 아이디
+        : String = "",
+        var thumbnail //앨범커버
+        : String = "",
+        var albumName //앨범 이름
+        : String = "",
+        var selectedFeedList //앨범이 가지는 피드 리스트
+        : ArrayList<Feed> = ArrayList(),
+        var creatorToken
+        : String = "", //앨범 작성자 토큰
+        @get:Exclude @set:Exclude @Exclude
+        var creatorInfo
+        : UserInfo = UserInfo(),
+        var albumDesc //앨범 설명
+        :String = ""
+) : Parcelable
 
-class AlbumData : Serializable {
-    var thumbnail: String? = null //앨범 커버
-    var albumName: String? = null //앨범 이름
-    var containsList= ArrayList<Feed>() //앨범이 가진 피드 리스트
-    var albumId: String? = null
-    var creater: String?= null
-
-    //파이어베이스에서 전달받은 데이터를 객체에 담음
-    fun addData(data: Map<String, Any>) {
-        thumbnail = data["thumbnail"] as String?
-        albumName = data["albumName"] as String?
-        albumId = data["albumId"] as String?
-        if("creater" in data) creater = data["creater"] as String?
-//
-//        for(i in data["containsList"] as ArrayList<HashMap<*,*>>){
-//            var item = Feed()
-//            item.setFeedData(i)
-//            containsList.add(item)
-//        }
-    }
-}

@@ -70,6 +70,8 @@ class FragmentChallenge : Fragment() {
         return binding.root
     }
 
+
+
     /** UI를 세팅하는 함수
      * */
     private fun setUI() {

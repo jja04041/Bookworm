@@ -89,8 +89,6 @@ dependencies {
 
     // 카카오 SDK 모듈 설정
     implementation "com.kakao.sdk:v2-user:2.11.1" // 카카오 로그인
-
-
     // 구글 로그인
     implementation 'com.google.android.gms:play-services-auth:20.1.0'
 
@@ -157,7 +155,6 @@ dependencies {
     def paging_version = "3.1.1"
 
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
-
 
 
     // 검색 api
