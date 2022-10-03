@@ -24,7 +24,7 @@ class FragmentSelectFeed : Fragment() {
             parentActivity.switchTab(1)
         })
         binding!!.btnNext.setOnClickListener({
-            parentActivity.albumProcessViewModel.modifyFeedList(albumProcessAdapter!!.selectedFeed)
+            parentActivity.albumProcessViewModel.modifyFeedList(albumProcessAdapter!!.selectedFeed.value!!)
             //이곳에 서버에 앨범을 업로드 하는 로직을 작성해야 함.
             parentActivity.albumProcessViewModel.uploadAlbum()
         })
@@ -53,9 +53,9 @@ class FragmentSelectFeed : Fragment() {
             binding!!.mRecyclerView.visibility = View.VISIBLE
             binding!!.tvAlertNoPost.visibility = View.GONE
             albumProcessAdapter!!.setItemClickListener {
-                var theme = getResources().newTheme()
+                var theme = resources.newTheme()
                 theme.applyStyle(R.style.ThemeOverlay_AppCompat_Dark, true)
-                val a = albumProcessAdapter!!.selectedFeed.size >= 1
+                val a = albumProcessAdapter!!.selectedFeed.value!!.size >= 1
                 if (!a) {
                     binding!!.btnNext.setBackgroundTintList(
                         requireContext().getResources().getColorStateList(

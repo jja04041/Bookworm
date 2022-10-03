@@ -1,5 +1,6 @@
 package com.example.bookworm.bottomMenu.profile.submenu.album.AlbumDisplay.view
 
+import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.findViewTreeLifecycleOwner
@@ -32,6 +34,9 @@ class ShowAlbumContentActivity : AppCompatActivity() {
     lateinit var collapsingToolbarLayout: CollapsingToolbarLayout
     lateinit var albumOptionMenu: AlbumOptionMenu
     lateinit var uv: UserInfoViewModel
+    val data by lazy {
+        intent.getParcelableExtra<AlbumData>("albumData")!! //onclick 이벤트를 통해 넘겨받은 앨범 데이터
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
 
         //initialize
@@ -44,16 +49,13 @@ class ShowAlbumContentActivity : AppCompatActivity() {
         collapsingToolbarLayout = binding!!.mCollapsingToolbar
 
         uv = ViewModelProvider(this, UserInfoViewModel.Factory(this)).get(
-            UserInfoViewModel::class.java
+                UserInfoViewModel::class.java
         )
-        var data =
-            intent.getSerializableExtra("albumData") as AlbumData //onclick 이벤트를 통해 넘겨받은 앨범 데이터
-
-        if (data.creater != null)
-            uv.getUser(data.creater, true) //앨범 생성자의 데이터를 가져옴
+        if (data.creatorToken != "")
+            uv.getUser(data.creatorToken, true) //앨범 생성자의 데이터를 가져옴
         //delay
         binding!!.root.delayOnLifeCycle(100L) {
-            if (binding!!.mRecyclerView.adapter!!.itemCount > 1) enablescroll()
+            if (binding!!.mRecyclerView.adapter!!.itemCount > 1) enableScroll()
             else disablescoll()
         }
 
@@ -63,27 +65,38 @@ class ShowAlbumContentActivity : AppCompatActivity() {
 
 
     //UI 초기화
+    @SuppressLint("SetTextI18n")
     fun setUI(data: AlbumData) {
         Glide.with(this).load(data.thumbnail).into(binding!!.ivAlbumPic)//앨범 이미지 보이기
         //여기에는 앨범에 대한 설명이 있는 경우 보이도록
-
-        binding!!.tvPostCnt.text = "${data.containsList.size} 게시물"
+        binding!!.edtAlbumDesc.apply {
+            if (data.albumDesc != "") text = data.albumDesc
+            else {
+                isVisible = false
+                binding!!.topDescBar.isVisible = false
+                binding!!.bottomDescBar.isVisible = false
+            }
+        }
+        binding!!.btnBack.setOnClickListener {
+            finish()
+        }
+        binding!!.tvPostCnt.text = "${data.selectedFeedList.size} 게시물"
         //사용자명 보이기
-        uv.userInfoLiveData.observe(this, { userinfo ->
+        uv.userInfoLiveData.observe(this) { userinfo ->
             Glide.with(binding!!.root).load(userinfo.profileimg).circleCrop()
-                .into(binding!!.ivUserProfilePic) //이미지 삽입
-            binding!!.tvUserName.setText(userinfo.username)
-        })
-        setToolbarTitleUI("안녕하세요 제이름은 김삼순입니다.")
-//                setToolbarTitleUI(data.albumName!!)
+                    .into(binding!!.ivUserProfilePic) //이미지 삽입
+            binding!!.tvUserName.text = userinfo.username
+        }
+
+        setToolbarTitleUI(data.albumName!!)
         //옵션 메뉴
-        binding!!.btnMore.setOnClickListener({
+        binding!!.btnMore.setOnClickListener {
             albumOptionMenu = AlbumOptionMenu(this, it, data)
             albumOptionMenu.setOnMenuItemClickListener(albumOptionMenu)
             albumOptionMenu.show()
-        })
+        }
         binding!!.appBarLayout.addOnOffsetChangedListener(object :
-            AppBarStateChangeListener() {
+                AppBarStateChangeListener() {
 
             override fun onStateChanged(appBarLayout: AppBarLayout?, state: State?) {
                 Log.d("STATE", state!!.name);
@@ -99,13 +112,16 @@ class ShowAlbumContentActivity : AppCompatActivity() {
         var str = text
         str = if (str.length > 10) str.substring(0, 10) + "\n" + str.substring(10) else str
         if (str.length > 10) setMargin(binding!!.tvPostCnt, 0, 0, 0, 60) //margin을 주기
-        collapsingToolbarLayout.setTitle(str)
+        collapsingToolbarLayout.apply {
+            title = str
+            titleCollapseMode
+        }
     }
 
     fun setMargin(v: View, left: Int, top: Int, right: Int, bottom: Int) {
         var params = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
         )
         params.setMargins(dp2px(left), dp2px(top), dp2px(right), dp2px(bottom))
         v.layoutParams = params
@@ -114,9 +130,9 @@ class ShowAlbumContentActivity : AppCompatActivity() {
     fun dp2px(dp: Int): Int {
         val r: Resources = this.resources
         return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            dp.toFloat(),
-            r.getDisplayMetrics()
+                TypedValue.COMPLEX_UNIT_DIP,
+                dp.toFloat(),
+                r.getDisplayMetrics()
         ).toInt()
     }
 
@@ -124,7 +140,7 @@ class ShowAlbumContentActivity : AppCompatActivity() {
     //리사이클러뷰 초기화
     fun initRecyclerView(data: AlbumData) {
         contentAdapter = ShowAlbumContentAdapter(this)
-        contentAdapter!!.submitList(data.containsList.toList())
+        contentAdapter!!.submitList(data.selectedFeedList.toList())
         binding!!.mRecyclerView.adapter = contentAdapter
         val linearLayoutManager = LinearLayoutManager(this)
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
@@ -138,10 +154,10 @@ class ShowAlbumContentActivity : AppCompatActivity() {
 
 
     //function for delay(View)
-    fun View.delayOnLifeCycle(
-        durationInMillis: Long,
-        dispatcher: CoroutineDispatcher = Dispatchers.Main,
-        block: () -> Unit
+    private fun View.delayOnLifeCycle(
+            durationInMillis: Long,
+            dispatcher: CoroutineDispatcher = Dispatchers.Main,
+            block: () -> Unit,
     ):
             Job? = findViewTreeLifecycleOwner()?.let { lifecycleOwner ->
         lifecycleOwner.lifecycle.coroutineScope.launch(dispatcher) {
@@ -150,7 +166,7 @@ class ShowAlbumContentActivity : AppCompatActivity() {
         }
     }
 
-    fun enablescroll() {
+    fun enableScroll() {
         val params = collapsingToolbarLayout.layoutParams as AppBarLayout.LayoutParams
 
 
@@ -158,8 +174,8 @@ class ShowAlbumContentActivity : AppCompatActivity() {
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar)
 
         params.setScrollFlags(
-            AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
-                    or AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
+                AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+                        or AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
         )
         collapsingToolbarLayout.layoutParams = params
 
