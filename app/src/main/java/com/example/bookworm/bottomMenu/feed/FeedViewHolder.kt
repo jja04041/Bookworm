@@ -165,8 +165,8 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
                         text = feed.likeCount.toString()
                     }
                     btnLike.apply {
-                        background = if (feed.isUserLiked) context.getDrawable(R.drawable.icon_like_red)
-                        else context.getDrawable(R.drawable.icon_like)
+                        background = if (feed.isUserLiked) AppCompatResources.getDrawable(context, R.drawable.icon_like_red)
+                        else AppCompatResources.getDrawable(context, R.drawable.icon_like)
                     }
                 }
                 lllike.setOnClickListener { controlLike(feed, mainUser) }//메뉴 선택 시
@@ -260,8 +260,8 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
 
                 }
                 btnLike.apply {
-                    background = if (feed.isUserLiked) context.getDrawable(R.drawable.icon_like_red)
-                    else context.getDrawable(R.drawable.icon_like)
+                    background = if (feed.isUserLiked) AppCompatResources.getDrawable(context, R.drawable.icon_like_red)
+                    else AppCompatResources.getDrawable(context, R.drawable.icon_like)
                 }
             }
             feedViewModel.manageLike(feed.feedID!!, nowUser, feed.isUserLiked)

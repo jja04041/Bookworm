@@ -99,6 +99,7 @@
         <entry key="src/main/res/layout/fragment_challenge.xml" value="0.22060709705002138" />
         <entry key="src/main/res/layout/fragment_feed.xml" value="0.15566234851650648" />
         <entry key="src/main/res/layout/fragment_feed_item.xml" value="0.25" />
+        <entry key="src/main/res/layout/fragment_profile_fragment_posts.xml" value="0.29585292860196666" />
         <entry key="src/main/res/layout/fragment_record_item.xml" value="0.22060709705002138" />
         <entry key="src/main/res/layout/fragment_search.xml" value="0.21396192203082504" />
         <entry key="src/main/res/layout/fragment_search_page_book.xml" value="0.1" />
