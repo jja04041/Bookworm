@@ -160,6 +160,15 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
 
                 }
                 //좋아요 표시관리
+                binding.apply {
+                    tvLike.apply {
+                        text = feed.likeCount.toString()
+                    }
+                    btnLike.apply {
+                        background = if (feed.isUserLiked) context.getDrawable(R.drawable.icon_like_red)
+                        else context.getDrawable(R.drawable.icon_like)
+                    }
+                }
                 lllike.setOnClickListener { controlLike(feed, mainUser) }//메뉴 선택 시
 
                 btnFeedMenu.setOnClickListener { view ->
@@ -248,6 +257,7 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
             binding.apply {
                 tvLike.apply {
                     text = "${text.toString().toInt() + (if (feed.isUserLiked) 1 else -1)}"
+
                 }
                 btnLike.apply {
                     background = if (feed.isUserLiked) context.getDrawable(R.drawable.icon_like_red)

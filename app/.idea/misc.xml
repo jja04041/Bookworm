@@ -95,7 +95,7 @@
         <entry key="src/main/res/layout/activity_login.xml" value="0.29585292860196666" />
         <entry key="src/main/res/layout/activity_profile_info.xml" value="0.20820863616930313" />
         <entry key="src/main/res/layout/activity_profile_modify.xml" value="0.155622060709705" />
-        <entry key="src/main/res/layout/feed_data.xml" value="0.1" />
+        <entry key="src/main/res/layout/feed_data.xml" value="0.335" />
         <entry key="src/main/res/layout/fragment_challenge.xml" value="0.22060709705002138" />
         <entry key="src/main/res/layout/fragment_feed.xml" value="0.15566234851650648" />
         <entry key="src/main/res/layout/fragment_feed_item.xml" value="0.25" />

@@ -153,7 +153,7 @@ class FeedViewModel(val context: Context) : ViewModel() {
                     .runTransaction { transaction ->
                         transaction.apply {
                             update(feedRef, "likeCount", if (isLiked) FieldValue.increment(1L) else FieldValue.increment(-1L))
-                                    .update(nowUserRef, "UserInfo.likedPost",
+                                    .update(nowUserRef, "likedPost",
                                             if (isLiked) FieldValue.arrayUnion(feedId) else FieldValue.arrayRemove(feedId))
                         }
                     }.addOnSuccessListener {
