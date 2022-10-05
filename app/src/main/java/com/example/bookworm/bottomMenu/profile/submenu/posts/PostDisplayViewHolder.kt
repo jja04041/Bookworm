@@ -16,9 +16,8 @@ class PostDisplayViewHolder(val binding: FragmentProfilePostItemBinding, val con
         Glide.with(binding.root).load(item.book!!.imgUrl).into(binding.ivThumb)
         binding.postContainer.setOnClickListener {
             val intent = Intent(context, SubActivityComment::class.java)
-            intent.putExtra("item", item)
-            intent.putExtra("position", absoluteAdapterPosition)
-            context!!.startActivity(intent)
+            intent.putExtra("Feed", item)
+            context.startActivity(intent)
         }
     }
 
