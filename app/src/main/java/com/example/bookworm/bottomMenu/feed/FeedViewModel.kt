@@ -181,10 +181,11 @@ class FeedViewModel(val context: Context) : ViewModel() {
                 loadPagingRepo.reset()
 //                loadPagingRepo.setQuery(FireStoreLoadModule.provideQueryLoadPostsOrderByFeedID().whereIn("book.categoryname", listOf("국내도서>컴퓨터/모바일>컴퓨터 공학>자료구조/알고리즘","사회","국내도서>소설/시/희곡>역사소설>한국 역사소설"))) //쿼리 세팅
                 loadPagingRepo.setQuery(FireStoreLoadModule.provideQueryLoadPostsOrderByFeedID()) //쿼리 세팅
-            } else {
-                loadPagingRepo.reset()
-                loadPagingRepo.setQuery(FireStoreLoadModule.provideQueryLoadPostsOrderByFeedID())
             }
+//            else {
+//                loadPagingRepo.reset()
+//                loadPagingRepo.setQuery(FireStoreLoadModule.provideQueryLoadPostsOrderByFeedID())
+//            }
             var loadedData = loadPagingRepo.loadFireStoreData(LoadPagingDataRepository.DataType.FeedType)
             if (loadedData != null) {
                 postsData =
