@@ -124,6 +124,9 @@ class UserInfoViewModel(context: Context) : ViewModel() {
             var arrayList = ArrayList<Feed>()
             data.documents.forEach {
                 var feed = it.toObject(Feed::class.java)!!
+                feed.apply {
+                    creatorInfo = suspendGetUser(userToken)
+                }
                 arrayList.add(feed)
             }
             feedList.value = arrayList

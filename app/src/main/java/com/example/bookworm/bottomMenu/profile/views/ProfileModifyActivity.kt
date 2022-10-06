@@ -1,6 +1,7 @@
 package com.example.bookworm.bottomMenu.profile.views
 
 import android.app.AlertDialog
+import android.content.Context
 
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing
@@ -24,8 +25,10 @@ import com.example.bookworm.core.login.LoginActivity
 import com.example.bookworm.R
 
 import android.graphics.Color
+import android.graphics.Rect
 import android.net.Uri
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
@@ -46,9 +49,22 @@ class ProfileModifyActivity : AppCompatActivity() {
         ViewModelProvider(this, ChallengeViewModel.Factory(this))[ChallengeViewModel::class.java]
     }
     private var uploadCheck = false
+    lateinit var imm:InputMethodManager
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if(currentFocus!=null){
+            val rect = Rect()
+            currentFocus!!.getGlobalVisibleRect(rect)
+            if(!rect.contains(ev!!.x.toInt(),ev.y.toInt())){
+                imm.hideSoftInputFromWindow(currentFocus!!.windowToken,0)
+                currentFocus!!.clearFocus()
+            }
+        }
+        return super.dispatchTouchEvent(ev)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        imm= this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         val isDuplicated: LiveData<Boolean> = userInfoViewModel.isDuplicated
         imageProcess = ImageProcessing(this)
 

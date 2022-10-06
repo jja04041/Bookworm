@@ -97,8 +97,8 @@ class FragmentFeed : Fragment() {
                         val layoutManager = recyclerView.layoutManager as LinearLayoutManager?
                         val lastVisibleItemPosition =
                                 layoutManager!!.findLastCompletelyVisibleItemPosition()
-                        if (layoutManager != null && lastVisibleItemPosition
-                                == feedAdapter.currentList.lastIndex && lastVisibleItemPosition > 0)
+                        if ((lastVisibleItemPosition
+                                        == feedAdapter.currentList.lastIndex) && lastVisibleItemPosition > 0)
                             getFeeds(false)
                     }
                 })
@@ -150,11 +150,10 @@ class FragmentFeed : Fragment() {
                     //데이터의 끝에 다다르지 않았다면, 현재 목록에 불러온 아이템을 추가한다.
                     if (viewModel.postsData != null && !current.containsAll(viewModel.postsData!!)) {
                         val resultData = viewModel.postsData!!.toMutableList()
-                        var index = 0
-                        while (true) {
-                            if (current.contains(resultData[index])) resultData.removeAt(index)
-                            index++
-                            if (index > resultData.size - 1) break
+                        val i = resultData.iterator()
+                        //반복하면서 중복되는 데이터가 있는 경우 삭제
+                        while (i.hasNext()) {
+                            if (current.contains(i.next())) i.remove()
                         }
                         current.addAll(resultData)
                         current.add(Feed())

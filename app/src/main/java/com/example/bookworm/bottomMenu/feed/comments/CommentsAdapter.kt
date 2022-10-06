@@ -79,7 +79,7 @@ class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
         val binding = LayoutCommentItemBinding.bind(itemView)
         fun bind(item: Comment) {
             binding.lifecycleOwner = itemView.context as SubActivityComment
-            binding.comment=item
+            binding.comment = item
             binding.apply {
 //                //댓글 작성자 프로필 이미지 로드
 //                Glide.with(itemView.context)
@@ -106,7 +106,7 @@ class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
                 item.creatorInfo!!.apply {
                     tvNickname.text = username
                     Glide.with(itemView.context)
-                            .load(profileimg)
+                            .load(profileimg).circleCrop()
                             .into(ivProfileImage)
                 }
 
