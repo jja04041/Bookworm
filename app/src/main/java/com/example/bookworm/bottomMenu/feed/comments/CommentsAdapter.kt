@@ -1,6 +1,7 @@
 package com.example.bookworm.bottomMenu.feed.comments
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.example.bookworm.R
 import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.feed.Feed
+import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
 import com.example.bookworm.databinding.LayoutCommentItemBinding
 import com.example.bookworm.databinding.LayoutCommentSummaryBinding
 import java.text.DateFormat
@@ -91,6 +93,13 @@ class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
 //                tvCommentContent.text = item.contents
                 //댓글 작성일자 세팅
                 tvDate.text = getDateDuration(item.madeDate)
+
+                //프로필 클릭 시 해당 사용자의 프로필 정보 화면으로 이동하게
+                llProfile.setOnClickListener{
+                    val intent = Intent(itemView.context, ProfileInfoActivity::class.java)
+                    intent.putExtra("userID", item.userToken)
+                    itemView.context.startActivity(intent)
+                }
             }
         }
     }
