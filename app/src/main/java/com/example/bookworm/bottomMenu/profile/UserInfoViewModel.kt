@@ -7,9 +7,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.bookworm.BookWorm
 import com.example.bookworm.bottomMenu.feed.Feed
+import com.example.bookworm.bottomMenu.feed.SubActivityCreatePost
+import com.example.bookworm.bottomMenu.feed.SubActivityModifyFeed
+import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumData
+import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
 import com.example.bookworm.core.dataprocessing.repository.UserRepository
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.extension.follow.view.FollowViewModelImpl
@@ -33,6 +38,7 @@ class UserInfoViewModel(context: Context) : ViewModel() {
     var isDuplicated = MutableLiveData<Boolean>() //중복 여부를 체크 하는 LiveData
     val repo = UserRepository(context)
     var feedList = MutableLiveData<ArrayList<Feed>>()
+
 
     enum class State { Loading, Done, Error } //로딩중 , 로딩 끝 , 에러
 
@@ -172,7 +178,7 @@ class UserInfoViewModel(context: Context) : ViewModel() {
             "가정/요리/뷰티", "건강/취미/레저", "여행", "잡지", "달력/기타" -> {
                 category = "생활"
             }
-            "외국어", "대학교재", "초중고참고서", "수험서/자격증", "공무원 수험서", "컴퓨터/모바일" -> {
+            "외국어", "대학교재", "초등학교참고서", "중학교참고서", "고등학교참고서", "수험서/자격증", "공무원 수험서", "컴퓨터/모바일" -> {
                 category = "공부"
             }
         }
@@ -186,7 +192,10 @@ class UserInfoViewModel(context: Context) : ViewModel() {
                 genre!!.replace(category, unboxint)
             }
         }
+
         return category
+
+
     }
 }
 

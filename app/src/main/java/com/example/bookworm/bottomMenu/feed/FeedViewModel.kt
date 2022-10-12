@@ -10,11 +10,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.bookworm.LoadState
 import com.example.bookworm.achievement.Achievement
 import com.example.bookworm.appLaunch.views.MainActivity
-import com.example.bookworm.bottomMenu.bookworm.BookWorm
-import com.example.bookworm.bottomMenu.feed.SubActivityCreatePost.Companion.CREATE_OK
 import com.example.bookworm.bottomMenu.feed.comments.Comment
 import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
-import com.example.bookworm.bottomMenu.feed.oldItems.subActivity_Feed_Create
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing
@@ -51,6 +48,7 @@ class FeedViewModel(val context: Context) : ViewModel() {
     val nowLikeState = MutableLiveData<LoadState>()
 
     val fbModule = FBModule(context)
+    var canexit = true;
 
     class Factory(val context: Context) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -94,14 +92,13 @@ class FeedViewModel(val context: Context) : ViewModel() {
                         .addOnSuccessListener {    //정상적으로 업로드 되는 경우
                             //유저의 정보 업데이트
                             feed.creatorInfo!!.apply {
-//                                setGenre(feed.book!!.categoryname, context) //장르 설정
                                 userInfoViewModel.setGenre(feed.book!!.categoryName,this)
 
 
                                 userInfoViewModel.getBookWorm(token).onJoin
                                 var data = userInfoViewModel.bwdata.value
 
-//                                achievement.canreturn()
+
 
                                 data!!.readCount++
                                 userInfoViewModel.updateBw(token, data)
@@ -109,8 +106,7 @@ class FeedViewModel(val context: Context) : ViewModel() {
 
                                 val achievement = Achievement(context, fbModule, this, data)
                                 achievement.CompleteAchievement(this, context)
-
-
+                                canexit = achievement.canreturn()
                             }
                             nowFeedUploadState.value = LoadState.Done
                         }

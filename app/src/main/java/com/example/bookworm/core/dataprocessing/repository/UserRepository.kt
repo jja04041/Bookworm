@@ -3,9 +3,16 @@ package com.example.bookworm.core.dataprocessing.repository
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.lifecycle.ViewModelProvider
+import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.bookworm.BookWorm
 import com.example.bookworm.bottomMenu.feed.FireStoreLoadModule
+import com.example.bookworm.bottomMenu.feed.SubActivityCreatePost
+import com.example.bookworm.bottomMenu.feed.SubActivityModifyFeed
+import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
+import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumData
+import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
 import com.example.bookworm.core.userdata.UserInfo
 import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.FieldPath

@@ -141,34 +141,6 @@ public class PreferGenreActivity extends AppCompatActivity {
         });
     }
 
-    private void Addlabel(String _strgenre) {
-//        TextView label = new TextView(this);
-//        label.setWidth(ConvertDPtoPX(this, 32));
-//        label.setHeight(ConvertDPtoPX(this, 32));
-//
-//        label.setPadding(
-//                0,
-//                ConvertDPtoPX(this, 5),
-//                0,
-//                ConvertDPtoPX(this, 5));
-////        LinearLayout.LayoutParams LP = (LinearLayout.LayoutParams)binding.genrelayout1.getLayoutParams();
-////
-////        LP.setMargins(
-////                ConvertDPtoPX(this, 5),
-////                ConvertDPtoPX(this, 5),
-////                ConvertDPtoPX(this, 5),
-////                ConvertDPtoPX(this, 5));
-//
-//        label.setGravity(Gravity.CENTER);
-//        label.setBackgroundResource(R.drawable.label_design);
-//        label.setText(_strgenre);
-//        label.setTextSize(ConvertDPtoPX(this, 18));
-//        label.setId(View.generateViewId());
-//
-//        viewId.add(label.getId());
-//        //label.setOnClickListener(this);
-//        binding.genrelayout1.addView(label);
-    }
 
     public boolean RemoveLbl(TextView _lblSelected) {
         for (int j = 0; j < lbllist.length; ++j) {

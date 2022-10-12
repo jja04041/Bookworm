@@ -147,13 +147,16 @@ class SubActivityComment : AppCompatActivity() {
                         current.add(0, feedItem) //피드 데이터를 가져온다.
                     }
                     //만약 현재 목록이 비어있지 않고, 마지막 아이템이 로딩 아이템 이라면 마지막 아이템을 제거
-                    if (current.size > 1 && (current.last() as Comment).commentID == "") current.removeLast()
+                    if (current.size > 1 && (current.last() as Comment).commentID == "")
+                        current.removeLast()
                     //데이터의 끝에 다다르지 않았다면, 현재 목록에 불러온 아이템을 추가한다.
                     val loadedData = feedViewModel.commentsData
                     if (loadedData != null && !current.containsAll(loadedData)) {
                         current.addAll(loadedData)
-                        if (loadedData.size == 10) current.add(Comment())
-                        else isDataEnd =true
+                        if (loadedData.size == 10)
+                            current.add(Comment())
+                        else
+                            isDataEnd =true
                     }
 //                    //데이터의 끝에 다다랐다면 끝이라는 것을 변수에 저장
 //                    else isDataEnd = true

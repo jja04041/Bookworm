@@ -18,6 +18,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.bookworm.LoadState
+import com.example.bookworm.achievement.Achievement
 import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing
 import com.example.bookworm.core.userdata.UserInfo
@@ -127,15 +128,16 @@ class SubActivityCreatePost : AppCompatActivity() {
                                         Toast.makeText(this@SubActivityCreatePost,
                                                 "게시물이 업로드 되었습니다.", Toast.LENGTH_SHORT)
                                                 .show()
+
                                         intent.putExtra("feedData",feedData)
                                         setResult(CREATE_OK,intent)
-                                        this@SubActivityCreatePost.finish()
+                                        if(feedViewModel.canexit)
+                                            this@SubActivityCreatePost.finish()
                                     }
                                     LoadState.Error ->
                                         Toast.makeText(this@SubActivityCreatePost,
                                                 "게시물 업로드에 실패했습니다. \n 다시 시도해 주세요", Toast.LENGTH_SHORT)
                                                 .show()
-                                    else -> {}
                                 }
                             }
                         }.setNegativeButton("아니요") { dialog, which ->
