@@ -14,6 +14,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.bookworm.LoadState
 import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.feed.Feed
 import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
@@ -85,7 +86,7 @@ class BookSearchFragment : Fragment() {
     }
 
     fun loadData(isRefreshing: Boolean = true) {
-        val stateLiveData = MutableLiveData<SearchViewModel.State>()
+        val stateLiveData = MutableLiveData<LoadState>()
         val resultList = ArrayList<Book>()
         if (!isRefreshing && !isEnd) {
             searchViewModel.loadBooks(stateLiveData = stateLiveData,
@@ -109,14 +110,14 @@ class BookSearchFragment : Fragment() {
             }
         }
         stateLiveData.observe(context as SearchMainActivity) { state ->
-            if (state == SearchViewModel.State.Done) {
+            if (state == LoadState.Done) {
                 var current = bookAdapter.currentList.toMutableList() //기존에 가지고 있던 아이템 목록
                 //만약 현재 목록이 비어있지 않고, 마지막 아이템이 로딩 아이템 이라면 마지막 아이템을 제거
                 if (current.isEmpty() && resultList.isEmpty()) {
                     Toast.makeText(context, "검색 결과가 없습니다.", Toast.LENGTH_SHORT).show()
                     isEnd = true
                 }
-                if (current.isNotEmpty() && current.last().itemId == "") current.removeLast()
+                if (current.isNotEmpty() && current.last().title == "") current.removeLast()
                 //데이터의 끝에 다다르지 않았다면, 현재 목록에 불러온 아이템을 추가한다.
                 if (!current.containsAll(resultList)) {
                     current.addAll(resultList)

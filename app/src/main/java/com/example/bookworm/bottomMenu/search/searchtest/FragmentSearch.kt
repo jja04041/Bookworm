@@ -2,7 +2,6 @@ package com.example.bookworm.bottomMenu.search.searchtest
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,13 +11,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.bookworm.LoadState
 import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.bookworm.BookWorm
 import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
 import com.example.bookworm.bottomMenu.search.searchtest.bookitems.BookAdapter
 import com.example.bookworm.bottomMenu.search.searchtest.bookitems.OnBookItemClickListener
 import com.example.bookworm.bottomMenu.search.searchtest.modules.SearchViewModel
-import com.example.bookworm.bottomMenu.search.searchtest.views.SearchDetailActivity
+import com.example.bookworm.bottomMenu.search.searchtest.views.BookDetailActivity
 import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.FragmentSearchBinding
@@ -52,8 +52,8 @@ class FragmentSearch : Fragment() {
             bookAdapter.setListener(object : OnBookItemClickListener {
                 override fun onItemClick(holder: RecyclerView.ViewHolder, view: View, position: Int) {
                     if (holder is BookAdapter.BookViewHolder) {
-                        val intent = Intent(context, SearchDetailActivity::class.java)
-                        intent.putExtra("Book", bookAdapter.currentList[position])
+                        val intent = Intent(context, BookDetailActivity::class.java)
+                        intent.putExtra("BookID", bookAdapter.currentList[position].itemId)
                         startActivity(intent)
                     }
                 }
@@ -81,12 +81,12 @@ class FragmentSearch : Fragment() {
     }
 
     private fun loadRecommendBooks() {
-        val liveData = MutableLiveData<SearchViewModel.State>()
+        val liveData = MutableLiveData<LoadState>()
         val resultList = ArrayList<Book>()
         searchViewModel.loadPopularBook(liveData, resultList)
         showShimmer(true)
         liveData.observe(context as MainActivity) { state ->
-            if (state == SearchViewModel.State.Done) {
+            if (state == LoadState.Done) {
                 bookAdapter.submitList(resultList)
                 showShimmer(false)
             }

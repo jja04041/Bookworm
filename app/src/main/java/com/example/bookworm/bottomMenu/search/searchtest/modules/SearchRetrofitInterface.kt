@@ -20,7 +20,7 @@ interface SearchRetrofitInterface {
 
     //도서별 상세 정보
     @GET("ItemLookUp.aspx")
-    fun getItem(
+    suspend fun getItem(
             @QueryMap querys: Map<String, String>,
     ): Response<String>
 }

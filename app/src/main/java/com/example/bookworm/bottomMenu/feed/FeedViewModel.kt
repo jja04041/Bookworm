@@ -1,6 +1,7 @@
 package com.example.bookworm.bottomMenu.feed
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
@@ -30,7 +31,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
-
+@SuppressLint("StaticFieldLeak")
 class FeedViewModel(val context: Context) : ViewModel() {
     private val loadPagingRepo = LoadPagingDataRepository()
     private val feedDataRepository = FeedDataRepository(context)
@@ -186,7 +187,7 @@ class FeedViewModel(val context: Context) : ViewModel() {
 //                loadPagingRepo.reset()
 //                loadPagingRepo.setQuery(FireStoreLoadModule.provideQueryLoadPostsOrderByFeedID())
 //            }
-            var loadedData = loadPagingRepo.loadFireStoreData(LoadPagingDataRepository.DataType.FeedType)
+            val loadedData = loadPagingRepo.loadFireStoreData(LoadPagingDataRepository.DataType.FeedType)
             if (loadedData != null) {
                 postsData =
                         (loadedData as MutableList<Feed>).map { feed: Feed ->
@@ -194,7 +195,7 @@ class FeedViewModel(val context: Context) : ViewModel() {
                                 val tempUserInfo = userInfoViewModel.suspendGetUser(null)?.apply {
                                     feed.isUserLiked = likedPost.contains(feed.feedID)
                                 }
-                                feed.creatorInfo = userInfoViewModel.suspendGetUser(feed.userToken!!)
+                                feed.creatorInfo = userInfoViewModel.suspendGetUser(feed.userToken)!!
                                 feed.isUserPost = (tempUserInfo!!.token == feed.userToken)
                                 feed.duration = getDateDuration(feed.date)
                                 if (feed.commentsCount > 0L) {
@@ -224,7 +225,7 @@ class FeedViewModel(val context: Context) : ViewModel() {
             commentsData = if (loadedData != null) {
                 (loadedData as MutableList<Comment>).map { comment: Comment ->
                     return@map withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-                        comment.creator = userInfoViewModel.suspendGetUser(comment.userToken)
+                        comment.creator = userInfoViewModel.suspendGetUser(comment.userToken)!!
                         return@withContext comment
                     }
                 }

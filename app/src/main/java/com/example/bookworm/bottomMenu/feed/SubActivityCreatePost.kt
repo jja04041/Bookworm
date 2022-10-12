@@ -32,12 +32,14 @@ class SubActivityCreatePost : AppCompatActivity() {
     private val dataBinding by lazy {
         SubactivityCreatePostBinding.inflate(layoutInflater)
     }
+
     companion object {
         val CREATE_OK = 30
     }
+
     private val feedData by lazy {
         Feed(
-                creatorInfo = intent.getParcelableExtra("mainUser"), userToken = intent.getParcelableExtra<UserInfo>("mainUser")!!.token
+                creatorInfo = intent.getParcelableExtra("mainUser")!!, userToken = intent.getParcelableExtra<UserInfo>("mainUser")!!.token
         )
     }
     private var feedImageBitmap: Bitmap? = null
@@ -54,7 +56,7 @@ class SubActivityCreatePost : AppCompatActivity() {
     ) { result: ActivityResult ->
         if (result.resultCode == RESULT_OK) {
             val intent = result.data
-            feedData.book = intent!!.getParcelableExtra("bookData")
+            feedData.book = intent!!.getParcelableExtra("bookData")!!
             dataBinding.tvFeedBookTitle.text = feedData.book!!.title
         }
     }
@@ -127,8 +129,8 @@ class SubActivityCreatePost : AppCompatActivity() {
                                         Toast.makeText(this@SubActivityCreatePost,
                                                 "게시물이 업로드 되었습니다.", Toast.LENGTH_SHORT)
                                                 .show()
-                                        intent.putExtra("feedData",feedData)
-                                        setResult(CREATE_OK,intent)
+                                        intent.putExtra("feedData", feedData)
+                                        setResult(CREATE_OK, intent)
                                         this@SubActivityCreatePost.finish()
                                     }
                                     LoadState.Error ->

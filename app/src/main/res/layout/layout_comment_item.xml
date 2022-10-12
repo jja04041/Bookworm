@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="comment"
             type="com.example.bookworm.bottomMenu.feed.comments.Comment" />
@@ -36,8 +35,8 @@
                         android:id="@+id/imgProfile"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/profile"
                         app:imgUrl='@{comment.creator.profileimg != null ? comment.creator.profileimg:""}'
+                        app:type='@{"profile"}'
                         app:placeholder="@{@drawable/profile}" />
 
                     <LinearLayout

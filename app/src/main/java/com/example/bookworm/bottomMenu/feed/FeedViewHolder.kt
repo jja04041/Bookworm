@@ -30,6 +30,7 @@ import com.example.bookworm.bottomMenu.feed.comments.Comment
 import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
+import com.example.bookworm.bottomMenu.search.searchtest.views.BookDetailActivity
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.FeedDataBinding
 import com.example.bookworm.notification.MyFCMService
@@ -39,32 +40,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 
-//데이터 바인딩을 위한 어댑터
-object bindingAdapter {
-    @JvmStatic
-    @BindingAdapter("app:imgUrl", "app:placeholder")
-    fun setProfileImage(v: ImageView, url: String, placeholder: Drawable) =
-            Glide.with(v.context)
-                    .load(url)
-                    .error(placeholder)
-                    .circleCrop()
-                    .into(v)
 
-    @JvmStatic
-    @BindingAdapter("app:feedImgUrl")
-    fun setFeedImage(v: ImageView, url: String) {
-        val circularProgressDrawable = CircularProgressDrawable(v.context)
-        circularProgressDrawable.apply {
-            strokeWidth = 5f
-            centerRadius = 30f
-            start()
-            Glide.with(v.context).load(url)
-                    .placeholder(this)
-                    .error(0).into(v)
-        }
-    }
-
-}
 
 class newFeedViewHolder(private val binding: FeedDataBinding, val context: Context, val adapter: FeedAdapter) : RecyclerView.ViewHolder(binding.root) {
     var limit = 0
@@ -127,10 +103,9 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
                 }
                 //책 정보 확인 시
                 llbook.setOnClickListener {
-//                    val intent = Intent(context, search_fragment_subActivity_result::class.java)
-//                    intent.putExtra("itemid", feed.book!!.itemId)
-//                    intent.putExtra("data", feed.book!!)
-//                    context.startActivity(intent)
+                    val intent = Intent(context, BookDetailActivity::class.java)
+                    intent.putExtra("BookID", feed.book.itemId)
+                    context.startActivity(intent)
                 }
                 //댓글창 클릭 시
                 llComments.setOnClickListener {
