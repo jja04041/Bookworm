@@ -1,10 +1,13 @@
 package com.example.bookworm.bottomMenu.search.searchtest.views
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.example.bookworm.LoadState
+import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.feed.Feed
 import com.example.bookworm.bottomMenu.feed.FeedViewModel
 import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
@@ -13,7 +16,7 @@ import com.example.bookworm.databinding.LayoutBookSearchDetailBinding
 
 class BookDetailActivity : AppCompatActivity() {
     val binding by lazy {
-        LayoutBookSearchDetailBinding.inflate(layoutInflater)
+        DataBindingUtil.setContentView<LayoutBookSearchDetailBinding>(this, R.layout.layout_book_search_detail)
     }
     private val bookId by lazy {
         intent.getStringExtra("BookID")!!
@@ -32,13 +35,8 @@ class BookDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.apply {
-            setUI()
-            lifecycleOwner = this@BookDetailActivity
-            tvLink.setOnClickListener {
-                //구매링크로 연결
-            }
-        }
+        binding.lifecycleOwner = this@BookDetailActivity
+        setUI()
     }
 
     private fun setUI() {
@@ -48,12 +46,16 @@ class BookDetailActivity : AppCompatActivity() {
         binding.apply {
             //데이터를 가져온 후
             stateLiveData.observe(this@BookDetailActivity) { book ->
-                if (book != Book()) {
-                    this.book = book
-                    executePendingBindings()
-                } else {
+                this.book = book
+                executePendingBindings()
 
-                }
+                if (book == Book()) Toast.makeText(this@BookDetailActivity, "정보를 로드하는데 실패하였습니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
+            }
+            tvLink.setOnClickListener {
+                //구매링크로 연결
+            }
+            btnBack.setOnClickListener {
+                finish()
             }
         }
     }

@@ -44,14 +44,12 @@
             app:tabIndicatorColor="@color/black">
 
             <com.google.android.material.tabs.TabItem
-                android:id="@+id/item_follower"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="팔로워" />
 
 
             <com.google.android.material.tabs.TabItem
-                android:id="@+id/item_following"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="팔로잉" />

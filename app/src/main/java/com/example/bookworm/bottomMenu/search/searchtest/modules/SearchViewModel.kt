@@ -3,10 +3,7 @@ package com.example.bookworm.bottomMenu.search.searchtest.modules
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.bookworm.LoadState
 import com.example.bookworm.appLaunch.views.MainActivity
@@ -95,9 +92,9 @@ class SearchViewModel(context: Context) : ViewModel() {
             //상세정보에서만 필요한 데이터들
             if (isDetail) {
                 purchaseLink = getString("link") //구매 링크
-                originPrice = getString("priceStandard") //정상가
-                salePrice = getString("priceSales") //판매가
-                userRate = (getString("customerReviewRank").toFloat()) / 2 //사용자 평점
+                originPrice = getInt("priceStandard").toString()//정상가
+                salePrice = getInt("priceSales").toString()//판매가
+                userRate = getInt("customerReviewRank") / 2F//사용자 평점
             }
         }
     }
@@ -130,15 +127,15 @@ class SearchViewModel(context: Context) : ViewModel() {
 
     fun loadBookDetail(itemId: String, stateLiveData: MutableLiveData<Book>, reviewList: ArrayList<Feed>) {
         //itemId로 검색하고 데이터를 받아옴
+        //책 검색과 동시에 책 리뷰를 받아와야 함.
         viewModelScope.launch {
             val result = searchDataRepository.loadBookDetail(itemId)
             if (result.isSuccessful) {
-                val data = result.body()
-//                val data = result.body()?.let { JSONObject(it)["item"] as JSONArray }
-//                for (i in 0 until data!!.length()) {
-//                    val item = data.getJSONObject(i)
-//                }
-            }
+                val book = result.body()?.let {
+                    convertToBook(data = (JSONObject(it)["item"] as JSONArray).getJSONObject(0), isRc = false,true)
+                }
+                stateLiveData.value = book //검색된 책 데이터
+            } else stateLiveData.value = Book()
         }
     }
 
@@ -152,7 +149,7 @@ class SearchViewModel(context: Context) : ViewModel() {
 
 
     //리뷰 정보를 가져오는 함수
-    fun getReviewData(stateLiveData: MutableLiveData<LoadState>, reviewList: ArrayList<Feed>) {
+    fun getReviewData(stateLiveData: MutableLiveData<LoadState>? = null, reviewList: ArrayList<Feed>, itemId: String) {
 
     }
 //보류

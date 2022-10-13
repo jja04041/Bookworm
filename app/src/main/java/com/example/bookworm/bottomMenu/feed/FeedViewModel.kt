@@ -17,6 +17,7 @@ import com.example.bookworm.bottomMenu.feed.comments.Comment
 import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
 import com.example.bookworm.bottomMenu.feed.oldItems.subActivity_Feed_Create
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
+import com.example.bookworm.bottomMenu.search.searchtest.views.BookDetailActivity
 import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing
 import com.example.bookworm.core.internet.FBModule
@@ -41,6 +42,7 @@ class FeedViewModel(val context: Context) : ViewModel() {
                 is SubActivityComment -> context
                 is SubActivityCreatePost -> context
                 is SubActivityModifyFeed -> context
+                is BookDetailActivity -> context //책 리뷰 받기 위해
                 else -> context as SearchMainActivity
             },
             UserInfoViewModel.Factory(context))[UserInfoViewModel::class.java]

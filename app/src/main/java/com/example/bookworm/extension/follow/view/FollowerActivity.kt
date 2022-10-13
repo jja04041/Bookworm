@@ -1,54 +1,54 @@
-package com.example.bookworm.extension.follow.view;
+package com.example.bookworm.extension.follow.view
 
-import android.content.Intent;
-import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.tabs.TabLayout
+import android.os.Bundle
+import com.example.bookworm.R
+import android.content.Intent
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import com.example.bookworm.extension.follow.modules.FollowPagerAdapter
+import com.example.bookworm.extension.follow.view.FollowViewModelImpl
+import androidx.lifecycle.ViewModelProvider
+import com.example.bookworm.core.userdata.UserInfo
+import com.example.bookworm.databinding.ActivityFollowerBinding
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager.widget.ViewPager;
-
-import com.example.bookworm.extension.follow.modules.FollowPagerAdapter;
-import com.example.bookworm.R;
-import com.google.android.material.tabs.TabLayout;
-
-public class FollowerActivity extends AppCompatActivity {
-
-    ViewPager viewPager;
-    TabLayout tabLayout;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_follower);
-        Intent intent = getIntent();
-        String token = intent.getStringExtra("token");
-        int selected = intent.getIntExtra("page", 0);
-        viewPager = findViewById(R.id.viewpager);
-        FollowPagerAdapter adapter = new FollowPagerAdapter(getSupportFragmentManager(), token);
-        viewPager.setAdapter(adapter);
-        FollowViewModelImpl fv = new ViewModelProvider(this, new FollowViewModelImpl.Factory(this)).get(FollowViewModelImpl.class);
-
-        //전달받은 토큰을 이용하여 데이터를 조회한다 .
-        fv.WithoutSuspendgetUser(token);
-
-        //탭 레이아웃 구성
-        tabLayout = findViewById(R.id.tab_layout);
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.getTabAt(selected).select();
-
-        //팔로잉 팔로워가 변하면 데이터를 인식함
-        fv.getData().observe(this, userInfo -> {
-            tabLayout.getTabAt(0).setText(userInfo.getFollowerCounts() + " 팔로워");
-            tabLayout.getTabAt(1).setText(userInfo.getFollowingCounts() + " 팔로잉");
-        });
-
-
+class FollowerActivity : AppCompatActivity() {
+    val binding by lazy {
+        ActivityFollowerBinding.inflate(layoutInflater)
     }
+    val token by lazy {
+        intent.getStringExtra("token")
+    }
+    val followViewModel by lazy {
+        ViewModelProvider(this, FollowViewModelImpl.Factory(this)).get(FollowViewModelImpl::class.java)
+    }
+    val selected by lazy { intent.getIntExtra("page", 0) }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(binding.root)
+        val adapter = FollowPagerAdapter(supportFragmentManager, token)
+        binding.apply {
+            viewpager.apply {
+                viewpager.adapter = adapter
+            }
 
-    @Override
-    protected void onDestroy() {
-
-        super.onDestroy();
+            //탭 레이아웃 구성
+            tabLayout.apply {
+                setupWithViewPager(viewpager)
+                getTabAt(selected)!!.select()
+                //팔로잉 팔로워가 변하면 데이터를 인식함
+                MutableLiveData<UserInfo>().apply {
+                    followViewModel.getUser(this, token!!)
+                    observe(this@FollowerActivity) { userdata ->
+                        userdata.apply {
+                            getTabAt(0)!!.text = "$followerCounts 팔로워"
+                            getTabAt(1)!!.text = "$followingCounts 팔로잉"
+                        }
+                    }
+                }
+            }
+        }
     }
 }

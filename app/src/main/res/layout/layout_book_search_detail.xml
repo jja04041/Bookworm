@@ -6,6 +6,7 @@
     <data>
 
         <import type="android.view.View" />
+
         <variable
             name="book"
             type="com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book" />
@@ -19,17 +20,17 @@
         android:background="@color/white"
         android:orientation="vertical">
 
-<!--         Shimmer -->
-                <com.facebook.shimmer.ShimmerFrameLayout
-                    android:id="@+id/SFLSearch"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+        <!--         Shimmer -->
+        <!--                <com.facebook.shimmer.ShimmerFrameLayout-->
+        <!--                    android:id="@+id/SFLSearch"-->
+        <!--                    android:layout_width="match_parent"-->
+        <!--                    android:layout_height="match_parent">-->
 
-                    <include layout="@layout/shimmer_subactivity_search_fragment_result" />
+        <!--                    <include layout="@layout/shimmer_subactivity_search_fragment_result" />-->
 
-                </com.facebook.shimmer.ShimmerFrameLayout>
+        <!--                </com.facebook.shimmer.ShimmerFrameLayout>-->
 
-<!--         실제로 나타나는 뷰 -->
+        <!--         실제로 나타나는 뷰 -->
         <LinearLayout
             android:id="@+id/llSearch"
             android:layout_width="match_parent"
@@ -93,9 +94,9 @@
                             android:layout_width="130dp"
                             android:layout_height="165dp"
                             android:layout_margin="20dp"
-                            app:imgUrl="@{book.imgUrl}"
-                            app:type='@{"book"}'
-                            app:placeholder="@{@drawable/bookimg_sample}" />
+                            app:imgUrl="@{String.valueOf(book.imgUrl)}"
+                            app:placeholder="@{@drawable/bookimg_sample}"
+                            app:type='@{"book"}' />
 
                         <ScrollView
                             android:id="@+id/ScrChild"
