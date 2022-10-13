@@ -49,7 +49,7 @@ class SubActivityChallengeInfo : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        setResult(RESULT_OK) //챌린지 프레그먼트에서 새로고침을 진행하도록 함.
+//        setResult(RESULT_OK) //챌린지 프레그먼트에서 새로고침을 진행하도록 함.
         finish()
         super.onBackPressed()
     }

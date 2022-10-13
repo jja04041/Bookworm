@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
@@ -13,15 +15,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.bookworm.LoadState
 import com.example.bookworm.appLaunch.views.MainActivity
-import com.example.bookworm.bottomMenu.bookworm.BookWorm
+import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
+import com.example.bookworm.bottomMenu.search.RankFB
 import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
 import com.example.bookworm.bottomMenu.search.searchtest.bookitems.BookAdapter
 import com.example.bookworm.bottomMenu.search.searchtest.bookitems.OnBookItemClickListener
 import com.example.bookworm.bottomMenu.search.searchtest.modules.SearchViewModel
 import com.example.bookworm.bottomMenu.search.searchtest.views.BookDetailActivity
 import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
-import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.FragmentSearchBinding
+
 
 class FragmentSearch : Fragment() {
     private val binding by lazy {
@@ -38,6 +41,12 @@ class FragmentSearch : Fragment() {
     private val bookAdapter by lazy {
         BookAdapter(requireContext())
     }
+
+    var rankFB: RankFB? = null
+
+    var nickNameListGlobal: Array<TextView>? = null
+    var readCountListGlobal: Array<TextView>? = null
+    var profileListGlobal: Array<ImageView>? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding.apply {
@@ -59,26 +68,44 @@ class FragmentSearch : Fragment() {
                 }
             })
 
-            tv1stNickname.setText("성근")
-            tv2ndNickname.setText("이규연")
-            tv3rdNickname.setText("조세현")
-            tv1stReadCount.setText("15권")
-            tv2ndReadCount.setText("11권")
-            tv3rdReadCount.setText("5권")
-            Glide.with(requireContext()).load("https://k.kakaocdn.net/dn/b8DtBK/btqRorUTUCy/w10D6Zn5IMsop8v2BJY5VK/img_640x640.jpg").circleCrop().into(img1stProfile)
-            Glide.with(requireContext()).load("https://lh3.googleusercontent.com/a-/ACNPEu_H7Agfvs-q7d7eQU3IX8dbha5l4Awq9vgm5LoFXSI=s96-c").circleCrop().into(img2ndProfile)
-            Glide.with(requireContext()).load("https://k.kakaocdn.net/dn/qYA2k/btrJuRyOoVk/KsChdA2fMXS2xrbeArhBtk/img_640x640.jpg").circleCrop().into(img3rdProfile)
+            showShimmer(true)
+
+            rankFB = RankFB(requireContext());
+            rankFB!!.getRanking()
+
+            var nickNameList = arrayOf(tv1stNickname, tv2ndNickname, tv3rdNickname)
+            var readCountList = arrayOf(tv1stReadCount, tv2ndReadCount, tv3rdReadCount)
+            var profileList = arrayOf(img1stProfile, img2ndProfile, img3rdProfile)
+
+            nickNameListGlobal = nickNameList
+            readCountListGlobal = readCountList
+            profileListGlobal = profileList
+
         }
         loadRecommendBooks();
 
         return binding.root
     }
 
-    fun setRanking() {
-        var userList = ArrayList<UserInfo>()
-        var bwList = ArrayList<BookWorm>()
 
+    fun setRanking(readCount: String, index: Int) {
+        readCountListGlobal!![index].setText(readCount)
     }
+
+    fun setRanking(map: Map<String, Object>, index: Int) {
+        nickNameListGlobal!![index].setText(map.get("username").toString())
+        Glide.with(requireContext()).load(map.get("profileimg").toString()).circleCrop().into(profileListGlobal!![index])
+
+        //프로필 클릭 시 해당 사용자의 프로필 정보 화면으로 이동하게
+        profileListGlobal!![index].setOnClickListener{
+            val intent = Intent(requireContext(), ProfileInfoActivity::class.java)
+            intent.putExtra("userID", map.get("token").toString())
+            requireContext().startActivity(intent)
+        }
+
+        showShimmer(false)
+    }
+
 
     private fun loadRecommendBooks() {
         val liveData = MutableLiveData<LoadState>()
@@ -88,7 +115,7 @@ class FragmentSearch : Fragment() {
         liveData.observe(context as MainActivity) { state ->
             if (state == LoadState.Done) {
                 bookAdapter.submitList(resultList)
-                showShimmer(false)
+//                showShimmer(false)
             }
 
         }

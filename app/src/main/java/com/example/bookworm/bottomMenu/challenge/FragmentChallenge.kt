@@ -55,10 +55,13 @@ class FragmentChallenge : Fragment() {
     ) { result: ActivityResult ->
         //챌린지 생성 완료 시
         if (result.resultCode == AppCompatActivity.RESULT_OK) {
-            val data = result.data!!.getParcelableExtra<Challenge>("challengeData")!!
-            challengeAdapter.submitList(challengeAdapter.currentList.toMutableList().apply {
-                this[data.pos] = data
-            })
+            val data = result.data!!
+            if (data.hasExtra("challengeData")) {
+                val data = data.getParcelableExtra<Challenge>("challengeData")
+                challengeAdapter.submitList(challengeAdapter.currentList.toMutableList().apply {
+                    this[data!!.pos] = data
+                })
+            }
         }
     }
 
@@ -69,7 +72,6 @@ class FragmentChallenge : Fragment() {
         setUI()
         return binding.root
     }
-
 
 
     /** UI를 세팅하는 함수

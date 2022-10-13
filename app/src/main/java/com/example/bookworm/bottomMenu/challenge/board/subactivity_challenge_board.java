@@ -64,6 +64,14 @@ public class subactivity_challenge_board extends AppCompatActivity {
             }
         });
 
+        //뒤로가기
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         //인증글 작성 버튼
         binding.btnCreateChallengeBoard.setOnClickListener(new View.OnClickListener() {
             @Override
