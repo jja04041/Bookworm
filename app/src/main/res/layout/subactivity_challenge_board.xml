@@ -8,6 +8,32 @@
     android:orientation="vertical"
     tools:context=".bottomMenu.challenge.board.subactivity_challenge_board">
 
+    <FrameLayout
+        android:id="@+id/setting"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/feed_bottom_border_only"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/back_icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="인증 게시판"
+            android:textColor="@color/black"
+            android:textSize="13dp" />
+
+    </FrameLayout>
+
+
     <LinearLayout
         android:id="@+id/llbook"
         android:layout_width="match_parent"
