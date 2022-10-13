@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.bookworm.LoadState
 import com.example.bookworm.R
 import com.example.bookworm.appLaunch.views.MainActivity
-import com.example.bookworm.bottomMenu.feed.oldItems.subActivity_Feed_Modify
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.databinding.FragmentFeedTopbarBinding
 import com.example.bookworm.databinding.TmpActivityFeedBinding
@@ -50,11 +49,11 @@ class FragmentFeed : Fragment() {
             feedAdapter.submitList(list)
             binding.recyclerView.smoothScrollToPosition(0)
         }
-        if (result.resultCode == subActivity_Feed_Modify.MODIFY_OK) {
-            //수정된 아이템
-            val item = result.data!!.getParcelableExtra<Feed>("modifiedFeed")
-//            binding.recyclerView.smoothScrollToPosition(item!!.position)
-        }
+//        if (result.resultCode == subActivity_Feed_Modify.MODIFY_OK) {
+//            //수정된 아이템
+//            val item = result.data!!.getParcelableExtra<Feed>("modifiedFeed")
+////            binding.recyclerView.smoothScrollToPosition(item!!.position)
+//        }
     }
 
     override fun onCreateView(

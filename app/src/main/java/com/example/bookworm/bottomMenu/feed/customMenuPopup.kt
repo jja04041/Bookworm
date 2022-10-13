@@ -15,7 +15,6 @@ import com.example.bookworm.LoadState
 import com.example.bookworm.R
 import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
-import com.example.bookworm.bottomMenu.feed.oldItems.subActivity_Feed_Modify
 
 //메뉴 팝업
 
@@ -61,7 +60,7 @@ class customMenuPopup(val context: Context, val anchor: View) : PopupMenu(contex
         fun modifyData(item: Any) {
             if (item is Feed) {
                 //수정을 담당하는 액티비티로 이동해야함.
-                var intent = Intent(context as MainActivity, subActivity_Feed_Modify::class.java)
+                var intent = Intent(context as MainActivity, SubActivityModifyFeed::class.java)
                 intent.putExtra("Feed", item)
 
                 //현재 화면이 댓글 화면인 경우
