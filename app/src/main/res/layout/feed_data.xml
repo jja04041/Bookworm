@@ -43,8 +43,9 @@
                     android:layout_marginHorizontal="15dp"
                     android:layout_marginVertical="5dp"
                     android:src="@drawable/profile"
-                    app:imgUrl='@{feed.creatorInfo.profileimg != null ? feed.creatorInfo.profileimg:""}'
-                    app:placeholder="@{@drawable/profile}" />
+                    app:imgUrl='@{feed.creatorInfo != null ? feed.creatorInfo.profileimg:""}'
+                    app:placeholder="@{@drawable/profile}"
+                    app:type='@{"profile"}' />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -58,7 +59,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:maxLength="15"
-                        android:text="@{feed.creatorInfo.username,default = 사용자}"
+                        android:text='@{feed.creatorInfo!= null ? feed.creatorInfo.username : "",default = 사용자}'
                         android:textColor="#000000"
                         android:textSize="18dp"
                         android:textStyle="bold" />
@@ -107,7 +108,9 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
-                app:feedImgUrl='@{feed.book.imgUrl != null ? feed.book.imgUrl:""}' />
+                app:imgUrl='@{feed.book.imgUrl != null ? feed.book.imgUrl:""}'
+                app:placeholder="@{@drawable/bookimg_sample}"
+                app:type='@{"feed"}' />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -168,7 +171,7 @@
                         android:layout_marginStart="5dp"
                         android:ellipsize="end"
                         android:maxLines="1"
-                        android:text='@{feed.book.author != null? String.valueOf(feed.book.author) : "",default = ""}' />
+                        android:text='@{String.valueOf(feed.book.author) ,default = ""}' />
 
                 </LinearLayout>
 
@@ -187,8 +190,11 @@
                 android:layout_height="360dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="15dp"
-                android:visibility='@{(feed.imgurl!="" &amp;&amp; feed.imgurl != null)? View.VISIBLE:View.GONE,default=gone}'
-                app:feedImgUrl='@{(feed.imgurl!="" &amp;&amp; feed.imgurl != null) ? feed.imgurl:""}' />
+                android:visibility='@{feed.imgurl!=""? View.VISIBLE:View.GONE,default=gone}'
+                app:imgUrl='@{feed.imgurl!=null ? feed.imgurl : ""}'
+                app:placeholder="@{@drawable/bookimg_sample}"
+                app:type='@{"feedImg"}' />
+
 
             <FrameLayout
                 android:id="@+id/flFeedContent"
@@ -316,7 +322,8 @@
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
                                 app:imgUrl='@{feed.comment.creator.profileimg!=null? feed.comment.creator.profileimg:""}'
-                                app:placeholder="@{@drawable/profile}" />
+                                app:placeholder="@{@drawable/profile}"
+                                app:type='@{"profile"}' />
 
                             <LinearLayout
                                 android:layout_width="wrap_content"

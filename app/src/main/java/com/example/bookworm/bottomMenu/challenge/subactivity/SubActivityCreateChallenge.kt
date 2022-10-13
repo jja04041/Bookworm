@@ -1,11 +1,16 @@
 package com.example.bookworm.bottomMenu.challenge.subactivity
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.NumberPicker
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
@@ -26,6 +31,7 @@ import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.SubactivityChallengeCreatechallengeBinding
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class SubActivityCreateChallenge : AppCompatActivity(), NumberPicker.OnValueChangeListener {
     val binding by lazy {
@@ -37,7 +43,7 @@ class SubActivityCreateChallenge : AppCompatActivity(), NumberPicker.OnValueChan
     private val userViewModel by lazy {
         ViewModelProvider(this, UserInfoViewModel.Factory(this))[UserInfoViewModel::class.java]
     }
-
+    lateinit var imm: InputMethodManager
 
     private var challengeData = Challenge()
 
@@ -58,6 +64,7 @@ class SubActivityCreateChallenge : AppCompatActivity(), NumberPicker.OnValueChan
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         val liveData = MutableLiveData<UserInfo>()
+        imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         userViewModel.getUser(null, liveData = liveData)
         liveData.observe(this) { userInfo ->
             challengeData.apply {
@@ -69,6 +76,19 @@ class SubActivityCreateChallenge : AppCompatActivity(), NumberPicker.OnValueChan
             setUI()
         }
 
+    }
+
+    //다른 영역 선택시, 키보드 내림.
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (currentFocus != null) {
+            val rect = Rect()
+            currentFocus!!.getGlobalVisibleRect(rect)
+            if (!rect.contains(ev!!.x.toInt(), ev.y.toInt())) {
+                imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
+                currentFocus!!.clearFocus()
+            }
+        }
+        return super.dispatchTouchEvent(ev)
     }
 
 
@@ -86,6 +106,12 @@ class SubActivityCreateChallenge : AppCompatActivity(), NumberPicker.OnValueChan
                     if (challengeData.book != Book()) intent.putExtra("prevBook", challengeData.book)
                     bookResult.launch(intent)
                 }
+            }
+            ivThumbnail.setOnClickListener {
+                //책가져오는 메소드 작성
+                val intent = Intent(this@SubActivityCreateChallenge, SearchMainActivity::class.java)
+                if (challengeData.book != Book()) intent.putExtra("prevBook", challengeData.book)
+                bookResult.launch(intent)
             }
 
             /**
@@ -118,7 +144,7 @@ class SubActivityCreateChallenge : AppCompatActivity(), NumberPicker.OnValueChan
 
             //뒤로가기
             btnBack.setOnClickListener {
-                finish()
+                backPressed()
             }
             //챌린지 생성
             btnStartChallenge.setOnClickListener {
@@ -172,5 +198,25 @@ class SubActivityCreateChallenge : AppCompatActivity(), NumberPicker.OnValueChan
     @SuppressLint("SetTextI18n")
     override fun onValueChange(picker: NumberPicker?, oldVal: Int, newVal: Int) {
         binding.tvMax.text = (picker!!.value + 2).toString()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        backPressed()
+    }
+
+    //뒤로가기 시에 보여주는 메뉴
+    private fun backPressed() {
+        //만약 작성된 내용이 있는 경우
+        if (challengeData.book != Book() || binding.etCreatechallengeChallengename.text.isNotEmpty() || binding.etCreatechallengeChallengeinfo.text.isNotEmpty()) {
+            AlertDialog.Builder(this)
+                    .setTitle("현재까지 작성된 내용이 삭제됩니다. 그래도 계속하시겠습니까?")
+                    .setPositiveButton("네") { dialog, v ->
+                        finish()
+                        dialog.dismiss()
+                    }.setNegativeButton("아니오") { dialog, v ->
+                        dialog.dismiss()
+                    }.show()
+        } else finish()
     }
 }

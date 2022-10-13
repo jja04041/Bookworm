@@ -109,7 +109,7 @@ class SubActivityComment : AppCompatActivity() {
                     feedViewModel.nowCommentLoadState.observe(context as SubActivityComment) { state ->
                         if (state == LoadState.Done) {
                             comment.duration = feedViewModel.getDateDuration(comment!!.madeDate)
-                            comment.creator = nowUser
+                            comment.creator = nowUser!!
                             commentAdapter.currentList.toMutableList().apply {
                                 add(1, comment)
                                 commentAdapter.submitList(this)

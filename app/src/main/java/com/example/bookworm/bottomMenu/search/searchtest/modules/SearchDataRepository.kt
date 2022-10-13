@@ -2,8 +2,12 @@ package com.example.bookworm.bottomMenu.search.searchtest.modules
 
 import android.content.Context
 import com.example.bookworm.R
+import com.example.bookworm.bottomMenu.feed.FireStoreLoadModule
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -26,6 +30,13 @@ class SearchDataRepository(val context: Context) {
 
     suspend fun loadSearchedBooks(keyword: String, page: Int) = aladinApi.getResult(QueryForRetrofit.getQueryForSearchBooks(context, keyword, page))
 
+    suspend fun loadBookDetail(itemId: String) = aladinApi.getItem(QueryForRetrofit.getQueryForSearchBookDetail(context = context, itemId = itemId))
+    suspend fun loadUserBookReview(itemId: String) =
+            FireStoreLoadModule.provideQueryPathToFeedCollection()
+                    .whereEqualTo("Book.itemId", itemId)
+                    .get().await()
+
+
     //Retrofit 인스턴스
     inner class RetrofitInstance(baseUrl: String) {
         private val client: Retrofit = Retrofit.Builder()
@@ -37,6 +48,7 @@ class SearchDataRepository(val context: Context) {
             return client
         }
     }
+
 
     //쿼리 작성
     private object QueryForRetrofit {

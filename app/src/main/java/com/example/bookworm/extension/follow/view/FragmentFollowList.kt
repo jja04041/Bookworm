@@ -74,14 +74,8 @@ class FragmentFollowList(
 
     fun loadUserData(flag: Boolean) {
         CoroutineScope(Dispatchers.Main).launch {
-            nowUser = fv.getUser(null, true)
-            (context as FollowerActivity).tabLayout.getTabAt(0)!!
-                .setText("${nowUser!!.followerCounts} 팔로워")
-            (context as FollowerActivity).tabLayout.getTabAt(1)!!
-                .setText("${nowUser!!.followingCounts} 팔로잉")
-            Log.d("data", nowUser!!.followerCounts.toString())
             if (flag) init()
-            fv.getFollowerList(token, if (isfollower == 0) false else true)
+            fv.getFollowerList(token, isfollower != 0)
             if (flag) showShimmer(true)
         }
 

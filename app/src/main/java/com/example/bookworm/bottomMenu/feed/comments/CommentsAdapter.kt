@@ -5,15 +5,12 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.bookworm.R
-import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.feed.Feed
 import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
 import com.example.bookworm.databinding.LayoutCommentItemBinding
@@ -25,6 +22,7 @@ import java.util.*
 
 //댓글 불러오는 어댑터
 class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
+
 
     private val vType = mapOf("Loading" to 0, "SummaryFeed" to 1, "Comments" to 2)
 
@@ -49,10 +47,11 @@ class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view: View
+
         return when (viewType) {
             vType["SummaryFeed"] -> {
                 view = inflater.inflate(R.layout.layout_comment_summary, parent, false)
-                newSummaryItemViewHolder(view)
+                SummaryItemViewHolder(view)
             }
             vType["Loading"] -> {
                 view = inflater.inflate(R.layout.layout_item_loading, parent, false)
@@ -60,7 +59,7 @@ class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
             }
             else -> {
                 view = inflater.inflate(R.layout.layout_comment_item, parent, false)
-                newCommentItemViewHolder(view)
+                CommentItemViewHolder(view)
             }
         }
     }
@@ -77,21 +76,13 @@ class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
     }
 
     //댓글 뷰홀더
-    inner class newCommentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class CommentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = LayoutCommentItemBinding.bind(itemView)
         fun bind(item: Comment) {
-            binding.lifecycleOwner = itemView.context as SubActivityComment
-            binding.comment = item
             binding.apply {
-//                //댓글 작성자 프로필 이미지 로드
-//                Glide.with(itemView.context)
-//                        .load(item.creator!!.profileimg)
-//                        .into(imgProfile)
-//                //댓글 작성자 닉네임 세팅
-//                tvNickname.text = item.creator!!.username
-//                //댓글 내용 세팅
-//                tvCommentContent.text = item.contents
-                //댓글 작성일자 세팅
+                //DataBinding을 통한 뷰 세팅
+                lifecycleOwner = itemView.context as SubActivityComment
+                comment = item
                 tvDate.text = getDateDuration(item.madeDate)
 
                 //프로필 클릭 시 해당 사용자의 프로필 정보 화면으로 이동하게
@@ -105,7 +96,7 @@ class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
     }
 
     //게시물 요약 내용
-    inner class newSummaryItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class SummaryItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = LayoutCommentSummaryBinding.bind(itemView)
 
         @SuppressLint("SetTextI18n", "UseCompatLoadingForDrawables")
@@ -142,10 +133,10 @@ class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
         var item = getItem(safePosition)
         when (item) {
             is Feed -> {
-                (holder as newSummaryItemViewHolder).bind(item)
+                (holder as SummaryItemViewHolder).bind(item)
             }
             is Comment -> {
-                if (item.commentID != "") (holder as newCommentItemViewHolder).bind(item)
+                if (item.commentID != "") (holder as CommentItemViewHolder).bind(item)
                 else showLoadingView(holder as LoadingViewHolder, safePosition)
             }
             else -> {}

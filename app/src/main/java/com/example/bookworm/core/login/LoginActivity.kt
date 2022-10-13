@@ -67,7 +67,7 @@ class LoginActivity : AppCompatActivity() {
                         } catch (e: NullPointerException) {
                             ""
                         },
-                        email = account.email,
+                        email = account.email.let { "" },
                         platform = "Google"
                 )
                 //회원 가입 함수로 데이터를 전달%

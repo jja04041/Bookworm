@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".core.login.LoginActivity">
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <LinearLayout
+        android:layout_weight="1"
+        android:paddingTop="100dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
@@ -23,7 +23,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
             android:fontFamily="@font/fontstyle"
             android:text="책  볼  레 ?"
             android:textAlignment="center"
@@ -33,21 +32,29 @@
 
         <ImageButton
             android:id="@+id/btn_login_kakao"
-            android:layout_width="wrap_content"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="50dp"
+            android:scaleType="fitCenter"
             android:background="#ffffff"
             android:src="@drawable/kakao_login_medium_narrow" />
 
         <ImageButton
             android:id="@+id/btn_login_google"
-            android:layout_width="wrap_content"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:scaleType="fitCenter"
             android:background="#ffffff"
             android:src="@drawable/google_login_medium" />
 
-
+        <TextView
+            android:layout_weight="1"
+            android:paddingBottom="50dp"
+            android:gravity="bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold|italic"
+            android:text="Team BookWorm"/>
     </LinearLayout>
 
 </LinearLayout>

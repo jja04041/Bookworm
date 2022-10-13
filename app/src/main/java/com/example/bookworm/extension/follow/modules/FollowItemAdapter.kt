@@ -27,7 +27,6 @@ class FollowItemAdapter(
                 view = inflater.inflate(R.layout.layout_user_item, parent, false)
                 return FollowerViewHolder(
                     view, context, nowUserInfo, isFollower
-//                    ,pager
                 )
             }
             else -> {

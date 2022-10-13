@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
@@ -25,7 +26,6 @@ import kotlinx.coroutines.launch
 
 class ProfileInfoActivity : AppCompatActivity() {
     lateinit var binding: ActivityProfileInfoBinding
-    var userInfo: UserInfo? = null
     var nowUser //타인 userInfo, 현재 사용자 nowUser
             : UserInfo? = null
     lateinit var userID: String
@@ -95,15 +95,15 @@ class ProfileInfoActivity : AppCompatActivity() {
         }
 
     //UI설정
-    suspend fun setUI(user: UserInfo, bookWorm: BookWorm) {
+    fun setUI(user: UserInfo, bookWorm: BookWorm) {
 
         binding.tvNickname.text = user.username //닉네임 설정
         setMedal(user) //메달 설정
         binding.tvNickname.visibility = View.VISIBLE
         Glide.with(this).load(user.profileimg).circleCrop()
-            .diskCacheStrategy(DiskCacheStrategy.NONE)
-            .skipMemoryCache(true)
-            .into(binding.ivProfileImage) //프로필이미지 설정
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(binding.ivProfileImage) //프로필이미지 설정
         binding.ivProfileImage.visibility = View.VISIBLE
 
         binding.tvIntroduce.setText(user.introduce)
@@ -138,11 +138,11 @@ class ProfileInfoActivity : AppCompatActivity() {
         binding.tvFollowingCount.text = user.followingCounts.toString()
         binding.tvReadBookCount.text = bookWorm.readCount.toString()
         binding.ivBookworm.setImageResource(
-            this.resources.getIdentifier(
-                "bw_${bookWorm.wormType}",
-                "drawable",
-                this.packageName
-            )
+                this.resources.getIdentifier(
+                        "bw_${bookWorm.wormType}",
+                        "drawable",
+                        this.packageName
+                )
         )
 
 
@@ -151,26 +151,25 @@ class ProfileInfoActivity : AppCompatActivity() {
             if (binding.tvFollow.isSelected) {
                 binding.tvFollow.isSelected = false
                 binding.tvFollow.text = "팔로우"
-                lifecycleScope.launch {
-                    setFollowerCnt(
-                        async { fv.follow(user, false) }
-                            .await()
-                            .followerCounts.toLong())
+                MutableLiveData<UserInfo>().apply {
+                    fv.follow(user, false, this)
+                    this.observe(this@ProfileInfoActivity) { userData ->
+                        setFollowerCnt(userData.followerCounts.toLong())
+                    }
                 }
             } else {
                 binding.tvFollow.isSelected = true
                 binding.tvFollow.text = "팔로잉"
-                lifecycleScope.launch {
-                    setFollowerCnt(
-                        async {
-                            fv.follow(user, true)
-                        }.await().followerCounts.toLong()
-                    )
+                MutableLiveData<UserInfo>().apply {
+                    fv.follow(user, true, this)
+                    this.observe(this@ProfileInfoActivity) { userData ->
+                        setFollowerCnt(userData.followerCounts.toLong())
+                    }
                 }
                 myFCMService!!.sendPostToFCM(
-                    this,
-                    user!!.fCMtoken,
-                    nowUser!!.username + "님이 팔로우하였습니다"
+                        this,
+                        user!!.fCMtoken,
+                        nowUser!!.username + "님이 팔로우하였습니다"
                 )
             }
 
@@ -178,7 +177,7 @@ class ProfileInfoActivity : AppCompatActivity() {
         //뒤로가기
         binding.btnBack.setOnClickListener { view: View? ->
             if (cache != binding.tvFollow.isSelected && intent.extras!!
-                    .containsKey("pos")
+                            .containsKey("pos")
             ) {
                 val pos = intent.getIntExtra("pos", -1)
                 val intent = Intent()

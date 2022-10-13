@@ -5,6 +5,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -70,12 +72,19 @@ class ChallengeAdapter(val context: Context) : ListAdapter<Challenge, RecyclerVi
                         Glide.with(context)
                                 .load(imgUrl)
                                 .into(ivThumb)
+
                     }
                     tvPerson.text = "${currentPart.size}/${maxPart}" //현재 참여자 수
-                    tvDday.text = DdayCounter(challenge.endDate).dDayByDash //디데이 설정
+                    val dDay = DdayCounter(challenge.endDate).dDayByDash //디데이 설정
+                    if (dDay == "종료됨") {
+                        root.isEnabled = false
+                        root.isClickable = false
+                    }
+                    tvDday.text = dDay //디데이 설정
                     tvChallengeStartDate.text = challenge.startDate.substring(5) //시작 일자
                     tvChallengeEndDate.text = challenge.endDate.substring(5) //마감 일자
                     tvCtitle.text = challenge.title
+
                 }
                 //챌린지 아이템 선택 감지
                 root.setOnClickListener {

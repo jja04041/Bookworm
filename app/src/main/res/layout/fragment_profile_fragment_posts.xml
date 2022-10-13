@@ -10,6 +10,10 @@
         android:layout_height="wrap_content"
         android:visibility="gone" />
 
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <LinearLayout
         android:id="@+id/llalertNoPosts"
         android:layout_width="match_parent"

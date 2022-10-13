@@ -9,17 +9,6 @@ import com.bumptech.glide.Glide
 import com.example.bookworm.databinding.SubactivityModifyPostBinding
 
 
-//데이터 바인딩을 위한 어댑터
-object ModifyPostBindingAdapter {
-    @JvmStatic
-    @BindingAdapter("app:imgUrl")
-    fun loadImage(v: ImageView, url: String) =
-            Glide.with(v.context)
-                    .load(url)
-                    .into(v)
-//    @BindingAdapter
-
-}
 
 //게시물수정 액티비티
 class SubActivityModifyFeed : AppCompatActivity() {

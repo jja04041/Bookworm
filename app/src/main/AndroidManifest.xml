@@ -153,7 +153,8 @@
         <activity android:name=".bottomMenu.challenge.subactivity.SubActivityCreateChallenge" />
         <activity android:name=".bottomMenu.challenge.subactivity.SubActivityChallengeInfo" />
         <activity android:name=".bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumContentActivity" />
-        <activity android:name=".bottomMenu.profile.submenu.album.AlbumCreate.view.ShowFeedListForCreateAlbum" /> <!-- cache directory file provider paths -->
+        <activity android:name=".bottomMenu.profile.submenu.album.AlbumCreate.view.ShowFeedListForCreateAlbum" />
+        <activity android:name=".bottomMenu.search.searchtest.views.BookDetailActivity" /> <!-- cache directory file provider paths -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

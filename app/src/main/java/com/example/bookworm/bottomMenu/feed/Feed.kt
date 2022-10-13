@@ -11,7 +11,7 @@ import kotlinx.parcelize.Parcelize
 //게시물 DTO
 @Parcelize
 data class Feed(
-        var book: Book? = null,
+        var book: Book = Book(),
         //라벨 Array 추가
         var feedID //피드 ID
         : String? = null,
@@ -30,7 +30,7 @@ data class Feed(
 
         @Exclude @get:Exclude @set:Exclude
         var creatorInfo //작성자 정보
-        : UserInfo? = null,
+        : UserInfo = UserInfo(),
 
         var userToken
         : String? = null,

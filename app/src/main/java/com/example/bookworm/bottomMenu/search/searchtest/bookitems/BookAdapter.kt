@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.example.bookworm.R
 import com.example.bookworm.databinding.LayoutItemLoadingBinding
@@ -16,7 +17,7 @@ import com.github.ybq.android.spinkit.sprite.Sprite
 import com.github.ybq.android.spinkit.style.ThreeBounce
 
 class BookAdapter(val context: Context) : ListAdapter<Book, RecyclerView.ViewHolder>(Companion) {
-    var listener: OnBookItemClickListener?= null
+    var listener: OnBookItemClickListener? = null
 
     companion object : DiffUtil.ItemCallback<Book>() {
         override fun areItemsTheSame(oldItem: Book, newItem: Book): Boolean {
@@ -36,6 +37,7 @@ class BookAdapter(val context: Context) : ListAdapter<Book, RecyclerView.ViewHol
     override fun getItemId(position: Int): Long {
         return position.hashCode().toLong()
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(context)
         return when (viewType) {
@@ -81,7 +83,17 @@ class BookAdapter(val context: Context) : ListAdapter<Book, RecyclerView.ViewHol
         fun bindItem(item: Book) {
             binding.apply {
                 tvBookTitle.text = item.title
-                Glide.with(itemView.context).load(item.imgUrl).into(ivBook)
+                val circularProgressDrawable = CircularProgressDrawable(itemView.context)
+                circularProgressDrawable.apply {
+                    strokeWidth = 5f
+                    centerRadius = 30f
+                    start()
+                    Glide.with(itemView.context)
+                            .load(item.imgUrl)
+                            .placeholder(this)
+                            .into(ivBook)
+                }
+
                 root.setOnClickListener { view ->
                     val pos = bindingAdapterPosition
                     if (pos != RecyclerView.NO_POSITION)
@@ -102,9 +114,16 @@ class BookAdapter(val context: Context) : ListAdapter<Book, RecyclerView.ViewHol
                 tvDescription.text = item.content
                 tvPublisher.text = item.publisher
                 tvTitle.text = item.title
-                Glide.with(itemView.context)
-                        .load(item.imgUrl)
-                        .into(ivThumb)
+                val circularProgressDrawable = CircularProgressDrawable(itemView.context)
+                circularProgressDrawable.apply {
+                    strokeWidth = 5f
+                    centerRadius = 30f
+                    start()
+                    Glide.with(itemView.context)
+                            .load(item.imgUrl)
+                            .placeholder(this)
+                            .into(ivThumb)
+                }
                 root.setOnClickListener { v ->
                     val pos = bindingAdapterPosition
                     if (pos != RecyclerView.NO_POSITION)

@@ -6,16 +6,22 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.feed.FragmentFeed;
 import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment;
+import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
 import com.example.bookworm.core.MoveFragment;
+import com.example.bookworm.core.userdata.UserInfo;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -39,8 +45,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom);
-
+        UserInfoViewModel viewModel = new ViewModelProvider(this, new UserInfoViewModel.Factory(this)).get(UserInfoViewModel.class);
         bottomNavigationView.setItemIconTintList(null);
+        MutableLiveData<UserInfo> liveData = new MutableLiveData<>();
+        viewModel.getUser(null, liveData, false);
+        liveData.observe(this, userInfo -> {
+            Toast toast = Toast.makeText(MainActivity.this, String.format("%s님 환영합니다!", userInfo.getUsername()), Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.TOP, 0, 0);
+            toast.show();
+        });
 
 
         //딥링크로 연결되는 경우 처리되는 코드들

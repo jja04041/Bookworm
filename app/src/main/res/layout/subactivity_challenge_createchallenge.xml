@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.example.bookworm.bottomMenu.challenge.fragment_challenge">
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/llChallcreate"
@@ -65,6 +64,8 @@
                         app:contentPaddingTop="10dp">
 
                         <ImageView
+                            android:src="@drawable/bookimg_sample"
+                            android:scaleType="fitCenter"
                             android:id="@+id/ivThumbnail"
                             android:layout_width="200dp"
                             android:layout_height="150dp"
