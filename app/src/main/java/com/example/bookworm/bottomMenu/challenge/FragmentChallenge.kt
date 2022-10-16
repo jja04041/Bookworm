@@ -159,7 +159,7 @@ class FragmentChallenge : Fragment() {
     /**어댑터 설정*/
     private fun setAdapter() {
         challengeAdapter.setListener { holder, view, pos ->
-            if (DdayCounter(challengeAdapter.currentList[pos].dDay).dDayByDash != "종료됨")
+            if (DdayCounter.getDdayByDash(challengeAdapter.currentList[pos].dDay)!= "종료됨")
                 Intent(activity, SubActivityChallengeInfo::class.java).apply {
                     putExtra("challengeInfo", challengeAdapter.currentList[pos].apply {
                         this.pos = pos

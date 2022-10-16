@@ -29,8 +29,7 @@ class BookAdapter(val context: Context) : ListAdapter<Book, RecyclerView.ViewHol
         }
     }
 
-    @JvmName("setListener1")
-    fun setListener(listener: OnBookItemClickListener) {
+    fun addListener(listener: OnBookItemClickListener) {
         this.listener = listener
     }
 
@@ -82,7 +81,6 @@ class BookAdapter(val context: Context) : ListAdapter<Book, RecyclerView.ViewHol
 
         fun bindItem(item: Book) {
             binding.apply {
-                tvBookTitle.text = item.title
                 val circularProgressDrawable = CircularProgressDrawable(itemView.context)
                 circularProgressDrawable.apply {
                     strokeWidth = 5f
@@ -94,8 +92,9 @@ class BookAdapter(val context: Context) : ListAdapter<Book, RecyclerView.ViewHol
                             .into(ivBook)
                 }
 
+
                 root.setOnClickListener { view ->
-                    val pos = bindingAdapterPosition
+                    val pos = absoluteAdapterPosition
                     if (pos != RecyclerView.NO_POSITION)
                         listener!!.onItemClick(this@RecomBookViewHolder, view, pos)
                 }
@@ -124,7 +123,7 @@ class BookAdapter(val context: Context) : ListAdapter<Book, RecyclerView.ViewHol
                             .placeholder(this)
                             .into(ivThumb)
                 }
-                root.setOnClickListener { v ->
+              root.setOnClickListener { v ->
                     val pos = bindingAdapterPosition
                     if (pos != RecyclerView.NO_POSITION)
                         listener!!.onItemClick(this@BookViewHolder, v, pos)

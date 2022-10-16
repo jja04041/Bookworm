@@ -57,16 +57,6 @@ class FragmentSearch : Fragment() {
                     binding.edtSearchBtn.clearFocus()
                 }
             }
-            favRecyclerView.adapter = bookAdapter
-            bookAdapter.setListener(object : OnBookItemClickListener {
-                override fun onItemClick(holder: RecyclerView.ViewHolder, view: View, position: Int) {
-                    if (holder is BookAdapter.BookViewHolder) {
-                        val intent = Intent(context, BookDetailActivity::class.java)
-                        intent.putExtra("BookID", bookAdapter.currentList[position].itemId)
-                        startActivity(intent)
-                    }
-                }
-            })
 
             showShimmer(true)
 
@@ -82,6 +72,7 @@ class FragmentSearch : Fragment() {
             profileListGlobal = profileList
 
         }
+        setAdapter()
         loadRecommendBooks();
 
         return binding.root
@@ -92,14 +83,14 @@ class FragmentSearch : Fragment() {
         readCountListGlobal!![index].setText(readCount)
     }
 
-    fun setRanking(map: Map<String, Object>, index: Int) {
-        nickNameListGlobal!![index].setText(map.get("username").toString())
-        Glide.with(requireContext()).load(map.get("profileimg").toString()).circleCrop().into(profileListGlobal!![index])
+    fun setRanking(map: Map<String, Any>, index: Int) {
+        nickNameListGlobal!![index].text = map.get("username").toString()
+        Glide.with(requireContext()).load(map["profileimg"].toString()).circleCrop().into(profileListGlobal!![index])
 
         //프로필 클릭 시 해당 사용자의 프로필 정보 화면으로 이동하게
         profileListGlobal!![index].setOnClickListener{
             val intent = Intent(requireContext(), ProfileInfoActivity::class.java)
-            intent.putExtra("userID", map.get("token").toString())
+            intent.putExtra("userID", map["token"].toString())
             requireContext().startActivity(intent)
         }
 
@@ -107,6 +98,19 @@ class FragmentSearch : Fragment() {
     }
 
 
+    private fun setAdapter(){
+        //인기도서 onclick
+        bookAdapter.addListener(object : OnBookItemClickListener {
+            override fun onItemClick(holder: RecyclerView.ViewHolder, view: View, position: Int) {
+                if (holder is BookAdapter.RecomBookViewHolder) {
+                    val intent = Intent(requireContext(), BookDetailActivity::class.java)
+                    intent.putExtra("BookID", bookAdapter.currentList[position].itemId)
+                    requireContext().startActivity(intent)
+                }
+            }
+        })
+        binding.favRecyclerView.adapter = bookAdapter
+    }
     private fun loadRecommendBooks() {
         val liveData = MutableLiveData<LoadState>()
         val resultList = ArrayList<Book>()

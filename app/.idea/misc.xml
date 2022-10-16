@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../../../../../../../layout/custom_preview.xml" value="0.1879432624113475" />
         <entry key="../../../../../../../layout/custom_preview.xml" value="0.10925925925925926" />
         <entry key="../../../../../../layout/custom_preview.xml" value="0.15077937649880097" />
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/drawable/back_icon.xml" value="0.2435" />
@@ -91,9 +92,11 @@
         <entry key="..\:/KY/School Project/Bookworm/app/src/main/res/menu/menu_bottom.xml" value="0.36614583333333334" />
         <entry key="src/main/res/drawable-v24/loginbutton_design.xml" value="0.1385" />
         <entry key="src/main/res/drawable/back_icon.xml" value="0.1" />
+        <entry key="src/main/res/drawable/feed_bottom_border_only.xml" value="0.118" />
         <entry key="src/main/res/drawable/label_design.xml" value="0.1385" />
         <entry key="src/main/res/drawable/llcomment_stroke.xml" value="0.1385" />
         <entry key="src/main/res/drawable/ripplebutton.xml" value="0.1" />
+        <entry key="src/main/res/drawable/ripplebutton_create_feed.xml" value="0.116" />
         <entry key="src/main/res/drawable/ripplebutton_none.xml" value="0.1" />
         <entry key="src/main/res/layout/activity_follower.xml" value="0.22060709705002138" />
         <entry key="src/main/res/layout/activity_login.xml" value="0.29585292860196666" />
@@ -112,8 +115,9 @@
         <entry key="src/main/res/layout/fragment_search_page_feed.xml" value="0.29585292860196666" />
         <entry key="src/main/res/layout/fragment_search_page_user.xml" value="0.23889392565729828" />
         <entry key="src/main/res/layout/fragment_select_feed.xml" value="0.22060709705002138" />
-        <entry key="src/main/res/layout/layout_book_search_detail.xml" value="0.1" />
+        <entry key="src/main/res/layout/layout_book_search_detail.xml" value="0.165" />
         <entry key="src/main/res/layout/layout_book_search_detail_review.xml" value="0.29585292860196666" />
+        <entry key="src/main/res/layout/layout_book_search_detail_top.xml" value="0.2949978623343309" />
         <entry key="src/main/res/layout/layout_challenge_item.xml" value="0.29585292860196666" />
         <entry key="src/main/res/layout/layout_comment_item.xml" value="0.1" />
         <entry key="src/main/res/layout/layout_comment_summary.xml" value="0.165" />
