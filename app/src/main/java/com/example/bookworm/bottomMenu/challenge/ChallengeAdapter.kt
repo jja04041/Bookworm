@@ -75,7 +75,7 @@ class ChallengeAdapter(val context: Context) : ListAdapter<Challenge, RecyclerVi
 
                     }
                     tvPerson.text = "${currentPart.size}/${maxPart}" //현재 참여자 수
-                    val dDay = DdayCounter(challenge.endDate).dDayByDash //디데이 설정
+                    val dDay = DdayCounter.getDdayByDash(challenge.endDate) //디데이 설정
                     if (dDay == "종료됨") {
                         root.isEnabled = false
                         root.isClickable = false

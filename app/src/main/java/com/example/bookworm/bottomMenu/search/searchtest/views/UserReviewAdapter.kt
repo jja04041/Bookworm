@@ -7,23 +7,33 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.feed.Feed
 import com.example.bookworm.bottomMenu.feed.FeedAdapter
+import com.example.bookworm.bottomMenu.feed.comments.Comment
+import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
+import com.example.bookworm.databinding.LayoutBookSearchDetailBinding
 import com.example.bookworm.databinding.LayoutBookSearchDetailReviewBinding
+import com.example.bookworm.databinding.LayoutBookSearchDetailTopBinding
 import com.example.bookworm.databinding.LayoutItemLoadingBinding
 
 class UserReviewAdapter(val context: Context) :
-        ListAdapter<Feed, RecyclerView.ViewHolder>(Companion) {
+        ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
 
-    //비교 객체
-    companion object : DiffUtil.ItemCallback<Feed>() {
-        override fun areItemsTheSame(oldItem: Feed, newItem: Feed): Boolean {
+
+    private val vType = mapOf("Loading" to 0, "BookDetail" to 1, "Review" to 2)
+
+    companion object : DiffUtil.ItemCallback<Any>() {
+        override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: Feed, newItem: Feed): Boolean {
-            return oldItem.feedID == newItem.feedID
+        override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
+            return if (oldItem is Feed && newItem is Feed)
+                oldItem.feedID == newItem.feedID
+            else
+                (oldItem as Book).itemId == (newItem as Book).itemId
         }
     }
 
@@ -31,9 +41,13 @@ class UserReviewAdapter(val context: Context) :
         val inflater = LayoutInflater.from(parent.context)
         val view: View
         return when (viewType) {
-            0 -> {
+            vType["Review"] -> {
                 view = inflater.inflate(R.layout.layout_book_search_detail_review, parent, false)
                 UserReviewViewHolder(view)
+            }
+            vType["BookDetail"] -> {
+                view = inflater.inflate(R.layout.layout_book_search_detail_top, parent, false)
+                BookDetailViewHolder(view)
             }
             else -> {
                 view = inflater.inflate(R.layout.layout_item_loading, parent, false)
@@ -44,10 +58,17 @@ class UserReviewAdapter(val context: Context) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val safePosition = holder.bindingAdapterPosition
-        if (holder is UserReviewViewHolder) {
-            val feed = getItem(position) ?: return
-            holder.bindItem(feed)
-        } else showLoadingView(holder as LoadingViewHolder, safePosition)
+        when (holder) {
+            is UserReviewViewHolder -> {
+                val item = getItem(safePosition) as Feed
+                holder.bindItem(item)
+            }
+            is BookDetailViewHolder -> {
+                val item = getItem(safePosition) as Book
+                holder.bindItem(item)
+            }
+            else -> showLoadingView(holder as LoadingViewHolder, safePosition)
+        }
     }
 
     private fun showLoadingView(viewHolder: LoadingViewHolder, position: Int) {
@@ -60,7 +81,11 @@ class UserReviewAdapter(val context: Context) :
     }
 
     //뷰타입 설정 (0은 리뷰 뷰홀더 , 1은 로딩 뷰홀더)
-    override fun getItemViewType(position: Int) = if (currentList[position].feedID != null) 1 else 0
+    override fun getItemViewType(position: Int): Int {
+        return if (currentList[position] is Book) vType["BookDetail"]!!
+        else if (currentList[position] is Feed && (currentList[position] as Feed).feedID != "") vType["Review"]!!
+        else vType["Loading"]!!
+    }
 
     inner class UserReviewViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding by lazy {
@@ -70,8 +95,23 @@ class UserReviewAdapter(val context: Context) :
         fun bindItem(item: Feed) {
             binding.apply {
                 tvDate.text = item.date
+                Glide.with(itemView).load(item.creatorInfo.profileimg).circleCrop().into(imgProfile)
                 tvNickname.text = item.creatorInfo.username
                 tvCommentContent.text = item.feedText
+            }
+        }
+    }
+
+    inner class BookDetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val binding by lazy {
+            LayoutBookSearchDetailTopBinding.bind(itemView)
+        }
+
+        fun bindItem(item: Book) {
+            binding.apply {
+                lifecycleOwner = itemView.context as BookDetailActivity
+                this.book = item
+                executePendingBindings()
             }
         }
     }

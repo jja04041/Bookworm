@@ -1,6 +1,7 @@
 package com.example.bookworm.bottomMenu.search.searchtest.pages
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -21,6 +22,7 @@ import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
 import com.example.bookworm.bottomMenu.search.searchtest.bookitems.BookAdapter
 import com.example.bookworm.bottomMenu.search.searchtest.bookitems.OnBookItemClickListener
 import com.example.bookworm.bottomMenu.search.searchtest.modules.SearchViewModel
+import com.example.bookworm.bottomMenu.search.searchtest.views.BookDetailActivity
 import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
 import com.example.bookworm.databinding.FragmentSearchPageBookBinding
 import com.example.bookworm.databinding.SubactivitySearchMainBinding
@@ -49,17 +51,18 @@ class BookSearchFragment : Fragment() {
 
 
     fun setAdapter() {
-        bookAdapter.setListener(object : OnBookItemClickListener {
+        bookAdapter.addListener(object : OnBookItemClickListener {
             override fun onItemClick(holder: RecyclerView.ViewHolder, view: View, position: Int) {
                 if (holder is BookAdapter.BookViewHolder) {
-//                    val intent = Intent(context, SearchDetailActivity::class.java)
-//                    intent.putExtra("Book", bookAdapter.currentList[position])
-//                    startActivity(intent)
                     if (activity!!.callingActivity != null) {
                         val intent = activity!!.intent
                         intent.putExtra("bookData", bookAdapter.currentList[position])
                         activity!!.setResult(Activity.RESULT_OK, intent)
                         activity!!.finish()
+                    } else {
+                        val intent = Intent(requireContext(), BookDetailActivity::class.java)
+                        intent.putExtra("BookID", bookAdapter.currentList[position].itemId)
+                        this@BookSearchFragment.startActivity(intent)
                     }
                 }
             }

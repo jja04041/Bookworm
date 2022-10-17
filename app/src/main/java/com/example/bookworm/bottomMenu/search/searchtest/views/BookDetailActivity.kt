@@ -1,22 +1,30 @@
 package com.example.bookworm.bottomMenu.search.searchtest.views
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.bookworm.LoadState
 import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.feed.Feed
 import com.example.bookworm.bottomMenu.feed.FeedViewModel
+import com.example.bookworm.bottomMenu.feed.SubActivityCreatePost
+import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
 import com.example.bookworm.bottomMenu.search.searchtest.modules.SearchViewModel
+import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.LayoutBookSearchDetailBinding
 
 class BookDetailActivity : AppCompatActivity() {
     val binding by lazy {
-        DataBindingUtil.setContentView<LayoutBookSearchDetailBinding>(this, R.layout.layout_book_search_detail)
+        LayoutBookSearchDetailBinding.inflate(layoutInflater)
     }
     private val bookId by lazy {
         intent.getStringExtra("BookID")!!
@@ -31,31 +39,88 @@ class BookDetailActivity : AppCompatActivity() {
                 SearchViewModel.Factory(this)
         )[SearchViewModel::class.java]
     }
+
     //책 리뷰 정보를 가져오는 뷰모델
+    private val userInfoViewModel by lazy {
+        ViewModelProvider(this,
+                UserInfoViewModel.Factory(this)
+        )[UserInfoViewModel::class.java]
+    }
+    val reviewList = ArrayList<Any>()
+    private var isReviewEnd = false
+    private val RVPAGESIZE = 5
+    //유저 정보를 가져오는 뷰모델
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.lifecycleOwner = this@BookDetailActivity
+        setContentView(binding.root)
+        setAdapter()
         setUI()
     }
 
     private fun setUI() {
         val stateLiveData = MutableLiveData<Book>()
-        val reviewList = ArrayList<Feed>()
-        searchViewModel.loadBookDetail(bookId, stateLiveData, reviewList)
+        val tmpList = ArrayList<Feed>()
+        searchViewModel.loadBookDetail(bookId, stateLiveData, tmpList, RVPAGESIZE)
         binding.apply {
             //데이터를 가져온 후
             stateLiveData.observe(this@BookDetailActivity) { book ->
-                this.book = book
-                executePendingBindings()
-
+                reviewList.add(book)
                 if (book == Book()) Toast.makeText(this@BookDetailActivity, "정보를 로드하는데 실패하였습니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
+                if (tmpList.isEmpty() || tmpList.size < RVPAGESIZE) {
+                    isReviewEnd = true
+                    llEmptyReview.isVisible = tmpList.isEmpty()
+                }
+                if (tmpList.isNotEmpty()) {
+                    reviewList.addAll(tmpList)
+                    if (!isReviewEnd) reviewList.add(Feed())
+                }
+                userReviewAdapter.submitList(reviewList)
+                showShimmer(false)
             }
-            tvLink.setOnClickListener {
+            btnPurchase.setOnClickListener {
                 //구매링크로 연결
+                Intent(Intent.ACTION_VIEW).apply {
+                    this.data = Uri.parse((reviewList[0] as Book).purchaseLink)
+                    this@BookDetailActivity.startActivity(this)
+                }
             }
-            btnBack.setOnClickListener {
+            btnFeedCreate.setOnClickListener {
+                //현재 사용자 정보를 가지고 와서 인텐트로 넘긴다.
+                MutableLiveData<UserInfo>().apply {
+                    userInfoViewModel.getUser(null, this, false)
+                    this.observe(this@BookDetailActivity) { userInfo ->
+                        Intent(this@BookDetailActivity, SubActivityCreatePost::class.java).apply {
+                            this.putExtra("BookData", reviewList[0] as Book)
+                            this.putExtra("mainUser", userInfo)
+                            this@BookDetailActivity.startActivity(this)
+                        }
+                    }
+                }
+
+            }
+            //뒤로가기
+            ivBack.setOnClickListener {
                 finish()
+            }
+        }
+    }
+
+    private fun loadMoreReviews() {
+        val tmpList = ArrayList<Feed>()
+        MutableLiveData<LoadState>().apply {
+            searchViewModel.loadBookReview(bookId, this, tmpList, RVPAGESIZE)
+            observe(this@BookDetailActivity) {
+                if (it == LoadState.Done) {
+                    if (tmpList.isEmpty() || tmpList.size < RVPAGESIZE) isReviewEnd = true
+                    if (tmpList.isNotEmpty()) {
+                        reviewList.removeLast()
+                        reviewList.addAll(tmpList)
+                        if (!isReviewEnd) reviewList.add(Feed())
+                    }
+                    userReviewAdapter.submitList(reviewList)
+                }
             }
         }
     }
@@ -63,6 +128,30 @@ class BookDetailActivity : AppCompatActivity() {
     fun setAdapter() {
         binding.apply {
             mRecyclerView.adapter = userReviewAdapter
+            mRecyclerView.itemAnimator = null //리사이클러뷰 애니메이션 제거
+            mRecyclerView.isNestedScrollingEnabled = false
+            mRecyclerView.setHasFixedSize(true)
+            //스와이프하여 새로고침
+            with(mRecyclerView) {
+                addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        super.onScrolled(recyclerView, dx, dy)
+                        val layoutManager = recyclerView.layoutManager as LinearLayoutManager?
+                        val lastVisibleItemPosition =
+                                layoutManager!!.findLastCompletelyVisibleItemPosition()
+                        if ((lastVisibleItemPosition
+                                        == userReviewAdapter.currentList.lastIndex) && lastVisibleItemPosition > 0 && !isReviewEnd)
+                            loadMoreReviews()
+                    }
+                })
+            }
         }
+    }
+
+    //shimmer을 켜고 끄고 하는 메소드
+    private fun showShimmer(bool: Boolean) {
+        binding.llSearch.isVisible = !bool
+        if (bool) binding.SFLSearch.startShimmer() else binding.SFLSearch.stopShimmer()
+        binding.SFLSearch.isVisible = bool
     }
 }

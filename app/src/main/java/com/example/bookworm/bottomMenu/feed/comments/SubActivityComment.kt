@@ -158,9 +158,6 @@ class SubActivityComment : AppCompatActivity() {
                         else
                             isDataEnd =true
                     }
-//                    //데이터의 끝에 다다랐다면 끝이라는 것을 변수에 저장
-//                    else isDataEnd = true
-
                     //변경된 리스트를 어댑터에 반영
                     commentAdapter.submitList(current)
                 }

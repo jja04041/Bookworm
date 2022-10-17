@@ -18,7 +18,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.bookworm.LoadState
-import com.example.bookworm.achievement.Achievement
+import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
 import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing
 import com.example.bookworm.core.userdata.UserInfo
@@ -39,9 +39,17 @@ class SubActivityCreatePost : AppCompatActivity() {
     }
 
     private val feedData by lazy {
-        Feed(
-                creatorInfo = intent.getParcelableExtra("mainUser")!!, userToken = intent.getParcelableExtra<UserInfo>("mainUser")!!.token
-        )
+        Feed().apply {
+            val mainUserKeyword = "mainUser"
+            intent.apply {
+                creatorInfo = if (hasExtra(mainUserKeyword)) getParcelableExtra(mainUserKeyword)!! else UserInfo()
+                userToken = creatorInfo.token
+                book = if (intent.hasExtra("BookData")) {
+                    intent.getParcelableExtra("BookData")!!
+                } else Book()
+            }
+            dataBinding.tvFeedBookTitle.text = book.title
+        }
     }
     private var feedImageBitmap: Bitmap? = null
     private val imageProcess by lazy {
@@ -50,6 +58,7 @@ class SubActivityCreatePost : AppCompatActivity() {
     private val feedViewModel by lazy {
         ViewModelProvider(this, FeedViewModel.Factory(this))[FeedViewModel::class.java]
     }
+
 
     //액티비티 간 데이터 전달 핸들러(검색한 데이터의 값을 전달받는 매개체가 된다.) [책 데이터 이동]
     var bookResult = registerForActivityResult(
@@ -96,7 +105,7 @@ class SubActivityCreatePost : AppCompatActivity() {
 
 
             }
-            feedData.creatorInfo?.apply {
+            feedData.creatorInfo.apply {
                 tvNickname.text = username!!
                 Glide.with(this@SubActivityCreatePost)
                         .load(profileimg)
@@ -130,16 +139,15 @@ class SubActivityCreatePost : AppCompatActivity() {
                                         Toast.makeText(this@SubActivityCreatePost,
                                                 "게시물이 업로드 되었습니다.", Toast.LENGTH_SHORT)
                                                 .show()
-
                                         intent.putExtra("feedData", feedData)
                                         setResult(CREATE_OK, intent)
-                                        if (feedViewModel.canexit)
-                                            this@SubActivityCreatePost.finish()
+                                        this@SubActivityCreatePost.finish()
                                     }
                                     LoadState.Error ->
                                         Toast.makeText(this@SubActivityCreatePost,
                                                 "게시물 업로드에 실패했습니다. \n 다시 시도해 주세요", Toast.LENGTH_SHORT)
                                                 .show()
+                                    else -> {}
                                 }
                             }
                         }.setNegativeButton("아니요") { dialog, which ->

@@ -5,19 +5,27 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.example.bookworm.DdayCounter
 import com.example.bookworm.LoadState
 import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.feed.Feed
 import com.example.bookworm.bottomMenu.feed.FeedViewModel
+import com.example.bookworm.bottomMenu.feed.FireStoreLoadModule
+import com.example.bookworm.bottomMenu.feed.comments.Comment
 import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
 import com.example.bookworm.bottomMenu.search.searchtest.views.BookDetailActivity
 import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
+import com.google.firebase.firestore.DocumentSnapshot
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
-import java.lang.Exception
+import kotlin.Exception
 
 //전반적인 검색에 사용될 뷰모델 -> 데이터 가공, 처리 담당
 class SearchViewModel(context: Context) : ViewModel() {
@@ -48,6 +56,7 @@ class SearchViewModel(context: Context) : ViewModel() {
             FeedViewModel.Factory(ct))[FeedViewModel::class.java]
     private var loadDataState: MutableLiveData<LoadState>? = null
     val liveKeywordData: MutableLiveData<String> = MutableLiveData()
+    val lastReviewDataVisible: DocumentSnapshot? = null
 
     //알라딘의 인기도서 가져오는 메소드
     fun loadPopularBook(stateLiveData: MutableLiveData<LoadState>, resultBookList: ArrayList<Book>) {
@@ -125,14 +134,33 @@ class SearchViewModel(context: Context) : ViewModel() {
         }
     }
 
-    fun loadBookDetail(itemId: String, stateLiveData: MutableLiveData<Book>, reviewList: ArrayList<Feed>) {
+    //추가적으로 책 리뷰를 불러오는 함수
+    fun loadBookReview(itemId: String, stateLiveData: MutableLiveData<LoadState>, reviewList: ArrayList<Feed>, page: Int) {
+        stateLiveData.value = LoadState.Loading
+        viewModelScope.launch {
+            try {
+                val reviewResult = searchDataRepository.loadUserBookReview(itemId, page = page, lastReviewDataVisible)
+                        .toObjects(Feed::class.java)
+                reviewList.addAll(addExtraDataInFeed(reviewResult))
+                stateLiveData.value = LoadState.Done
+            } catch (e: Exception) {
+                stateLiveData.value = LoadState.Error
+            }
+
+        }
+    }
+
+    fun loadBookDetail(itemId: String, stateLiveData: MutableLiveData<Book>, reviewList: ArrayList<Feed>, page: Int) {
         //itemId로 검색하고 데이터를 받아옴
         //책 검색과 동시에 책 리뷰를 받아와야 함.
         viewModelScope.launch {
+            val reviewResult = searchDataRepository.loadUserBookReview(itemId, page = page)
+                    .toObjects(Feed::class.java)
+            reviewList.addAll(addExtraDataInFeed(reviewResult))
             val result = searchDataRepository.loadBookDetail(itemId)
             if (result.isSuccessful) {
                 val book = result.body()?.let {
-                    convertToBook(data = (JSONObject(it)["item"] as JSONArray).getJSONObject(0), isRc = false,true)
+                    convertToBook(data = (JSONObject(it)["item"] as JSONArray).getJSONObject(0), isRc = false, true)
                 }
                 stateLiveData.value = book //검색된 책 데이터
             } else stateLiveData.value = Book()
@@ -147,11 +175,27 @@ class SearchViewModel(context: Context) : ViewModel() {
             .replace("&lt", "<")
             .replace("&gt", ">")
 
+    private suspend fun addExtraDataInFeed(feedList: MutableList<Feed>) =
+            feedList.map { feed: Feed ->
+                return@map withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
+                    val tempUserInfo = userInfoViewModel.suspendGetUser(null)?.apply {
+                        feed.isUserLiked = likedPost.contains(feed.feedID)
+                    }
+                    feed.creatorInfo = userInfoViewModel.suspendGetUser(feed.userToken)!!
+                    feed.isUserPost = (tempUserInfo!!.token == feed.userToken)
+                    feed.duration = DdayCounter.getDuration(feed.date!!)
+                    if (feed.commentsCount > 0L) {
+                        feed.comment = FireStoreLoadModule.provideQueryCommentsLately(feed.feedID!!)
+                                .get().await()
+                                .toObjects(Comment::class.java)[0] //형변환을 자동으로 해줌.
+                        feed.comment!!.creator = userInfoViewModel.suspendGetUser(feed.comment!!.userToken)!!
+                        feed.comment!!.duration = DdayCounter.getDuration(feed.comment!!.madeDate!!)
+                    }
+                    return@withContext feed
+                }
+            }
 
-    //리뷰 정보를 가져오는 함수
-    fun getReviewData(stateLiveData: MutableLiveData<LoadState>? = null, reviewList: ArrayList<Feed>, itemId: String) {
 
-    }
 //보류
 //    fun loadRanking(stateLiveData: MutableLiveData<LoadState>, bwList: ArrayList<BookWorm>, userList: ArrayList<UserInfo>) {
 //        loadDataState = stateLiveData
