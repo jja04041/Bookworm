@@ -2,11 +2,16 @@ package com.example.bookworm.appLaunch.views;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
+import android.hardware.input.InputManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -39,6 +44,19 @@ public class MainActivity extends AppCompatActivity {
 
     MoveFragment MoveFragment = new MoveFragment();
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (getCurrentFocus() != null) {
+            Rect rect = new Rect();
+            getCurrentFocus().getGlobalVisibleRect(rect);
+            if (!rect.contains(Math.round(ev.getX()), Math.round(ev.getY()))) {
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                getCurrentFocus().clearFocus();
+            }
+        }
+        return super.dispatchTouchEvent(ev);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

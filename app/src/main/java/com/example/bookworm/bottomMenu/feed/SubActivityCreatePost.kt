@@ -102,32 +102,11 @@ class SubActivityCreatePost : AppCompatActivity() {
 
         dataBinding.apply {
             btnBack.setOnClickListener {
-                dataBinding.apply {
-                    if (feedData != Feed()) {
-                        Dialog(this@SubActivityCreatePost).apply {
-                            val dialogBinding = CustomDialogLabelBinding.inflate(layoutInflater)
-                            this.setContentView(dialogBinding.root)
-                            dialogBinding.apply {
-                                root.layoutParams = root.layoutParams.apply {
-                                    width = 1000
-                                    height = LinearLayout.LayoutParams.MATCH_PARENT
-                                }
-                                tvMessage.text = "피드 작성을 그만 하시겠습니까?"
-                                btnYes.setOnClickListener {
-                                    this@SubActivityCreatePost.finish()
-                                    dismiss()
-                                }
-                                btnNo.setOnClickListener {
-                                    dismiss()
-                                }
-                            }
-                            this.show()
-                        }
-                    } else this@SubActivityCreatePost.finish()
-                }
-
-
+                createAlert("back")
             }
+
+
+
             feedData.creatorInfo.apply {
                 tvNickname.text = username!!
                 Glide.with(this@SubActivityCreatePost)
@@ -151,29 +130,7 @@ class SubActivityCreatePost : AppCompatActivity() {
 
             })
             tvFinish.setOnClickListener {
-                AlertDialog.Builder(this@SubActivityCreatePost)
-                        .setMessage("피드를 업로드하시겠습니까?")
-                        .setPositiveButton("네") { dialog, which ->
-                            dialog.dismiss()
-                            feedViewModel.uploadFeed(feedData, feedImageBitmap, imageProcess)
-                            feedViewModel.nowFeedUploadState.observe(this@SubActivityCreatePost) {
-                                when (it) {
-                                    LoadState.Done -> {
-
-                                        intent.putExtra("feedData", feedData)
-                                        setResult(CREATE_OK, intent)
-                                        this@SubActivityCreatePost.finish()
-                                    }
-                                    LoadState.Error ->
-                                        Toast.makeText(this@SubActivityCreatePost,
-                                                "게시물 업로드에 실패했습니다. \n 다시 시도해 주세요", Toast.LENGTH_SHORT)
-                                                .show()
-                                    else -> {}
-                                }
-                            }
-                        }.setNegativeButton("아니요") { dialog, which ->
-                            dialog.dismiss()
-                        }.show()
+                createAlert("upload")
             }
             //이미지 찾기
             btnImageUpload.setOnClickListener {
@@ -193,4 +150,66 @@ class SubActivityCreatePost : AppCompatActivity() {
             }
         }
     }
+
+
+    private fun createAlert(type: String) {
+        Dialog(this@SubActivityCreatePost).apply {
+            val dialogBinding = CustomDialogLabelBinding.inflate(layoutInflater)
+            this.setContentView(dialogBinding.root)
+            dialogBinding.apply {
+                root.layoutParams = root.layoutParams.apply {
+                    width = 1000
+                    height = LinearLayout.LayoutParams.MATCH_PARENT
+                }
+
+                btnNo.setOnClickListener {
+                    dismiss()
+                }
+                when (type) {
+                    "back" -> {
+                        tvMessage.text = "피드 작성을 그만 하시겠습니까?"
+                        btnYes.setOnClickListener {
+                            this@SubActivityCreatePost.finish()
+                            dismiss()
+                        }
+                        show()
+                    }
+                    else -> {
+                        tvMessage.text = "피드를 업로드하시겠습니까?"
+                        btnYes.setOnClickListener {
+                            if (feedData.book == Book() || feedData.feedText == "") {
+                                Toast.makeText(context, "내용을 입력한 후 완료를 선택해 주세요.", Toast.LENGTH_SHORT).show()
+                            }else if(feedData.feedText!!.length<10){
+                                Toast.makeText(context, "리뷰를 10자 이상 입력해주세요.", Toast.LENGTH_SHORT).show()
+                            }
+                            else {
+                                processUpload()
+                            }
+                            dismiss()
+                        }
+                        show()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun processUpload() {
+        feedViewModel.uploadFeed(feedData, feedImageBitmap, imageProcess)
+        feedViewModel.nowFeedUploadState.observe(this@SubActivityCreatePost) {
+            when (it) {
+                LoadState.Done -> {
+                    intent.putExtra("feedData", feedData)
+                    setResult(CREATE_OK, intent)
+                    this@SubActivityCreatePost.finish()
+                }
+                LoadState.Error ->
+                    Toast.makeText(this@SubActivityCreatePost,
+                            "게시물 업로드에 실패했습니다. \n 다시 시도해 주세요", Toast.LENGTH_SHORT)
+                            .show()
+                else -> {}
+            }
+        }
+    }
+
 }
