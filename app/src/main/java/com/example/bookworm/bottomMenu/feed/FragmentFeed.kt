@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
@@ -28,14 +29,14 @@ import androidx.recyclerview.widget.RecyclerView.OnScrollListener as OnScrollLis
 class FragmentFeed : Fragment() {
     private lateinit var binding: TmpActivityFeedBinding //Binding
 
-    private val viewModel by lazy {
+    private val feedViewModel by lazy {
         ViewModelProvider(this, FeedViewModel.Factory(requireContext()))[FeedViewModel::class.java]
     }
     val feedAdapter by lazy {
-        FeedAdapter(requireContext())
+        FeedAdapter()
     }
     private var isDataEnd = false // 파이어베이스 내에서 검색할 때, 데이터 끝인지 판별하는 변수
-
+    private var need2Top = false
     private var storiesBar: RecyclerView? = null
 
 
@@ -45,10 +46,11 @@ class FragmentFeed : Fragment() {
     ) { result: ActivityResult ->
         if (result.resultCode == SubActivityCreatePost.CREATE_OK) {
             val item = result.data!!.getParcelableExtra<Feed>("feedData")
-            val list = feedAdapter.currentList.toMutableList()
-            list.add(0, item)
-            feedAdapter.submitList(list)
-            binding.recyclerView.smoothScrollToPosition(0)
+            need2Top = true //상단으로 스크롤 하기 위한 플래그 설정
+            feedAdapter.currentList.toList().apply {
+                feedAdapter.submitList(listOf(item) + this)
+            }
+
         }
         if (result.resultCode == subActivity_Feed_Modify.MODIFY_OK) {
             //수정된 아이템
@@ -81,12 +83,71 @@ class FragmentFeed : Fragment() {
 
         }
 
+        setAdapter()
 
+
+        return binding.root
+    }
+
+    private fun check2Top() {
+        //게시물 작성 완료 시
+        if (need2Top) {
+            binding.recyclerView.scrollToPosition(0)
+            need2Top = false
+            Toast.makeText(context,
+                    "게시물이 업로드 되었습니다.", Toast.LENGTH_SHORT)
+                    .show()
+        }
+    }
+
+    private fun processFeedDelete(pos: Int) {
+        val mutableList = feedAdapter.currentList.toMutableList()
+        mutableList.removeAt(pos)
+        if (!isDataEnd) {
+            val liveData = MutableLiveData<Feed>()
+            feedViewModel.loadPost(liveData)
+            liveData.observe(viewLifecycleOwner, Observer { addedItem ->
+                mutableList.removeLast()
+                mutableList += listOf(addedItem, Feed())
+                feedAdapter.submitList(mutableList)
+            })
+        } else
+            feedAdapter.submitList(mutableList)
+
+    }
+
+    private fun setAdapter() {
         binding.apply {
-            recyclerView.adapter = feedAdapter //어댑터 세팅 
-            recyclerView.itemAnimator = null //리사이클러뷰 애니메이션 제거
+            recyclerView.adapter = feedAdapter //어댑터 세팅
+            //데이터 변경시 감지 후 자동 스크롤
+            feedAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+                override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                    check2Top()
+                }
+            })
+            feedAdapter.setFeedMenuListener(object : OnFeedMenuClickListener {
+                override fun onItemClick(holder: FeedViewHolder, view: View, position: Int) {
+                    val feed = feedAdapter.currentList[position]
+                    feed.position = position
+                    val popupMenu = customMenuPopup(context!!, view)
+                    if (feed.isUserPost) {
+                        popupMenu.setItem(feed)
+                        popupMenu.liveState.observe(viewLifecycleOwner, Observer { data ->
+                            if (data == popupMenu.FEED_DELETE) {
+                                //게시물 삭제시 새로운 게시물 하나를 더 불러옴.
+                                processFeedDelete(position)
+                            }
+                        })
+                    }
+                }
+            })
+
+//            recyclerView.itemAnimator = null //리사이클러뷰 애니메이션 제거
             recyclerView.isNestedScrollingEnabled = false
             recyclerView.setHasFixedSize(true)
+
+
+
             swiperefresh.setOnRefreshListener {
                 pageRefresh()
             } //스와이프하여 새로고침
@@ -104,8 +165,6 @@ class FragmentFeed : Fragment() {
                 })
             }
         }
-
-        return binding.root
     }
 
     //화면 이동 시 보여졌던 키보드를 숨김
@@ -132,8 +191,8 @@ class FragmentFeed : Fragment() {
     //FireStore에서 피드 가져옴
     private fun getFeeds(refreshing: Boolean) {
         if (!isDataEnd) {
-            viewModel.loadPosts(refreshing)
-            viewModel.nowFeedLoadState.observe(viewLifecycleOwner, Observer { nowState ->
+            feedViewModel.loadPosts(refreshing)
+            feedViewModel.nowFeedLoadState.observe(viewLifecycleOwner, Observer { nowState ->
                 //피드를 새로 불러올 때 활성화
                 showShimmer(
                         if (!refreshing) false
@@ -148,8 +207,8 @@ class FragmentFeed : Fragment() {
                     //만약 현재 목록이 비어있지 않고, 마지막 아이템이 로딩 아이템 이라면 마지막 아이템을 제거
                     if (current.isNotEmpty() && current.last().feedID == null) current.removeLast()
                     //데이터의 끝에 다다르지 않았다면, 현재 목록에 불러온 아이템을 추가한다.
-                    if (viewModel.postsData != null && !current.containsAll(viewModel.postsData!!)) {
-                        val resultData = viewModel.postsData!!.toMutableList()
+                    if (feedViewModel.postsData != null && !current.containsAll(feedViewModel.postsData!!)) {
+                        val resultData = feedViewModel.postsData!!.toMutableList()
                         val i = resultData.iterator()
                         //반복하면서 중복되는 데이터가 있는 경우 삭제
                         while (i.hasNext()) {

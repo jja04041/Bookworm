@@ -56,7 +56,7 @@ class SearchViewModel(context: Context) : ViewModel() {
             FeedViewModel.Factory(ct))[FeedViewModel::class.java]
     private var loadDataState: MutableLiveData<LoadState>? = null
     val liveKeywordData: MutableLiveData<String> = MutableLiveData()
-    val lastReviewDataVisible: DocumentSnapshot? = null
+    var lastReviewDataVisibleFeedID: String? = null
 
     //알라딘의 인기도서 가져오는 메소드
     fun loadPopularBook(stateLiveData: MutableLiveData<LoadState>, resultBookList: ArrayList<Book>) {
@@ -139,8 +139,7 @@ class SearchViewModel(context: Context) : ViewModel() {
         stateLiveData.value = LoadState.Loading
         viewModelScope.launch {
             try {
-                val reviewResult = searchDataRepository.loadUserBookReview(itemId, page = page, lastReviewDataVisible)
-                        .toObjects(Feed::class.java)
+                val reviewResult = searchDataRepository.loadUserBookReview(itemId, page = page, lastReviewDataVisibleFeedID)!!.toObjects(Feed::class.java)
                 reviewList.addAll(addExtraDataInFeed(reviewResult))
                 stateLiveData.value = LoadState.Done
             } catch (e: Exception) {
@@ -154,9 +153,10 @@ class SearchViewModel(context: Context) : ViewModel() {
         //itemId로 검색하고 데이터를 받아옴
         //책 검색과 동시에 책 리뷰를 받아와야 함.
         viewModelScope.launch {
-            val reviewResult = searchDataRepository.loadUserBookReview(itemId, page = page)
-                    .toObjects(Feed::class.java)
+            val reviewResult = searchDataRepository.loadUserBookReview(itemId, page = page)!!.toObjects(Feed::class.java).toMutableList()
+            lastReviewDataVisibleFeedID = reviewResult.last().feedID
             reviewList.addAll(addExtraDataInFeed(reviewResult))
+
             val result = searchDataRepository.loadBookDetail(itemId)
             if (result.isSuccessful) {
                 val book = result.body()?.let {

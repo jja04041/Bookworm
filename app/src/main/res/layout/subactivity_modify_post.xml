@@ -155,7 +155,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/tvFinish"
+                android:id="@+id/btnFinish"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/square_button_yellow"

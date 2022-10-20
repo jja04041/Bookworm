@@ -3,6 +3,8 @@ package com.example.bookworm.bottomMenu.feed.comments
 import android.content.Context
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,7 +39,15 @@ class SubActivityComment : AppCompatActivity() {
     private val binding by lazy {
         SubactivityCommentBinding.inflate(layoutInflater)
     }
+    //액티비티 간 데이터 전달 핸들러(검색한 데이터의 값을 전달받는 매개체가 된다.) [책 데이터 이동]
+    var startActivityResult = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
+        if (result.resultCode == RESULT_OK) {
+            val intent = result.data
 
+        }
+    }
     private val userInfoViewModel by lazy {
         ViewModelProvider(this, UserInfoViewModel.Factory(this))[UserInfoViewModel::class.java]
     }

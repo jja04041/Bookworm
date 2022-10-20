@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.feed.Feed
 import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
+import com.example.bookworm.bottomMenu.search.searchtest.views.BookDetailActivity
 import com.example.bookworm.databinding.LayoutCommentItemBinding
 import com.example.bookworm.databinding.LayoutCommentSummaryBinding
 import java.text.DateFormat
@@ -86,7 +87,7 @@ class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
                 tvDate.text = getDateDuration(item.madeDate)
 
                 //프로필 클릭 시 해당 사용자의 프로필 정보 화면으로 이동하게
-                llProfile.setOnClickListener{
+                llProfile.setOnClickListener {
                     val intent = Intent(itemView.context, ProfileInfoActivity::class.java)
                     intent.putExtra("userID", item.userToken)
                     itemView.context.startActivity(intent)
@@ -112,10 +113,15 @@ class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
 
                 //내용
                 //책
-                item.book!!.apply {
+                item.book.apply {
                     feedBookAuthor.text = author
                     feedBookTitle.text = title
                     Glide.with(itemView.context).load(imgUrl).into(feedBookThumb)
+                    llbook.setOnClickListener {
+                        val intent = Intent(itemView.context, BookDetailActivity::class.java)
+                        intent.putExtra("BookID", item.book.itemId)
+                        itemView.context.startActivity(intent)
+                    }
                 }
                 //피드 내용
                 tvFeedText.text = item.feedText

@@ -21,6 +21,7 @@
             android:gravity="center">
 
             <TextView
+                android:id="@+id/tvMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="메시지"
@@ -39,6 +40,7 @@
                 android:gravity="center">
 
                 <Button
+                    android:id="@+id/btnNo"
                     android:layout_width="60dp"
                     android:layout_height="30dp"
                     android:background="@drawable/label_design"
@@ -53,6 +55,7 @@
                 android:gravity="center">
 
                 <Button
+                    android:id="@+id/btnYes"
                     android:layout_width="60dp"
                     android:layout_height="30dp"
                     android:background="@drawable/label_design"

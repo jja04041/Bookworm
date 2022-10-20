@@ -51,14 +51,10 @@ class AlbumOptionMenu(context: Context?, anchor: View?, val data: AlbumData) :
                         }
                         (context as ShowAlbumContentActivity).finish()
                     }
-                        .setNegativeButton("아니오",
-                        object : DialogInterface.OnClickListener {
-                            //아니오를 선택할 때 적용할 메커니즘
-                            override fun onClick(p0: DialogInterface?, p1: Int) {
-
-                            }
-                        })
-                    .show() // 작성된 Dialog를 화면에 표시한다.
+                        .setNegativeButton("아니오")
+                        //아니오를 선택할 때 적용할 메커니즘
+                        { p0, p1 -> }
+                        .show() // 작성된 Dialog를 화면에 표시한다.
                 return false
             }
         }

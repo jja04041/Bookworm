@@ -1,27 +1,37 @@
 package com.example.bookworm.bottomMenu.feed
 
-import android.R
+
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.bookworm.LoadState
+import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
 import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing
 import com.example.bookworm.core.userdata.UserInfo
+import com.example.bookworm.databinding.CustomDialogLabelBinding
 import com.example.bookworm.databinding.SubactivityCreatePostBinding
 
 
@@ -42,6 +52,7 @@ class SubActivityCreatePost : AppCompatActivity() {
         Feed().apply {
             val mainUserKeyword = "mainUser"
             intent.apply {
+                isUserPost = true
                 creatorInfo = if (hasExtra(mainUserKeyword)) getParcelableExtra(mainUserKeyword)!! else UserInfo()
                 userToken = creatorInfo.token
                 book = if (intent.hasExtra("BookData")) {
@@ -86,21 +97,33 @@ class SubActivityCreatePost : AppCompatActivity() {
         imageProcess.bitmapUri.observe(this, Observer { it: Uri? ->
             Glide.with(this).load(it)
                     .into(dataBinding.ivpicture)
-            dataBinding.ivpicture.setColorFilter(ContextCompat.getColor(this, R.color.transparent))
+//            dataBinding.ivpicture.setColorFilter(ContextCompat.getColor(this, android.R.color.transparent))
         })
 
         dataBinding.apply {
             btnBack.setOnClickListener {
                 dataBinding.apply {
-                    if (feedData != Feed()) AlertDialog.Builder(this@SubActivityCreatePost)
-                            .setMessage("피드 작성을 그만 하시겠습니까?")
-                            .setPositiveButton("네") { dialog, which ->
-                                this@SubActivityCreatePost.finish()
-                                dialog.dismiss()
-                            }.setNegativeButton("아니오") { d, w ->
-                                d.dismiss()
-                            }.show()
-                    else this@SubActivityCreatePost.finish()
+                    if (feedData != Feed()) {
+                        Dialog(this@SubActivityCreatePost).apply {
+                            val dialogBinding = CustomDialogLabelBinding.inflate(layoutInflater)
+                            this.setContentView(dialogBinding.root)
+                            dialogBinding.apply {
+                                root.layoutParams = root.layoutParams.apply {
+                                    width = 1000
+                                    height = LinearLayout.LayoutParams.MATCH_PARENT
+                                }
+                                tvMessage.text = "피드 작성을 그만 하시겠습니까?"
+                                btnYes.setOnClickListener {
+                                    this@SubActivityCreatePost.finish()
+                                    dismiss()
+                                }
+                                btnNo.setOnClickListener {
+                                    dismiss()
+                                }
+                            }
+                            this.show()
+                        }
+                    } else this@SubActivityCreatePost.finish()
                 }
 
 
@@ -136,9 +159,7 @@ class SubActivityCreatePost : AppCompatActivity() {
                             feedViewModel.nowFeedUploadState.observe(this@SubActivityCreatePost) {
                                 when (it) {
                                     LoadState.Done -> {
-                                        Toast.makeText(this@SubActivityCreatePost,
-                                                "게시물이 업로드 되었습니다.", Toast.LENGTH_SHORT)
-                                                .show()
+
                                         intent.putExtra("feedData", feedData)
                                         setResult(CREATE_OK, intent)
                                         this@SubActivityCreatePost.finish()

@@ -1,9 +1,11 @@
 package com.example.bookworm.bottomMenu.feed
 
 
+import android.accounts.NetworkErrorException
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -11,11 +13,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.bookworm.LoadState
 import com.example.bookworm.achievement.Achievement
 import com.example.bookworm.appLaunch.views.MainActivity
-import com.example.bookworm.bottomMenu.bookworm.BookWorm
-import com.example.bookworm.bottomMenu.feed.SubActivityCreatePost.Companion.CREATE_OK
 import com.example.bookworm.bottomMenu.feed.comments.Comment
 import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
-import com.example.bookworm.bottomMenu.feed.oldItems.subActivity_Feed_Create
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.search.searchtest.views.BookDetailActivity
 import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
@@ -25,6 +24,7 @@ import com.example.bookworm.core.userdata.UserInfo
 import com.google.firebase.firestore.FieldValue
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
+import java.lang.NullPointerException
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -32,10 +32,10 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
+
 @SuppressLint("StaticFieldLeak")
 class FeedViewModel(val context: Context) : ViewModel() {
-    private val loadPagingRepo = LoadPagingDataRepository()
-    private val feedDataRepository = FeedDataRepository(context)
+    private val dataRepository = FeedDataRepository()
     private val userInfoViewModel = ViewModelProvider(
             when (context) {
                 is MainActivity -> context
@@ -65,7 +65,7 @@ class FeedViewModel(val context: Context) : ViewModel() {
         liveData.value = LoadState.Loading
         viewModelScope.launch {
             try {
-                feedDataRepository.deleteFeed(feed)
+                dataRepository.deleteFeed(feed)
                 LoadState.Done
             } catch (e: Exception) {
                 LoadState.Error
@@ -98,7 +98,7 @@ class FeedViewModel(val context: Context) : ViewModel() {
                             //유저의 정보 업데이트
                             feed.creatorInfo!!.apply {
 //                                setGenre(feed.book!!.categoryname, context) //장르 설정
-                                userInfoViewModel.setGenre(feed.book!!.categoryName,this)
+                                userInfoViewModel.setGenre(feed.book!!.categoryName, this)
 
 
                                 userInfoViewModel.getBookWorm(token).onJoin
@@ -127,21 +127,16 @@ class FeedViewModel(val context: Context) : ViewModel() {
 
     //댓글을 추가/삭제하는 함수
     fun manageComment(comment: Comment, feedId: String, isAdd: Boolean = true) {
-        val feedRef = FireStoreLoadModule.provideQueryPostByFeedID(feedId)
-        val commentRef = feedRef.collection("comments").document(comment.commentID!!)
-
         viewModelScope.launch {
             nowCommentLoadState.value = LoadState.Loading
-            FireStoreLoadModule.provideFirebaseInstance().apply {
-                runTransaction { transaction ->
-                    transaction.set(commentRef, comment)
-                            .update(feedRef, "commentsCount", FieldValue
-                                    .increment(if (isAdd) 1L else -1L))
-                }.addOnSuccessListener {
-                    nowCommentLoadState.value = LoadState.Done
-                }.addOnFailureListener {
-                    nowCommentLoadState.value = LoadState.Error
-                }
+            try {
+                dataRepository.manageComment(feedId, comment, isAdd)
+                nowCommentLoadState.value = LoadState.Done
+            } catch (e: NetworkErrorException) {
+                Toast.makeText(context, "네트워크 오류입니다 다시 시도해 주세요. ", Toast.LENGTH_SHORT).show()
+                nowCommentLoadState.value = LoadState.Error
+            } catch (e: Exception) {
+                nowCommentLoadState.value = LoadState.Error
             }
         }
     }
@@ -181,55 +176,37 @@ class FeedViewModel(val context: Context) : ViewModel() {
         viewModelScope.launch {
             //새로고침 또는 첫 로드 시에는 변수 리셋과 쿼리 재장착
             if (isRefresh) {
-                loadPagingRepo.reset()
+                dataRepository.reset()
 //                loadPagingRepo.setQuery(FireStoreLoadModule.provideQueryLoadPostsOrderByFeedID().whereIn("book.categoryname", listOf("국내도서>컴퓨터/모바일>컴퓨터 공학>자료구조/알고리즘","사회","국내도서>소설/시/희곡>역사소설>한국 역사소설"))) //쿼리 세팅
-                loadPagingRepo.setQuery(FireStoreLoadModule.provideQueryLoadPostsOrderByFeedID()) //쿼리 세팅
+                dataRepository.setQuery(FireStoreLoadModule.provideQueryLoadPostsOrderByFeedID()) //쿼리 세팅
             }
 //            else {
 //                loadPagingRepo.reset()
 //                loadPagingRepo.setQuery(FireStoreLoadModule.provideQueryLoadPostsOrderByFeedID())
 //            }
-            val loadedData = loadPagingRepo.loadFireStoreData(LoadPagingDataRepository.DataType.FeedType)
-            if (loadedData != null) {
-                postsData =
-                        (loadedData as MutableList<Feed>).map { feed: Feed ->
-                            return@map withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-                                val tempUserInfo = userInfoViewModel.suspendGetUser(null)?.apply {
-                                    feed.isUserLiked = likedPost.contains(feed.feedID)
-                                }
-                                feed.creatorInfo = userInfoViewModel.suspendGetUser(feed.userToken)!!
-                                feed.isUserPost = (tempUserInfo!!.token == feed.userToken)
-                                feed.duration = getDateDuration(feed.date)
-                                if (feed.commentsCount > 0L) {
-                                    feed.comment = FireStoreLoadModule.provideQueryCommentsLately(feed.feedID!!)
-                                            .get().await()
-                                            .toObjects(Comment::class.java)[0] //형변환을 자동으로 해줌.
-                                    feed.comment!!.creator = userInfoViewModel.suspendGetUser(feed.comment!!.userToken)!!
-                                    feed.comment!!.duration = getDateDuration(feed.comment!!.madeDate)
-                                }
-                                return@withContext feed
-                            }
-                        }
-            } else postsData = null
+            val loadedData = dataRepository.loadFireStoreData(FeedDataRepository.DataType.FeedType)
+            postsData = if (loadedData != null) {
+                (loadedData as MutableList<Feed>).map { feed: Feed ->
+                    addFeedData(feed)
+                }
+            } else null
 
             nowFeedLoadState.value = LoadState.Done
         }
     }
 
+
     fun loadComment(feedId: String, isRefresh: Boolean) {
         nowCommentLoadState.value = LoadState.Loading
         viewModelScope.launch {
             if (isRefresh) {
-                loadPagingRepo.reset()
-                loadPagingRepo.setQuery(FireStoreLoadModule.provideQueryCommentsInFeedByFeedID(feedId))
+                dataRepository.reset()
+                dataRepository.setQuery(FireStoreLoadModule.provideQueryCommentsInFeedByFeedID(feedId))
             }
-            val loadedData = loadPagingRepo.loadFireStoreData(LoadPagingDataRepository.DataType.CommentType, 10)
+            val loadedData = dataRepository.loadFireStoreData(FeedDataRepository.DataType.CommentType, 10)
             commentsData = if (loadedData != null) {
                 (loadedData as MutableList<Comment>).map { comment: Comment ->
-                    return@map withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-                        comment.creator = userInfoViewModel.suspendGetUser(comment.userToken)!!
-                        return@withContext comment
-                    }
+                    return@map addCommentData(comment)
                 }
             } else null
             nowCommentLoadState.value = LoadState.Done
@@ -237,8 +214,11 @@ class FeedViewModel(val context: Context) : ViewModel() {
     }
 
     //단일 게시물을 불러올 때
-    fun loadPost() {
-
+    fun loadPost(liveData: MutableLiveData<Feed>) {
+        viewModelScope.launch {
+            val loadedData = dataRepository.loadFireStoreData(FeedDataRepository.DataType.FeedType, pageSize = 1)
+            liveData.value = addFeedData(loadedData as Feed)
+        }
     }
 
     //시간차 구하기 n분 전, n시간 전 등등
@@ -269,5 +249,28 @@ class FeedViewModel(val context: Context) : ViewModel() {
             e.printStackTrace()
             return ""
         }
+    }
+
+    //넘겨준 정보에 필요한 정보를 담아서 보내주는 converter
+    private suspend fun addFeedData(feed: Feed) = withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
+        val tempUserInfo = userInfoViewModel.suspendGetUser(null)?.apply {
+            feed.isUserLiked = likedPost.contains(feed.feedID)
+        }
+        feed.creatorInfo = userInfoViewModel.suspendGetUser(feed.userToken)!!
+        feed.isUserPost = (tempUserInfo!!.token == feed.userToken)
+        feed.duration = getDateDuration(feed.date)
+        if (feed.commentsCount > 0L) {
+            feed.comment = FireStoreLoadModule.provideQueryCommentsLately(feed.feedID!!)
+                    .get().await()
+                    .toObjects(Comment::class.java)[0] //형변환을 자동으로 해줌.
+            feed.comment!!.creator = userInfoViewModel.suspendGetUser(feed.comment!!.userToken)!!
+            feed.comment!!.duration = getDateDuration(feed.comment!!.madeDate)
+        }
+        return@withContext feed
+    }
+
+    private suspend fun addCommentData(comment: Comment) = withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
+        comment.creator = userInfoViewModel.suspendGetUser(comment.userToken)!!
+        return@withContext comment
     }
 }
