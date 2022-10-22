@@ -21,6 +21,7 @@ import com.example.bookworm.DdayCounter
 import com.example.bookworm.LoadState
 import com.example.bookworm.R
 import com.example.bookworm.appLaunch.views.MainActivity
+import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing
 import com.example.bookworm.databinding.FragmentFeedTopbarBinding
@@ -61,7 +62,7 @@ class FragmentFeed : Fragment() {
         /**
          * 게시물이 수정된 경우
          * */
-        if (result.resultCode == SubActivityModifyPost.MODIFY_OK) {
+        if (result.resultCode == SubActivityModifyPost.MODIFY_OK || result.resultCode == SubActivityComment.FEED_MODIFIED) {
             //수정된 아이템
             result.data!!.apply {
                 //게시물 업로드 하는 함수
@@ -83,7 +84,17 @@ class FragmentFeed : Fragment() {
 
             }
         }
-
+        //댓글 화면에서 게시물을 삭제하려고 한 경우
+        if (result.resultCode == SubActivityComment.FEED_DELETE) {
+            result.data!!.apply {
+                val target = getParcelableExtra<Feed>("deleteTarget")!!
+                feedAdapter.currentList.toMutableList().apply {
+                    this.removeAt(target.position)
+                    feedAdapter.submitList(this.toList())
+                }
+                Toast.makeText(context, "게시물이 정상적으로 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
 
     }
 

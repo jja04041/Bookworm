@@ -104,6 +104,10 @@ class CommentsAdapter(val context: Context) : ListAdapter<Any, RecyclerView.View
     inner class SummaryItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = LayoutCommentSummaryBinding.bind(itemView)
 
+        private fun deleteThisFeed(feed: Feed) {
+
+        }
+
         @SuppressLint("SetTextI18n", "UseCompatLoadingForDrawables")
         fun bind(item: Feed) {
             binding.apply {
@@ -114,16 +118,20 @@ class CommentsAdapter(val context: Context) : ListAdapter<Any, RecyclerView.View
                             .load(profileimg).circleCrop()
                             .into(ivProfileImage)
                 }
-                btnFeedMenu.setOnClickListener {v->
-                    val popupMenu = customMenuPopup(context,v)
+                btnFeedMenu.setOnClickListener { v ->
+                    val popupMenu = customMenuPopup(context, v)
                     if (item.isUserPost) {
                         popupMenu.setItem(item)
-//                        popupMenu.liveState.observe(context as MainActivity, Observer { data ->
-//                            if (data == popupMenu.FEED_DELETE) {
-//                                //게시물 삭제시 새로운 게시물 하나를 더 불러옴.
-//                                processFeedDelete(position)
-//                            }
-//                        })
+                        popupMenu.liveState.observe(context as MainActivity) {
+                            if (it == popupMenu.FEED_DELETE) {
+                                //FragmentFeed의 FeedAdapter에서 이 데이터를 삭제한다.
+                                val intent = context.intent
+                                intent.putExtra("deleteTarget", item) //삭제 대상 게시물 아이템을 인텐트에 담는다.
+                                //이 게시물은 삭제할 것이라고 액티비티에 알려줌
+                                (context as SubActivityComment).setResult(SubActivityComment.FEED_DELETE, intent)
+                                (context as SubActivityComment).finish()
+                            }
+                        }
                     }
                 }
                 //내용

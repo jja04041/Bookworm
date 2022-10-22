@@ -158,6 +158,7 @@ class SubActivityModifyPost : AppCompatActivity() {
                 val liveData = MutableLiveData<String>()
                 feedViewModel.getFeedImgUrl(newData, imgBitmap, imageProcessing, liveData)
                 liveData.observe(this@SubActivityModifyPost) {
+                    //수정된 게시물 정보를 intent를 통해 이 액티비티를 호출한 부모 액티비티에 데이터를 전달한다.
                     if (it != null) {
                         newData.imgurl = it
                         intent.putExtra("modifiedFeed", newData)
