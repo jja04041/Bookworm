@@ -1,6 +1,7 @@
 package com.example.bookworm.bottomMenu.feed.comments
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +11,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.signature.ObjectKey
 import com.example.bookworm.R
+import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.feed.Feed
+import com.example.bookworm.bottomMenu.feed.customMenuPopup
 import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
 import com.example.bookworm.bottomMenu.search.searchtest.views.BookDetailActivity
 import com.example.bookworm.databinding.LayoutCommentItemBinding
@@ -22,7 +26,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 //댓글 불러오는 어댑터
-class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
+class CommentsAdapter(val context: Context) : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
 
 
     private val vType = mapOf("Loading" to 0, "SummaryFeed" to 1, "Comments" to 2)
@@ -104,13 +108,24 @@ class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
         fun bind(item: Feed) {
             binding.apply {
                 //작성자 관련
-                item.creatorInfo!!.apply {
+                item.creatorInfo.apply {
                     tvNickname.text = username
                     Glide.with(itemView.context)
                             .load(profileimg).circleCrop()
                             .into(ivProfileImage)
                 }
-
+                btnFeedMenu.setOnClickListener {v->
+                    val popupMenu = customMenuPopup(context,v)
+                    if (item.isUserPost) {
+                        popupMenu.setItem(item)
+//                        popupMenu.liveState.observe(context as MainActivity, Observer { data ->
+//                            if (data == popupMenu.FEED_DELETE) {
+//                                //게시물 삭제시 새로운 게시물 하나를 더 불러옴.
+//                                processFeedDelete(position)
+//                            }
+//                        })
+                    }
+                }
                 //내용
                 //책
                 item.book.apply {
@@ -125,7 +140,7 @@ class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
                 }
                 //피드 내용
                 tvFeedText.text = item.feedText
-                if (item.imgurl != "") Glide.with(itemView.context).load(item.imgurl).into(ivFeedImage)
+                if (item.imgurl != "") Glide.with(itemView.context).load(item.imgurl).signature(ObjectKey(System.currentTimeMillis().toString())).into(ivFeedImage)
                 ivFeedImage.isVisible = (item.imgurl != "")
                 tvCommentCount.text = "댓글 ${item.commentsCount}개"
                 tvDate.text = item.duration

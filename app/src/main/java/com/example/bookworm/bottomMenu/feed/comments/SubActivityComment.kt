@@ -39,6 +39,7 @@ class SubActivityComment : AppCompatActivity() {
     private val binding by lazy {
         SubactivityCommentBinding.inflate(layoutInflater)
     }
+
     //액티비티 간 데이터 전달 핸들러(검색한 데이터의 값을 전달받는 매개체가 된다.) [책 데이터 이동]
     var startActivityResult = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -62,13 +63,13 @@ class SubActivityComment : AppCompatActivity() {
     val nowUser by lazy {
         intent.getParcelableExtra<UserInfo>("NowUser")
     }
-    private val commentAdapter = CommentsAdapter()
+    private val commentAdapter by lazy { CommentsAdapter(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.apply {
             setContentView(root)
-            tvTopName.text = "${feedItem.creatorInfo!!.username}님의 게시물"
+            tvTopName.text = "${feedItem.creatorInfo.username}님의 게시물"
             mRecyclerView.isNestedScrollingEnabled = false
             btnWriteComment.setOnClickListener {
                 //댓글 추가
@@ -77,6 +78,7 @@ class SubActivityComment : AppCompatActivity() {
             btnBefore.setOnClickListener { finish() }
             setRecyclerView()
             loadCommentData(true)
+
         }
 
     }
@@ -92,16 +94,16 @@ class SubActivityComment : AppCompatActivity() {
                 edtComment.apply {
 
                     val madeDate = LocalDateTime.now()
-                        .format(
-                            DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")
-                                .withLocale(Locale.KOREA)
-                                .withZone(ZoneId.of("Asia/Seoul"))
-                        )
+                            .format(
+                                    DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")
+                                            .withLocale(Locale.KOREA)
+                                            .withZone(ZoneId.of("Asia/Seoul"))
+                            )
                     val comment = Comment(
-                        commentID = "${madeDate}_${nowUser!!.token}",
-                        contents = commentText,
-                        userToken = nowUser!!.token,
-                        madeDate = madeDate
+                            commentID = "${madeDate}_${nowUser!!.token}",
+                            contents = commentText,
+                            userToken = nowUser!!.token,
+                            madeDate = madeDate
                     )
                     feedViewModel.manageComment(comment, feedItem.feedID!!, true) //서버에 댓글 추가
                     //게시물 작성자에게 댓글이 달렸다는 알림을 보냄
@@ -112,7 +114,7 @@ class SubActivityComment : AppCompatActivity() {
 
                     //키보드 내리기
                     (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-                        .hideSoftInputFromWindow(windowToken, 0)
+                            .hideSoftInputFromWindow(windowToken, 0)
                     clearFocus()
                     text = null
 
@@ -163,7 +165,7 @@ class SubActivityComment : AppCompatActivity() {
                     if (loadedData != null && !current.containsAll(loadedData)) {
                         current.addAll(loadedData)
                         if (loadedData.size == 10) current.add(Comment())
-                        else isDataEnd =true
+                        else isDataEnd = true
                     }
                     //변경된 리스트를 어댑터에 반영
                     commentAdapter.submitList(current)

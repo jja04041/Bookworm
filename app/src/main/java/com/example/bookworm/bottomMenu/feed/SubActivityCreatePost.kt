@@ -33,6 +33,9 @@ import com.example.bookworm.core.dataprocessing.image.ImageProcessing
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.CustomDialogLabelBinding
 import com.example.bookworm.databinding.SubactivityCreatePostBinding
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 
 //기존 피드 작성 액티비티에서 난잡하게 꼬여 있던 코드들을 MVVM 패턴에 맞게 재구성
@@ -97,7 +100,6 @@ class SubActivityCreatePost : AppCompatActivity() {
         imageProcess.bitmapUri.observe(this, Observer { it: Uri? ->
             Glide.with(this).load(it)
                     .into(dataBinding.ivpicture)
-//            dataBinding.ivpicture.setColorFilter(ContextCompat.getColor(this, android.R.color.transparent))
         })
 
         dataBinding.apply {
@@ -143,7 +145,7 @@ class SubActivityCreatePost : AppCompatActivity() {
                 setOnClickListener {
                     //책가져오는 메소드 작성
                     val intent = Intent(this@SubActivityCreatePost, SearchMainActivity::class.java)
-                    if (feedData.book != null) intent.putExtra("prevBook", feedData.book)
+                    if (feedData.book != Book()) intent.putExtra("prevBook", feedData.book)
                     bookResult.launch(intent)
                 }
 
@@ -195,6 +197,9 @@ class SubActivityCreatePost : AppCompatActivity() {
     }
 
     private fun processUpload() {
+        feedData.date = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+        feedData.feedID = System.currentTimeMillis().toString() + "_" + feedData.userToken //현재 시각 + 사용자 토큰을 FeedID로 설정
         feedViewModel.uploadFeed(feedData, feedImageBitmap, imageProcess)
         feedViewModel.nowFeedUploadState.observe(this@SubActivityCreatePost) {
             when (it) {

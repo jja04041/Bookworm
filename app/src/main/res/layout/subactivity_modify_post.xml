@@ -26,13 +26,14 @@
                     android:background="@drawable/feed_bottom_border_only"
                     android:orientation="horizontal">
 
-                    <Button
+                    <ImageView
                         android:id="@+id/btnBack"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_gravity="start|center_vertical"
                         android:layout_marginStart="20dp"
-                        android:background="@drawable/back_icon" />
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/back_icon" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -76,13 +77,14 @@
 
                     </LinearLayout>
 
-                    <Button
+                    <ImageView
                         android:id="@+id/btnImageUpload"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_gravity="end|center_vertical"
                         android:layout_marginEnd="10dp"
-                        android:background="@drawable/camera_thin" />
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/camera_thin" />
 
                 </FrameLayout>
 
@@ -117,11 +119,27 @@
 
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/ivpicture"
-                    android:layout_width="360dp"
+                <FrameLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center" />
+                    android:layout_gravity="center">
+
+                    <ImageView
+                        android:id="@+id/btnFeedImgDelete"
+                        android:visibility="gone"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="end"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/icon_delete"
+                        android:elevation="100dp" />
+
+                    <ImageView
+                        android:id="@+id/ivpicture"
+                        android:layout_width="360dp"
+                        android:layout_height="wrap_content"
+                        android:background="@color/gray" />
+                </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"

@@ -60,7 +60,7 @@ public class Board_SummaryViewHolder extends RecyclerView.ViewHolder implements 
         //댓글 표시
 
         //메뉴바
-        binding.ivFeedMenu.setOnClickListener(new View.OnClickListener() {
+        binding.btnFeedMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                CustomPopup popup1 = new CustomPopup(context, view);

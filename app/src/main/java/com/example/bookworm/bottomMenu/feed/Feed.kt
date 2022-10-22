@@ -1,5 +1,6 @@
 package com.example.bookworm.bottomMenu.feed
 
+import android.graphics.Bitmap
 import android.os.Parcelable
 import com.example.bookworm.bottomMenu.feed.comments.Comment
 
@@ -57,5 +58,8 @@ data class Feed(
         @Exclude @get:Exclude @set:Exclude
         var isUserPost //이것이 현재 사용자의 게시물인지 확인하는 변수
         : Boolean = false,
+        @Exclude @get:Exclude @set:Exclude
+        var bitmap //업로드시 가지고 있는 비트맵
+        : Bitmap? = null,
 ) : Parcelable
 

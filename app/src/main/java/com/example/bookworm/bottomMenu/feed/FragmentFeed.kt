@@ -2,6 +2,8 @@ package com.example.bookworm.bottomMenu.feed
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,11 +17,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.bookworm.DdayCounter
 import com.example.bookworm.LoadState
 import com.example.bookworm.R
 import com.example.bookworm.appLaunch.views.MainActivity
-import com.example.bookworm.bottomMenu.feed.oldItems.subActivity_Feed_Modify
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
+import com.example.bookworm.core.dataprocessing.image.ImageProcessing
 import com.example.bookworm.databinding.FragmentFeedTopbarBinding
 import com.example.bookworm.databinding.TmpActivityFeedBinding
 import kotlinx.coroutines.launch
@@ -36,7 +39,7 @@ class FragmentFeed : Fragment() {
         FeedAdapter()
     }
     private var isDataEnd = false // 파이어베이스 내에서 검색할 때, 데이터 끝인지 판별하는 변수
-    private var need2Top = false
+    private var need2Mov = -1
     private var storiesBar: RecyclerView? = null
 
 
@@ -46,17 +49,42 @@ class FragmentFeed : Fragment() {
     ) { result: ActivityResult ->
         if (result.resultCode == SubActivityCreatePost.CREATE_OK) {
             val item = result.data!!.getParcelableExtra<Feed>("feedData")
-            need2Top = true //상단으로 스크롤 하기 위한 플래그 설정
+            need2Mov = 0 //상단으로 스크롤 하기 위한 플래그 설정
             feedAdapter.currentList.toList().apply {
                 feedAdapter.submitList(listOf(item) + this)
             }
+            Toast.makeText(context,
+                    "게시물이 업로드 되었습니다.", Toast.LENGTH_SHORT)
+                    .show()
 
         }
-        if (result.resultCode == subActivity_Feed_Modify.MODIFY_OK) {
+        /**
+         * 게시물이 수정된 경우
+         * */
+        if (result.resultCode == SubActivityModifyPost.MODIFY_OK) {
             //수정된 아이템
-            val item = result.data!!.getParcelableExtra<Feed>("modifiedFeed")
-//            binding.recyclerView.smoothScrollToPosition(item!!.position)
+            result.data!!.apply {
+                //게시물 업로드 하는 함수
+                val item = getParcelableExtra<Feed>("modifiedFeed")!!
+                feedViewModel.uploadFeed(item, null, ImageProcessing(requireContext()), item.imgurl)
+                feedViewModel.nowFeedUploadState.observe(viewLifecycleOwner, Observer {
+                    if (it == LoadState.Done) {
+                        //수정 업데이트 적용
+                        need2Mov = item.position
+                        item.duration = DdayCounter.getDuration(item.date!!)
+                        feedAdapter.currentList.toMutableList().apply {
+                            this.removeAt(need2Mov)
+                            add(need2Mov, item)
+                            feedAdapter.submitList(this.toList())
+                        }
+                        Toast.makeText(requireContext(), "게시물이 정상적으로 수정되었습니다. ", Toast.LENGTH_SHORT).show()
+                    }
+                })
+
+            }
         }
+
+
     }
 
     override fun onCreateView(
@@ -90,13 +118,10 @@ class FragmentFeed : Fragment() {
     }
 
     private fun check2Top() {
-        //게시물 작성 완료 시
-        if (need2Top) {
-            binding.recyclerView.scrollToPosition(0)
-            need2Top = false
-            Toast.makeText(context,
-                    "게시물이 업로드 되었습니다.", Toast.LENGTH_SHORT)
-                    .show()
+        //게시물 작성 완료 시 or 수정 완료시
+        if (need2Mov >= 0) {
+            binding.recyclerView.scrollToPosition(need2Mov)
+            need2Mov = -1 //기본값으로 초기화
         }
     }
 
@@ -122,6 +147,10 @@ class FragmentFeed : Fragment() {
             //데이터 변경시 감지 후 자동 스크롤
             feedAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
                 override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                    check2Top()
+                }
+
+                override fun onChanged() {
                     check2Top()
                 }
             })

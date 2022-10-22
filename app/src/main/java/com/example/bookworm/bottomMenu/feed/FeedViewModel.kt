@@ -24,7 +24,6 @@ import com.example.bookworm.core.userdata.UserInfo
 import com.google.firebase.firestore.FieldValue
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
-import java.lang.NullPointerException
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -41,7 +40,7 @@ class FeedViewModel(val context: Context) : ViewModel() {
                 is MainActivity -> context
                 is SubActivityComment -> context
                 is SubActivityCreatePost -> context
-                is SubActivityModifyFeed -> context
+                is SubActivityModifyPost -> context
                 is BookDetailActivity -> context //책 리뷰 받기 위해
                 else -> context as SearchMainActivity
             },
@@ -52,6 +51,17 @@ class FeedViewModel(val context: Context) : ViewModel() {
     val nowCommentLoadState = MutableLiveData<LoadState>() //현재 댓글 로드 상태를 추적하는 LiveData
     val nowFeedUploadState = MutableLiveData<LoadState>() //현재 피드 업로드 상태를 추적하는 LiveData
     val nowLikeState = MutableLiveData<LoadState>()
+
+    //이미지 처리 작업
+    val imageJob = { imgBitmap: Bitmap?, imageProcess: ImageProcessing, feed: Feed ->
+        viewModelScope.async {
+            if (imgBitmap != null) {
+                val imageName = "feed_ ${feed.feedID}.jpg"
+                val imgUrl = imageProcess.uploadImg(imgBitmap, imageName)
+                imgUrl //null값인 경우, 업로드 실패, 아닌 경우 제대로 처리 된 것
+            } else ""
+        }
+    }
 
     val fbModule = FBModule(context)
 
@@ -73,25 +83,24 @@ class FeedViewModel(val context: Context) : ViewModel() {
         }
     }
 
+    fun getFeedImgUrl(feed: Feed, bitmap: Bitmap?, imageProcess: ImageProcessing, liveData: MutableLiveData<String>) {
+        liveData.value = null
+        viewModelScope.launch {
+            if (bitmap != null) {
+                liveData.value = imageJob(bitmap, imageProcess, feed).await()
+            } else liveData.value = ""
+        }
+    }
+
     //피드를 업로드할 때 사용하는 함수
     //선택한 이미지 비트맵을 URI로 변경 후, 서버에 업로드 => 파이어베이스에 피드 등록
-    fun uploadFeed(feed: Feed, imgBitmap: Bitmap?, imageProcess: ImageProcessing) {
+    fun uploadFeed(feed: Feed, imgBitmap: Bitmap? = null, imageProcess: ImageProcessing, imgUrlData: String = "") {
         nowFeedUploadState.value = LoadState.Loading
-        feed.date = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-        feed.feedID = System.currentTimeMillis().toString() + "_" + feed.userToken //현재 시각 + 사용자 토큰을 FeedID로 설정
-        val imageJob =  //이미지 처리 작업
-                viewModelScope.async {
-                    if (imgBitmap != null) {
-                        val imageName = "feed_ ${feed.feedID}.jpg"
-                        val imgUrl = imageProcess.uploadImg(imgBitmap, imageName)
-                        imgUrl //null값인 경우, 업로드 실패, 아닌 경우 제대로 처리 된 것
-                    } else ""
-                }
         viewModelScope.launch {
-            val url = imageJob.await()
+            val url = imageJob(imgBitmap, imageProcess, feed).await()
             if (url != null) {
-                feed.imgurl = url
+                if (url == "" && imgUrlData != "") feed.imgurl = imgUrlData
+                else feed.imgurl = url
                 //파이어스토어에 피드 업로드
                 FireStoreLoadModule.provideQueryUploadPost(feed)
                         .addOnSuccessListener {    //정상적으로 업로드 되는 경우

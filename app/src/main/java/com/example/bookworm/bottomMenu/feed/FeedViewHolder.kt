@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
+import com.bumptech.glide.signature.ObjectKey
 import com.example.bookworm.LoadState
 import com.example.bookworm.R
 import com.example.bookworm.appLaunch.views.MainActivity
@@ -87,6 +88,7 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context,
                         centerRadius = 30f
                         start()
                     })
+                    .signature(ObjectKey(System.currentTimeMillis().toString()))
                     .error(AppCompatResources.getDrawable(context, R.drawable.bookimg_sample))
                     .into(this)
         }
