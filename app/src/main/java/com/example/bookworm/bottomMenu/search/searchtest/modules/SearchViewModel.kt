@@ -154,7 +154,7 @@ class SearchViewModel(context: Context) : ViewModel() {
         //책 검색과 동시에 책 리뷰를 받아와야 함.
         viewModelScope.launch {
             val reviewResult = searchDataRepository.loadUserBookReview(itemId, page = page)!!.toObjects(Feed::class.java).toMutableList()
-            lastReviewDataVisibleFeedID = reviewResult.last().feedID
+            lastReviewDataVisibleFeedID = if (reviewResult.size > 0) reviewResult.last().feedID else ""
             reviewList.addAll(addExtraDataInFeed(reviewResult))
 
             val result = searchDataRepository.loadBookDetail(itemId)

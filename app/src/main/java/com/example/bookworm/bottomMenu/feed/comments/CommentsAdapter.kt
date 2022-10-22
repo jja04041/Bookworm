@@ -101,15 +101,14 @@ class CommentsAdapter(val context: Context) : ListAdapter<Any, RecyclerView.View
                     val popupMenu = customMenuPopup(context, v)
                     if (item.isUserComment){
                         item.feedID = (currentList[0] as Feed).feedID!!
+                        item.position = bindingAdapterPosition
                         popupMenu.setItem(item)
                         popupMenu.liveState.observe(context as SubActivityComment) {
                             if (it == popupMenu.COMMENT_DELETE) {
-                                //FragmentFeed의 FeedAdapter에서 이 데이터를 삭제한다.
-//                                val intent = context.intent
-//                                intent.putExtra("deleteTarget", item) //삭제 대상 게시물 아이템을 인텐트에 담는다.
-                                //이 게시물은 삭제할 것이라고 액티비티에 알려줌
-//                                (context as SubActivityComment).setResult(SubActivityComment.COMMENT_DELETE, intent)
-//                                (context as SubActivityComment).finish()
+                                currentList.toMutableList().apply {
+                                    removeAt(item.position!!)
+                                    submitList(toList())
+                                }
                             }
                         }
                     }

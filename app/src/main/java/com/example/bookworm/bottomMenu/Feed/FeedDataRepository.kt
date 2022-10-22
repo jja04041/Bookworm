@@ -81,9 +81,16 @@ class FeedDataRepository() {
         val feedRef = FireStoreLoadModule.provideQueryPostByFeedID(feedId)
         val commentRef = feedRef.collection("comments").document(comment.commentID!!)
         return FireStoreLoadModule.provideFirebaseInstance().runTransaction { transaction ->
-            transaction.set(commentRef, comment)
-                    .update(feedRef, "commentsCount", FieldValue
-                            .increment(if (isAdd) 1L else -1L))
+            transaction.apply {
+                if (isAdd) set(commentRef, comment)
+                        .update(feedRef, "commentsCount", FieldValue
+                                .increment(1L))
+                else
+                delete(commentRef)
+                        .update(feedRef, "commentsCount", FieldValue
+                                .increment(-1L))
+            }
+
         }.await()
     }
 
