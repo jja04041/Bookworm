@@ -1,9 +1,11 @@
 package com.example.bookworm.bottomMenu.feed
 
 
+import android.accounts.NetworkErrorException
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -29,16 +31,16 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
+
 @SuppressLint("StaticFieldLeak")
 class FeedViewModel(val context: Context) : ViewModel() {
-    private val loadPagingRepo = LoadPagingDataRepository()
-    private val feedDataRepository = FeedDataRepository(context)
+    private val dataRepository = FeedDataRepository()
     private val userInfoViewModel = ViewModelProvider(
             when (context) {
                 is MainActivity -> context
                 is SubActivityComment -> context
                 is SubActivityCreatePost -> context
-                is SubActivityModifyFeed -> context
+                is SubActivityModifyPost -> context
                 is BookDetailActivity -> context //책 리뷰 받기 위해
                 else -> context as SearchMainActivity
             },
@@ -50,8 +52,18 @@ class FeedViewModel(val context: Context) : ViewModel() {
     val nowFeedUploadState = MutableLiveData<LoadState>() //현재 피드 업로드 상태를 추적하는 LiveData
     val nowLikeState = MutableLiveData<LoadState>()
 
+    //이미지 처리 작업
+    val imageJob = { imgBitmap: Bitmap?, imageProcess: ImageProcessing, feed: Feed ->
+        viewModelScope.async {
+            if (imgBitmap != null) {
+                val imageName = "feed_ ${feed.feedID}.jpg"
+                val imgUrl = imageProcess.uploadImg(imgBitmap, imageName)
+                imgUrl //null값인 경우, 업로드 실패, 아닌 경우 제대로 처리 된 것
+            } else ""
+        }
+    }
+
     val fbModule = FBModule(context)
-    var canexit = true;
 
     class Factory(val context: Context) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -63,7 +75,7 @@ class FeedViewModel(val context: Context) : ViewModel() {
         liveData.value = LoadState.Loading
         viewModelScope.launch {
             try {
-                feedDataRepository.deleteFeed(feed)
+                dataRepository.deleteFeed(feed)
                 LoadState.Done
             } catch (e: Exception) {
                 LoadState.Error
@@ -71,37 +83,37 @@ class FeedViewModel(val context: Context) : ViewModel() {
         }
     }
 
+    fun getFeedImgUrl(feed: Feed, bitmap: Bitmap?, imageProcess: ImageProcessing, liveData: MutableLiveData<String>) {
+        liveData.value = null
+        viewModelScope.launch {
+            if (bitmap != null) {
+                liveData.value = imageJob(bitmap, imageProcess, feed).await()
+            } else liveData.value = ""
+        }
+    }
+
     //피드를 업로드할 때 사용하는 함수
     //선택한 이미지 비트맵을 URI로 변경 후, 서버에 업로드 => 파이어베이스에 피드 등록
-    fun uploadFeed(feed: Feed, imgBitmap: Bitmap?, imageProcess: ImageProcessing) {
+    fun uploadFeed(feed: Feed, imgBitmap: Bitmap? = null, imageProcess: ImageProcessing, imgUrlData: String = "") {
         nowFeedUploadState.value = LoadState.Loading
-        feed.date = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-        feed.feedID = System.currentTimeMillis().toString() + "_" + feed.userToken //현재 시각 + 사용자 토큰을 FeedID로 설정
-        val imageJob =  //이미지 처리 작업
-                viewModelScope.async {
-                    if (imgBitmap != null) {
-                        val imageName = "feed_ ${feed.feedID}.jpg"
-                        val imgUrl = imageProcess.uploadImg(imgBitmap, imageName)
-                        imgUrl //null값인 경우, 업로드 실패, 아닌 경우 제대로 처리 된 것
-                    } else ""
-                }
         viewModelScope.launch {
-            val url = imageJob.await()
+            val url = imageJob(imgBitmap, imageProcess, feed).await()
             if (url != null) {
-                feed.imgurl = url
+                if (url == "" && imgUrlData != "") feed.imgurl = imgUrlData
+                else feed.imgurl = url
                 //파이어스토어에 피드 업로드
                 FireStoreLoadModule.provideQueryUploadPost(feed)
                         .addOnSuccessListener {    //정상적으로 업로드 되는 경우
                             //유저의 정보 업데이트
                             feed.creatorInfo!!.apply {
-                                userInfoViewModel.setGenre(feed.book!!.categoryName,this)
+//                                setGenre(feed.book!!.categoryname, context) //장르 설정
+                                userInfoViewModel.setGenre(feed.book!!.categoryName, this)
 
 
                                 userInfoViewModel.getBookWorm(token).onJoin
                                 var data = userInfoViewModel.bwdata.value
 
-
+//                                achievement.canreturn()
 
                                 data!!.readCount++
                                 userInfoViewModel.updateBw(token, data)
@@ -109,7 +121,8 @@ class FeedViewModel(val context: Context) : ViewModel() {
 
                                 val achievement = Achievement(context, fbModule, this, data)
                                 achievement.CompleteAchievement(this, context)
-                                canexit = achievement.canreturn()
+
+
                             }
                             nowFeedUploadState.value = LoadState.Done
                         }
@@ -123,21 +136,16 @@ class FeedViewModel(val context: Context) : ViewModel() {
 
     //댓글을 추가/삭제하는 함수
     fun manageComment(comment: Comment, feedId: String, isAdd: Boolean = true) {
-        val feedRef = FireStoreLoadModule.provideQueryPostByFeedID(feedId)
-        val commentRef = feedRef.collection("comments").document(comment.commentID!!)
-
         viewModelScope.launch {
             nowCommentLoadState.value = LoadState.Loading
-            FireStoreLoadModule.provideFirebaseInstance().apply {
-                runTransaction { transaction ->
-                    transaction.set(commentRef, comment)
-                            .update(feedRef, "commentsCount", FieldValue
-                                    .increment(if (isAdd) 1L else -1L))
-                }.addOnSuccessListener {
-                    nowCommentLoadState.value = LoadState.Done
-                }.addOnFailureListener {
-                    nowCommentLoadState.value = LoadState.Error
-                }
+            try {
+                dataRepository.manageComment(feedId, comment, isAdd)
+                nowCommentLoadState.value = LoadState.Done
+            } catch (e: NetworkErrorException) {
+                Toast.makeText(context, "네트워크 오류입니다 다시 시도해 주세요. ", Toast.LENGTH_SHORT).show()
+                nowCommentLoadState.value = LoadState.Error
+            } catch (e: Exception) {
+                nowCommentLoadState.value = LoadState.Error
             }
         }
     }
@@ -177,55 +185,37 @@ class FeedViewModel(val context: Context) : ViewModel() {
         viewModelScope.launch {
             //새로고침 또는 첫 로드 시에는 변수 리셋과 쿼리 재장착
             if (isRefresh) {
-                loadPagingRepo.reset()
+                dataRepository.reset()
 //                loadPagingRepo.setQuery(FireStoreLoadModule.provideQueryLoadPostsOrderByFeedID().whereIn("book.categoryname", listOf("국내도서>컴퓨터/모바일>컴퓨터 공학>자료구조/알고리즘","사회","국내도서>소설/시/희곡>역사소설>한국 역사소설"))) //쿼리 세팅
-                loadPagingRepo.setQuery(FireStoreLoadModule.provideQueryLoadPostsOrderByFeedID()) //쿼리 세팅
+                dataRepository.setQuery(FireStoreLoadModule.provideQueryLoadPostsOrderByFeedID()) //쿼리 세팅
             }
 //            else {
 //                loadPagingRepo.reset()
 //                loadPagingRepo.setQuery(FireStoreLoadModule.provideQueryLoadPostsOrderByFeedID())
 //            }
-            val loadedData = loadPagingRepo.loadFireStoreData(LoadPagingDataRepository.DataType.FeedType)
-            if (loadedData != null) {
-                postsData =
-                        (loadedData as MutableList<Feed>).map { feed: Feed ->
-                            return@map withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-                                val tempUserInfo = userInfoViewModel.suspendGetUser(null)?.apply {
-                                    feed.isUserLiked = likedPost.contains(feed.feedID)
-                                }
-                                feed.creatorInfo = userInfoViewModel.suspendGetUser(feed.userToken)!!
-                                feed.isUserPost = (tempUserInfo!!.token == feed.userToken)
-                                feed.duration = getDateDuration(feed.date)
-                                if (feed.commentsCount > 0L) {
-                                    feed.comment = FireStoreLoadModule.provideQueryCommentsLately(feed.feedID!!)
-                                            .get().await()
-                                            .toObjects(Comment::class.java)[0] //형변환을 자동으로 해줌.
-                                    feed.comment!!.creator = userInfoViewModel.suspendGetUser(feed.comment!!.userToken)!!
-                                    feed.comment!!.duration = getDateDuration(feed.comment!!.madeDate)
-                                }
-                                return@withContext feed
-                            }
-                        }
-            } else postsData = null
+            val loadedData = dataRepository.loadFireStoreData(FeedDataRepository.DataType.FeedType)
+            postsData = if (loadedData != null) {
+                (loadedData as MutableList<Feed>).map { feed: Feed ->
+                    addFeedData(feed)
+                }
+            } else null
 
             nowFeedLoadState.value = LoadState.Done
         }
     }
 
+
     fun loadComment(feedId: String, isRefresh: Boolean) {
         nowCommentLoadState.value = LoadState.Loading
         viewModelScope.launch {
             if (isRefresh) {
-                loadPagingRepo.reset()
-                loadPagingRepo.setQuery(FireStoreLoadModule.provideQueryCommentsInFeedByFeedID(feedId))
+                dataRepository.reset()
+                dataRepository.setQuery(FireStoreLoadModule.provideQueryCommentsInFeedByFeedID(feedId))
             }
-            val loadedData = loadPagingRepo.loadFireStoreData(LoadPagingDataRepository.DataType.CommentType, 10)
+            val loadedData = dataRepository.loadFireStoreData(FeedDataRepository.DataType.CommentType, 10)
             commentsData = if (loadedData != null) {
                 (loadedData as MutableList<Comment>).map { comment: Comment ->
-                    return@map withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-                        comment.creator = userInfoViewModel.suspendGetUser(comment.userToken)!!
-                        return@withContext comment
-                    }
+                    return@map addCommentData(comment)
                 }
             } else null
             nowCommentLoadState.value = LoadState.Done
@@ -233,8 +223,11 @@ class FeedViewModel(val context: Context) : ViewModel() {
     }
 
     //단일 게시물을 불러올 때
-    fun loadPost() {
-
+    fun loadPost(liveData: MutableLiveData<Feed>) {
+        viewModelScope.launch {
+            val loadedData = dataRepository.loadFireStoreData(FeedDataRepository.DataType.FeedType, pageSize = 1)
+            liveData.value = addFeedData(loadedData as Feed)
+        }
     }
 
     //시간차 구하기 n분 전, n시간 전 등등
@@ -265,5 +258,28 @@ class FeedViewModel(val context: Context) : ViewModel() {
             e.printStackTrace()
             return ""
         }
+    }
+
+    //넘겨준 정보에 필요한 정보를 담아서 보내주는 converter
+    private suspend fun addFeedData(feed: Feed) = withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
+        val tempUserInfo = userInfoViewModel.suspendGetUser(null)?.apply {
+            feed.isUserLiked = likedPost.contains(feed.feedID)
+        }
+        feed.creatorInfo = userInfoViewModel.suspendGetUser(feed.userToken)!!
+        feed.isUserPost = (tempUserInfo!!.token == feed.userToken)
+        feed.duration = getDateDuration(feed.date)
+        if (feed.commentsCount > 0L) {
+            feed.comment = FireStoreLoadModule.provideQueryCommentsLately(feed.feedID!!)
+                    .get().await()
+                    .toObjects(Comment::class.java)[0] //형변환을 자동으로 해줌.
+            feed.comment!!.creator = userInfoViewModel.suspendGetUser(feed.comment!!.userToken)!!
+            feed.comment!!.duration = getDateDuration(feed.comment!!.madeDate)
+        }
+        return@withContext feed
+    }
+
+    private suspend fun addCommentData(comment: Comment) = withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
+        comment.creator = userInfoViewModel.suspendGetUser(comment.userToken)!!
+        return@withContext comment
     }
 }

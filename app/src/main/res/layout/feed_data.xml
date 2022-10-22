@@ -189,11 +189,8 @@
                 android:layout_width="360dp"
                 android:layout_height="360dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="15dp"
-                android:visibility='@{feed.imgurl!=""? View.VISIBLE:View.GONE,default=gone}'
-                app:imgUrl='@{feed.imgurl!=null ? feed.imgurl : ""}'
-                app:placeholder="@{@drawable/bookimg_sample}"
-                app:type='@{"feedImg"}' />
+                android:visibility="gone"
+                android:layout_marginTop="15dp" />
 
 
             <FrameLayout

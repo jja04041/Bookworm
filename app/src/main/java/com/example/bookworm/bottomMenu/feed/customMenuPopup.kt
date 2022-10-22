@@ -18,7 +18,7 @@ import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
 
 //메뉴 팝업
 
-class customMenuPopup(val context: Context, val anchor: View) : PopupMenu(context, anchor) {
+class customMenuPopup(val context: Context, anchor: View) : PopupMenu(context, anchor) {
 
     var liveState = MutableLiveData<Int>()
 
@@ -33,14 +33,14 @@ class customMenuPopup(val context: Context, val anchor: View) : PopupMenu(contex
                     is Feed -> R.menu.feed_menu
                     else -> R.menu.comment_menu
                 }, this.menu)
-        this.setOnMenuItemClickListener(menuItemClickListener(data, context))
+        this.setOnMenuItemClickListener(OnMenuItemClickListener(data, context))
         //리스너 설정
         this.show() //팝업 메뉴 설정
     }
 
     //리스너 내부 클래스
-    inner class menuItemClickListener(val data: Any, val context: Context)
-        : OnMenuItemClickListener {
+    inner class OnMenuItemClickListener(val data: Any, val context: Context)
+        : PopupMenu.OnMenuItemClickListener {
         lateinit var vm: ViewModel //뷰모델 설정
 
 
@@ -60,12 +60,12 @@ class customMenuPopup(val context: Context, val anchor: View) : PopupMenu(contex
         fun modifyData(item: Any) {
             if (item is Feed) {
                 //수정을 담당하는 액티비티로 이동해야함.
-                var intent = Intent(context as MainActivity, SubActivityModifyFeed::class.java)
+                var intent = Intent(context as MainActivity, SubActivityModifyPost::class.java)
                 intent.putExtra("Feed", item)
 
                 //현재 화면이 댓글 화면인 경우
                 if (context is SubActivityComment)
-//                    context.startActivityResult.launch(intent)
+                    context.startActivityResult.launch(intent)
                 //피드화면인 경우
                 else
                     (context.supportFragmentManager.findFragmentByTag("0") as FragmentFeed)

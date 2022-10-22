@@ -1,6 +1,7 @@
 package com.example.bookworm.bottomMenu.feed.comments
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -10,9 +11,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.signature.ObjectKey
 import com.example.bookworm.R
+import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.feed.Feed
+import com.example.bookworm.bottomMenu.feed.customMenuPopup
 import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
+import com.example.bookworm.bottomMenu.search.searchtest.views.BookDetailActivity
 import com.example.bookworm.databinding.LayoutCommentItemBinding
 import com.example.bookworm.databinding.LayoutCommentSummaryBinding
 import java.text.DateFormat
@@ -21,7 +26,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 //댓글 불러오는 어댑터
-class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
+class CommentsAdapter(val context: Context) : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
 
 
     private val vType = mapOf("Loading" to 0, "SummaryFeed" to 1, "Comments" to 2)
@@ -86,7 +91,7 @@ class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
                 tvDate.text = getDateDuration(item.madeDate)
 
                 //프로필 클릭 시 해당 사용자의 프로필 정보 화면으로 이동하게
-                llProfile.setOnClickListener{
+                llProfile.setOnClickListener {
                     val intent = Intent(itemView.context, ProfileInfoActivity::class.java)
                     intent.putExtra("userID", item.userToken)
                     itemView.context.startActivity(intent)
@@ -99,27 +104,51 @@ class CommentsAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
     inner class SummaryItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = LayoutCommentSummaryBinding.bind(itemView)
 
+        private fun deleteThisFeed(feed: Feed) {
+
+        }
+
         @SuppressLint("SetTextI18n", "UseCompatLoadingForDrawables")
         fun bind(item: Feed) {
             binding.apply {
                 //작성자 관련
-                item.creatorInfo!!.apply {
+                item.creatorInfo.apply {
                     tvNickname.text = username
                     Glide.with(itemView.context)
                             .load(profileimg).circleCrop()
                             .into(ivProfileImage)
                 }
-
+                btnFeedMenu.setOnClickListener { v ->
+                    val popupMenu = customMenuPopup(context, v)
+                    if (item.isUserPost) {
+                        popupMenu.setItem(item)
+                        popupMenu.liveState.observe(context as MainActivity) {
+                            if (it == popupMenu.FEED_DELETE) {
+                                //FragmentFeed의 FeedAdapter에서 이 데이터를 삭제한다.
+                                val intent = context.intent
+                                intent.putExtra("deleteTarget", item) //삭제 대상 게시물 아이템을 인텐트에 담는다.
+                                //이 게시물은 삭제할 것이라고 액티비티에 알려줌
+                                (context as SubActivityComment).setResult(SubActivityComment.FEED_DELETE, intent)
+                                (context as SubActivityComment).finish()
+                            }
+                        }
+                    }
+                }
                 //내용
                 //책
-                item.book!!.apply {
+                item.book.apply {
                     feedBookAuthor.text = author
                     feedBookTitle.text = title
                     Glide.with(itemView.context).load(imgUrl).into(feedBookThumb)
+                    llbook.setOnClickListener {
+                        val intent = Intent(itemView.context, BookDetailActivity::class.java)
+                        intent.putExtra("BookID", item.book.itemId)
+                        itemView.context.startActivity(intent)
+                    }
                 }
                 //피드 내용
                 tvFeedText.text = item.feedText
-                if (item.imgurl != "") Glide.with(itemView.context).load(item.imgurl).into(ivFeedImage)
+                if (item.imgurl != "") Glide.with(itemView.context).load(item.imgurl).signature(ObjectKey(System.currentTimeMillis().toString())).into(ivFeedImage)
                 ivFeedImage.isVisible = (item.imgurl != "")
                 tvCommentCount.text = "댓글 ${item.commentsCount}개"
                 tvDate.text = item.duration

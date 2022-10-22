@@ -80,7 +80,7 @@ class FragmentSearch : Fragment() {
 
 
     fun setRanking(readCount: String, index: Int) {
-        readCountListGlobal!![index].setText(readCount)
+        readCountListGlobal!![index].setText(readCount + '권')
     }
 
     fun setRanking(map: Map<String, Any>, index: Int) {

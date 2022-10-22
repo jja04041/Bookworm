@@ -1,16 +1,15 @@
 package com.example.bookworm.bottomMenu.feed
 
 import com.example.bookworm.bottomMenu.feed.comments.Comment
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.QuerySnapshot
+import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 //페이징 처리를 위한 레포지토리
-class LoadPagingDataRepository() {
+class FeedDataRepository() {
     private val PAGE_SIZE = 5
     private var queryForPaging: Query? = null
     private var lastVisibleData: DocumentSnapshot? = null
@@ -30,6 +29,11 @@ class LoadPagingDataRepository() {
     //데이터 타입을 관리
     enum class DataType { FeedType, CommentType }
 
+    suspend fun deleteFeed(feed: Feed) {
+        FireStoreLoadModule.provideQueryPathToFeedCollection()
+                .document(feed.feedID!!).delete().await()
+    }
+
     suspend fun loadFireStoreData(type: DataType, pageSize: Int = PAGE_SIZE): Any? {
         var query = queryForPaging!!.limit(pageSize.toLong())
         currentPage = withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
@@ -48,7 +52,17 @@ class LoadPagingDataRepository() {
             lastVisibleData = currentPage!!.documents.last() //마지막 데이터를 담아놔서 그 이후의 데이터를 가져올 수 있게 함
             when (type) {
                 DataType.FeedType -> //피드 데이터인 경우
-                    currentPage!!.toObjects(Feed::class.java)
+                {
+                    try {
+                        if (pageSize == 1) {
+                            currentPage!!.toObjects(Feed::class.java)[0]
+                        } else {
+                            currentPage!!.toObjects(Feed::class.java)
+                        }
+                    } catch (e: IndexOutOfBoundsException) {
+                        null
+                    }
+                }
                 DataType.CommentType -> //댓글 데이터인 경우
                     currentPage!!.toObjects(Comment::class.java)
                 else -> {
@@ -60,6 +74,17 @@ class LoadPagingDataRepository() {
             null
         }
 
+    }
+
+    //댓글 작성 관리
+    suspend fun manageComment(feedId: String, comment: Comment, isAdd: Boolean): Transaction {
+        val feedRef = FireStoreLoadModule.provideQueryPostByFeedID(feedId)
+        val commentRef = feedRef.collection("comments").document(comment.commentID!!)
+        return FireStoreLoadModule.provideFirebaseInstance().runTransaction { transaction ->
+            transaction.set(commentRef, comment)
+                    .update(feedRef, "commentsCount", FieldValue
+                            .increment(if (isAdd) 1L else -1L))
+        }.await()
     }
 
 }

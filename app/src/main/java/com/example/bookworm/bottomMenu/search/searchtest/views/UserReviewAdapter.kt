@@ -83,7 +83,7 @@ class UserReviewAdapter(val context: Context) :
     //뷰타입 설정 (0은 리뷰 뷰홀더 , 1은 로딩 뷰홀더)
     override fun getItemViewType(position: Int): Int {
         return if (currentList[position] is Book) vType["BookDetail"]!!
-        else if (currentList[position] is Feed && (currentList[position] as Feed).feedID != "") vType["Review"]!!
+        else if (currentList[position] is Feed && (currentList[position] as Feed).feedID != null) vType["Review"]!!
         else vType["Loading"]!!
     }
 

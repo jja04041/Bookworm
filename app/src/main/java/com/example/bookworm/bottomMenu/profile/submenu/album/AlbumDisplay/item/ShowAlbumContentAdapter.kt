@@ -34,7 +34,6 @@ class ShowAlbumContentAdapter(val context: Context) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder is ShowAlbumContentItemViewHolder) holder.setItem(currentList[position])
-        else (holder as AddAlbumPostViewholder).setItem()
     }
 
     //데이터가 빈 경우 추가 할 수 있는 버튼으로 변경한다,

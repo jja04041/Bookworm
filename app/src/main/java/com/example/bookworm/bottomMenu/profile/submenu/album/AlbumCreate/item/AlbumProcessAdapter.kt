@@ -11,10 +11,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.feed.Feed
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.AlbumProcessViewHolder
-import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumActivity
-import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumContentActivity
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.ShowFeedListForCreateAlbum
-import com.example.bookworm.databinding.FragmentRecordItemBinding
 import com.example.bookworm.databinding.SubactivityShowalbumcontentItemBinding
 import kotlin.collections.ArrayList
 

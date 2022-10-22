@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
+import com.bumptech.glide.signature.ObjectKey
 import com.example.bookworm.LoadState
 import com.example.bookworm.R
 import com.example.bookworm.appLaunch.views.MainActivity
@@ -40,9 +41,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 
-
-
-class newFeedViewHolder(private val binding: FeedDataBinding, val context: Context, val adapter: FeedAdapter) : RecyclerView.ViewHolder(binding.root) {
+class FeedViewHolder(private val binding: FeedDataBinding, val context: Context, val adapter: FeedAdapter) : RecyclerView.ViewHolder(binding.root) {
     var limit = 0
     var restricted = false
     private var myFCMService: MyFCMService? = null
@@ -57,13 +56,14 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
 
     //생성자를 만든다.
     init {
+        binding.lifecycleOwner = context as MainActivity
         pv.getUser(null, mainUserLiveData, false)
         //FCMService 객체를 생성한다 .
         myFCMService = MyFCMService.getInstance()
     }
 
     //아이템을 세팅하는 메소드
-    fun bindFeed(feed: Feed) {
+    fun bindFeed(feed: Feed, listener: OnFeedMenuClickListener) {
         //순서
         // 1. 전달받은 데이터를 가지고, 불완전한 데이터들을 먼저 수집( 피드 작성자, 댓글 작성자)
         // 2. 받은 정보를 현재 아이템에 저장
@@ -79,12 +79,19 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
                 .replace("&gt;", ">")
                 .replace("&lt", "<")
                 .replace("&gt", ">")
-        if (feed.imgurl == "") binding.feedImage.isVisible = false
 
-//        //라벨표시
-//        if (feed.label!![0] != "") setLabel(feed.label)
-//        else binding.lllabel.visibility = View.GONE
-        //리스너 부착
+        binding.feedImage.apply {
+            isVisible = feed.imgurl != ""
+            Glide.with(context).load(feed.imgurl)
+                    .placeholder(CircularProgressDrawable(context).apply {
+                        strokeWidth = 5f
+                        centerRadius = 30f
+                        start()
+                    })
+                    .signature(ObjectKey(System.currentTimeMillis().toString()))
+                    .error(AppCompatResources.getDrawable(context, R.drawable.bookimg_sample))
+                    .into(this)
+        }
         //책 정보 확인 시
         mainUserLiveData.observe(context as MainActivity) { mainUser ->
             binding.apply {
@@ -107,6 +114,7 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
                     intent.putExtra("BookID", feed.book.itemId)
                     context.startActivity(intent)
                 }
+
                 //댓글창 클릭 시
                 llComments.setOnClickListener {
                     if (llLastComment.visibility != View.GONE) {
@@ -147,17 +155,9 @@ class newFeedViewHolder(private val binding: FeedDataBinding, val context: Conte
                 lllike.setOnClickListener { controlLike(feed, mainUser) }//메뉴 선택 시
 
                 btnFeedMenu.setOnClickListener { view ->
-                    feed.position = absoluteAdapterPosition
-                    val popupMenu = customMenuPopup(context, view)
-                    if (feed.isUserPost) {
-                        popupMenu.setItem(feed)
-                        popupMenu.liveState.observe(context) {
-                            if (it == popupMenu.FEED_DELETE) {
-                                val tmp = adapter.currentList.toMutableList()
-                                tmp.removeAt(feed.position)
-                                adapter.submitList(tmp)
-                            }
-                        }
+                    val pos = bindingAdapterPosition
+                    if (pos != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(this@FeedViewHolder, view, pos)
                     }
                 }
                 //프로필을 눌렀을때 그 사용자의 프로필 정보 화면으로 이동

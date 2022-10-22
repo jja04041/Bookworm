@@ -14,9 +14,10 @@ import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.databinding.FeedDataBinding
 
 
-class FeedAdapter(private val context: Context) :
+class FeedAdapter() :
         ListAdapter<Feed, RecyclerView.ViewHolder>(Companion) {
     private lateinit var dataBinding: FeedDataBinding
+    private var listener: OnFeedMenuClickListener? = null
 
     //뷰홀더가 만들어질때 작동하는 메서드
     //화면을 인플레이트하고 인플레이트된 화면을 리턴한다.
@@ -26,8 +27,7 @@ class FeedAdapter(private val context: Context) :
         return when (viewType) {
             1 -> {
                 dataBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.feed_data, parent, false)
-                dataBinding.lifecycleOwner = parent.context as MainActivity
-                newFeedViewHolder(dataBinding, context, this)
+                FeedViewHolder(dataBinding, parent.context, this)
             }
             else -> {
                 view = inflater.inflate(R.layout.layout_item_loading, parent, false)
@@ -41,13 +41,16 @@ class FeedAdapter(private val context: Context) :
         return currentList[position].hashCode().toLong()
     }
 
+    fun setFeedMenuListener(listener: OnFeedMenuClickListener) {
+        this.listener = listener
+    }
 
     //Arraylist에 있는 아이템을 뷰 홀더에 바인딩 하는 메소드
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val safePosition = holder.bindingAdapterPosition
-        if (holder is newFeedViewHolder) {
+        if (holder is FeedViewHolder) {
             var feed = getItem(position) ?: return
-            holder.bindFeed(feed)
+            holder.bindFeed(feed,listener!!)
         } else if (holder is LoadingViewHolder) {
             showLoadingView(holder, safePosition)
         }

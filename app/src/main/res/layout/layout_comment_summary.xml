@@ -78,7 +78,7 @@
                 android:textSize="12dp" />
 
             <ImageView
-                android:id="@+id/ivFeedMenu"
+                android:id="@+id/btnFeedMenu"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"

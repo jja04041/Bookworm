@@ -7,6 +7,7 @@ import com.example.bookworm.bottomMenu.feed.FireStoreLoadModule
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,14 +34,13 @@ class SearchDataRepository(val context: Context) {
     suspend fun loadSearchedBooks(keyword: String, page: Int) = aladinApi.getResult(QueryForRetrofit.getQueryForSearchBooks(context, keyword, page))
 
     suspend fun loadBookDetail(itemId: String) = aladinApi.getItem(QueryForRetrofit.getQueryForSearchBookDetail(context = context, itemId = itemId))
-    suspend fun loadUserBookReview(itemId: String, page: Int = 5, lastVisible: DocumentSnapshot? = null) =
-            FireStoreLoadModule.provideQueryPathToFeedCollection()
-                    .whereEqualTo("book.itemId", itemId)
-                    .apply {
-                        if(lastVisible!=null) startAfter(lastVisible)
-                    }.orderBy("feedID")
-                    .limit(page.toLong())
-                    .get().await()
+    suspend fun loadUserBookReview(itemId: String, page: Int = 5, lastVisible: String? = null): QuerySnapshot? {
+        var query = FireStoreLoadModule.provideQueryPathToFeedCollection()
+                .whereEqualTo("book.itemId", itemId)
+                .orderBy("feedID", Query.Direction.ASCENDING)
+        if (lastVisible != null) query = query.startAfter(lastVisible)
+        return query.limit(page.toLong()).get().await()
+    }
 
 
     //Retrofit 인스턴스

@@ -102,6 +102,7 @@
         <entry key="src/main/res/layout/activity_login.xml" value="0.29585292860196666" />
         <entry key="src/main/res/layout/activity_profile_info.xml" value="0.20820863616930313" />
         <entry key="src/main/res/layout/activity_profile_modify.xml" value="0.155622060709705" />
+        <entry key="src/main/res/layout/custom_dialog_label.xml" value="0.29585292860196666" />
         <entry key="src/main/res/layout/feed_data.xml" value="0.29253731343283584" />
         <entry key="src/main/res/layout/fragment_challenge.xml" value="0.22060709705002138" />
         <entry key="src/main/res/layout/fragment_feed.xml" value="0.15566234851650648" />
@@ -139,7 +140,7 @@
         <entry key="src/main/res/layout/subactivity_createalbumcontent.xml" value="0.26745240253853125" />
         <entry key="src/main/res/layout/subactivity_feed_create.xml" value="0.14458838278311742" />
         <entry key="src/main/res/layout/subactivity_feed_modify.xml" value="0.335" />
-        <entry key="src/main/res/layout/subactivity_modify_post.xml" value="0.1" />
+        <entry key="src/main/res/layout/subactivity_modify_post.xml" value="0.25" />
         <entry key="src/main/res/layout/subactivity_search_fragment_result.xml" value="0.242973708068903" />
         <entry key="src/main/res/layout/subactivity_search_main.xml" value="0.25" />
         <entry key="src/main/res/layout/subactivity_showalbumcontent.xml" value="0.22060709705002138" />

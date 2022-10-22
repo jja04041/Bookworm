@@ -68,15 +68,17 @@ class BookDetailActivity : AppCompatActivity() {
             stateLiveData.observe(this@BookDetailActivity) { book ->
                 reviewList.add(book)
                 if (book == Book()) Toast.makeText(this@BookDetailActivity, "정보를 로드하는데 실패하였습니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
+                //작성된 리뷰가 없거나, 최대 로드 가능한 수보다 적은 경우
                 if (tmpList.isEmpty() || tmpList.size < RVPAGESIZE) {
                     isReviewEnd = true
                     llEmptyReview.isVisible = tmpList.isEmpty()
                 }
+                //만약 임시저장 리스트에 담긴 데이터가 있다면
                 if (tmpList.isNotEmpty()) {
                     reviewList.addAll(tmpList)
-                    if (!isReviewEnd) reviewList.add(Feed())
+                    if (!isReviewEnd) reviewList.add(Feed()) //추가로 더 불러올 수 있는 경우
                 }
-                userReviewAdapter.submitList(reviewList)
+                userReviewAdapter.submitList(reviewList) //현재 어답터에 정보를 반영
                 showShimmer(false)
             }
             btnPurchase.setOnClickListener {
@@ -109,17 +111,16 @@ class BookDetailActivity : AppCompatActivity() {
 
     private fun loadMoreReviews() {
         val tmpList = ArrayList<Feed>()
-        MutableLiveData<LoadState>().apply {
-            searchViewModel.loadBookReview(bookId, this, tmpList, RVPAGESIZE)
-            observe(this@BookDetailActivity) {
-                if (it == LoadState.Done) {
-                    if (tmpList.isEmpty() || tmpList.size < RVPAGESIZE) isReviewEnd = true
-                    if (tmpList.isNotEmpty()) {
-                        reviewList.removeLast()
-                        reviewList.addAll(tmpList)
-                        if (!isReviewEnd) reviewList.add(Feed())
-                    }
-                    userReviewAdapter.submitList(reviewList)
+        val liveData = MutableLiveData<LoadState>()
+        searchViewModel.loadBookReview(bookId, liveData, tmpList, RVPAGESIZE)
+        liveData.observe(this@BookDetailActivity) {
+            if (it == LoadState.Done) {
+                if (tmpList.isEmpty() || tmpList.size < RVPAGESIZE) isReviewEnd = true
+                if (tmpList.isNotEmpty()) {
+                    reviewList.removeLast()
+                    reviewList.addAll(tmpList)
+                    if (!isReviewEnd) reviewList.add(Feed())
+                    userReviewAdapter.submitList(reviewList.toMutableList())
                 }
             }
         }
@@ -130,7 +131,6 @@ class BookDetailActivity : AppCompatActivity() {
             mRecyclerView.adapter = userReviewAdapter
             mRecyclerView.itemAnimator = null //리사이클러뷰 애니메이션 제거
             mRecyclerView.isNestedScrollingEnabled = false
-            mRecyclerView.setHasFixedSize(true)
             //스와이프하여 새로고침
             with(mRecyclerView) {
                 addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -140,7 +140,7 @@ class BookDetailActivity : AppCompatActivity() {
                         val lastVisibleItemPosition =
                                 layoutManager!!.findLastCompletelyVisibleItemPosition()
                         if ((lastVisibleItemPosition
-                                        == userReviewAdapter.currentList.lastIndex) && lastVisibleItemPosition > 0 && !isReviewEnd)
+                                        == userReviewAdapter.currentList.lastIndex - 1) && lastVisibleItemPosition > 0 && !isReviewEnd)
                             loadMoreReviews()
                     }
                 })
