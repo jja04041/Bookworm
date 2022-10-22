@@ -64,16 +64,18 @@ class customMenuPopup(val context: Context, anchor: View) : PopupMenu(context, a
         fun modifyData(item: Any) {
             if (item is Feed) {
                 //수정을 담당하는 액티비티로 이동해야함.
-                var intent = Intent(context as MainActivity, SubActivityModifyPost::class.java)
-                intent.putExtra("Feed", item)
-
-                //현재 화면이 댓글 화면인 경우
-                if (context is SubActivityComment)
-                    context.startActivityResult.launch(intent)
-                //피드화면인 경우
-                else
-                    (context.supportFragmentManager.findFragmentByTag("0") as FragmentFeed)
-                            .startActivityResult.launch(intent)
+                when (context) {
+                    is MainActivity -> {
+                        val intent = Intent(context, SubActivityModifyPost::class.java)
+                        intent.putExtra("Feed", item)
+                        (context.supportFragmentManager.findFragmentByTag("0") as FragmentFeed).startActivityResult.launch(intent)
+                    }
+                    is SubActivityComment -> {
+                        val intent = Intent(context, SubActivityModifyPost::class.java)
+                        intent.putExtra("Feed", item)
+                        context.startActivityResult.launch(intent)
+                    }
+                }
             }
         }
 

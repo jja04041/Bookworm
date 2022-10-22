@@ -122,7 +122,7 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context,
                         feed.position = bindingAdapterPosition
                         intent.putExtra("Feed", feed)
                         intent.putExtra("NowUser", mainUser)
-                        context.startActivity(intent)
+                        (context.supportFragmentManager.findFragmentByTag("0") as FragmentFeed).startActivityResult.launch(intent)
                     }
                 }
                 //댓글 작성

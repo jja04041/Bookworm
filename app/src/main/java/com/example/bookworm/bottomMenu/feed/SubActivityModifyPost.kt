@@ -41,6 +41,7 @@ class SubActivityModifyPost : AppCompatActivity() {
         ViewModelProvider(this, FeedViewModel.Factory(this))[FeedViewModel::class.java]
     }
     private var binding: SubactivityModifyPostBinding? = null
+
     //원본 게시물 데이터
     private val originData by lazy {
         intent!!.getParcelableExtra<Feed>("Feed")!!
@@ -157,10 +158,12 @@ class SubActivityModifyPost : AppCompatActivity() {
                 //이곳에서 이미지를 서버에 올리고, 그 url을 받아 게시물을 작성해보아야겠다.
                 val liveData = MutableLiveData<String>()
                 feedViewModel.getFeedImgUrl(newData, imgBitmap, imageProcessing, liveData)
+                var tmpUrl: String? = null //임시 저장하는 변수
                 liveData.observe(this@SubActivityModifyPost) {
                     //수정된 게시물 정보를 intent를 통해 이 액티비티를 호출한 부모 액티비티에 데이터를 전달한다.
-                    if (it != null) {
+                    if (it != null && it != tmpUrl) {
                         newData.imgurl = it
+                        tmpUrl = it
                         intent.putExtra("modifiedFeed", newData)
                         setResult(MODIFY_OK, intent)
                         finish()
@@ -186,17 +189,18 @@ class SubActivityModifyPost : AppCompatActivity() {
                     "upload" -> {
                         tvMessage.text = "게시물을 수정하시겠습니까?"
                         btnYes.setOnClickListener {
+                            dismiss()
                             processUpdatePost()
                         }
                     }
                     "btnBack" -> {
                         tvMessage.text = "게시물 수정을 그만하시겠습니까?"
                         btnYes.setOnClickListener {
+                            dismiss()
                             finish()
                         }
                     }
                 }
-
                 show()
             }
         }
