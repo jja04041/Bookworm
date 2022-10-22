@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +28,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 //메커니즘 순서
-//1. 이전 화면(fragmentFeed)에서 넘어온 Feed데이터를 가지고 화면애 세팅해준다.
+//1. 이전 화면(fragmentFeed)에서 넘어온 Feed데이터를 가지고 화면에 세팅해준다.
 //2. 댓글을 불러와야 하는데, Paging3를 이용하여 데이터를 가지고 온다.
 //3. 가지고 온 댓글을 리사이클러뷰에 뿌려준다.
 //4. 사용자가 댓글을 단 경우, 파이어스토어 서버에 해당 댓글을 저장하고, (1) 화면을 새로고침한다. or (2) 맨 위에 아이템을 세팅한다.
@@ -44,6 +45,8 @@ class SubActivityComment : AppCompatActivity() {
     companion object {
         const val FEED_MODIFIED = 111
         const val FEED_DELETE = 112
+
+        const val COMMENT_DELETE = 113
     }
 
     //액티비티 간 데이터 전달 핸들러(검색한 데이터의 값을 전달받는 매개체가 된다.) [책 데이터 이동]
@@ -94,6 +97,7 @@ class SubActivityComment : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        showShimmer(true)
         binding.apply {
             setContentView(root)
             setUI()
@@ -142,10 +146,12 @@ class SubActivityComment : AppCompatActivity() {
                     )
                     feedViewModel.manageComment(comment, feedItem.feedID!!, true) //서버에 댓글 추가
                     //게시물 작성자에게 댓글이 달렸다는 알림을 보냄
-                    myFCMService.sendPostToFCM(
-                            this@SubActivityComment, feedItem.creatorInfo!!.fCMtoken,
-                            "${nowUser!!.username}님이 댓글을 남겼습니다. \"${text}\" "
-                    )
+                    if (nowUser!!.token != feedItem.userToken) { //본인이 댓글을 단 경우엔 알림이 가지 않도록 함
+                        myFCMService.sendPostToFCM(
+                                this@SubActivityComment, feedItem.creatorInfo!!.fCMtoken,
+                                "${nowUser!!.username}님이 댓글을 남겼습니다. \"${text}\" "
+                        )
+                    }
 
                     //키보드 내리기
                     (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
@@ -219,6 +225,7 @@ class SubActivityComment : AppCompatActivity() {
                     }
                     //변경된 리스트를 어댑터에 반영
                     commentAdapter.submitList(current)
+                    showShimmer(false)
                 }
             }
         }
@@ -248,5 +255,12 @@ class SubActivityComment : AppCompatActivity() {
                 })
             }
         }
+    }
+
+    //shimmer을 켜고 끄고 하는 메소드
+    fun showShimmer(bool: Boolean) {
+        binding.llComment.isVisible = !bool
+        if (bool) binding.SFLComment.startShimmer() else binding.SFLComment.stopShimmer()
+        binding.SFLComment.isVisible = bool
     }
 }

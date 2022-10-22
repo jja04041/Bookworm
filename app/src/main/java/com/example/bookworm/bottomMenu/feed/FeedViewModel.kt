@@ -279,7 +279,9 @@ class FeedViewModel(val context: Context) : ViewModel() {
     }
 
     private suspend fun addCommentData(comment: Comment) = withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
+        val tempUserInfo = userInfoViewModel.suspendGetUser(null)
         comment.creator = userInfoViewModel.suspendGetUser(comment.userToken)!!
+        comment.isUserComment = (tempUserInfo!!.token == comment.userToken)
         return@withContext comment
     }
 }

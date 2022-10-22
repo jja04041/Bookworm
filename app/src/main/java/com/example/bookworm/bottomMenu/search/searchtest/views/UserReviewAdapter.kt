@@ -1,6 +1,7 @@
 package com.example.bookworm.bottomMenu.search.searchtest.views
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +13,16 @@ import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.feed.Feed
 import com.example.bookworm.bottomMenu.feed.FeedAdapter
 import com.example.bookworm.bottomMenu.feed.comments.Comment
+import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
 import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
 import com.example.bookworm.databinding.LayoutBookSearchDetailBinding
 import com.example.bookworm.databinding.LayoutBookSearchDetailReviewBinding
 import com.example.bookworm.databinding.LayoutBookSearchDetailTopBinding
 import com.example.bookworm.databinding.LayoutItemLoadingBinding
+import java.text.DateFormat
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
 class UserReviewAdapter(val context: Context) :
         ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
@@ -94,10 +100,16 @@ class UserReviewAdapter(val context: Context) :
 
         fun bindItem(item: Feed) {
             binding.apply {
-                tvDate.text = item.date
+//                tvDate.text = item.date
+                tvDate.text = getDateDuration(item.date)
                 Glide.with(itemView).load(item.creatorInfo.profileimg).circleCrop().into(imgProfile)
                 tvNickname.text = item.creatorInfo.username
                 tvCommentContent.text = item.feedText
+                llProfile.setOnClickListener{
+                    val intent = Intent(itemView.context, ProfileInfoActivity::class.java)
+                    intent.putExtra("userID", item.userToken)
+                    itemView.context.startActivity(intent)
+                }
             }
         }
     }
@@ -119,6 +131,36 @@ class UserReviewAdapter(val context: Context) :
     inner class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding by lazy {
             LayoutItemLoadingBinding.bind(itemView)
+        }
+    }
+
+    //시간차 구하기 n분 전, n시간 전 등등
+    fun getDateDuration(createdTime: String?): String {
+        var dateDuration = ""
+        val now = System.currentTimeMillis()
+        val dateNow = Date(now) //현재시각
+        val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        try {
+            val dateCreated = createdTime?.let { dateFormat.parse(it) }
+            val duration = dateNow.time - dateCreated!!.time //시간차이 mills
+            dateDuration = if (duration / 1000 / 60 == 0L) {
+                "방금"
+            } else if (duration / 1000 / 60 <= 59) {
+                (duration / 1000 / 60).toString() + "분 전"
+            } else if (duration / 1000 / 60 / 60 <= 23) {
+                (duration / 1000 / 60 / 60).toString() + "시간 전"
+            } else if (duration / 1000 / 60 / 60 / 24 <= 29) {
+                (duration / 1000 / 60 / 60 / 24).toString() + "일 전"
+            } else if (duration / 1000 / 60 / 60 / 24 / 30 <= 12) {
+                (duration / 1000 / 60 / 60 / 24 / 30).toString() + "개월 전"
+            } else {
+//                (duration / 1000 / 60 / 60 / 24 / 30 / 12).toString() + "년 전"
+                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(duration)
+            }
+            return dateDuration
+        } catch (e: ParseException) {
+            e.printStackTrace()
+            return ""
         }
     }
 }

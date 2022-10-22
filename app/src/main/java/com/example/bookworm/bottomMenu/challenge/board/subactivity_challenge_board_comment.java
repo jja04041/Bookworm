@@ -193,7 +193,9 @@ public class subactivity_challenge_board_comment extends AppCompatActivity {
             binding.edtComment.setText(null);
             binding.mRecyclerView.smoothScrollToPosition(0); //맨 위로 포커스를 이동 (본인 댓글 확인을 위함)
 
-            myFCMService.sendPostToFCM(context, creatorUser.getFCMtoken(), nowUser.getUsername() + "님이 댓글을 남겼습니다. " + "\"" + string + "\"");
+            if (!nowUser.getToken().equals(creatorUser.getToken())) {
+                myFCMService.sendPostToFCM(context, creatorUser.getFCMtoken(), nowUser.getUsername() + "님이 댓글을 남겼습니다. " + "\"" + string + "\"");
+            }
         }
     }
 

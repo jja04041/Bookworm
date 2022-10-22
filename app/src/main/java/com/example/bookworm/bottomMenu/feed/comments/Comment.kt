@@ -17,4 +17,9 @@ data class Comment(
         var duration: String? ="", //댓글 생성일자(~일전 등)
         @Exclude
         var creator: UserInfo?= null, // 댓글 작성자 정보
+
+        @Exclude @get:Exclude @set:Exclude
+        var isUserComment //이것이 현재 사용자의 댓글인지 확인하는 변수
+        : Boolean = false
+
 ) : Parcelable //Content를 통해 전달할 수도 있을까봐 적용해둠

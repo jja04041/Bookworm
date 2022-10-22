@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.bookworm.LoadState
 import com.example.bookworm.R
 import com.example.bookworm.appLaunch.views.MainActivity
+import com.example.bookworm.bottomMenu.feed.comments.Comment
 import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
 
 //메뉴 팝업
@@ -25,6 +26,8 @@ class customMenuPopup(val context: Context, anchor: View) : PopupMenu(context, a
     //피드 관련 메뉴 변수
     val FEED_DELETE = 299 // 삭제
     val FEED_MODIFY = 1 // 수정
+
+    val COMMENT_DELETE = 298 // 댓글 삭제
 
     //피드 메뉴인 경우
     fun setItem(data: Any) {
@@ -50,6 +53,7 @@ class customMenuPopup(val context: Context, anchor: View) : PopupMenu(context, a
                 R.id.menu_modify -> modifyData(data)
                 R.id.menu_delete -> {
                     if (data is Feed) createAlertBuilder(FEED_DELETE)
+                    if (data is Comment) createAlertBuilder(COMMENT_DELETE)
                 }
                 else -> return true
             }
@@ -79,6 +83,7 @@ class customMenuPopup(val context: Context, anchor: View) : PopupMenu(context, a
                         .setMessage(
                                 when (code) {
                                     FEED_DELETE -> "게시물을 삭제하시겠습니까?" //피드(게시물) 삭제
+                                    COMMENT_DELETE -> "댓글을 삭제하시겠습니까?" //댓글 삭제
                                     else -> ""
                                 })
                         //참인 경우
@@ -92,7 +97,7 @@ class customMenuPopup(val context: Context, anchor: View) : PopupMenu(context, a
 
                                 //뷰모델을 이용하여 서버에서 피드 데이터 삭제 진행
                                 val state = MutableLiveData<LoadState>()
-                                (vm as FeedViewModel).deleteFeed(data as Feed,state)
+                                (vm as FeedViewModel).deleteFeed(data as Feed, state)
                                 //어댑터 Refresh
                                 //삭제된 내용을 현재 액티비티에 반영해야함.
                                 state.observe(context as AppCompatActivity) {
@@ -100,6 +105,8 @@ class customMenuPopup(val context: Context, anchor: View) : PopupMenu(context, a
                                     else liveState.value = FEED_DELETE
                                 }
 
+
+                            } else if (code == COMMENT_DELETE) { //댓글 삭제 진행
 
                             }
                         }.setNegativeButton("아니오") { dialog: DialogInterface, which: Int ->

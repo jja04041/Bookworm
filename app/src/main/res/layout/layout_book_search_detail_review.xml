@@ -72,6 +72,7 @@
         android:id="@+id/tvCommentContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
         android:text="@string/lorem"
         android:textColor="#CC000000" />
 
