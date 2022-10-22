@@ -122,7 +122,7 @@ class CommentsAdapter(val context: Context) : ListAdapter<Any, RecyclerView.View
                     val popupMenu = customMenuPopup(context, v)
                     if (item.isUserPost) {
                         popupMenu.setItem(item)
-                        popupMenu.liveState.observe(context as MainActivity) {
+                        popupMenu.liveState.observe(context as SubActivityComment) {
                             if (it == popupMenu.FEED_DELETE) {
                                 //FragmentFeed의 FeedAdapter에서 이 데이터를 삭제한다.
                                 val intent = context.intent
