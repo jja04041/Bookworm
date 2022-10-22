@@ -137,7 +137,7 @@ public class Board_CommentAdapter extends RecyclerView.Adapter<RecyclerView.View
                 }
             });
 
-            binding.ivFeedMenu.setOnClickListener(new View.OnClickListener() {
+            binding.btnCommentMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 //                    item.setPosition(getAdapterPosition());

@@ -77,7 +77,7 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/ivFeedMenu"
+                android:id="@+id/btnCommentMenu"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center_vertical|end"

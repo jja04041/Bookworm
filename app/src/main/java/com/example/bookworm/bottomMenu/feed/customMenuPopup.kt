@@ -92,10 +92,12 @@ class customMenuPopup(val context: Context, anchor: View) : PopupMenu(context, a
                         .setPositiveButton("네") { dialog: DialogInterface, which: Int ->
                             dialog.dismiss() //창 닫기
                             //피드 삭제
+                            vm = ViewModelProvider(if (context is MainActivity) context
+                            else context as SubActivityComment)[FeedViewModel::class.java]
                             if (code == FEED_DELETE) {
                                 //뷰모델 생성
-                                vm = ViewModelProvider(if (context is MainActivity) context
-                                else context as SubActivityComment)[FeedViewModel::class.java]
+//                                vm = ViewModelProvider(if (context is MainActivity) context
+//                                else context as SubActivityComment)[FeedViewModel::class.java]
 
                                 //뷰모델을 이용하여 서버에서 피드 데이터 삭제 진행
                                 val state = MutableLiveData<LoadState>()
@@ -109,7 +111,8 @@ class customMenuPopup(val context: Context, anchor: View) : PopupMenu(context, a
 
 
                             } else if (code == COMMENT_DELETE) { //댓글 삭제 진행
-
+                                val state = MutableLiveData<LoadState>()
+                                (vm as FeedViewModel).manageComment(data as Comment, data.feedID, false)
                             }
                         }.setNegativeButton("아니오") { dialog: DialogInterface, which: Int ->
                             dialog.dismiss()

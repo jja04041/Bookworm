@@ -97,9 +97,10 @@ class CommentsAdapter(val context: Context) : ListAdapter<Any, RecyclerView.View
                     itemView.context.startActivity(intent)
                 }
 
-                ivFeedMenu.setOnClickListener{ v ->
+                btnCommentMenu.setOnClickListener{ v ->
                     val popupMenu = customMenuPopup(context, v)
                     if (item.isUserComment){
+                        item.feedID = (currentList[0] as Feed).feedID!!
                         popupMenu.setItem(item)
                         popupMenu.liveState.observe(context as SubActivityComment) {
                             if (it == popupMenu.COMMENT_DELETE) {
