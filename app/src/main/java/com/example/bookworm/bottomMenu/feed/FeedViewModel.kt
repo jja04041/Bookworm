@@ -135,17 +135,21 @@ class FeedViewModel(val context: Context) : ViewModel() {
     }
 
     //댓글을 추가/삭제하는 함수
-    fun manageComment(comment: Comment, feedId: String, isAdd: Boolean = true) {
+    fun manageComment(comment: Comment, feedId: String, isAdd: Boolean = true, state: MutableLiveData<LoadState>? = null) {
         viewModelScope.launch {
-            nowCommentLoadState.value = LoadState.Loading
+            if (state != null) state.value = LoadState.Loading
+            else nowCommentLoadState.value = LoadState.Loading
             try {
                 dataRepository.manageComment(feedId, comment, isAdd)
-                nowCommentLoadState.value = LoadState.Done
+                if (state != null) state.value = LoadState.Done
+                else nowCommentLoadState.value = LoadState.Done
             } catch (e: NetworkErrorException) {
                 Toast.makeText(context, "네트워크 오류입니다 다시 시도해 주세요. ", Toast.LENGTH_SHORT).show()
-                nowCommentLoadState.value = LoadState.Error
+                if (state != null) state.value = LoadState.Error
+                else nowCommentLoadState.value = LoadState.Error
             } catch (e: Exception) {
-                nowCommentLoadState.value = LoadState.Error
+                if (state != null) state.value = LoadState.Error
+                else nowCommentLoadState.value = LoadState.Error
             }
         }
     }

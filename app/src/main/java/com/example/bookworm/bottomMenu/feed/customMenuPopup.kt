@@ -112,7 +112,10 @@ class customMenuPopup(val context: Context, anchor: View) : PopupMenu(context, a
 
                             } else if (code == COMMENT_DELETE) { //댓글 삭제 진행
                                 val state = MutableLiveData<LoadState>()
-                                (vm as FeedViewModel).manageComment(data as Comment, data.feedID, false)
+                                (vm as FeedViewModel).manageComment(data as Comment, data.feedID, false, state)
+                                state.observe(context as SubActivityComment){
+                                    if (state.value == LoadState.Done) liveState.value = COMMENT_DELETE
+                                }
                             }
                         }.setNegativeButton("아니오") { dialog: DialogInterface, which: Int ->
                             dialog.dismiss()

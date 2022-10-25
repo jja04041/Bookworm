@@ -166,6 +166,7 @@ class SubActivityComment : AppCompatActivity() {
                         if (state == LoadState.Done) {
                             comment.duration = feedViewModel.getDateDuration(comment!!.madeDate)
                             comment.creator = nowUser!!
+                            comment.isUserComment = true //내가 달은 댓글이므로. 이 코드가 없으면 내거라고 인식을 못해서 댓글을 달은 직후 상태에서 댓글 삭제 팝업이 뜨지 않음.
                             commentAdapter.currentList.toMutableList().apply {
                                 add(1, comment)
                                 commentAdapter.submitList(this)
@@ -239,7 +240,7 @@ class SubActivityComment : AppCompatActivity() {
     private fun setRecyclerView() {
         binding.apply {
             mRecyclerView.adapter = commentAdapter //어댑터 세팅
-            mRecyclerView.itemAnimator = null //리사이클러뷰 애니메이션 제거
+//            mRecyclerView.itemAnimator = null //리사이클러뷰 애니메이션 제거
             mRecyclerView.isNestedScrollingEnabled = false
             mRecyclerView.setHasFixedSize(true)
             swiperefresh.setOnRefreshListener {
