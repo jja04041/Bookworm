@@ -49,16 +49,16 @@ class SubActivityModifyPost : AppCompatActivity() {
     private var originBitmap: Bitmap? = null //원본 게시물 이미지 비트맵
     private var imgBitmap: Bitmap? = null //수정된 게시물 이미지 비트맵
 
-    //액티비티 간 데이터 전달 핸들러(검색한 데이터의 값을 전달받는 매개체가 된다.) [책 데이터 이동]
-    private var bookResult = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-    ) { result: ActivityResult ->
-        if (result.resultCode == RESULT_OK) {
-            val intent = result.data
-            newData.book = intent!!.getParcelableExtra("bookData")!!
-            binding!!.tvFeedBookTitle.text = newData.book!!.title
-        }
-    }
+    //    //액티비티 간 데이터 전달 핸들러(검색한 데이터의 값을 전달받는 매개체가 된다.) [책 데이터 이동]
+//    private var bookResult = registerForActivityResult(
+//            ActivityResultContracts.StartActivityForResult()
+//    ) { result: ActivityResult ->
+//        if (result.resultCode == RESULT_OK) {
+//            val intent = result.data
+//            newData.book = intent!!.getParcelableExtra("bookData")!!
+//            binding!!.tvFeedBookTitle.text = newData.book!!.title
+//        }
+//    }
     private lateinit var newData: Feed
     private lateinit var imageProcessing: ImageProcessing
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,6 +85,7 @@ class SubActivityModifyPost : AppCompatActivity() {
                         //이미지 로딩 성공시
                         override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                             originBitmap = resource!!.toBitmap()
+                            imgBitmap = originBitmap
                             btnFeedImgDelete.isVisible = true
                             return false
                         }
@@ -124,11 +125,15 @@ class SubActivityModifyPost : AppCompatActivity() {
             }
             tvFeedBookTitle.apply {
                 text = newData.book.title
+                // 수정 시엔 책 변경 불가
                 setOnClickListener {
-                    val intent = Intent(this@SubActivityModifyPost, SearchMainActivity::class.java)
-                    if (newData.book != Book()) intent.putExtra("prevBook", newData.book)
-                    bookResult.launch(intent)
+                    Toast.makeText(this@SubActivityModifyPost, "게시물 수정 시엔 도서를 변경할 수 없습니다.", Toast.LENGTH_SHORT).show()
                 }
+//                setOnClickListener {
+//                    val intent = Intent(this@SubActivityModifyPost, SearchMainActivity::class.java)
+//                    if (newData.book != Book()) intent.putExtra("prevBook", newData.book)
+//                    bookResult.launch(intent)
+//                }
             }
             btnFinish.setOnClickListener {
                 createAlert("upload")
@@ -147,6 +152,7 @@ class SubActivityModifyPost : AppCompatActivity() {
         binding = null
     }
 
+    //게시물 수정 로직
     private fun processUpdatePost() {
         binding!!.apply {
             newData.feedText = edtFeedText.text.toString()
@@ -157,20 +163,29 @@ class SubActivityModifyPost : AppCompatActivity() {
                         .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
                 //이곳에서 이미지를 서버에 올리고, 그 url을 받아 게시물을 작성해보아야겠다.
                 val liveData = MutableLiveData<String>()
-                feedViewModel.getFeedImgUrl(newData, imgBitmap, imageProcessing, liveData)
-                var tmpUrl: String? = null //임시 저장하는 변수
-                liveData.observe(this@SubActivityModifyPost) {
-                    //수정된 게시물 정보를 intent를 통해 이 액티비티를 호출한 부모 액티비티에 데이터를 전달한다.
-                    if (it != null && it != tmpUrl) {
-                        newData.imgurl = it
-                        tmpUrl = it
-                        intent.putExtra("modifiedFeed", newData)
-                        setResult(MODIFY_OK, intent)
-                        finish()
+                if (imgBitmap == null) {
+                    newData.imgurl = ""
+                    sendDataToBeforeActivity()
+                } else {
+                    feedViewModel.getFeedImgUrl(newData, imgBitmap, imageProcessing, liveData)
+                    val tmpUrl: String? = null //임시 저장하는 변수
+                    liveData.observe(this@SubActivityModifyPost) {
+                        //수정된 게시물 정보를 intent를 통해 이 액티비티를 호출한 부모 액티비티에 데이터를 전달한다.
+                        if (it != null && it != tmpUrl) {
+                            newData.imgurl = it
+                            sendDataToBeforeActivity()
+                        }
                     }
                 }
+
             } else finish() //기존내용에서 수정된 게 없는 경우 그냥 닫음
         }
+    }
+
+    private fun sendDataToBeforeActivity() {
+        intent.putExtra("modifiedFeed", newData)
+        setResult(MODIFY_OK, intent)
+        finish()
     }
 
     private fun createAlert(type: String) {

@@ -27,9 +27,6 @@ import kotlinx.coroutines.tasks.await
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 @SuppressLint("StaticFieldLeak")
@@ -71,14 +68,15 @@ class FeedViewModel(val context: Context) : ViewModel() {
         }
     }
 
-    fun deleteFeed(feed: Feed, liveData: MutableLiveData<LoadState>) {
+    fun deletePost(feed: Feed, liveData: MutableLiveData<LoadState>) {
         liveData.value = LoadState.Loading
         viewModelScope.launch {
             try {
-                dataRepository.deleteFeed(feed)
-                LoadState.Done
+                dataRepository.deletePostProcess(feed)
+                updateUserInfo(feed, true)
+                liveData.value = LoadState.Done
             } catch (e: Exception) {
-                LoadState.Error
+                liveData.value = LoadState.Error
             }
         }
     }
@@ -94,43 +92,29 @@ class FeedViewModel(val context: Context) : ViewModel() {
 
     //피드를 업로드할 때 사용하는 함수
     //선택한 이미지 비트맵을 URI로 변경 후, 서버에 업로드 => 파이어베이스에 피드 등록
-    fun uploadFeed(feed: Feed, imgBitmap: Bitmap? = null, imageProcess: ImageProcessing, imgUrlData: String = "") {
+    fun uploadPost(feed: Feed, imgBitmap: Bitmap? = null, imageProcess: ImageProcessing) {
         nowFeedUploadState.value = LoadState.Loading
         viewModelScope.launch {
             val url = imageJob(imgBitmap, imageProcess, feed).await()
             if (url != null) {
-                if (url == "" && imgUrlData != "") feed.imgurl = imgUrlData
-                else feed.imgurl = url
-                //파이어스토어에 피드 업로드
-                FireStoreLoadModule.provideQueryUploadPost(feed)
-                        .addOnSuccessListener {    //정상적으로 업로드 되는 경우
-                            //유저의 정보 업데이트
-                            feed.creatorInfo!!.apply {
-//                                setGenre(feed.book!!.categoryname, context) //장르 설정
-                                userInfoViewModel.setGenre(feed.book!!.categoryName, this)
-
-
-                                userInfoViewModel.getBookWorm(token).onJoin
-                                var data = userInfoViewModel.bwdata.value
-
-//                                achievement.canreturn()
-
-                                data!!.readCount++
-                                userInfoViewModel.updateBw(token, data)
-                                userInfoViewModel.updateUser(this)
-
-                                val achievement = Achievement(context, fbModule, this, data)
-                                achievement.CompleteAchievement(this, context)
-
-
-                            }
-                            nowFeedUploadState.value = LoadState.Done
-                        }
-                        // 업적 업데이트
-
-
-                        .addOnFailureListener { nowFeedUploadState.value = LoadState.Error }
-            } else nowFeedUploadState.value = LoadState.Error
+                if (!feed.isModified) feed.imgurl = url
+                //파이어스토어에 게시물 업로드
+                try {
+                    //수정된 게시물인 경우
+                    if (feed.isModified) {
+                        dataRepository.modifyPost(feed).await()
+                        nowFeedUploadState.value = LoadState.Done
+                    }
+                    //새로 생성된 게시물인 경우
+                    else {
+                        dataRepository.uploadPost(feed).await()
+                        updateUserInfo(feed)
+                        nowFeedUploadState.value = LoadState.Done
+                    }
+                } catch (e: Exception) {
+                    nowFeedLoadState.value = LoadState.Error
+                }
+            }
         }
     }
 
@@ -156,29 +140,37 @@ class FeedViewModel(val context: Context) : ViewModel() {
 
     //좋아요를 관리하는 함수
     fun manageLike(feedId: String, nowUser: UserInfo, isLiked: Boolean) {
-        val feedRef = FireStoreLoadModule.provideQueryPostByFeedID(feedId)
-        val nowUserRef = FireStoreLoadModule.provideUserByUserToken(nowUser.token)
         nowLikeState.value = LoadState.Loading
         viewModelScope.launch {
-            FireStoreLoadModule.provideFirebaseInstance() // Base For Query
-                    .runTransaction { transaction ->
-                        transaction.apply {
-                            update(feedRef, "likeCount", if (isLiked) FieldValue.increment(1L) else FieldValue.increment(-1L))
-                                    .update(nowUserRef, "likedPost",
-                                            if (isLiked) FieldValue.arrayUnion(feedId) else FieldValue.arrayRemove(feedId))
-                        }
-                    }.addOnSuccessListener {
-                        viewModelScope.launch {
-                            val user = userInfoViewModel.suspendGetUser(nowUser.token)
-                            userInfoViewModel.updateUser(user!!)
-                            //업적 처리
-//                        userInfoViewModel.getBookWorm(nowUser.token)
-//                        userInfoViewModel.bwdata.value
-                            nowLikeState.value = LoadState.Done
-                        }
-                    }.addOnFailureListener {
-                        nowLikeState.value = LoadState.Error
-                    }
+            try {
+                dataRepository.manageLike(feedId, nowUser.token, isLiked)
+                val user = userInfoViewModel.suspendGetUser(nowUser.token)
+                userInfoViewModel.updateUser(user!!)
+                nowLikeState.value = LoadState.Done
+            } catch (e: NullPointerException) {
+                //좋아요 처리가 불가한 경우
+                nowLikeState.value = LoadState.Error
+            }
+        }
+    }
+
+    //유저의 정보 업데이트 (게시물 업로드시)
+    private fun updateUserInfo(feed: Feed, isDelete: Boolean = false) {
+        feed.creatorInfo.apply {
+            if (!isDelete) {
+                userInfoViewModel.setGenre(feed.book.categoryName, this)
+                userInfoViewModel.getBookWorm(token).onJoin
+                val data = userInfoViewModel.bwdata.value
+                data!!.readCount++
+                userInfoViewModel.updateBw(token, data)
+                userInfoViewModel.updateUser(this)
+            } else {
+                userInfoViewModel.getBookWorm(token).onJoin
+                val data = userInfoViewModel.bwdata.value
+                data!!.readCount--
+                userInfoViewModel.updateBw(token, data)
+                userInfoViewModel.updateUser(this)
+            }
         }
     }
 
@@ -227,9 +219,12 @@ class FeedViewModel(val context: Context) : ViewModel() {
     }
 
     //단일 게시물을 불러올 때
-    fun loadPost(liveData: MutableLiveData<Feed>) {
+    fun loadPost(liveData: MutableLiveData<Feed>, feedId: String? = null) {
+        liveData.value = null
         viewModelScope.launch {
-            val loadedData = dataRepository.loadFireStoreData(FeedDataRepository.DataType.FeedType, pageSize = 1)
+            val loadedData =
+                    if (feedId == null) dataRepository.loadFireStoreData(FeedDataRepository.DataType.FeedType, pageSize = 1)
+                    else dataRepository.loadOnePost(feedId).toObject(Feed::class.java)
             liveData.value = addFeedData(loadedData as Feed)
         }
     }

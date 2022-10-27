@@ -76,6 +76,18 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tvIfModified"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginRight="10dp"
+                android:text="(수정됨)"
+                android:textStyle="bold"
+                android:textSize="12dp"
+                android:visibility="gone"
+                />
+
+            <TextView
                 android:id="@+id/tvDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -189,8 +201,8 @@
                 android:layout_width="360dp"
                 android:layout_height="360dp"
                 android:layout_gravity="center_horizontal"
-                android:visibility="gone"
-                android:layout_marginTop="15dp" />
+                android:layout_marginTop="15dp"
+                android:visibility="gone" />
 
 
             <FrameLayout

@@ -30,7 +30,7 @@ data class Feed(
         : Long = 0,
 
         var isModified
-        :Boolean = true, //수정됨을 확인 할 수 있는 플래그
+        :Boolean = false, //수정됨을 확인 할 수 있는 플래그
 
         @Exclude @get:Exclude @set:Exclude
         var creatorInfo //작성자 정보

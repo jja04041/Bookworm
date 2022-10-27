@@ -1,5 +1,6 @@
 package com.example.bookworm.bottomMenu.feed
 
+import android.util.Log
 import com.example.bookworm.bottomMenu.feed.comments.Comment
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
@@ -8,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
-//페이징 처리를 위한 레포지토리
+//게시물 관련 처리를 위한 레포지토리
 class FeedDataRepository() {
     private val PAGE_SIZE = 5
     private var queryForPaging: Query? = null
@@ -29,11 +30,14 @@ class FeedDataRepository() {
     //데이터 타입을 관리
     enum class DataType { FeedType, CommentType }
 
-    suspend fun deleteFeed(feed: Feed) {
-        FireStoreLoadModule.provideQueryPathToFeedCollection()
-                .document(feed.feedID!!).delete().await()
+    //게시물을 삭제하는 과정을 처리한다.
+    suspend fun deletePostProcess(feed: Feed) {
+        val feedRef = FireStoreLoadModule.provideQueryPathToFeedCollection()
+                .document(feed.feedID!!) //게시물의 경로
+        feedRef.delete().await()
     }
 
+    //Firestore에 있는 정보를 가져오는 함수
     suspend fun loadFireStoreData(type: DataType, pageSize: Int = PAGE_SIZE): Any? {
         var query = queryForPaging!!.limit(pageSize.toLong())
         currentPage = withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
@@ -76,6 +80,10 @@ class FeedDataRepository() {
 
     }
 
+    //한 개의 게시물의 정보만 가져오기 -> 게시물 수정시 최신의 데이터를 가져오기 위함.
+    suspend fun loadOnePost(feedId: String) =
+            FireStoreLoadModule.provideQueryPostByFeedID(feedId = feedId).get().await()
+
     //댓글 작성 관리
     suspend fun manageComment(feedId: String, comment: Comment, isAdd: Boolean): Transaction {
         val feedRef = FireStoreLoadModule.provideQueryPostByFeedID(feedId)
@@ -86,12 +94,36 @@ class FeedDataRepository() {
                         .update(feedRef, "commentsCount", FieldValue
                                 .increment(1L))
                 else
-                delete(commentRef)
-                        .update(feedRef, "commentsCount", FieldValue
-                                .increment(-1L))
+                    delete(commentRef)
+                            .update(feedRef, "commentsCount", FieldValue
+                                    .increment(-1L))
             }
 
         }.await()
     }
+
+    //좋아요 관리
+    suspend fun manageLike(feedId: String, nowUserToken: String, isLiked: Boolean): Transaction {
+        val feedRef = FireStoreLoadModule.provideQueryPostByFeedID(feedId)
+        val nowUserRef = FireStoreLoadModule.provideUserByUserToken(nowUserToken)
+        return FireStoreLoadModule.provideFirebaseInstance()
+                .runTransaction { transaction ->
+                    transaction.apply {
+                        val likeCount = transaction.get(feedRef)["likeCount"] as Long //현재 상태의 좋아요 수 확인
+                        if (likeCount >= 0) {
+                            update(feedRef, "likeCount", FieldValue.increment(if (isLiked) 1L else -1L))
+                                    .update(nowUserRef, "likedPost", if (isLiked) FieldValue.arrayUnion(feedId) else FieldValue.arrayRemove(feedId))
+                        } else throw NullPointerException()
+                    }
+                }.await()
+    }
+
+    //게시물 업로드
+    fun uploadPost(feed: Feed) =
+            FireStoreLoadModule.provideQueryUploadPost(feed)
+
+    //게시물 수정
+    fun modifyPost(feed: Feed) =
+            FireStoreLoadModule.provideQueryModifyPost(feed)
 
 }

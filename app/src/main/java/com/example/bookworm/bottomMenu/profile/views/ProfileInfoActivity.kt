@@ -17,7 +17,7 @@ import com.example.bookworm.bottomMenu.profile.submenu.SubMenuPagerAdapter
 import com.example.bookworm.chat.newchat.MessageActivity
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.ActivityProfileInfoBinding
-import com.example.bookworm.extension.follow.view.FollowViewModelImpl
+import com.example.bookworm.extension.follow.view.FollowViewModel
 import com.example.bookworm.notification.MyFCMService
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.async
@@ -29,7 +29,7 @@ class ProfileInfoActivity : AppCompatActivity() {
     var nowUser //타인 userInfo, 현재 사용자 nowUser
             : UserInfo? = null
     lateinit var userID: String
-    lateinit var fv: FollowViewModelImpl
+    lateinit var fv: FollowViewModel
     private val userViewModel by lazy {
         ViewModelProvider(
                 this,
@@ -48,7 +48,7 @@ class ProfileInfoActivity : AppCompatActivity() {
 
         binding = ActivityProfileInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        fv = FollowViewModelImpl(this)
+        fv = FollowViewModel(this)
         mFirebaseDatabase = FirebaseDatabase.getInstance()
 
         //shimmer 적용을 위해 기존 뷰는 일단 안보이게, shimmer는 보이게

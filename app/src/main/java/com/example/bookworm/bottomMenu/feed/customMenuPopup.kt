@@ -101,15 +101,16 @@ class customMenuPopup(val context: Context, anchor: View) : PopupMenu(context, a
 
                                 //뷰모델을 이용하여 서버에서 피드 데이터 삭제 진행
                                 val state = MutableLiveData<LoadState>()
-                                (vm as FeedViewModel).deleteFeed(data as Feed, state)
+                                (vm as FeedViewModel).deletePost(data as Feed, state)
                                 //어댑터 Refresh
                                 //삭제된 내용을 현재 액티비티에 반영해야함.
                                 state.observe(context as AppCompatActivity) {
-                                    if (context is SubActivityComment) context.finish()
-                                    else liveState.value = FEED_DELETE
+                                    states->
+                                    if(states == LoadState.Done){
+                                        if (context is SubActivityComment) context.finish()
+                                        else liveState.value = FEED_DELETE
+                                    }
                                 }
-
-
                             } else if (code == COMMENT_DELETE) { //댓글 삭제 진행
                                 val state = MutableLiveData<LoadState>()
                                 (vm as FeedViewModel).manageComment(data as Comment, data.feedID, false, state)

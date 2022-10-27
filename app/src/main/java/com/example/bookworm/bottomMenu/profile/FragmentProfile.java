@@ -28,7 +28,7 @@ import com.example.bookworm.chat.newchat.Activity_chatlist;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.databinding.FragmentProfileBinding;
-import com.example.bookworm.extension.follow.view.FollowViewModelImpl;
+import com.example.bookworm.extension.follow.view.FollowViewModel;
 import com.example.bookworm.extension.follow.view.FollowerActivity;
 
 public class FragmentProfile extends Fragment implements LifecycleObserver {
@@ -39,7 +39,7 @@ public class FragmentProfile extends Fragment implements LifecycleObserver {
     private Context current_context;
     private FBModule fbModule;
     UserInfoViewModel pv;
-    FollowViewModelImpl fv;
+    FollowViewModel fv;
     private UserInfo NowUser;
     SubMenuPagerAdapter menuPagerAdapter;
     public ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
@@ -62,7 +62,7 @@ public class FragmentProfile extends Fragment implements LifecycleObserver {
         View view = binding.getRoot();
         current_context = getActivity();
         pv = new ViewModelProvider(this, new UserInfoViewModel.Factory(current_context)).get(UserInfoViewModel.class);
-        fv = new ViewModelProvider(this, new FollowViewModelImpl.Factory(current_context)).get(FollowViewModelImpl.class);
+        fv = new ViewModelProvider(this, new FollowViewModel.Factory(current_context)).get(FollowViewModel.class);
         fbModule = new FBModule(current_context);
         //서브 메뉴를 보여주기위한 어댑터
         menuPagerAdapter = new SubMenuPagerAdapter(null, getChildFragmentManager());

@@ -4,29 +4,20 @@ package com.example.bookworm.bottomMenu.feed
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.bookworm.LoadState
-import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
 import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing
@@ -200,7 +191,7 @@ class SubActivityCreatePost : AppCompatActivity() {
         feedData.date = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
         feedData.feedID = System.currentTimeMillis().toString() + "_" + feedData.userToken //현재 시각 + 사용자 토큰을 FeedID로 설정
-        feedViewModel.uploadFeed(feedData, feedImageBitmap, imageProcess)
+        feedViewModel.uploadPost(feedData, feedImageBitmap, imageProcess)
         feedViewModel.nowFeedUploadState.observe(this@SubActivityCreatePost) {
             when (it) {
                 LoadState.Done -> {

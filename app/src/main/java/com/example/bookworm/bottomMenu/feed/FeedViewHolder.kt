@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.lifecycle.MutableLiveData
@@ -139,6 +140,7 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context,
 
 
                 }
+                tvIfModified.isVisible = feed.isModified
                 //좋아요 표시관리
                 binding.apply {
                     tvLike.apply {
@@ -232,8 +234,8 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context,
 
                 }
                 btnLike.apply {
-                    background = if (feed.isUserLiked) AppCompatResources.getDrawable(context, R.drawable.icon_like_red)
-                    else AppCompatResources.getDrawable(context, R.drawable.icon_like)
+                    val back = if (feed.isUserLiked) R.drawable.icon_like_red else R.drawable.icon_like
+                    background = AppCompatResources.getDrawable(context, back)
                 }
             }
             feedViewModel.manageLike(feed.feedID!!, nowUser, feed.isUserLiked)
@@ -244,6 +246,17 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context,
                                 context,
                                 feedUserFcmtoken, "${nowUser.username}님이 좋아요를 표시했습니다."
                         )
+                    }
+                    LoadState.Error -> {
+                        Toast.makeText(context, "게시물의 좋아요를 처리하는 중 오류가 발생하였습니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
+                        binding.apply {
+                            //에러 발생시 원상태로 돌림.
+                            tvLike.text = "${tvLike.text.toString().toInt() + (if (feed.isUserLiked) -1 else 1)}"
+                            btnLike.apply {
+                                val back = if (!feed.isUserLiked) R.drawable.icon_like_red else R.drawable.icon_like
+                                background = AppCompatResources.getDrawable(context, back)
+                            }
+                        }
                     }
                     else -> {}
                 }

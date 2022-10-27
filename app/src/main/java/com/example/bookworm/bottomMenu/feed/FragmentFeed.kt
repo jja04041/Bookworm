@@ -2,8 +2,6 @@ package com.example.bookworm.bottomMenu.feed
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -67,18 +65,25 @@ class FragmentFeed : Fragment() {
             result.data!!.apply {
                 //게시물 업로드 하는 함수
                 val item = getParcelableExtra<Feed>("modifiedFeed")!!
-                feedViewModel.uploadFeed(item, null, ImageProcessing(requireContext()), item.imgurl)
+                val newFeedLiveData = MutableLiveData<Feed>()
+                feedViewModel.uploadPost(item, null, ImageProcessing(requireContext()))
                 feedViewModel.nowFeedUploadState.observe(viewLifecycleOwner, Observer {
                     if (it == LoadState.Done) {
-                        //수정 업데이트 적용
-                        need2Mov = item.position
-                        item.duration = DdayCounter.getDuration(item.date!!)
-                        feedAdapter.currentList.toMutableList().apply {
-                            this.removeAt(need2Mov)
-                            add(need2Mov, item)
-                            feedAdapter.submitList(this.toList())
-                        }
-                        Toast.makeText(requireContext(), "게시물이 정상적으로 수정되었습니다. ", Toast.LENGTH_SHORT).show()
+                        feedViewModel.loadPost(newFeedLiveData, item.feedID)
+                        newFeedLiveData.observe(viewLifecycleOwner, Observer { feed ->
+                            if (feed != null) {
+                                //수정 업데이트 적용
+                                need2Mov = item.position
+                                feed.duration = DdayCounter.getDuration(feed.date!!)
+                                feedAdapter.currentList.toMutableList().apply {
+                                    this.removeAt(need2Mov)
+                                    add(need2Mov, feed)
+                                    feedAdapter.submitList(this.toList())
+                                }
+                                Toast.makeText(requireContext(), "게시물이 정상적으로 수정되었습니다. ", Toast.LENGTH_SHORT).show()
+                            }
+                        })
+
                     }
                 })
 
@@ -139,6 +144,7 @@ class FragmentFeed : Fragment() {
     private fun processFeedDelete(pos: Int) {
         val mutableList = feedAdapter.currentList.toMutableList()
         mutableList.removeAt(pos)
+        //삭제한 만큼 불러온다.
         if (!isDataEnd) {
             val liveData = MutableLiveData<Feed>()
             feedViewModel.loadPost(liveData)

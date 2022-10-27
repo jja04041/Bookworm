@@ -75,7 +75,7 @@ public class LoadingActivity extends AppCompatActivity {
                         Log.e("카카오 자동로그인 중 에러 발생", "기타오류");
                     }
                 } else {
-                    Log.d("카카오토큰", Objects.requireNonNull(AuthApiClient.getInstance().getTokenManagerProvider().getManager().getToken()).getAccessToken());
+//                    Log.d("카카오토큰", Objects.requireNonNull(AuthApiClient.getInstance().getTokenManagerProvider().getManager().getToken()).getAccessToken());
                     //토큰 유효성 체크 성공(필요 시 토큰 갱신됨)
                     moveToMain();
                 }

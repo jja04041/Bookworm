@@ -2,21 +2,15 @@ package com.example.bookworm.bottomMenu.profile
 
 import android.content.Context
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.bookworm.BookWorm
 import com.example.bookworm.bottomMenu.feed.Feed
-import com.example.bookworm.bottomMenu.feed.SubActivityCreatePost
-import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumData
-import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
 import com.example.bookworm.core.dataprocessing.repository.UserRepository
 import com.example.bookworm.core.userdata.UserInfo
-import com.example.bookworm.extension.follow.view.FollowViewModelImpl
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.*

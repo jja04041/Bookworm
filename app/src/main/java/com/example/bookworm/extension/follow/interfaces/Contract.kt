@@ -15,7 +15,7 @@ MVP 디자인 패턴을 이용하여 구현하였다.
 interface Contract {
     interface View {
         //imageView와 textView에 사용자의 info를 보여준다
-        fun showInfo(info: ArrayList<UserInfo>?)
+        fun showInfo(info: MutableList<UserInfo>?)
     }
 
     interface Presenter {

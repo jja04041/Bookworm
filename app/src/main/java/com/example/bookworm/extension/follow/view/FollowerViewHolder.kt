@@ -6,13 +6,11 @@ import android.content.Intent
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.LayoutUserItemBinding
-import kotlinx.coroutines.launch
 
 //isFollower 0=팔로잉 탭, 1=팔로워 탭
 class FollowerViewHolder(
@@ -23,8 +21,8 @@ class FollowerViewHolder(
     var binding = LayoutUserItemBinding.bind(itemView)
     var v = false
     val fv =
-            ViewModelProvider(context as FollowerActivity, FollowViewModelImpl.Factory(context)).get(
-                    FollowViewModelImpl::class.java
+            ViewModelProvider(context as FollowerActivity, FollowViewModel.Factory(context)).get(
+                    FollowViewModel::class.java
             )
 
     fun setItem(item: UserInfo?) {

@@ -97,9 +97,9 @@ class CommentsAdapter(val context: Context) : ListAdapter<Any, RecyclerView.View
                     itemView.context.startActivity(intent)
                 }
 
-                btnCommentMenu.setOnClickListener{ v ->
+                btnCommentMenu.setOnClickListener { v ->
                     val popupMenu = customMenuPopup(context, v)
-                    if (item.isUserComment){
+                    if (item.isUserComment) {
                         item.feedID = (currentList[0] as Feed).feedID!!
                         item.position = bindingAdapterPosition
                         popupMenu.setItem(item)
@@ -146,8 +146,8 @@ class CommentsAdapter(val context: Context) : ListAdapter<Any, RecyclerView.View
                                 val intent = context.intent
                                 intent.putExtra("deleteTarget", item) //삭제 대상 게시물 아이템을 인텐트에 담는다.
                                 //이 게시물은 삭제할 것이라고 액티비티에 알려줌
-                                (context as SubActivityComment).setResult(SubActivityComment.FEED_DELETE, intent)
-                                (context as SubActivityComment).finish()
+                                context.setResult(SubActivityComment.FEED_DELETE, intent)
+                                context.finish()
                             }
                         }
                     }
@@ -166,6 +166,7 @@ class CommentsAdapter(val context: Context) : ListAdapter<Any, RecyclerView.View
                 }
                 //피드 내용
                 tvFeedText.text = item.feedText
+                tvIfModified.isVisible = item.isModified
                 if (item.imgurl != "") Glide.with(itemView.context).load(item.imgurl).signature(ObjectKey(System.currentTimeMillis().toString())).into(ivFeedImage)
                 ivFeedImage.isVisible = (item.imgurl != "")
                 tvCommentCount.text = "댓글 ${item.commentsCount}개"

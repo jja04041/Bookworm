@@ -63,7 +63,7 @@ class SubActivityComment : AppCompatActivity() {
                 if (!feedItem.isModified) feedItem.isModified = true
                 isModified = true
                 feedItem.apply {
-                    feedViewModel.uploadFeed(this, null, imageProcessModule, this.imgurl)
+                    feedViewModel.uploadPost(this, null, imageProcessModule)
                     feedViewModel.nowFeedUploadState.observe(this@SubActivityComment) {
                         if (it == LoadState.Done) {
                             //수정 업데이트 적용

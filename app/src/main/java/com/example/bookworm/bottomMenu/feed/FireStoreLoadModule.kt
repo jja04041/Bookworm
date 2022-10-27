@@ -60,6 +60,16 @@ object FireStoreLoadModule {
             provideQueryPathToFeedCollection()
                     .document(item.feedID!!).set(item)
 
+    fun provideQueryModifyPost(item: Feed) =
+            provideQueryPathToFeedCollection()
+                    .document(item.feedID!!)
+                    .update("book", item.book,
+                            "feedText", item.feedText,
+                            "date", item.date,
+                            "isModified", true,
+                            "imgurl", item.imgurl
+                    )
+
     //FeedId로 피드 문서 검색하는 쿼리
     fun provideQueryPostByFeedID(feedId: String) =
             provideQueryPathToFeedCollection()
