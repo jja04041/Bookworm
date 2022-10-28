@@ -5,21 +5,22 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.bookworm.R
-import com.example.bookworm.bottomMenu.Feed.items.Feed
+import com.example.bookworm.bottomMenu.feed.Feed
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.AlbumProcessViewHolder
-import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumActivity
-import com.example.bookworm.databinding.FragmentRecordItemBinding
+import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.ShowFeedListForCreateAlbum
+import com.example.bookworm.databinding.SubactivityShowalbumcontentItemBinding
 import kotlin.collections.ArrayList
 
 class AlbumProcessAdapter(val context: Context) :
-    ListAdapter<Feed, AlbumProcessViewHolder>(MyDiffCallback) {
-    val parentActivity = context as CreateAlbumActivity
-    var binding: FragmentRecordItemBinding? = null
+        ListAdapter<Feed, AlbumProcessViewHolder>(MyDiffCallback) {
+    val parentActivity = context as ShowFeedListForCreateAlbum
+    var binding: SubactivityShowalbumcontentItemBinding? = null
     var onItemClickListener: ((Feed) -> Unit)? = null
-    var selectedFeed: ArrayList<Feed> = ArrayList()
+    val selectedFeed = MutableLiveData<ArrayList<Feed>>()
 
     init {
         setHasStableIds(true)
@@ -28,8 +29,8 @@ class AlbumProcessAdapter(val context: Context) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlbumProcessViewHolder {
         val inflater = LayoutInflater.from(parentActivity)
-        binding = FragmentRecordItemBinding.inflate(inflater)
-
+        binding = SubactivityShowalbumcontentItemBinding.inflate(inflater)
+        selectedFeed.value = ArrayList()
         return AlbumProcessViewHolder(binding!!, context)
     }
 
@@ -42,17 +43,21 @@ class AlbumProcessAdapter(val context: Context) :
 
     override fun getItemId(position: Int): Long = position.toLong()
 
-    fun applySelection(binding: FragmentRecordItemBinding, feed: Feed) {
-        if (selectedFeed.contains(feed)) {
-            selectedFeed.remove(feed)
+    fun applySelection(binding: SubactivityShowalbumcontentItemBinding, feed: Feed) {
+        if (selectedFeed.value!!.contains(feed)) {
+            selectedFeed.value = selectedFeed.value!!.apply {
+                remove(feed)
+            }
             changeBackground(binding, R.color.white)
         } else {
-            selectedFeed.add(feed)
+            selectedFeed.value = selectedFeed.value!!.apply {
+                add(feed)
+            }
             changeBackground(binding, R.color.purple_200)
         }
     }
 
-    private fun changeBackground(binding: FragmentRecordItemBinding, resId: Int) {
+    private fun changeBackground(binding: SubactivityShowalbumcontentItemBinding, resId: Int) {
         binding.frame.setBackgroundColor(ContextCompat.getColor(binding.root.context, resId))
     }
 
@@ -63,16 +68,16 @@ class AlbumProcessAdapter(val context: Context) :
     //값 업데이트를 위한 비교 콜백
     object MyDiffCallback : DiffUtil.ItemCallback<Feed>() {
         override fun areItemsTheSame(
-            oldItem: Feed,
-            newItem: Feed
+                oldItem: Feed,
+                newItem: Feed,
         ): Boolean {
             return oldItem.feedID == newItem.feedID
         }
 
         @SuppressLint("DiffUtilEquals")
         override fun areContentsTheSame(
-            oldItem: Feed,
-            newItem: Feed
+                oldItem: Feed,
+                newItem: Feed,
         ): Boolean {
             return oldItem == newItem
         }

@@ -2,7 +2,6 @@ package com.example.bookworm.chat.newchat;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +11,6 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
 import com.example.bookworm.core.userdata.UserInfo;
@@ -48,7 +45,7 @@ public class ChatlistRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
         pv = new UserInfoViewModel(context);
         pv.getUser(null, false);
-        pv.getData().observe((LifecycleOwner) context, userInfo -> {
+        pv.getUserInfoLiveData().observe((LifecycleOwner) context, userInfo -> {
             userinfo = userInfo;
             uid = userinfo.getToken();
 

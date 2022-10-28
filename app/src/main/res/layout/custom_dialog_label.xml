@@ -4,201 +4,67 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="350dp"
     android:layout_height="wrap_content"
+    android:background="@drawable/square_button"
     android:orientation="vertical"
     android:padding="10dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="감정"
-        android:textColor="#000000"
-        android:textSize="20dp"
-        android:textStyle="bold" />
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+        android:layout_height="200dp"
+        android:layout_margin="20dp"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvEmotion0"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/selector_selected_label"
-            android:gravity="center"
-            android:paddingHorizontal="10dp"
-            android:text="재미"
-            android:textSize="18dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:background="@drawable/round_button_gray"
+            android:gravity="center">
 
-        <TextView
-            android:id="@+id/tvEmotion1"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/selector_selected_label"
-            android:gravity="center"
-            android:paddingHorizontal="10dp"
-            android:text="감동"
-            android:textSize="18dp" />
+            <TextView
+                android:id="@+id/tvMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="메시지"
+                android:textColor="@color/black" />
 
-        <TextView
-            android:id="@+id/tvEmotion2"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/selector_selected_label"
-            android:gravity="center"
-            android:paddingHorizontal="10dp"
-            android:text="슬픔"
-            android:textSize="18dp" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvEmotion3"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/selector_selected_label"
-            android:gravity="center"
-            android:paddingHorizontal="10dp"
-            android:text="긴장감"
-            android:textSize="18dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
 
-        <TextView
-            android:id="@+id/tvEmotion4"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/selector_selected_label"
-            android:gravity="center"
-            android:paddingHorizontal="10dp"
-            android:text="스릴"
-            android:textSize="18dp" />
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+                <Button
+                    android:id="@+id/btnNo"
+                    android:layout_width="60dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/label_design"
+                    android:text="아니요" />
 
-        <TextView
-            android:id="@+id/tvEmotion5"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/selector_selected_label"
-            android:gravity="center"
-            android:paddingHorizontal="10dp"
-            android:text="공포"
-            android:textSize="18dp" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvEmotion6"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/selector_selected_label"
-            android:gravity="center"
-            android:paddingHorizontal="10dp"
-            android:text="힐링"
-            android:textSize="18dp" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
 
-    </LinearLayout>
+                <Button
+                    android:id="@+id/btnYes"
+                    android:layout_width="60dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/label_design"
+                    android:text="네" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="추천"
-        android:textColor="#000000"
-        android:textSize="20dp"
-        android:textStyle="bold" />
+            </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tvRecommend0"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/selector_selected_label"
-            android:gravity="center"
-            android:paddingHorizontal="10dp"
-            android:text="꼭 보세요"
-            android:textSize="18dp" />
-
-        <TextView
-            android:id="@+id/tvRecommend1"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/selector_selected_label"
-            android:gravity="center"
-            android:paddingHorizontal="10dp"
-            android:text="볼만해요"
-            android:textSize="18dp" />
-
-        <TextView
-            android:id="@+id/tvRecommend2"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/selector_selected_label"
-            android:gravity="center"
-            android:paddingHorizontal="10dp"
-            android:text="시간 잘가요"
-            android:textSize="18dp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tvRecommend3"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/selector_selected_label"
-            android:gravity="center"
-            android:paddingHorizontal="10dp"
-            android:text="또 읽을래요"
-            android:textSize="18dp" />
-
-        <TextView
-            android:id="@+id/tvRecommend4"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/selector_selected_label"
-            android:gravity="center"
-            android:paddingHorizontal="10dp"
-            android:text="별로에요"
-            android:textSize="18dp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btnOk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="완료" />
-
+        </LinearLayout>
 
     </LinearLayout>
 

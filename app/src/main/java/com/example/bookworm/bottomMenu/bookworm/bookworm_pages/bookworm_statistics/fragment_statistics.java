@@ -50,7 +50,7 @@ public class fragment_statistics extends Fragment {
         pv.getUser(null, false);
 
         //데이터 수정을 감지함
-        pv.getData().observe(getViewLifecycleOwner(), userinfo -> {
+        pv.getUserInfoLiveData().observe(getViewLifecycleOwner(), userinfo -> {
 
         });
 
@@ -62,7 +62,7 @@ public class fragment_statistics extends Fragment {
     public void onResume() {
         super.onResume();
         uv.getUser(null, false);
-        uv.getData().observe(this, userInfo -> {
+        uv.getUserInfoLiveData().observe(this, userInfo -> {
             String[] genre = {
                     "자기계발", "소설", "육아", "어린이", "청소년", "사회", "과학", "인문", "생활", "공부", "만화"};
             TextView bookworm[] = { //권수 확인
@@ -131,10 +131,10 @@ public class fragment_statistics extends Fragment {
             uv.getBookWorm(userInfo.getToken());
         });
         uv.getBwdata().observe(this, bw -> {
-            binding.pieChart.setCenterText("총 " + bw.getReadcount() + "권");
+            binding.pieChart.setCenterText("총 " + bw.getReadCount() + "권");
             binding.pieChart.setCenterTextSize(20);
 
-            if (bw.getReadcount() == 0) { //읽은 권수가 0권이라면 독서기록이 없다고 표기
+            if (bw.getReadCount() == 0) { //읽은 권수가 0권이라면 독서기록이 없다고 표기
                 isEmptyRecord(true);
             } else {
                 isEmptyRecord(false);

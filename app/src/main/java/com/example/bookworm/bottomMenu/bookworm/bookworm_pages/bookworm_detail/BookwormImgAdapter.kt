@@ -2,13 +2,20 @@ package com.example.bookworm.bottomMenu.bookworm.bookworm_pages.bookworm_detail
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
+import android.graphics.Typeface
+import android.util.Log
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookworm.R
+import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 
 
 //사용자의 데이터를 받아서 BookWorm 이미지 뷰의 데이터를 세팅한다.
@@ -24,6 +31,8 @@ import com.example.bookworm.R
 class BookwormImgAdapter(val parentView: View, val context: Context) :
     ListAdapter<BookwormData, RecyclerView.ViewHolder>(MyDiffCallback) {
     var mItemClickListener: OnItemClickEventListener? = null
+    var uv: UserInfoViewModel? = null
+    var lastPos: Int = 0 //현재 선택된 책볼레의 위치
 
     interface OnItemClickEventListener {
         fun onItemClick(a_view: View?, a_position: Int)
@@ -32,7 +41,7 @@ class BookwormImgAdapter(val parentView: View, val context: Context) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view: View
-        val selectedView: View
+        uv = UserInfoViewModel(context)
         when (viewType) {
             1 -> {
                 view = inflater.inflate(R.layout.fragment_bw_item, parent, false)
@@ -43,14 +52,33 @@ class BookwormImgAdapter(val parentView: View, val context: Context) :
                 return NotHasBookwormViewHolder(view)
             }
         }
+
+
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val safePosition = holder.bindingAdapterPosition
+
         if (holder is HasBookwormViewHolder) {
-            holder.setItems(currentList[safePosition])
+
+            var data = currentList[safePosition]
+            holder.setItems(data)
+
+            //탭을 옮길 때 혹은 처음 해당 탭을 열 때 해당 책볼레가 선택 표시 되도록 함.
+            if(safePosition == this.lastPos)  {
+                holder.binding!!.tvGenre.setTypeface(Typeface.DEFAULT_BOLD)
+                holder.binding!!.itemContainer.setBackgroundColor(Color.rgb(204, 204, 204))
+                holder.binding!!!!.ivBwImage.setBackgroundColor(Color.rgb(170, 170, 170))
+            }
+            holder.binding!!.ivBwImage.setOnClickListener({
+                holder.setWorks(data)
+            })
+
+
         }
+
     }
+
 
     //해당 데이터가 있는 경우에만 보여준다.
     override fun getItemViewType(pos: Int): Int {

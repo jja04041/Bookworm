@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    android:id="@+id/mother"
+    tools:context=".bottomMenu.profile.views.PreferGenreActivity">
+
+    <FrameLayout
+        android:id="@+id/setting"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/feed_bottom_border_only"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/ripplebutton_none"
+            android:padding="5dp">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/back_icon" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="선호장르"
+            android:textColor="@color/black"
+            android:textSize="13dp" />
+
+        <FrameLayout
+            android:id="@+id/btnFinish"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/ripplebutton_none">
+
+            <TextView
+                android:id="@+id/confirm"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="완료"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+        </FrameLayout>
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:gravity="bottom"
+            android:text="평소 선호하시는 장르들을 선택 해보세요! (최대5개)"
+            android:textSize="10dp" />
+
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:id="@+id/lbl0"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/selector_selected_label"
+            android:gravity="center"
+            android:paddingHorizontal="10dp"
+            android:text=""
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/lbl1"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/selector_selected_label"
+            android:gravity="center"
+            android:paddingHorizontal="10dp"
+            android:text=""
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/lbl2"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/selector_selected_label"
+            android:gravity="center"
+            android:paddingHorizontal="10dp"
+            android:text=""
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/lbl3"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/selector_selected_label"
+            android:gravity="center"
+            android:paddingHorizontal="10dp"
+            android:text=""
+            android:textSize="18dp" />
+
+
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/lbl4"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/selector_selected_label"
+                android:gravity="center"
+                android:paddingHorizontal="10dp"
+                android:text=""
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/lbl5"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/selector_selected_label"
+                android:gravity="center"
+                android:paddingHorizontal="10dp"
+                android:text=""
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/lbl6"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/selector_selected_label"
+                android:gravity="center"
+                android:paddingHorizontal="10dp"
+                android:text=""
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/lbl7"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/selector_selected_label"
+                android:gravity="center"
+                android:paddingHorizontal="10dp"
+                android:text=""
+                android:textSize="18dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:gravity="bottom"
+        android:text="선택하신 장르들은 독자님들께 책을 추천하는데 사용됩니다."
+        android:textSize="10dp" />
+
+
+</LinearLayout>

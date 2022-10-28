@@ -12,8 +12,6 @@ import com.bumptech.glide.Glide;
 
 import com.example.bookworm.bottomMenu.challenge.items.Challenge;
 import com.example.bookworm.bottomMenu.challenge.subactivity.subactivity_challenge_board_create;
-import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_result;
-
 import com.example.bookworm.databinding.SubactivityChallengeBoardBinding;
 import com.google.firebase.firestore.DocumentSnapshot;
 
@@ -52,17 +50,25 @@ public class subactivity_challenge_board extends AppCompatActivity {
 
         Intent intent = getIntent();
         //넘겨받은 값 챌린지 객체에 넣음
-        challenge = (Challenge) intent.getSerializableExtra("challenge");
+        challenge = (Challenge) intent.getParcelableExtra("challenge");
 
         binding.feedBookAuthor.setText(challenge.getBook().getAuthor());
-        Glide.with(this).load(challenge.getBook().getImg_url()).into(binding.feedBookThumb); //책 썸네일 설정
+        Glide.with(this).load(challenge.getBook().getImgUrl()).into(binding.feedBookThumb); //책 썸네일 설정
         binding.feedBookTitle.setText(challenge.getBook().getTitle());
         binding.llbook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, search_fragment_subActivity_result.class);
-                intent.putExtra("itemid", challenge.getBook().getItemId());
-                context.startActivity(intent);
+//                Intent intent = new Intent(context, search_fragment_subActivity_result.class);
+//                intent.putExtra("itemid", challenge.getBook().getItemId());
+//                context.startActivity(intent);
+            }
+        });
+
+        //뒤로가기
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 
@@ -76,7 +82,7 @@ public class subactivity_challenge_board extends AppCompatActivity {
             }
         });
 
-        boardFB.getData(map, challenge.getTitle());
+        boardFB.getData(map, challenge.getId());
 
 
     }

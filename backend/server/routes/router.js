@@ -171,46 +171,27 @@ router.post("/deleteImg", (req, res) => {
     })
   } else return res.sendStatus(401); //유저 토큰과 일치 하지 않은 경우 401에러 표시 
 })
-//토큰 관리 
-// router.post("/token", (req, res) => {
-//   const token = req.body.token;
-//   const platform = req.body.platform;
-//   if (!token) return res.status(400).send({
-//       error: 'There is no token.'
-//     })
-//     .send({
-//       message: 'Access token is a required parameter.'
-//     });
 
-//   console.log(`Verifying Kakao token: ${token}`);
-//   //토큰 생성 
-//   if (platform == "kakao") {
-//     createFirebaseToken(token, platform).then((firebaseToken) => {
-//       console.log(`Returning firebase token to user: ${firebaseToken}`);
-//       console.log(firebaseToken);
-//     });
-//   }
-// });
+router.get("/getToken", (req, res) => {
+  const token = req.query.token;
+  const platform = req.query.platform;
+  if (!token) return res.status(400).send({
+      error: 'There is no token.'
+    })
+    .send({
+      message: 'Access token is a required parameter.'
+    });
 
-// router.get("/token", (req, res) => {
-//   const token = req.query.token;
-//   const platform = req.query.platform;
-//   if (!token) return res.status(400).send({
-//       error: 'There is no token.'
-//     })
-//     .send({
-//       message: 'Access token is a required parameter.'
-//     });
-
-//   console.log(`Verifying Kakao token: ${token}`);
-//   //토큰 생성 
-//   if (platform == "kakao") {
-//     createFirebaseToken(token, platform).then((firebaseToken) => {
-//       console.log(`Returning firebase token to user: ${firebaseToken}`);
-//       console.log(firebaseToken);
-//     });
-//   }
-// });
+  console.log(`Verifying token: ${token}`);
+  //토큰 생성 
+    createFirebaseToken(token, platform).then((firebaseToken) => {
+      console.log(`Returning firebase token to user: ${firebaseToken}`);
+      console.log(firebaseToken);
+      return res.status(200).send({
+          customToken : firebaseToken //최종적으로 발행된 커스텀 토큰 
+      });
+    });
+});
 
 
 

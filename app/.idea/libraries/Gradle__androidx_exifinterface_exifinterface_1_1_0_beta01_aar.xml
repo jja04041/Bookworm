@@ -1,13 +1,17 @@
 <component name="libraryTable">
   <library name="Gradle: androidx.exifinterface:exifinterface:1.1.0-beta01@aar">
     <ANNOTATIONS>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/e384eefe4a2d0781bc31797117e70d98/transformed/exifinterface-1.1.0-beta01/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/8afa0051f56957cda495eae676cff71a/transformed/exifinterface-1.1.0-beta01/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/4c67e08c73f642fb5eb9353dce1179f4/transformed/exifinterface-1.1.0-beta01/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/e384eefe4a2d0781bc31797117e70d98/transformed/exifinterface-1.1.0-beta01/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/e384eefe4a2d0781bc31797117e70d98/transformed/exifinterface-1.1.0-beta01/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/e384eefe4a2d0781bc31797117e70d98/transformed/exifinterface-1.1.0-beta01/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/4be5f9e4cf5e38b24bd0fe9196d248cf/transformed/exifinterface-1.1.0-beta01/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/efaa83780684e33c39865c1e988c85d8/transformed/exifinterface-1.1.0-beta01/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/499aad2fb6ea4a208c87517cfc02d8df/transformed/exifinterface-1.1.0-beta01/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/8afa0051f56957cda495eae676cff71a/transformed/exifinterface-1.1.0-beta01/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/8afa0051f56957cda495eae676cff71a/transformed/exifinterface-1.1.0-beta01/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/8afa0051f56957cda495eae676cff71a/transformed/exifinterface-1.1.0-beta01/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

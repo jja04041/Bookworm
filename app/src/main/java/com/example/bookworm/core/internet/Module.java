@@ -5,13 +5,8 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-
-import com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Create;
-import com.example.bookworm.appLaunch.views.MainActivity;
+import com.example.bookworm.bottomMenu.feed.oldItems.subActivity_Feed_Create;
 import com.example.bookworm.bottomMenu.profile.views.ProfileModifyActivity;
-import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_main;
-import com.example.bookworm.bottomMenu.search.subactivity.search_fragment_subActivity_result;
-import com.example.bookworm.bottomMenu.search.fragment_search;
 import com.example.bookworm.core.internet.interfaces.GetDataInterface;
 
 import org.json.JSONArray;
@@ -116,11 +111,11 @@ public class Module {
             case 1: //추천 책(카테고리 별)
                 JSONArray jsonArray = json.getJSONArray("item");
                 if (jsonArray != null)
-                    ((fragment_search) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("1")).updateRecom(jsonArray);
-                break;
+//                    ((fragment_search) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("1")).updateRecom(jsonArray);
+                    break;
             case 2: //책 상세 내용
                 JSONObject jsonObject = json.getJSONArray("item").getJSONObject(0);
-                ((search_fragment_subActivity_result) context).putItem(jsonObject);
+
                 break;
 
         }
@@ -130,7 +125,7 @@ public class Module {
     {
         count = Integer.parseInt(json.get("totalResults").toString());
         JSONArray jsonArray = json.getJSONArray("item");
-        ((search_fragment_subActivity_main) context).moduleUpdated(jsonArray); //이후의 작업은 서브액티비티의 메소드에서 진행
+
     }
 
     public void setPage(int page) {

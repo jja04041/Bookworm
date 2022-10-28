@@ -7,7 +7,6 @@ import androidx.core.content.ContextCompat;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,11 +21,10 @@ import com.example.bookworm.achievement.Achievement;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.challenge.items.Challenge;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
-import com.example.bookworm.bottomMenu.search.items.Book;
 
+import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book;
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing;
 import com.example.bookworm.core.internet.FBModule;
-import com.example.bookworm.core.internet.Module;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.databinding.SubactivityChallengeBoardCreateBinding;
 
@@ -78,7 +76,7 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
 
         Intent intent = getIntent();
         //넘겨받은 값 챌린지 객체에 넣음
-        challenge = (Challenge) intent.getSerializableExtra("challenge");
+        challenge = intent.getParcelableExtra("challenge");
 
         selected_book = challenge.getBook();
 
@@ -94,7 +92,7 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
         //이미지 업로드 버튼
         binding.btnImageUpload.setOnClickListener(view -> imageProcess.initProcess());
 
-        uv.getData().observe(this, userinfo -> {
+        uv.getUserInfoLiveData().observe(this, userinfo -> {
             uv.getBookWorm(userinfo.getToken());
             userInfo = userinfo;
             Glide.with(this).load(userinfo.getProfileimg()).circleCrop().into(binding.ivProfileImage); //프로필사진 로딩후 삽입.
@@ -170,8 +168,8 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
 
     //피드 업로드
     public void feedUpload(String imgUrl) {
-        if (binding.edtFeedText.getText().toString().equals("")) { //테스트용@@@ 나중에 지우고 바로 밑줄로 바꿔야함 (인증글 테스트 할때마다 사진 올리는거 힘들어서...)
-//        if (binding.edtFeedText.getText().toString().equals("") || binding.ivpicture.getDrawable() == null) { //인증사진이나 피드 내용이 없으면 작성해달라는 알림 띄움
+//        if (binding.edtFeedText.getText().toString().equals("")) { //테스트용@@@ 나중에 지우고 바로 밑줄로 바꿔야함 (인증글 테스트 할때마다 사진 올리는거 힘들어서...)
+        if (binding.edtFeedText.getText().toString().equals("") || binding.ivpicture.getDrawable() == null) { //인증사진이나 피드 내용이 없으면 작성해달라는 알림 띄움
             new AlertDialog.Builder(current_context)
                     .setMessage("인증 사진과 인증글 내용을 작성해주세요")
                     .setPositiveButton("알겠습니다.", new DialogInterface.OnClickListener() {
@@ -187,6 +185,9 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String formatTime = dateFormat.format(System.currentTimeMillis());
 
+            // 장르 처리
+//            selected_book.setCategoryname(userInfo.setGenre(selected_book.getCategoryname(), current_context));
+
             map.put("UserToken", userInfo.getToken()); //유저 정보
             map.put("book", selected_book); //책 정보
             map.put("boardText", binding.edtFeedText.getText().toString()); //피드 내용
@@ -200,10 +201,8 @@ public class subactivity_challenge_board_create extends AppCompatActivity {
             if (imgUrl != null) map.put("imgurl", imgUrl); //이미지 url
 
             //챌린지 인증글 업로드
-            fbModule.uploadChallengeBoard(2, challenge.getTitle(), BoardID, map);
+            fbModule.uploadChallengeBoard(2, challenge.getId(), BoardID, map);
 
-            // 장르 처리
-            userInfo.setGenre(selected_book.getCategoryname(), current_context);
 
 //            int count = userBw.getReadcount();
 //            userBw.setReadcount(++count);

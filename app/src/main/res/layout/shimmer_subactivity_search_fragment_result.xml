@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".bottomMenu.search.subactivity.search_fragment_subActivity_result">
+    >
 
     <ScrollView
         android:layout_width="match_parent"
@@ -26,13 +26,14 @@
                 android:background="@drawable/feed_bottom_border_only"
                 android:orientation="horizontal">
 
-                <Button
+                <ImageView
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:id="@+id/btnBack"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="start|center_vertical"
                     android:layout_marginStart="20dp"
-                    android:background="@drawable/back_icon" />
+                    android:src="@drawable/back_icon" />
 
                 <TextView
                     android:layout_width="wrap_content"

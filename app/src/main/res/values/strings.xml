@@ -2,6 +2,7 @@
     <string name="app_name">Bookworm</string>
     <string name="ttbKey">ttblmy62681659001</string>
     <string name="kakaoKey">cd44810051deea6f9245b43a98310f47</string>
+    <string name="kakaoKeyForAuth">kakaocd44810051deea6f9245b43a98310f47</string>
     <string name="firebase_web_client_id">716320636213-jh4e2fmt6pfma3m5nr7t4c8ghks1rsdh.apps.googleusercontent.com</string>
     <string name="server_client_id">553081648947-keggti6ufd3l0nt9m7sl0ffloa5buke9.apps.googleusercontent.com</string>
     <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
@@ -26,13 +27,15 @@
     <string name="cancel">설정 닫기</string>
     <!--Strings used for xml(layout)-->
     <string name="set_your_title"><font bold="true">제목을 입력해주세요</font></string>
-
-
+    <string name="aladinBaseurl">http://www.aladin.co.kr/ttb/api/ </string>
 
     <string name="ted_scheme">ted</string>
 
     <string name="scheme_host_main">main</string>
     <string name="scheme_host_profile">profile</string>
+
+    <string name="Algolia_appid">OA5097NS7Y</string>
+    <string name="Algolia_apiKey">10009a947514e0b1e48c53b95767acd9</string>
 
 
 </resources>

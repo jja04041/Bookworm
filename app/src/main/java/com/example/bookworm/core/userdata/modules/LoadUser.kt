@@ -18,19 +18,18 @@ class LoadUser(val view: UserContract.View) : UserContract.Presenter {
         reference = FirebaseFirestore.getInstance().collection("users")
         task = reference!!.document(token).get()
         if (boolean != null) this.boolean = boolean
-        task!!.addOnCompleteListener({
+        task!!.addOnCompleteListener {
             setProfile(it.result)
-        })
+        }
     }
 
     override fun setProfile(document: DocumentSnapshot) {
-        var userData = UserInfo()
         try {
-            var map = document.data!!["UserInfo"] as Map<String, String>
-            userData.add(map)
+            view.showProfile(document.toObject(UserInfo::class.java), boolean)
+
         } catch (e: NullPointerException) {
         }
 
-        view.showProfile(userData, boolean)
+
     }
 }

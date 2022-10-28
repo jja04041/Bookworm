@@ -2,6 +2,7 @@ package com.example.bookworm.bottomMenu.bookworm.bookworm_pages.bookworm_record;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
-import com.example.bookworm.bottomMenu.Feed.items.Feed;
 import com.example.bookworm.bottomMenu.challenge.board.Board;
+import com.example.bookworm.bottomMenu.feed.Feed;
+import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment;
 import com.example.bookworm.databinding.FragmentRecordItemBinding;
 
 import java.util.ArrayList;
@@ -83,11 +85,27 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
 
         public void setItem(Feed item) {
-            Glide.with(context).load(item.getBook().getImg_url()).into(binding.ivBookThumb);
+            Glide.with(context).load(item.getBook().getImgUrl()).into(binding.ivBookThumb);
             binding.feedBookTitle.setText(item.getBook().getTitle());
             binding.tvFeedtext.setText(item.getFeedText());
             binding.tvFeedDate.setText(item.getDate().substring(5, 10));
+            binding.frame.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, SubActivityComment.class);
+                    intent.putExtra("item", item);
+                    intent.putExtra("position", getAbsoluteAdapterPosition());
+                    context.startActivity(intent);
+                }
+            });
         }
+
+
+    }
+
+    public void setData(ArrayList data) {
+        feedList.clear();
+        feedList.addAll(data);
     }
 
 
