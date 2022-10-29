@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.search.searchtest.views
+package com.example.bookworm.bottomMenu.search.searchtest.adapters
 
 import android.content.Context
 import android.content.Intent
@@ -11,11 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.feed.Feed
-import com.example.bookworm.bottomMenu.feed.FeedAdapter
-import com.example.bookworm.bottomMenu.feed.comments.Comment
 import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
 import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
-import com.example.bookworm.databinding.LayoutBookSearchDetailBinding
+import com.example.bookworm.bottomMenu.search.searchtest.views.BookDetailActivity
 import com.example.bookworm.databinding.LayoutBookSearchDetailReviewBinding
 import com.example.bookworm.databinding.LayoutBookSearchDetailTopBinding
 import com.example.bookworm.databinding.LayoutItemLoadingBinding

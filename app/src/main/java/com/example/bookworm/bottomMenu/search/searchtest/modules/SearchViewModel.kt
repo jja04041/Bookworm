@@ -196,26 +196,5 @@ class SearchViewModel(context: Context) : ViewModel() {
             }
 
 
-//보류
-//    fun loadRanking(stateLiveData: MutableLiveData<LoadState>, bwList: ArrayList<BookWorm>, userList: ArrayList<UserInfo>) {
-//        loadDataState = stateLiveData
-//        loadDataState!!.value = LoadState.Loading
-//        viewModelScope.launch {
-//            try {
-//                val result = searchDataRepository.loadRanking()
-//                if (result.documents.isNotEmpty()) {
-//                    for (i: DocumentSnapshot in result.documents) {
-//                        val bwData = i["BookWorm"] as Map<String>
-//                    }
-//                    loadDataState!!.value = LoadState.Done
-//                }
-//                loadDataState!!.value = LoadState.Error
-//            } catch (e: NullPointerException) {
-//                loadDataState!!.value = LoadState.Error
-//            }
-//        }
-//
-//    }
-
 
 }

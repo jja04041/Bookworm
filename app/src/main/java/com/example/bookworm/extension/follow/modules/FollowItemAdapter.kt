@@ -20,18 +20,18 @@ class FollowItemAdapter(
     //뷰홀더가 만들어질때 작동하는 메서드
     //화면을 인플레이트하고 인플레이트된 화면을 리턴한다.
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        var inflater: LayoutInflater = LayoutInflater.from(context)
-        var view: View
-        when (viewType) {
+        val inflater: LayoutInflater = LayoutInflater.from(context)
+        val view: View
+        return when (viewType) {
             1 -> {
                 view = inflater.inflate(R.layout.layout_user_item, parent, false)
-                return FollowerViewHolder(
-                    view, context, nowUserInfo, isFollower
+                FollowerViewHolder(
+                    view, context, nowUserInfo
                 )
             }
             else -> {
                 view = inflater.inflate(R.layout.layout_item_loading, parent, false)
-                return LoadingViewHolder(view)
+                LoadingViewHolder(view)
             }
         }
     }
@@ -52,7 +52,7 @@ class FollowItemAdapter(
 
     //뷰타입 확인
     override fun getItemViewType(pos: Int): Int {
-        return if (currentList.get(pos).token != null) 1 else 2
+        return if (currentList[pos].token != "") 1 else 2
     }
 
 

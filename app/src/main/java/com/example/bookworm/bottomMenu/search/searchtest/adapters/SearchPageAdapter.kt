@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.search.searchtest.pages
+package com.example.bookworm.bottomMenu.search.searchtest.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

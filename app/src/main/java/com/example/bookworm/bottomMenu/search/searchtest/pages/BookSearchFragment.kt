@@ -72,9 +72,6 @@ class BookSearchFragment : Fragment() {
             with(this) {
                 addOnScrollListener(object : RecyclerView.OnScrollListener() {
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                        val imm = context.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
-                        val edtSearch = activity!!.findViewById<EditText>(R.id.edtSearch)
-
                         super.onScrolled(recyclerView, dx, dy)
                         val layoutManager = recyclerView.layoutManager as LinearLayoutManager?
                         val lastVisibleItemPosition =

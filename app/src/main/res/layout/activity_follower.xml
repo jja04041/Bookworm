@@ -20,13 +20,14 @@
             android:background="@drawable/feed_bottom_border_only"
             android:orientation="horizontal">
 
-            <Button
+            <ImageView
                 android:id="@+id/btnBack"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginStart="20dp"
-                android:background="@drawable/back_icon" />
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/back_icon" />
 
             <TextView
                 android:layout_width="wrap_content"

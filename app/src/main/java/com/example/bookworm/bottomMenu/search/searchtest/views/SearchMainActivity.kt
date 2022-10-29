@@ -1,8 +1,6 @@
 package com.example.bookworm.bottomMenu.search.searchtest.views
 
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
@@ -11,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
 import com.example.bookworm.bottomMenu.search.searchtest.modules.SearchViewModel
 import com.example.bookworm.bottomMenu.search.searchtest.pages.BookSearchFragment
-import com.example.bookworm.bottomMenu.search.searchtest.pages.SearchPageAdapter
+import com.example.bookworm.bottomMenu.search.searchtest.adapters.SearchPageAdapter
 import com.example.bookworm.databinding.SubactivitySearchMainBinding
 import com.google.android.material.tabs.TabLayoutMediator
 

@@ -18,37 +18,56 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 
 //실제로 서버와 연동하여 데이터를 가져오는 레포지토리 (데이터 송수신을 담당)
 class SearchDataRepository(val context: Context) {
-    private val aladinApi = RetrofitInstance(context.getString(R.string.aladinBaseurl)).getInstance()
+    private val aladinApi =
+        RetrofitInstance(context.getString(R.string.aladinBaseurl)).getInstance()
             .create(SearchRetrofitInterface::class.java)
     private val firestoreDb = FirebaseFirestore.getInstance()
 
 
     suspend fun loadPopularBookData() =
-            aladinApi.getRecom(QueryForRetrofit.getQueryForRecommend(context))
+        aladinApi.getRecom(QueryForRetrofit.getQueryForRecommend(context))
 
 
     suspend fun loadRanking() = firestoreDb.collection("users")
-            .orderBy("BookWorm.readcount", Query.Direction.DESCENDING).limit(3)
-            .get().await()
+        .orderBy("BookWorm.readcount", Query.Direction.DESCENDING).limit(3)
+        .get().await()
 
-    suspend fun loadSearchedBooks(keyword: String, page: Int) = aladinApi.getResult(QueryForRetrofit.getQueryForSearchBooks(context, keyword, page))
+    suspend fun loadSearchedBooks(keyword: String, page: Int) =
+        aladinApi.getResult(QueryForRetrofit.getQueryForSearchBooks(context, keyword, page))
 
-    suspend fun loadBookDetail(itemId: String) = aladinApi.getItem(QueryForRetrofit.getQueryForSearchBookDetail(context = context, itemId = itemId))
-    suspend fun loadUserBookReview(itemId: String, page: Int = 5, lastVisible: String? = null): QuerySnapshot? {
+    suspend fun loadBookDetail(itemId: String) = aladinApi.getItem(
+        QueryForRetrofit.getQueryForSearchBookDetail(
+            context = context,
+            itemId = itemId
+        )
+    )
+
+    suspend fun loadUserBookReview(
+        itemId: String,
+        page: Int = 5,
+        lastVisible: String? = null
+    ): QuerySnapshot? {
         var query = FireStoreLoadModule.provideQueryPathToFeedCollection()
-                .whereEqualTo("book.itemId", itemId)
-                .orderBy("feedID", Query.Direction.ASCENDING)
+            .whereEqualTo("book.itemId", itemId)
+            .orderBy("feedID", Query.Direction.ASCENDING)
         if (lastVisible != null) query = query.startAfter(lastVisible)
         return query.limit(page.toLong()).get().await()
     }
 
+    suspend fun loadUserData(keyword: String) {
+        val PAGE = 10L
+        val query: Query = FireStoreLoadModule.provideQueryPathToUserCollection()
+            .whereArrayContains("userName", keyword)
+            .orderBy("userId")
+
+    }
 
     //Retrofit 인스턴스
     inner class RetrofitInstance(baseUrl: String) {
         private val client: Retrofit = Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build()
+            .baseUrl(baseUrl)
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .build()
 
         fun getInstance(): Retrofit {
             return client
@@ -65,7 +84,11 @@ class SearchDataRepository(val context: Context) {
             return query
         }
 
-        fun getQueryForSearchBooks(context: Context, keyword: String, page: Int): Map<String, String> {
+        fun getQueryForSearchBooks(
+            context: Context,
+            keyword: String,
+            page: Int
+        ): Map<String, String> {
             val query = setDefault(context)
             query["QueryType"] = "Keyword"
             query["Query"] = keyword
