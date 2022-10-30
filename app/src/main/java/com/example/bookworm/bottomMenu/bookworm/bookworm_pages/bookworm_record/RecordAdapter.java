@@ -112,6 +112,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     intent.putExtra("position", getAbsoluteAdapterPosition());
                     context.startActivity(intent);
                 }
+
             });
 
         }
