@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <nl.dionsegijn.konfetti.KonfettiView
+        android:id="@+id/viewKonfetti"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_achievement_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center"
+            android:layout_marginTop="100dp"
+            android:text="축하합니다~"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/iv_achievement_dialog"
+        android:layout_width="360dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center" />
+
+    <Button
+        android:id="@+id/btn_achievement_cancle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
+        android:layout_gravity="bottom|center"
+        android:background="@drawable/round_button_gray"
+        android:text="확인" />
+
+    <TextView
+        android:id="@+id/tv_achievement_dialog_notice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="40dp"
+        android:text="획득한 보상을 인벤토리에서 확인해보세요!!"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="12dp" />
+
+
+</FrameLayout>
+

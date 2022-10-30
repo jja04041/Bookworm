@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.bookworm">
+    <!-- 인터넷 접속 중인지 확인 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 인터넷 사용 권한 설정 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 사진 업로드를 위한 권한 설정 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <!--
+        android:allowBackup="false" : 앱삭제시 데이터 백업을 하지 않도록 함. -->
+    <application
+        android:name=".core.login.GlobalApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/appicon"
+        android:label="책볼레"
+        android:roundIcon="@mipmap/appicon_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:usesCleartextTraffic="true"
+        tools:replace="android:label">
+        <activity
+            android:name=".bottomMenu.challenge.board.subactivity_challenge_board_comment"
+            android:exported="false" />
+        <activity
+            android:name=".bottomMenu.challenge.subactivity.subactivity_challenge_board_create"
+            android:exported="false" />
+        <activity
+            android:name=".bottomMenu.challenge.board.subactivity_challenge_board"
+            android:exported="false" />
+        <activity
+            android:name="com.example.bookworm.bottomMenu.feed.oldItems.subActivity_Feed_Modify"
+            android:exported="false" />
+        <activity
+            android:name="com.example.bookworm.bottomMenu.feed.ImagePicker"
+            android:exported="false" />
+        <activity
+            android:name="com.example.bookworm.core.dataprocessing.image.ImagePicker"
+            android:exported="false" />
+        <activity
+            android:name=".bottomMenu.profile.views.ProfileInfoActivity"
+            android:exported="false"
+            tools:ignore="AppLinkUrlError"></activity>
+        <activity
+            android:name="com.example.bookworm.bottomMenu.feed.comments.SubActivityComment"
+            android:exported="false" />
+
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="oauth"
+                    android:scheme="@string/kakaoKeyForAuth" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.example.bookworm.extension.follow.view.FollowerActivity"
+            android:exported="false" />
+        <!-- 카카오 계정 연동을 위한 AppKey -->
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="@string/kakaoKey" /> <!-- SubActivities -->
+        <activity
+            android:name="com.example.bookworm.bottomMenu.feed.oldItems.subActivity_Feed_Create"
+            android:exported="false"
+            android:parentActivityName=".appLaunch.views.MainActivity" />
+        <activity
+            android:name=".bottomMenu.profile.submenu.album.AlbumDisplay.view.ShowAlbumContentActivity"
+            android:exported="false"
+            android:parentActivityName=".appLaunch.views.MainActivity" />
+        <activity
+            android:name=".bottomMenu.challenge.subactivity.subactivity_challenge_challengeinfo"
+            android:exported="false"
+            android:parentActivityName=".appLaunch.views.MainActivity" />
+        <activity
+            android:name=".bottomMenu.challenge.subactivity.subactivity_challenge_createchallenge"
+            android:exported="false"
+            android:parentActivityName=".appLaunch.views.MainActivity" /> <!-- Main Activities -->
+        <!-- 선호장르 설정 -->
+        <!-- 회원 정보 수정 -->
+        <activity
+            android:name=".bottomMenu.profile.views.ProfileModifyActivity"
+            android:exported="false" /> <!-- 회원 정보 수정 -->
+
+        <activity
+            android:name=".bottomMenu.profile.views.ProfileSettingActivity"
+            android:exported="false"
+            tools:ignore="AppLinkUrlError"> <!-- 채팅리스트 화면 -->
+        </activity>
+
+        <activity
+            android:name=".appLaunch.views.MainActivity"
+            android:exported="false"
+            tools:ignore="AppLinkUrlError">
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="example.com"
+                    android:scheme="https" />
+                <data
+                    android:host="example.com"
+                    android:scheme="http" />
+            </intent-filter>
+
+        </activity> <!-- 메인 화면 -->
+
+        <activity
+            android:name=".core.login.LoginActivity"
+            android:exported="false" /><!-- 로그인 화면 -->
+        <!-- 채팅 화면 -->
+        <activity
+            android:name=".chat.newchat.Activity_chatlist"
+            android:exported="false" /> <!-- 채팅리스트 화면 -->
+        <activity
+            android:name=".chat.newchat.MessageActivity"
+            android:exported="false"></activity>
+        <activity
+            android:name=".bottomMenu.profile.views.PreferGenreActivity"
+            android:exported="false"></activity>
+
+        <activity
+            android:name=".LoadingActivity"
+            android:exported="true"> <!-- 로딩 화면 -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- uCrop cropping activity -->
+
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".bottomMenu.search.searchtest.views.SearchMainActivity" />
+        <activity android:name=".bottomMenu.feed.SubActivityCreatePost" />
+        <activity android:name=".bottomMenu.challenge.subactivity.SubActivityCreateChallenge" />
+        <activity android:name=".bottomMenu.challenge.subactivity.SubActivityChallengeInfo" />
+        <activity android:name=".bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumContentActivity" />
+        <activity android:name=".bottomMenu.profile.submenu.album.AlbumCreate.view.ShowFeedListForCreateAlbum" />
+        <activity android:name=".bottomMenu.search.searchtest.views.BookDetailActivity" />
+        <activity android:name=".bottomMenu.feed.SubActivityModifyPost" /> <!-- cache directory file provider paths -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+
+        <service
+            android:name=".notification.MyFCMService"
+            android:exported="false"
+            android:stopWithTask="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+    </application>
+
+
+</manifest>

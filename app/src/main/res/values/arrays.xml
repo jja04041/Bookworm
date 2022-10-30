@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="bookworm_char">
+        <item>default</item>
+        <item>child</item>
+        <item>confidence</item>
+        <item>fall</item>
+        <item>literature</item>
+        <item>student</item>
+        <item>mom</item>
+        <item>study</item>
+        <item>social</item>
+        <item>science</item>
+    </string-array>
+
+    <string-array name="bookworm_name">
+        <item>책볼레</item>
+        <item>착한어린이</item>
+        <item>자존감왕</item>
+        <item>가을볼레</item>
+        <item>문학볼레</item>
+        <item>사춘기볼레</item>
+        <item>좋은엄마</item>
+        <item>공부벌레</item>
+        <item>사회왕</item>
+        <item>싸이언쓰볼레</item>
+    </string-array>
+
+</resources>
