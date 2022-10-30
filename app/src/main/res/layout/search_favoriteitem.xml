@@ -6,9 +6,11 @@
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     android:gravity="center"
+
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
+        android:background="?attr/selectableItemBackground"
         android:id="@+id/cardview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,15 +26,15 @@
             android:scaleType="fitXY"
             android:src="@drawable/ic_baseline_image_24" />
 
-        <TextView
-            android:id="@+id/tvBookTitle"
-            android:layout_width="100dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="147dp"
-            android:ellipsize="end"
-            android:gravity="center|bottom"
-            android:maxLines="2"
-            android:text="제목입니다"
-            android:textAlignment="center" />
+<!--        <TextView-->
+<!--            android:id="@+id/tvBookTitle"-->
+<!--            android:layout_width="100dp"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:layout_marginTop="147dp"-->
+<!--            android:ellipsize="end"-->
+<!--            android:gravity="center|bottom"-->
+<!--            android:maxLines="2"-->
+<!--            android:text="제목입니다"-->
+<!--            android:textAlignment="center" />-->
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

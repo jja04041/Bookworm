@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.bookworm.bottomMenu.Feed.comments.Comment;
 import com.example.bookworm.bottomMenu.challenge.items.Challenge;
+import com.example.bookworm.bottomMenu.feed.comments.Comment;
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
 import com.example.bookworm.core.userdata.PersonalD;
 import com.example.bookworm.core.userdata.UserInfo;
@@ -23,6 +23,7 @@ import com.example.bookworm.notification.MyFCMService;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.net.MalformedURLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +31,7 @@ import java.util.Map;
 
 //인증 게시판에서 사진을 누르면 댓글이 보이도록 한다.
 
-    public class subactivity_challenge_board_comment extends AppCompatActivity {
+public class subactivity_challenge_board_comment extends AppCompatActivity {
 
     SubactivityChallengeBoardCommentBinding binding;
     public static Context context;
@@ -63,8 +64,8 @@ import java.util.Map;
         super.onCreate(savedInstanceState);
         binding = SubactivityChallengeBoardCommentBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        item = (Board) getIntent().getSerializableExtra("board");
-        challenge = (Challenge) getIntent().getSerializableExtra("challenge");
+        item = (Board) getIntent().getParcelableExtra("board");
+        challenge = (Challenge) getIntent().getParcelableExtra("challenge");
         nowUser = new PersonalD(this).getUserInfo();
         context = this;
         boardFB = new BoardFB(context);
@@ -90,7 +91,7 @@ import java.util.Map;
         initComment();
         loadData();
         uv.getUser(item.getUserToken(), true);
-        uv.getData().observe(this, userInfo -> {
+        uv.getUserInfoLiveData().observe(this, userInfo -> {
             creatorUser = userInfo;
         });
     }
@@ -172,13 +173,18 @@ import java.util.Map;
         if (!string.equals("") && !string.equals(null)) {
             //유저정보, 댓글내용, 작성시간
             Comment comment = new Comment();
-            comment.getData(nowUser.getToken(), string, System.currentTimeMillis());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            comment.setCommentID(System.currentTimeMillis() + "_" + nowUser.getToken());
+            comment.setUserToken(nowUser.getToken());
+            comment.setContents(string);
+            comment.setMadeDate(dateFormat.format(System.currentTimeMillis()));
+//            comment.getData(nowUser.getToken(), string, System.currentTimeMillis());
             data.put("comment", comment);
             //입력한 댓글 화면에 표시하기
             ArrayList a = new ArrayList(commentList);
             a.add(1, comment);
             replaceItem(a);
-            new Board_CommentsCounter().addCounter(data, context, challenge.getTitle(), item.getBoardID());
+            new Board_CommentsCounter().addCounter(data, context, challenge.getId(), item.getBoardID());
 
             //키보드 내리기
             InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -187,7 +193,9 @@ import java.util.Map;
             binding.edtComment.setText(null);
             binding.mRecyclerView.smoothScrollToPosition(0); //맨 위로 포커스를 이동 (본인 댓글 확인을 위함)
 
-            myFCMService.sendPostToFCM(context, creatorUser.getFCMtoken(), nowUser.getUsername() + "님이 댓글을 남겼습니다. " + "\"" + string + "\"");
+            if (!nowUser.getToken().equals(creatorUser.getToken())) {
+                myFCMService.sendPostToFCM(context, creatorUser.getFCMtoken(), nowUser.getUsername() + "님이 댓글을 남겼습니다. " + "\"" + string + "\"");
+            }
         }
     }
 
@@ -196,7 +204,7 @@ import java.util.Map;
         map = new HashMap();
         if (map.get("lastVisible") != null) map.remove("lastVisible");
         map.put("BoardID", item.getBoardID());
-        map.put("challengeName", challenge.getTitle());
+        map.put("challengeID", challenge.getId());
         boardFB.setLIMIT(LIMIT);
         boardFB.getCommentData(map, item.getBoardID());
     }
@@ -224,8 +232,7 @@ import java.util.Map;
 
                 for (DocumentSnapshot snapshot : a) {
                     Map data = snapshot.getData();
-                    Comment item = new Comment();
-                    item.setData(data);
+                    Comment item = snapshot.toObject(Comment.class);
                     newList.add(item);
                 }
                 //가져온 값의 마지막 snapshot부터 이어서 가져올 수 있도록 하기 위함.

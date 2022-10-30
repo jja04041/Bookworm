@@ -20,13 +20,21 @@
             android:background="@drawable/feed_bottom_border_only"
             android:orientation="horizontal">
 
-            <Button
+            <LinearLayout
                 android:id="@+id/btnBack"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginStart="20dp"
-                android:background="@drawable/back_icon" />
+                android:background="@drawable/ripplebutton_none"
+                android:padding="5dp">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/back_icon" />
+
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -35,6 +43,27 @@
                 android:text="설정"
                 android:textColor="@color/black"
                 android:textSize="13dp" />
+
+            <FrameLayout
+                android:id="@+id/btnFinish"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/ripplebutton_none">
+
+                <TextView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="완료"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+
+            </FrameLayout>
+
         </FrameLayout>
 
         <LinearLayout
@@ -44,12 +73,29 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/ivProfileImage"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginTop="5dp"
-                android:src="@drawable/profile" />
+            <FrameLayout
+                android:id="@+id/tvProfileImageModify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripplebutton_none">
+
+                <ImageView
+                    android:id="@+id/ivProfileImage"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/profile" />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="end|bottom"
+                    android:background="@drawable/ic_baseline_camera_alt_24"
+                    android:backgroundTint="@color/black" />
+
+            </FrameLayout>
+
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -76,14 +122,6 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvProfileImageModify"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="프로필 사진 변경"
-                android:textColor="#6666FF" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -92,54 +130,63 @@
             android:layout_weight="7"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:text="닉네임"
+                android:textColor="@color/black"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
                 <EditText
                     android:id="@+id/edtNewNickname"
-                    android:layout_width="match_parent"
+                    android:layout_width="260dp"
                     android:layout_height="50dp"
+                    android:layout_gravity="start|center_vertical"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/round_button_gray"
+                    android:background="@drawable/round_button_white"
                     android:hint="변경할 닉네임을 입력해주세요"
                     android:paddingStart="10dp" />
 
-                <TextView
+                <LinearLayout
                     android:id="@+id/checkDuplicate"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
                     android:layout_marginTop="3dp"
                     android:layout_marginEnd="10dp"
-                    android:background="@drawable/white_button"
-                    android:gravity="center"
-                    android:text="중복 확인"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+                    android:background="@drawable/ripplebutton_none"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/round_button_yellow"
+                        android:gravity="center"
+                        android:paddingHorizontal="15dp"
+                        android:paddingVertical="10dp"
+                        android:text="중복 확인"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
 
             </FrameLayout>
 
 
-            <Button
-                android:id="@+id/btnFavGenre"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginHorizontal="20dp"
-                android:background="@drawable/square_button"
-                android:text="선호 장르 변경" />
-
-            <Button
-                android:id="@+id/btnFinish"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/square_button"
-                android:text="완료" />
+                android:layout_height="1dp"
+                android:background="@color/gray" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -183,9 +230,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
                         android:layout_marginTop="3dp"
-                        android:background="@color/white"
+                        android:background="@drawable/round_button_white"
                         android:enabled="false"
                         android:gravity="start"
+                        android:padding="5dp"
                         android:text="안녕하세요"
                         android:textColor="@color/black"
                         android:textSize="13dp">
@@ -207,15 +255,56 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray" />
+
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp">
+                android:layout_height="60dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnFavGenre"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@drawable/ripplebutton_none"
+                    android:orientation="horizontal" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:text="선호 장르 변경"
+                    android:textColor="@color/black"
+                    android:textSize="17dp" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical|right"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_baseline_chevron_right_24" />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
                     android:text="닉네임 우측에 메달 표시"
                     android:textColor="@color/black"
                     android:textSize="17dp" />
@@ -225,17 +314,76 @@
                     android:layout_width="60dp"
                     android:layout_height="30dp"
                     android:layout_gravity="end|center_vertical"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginHorizontal="20dp"
                     android:background="@drawable/selector_selected"
                     android:elevation="10dp"
                     android:gravity="center"
                     android:text="숨김"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="17dp" />
-
 
             </FrameLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnLogout"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@drawable/ripplebutton_none"
+                    android:orientation="horizontal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:text="로그아웃"
+                    android:textColor="@color/black"
+                    android:textSize="17dp" />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnSignout"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@drawable/ripplebutton_none"
+                    android:orientation="horizontal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:text="회원 탈퇴"
+                    android:textColor="#FF0000"
+                    android:textSize="17dp" />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray" />
 
         </LinearLayout>
 

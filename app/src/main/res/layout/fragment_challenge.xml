@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swiperefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context="com.example.bookworm.bottomMenu.challenge.fragment_challenge">
+    android:background="@color/white">
 
 
     <LinearLayout
@@ -94,7 +92,7 @@
                 android:id="@+id/btn_create_challenge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/maincolor"
+                android:background="@drawable/ripplebutton_none"
                 android:text="챌린지 생성" />
 
         </LinearLayout>
@@ -175,16 +173,20 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/mRecyclerView"
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swiperefresh"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                android:layout_height="match_parent">
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/mRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         </LinearLayout>
 
 
     </LinearLayout>
 
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</LinearLayout>

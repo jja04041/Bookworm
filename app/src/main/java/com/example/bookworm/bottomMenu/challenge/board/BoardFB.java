@@ -2,11 +2,9 @@ package com.example.bookworm.bottomMenu.challenge.board;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.bookworm.bottomMenu.Feed.comments.Comment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -125,7 +123,7 @@ public class BoardFB {
         collectionReference = db.collection("challenge");
         Query query = collectionReference;
         if (map.get("BoardID") != null) {
-            query = collectionReference.document((String) map.get("challengeName")).collection("feed").document(token).collection("comments").orderBy("commentID", Query.Direction.DESCENDING);
+            query = collectionReference.document((String) map.get("challengeID")).collection("feed").document(token).collection("comments").orderBy("commentID", Query.Direction.DESCENDING);
         }
 
         if (map.get("lastVisible") != null) {

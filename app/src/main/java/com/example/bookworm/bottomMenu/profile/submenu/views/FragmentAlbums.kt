@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
-import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumActivity
+import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumContentActivity
+import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumCreate.view.ShowFeedListForCreateAlbum
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumDisplay.item.AlbumDisplayAdapter
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumDisplay.view.ShowAlbumContentActivity
 import com.example.bookworm.core.userdata.UserInfo
@@ -23,21 +25,21 @@ class FragmentAlbums(val token: String?) : Fragment() {
     lateinit var adapter: AlbumDisplayAdapter
     var NowUser: UserInfo? = null
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?,
     ): View? {
         //initialize
         binding = FragmentProfileFragmentAlbumsBinding.inflate(layoutInflater)
         pv = ViewModelProvider(this, UserInfoViewModel.Factory(requireContext())).get(
-            UserInfoViewModel::class.java
+                UserInfoViewModel::class.java
         )
         initRecyclerView()
 
         //implements
 
         //감지 센서 부착
-        pv!!.data.observe(viewLifecycleOwner) { userinfo ->
+        pv!!.userInfoLiveData.observe(viewLifecycleOwner) { userinfo ->
             if (NowUser == null) NowUser = userinfo
             if (token != null && userinfo.token != token) {
                 pv!!.getFeedList(token!!)
@@ -48,17 +50,16 @@ class FragmentAlbums(val token: String?) : Fragment() {
             }
         }
 
-        pv!!.feedList.observe(viewLifecycleOwner, { list ->
+        pv!!.feedList.observe(viewLifecycleOwner) { list ->
             if (token == NowUser!!.token || token == null) binding!!.btnAddAlbum.visibility =
-                View.VISIBLE
-            binding!!.btnAddAlbum.setOnClickListener({
-                var intent = Intent(context, CreateAlbumActivity::class.java)
-                intent.putExtra("list", list)
-                startActivity(intent)
-            })
-        })
+                    View.VISIBLE
+            binding!!.btnAddAlbum.setOnClickListener {
+                if (list.size > 1) startActivity(Intent(context, ShowFeedListForCreateAlbum::class.java))
+                else Toast.makeText(requireContext(), "게시물을 2개 이상 작성 후 이용 가능 합니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
 
-        pv!!.albumdata.observe(viewLifecycleOwner, { albumlist ->
+        pv!!.albumdata.observe(viewLifecycleOwner) { albumlist ->
             adapter.submitList(albumlist.toList()) {
                 //데이터가 있는 경우에만 리사이클러뷰를 화면에 표시한다.
                 if (adapter.currentList.size == 0) {
@@ -69,7 +70,7 @@ class FragmentAlbums(val token: String?) : Fragment() {
                     binding!!.llalertNoAlbums.visibility = View.INVISIBLE
                 }
             }
-        })
+        }
 
         return binding!!.root
     }
@@ -91,7 +92,7 @@ class FragmentAlbums(val token: String?) : Fragment() {
             override fun onViewHolderItemClick(view: View, position: Int) {
                 val albumItem = adapter.currentList[position]
                 var intent = Intent(context, ShowAlbumContentActivity::class.java)
-                intent.putExtra("albumData",albumItem)
+                intent.putExtra("albumData", albumItem)
                 startActivity(intent)
             }
 
@@ -99,9 +100,9 @@ class FragmentAlbums(val token: String?) : Fragment() {
         binding!!.albumRecyclerView.adapter = adapter
 
         (binding!!.albumRecyclerView?.itemAnimator as SimpleItemAnimator).supportsChangeAnimations =
-            false //데이터 업데이트 시, 플리커(깜빡이는 현상) 끄기
+                false //데이터 업데이트 시, 플리커(깜빡이는 현상) 끄기
         val gridLayoutManager = GridLayoutManager(
-            context, 2, GridLayoutManager.VERTICAL, false
+                context, 2, GridLayoutManager.VERTICAL, false
         )
         binding!!.albumRecyclerView.setLayoutManager(gridLayoutManager);
     }

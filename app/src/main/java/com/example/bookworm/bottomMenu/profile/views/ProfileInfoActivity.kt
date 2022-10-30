@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.bookworm.LoadState
 import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.bookworm.BookWorm
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
@@ -16,40 +18,41 @@ import com.example.bookworm.bottomMenu.profile.submenu.SubMenuPagerAdapter
 import com.example.bookworm.chat.newchat.MessageActivity
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.ActivityProfileInfoBinding
-import com.example.bookworm.extension.follow.view.FollowViewModelImpl
+import com.example.bookworm.extension.follow.view.FollowViewModel
 import com.example.bookworm.notification.MyFCMService
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
+
 class ProfileInfoActivity : AppCompatActivity() {
     lateinit var binding: ActivityProfileInfoBinding
-    var userInfo: UserInfo? = null
     var nowUser //타인 userInfo, 현재 사용자 nowUser
             : UserInfo? = null
     lateinit var userID: String
-    lateinit var fv: FollowViewModelImpl
-    lateinit var pv: UserInfoViewModel
+    private val followViewModel by lazy {
+        ViewModelProvider(
+            this,
+            FollowViewModel.Factory(this)
+        )[FollowViewModel::class.java]
+    }
+    private val userViewModel by lazy {
+        ViewModelProvider(
+            this,
+            UserInfoViewModel.Factory(this)
+        )[UserInfoViewModel::class.java]
+    }
     var cache: Boolean? = null
     lateinit var menuPagerAdapter: SubMenuPagerAdapter
-    private var myFCMService: MyFCMService? = null
-    private var mFirebaseDatabase: FirebaseDatabase? = null
+    private var myFCMService: MyFCMService = MyFCMService()
 
     //자신이나 타인의 프로필을 클릭했을때 나오는 화면
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //initialize
+
 
         binding = ActivityProfileInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        fv = FollowViewModelImpl(this)
-        pv = ViewModelProvider(
-            this,
-            UserInfoViewModel.Factory(this)
-        ).get(UserInfoViewModel::class.java)
-
-        myFCMService = MyFCMService()
-        mFirebaseDatabase = FirebaseDatabase.getInstance()
 
         //shimmer 적용을 위해 기존 뷰는 일단 안보이게, shimmer는 보이게
         binding.llResult.visibility = View.GONE
@@ -59,46 +62,58 @@ class ProfileInfoActivity : AppCompatActivity() {
         //작성자 UserInfo (userID를 사용해 파이어베이스에서 받아옴)
         userID = intent.getStringExtra("userID")!!
 
-        lifecycleScope.launch {
-            val getSubUserjob = async { fv.getUser(userID, true) }
-            val getNowUserJob = async { fv.getUser(null, true) }
-            val SubUserData = getSubUserjob.await()
-            nowUser = getNowUserJob.await()
+        val getSubUserInfoLiveData = MutableLiveData<UserInfo>()
+        val getNowUserInfoLiveData = MutableLiveData<UserInfo>()
+        userViewModel.getUser(null, getNowUserInfoLiveData, true)
+        getNowUserInfoLiveData.observe(this) {
+            if (it != null) {
+                nowUser = it
+                userViewModel.getUser(userID, getSubUserInfoLiveData, true)
+            }
 
-            SubUserData!!.let {
-                it.isFollowed = async { fv.isFollowNow(it) }.await()
-                pv.getBookWorm(SubUserData.token).join()
-                menuPagerAdapter = SubMenuPagerAdapter(it.token, supportFragmentManager)
-                Log.d("현재 읽은 도서 수 ", pv.bwdata.value!!.readcount!!.toString())
-                setUI(SubUserData, pv.bwdata.value!!)
+            getSubUserInfoLiveData.observe(this) { subUser ->
+
+                val followCheckLiveData = MutableLiveData<Boolean>()
+                if (subUser != null) {
+                    followViewModel.followCheck(followCheckLiveData, subUser.token)
+
+                    followCheckLiveData.observe(this) { checkResult ->
+                        if (checkResult != null) {
+                            subUser.isFollowed = checkResult
+                            userViewModel.getBookWorm(subUser.token)
+                            menuPagerAdapter =
+                                SubMenuPagerAdapter(subUser.token, supportFragmentManager)
+
+                            userViewModel.bwdata.observe(this) { data ->
+                                if (data != null) setUI(subUser, data)
+                            }
+                        }
+                    }
+                }
             }
         }
-
     }
 
     //이미 팔로잉 중
-    val isFollowingTrue: Unit
+    private val isFollowingTrue: Unit
         get() {
             cache = true
             binding.tvFollow.isSelected = true
             binding.tvFollow.text = "팔로잉"
-            Log.d("TAG", "로그값")
         }
 
     //팔로잉 중이 아님
-    val isFollowingFalse: Unit
+    private val isFollowingFalse: Unit
         get() {
             cache = false
             binding.tvFollow.isSelected = false
             binding.tvFollow.text = "팔로우"
-            Log.d("TAG", "로그값2")
         }
 
     //UI설정
-    suspend fun setUI(user: UserInfo, bookWorm: BookWorm) {
+    fun setUI(user: UserInfo, bookWorm: BookWorm) {
 
         binding.tvNickname.text = user.username //닉네임 설정
-        setMedal(user) //메달 설정
         binding.tvNickname.visibility = View.VISIBLE
         Glide.with(this).load(user.profileimg).circleCrop()
             .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -106,7 +121,7 @@ class ProfileInfoActivity : AppCompatActivity() {
             .into(binding.ivProfileImage) //프로필이미지 설정
         binding.ivProfileImage.visibility = View.VISIBLE
 
-        binding.tvIntroduce.setText(user.introduce)
+        binding.tvIntroduce.text = user.introduce
 
         // 채팅버튼
         binding.btnchatting.visibility = View.VISIBLE
@@ -126,6 +141,10 @@ class ProfileInfoActivity : AppCompatActivity() {
         binding.tabLayout.getTabAt(1)!!.text = "앨범"
         binding.tabLayout.getTabAt(0)!!.text = "포스트"
         binding.tabLayout.getTabAt(0)!!.select()
+        Log.d(
+            "fragment",
+            (binding.subMenuViewPager.adapter as SubMenuPagerAdapter).getItem(0).toString()
+        )
 
 
         if (user.isFollowed) isFollowingTrue
@@ -135,10 +154,10 @@ class ProfileInfoActivity : AppCompatActivity() {
         if (user.isMainUser) binding.tvFollow.visibility = View.GONE
         binding.tvFollowerCount.text = user.followerCounts.toString()
         binding.tvFollowingCount.text = user.followingCounts.toString()
-        binding.tvReadBookCount.text = bookWorm.readcount.toString()
+        binding.tvReadBookCount.text = bookWorm.readCount.toString()
         binding.ivBookworm.setImageResource(
             this.resources.getIdentifier(
-                "bw_${bookWorm.wormtype}",
+                "bw_${bookWorm.wormType}",
                 "drawable",
                 this.packageName
             )
@@ -150,29 +169,12 @@ class ProfileInfoActivity : AppCompatActivity() {
             if (binding.tvFollow.isSelected) {
                 binding.tvFollow.isSelected = false
                 binding.tvFollow.text = "팔로우"
-                lifecycleScope.launch {
-                    setFollowerCnt(
-                        async { fv.follow(user, false) }
-                            .await()
-                            .followerCounts.toLong())
-                }
+                followProcess(false, user) //언팔로잉 작업
             } else {
                 binding.tvFollow.isSelected = true
                 binding.tvFollow.text = "팔로잉"
-                lifecycleScope.launch {
-                    setFollowerCnt(
-                        async {
-                            fv.follow(user, true)
-                        }.await().followerCounts.toLong()
-                    )
-                }
-                myFCMService!!.sendPostToFCM(
-                    this,
-                    user!!.fCMtoken,
-                    nowUser!!.username + "님이 팔로우하였습니다"
-                )
+                followProcess(true, user) //팔로잉 작업
             }
-
         }
         //뒤로가기
         binding.btnBack.setOnClickListener { view: View? ->
@@ -213,5 +215,35 @@ class ProfileInfoActivity : AppCompatActivity() {
             binding!!.ivMedal.setVisibility(View.GONE)
             binding!!.ivMedal.setImageResource(0)
         }
+    }
+
+
+    private fun followProcess(isFollow: Boolean, targetUser: UserInfo) {
+        if (isFollow) {
+
+            val followStateLiveData = MutableLiveData<LoadState>()
+            followViewModel.follow(targetUser, true, followStateLiveData, targetUser)
+            followStateLiveData.observe(this) {
+                if (it == LoadState.Done) {
+                    setFollowerCnt(targetUser.followerCounts.toLong())
+                }
+            }
+            myFCMService.sendPostToFCM(
+                this,
+                targetUser.fCMtoken,
+                nowUser!!.username + "님이 팔로우하였습니다"
+            )
+        }
+        //언팔
+        else {
+            val unFollowStateLiveData = MutableLiveData<LoadState>()
+            followViewModel.follow(targetUser, false, unFollowStateLiveData, targetUser)
+            unFollowStateLiveData.observe(this) {
+                if (it == LoadState.Done) {
+                    setFollowerCnt(targetUser.followerCounts.toLong())
+                }
+            }
+        }
+
     }
 }

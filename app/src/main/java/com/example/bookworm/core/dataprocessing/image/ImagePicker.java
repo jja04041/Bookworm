@@ -20,7 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.bookworm.R;
-import com.example.bookworm.bottomMenu.Feed.subActivity_Feed_Create;
+import com.example.bookworm.bottomMenu.feed.oldItems.subActivity_Feed_Create;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -32,7 +32,6 @@ import java.io.File;
 import java.util.List;
 
 public class ImagePicker extends AppCompatActivity {
-    private static final String TAG = subActivity_Feed_Create.class.getSimpleName();
     public static final String INTENT_IMAGE_PICKER_OPTION = "image_picker_option";
     public static final String INTENT_ASPECT_RATIO_X = "aspect_ratio_x";
     public static final String INTENT_ASPECT_RATIO_Y = "aspect_ratio_Y";

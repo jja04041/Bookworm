@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_margin="10dp"
+        android:elevation="20dp"
+        card:cardCornerRadius="5dp">
+
+        <LinearLayout
+            android:id="@+id/frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/ripplebutton_none"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivBookThumb"
+                android:layout_width="80dp"
+                android:layout_height="120dp"
+                android:src="@drawable/bookimg_sample" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#08000000"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="95dp"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="10dp"
+                    android:paddingTop="10dp">
+
+                    <TextView
+                        android:id="@+id/tvChallengeTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="챌린지 제목"
+                        android:textColor="@color/black"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvBookTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:layout_marginVertical="3dp"
+                        android:maxLines="1"
+                        android:text="책 제목" />
+                    <TextView
+                        android:id="@+id/tvChallengeDescription"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:text="챌린지 설명" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:gravity="end"
+                    android:paddingHorizontal="10dp">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="26dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tvChallengeStartDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:background="@drawable/textview_design"
+                                android:paddingHorizontal="5dp"
+                                android:text="## - ##" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=" ~ " />
+
+                            <TextView
+                                android:id="@+id/tvChallengeEndDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:background="@drawable/textview_design"
+                                android:paddingHorizontal="5dp"
+                                android:text="## - ##" />
+
+
+                        </LinearLayout>
+
+<!--                        <TextView-->
+<!--                            android:id="@+id/tvDday"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_gravity="end"-->
+<!--                            android:layout_marginEnd="5dp"-->
+<!--                            android:text="D-##" />-->
+
+
+                    </FrameLayout>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+</LinearLayout>

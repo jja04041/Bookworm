@@ -5,6 +5,7 @@
     import androidx.fragment.app.FragmentManager;
     import androidx.fragment.app.FragmentStatePagerAdapter;
 
+    import com.example.bookworm.core.userdata.UserInfo;
     import com.example.bookworm.extension.follow.view.FragmentFollowList;
 
     import java.util.ArrayList;
@@ -13,11 +14,11 @@
 
         private ArrayList<Fragment> arrayList = new ArrayList<>();
 
-        public FollowPagerAdapter(@NonNull FragmentManager fm, String token) {
+        public FollowPagerAdapter(@NonNull FragmentManager fm, UserInfo userInfo) {
             super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
-            arrayList.add(new FragmentFollowList(token, 1)); //팔로워탭
-            arrayList.add(new FragmentFollowList(token, 0)); //팔로잉탭
+            arrayList.add(new FragmentFollowList(userInfo, 0)); //팔로워탭
+            arrayList.add(new FragmentFollowList(userInfo, 1)); //팔로잉탭
         }
 
         @NonNull

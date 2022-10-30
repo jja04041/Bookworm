@@ -11,12 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bookworm.appLaunch.views.MainActivity;
-import com.example.bookworm.bottomMenu.Feed.Fragment_feed;
-import com.example.bookworm.bottomMenu.Feed.comments.Comment;
-import com.example.bookworm.bottomMenu.Feed.comments.subactivity_comment;
 import com.example.bookworm.bottomMenu.bookworm.BookWorm;
-import com.example.bookworm.bottomMenu.challenge.fragment_challenge;
+//import com.example.bookworm.bottomMenu.challenge.fragment_challenge;
 import com.example.bookworm.bottomMenu.challenge.subactivity.subactivity_challenge_challengeinfo;
+import com.example.bookworm.bottomMenu.profile.views.ProfileModifyActivity;
 import com.example.bookworm.bottomMenu.profile.views.ProfileSettingActivity;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -61,9 +59,9 @@ public class FBModule {
             //피드 표시(토큰)
         else if (idx == 1) {
             //map객체: 팔로워 목록
-            query = query.orderBy("FeedID", Query.Direction.DESCENDING);
-            if (map.get("FeedID") != null) {
-                query = collectionReference.document((String) map.get("FeedID")).collection("comments").orderBy("commentID", Query.Direction.DESCENDING);
+            query = query.orderBy("feedID", Query.Direction.DESCENDING);
+            if (map.get("feedID") != null) {
+                query = collectionReference.document((String) map.get("feedID")).collection("comments").orderBy("commentID", Query.Direction.DESCENDING);
             }
 
             if (map.get("lastVisible") != null) {
@@ -117,38 +115,30 @@ public class FBModule {
                     document.getReference().update("UserInfo.genre", map.get("userinfo_genre"));
                 }
                 // 업적, 인벤토리 업데이트
-                else if (map.get("bookworm_achievementmap") != null) {
-                    if (map.get("bookworm_wormvec") != null) {
-                        document.getReference().update("BookWorm.achievementmap", map.get("bookworm_achievementmap"));
-                        document.getReference().update("BookWorm.wormvec", map.get("bookworm_wormvec"));
-                    } else if (map.get("bookworm_bgvec") != null) {
-                        document.getReference().update("BookWorm.achievementmap", map.get("bookworm_achievementmap"));
-                        document.getReference().update("BookWorm.bgvec", map.get("bookworm_bgvec"));
-                    }
-                    // wormtype update
-                } else if (map.get("bookworm_wormtype") != null) {
-                    document.getReference().update("BookWorm.wormtype", map.get("bookworm_wormtype"));
-                    // bg update
-                } else if (map.get("bookworm_bgtype") != null) {
-                    document.getReference().update("BookWorm.bgtype", map.get("bookworm_bgtype"));
-                } else if (map.get("bookworm_readcount") != null) {
-                    document.getReference().update("BookWorm.readcount", map.get("bookworm_readcount"));
-                }
+//                else if (map.get("bookworm_achievementmap") != null) {
+//                    if (map.get("bookworm_wormvec") != null) {
+//                        document.getReference().update("BookWorm.achievementmap", map.get("bookworm_achievementmap"));
+//                        document.getReference().update("BookWorm.wormvec", map.get("bookworm_wormvec"));
+//                    } else if (map.get("bookworm_bgvec") != null) {
+//                        document.getReference().update("BookWorm.achievementmap", map.get("bookworm_achievementmap"));
+//                        document.getReference().update("BookWorm.bgvec", map.get("bookworm_bgvec"));
+//                    }
+//                    // wormtype update
+//                } else if (map.get("bookworm_wormtype") != null) {
+//                    document.getReference().update("BookWorm.wormtype", map.get("bookworm_wormtype"));
+//                    // bg update
+//                } else if (map.get("bookworm_bgtype") != null) {
+//                    document.getReference().update("BookWorm.bgtype", map.get("bookworm_bgtype"));
+//                } else if (map.get("bookworm_readcount") != null) {
+//                    document.getReference().update("BookWorm.readcount", map.get("bookworm_readcount"));
+//                }
                 //회원인 경우, 로그인 처리
                 else {
-                    UserInfo userInfo = new UserInfo();
-                    BookWorm bookworm = new BookWorm();
-                    userInfo.add((Map) document.get("UserInfo"));
-                    bookworm.add((Map) document.get("BookWorm"));
 
 //                    ((LoginActivity) context).signIn(Boolean.FALSE, userInfo, bookworm);
                 }
             }
 
-            //피드 관련
-            if (idx == 1) {
-                db.collection(location[idx]).document((String) map.get("FeedID")).collection("comments").document(((Comment) map.get("comment")).getCommentID()).set(map);
-            }
             //챌린지 관련
             if (idx == 2) {
                 //챌린지 참여용
@@ -189,56 +179,18 @@ public class FBModule {
     private void successRead(QuerySnapshot querySnapshot, int idx, Map map) {
 
         //fragment_challenge에 있는 메소드를 사용하기 위함.
-        fragment_challenge fc;
-        //Fragment_feed에 있는 메소드를 사용하기 위함.
-        Fragment_feed ff;
-        if (querySnapshot.isEmpty()) {
-            //피드 조회
-            if (idx == 1) {
-                if (map.get("FeedID") != null) {
-                    ((subactivity_comment) context).moduleUpdated(null);
-                } else {
-                    ff = ((Fragment_feed) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
-                    ff.moduleUpdated(null, null); //찾은 피드 목록을 반환
-                }
-            }
-            if (idx == 2) {
-                fc = ((fragment_challenge) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("3"));
-                fc.moduleUpdated(null); //빈값을 반환하여, 찾는 값이 없음을 사용자에게 알림.
-            }
-        } else {
-            if (idx == 1) {
-                if (map.get("FeedID") != null) {
-                    ((subactivity_comment) context).moduleUpdated(querySnapshot.getDocuments());
-                } else {
-                    ff = ((Fragment_feed) ((AppCompatActivity) context).getSupportFragmentManager().findFragmentByTag("0"));
-                    List<DocumentSnapshot> documents = querySnapshot.getDocuments();
-                    ArrayList<DocumentSnapshot> data = new ArrayList<>(documents);
-                    final int[] count = {0};
-                    for (DocumentSnapshot document : documents) {
-                        document.getReference().collection("comments").limit(1).orderBy("commentID", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                count[0]++;
-                                List<DocumentSnapshot> shot = task.getResult().getDocuments();
-                                int pos = documents.indexOf(document); //for문으로 돌린 문서에 맞는 위치에 데이터를 세팅할 수 있도록 하기 위하여 위치값을 미리 가진다.
-                                //해당 위치에 데이터를 세팅한다.
-                                if (shot.size() > 0) data.set(pos, shot.get(0));
-                                else data.set(pos, null);
-                                if (count[0] == documents.size()) {
-                                    ff.moduleUpdated(documents, data); //찾은 피드 목록을 반환
-                                }
-                            }
-                        });
-                    }
-                }
-            }
-            if (idx == 2) {
-                //챌린지 검색
-                fc = ((fragment_challenge) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("3"));
-                fc.moduleUpdated(querySnapshot.getDocuments()); //찾은 챌린지 목록을 반환함.
-            }
-        }
+//        fragment_challenge fc;
+//
+//        if (idx == 2) {
+//            fc = ((fragment_challenge) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("3"));
+//            fc.moduleUpdated(null); //빈값을 반환하여, 찾는 값이 없음을 사용자에게 알림.
+//
+//        }
+//        if (idx == 2) {
+//            //챌린지 검색
+//            fc = ((fragment_challenge) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag("3"));
+//            fc.moduleUpdated(querySnapshot.getDocuments()); //찾은 챌린지 목록을 반환함.
+//        }
     }
 
 
@@ -246,7 +198,7 @@ public class FBModule {
         switch (idx) {
 
             case 1: //피드 작성
-                db.collection(location[idx]).document((String) data.get("FeedID")).set(data);
+                db.collection(location[idx]).document((String) data.get("feedID")).set(data);
                 break;
 
             case 2://챌린지 생성
@@ -297,10 +249,10 @@ public class FBModule {
     }
 
     //챌린지 인증게시판 업로드를 위한 함수
-    public void uploadChallengeBoard(int idx, String token, String FeedID, Map data) {
+    public void uploadChallengeBoard(int idx, String token, String feedID, Map data) {
         collectionReference = db.collection(location[idx]).document(token).collection("feed");
         //task 결정
-        task = collectionReference.document(FeedID).set(data);
+        task = collectionReference.document(feedID).set(data);
         //task 실행
         task.addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -319,7 +271,7 @@ public class FBModule {
     private void successDelete(int idx) {
         switch (idx) {
             case 0:
-                (((ProfileSettingActivity) context)).moveToLogin();
+                (((ProfileModifyActivity) context)).moveToLogin();
                 break;
         }
     }

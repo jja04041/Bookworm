@@ -42,7 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
-                android:hint="책 검색"
+                android:hint="검색"
                 android:paddingLeft="10dp"
                 android:paddingTop="7dp" />
         </LinearLayout>

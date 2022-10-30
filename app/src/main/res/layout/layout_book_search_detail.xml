@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/SFLSearch"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/shimmer_subactivity_search_fragment_result" />
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <!--         실제로 나타나는 뷰 -->
+    <LinearLayout
+        android:id="@+id/llSearch"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/ivBack"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/back_icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="책 정보"
+                    android:textColor="@color/black"
+                    android:textSize="13dp" />
+
+                <ImageView
+                    android:id="@+id/btnFeedCreate"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_margin="10dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/create_feed"
+                    android:textColor="@color/black" />
+
+                <ImageView
+                    android:id="@+id/btnPurchase"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_margin="60dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/icon_shopping_cart"
+                    android:textColor="@color/black" />
+
+            </FrameLayout>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/mRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            <LinearLayout
+                android:id="@+id/llEmptyReview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:gravity="center_horizontal"
+                android:visibility="gone">
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="90dp"
+                    android:gravity="center"
+                    android:text="리뷰가 없습니다.\n책을 읽고 리뷰를 남겨보세요!"
+                    android:textSize="18dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>
