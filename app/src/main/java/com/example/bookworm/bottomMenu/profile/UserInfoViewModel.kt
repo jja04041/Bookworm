@@ -141,7 +141,7 @@ class UserInfoViewModel(context: Context) : ViewModel() {
 
 
     //장르를 설정하는 코드
-    fun setGenre(categoryname: String?, user: UserInfo, isDelete: Boolean): String {
+    fun setGenre(categoryname: String?, user: UserInfo): String {
         //만약 게시물 삭제시엔 카테고리를 줄임.
         val tokenizer = StringTokenizer(categoryname, ">")
         tokenizer.nextToken() // 두번째 분류를 원하기 때문에 맨 앞 분류 꺼냄
@@ -173,9 +173,8 @@ class UserInfoViewModel(context: Context) : ViewModel() {
             }
         }
         //장르 세팅 코드
-        if (isDelete) user.genre!![category] = user.genre!![category]!! - 1 //만약 리뷰 삭제 시엔 해당 리뷰의 장르수를 1 줄임
-
-        else if (!user.genre!!.containsKey(category)) user.genre!![category] = 1
+//        if (isDelete) user.genre!![category] = user.genre!![category]!! - 1 //만약 리뷰 삭제 시엔 해당 리뷰의 장르수를 1 줄임
+        if (!user.genre!!.containsKey(category)) user.genre!![category] = 1
         else user.genre!![category] = user.genre!![category]!! + 1;
         return category
 
