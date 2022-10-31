@@ -7,7 +7,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.bookworm.LoadState
@@ -19,9 +18,8 @@ import com.example.bookworm.chat.newchat.MessageActivity
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.ActivityProfileInfoBinding
 import com.example.bookworm.extension.follow.view.FollowViewModel
+import com.example.bookworm.extension.follow.view.FollowerActivity
 import com.example.bookworm.notification.MyFCMService
-import com.google.firebase.database.FirebaseDatabase
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 
@@ -162,7 +160,26 @@ class ProfileInfoActivity : AppCompatActivity() {
                 this.packageName
             )
         )
+//팔로워액티비티 실행하기
 
+
+        //팔로워액티비티 실행하기
+        binding.btnFollower.setOnClickListener { view ->
+            val intent = Intent(this, FollowerActivity::class.java)
+            intent.putExtra("token", user.token)
+            intent.putExtra("page", 0)
+            startActivity(intent)
+        }
+
+        //팔로잉액티비티 실행하기
+
+        //팔로잉액티비티 실행하기
+        binding.btnFollowing.setOnClickListener { view ->
+            val intent = Intent(this, FollowerActivity::class.java)
+            intent.putExtra("token", user.token)
+            intent.putExtra("page", 1)
+            startActivity(intent)
+        }
 
         //팔로우 버튼을 클릭했을때 버튼 모양, 상태 변경
         binding.tvFollow.setOnClickListener {

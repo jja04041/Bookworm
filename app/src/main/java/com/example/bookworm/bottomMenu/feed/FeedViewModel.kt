@@ -157,14 +157,17 @@ class FeedViewModel(val context: Context) : ViewModel() {
     //유저의 정보 업데이트 (게시물 업로드시)
     private fun updateUserInfo(feed: Feed, isDelete: Boolean = false) {
         feed.creatorInfo.apply {
+            // 리뷰 업로드 시
             if (!isDelete) {
-                userInfoViewModel.setGenre(feed.book.categoryName, this)
+                userInfoViewModel.setGenre(feed.book.categoryName, this,isDelete)
                 userInfoViewModel.getBookWorm(token).onJoin
                 val data = userInfoViewModel.bwdata.value
                 data!!.readCount++
                 userInfoViewModel.updateBw(token, data)
                 userInfoViewModel.updateUser(this)
-            } else {
+            } //리뷰 삭제 시
+            else {
+                userInfoViewModel.setGenre(feed.book.categoryName, this,isDelete)
                 userInfoViewModel.getBookWorm(token).onJoin
                 val data = userInfoViewModel.bwdata.value
                 data!!.readCount--

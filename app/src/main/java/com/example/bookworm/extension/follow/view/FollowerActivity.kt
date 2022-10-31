@@ -5,8 +5,10 @@ import android.os.Bundle
 import androidx.lifecycle.MutableLiveData
 import com.example.bookworm.extension.follow.modules.FollowPagerAdapter
 import androidx.lifecycle.ViewModelProvider
+import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.ActivityFollowerBinding
+import com.google.android.material.tabs.TabLayoutMediator
 
 /**
  *팔로잉 팔로워 목록을 띄워주는 Activity
@@ -20,41 +22,58 @@ class FollowerActivity : AppCompatActivity() {
         intent.getStringExtra("token")!!
     }
     private val followViewModel by lazy {
-        ViewModelProvider(this, FollowViewModel.Factory(this)).get(FollowViewModel::class.java)
+        ViewModelProvider(this, FollowViewModel.Factory(this))[FollowViewModel::class.java]
     }
-    val userInfoLiveData = MutableLiveData<UserInfo>()
+    private val userInfoViewModel by lazy {
+        ViewModelProvider(this, UserInfoViewModel.Factory(this))[UserInfoViewModel::class.java]
+    }
+    private val targetUserInfoLiveData = MutableLiveData<UserInfo>()
+    private val nowUserInfoLiveData = MutableLiveData<UserInfo>()
     private val selected by lazy { intent.getIntExtra("page", 0) }
+    lateinit var adapter: FollowPagerAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-        followViewModel.getUser(liveData = userInfoLiveData, token = token)
-        userInfoLiveData.observe(this) { userData ->
-            val adapter = FollowPagerAdapter(supportFragmentManager, userData)
-            binding.apply {
-                viewpager.apply {
-                    viewpager.adapter = adapter
-                }
-
-                //탭 레이아웃 구성
-                tabLayout.apply {
-                    setupWithViewPager(viewpager)
-                    getTabAt(selected)!!.select()
-                    //팔로잉 팔로워가 변하면 데이터를 인식함
-                    MutableLiveData<UserInfo>().apply {
-                        followViewModel.getUser(this, token!!) //현재 유저의 값 가져오는 것
-                        observe(this@FollowerActivity) { userdata ->
-                            userdata.apply {
-                                getTabAt(0)!!.text = "$followerCounts 팔로워"
-                                getTabAt(1)!!.text = "$followingCounts 팔로잉"
-                            }
-                        }
+        userInfoViewModel.getUser(token = token, liveData = targetUserInfoLiveData, true)
+        targetUserInfoLiveData.observe(this) { targetUserData ->
+            if (targetUserData != null) {
+                userInfoViewModel.getUser(null, nowUserInfoLiveData, true)
+                nowUserInfoLiveData.observe(this@FollowerActivity) { nowUserData ->
+                    if (nowUserData != null) {
+                        setUI(targetUser = targetUserData, nowUser = nowUserData)
                     }
-                }
-                btnBack.setOnClickListener {
-                    finish()
                 }
             }
         }
+    }
 
+    //targetUser: 팔로잉, 팔로워 탭을 보고자 하는 대상의 정보 , nowUser: 팔로잉, 팔로워 탭을 보려고 하는 주체(현재 사용자 정보)
+    private fun setUI(targetUser: UserInfo, nowUser: UserInfo) {
+        adapter = FollowPagerAdapter(
+            supportFragmentManager,
+            lifecycle,
+            targetUser,
+            nowUser
+        )
+        binding.apply {
+            viewpager.adapter = adapter
+            TabLayoutMediator(
+                tabLayout,
+                viewpager,
+                false,
+                true
+            ) { tab, position ->
+                //팔로잉 팔로워가 변하면 데이터를 인식함
+                targetUser.apply {
+                    tab.text = if (position == 0) "$followerCounts 팔로워"
+                    else "$followingCounts 팔로잉"
+                    tab.tag = position.toString()
+                }
+            }.attach()
+            tabLayout.getTabAt(selected)!!.select()
+            setContentView(binding.root) //로드가 다 된후 레이아웃을 보여줌
+            btnBack.setOnClickListener {
+                finish()
+            }
+        }
     }
 }
