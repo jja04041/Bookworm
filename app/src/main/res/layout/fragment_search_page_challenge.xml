@@ -27,7 +27,7 @@
             android:id="@+id/llEmptySearchChallenge"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
+            android:background="@color/maincolor"
             android:gravity="center_horizontal">
 
             <TextView
@@ -37,6 +37,8 @@
                 android:gravity="center"
                 android:text="검색어와 일치하는 챌린지가 존재하지 않습니다."
                 android:textSize="18dp" />
+
+
 
         </LinearLayout>
 
