@@ -12,13 +12,17 @@ import com.example.bookworm.LoadState
 import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.LayoutUserItemBinding
+import com.example.bookworm.extension.follow.interfaces.OnFollowBtnClickListener
 
 //isFollower 0=팔로잉 탭, 1=팔로워 탭
 class FollowerViewHolder(
-    val itemView: View, context: Context?, val nowUserInfo: UserInfo,
+    val itemView: View,
+    val context: Context,
+    private val nowUserInfo: UserInfo,
+    val listener: OnFollowBtnClickListener
 ) :
     RecyclerView.ViewHolder(itemView) {
-    var context = context//전달된 context
+
     var binding = LayoutUserItemBinding.bind(itemView)
     var isFollowed = false
     val fv =
@@ -27,13 +31,13 @@ class FollowerViewHolder(
         )
 
     fun setItem(item: UserInfo?) {
-        Glide.with(context!!).load(item!!.profileimg).circleCrop().into(binding.ivProfileImg)
-        binding.tvProfileID.setText(item.username)
+        Glide.with(context).load(item!!.profileimg).circleCrop().into(binding.ivProfileImg)
+        binding.tvProfileID.text = item.username
         //사용자 본인과 다른 프로필인 경우에만 팔로우, 팔로잉이 가능 => 본인이 본인을 팔로우하는 건 기본이기 때문
-        if (!item.token.equals(nowUserInfo.token)) {
+        if (item.token != nowUserInfo.token) {
             if (item.isFollowed) following()
             else unfollowing()
-            binding.btnFollow.setOnClickListener {
+            binding.btnFollow.setOnClickListener { view ->
                 AlertDialog.Builder(context)
                     .setMessage(if (item.isFollowed) "팔로우를 취소하시겠습니까?" else "팔로우 하시겠습니까?")
                     .setPositiveButton(
@@ -43,18 +47,22 @@ class FollowerViewHolder(
                             val unFollowStateLiveData = MutableLiveData<LoadState>()
                             fv.follow(item, false, unFollowStateLiveData, item)
                             unFollowStateLiveData.observe(context as FollowerActivity) {
-                                if (it == LoadState.Done)
+                                if (it == LoadState.Done) {
                                     unfollowing()
+                                    listener.onItemClick(this, view)
+                                }
                             }
                         } else {
                             val followStateLiveData = MutableLiveData<LoadState>()
                             fv.follow(item, true, followStateLiveData, item)
                             followStateLiveData.observe(context as FollowerActivity) {
-                                if (it == LoadState.Done)
+                                if (it == LoadState.Done) {
                                     following()
-
+                                    listener.onItemClick(this, view)
+                                }
                             }
                         }
+
                         dialog.dismiss()
                     }
                     .setNegativeButton(
@@ -82,7 +90,6 @@ class FollowerViewHolder(
         binding.btnFollow.isSelected = false
         binding.btnFollow.text = "팔로우"
         isFollowed = false
-
     }
 
 

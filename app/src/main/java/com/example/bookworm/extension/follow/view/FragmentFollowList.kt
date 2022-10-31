@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
@@ -15,23 +14,32 @@ import com.example.bookworm.LoadState
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.FragmentFollowListBinding
+import com.example.bookworm.extension.follow.interfaces.OnFollowBtnClickListener
 import com.example.bookworm.extension.follow.modules.FollowItemAdapter
-import java.util.*
 
 //팔로워, 팔로잉 탭의 틀을 가지고 있는 클래스 => 팔로워 탭과 팔로잉 탭의 구분은 isFollower변수로 체크한다.
 //뷰는 가져온 데이터를 화면에 표시만 하는 역할을 한다
 class FragmentFollowList(
-    val userData: UserInfo,
-    val isfollower: Int,
+    private val targetUserData: UserInfo,
+    private val nowUserData: UserInfo,
+    val isFollower: Int,
 ) : Fragment() {
     var binding: FragmentFollowListBinding? = null
+    private val userInfoViewModel by lazy {
+        ViewModelProvider(
+            this,
+            UserInfoViewModel.Factory(requireContext())
+        )[UserInfoViewModel::class.java]
+    }
     private var followerAdapter: FollowItemAdapter? = null
-    private lateinit var fv: FollowViewModel
-
-
+    private val followViewModel by lazy {
+        ViewModelProvider(
+            this,
+            FollowViewModel.Factory(requireContext())
+        )[FollowViewModel::class.java]
+    }
     var canLoad = true //더 불러올 수 있는 지
     var isLoading: Boolean = false
-    var nowUser: UserInfo = userData
     var start: Boolean = true
     private var resultList = emptyList<UserInfo>().toMutableList()
     private val loadStateLiveData = MutableLiveData<LoadState>()
@@ -40,12 +48,14 @@ class FragmentFollowList(
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        fv = context.let { FollowViewModel(it!!) }
         binding = FragmentFollowListBinding.inflate(layoutInflater)
         //전달 받은 사용자 정보를 가져온다.
         loadStateLiveData.observe(viewLifecycleOwner, ({
             if (it == LoadState.Done) {
                 showInfo(resultList)
+                showShimmer(false)
+            } else if (it == LoadState.Error) {
+                showShimmer(false)
             }
         }))
 
@@ -84,10 +94,10 @@ class FragmentFollowList(
         if (flag) {
             init()
             resultList.clear()
-            fv.getFollowList(
+            followViewModel.getFollowList(
                 stateLiveData = loadStateLiveData,
-                isfollower == 0,
-                userData.token,
+                isFollower == 0,
+                targetUserData.token,
                 false,
                 resultList
             )
@@ -99,9 +109,22 @@ class FragmentFollowList(
     private fun initAdapter() {
         followerAdapter = context?.let {
             FollowItemAdapter(
-                it, nowUser, isfollower
+                it, nowUserData
             )
         }
+        followerAdapter!!.addListener(object : OnFollowBtnClickListener {
+            override fun onItemClick(holder: FollowerViewHolder, v: View) {
+                val liveData = MutableLiveData<UserInfo>()
+                userInfoViewModel.getUser(null, liveData = liveData, true)
+                liveData.observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        //팔로잉 탭의 숫자를 변경
+                        (activity as FollowerActivity).binding.tabLayout.getTabAt(1)!!.text =
+                            "${it.followingCounts} 팔로잉"
+                    }
+                }
+            }
+        })
         binding!!.recyclerView.adapter = followerAdapter
         binding!!.recyclerView.layoutManager = LinearLayoutManager(context)
         initScrollListener()
@@ -109,6 +132,8 @@ class FragmentFollowList(
 
     //리사이클러뷰 스크롤 초기화
     private fun initScrollListener() {
+
+
         binding!!.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -122,10 +147,10 @@ class FragmentFollowList(
                         ) {
                             resultList.clear()
                             //다음 데이터를 조회한다.
-                            fv.getFollowList(
+                            followViewModel.getFollowList(
                                 loadStateLiveData,
-                                isfollower == 0,
-                                userData.token,
+                                isFollower == 0,
+                                targetUserData.token,
                                 false,
                                 resultList
                             )
@@ -140,7 +165,7 @@ class FragmentFollowList(
     }
 
     //데이터를 세팅
-fun showInfo(result: MutableList<UserInfo>?) {
+    fun showInfo(result: MutableList<UserInfo>?) {
         val current = followerAdapter!!.currentList.toMutableList() // 기존에 가지고 있던 아이템 목록
         if (current.isEmpty()) {
             canLoad = false

@@ -29,7 +29,7 @@ data class Feed(
         var likeCount //좋아요 수
         : Long = 0,
 
-        var isModified
+        var modified
         :Boolean = false, //수정됨을 확인 할 수 있는 플래그
 
         @Exclude @get:Exclude @set:Exclude
