@@ -7,7 +7,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.bookworm.LoadState
@@ -19,9 +18,8 @@ import com.example.bookworm.chat.newchat.MessageActivity
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.ActivityProfileInfoBinding
 import com.example.bookworm.extension.follow.view.FollowViewModel
+import com.example.bookworm.extension.follow.view.FollowerActivity
 import com.example.bookworm.notification.MyFCMService
-import com.google.firebase.database.FirebaseDatabase
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 
@@ -112,7 +110,6 @@ class ProfileInfoActivity : AppCompatActivity() {
 
     //UI설정
     fun setUI(user: UserInfo, bookWorm: BookWorm) {
-
         binding.tvNickname.text = user.username //닉네임 설정
         binding.tvNickname.visibility = View.VISIBLE
         Glide.with(this).load(user.profileimg).circleCrop()
@@ -164,6 +161,23 @@ class ProfileInfoActivity : AppCompatActivity() {
         )
 
 
+        //팔로워액티비티 실행하기
+        binding.btnFollower.setOnClickListener { view ->
+            val intent = Intent(this, FollowerActivity::class.java)
+            intent.putExtra("token", user.token)
+            intent.putExtra("page", 0)
+            startActivity(intent)
+        }
+
+
+        //팔로잉액티비티 실행하기
+        binding.btnFollowing.setOnClickListener { view ->
+            val intent = Intent(this, FollowerActivity::class.java)
+            intent.putExtra("token", user.token)
+            intent.putExtra("page", 1)
+            startActivity(intent)
+        }
+
         //팔로우 버튼을 클릭했을때 버튼 모양, 상태 변경
         binding.tvFollow.setOnClickListener {
             if (binding.tvFollow.isSelected) {
@@ -178,8 +192,7 @@ class ProfileInfoActivity : AppCompatActivity() {
         }
         //뒤로가기
         binding.btnBack.setOnClickListener { view: View? ->
-            if (cache != binding.tvFollow.isSelected && intent.extras!!
-                    .containsKey("pos")
+            if (cache != binding.tvFollow.isSelected && intent.extras!!.containsKey("pos")
             ) {
                 val pos = intent.getIntExtra("pos", -1)
                 val intent = Intent()
@@ -195,7 +208,7 @@ class ProfileInfoActivity : AppCompatActivity() {
         binding.SFLoading.visibility = View.GONE
     }
 
-    fun setFollowerCnt(count: Long) {
+    private fun setFollowerCnt(count: Long) {
         binding.tvFollowerCount.text = count.toString()
     }
 
@@ -204,7 +217,7 @@ class ProfileInfoActivity : AppCompatActivity() {
         if (userInfo.medalAppear!!) { //메달을 표시한다면
             binding!!.ivMedal.setVisibility(View.VISIBLE)
             when (userInfo.tier.toString().toInt()) {
-                1 -> binding.ivMedal.setImageResource(R.drawable.medal_bronze)
+//                1 -> binding.ivMedal.setImageResource(R.drawable.medal_bronze)
                 2 -> binding.ivMedal.setImageResource(R.drawable.medal_silver)
                 3 -> binding.ivMedal.setImageResource(R.drawable.medal_gold)
                 4 -> {}

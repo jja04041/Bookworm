@@ -66,7 +66,7 @@ object FireStoreLoadModule {
                     .update("book", item.book,
                             "feedText", item.feedText,
                             "date", item.date,
-                            "isModified", true,
+                            "modified", true,
                             "imgurl", item.imgurl
                     )
 

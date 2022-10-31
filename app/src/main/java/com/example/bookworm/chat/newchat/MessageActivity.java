@@ -113,21 +113,18 @@ public class MessageActivity extends AppCompatActivity {
             sendMsg();
 
 
-            button2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String message = "안녕 나는 책벌레야";
-                    Create_DynamicLink(message);
-                    Intent msg = new Intent(Intent.ACTION_SEND);
+            button2.setOnClickListener(v -> {
+                String message = "안녕 나는 책벌레야";
+                Create_DynamicLink(message);
+                Intent msg = new Intent(Intent.ACTION_SEND);
 
-                    msg.addCategory(Intent.CATEGORY_DEFAULT);
-                    msg.putExtra(Intent.EXTRA_TEXT, "https://bookbollae.page.link/63fF");
-                    msg.putExtra(Intent.EXTRA_TITLE, "제목");
-                    msg.setType("text/plain");
-                    startActivity(Intent.createChooser(msg, "앱을 선택해 주세요"));
+                msg.addCategory(Intent.CATEGORY_DEFAULT);
+                msg.putExtra(Intent.EXTRA_TEXT, "https://bookbollae.page.link/63fF");
+                msg.putExtra(Intent.EXTRA_TITLE, "제목");
+                msg.setType("text/plain");
+                startActivity(Intent.createChooser(msg, "앱을 선택해 주세요"));
 
 
-                }
             });
         });
 

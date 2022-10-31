@@ -177,7 +177,7 @@ public class FragmentProfile extends Fragment implements LifecycleObserver {
             binding.ivMedal.setVisibility(View.VISIBLE);
             switch (Integer.parseInt(String.valueOf(userInfo.getTier()))) { //티어 0 ~ 5에 따라 다른 메달이 나오게
                 case 1:
-                    binding.ivMedal.setImageResource(R.drawable.medal_bronze);
+//                    binding.ivMedal.setImageResource(R.drawable.medal_bronze);
                     break;
                 case 2:
                     binding.ivMedal.setImageResource(R.drawable.medal_silver);

@@ -39,16 +39,21 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 
-class FeedViewHolder(private val binding: FeedDataBinding, val context: Context, val adapter: FeedAdapter) : RecyclerView.ViewHolder(binding.root) {
+class FeedViewHolder(
+    private val binding: FeedDataBinding,
+    val context: Context,
+    val adapter: FeedAdapter
+) : RecyclerView.ViewHolder(binding.root) {
     var limit = 0
     var restricted = false
     private var myFCMService: MyFCMService? = null
     val pv = ViewModelProvider(context as MainActivity, UserInfoViewModel.Factory(context)).get(
-            UserInfoViewModel::class.java
+        UserInfoViewModel::class.java
     )
-    val feedViewModel = ViewModelProvider(context as MainActivity, FeedViewModel.Factory(context)).get(
+    private val feedViewModel =
+        ViewModelProvider(context as MainActivity, FeedViewModel.Factory(context)).get(
             FeedViewModel::class.java
-    )
+        )
     private var feedUserFcmtoken: String? = null
     private val mainUserLiveData = MutableLiveData<UserInfo>()
 
@@ -70,27 +75,73 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context,
 
         //책 제목과 책 저자에 적힌 &lt, &gt 문제 해결
         feed.book!!.title = feed.book!!.title.replace("&lt;", "<")
-                .replace("&gt;", ">")
-                .replace("&lt", "<")
-                .replace("&gt", ">")
+            .replace("&gt;", ">")
+            .replace("&lt", "<")
+            .replace("&gt", ">")
         feed.book!!.author = feed.book!!.author.replace("&lt;", "<")
-                .replace("&gt;", ">")
-                .replace("&lt", "<")
-                .replace("&gt", ">")
+            .replace("&gt;", ">")
+            .replace("&lt", "<")
+            .replace("&gt", ">")
 
         binding.feedImage.apply {
             isVisible = feed.imgurl != ""
             Glide.with(context).load(feed.imgurl)
-                    .placeholder(CircularProgressDrawable(context).apply {
-                        strokeWidth = 5f
-                        centerRadius = 30f
-                        start()
-                    })
-                    .signature(ObjectKey(System.currentTimeMillis().toString()))
-                    .error(AppCompatResources.getDrawable(context, R.drawable.bookimg_sample))
-                    .into(this)
+                .placeholder(CircularProgressDrawable(context).apply {
+                    strokeWidth = 5f
+                    centerRadius = 30f
+                    start()
+                })
+                .signature(ObjectKey(System.currentTimeMillis().toString()))
+                .error(AppCompatResources.getDrawable(context, R.drawable.bookimg_sample))
+                .into(this)
         }
+        binding.apply {
+            //책 정보 확인 시
+            llbook.setOnClickListener {
+                val intent = Intent(context, BookDetailActivity::class.java)
+                intent.putExtra("BookID", feed.book.itemId)
+                context.startActivity(intent)
+            }
+
+
+            // 공유하기 버튼 눌렀을 때 (게시물 공유)
+            btnShare.setOnClickListener {
+
+
+            }
+            tvIfModified.isVisible = feed.modified
+            //좋아요 표시관리
+            binding.apply {
+                tvLike.apply {
+                    text = feed.likeCount.toString()
+                }
+                btnLike.apply {
+                    background = if (feed.isUserLiked) AppCompatResources.getDrawable(
+                        context,
+                        R.drawable.icon_like_red
+                    )
+                    else AppCompatResources.getDrawable(context, R.drawable.icon_like)
+                }
+            }
+
+
+            btnFeedMenu.setOnClickListener { view ->
+                val pos = bindingAdapterPosition
+                if (pos != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(this@FeedViewHolder, view, pos)
+                }
+            }
+            //프로필을 눌렀을때 그 사용자의 프로필 정보 화면으로 이동
+            llProfile.setOnClickListener {
+                val intent = Intent(context, ProfileInfoActivity::class.java)
+                intent.putExtra("userID", feed.userToken)
+                context.startActivity(intent)
+            }
+        }
+
         //책 정보 확인 시
+
+
         mainUserLiveData.observe(context as MainActivity) { mainUser ->
             binding.apply {
                 // 댓글이 있는 경우
@@ -106,13 +157,8 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context,
                         }
                     }
                 }
-                //책 정보 확인 시
-                llbook.setOnClickListener {
-                    val intent = Intent(context, BookDetailActivity::class.java)
-                    intent.putExtra("BookID", feed.book.itemId)
-                    context.startActivity(intent)
-                }
-
+                //좋아요 버튼 클릭 시
+                lllike.setOnClickListener { controlLike(feed, mainUser) }
                 //댓글창 클릭 시
                 llComments.setOnClickListener {
                     if (llLastComment.visibility != View.GONE) {
@@ -120,7 +166,9 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context,
                         feed.position = bindingAdapterPosition
                         intent.putExtra("Feed", feed)
                         intent.putExtra("NowUser", mainUser)
-                        (context.supportFragmentManager.findFragmentByTag("0") as FragmentFeed).startActivityResult.launch(intent)
+                        (context.supportFragmentManager.findFragmentByTag("0") as FragmentFeed).startActivityResult.launch(
+                            intent
+                        )
                     }
                 }
                 //댓글 작성
@@ -133,39 +181,10 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context,
                     feed.position = bindingAdapterPosition
                     intent.putExtra("Feed", feed)
                     intent.putExtra("NowUser", mainUser)
-                    context.startActivity(intent)
+                    (context.supportFragmentManager.findFragmentByTag("0") as FragmentFeed).startActivityResult.launch(
+                        intent
+                    )
                 }
-                // 공유하기 버튼 눌렀을 때 (게시물 공유)
-                btnShare.setOnClickListener {
-
-
-                }
-                tvIfModified.isVisible = feed.isModified
-                //좋아요 표시관리
-                binding.apply {
-                    tvLike.apply {
-                        text = feed.likeCount.toString()
-                    }
-                    btnLike.apply {
-                        background = if (feed.isUserLiked) AppCompatResources.getDrawable(context, R.drawable.icon_like_red)
-                        else AppCompatResources.getDrawable(context, R.drawable.icon_like)
-                    }
-                }
-                lllike.setOnClickListener { controlLike(feed, mainUser) }//메뉴 선택 시
-
-                btnFeedMenu.setOnClickListener { view ->
-                    val pos = bindingAdapterPosition
-                    if (pos != RecyclerView.NO_POSITION) {
-                        listener.onItemClick(this@FeedViewHolder, view, pos)
-                    }
-                }
-                //프로필을 눌렀을때 그 사용자의 프로필 정보 화면으로 이동
-                llProfile.setOnClickListener {
-                    val intent = Intent(context, ProfileInfoActivity::class.java)
-                    intent.putExtra("userID", feed.userToken)
-                    context.startActivity(intent)
-                }
-
                 //뷰에 피드 반영
                 this.feed = feed
                 executePendingBindings()
@@ -186,11 +205,12 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context,
         //댓글의 내용이 없는 경우 업로드 하지 않음.
         if (commentText.replace(" ", "") != "") {
             val madeDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
-                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-            val comment = Comment(commentID = "${madeDate}_${nowUser.token}",
-                    contents = commentText,
-                    userToken = nowUser.token,
-                    madeDate = madeDate
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+            val comment = Comment(
+                commentID = "${madeDate}_${nowUser.token}",
+                contents = commentText,
+                userToken = nowUser.token,
+                madeDate = madeDate
             )
             feedViewModel.manageComment(comment, feed.feedID!!, true) //서버에 댓글 추가
             feedViewModel.nowCommentLoadState.observe(context as MainActivity) { state ->
@@ -205,8 +225,8 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context,
 
                     //알림 푸시메시지 전송
                     myFCMService!!.sendPostToFCM(
-                            context,
-                            feedUserFcmtoken, "${nowUser.username}님이 댓글을 남겼습니다.\"${comment.contents}\""
+                        context,
+                        feedUserFcmtoken, "${nowUser.username}님이 댓글을 남겼습니다.\"${comment.contents}\""
                     )
                 }
             }
@@ -219,41 +239,52 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context,
     private fun controlLike(feed: Feed, nowUser: UserInfo) {
         if (limit < 5) {
             limit += 1
+            val backupLikeState = listOf(feed.likeCount, feed.isUserLiked) //작업 오류시 다시 되돌리기 위함.
+
             if (!feed.isUserLiked) {
                 //현재 좋아요를 누르지 않은 상태
                 feed.isUserLiked = true
+                feed.likeCount += 1L
                 feed.feedID?.let { nowUser.likedPost.add(it) }
             } else {
                 //현재 좋아요를 누른 상태
                 feed.isUserLiked = false
+                feed.likeCount -= 1L
                 feed.feedID?.let { nowUser.likedPost.remove(it) }
             }
+
+            feedViewModel.manageLike(feed, nowUser)
             binding.apply {
                 tvLike.apply {
-                    text = "${text.toString().toInt() + (if (feed.isUserLiked) 1 else -1)}"
-
+                    text = "${feed.likeCount}"
                 }
                 btnLike.apply {
-                    val back = if (feed.isUserLiked) R.drawable.icon_like_red else R.drawable.icon_like
+                    val back =
+                        if (feed.isUserLiked) R.drawable.icon_like_red else R.drawable.icon_like
                     background = AppCompatResources.getDrawable(context, back)
                 }
             }
-            feedViewModel.manageLike(feed.feedID!!, nowUser, feed.isUserLiked)
             feedViewModel.nowLikeState.observe(context as MainActivity) { state ->
                 when (state) {
                     LoadState.Done -> {
                         myFCMService!!.sendPostToFCM(
-                                context,
-                                feedUserFcmtoken, "${nowUser.username}님이 좋아요를 표시했습니다."
+                            context,
+                            feedUserFcmtoken, "${nowUser.username}님이 좋아요를 표시했습니다."
                         )
                     }
                     LoadState.Error -> {
-                        Toast.makeText(context, "게시물의 좋아요를 처리하는 중 오류가 발생하였습니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            "게시물의 좋아요를 처리하는 중 오류가 발생하였습니다. 다시 시도해 주세요.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         binding.apply {
-                            //에러 발생시 원상태로 돌림.
-                            tvLike.text = "${tvLike.text.toString().toInt() + (if (feed.isUserLiked) -1 else 1)}"
+                            tvLike.apply {
+                                text = backupLikeState[0].toString()
+                            }
                             btnLike.apply {
-                                val back = if (!feed.isUserLiked) R.drawable.icon_like_red else R.drawable.icon_like
+                                val back =
+                                    if (backupLikeState[1] as Boolean) R.drawable.icon_like_red else R.drawable.icon_like
                                 background = AppCompatResources.getDrawable(context, back)
                             }
                         }
@@ -261,14 +292,12 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context,
                     else -> {}
                 }
             }
-
-
         } else {
             AlertDialog.Builder(context)
-                    .setMessage("커뮤니티 활동 보호를 위해 잠시 후에 다시 시도해주세요")
-                    .setPositiveButton(
-                            "네"
-                    ) { dialog, which -> dialog.dismiss() }.show()
+                .setMessage("커뮤니티 활동 보호를 위해 잠시 후에 다시 시도해주세요")
+                .setPositiveButton(
+                    "네"
+                ) { dialog, which -> dialog.dismiss() }.show()
             if (!restricted) {
                 restricted = true
                 val handler = Handler(Looper.getMainLooper())
@@ -289,11 +318,12 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context,
             //뷰 생성
             val tv = TextView(context)
             tv.text = label[i] //라벨에 텍스트 삽입
-            tv.background = AppCompatResources.getDrawable(context, R.drawable.label_design) //디자인 적용
+            tv.background =
+                AppCompatResources.getDrawable(context, R.drawable.label_design) //디자인 적용
             tv.setBackgroundColor((context as MainActivity).getColor(R.color.subcolor_2)) //배경색 적용
             val params = LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
             ) //사이즈 설정
             params.setMargins(10, 0, 10, 0) //마진 설정
             tv.layoutParams = params //설정값 뷰에 저장
@@ -309,7 +339,7 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context,
             if (bool == false) { //피드라면
                 binding.ivMedal.visibility = View.VISIBLE
                 when (userInfo.tier!!.toInt()) {
-                    1 -> binding.ivMedal.setImageResource(R.drawable.medal_bronze)
+//                    1 -> binding.ivMedal.setImageResource(R.drawable.medal_bronze)
                     2 -> binding.ivMedal.setImageResource(R.drawable.medal_silver)
                     3 -> binding.ivMedal.setImageResource(R.drawable.medal_gold)
                     4 -> {}
@@ -319,7 +349,7 @@ class FeedViewHolder(private val binding: FeedDataBinding, val context: Context,
             } else { //댓글이라면
                 binding.ivCommentMedal.visibility = View.VISIBLE
                 when (userInfo.tier!!.toInt()) {
-                    1 -> binding.ivCommentMedal.setImageResource(R.drawable.medal_bronze)
+//                    1 -> binding.ivCommentMedal.setImageResource(R.drawable.medal_bronze)
                     2 -> binding.ivCommentMedal.setImageResource(R.drawable.medal_silver)
                     3 -> binding.ivCommentMedal.setImageResource(R.drawable.medal_gold)
                     4 -> {}
