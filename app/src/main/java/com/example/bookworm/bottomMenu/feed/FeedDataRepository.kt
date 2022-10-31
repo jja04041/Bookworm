@@ -33,22 +33,22 @@ class FeedDataRepository() {
     //게시물을 삭제하는 과정을 처리한다.
     suspend fun deletePostProcess(feed: Feed) {
         val feedRef = FireStoreLoadModule.provideQueryPathToFeedCollection()
-                .document(feed.feedID!!) //게시물의 경로
+            .document(feed.feedID!!) //게시물의 경로
         feedRef.delete().await()
     }
 
     //Firestore에 있는 정보를 가져오는 함수
     suspend fun loadFireStoreData(type: DataType, pageSize: Int = PAGE_SIZE): Any? {
-        var query = queryForPaging!!.limit(pageSize.toLong())
+        val query = queryForPaging!!.limit(pageSize.toLong())
         currentPage = withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
             //현재 페이지 그리고 마지막으로 표시된 데이터 이 세가지 요소의 조화를 이뤄야 함.
             if (lastVisibleData != null)
                 query.startAfter(
-                        when (type) {
-                            DataType.FeedType -> lastVisibleData!!.data!!["feedID"]
-                            DataType.CommentType -> lastVisibleData!!.data!!["CommentID"]
-                            else -> {}
-                        }
+                    when (type) {
+                        DataType.FeedType -> lastVisibleData!!.data!!["feedID"]
+                        DataType.CommentType -> lastVisibleData!!.data!!["CommentID"]
+                        else -> {}
+                    }
                 ).get().await()
             else query.get().await()
         }
@@ -82,7 +82,7 @@ class FeedDataRepository() {
 
     //한 개의 게시물의 정보만 가져오기 -> 게시물 수정시 최신의 데이터를 가져오기 위함.
     suspend fun loadOnePost(feedId: String) =
-            FireStoreLoadModule.provideQueryPostByFeedID(feedId = feedId).get().await()
+        FireStoreLoadModule.provideQueryPostByFeedID(feedId = feedId).get().await()
 
     //댓글 작성 관리
     suspend fun manageComment(feedId: String, comment: Comment, isAdd: Boolean): Transaction {
@@ -91,39 +91,51 @@ class FeedDataRepository() {
         return FireStoreLoadModule.provideFirebaseInstance().runTransaction { transaction ->
             transaction.apply {
                 if (isAdd) set(commentRef, comment)
-                        .update(feedRef, "commentsCount", FieldValue
-                                .increment(1L))
+                    .update(
+                        feedRef, "commentsCount", FieldValue
+                            .increment(1L)
+                    )
                 else
                     delete(commentRef)
-                            .update(feedRef, "commentsCount", FieldValue
-                                    .increment(-1L))
+                        .update(
+                            feedRef, "commentsCount", FieldValue
+                                .increment(-1L)
+                        )
             }
 
         }.await()
     }
 
     //좋아요 관리
-    suspend fun manageLike(feedId: String, nowUserToken: String, isLiked: Boolean): Transaction {
+    suspend fun manageLike(feedId: String, nowUserToken: String, isLiked: Boolean): Transaction? {
         val feedRef = FireStoreLoadModule.provideQueryPostByFeedID(feedId)
         val nowUserRef = FireStoreLoadModule.provideUserByUserToken(nowUserToken)
         return FireStoreLoadModule.provideFirebaseInstance()
-                .runTransaction { transaction ->
-                    transaction.apply {
-                        val likeCount = transaction.get(feedRef)["likeCount"] as Long //현재 상태의 좋아요 수 확인
-                        if (likeCount >= 0) {
-                            update(feedRef, "likeCount", FieldValue.increment(if (isLiked) 1L else -1L))
-                                    .update(nowUserRef, "likedPost", if (isLiked) FieldValue.arrayUnion(feedId) else FieldValue.arrayRemove(feedId))
-                        } else throw NullPointerException()
-                    }
-                }.await()
+            .runTransaction { transaction ->
+                transaction.apply {
+                    val likeCount = transaction.get(feedRef)["likeCount"] as Long //현재 상태의 좋아요 수 확인
+                    if (likeCount < 0) update(feedRef, "likeCount", 0L)
+                    update(
+                        feedRef,
+                        "likeCount",
+                        FieldValue.increment(if (isLiked) 1L else -1L)
+                    ).update(
+                            nowUserRef,
+                            "likedPost",
+                            if (isLiked) FieldValue.arrayUnion(feedId) else FieldValue.arrayRemove(
+                                feedId
+                            )
+                        )
+                }
+            }.await()
     }
 
     //게시물 업로드
     fun uploadPost(feed: Feed) =
-            FireStoreLoadModule.provideQueryUploadPost(feed)
+        FireStoreLoadModule.provideQueryUploadPost(feed)
 
     //게시물 수정
     fun modifyPost(feed: Feed) =
-            FireStoreLoadModule.provideQueryModifyPost(feed)
+        FireStoreLoadModule.provideQueryModifyPost(feed)
 
 }
