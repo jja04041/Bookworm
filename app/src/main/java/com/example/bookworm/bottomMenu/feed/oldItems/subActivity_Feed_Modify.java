@@ -28,7 +28,7 @@ import com.example.bookworm.R;
 
 import com.example.bookworm.bottomMenu.feed.Feed;
 import com.example.bookworm.bottomMenu.feed.ImagePicker;
-import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book;
+import com.example.bookworm.bottomMenu.search.bookitems.Book;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.internet.Module;

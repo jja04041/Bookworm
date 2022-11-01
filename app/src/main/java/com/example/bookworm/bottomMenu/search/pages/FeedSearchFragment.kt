@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.search.searchtest.pages
+package com.example.bookworm.bottomMenu.search.pages
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.bookworm.bottomMenu.search.searchtest.modules.SearchViewModel
-import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
-import com.example.bookworm.databinding.FragmentSearchPageChallengeBinding
+import com.example.bookworm.bottomMenu.search.modules.SearchViewModel
+import com.example.bookworm.bottomMenu.search.views.SearchMainActivity
+import com.example.bookworm.databinding.FragmentSearchPageFeedBinding
 
-class ChallengeSearchFragment : Fragment() {
+class FeedSearchFragment : Fragment() {
     private val binding by lazy {
-        FragmentSearchPageChallengeBinding.inflate(layoutInflater)
+        FragmentSearchPageFeedBinding.inflate(layoutInflater)
     }
     private val searchViewModel by lazy {
         ViewModelProvider(activity as SearchMainActivity,

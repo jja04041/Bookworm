@@ -18,8 +18,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.bookworm.LoadState
-import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
-import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
+import com.example.bookworm.bottomMenu.search.bookitems.Book
+import com.example.bookworm.bottomMenu.search.views.SearchMainActivity
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.CustomDialogLabelBinding

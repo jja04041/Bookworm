@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.search.searchtest.views
+package com.example.bookworm.bottomMenu.search.views
 
 import android.content.Intent
 import android.net.Uri
@@ -14,9 +14,9 @@ import com.example.bookworm.LoadState
 import com.example.bookworm.bottomMenu.feed.Feed
 import com.example.bookworm.bottomMenu.feed.SubActivityCreatePost
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
-import com.example.bookworm.bottomMenu.search.searchtest.adapters.UserReviewAdapter
-import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
-import com.example.bookworm.bottomMenu.search.searchtest.modules.SearchViewModel
+import com.example.bookworm.bottomMenu.search.adapters.FeedResultAdapter
+import com.example.bookworm.bottomMenu.search.bookitems.Book
+import com.example.bookworm.bottomMenu.search.modules.SearchViewModel
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.LayoutBookSearchDetailBinding
 
@@ -30,7 +30,7 @@ class BookDetailActivity : AppCompatActivity() {
 
 
     private val userReviewAdapter by lazy {
-        UserReviewAdapter(this)
+        FeedResultAdapter(this)
     }
     private val searchViewModel by lazy {
         ViewModelProvider(this,

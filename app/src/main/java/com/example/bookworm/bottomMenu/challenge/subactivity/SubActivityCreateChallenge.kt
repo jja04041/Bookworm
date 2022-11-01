@@ -25,13 +25,12 @@ import com.example.bookworm.bottomMenu.challenge.ChallengeViewModel
 import com.example.bookworm.bottomMenu.challenge.NumberPickerDialog
 import com.example.bookworm.bottomMenu.challenge.items.Challenge
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
-import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
-import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
+import com.example.bookworm.bottomMenu.search.bookitems.Book
+import com.example.bookworm.bottomMenu.search.views.SearchMainActivity
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.SubactivityChallengeCreatechallengeBinding
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class SubActivityCreateChallenge : AppCompatActivity(), NumberPicker.OnValueChangeListener {
     val binding by lazy {

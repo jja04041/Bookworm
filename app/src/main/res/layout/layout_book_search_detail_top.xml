@@ -9,7 +9,7 @@
 
         <variable
             name="book"
-            type="com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book" />
+            type="com.example.bookworm.bottomMenu.search.bookitems.Book" />
 
 
     </data>

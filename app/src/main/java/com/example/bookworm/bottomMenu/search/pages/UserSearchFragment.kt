@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.search.searchtest.pages
+package com.example.bookworm.bottomMenu.search.pages
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bookworm.bottomMenu.search.searchtest.adapters.UserDataAdapter
-import com.example.bookworm.bottomMenu.search.searchtest.modules.SearchViewModel
-import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
+import com.example.bookworm.bottomMenu.search.adapters.UserResultAdapter
+import com.example.bookworm.bottomMenu.search.modules.SearchViewModel
+import com.example.bookworm.bottomMenu.search.views.SearchMainActivity
 import com.example.bookworm.databinding.FragmentSearchPageUserBinding
 
 class UserSearchFragment : Fragment() {
@@ -26,7 +26,7 @@ class UserSearchFragment : Fragment() {
     private var page = 1
     private var isEnd = false
     private var keyword = ""
-    private val userAdapter = UserDataAdapter()
+    private val userAdapter = UserResultAdapter()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

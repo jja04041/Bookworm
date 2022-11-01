@@ -29,7 +29,7 @@ import com.example.bookworm.bottomMenu.feed.comments.Comment
 import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
-import com.example.bookworm.bottomMenu.search.searchtest.views.BookDetailActivity
+import com.example.bookworm.bottomMenu.search.views.BookDetailActivity
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.FeedDataBinding
 import com.example.bookworm.notification.MyFCMService

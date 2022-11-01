@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.search.Modules
+package com.example.bookworm.bottomMenu.search.modules
 
 import com.algolia.search.saas.Client
 import kotlinx.coroutines.*

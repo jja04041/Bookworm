@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.search.searchtest.bookitems
+package com.example.bookworm.bottomMenu.search.bookitems
 
 import android.os.Parcelable
 import com.google.firebase.firestore.Exclude

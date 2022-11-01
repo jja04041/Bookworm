@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.search.searchtest.modules
+package com.example.bookworm.bottomMenu.search.modules
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -14,10 +14,9 @@ import com.example.bookworm.bottomMenu.feed.FireStoreLoadModule
 import com.example.bookworm.bottomMenu.feed.comments.Comment
 import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
-import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
-import com.example.bookworm.bottomMenu.search.searchtest.views.BookDetailActivity
-import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
-import com.google.firebase.firestore.DocumentSnapshot
+import com.example.bookworm.bottomMenu.search.bookitems.Book
+import com.example.bookworm.bottomMenu.search.views.BookDetailActivity
+import com.example.bookworm.bottomMenu.search.views.SearchMainActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
