@@ -1,7 +1,7 @@
 //package com.example.bookworm.bottomMenu.challenge.board
 //
 //import android.os.Parcelable
-//import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
+//import com.example.bookworm.bottomMenu.search.Book
 //import kotlinx.parcelize.Parcelize
 //
 //@Parcelize

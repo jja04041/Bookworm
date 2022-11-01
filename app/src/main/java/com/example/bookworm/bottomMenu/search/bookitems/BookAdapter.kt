@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.search.searchtest.bookitems
+package com.example.bookworm.bottomMenu.search.bookitems
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -135,7 +135,7 @@ class BookAdapter(val context: Context) : ListAdapter<Book, RecyclerView.ViewHol
 
     inner class LoadingBookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {}
 
-    private fun showLoadingView(viewHolder: BookAdapter.LoadingBookViewHolder, position: Int) {
+    private fun showLoadingView(viewHolder: LoadingBookViewHolder, position: Int) {
         val binding: LayoutItemLoadingBinding = LayoutItemLoadingBinding.bind(viewHolder.itemView)
         val Circle: Sprite = ThreeBounce()
         Circle.animationDelay = 0

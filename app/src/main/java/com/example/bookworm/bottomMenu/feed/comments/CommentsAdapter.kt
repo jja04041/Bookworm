@@ -16,7 +16,7 @@ import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.feed.Feed
 import com.example.bookworm.bottomMenu.feed.customMenuPopup
 import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
-import com.example.bookworm.bottomMenu.search.searchtest.views.BookDetailActivity
+import com.example.bookworm.bottomMenu.search.views.BookDetailActivity
 import com.example.bookworm.databinding.LayoutCommentItemBinding
 import com.example.bookworm.databinding.LayoutCommentSummaryBinding
 import java.text.DateFormat

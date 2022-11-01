@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.search.searchtest.bookitems
+package com.example.bookworm.bottomMenu.search.bookitems
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView

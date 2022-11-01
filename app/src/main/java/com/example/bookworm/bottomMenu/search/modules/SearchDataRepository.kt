@@ -1,16 +1,11 @@
-package com.example.bookworm.bottomMenu.search.searchtest.modules
+package com.example.bookworm.bottomMenu.search.modules
 
 import android.content.Context
 import com.example.bookworm.R
-import com.example.bookworm.bottomMenu.feed.Feed
 import com.example.bookworm.bottomMenu.feed.FireStoreLoadModule
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory

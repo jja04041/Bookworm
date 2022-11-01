@@ -144,13 +144,13 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".bottomMenu.search.searchtest.views.SearchMainActivity" />
+        <activity android:name=".bottomMenu.search.views.SearchMainActivity" />
         <activity android:name=".bottomMenu.feed.SubActivityCreatePost" />
         <activity android:name=".bottomMenu.challenge.subactivity.SubActivityCreateChallenge" />
         <activity android:name=".bottomMenu.challenge.subactivity.SubActivityChallengeInfo" />
         <activity android:name=".bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumContentActivity" />
         <activity android:name=".bottomMenu.profile.submenu.album.AlbumCreate.view.ShowFeedListForCreateAlbum" />
-        <activity android:name=".bottomMenu.search.searchtest.views.BookDetailActivity" />
+        <activity android:name=".bottomMenu.search.views.BookDetailActivity" />
         <activity android:name=".bottomMenu.feed.SubActivityModifyPost" /> <!-- cache directory file provider paths -->
         <provider
             android:name="androidx.core.content.FileProvider"

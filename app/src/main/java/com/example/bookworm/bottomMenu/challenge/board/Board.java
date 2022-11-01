@@ -3,11 +3,8 @@ package com.example.bookworm.bottomMenu.challenge.board;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book;
+import com.example.bookworm.bottomMenu.search.bookitems.Book;
 
-import org.json.JSONObject;
-
-import java.io.Serializable;
 import java.util.Map;
 
 

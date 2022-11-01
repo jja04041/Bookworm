@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.search.searchtest.adapters
+package com.example.bookworm.bottomMenu.search.adapters
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil

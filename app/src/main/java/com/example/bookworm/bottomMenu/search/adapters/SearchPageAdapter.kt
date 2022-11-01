@@ -1,13 +1,12 @@
-package com.example.bookworm.bottomMenu.search.searchtest.adapters
+package com.example.bookworm.bottomMenu.search.adapters
 
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.bookworm.bottomMenu.search.searchtest.pages.BookSearchFragment
-import com.example.bookworm.bottomMenu.search.searchtest.pages.ChallengeSearchFragment
-import com.example.bookworm.bottomMenu.search.searchtest.pages.PostSearchFragment
-import com.example.bookworm.bottomMenu.search.searchtest.pages.UserSearchFragment
+import com.example.bookworm.bottomMenu.search.pages.BookSearchFragment
+import com.example.bookworm.bottomMenu.search.pages.ChallengeSearchFragment
+import com.example.bookworm.bottomMenu.search.pages.PostSearchFragment
+import com.example.bookworm.bottomMenu.search.pages.UserSearchFragment
 
 class SearchPageAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
         FragmentStateAdapter(fragmentManager, lifecycle) {

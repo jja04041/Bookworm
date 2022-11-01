@@ -1,4 +1,4 @@
-package com.example.bookworm.bottomMenu.search.searchtest.adapters
+package com.example.bookworm.bottomMenu.search.adapters
 
 import android.content.Context
 import android.content.Intent
@@ -12,8 +12,8 @@ import com.bumptech.glide.Glide
 import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.feed.Feed
 import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
-import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
-import com.example.bookworm.bottomMenu.search.searchtest.views.BookDetailActivity
+import com.example.bookworm.bottomMenu.search.bookitems.Book
+import com.example.bookworm.bottomMenu.search.views.BookDetailActivity
 import com.example.bookworm.databinding.LayoutBookSearchDetailReviewBinding
 import com.example.bookworm.databinding.LayoutBookSearchDetailTopBinding
 import com.example.bookworm.databinding.LayoutItemLoadingBinding
