@@ -23,11 +23,11 @@ import com.example.bookworm.core.dataprocessing.image.ImageProcessing
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.SubactivityCommentBinding
 import com.example.bookworm.notification.MyFCMService
-import java.lang.NullPointerException
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.NullPointerException
 
 //메커니즘 순서
 //1. 이전 화면(fragmentFeed)에서 넘어온 Feed데이터를 가지고 화면에 세팅해준다.
@@ -92,28 +92,40 @@ class SubActivityComment : AppCompatActivity() {
     private val feedViewModel by lazy {
         ViewModelProvider(this, FeedViewModel.Factory(this))[FeedViewModel::class.java]
     }
-    private var isCommentAdded =false
+    private var isCommentAdded = false
     private var isModified = false //수정된 게시물인 경우, 해당 데이터를 저장하는 변수
     private var isDataEnd = false
     private val myFCMService = MyFCMService.getInstance()
     private lateinit var feedItem: Feed
-    val nowUser by lazy {
-        intent.getParcelableExtra<UserInfo>("NowUser")
-    }
+    lateinit var nowUser: UserInfo
     private val commentAdapter by lazy { CommentsAdapter(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         feedItem = intent.getParcelableExtra("Feed")!!
-        showShimmer(true)
+        init()
+        try {
+            showShimmer(true)
+            nowUser = intent.getParcelableExtra("NowUser")!!
+            loadCommentData(true)
+        } catch (e: NullPointerException) {
+            val nowUserLiveData = MutableLiveData<UserInfo>()
+            userInfoViewModel.getUser(null, nowUserLiveData, false)
+            nowUserLiveData.observe(this) {
+                if (it != null) {
+                    nowUser = it
+                    loadCommentData(true)
+                }
+            }
+        }
+    }
+
+    private fun init() {
         binding.apply {
             setContentView(root)
             setUI()
             setRecyclerView()
-            loadCommentData(true)
         }
-
     }
 
     private fun setUI() {
@@ -256,9 +268,9 @@ class SubActivityComment : AppCompatActivity() {
     private fun setRecyclerView() {
         commentAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                if(isCommentAdded){
+                if (isCommentAdded) {
                     binding.mRecyclerView.smoothScrollToPosition(1)
-                    isCommentAdded=false
+                    isCommentAdded = false
                 }
             }
 
