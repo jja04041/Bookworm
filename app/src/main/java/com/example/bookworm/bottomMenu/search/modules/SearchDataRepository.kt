@@ -13,9 +13,13 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 
 //실제로 서버와 연동하여 데이터를 가져오는 레포지토리 (데이터 송수신을 담당)
 class SearchDataRepository(val context: Context) {
+
+    //알라딘 Api와 연동할 수 있는 Retrofit 객체를 미리 생성해둠
     private val aladinApi =
         RetrofitInstance(context.getString(R.string.aladinBaseurl)).getInstance()
             .create(SearchRetrofitInterface::class.java)
+
+    //파이어스토어에 저장된 데이터를 접근하기 위한 DAO
     private val firestoreDb = FirebaseFirestore.getInstance()
 
 
@@ -27,9 +31,12 @@ class SearchDataRepository(val context: Context) {
         .orderBy("BookWorm.readcount", Query.Direction.DESCENDING).limit(3)
         .get().await()
 
+    //검색한 도서를 가져오는 메소드 -> ViewModelScope 내에서 접근해야함 -> 비동기 처리
     suspend fun loadSearchedBooks(keyword: String, page: Int) =
         aladinApi.getResult(QueryForRetrofit.getQueryForSearchBooks(context, keyword, page))
 
+
+    //도서의 상세정보를 가져오는 메소드 -> ViewModelScope 내에서 접근해야함 -> 비동기 처리
     suspend fun loadBookDetail(itemId: String) = aladinApi.getItem(
         QueryForRetrofit.getQueryForSearchBookDetail(
             context = context,
@@ -37,6 +44,7 @@ class SearchDataRepository(val context: Context) {
         )
     )
 
+    //어플 사용자의 리뷰를 가져오는 메소드 -> ViewModelScope 내에서 접근해야함 -> 비동기 처리
     suspend fun loadUserBookReview(
         itemId: String,
         page: Int = 5,
@@ -49,10 +57,11 @@ class SearchDataRepository(val context: Context) {
         return query.limit(page.toLong()).get().await()
     }
 
+    //검색한 사용자 정보를 가져오기 위한 메소드 ->  ViewModelScope 내에서 접근해야함 -> 비동기 처리
     suspend fun loadUserData(keyword: String) {
         val PAGE = 10L
         val query: Query = FireStoreLoadModule.provideQueryPathToUserCollection()
-            .whereArrayContains("userName", keyword)
+            .whereArrayContains("userName", keyword) //전달된 키워드가 이름에 포함된 모든 사용자의 정보를 가져옴.
             .orderBy("userId")
 
     }
@@ -70,15 +79,17 @@ class SearchDataRepository(val context: Context) {
     }
 
 
-    //쿼리 작성
+    //쿼리 작성 -> 레프로핏작업을 위한
     private object QueryForRetrofit {
 
+        //추천 도서를 가져오기 위한 쿼리
         fun getQueryForRecommend(context: Context): Map<String, String> {
             val query = setDefault(context)
             query["QueryType"] = "Bestseller"
             return query
         }
 
+        //검색한 도서의 결과를 가져오기 위한 쿼리
         fun getQueryForSearchBooks(
             context: Context,
             keyword: String,
@@ -91,6 +102,7 @@ class SearchDataRepository(val context: Context) {
             return query
         }
 
+        //도서 상세정보를 가져오기 위한 쿼리
         fun getQueryForSearchBookDetail(context: Context, itemId: String): Map<String, String> {
             val query = setDefault(context)
             query["ItemId"] = itemId
@@ -98,6 +110,7 @@ class SearchDataRepository(val context: Context) {
             return query
         }
 
+        //기본 세팅
         private fun setDefault(context: Context): HashMap<String, String> {
             val query = HashMap<String, String>()
             query["ttbkey"] = context.getString(R.string.ttbKey)
@@ -108,4 +121,6 @@ class SearchDataRepository(val context: Context) {
             return query
         }
     }
+
+    //
 }

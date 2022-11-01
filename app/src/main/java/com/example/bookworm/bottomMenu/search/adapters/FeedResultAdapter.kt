@@ -22,7 +22,7 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class UserReviewAdapter(val context: Context) :
+class FeedResultAdapter(val context: Context) :
         ListAdapter<Any, RecyclerView.ViewHolder>(Companion) {
 
 

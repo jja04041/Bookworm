@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookworm.core.userdata.UserInfo
 
-class UserDataAdapter : ListAdapter<UserInfo, RecyclerView.ViewHolder>(Companion) {
+class UserResultAdapter : ListAdapter<UserInfo, RecyclerView.ViewHolder>(Companion) {
     companion object : DiffUtil.ItemCallback<UserInfo>() {
         override fun areItemsTheSame(oldItem: UserInfo, newItem: UserInfo): Boolean {
             return oldItem == newItem

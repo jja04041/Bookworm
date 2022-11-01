@@ -117,7 +117,6 @@ class FragmentSearch : Fragment() {
         liveData.observe(context as MainActivity) { state ->
             if (state == LoadState.Done) {
                 bookAdapter.submitList(resultList)
-//                showShimmer(false)
             }
 
         }

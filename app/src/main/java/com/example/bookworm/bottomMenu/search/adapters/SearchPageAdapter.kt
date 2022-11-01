@@ -5,14 +5,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.bookworm.bottomMenu.search.pages.BookSearchFragment
 import com.example.bookworm.bottomMenu.search.pages.ChallengeSearchFragment
-import com.example.bookworm.bottomMenu.search.pages.PostSearchFragment
+import com.example.bookworm.bottomMenu.search.pages.FeedSearchFragment
 import com.example.bookworm.bottomMenu.search.pages.UserSearchFragment
 
 class SearchPageAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
         FragmentStateAdapter(fragmentManager, lifecycle) {
     private val pageList = listOf(
             BookSearchFragment(),
-            PostSearchFragment(),
+            FeedSearchFragment(),
             ChallengeSearchFragment(),
             UserSearchFragment()
     )

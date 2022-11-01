@@ -10,7 +10,7 @@ import com.example.bookworm.bottomMenu.search.modules.SearchViewModel
 import com.example.bookworm.bottomMenu.search.views.SearchMainActivity
 import com.example.bookworm.databinding.FragmentSearchPageFeedBinding
 
-class PostSearchFragment : Fragment() {
+class FeedSearchFragment : Fragment() {
     private val binding by lazy {
         FragmentSearchPageFeedBinding.inflate(layoutInflater)
     }
