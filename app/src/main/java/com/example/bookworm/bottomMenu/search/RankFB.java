@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.example.bookworm.appLaunch.views.MainActivity;
+import com.example.bookworm.bottomMenu.search.views.FragmentSearch;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
