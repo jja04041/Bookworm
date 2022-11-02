@@ -85,7 +85,7 @@ class FragmentFeed : Fragment() {
                                 }
                                 Toast.makeText(
                                     requireContext(),
-                                    "게시물이 정상적으로 수정되었습니다. ",
+                                    "리뷰가 정상적으로 수정되었습니다. ",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
@@ -115,7 +115,7 @@ class FragmentFeed : Fragment() {
                     this.removeAt(target.position)
                     feedAdapter.submitList(this.toList())
                 }
-                Toast.makeText(context, "게시물이 정상적으로 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "리뷰가 정상적으로 삭제되었습니다.", Toast.LENGTH_SHORT).show()
             }
         }
 

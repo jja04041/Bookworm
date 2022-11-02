@@ -1,4 +1,4 @@
-package com.example.bookworm.extension.follow.view
+package com.example.bookworm.bottomMenu.profile.follow.view
 
 import android.app.AlertDialog
 import android.content.Context
@@ -12,7 +12,8 @@ import com.example.bookworm.LoadState
 import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.LayoutUserItemBinding
-import com.example.bookworm.extension.follow.interfaces.OnFollowBtnClickListener
+import com.example.bookworm.bottomMenu.profile.follow.interfaces.OnFollowBtnClickListener
+import com.example.bookworm.bottomMenu.profile.follow.modules.FollowViewModel
 
 //isFollower 0=팔로잉 탭, 1=팔로워 탭
 class FollowerViewHolder(
@@ -25,7 +26,7 @@ class FollowerViewHolder(
 
     var binding = LayoutUserItemBinding.bind(itemView)
     var isFollowed = false
-    val fv =
+    private val followViewModel =
         ViewModelProvider(context as FollowerActivity, FollowViewModel.Factory(context)).get(
             FollowViewModel::class.java
         )
@@ -45,19 +46,21 @@ class FollowerViewHolder(
                     ) { dialog, which ->
                         if (isFollowed) {
                             val unFollowStateLiveData = MutableLiveData<LoadState>()
-                            fv.follow(item, false, unFollowStateLiveData, item)
+                            followViewModel.follow(item, false, unFollowStateLiveData, item)
                             unFollowStateLiveData.observe(context as FollowerActivity) {
                                 if (it == LoadState.Done) {
                                     unfollowing()
+                                    item.isFollowed = false
                                     listener.onItemClick(this, view)
                                 }
                             }
                         } else {
                             val followStateLiveData = MutableLiveData<LoadState>()
-                            fv.follow(item, true, followStateLiveData, item)
+                            followViewModel.follow(item, true, followStateLiveData, item)
                             followStateLiveData.observe(context as FollowerActivity) {
                                 if (it == LoadState.Done) {
                                     following()
+                                    item.isFollowed =true
                                     listener.onItemClick(this, view)
                                 }
                             }

@@ -38,6 +38,7 @@ class UserSearchFragment : Fragment() {
     }
 
     private fun setUI() {
+        //검색어를 전달받은 후 처리하는 루틴을 작성한다.
         searchViewModel.liveKeywordData.observe(context as SearchMainActivity) {
         }
     }

@@ -17,10 +17,9 @@ import com.example.bookworm.bottomMenu.profile.submenu.SubMenuPagerAdapter
 import com.example.bookworm.chat.newchat.MessageActivity
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.ActivityProfileInfoBinding
-import com.example.bookworm.extension.follow.view.FollowViewModel
-import com.example.bookworm.extension.follow.view.FollowerActivity
+import com.example.bookworm.bottomMenu.profile.follow.modules.FollowViewModel
+import com.example.bookworm.bottomMenu.profile.follow.view.FollowerActivity
 import com.example.bookworm.notification.MyFCMService
-import kotlinx.coroutines.launch
 
 
 class ProfileInfoActivity : AppCompatActivity() {
@@ -48,7 +47,6 @@ class ProfileInfoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         binding = ActivityProfileInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -62,28 +60,27 @@ class ProfileInfoActivity : AppCompatActivity() {
 
         val getSubUserInfoLiveData = MutableLiveData<UserInfo>()
         val getNowUserInfoLiveData = MutableLiveData<UserInfo>()
-        userViewModel.getUser(null, getNowUserInfoLiveData, true)
+
+        userViewModel.getUser(null, getNowUserInfoLiveData, true) //현재 유저
         getNowUserInfoLiveData.observe(this) {
             if (it != null) {
                 nowUser = it
-                userViewModel.getUser(userID, getSubUserInfoLiveData, true)
-            }
+                userViewModel.getUser(userID, getSubUserInfoLiveData, true) //
+                getSubUserInfoLiveData.observe(this) { subUser ->
+                    val followCheckLiveData = MutableLiveData<Boolean>()
+                    if (subUser != null) {
+                        followViewModel.followCheck(followCheckLiveData, subUser.token)
 
-            getSubUserInfoLiveData.observe(this) { subUser ->
+                        followCheckLiveData.observe(this) { checkResult ->
+                            if (checkResult != null) {
+                                subUser.isFollowed = checkResult
+                                userViewModel.getBookWorm(subUser.token)
+                                menuPagerAdapter =
+                                    SubMenuPagerAdapter(subUser.token, supportFragmentManager)
 
-                val followCheckLiveData = MutableLiveData<Boolean>()
-                if (subUser != null) {
-                    followViewModel.followCheck(followCheckLiveData, subUser.token)
-
-                    followCheckLiveData.observe(this) { checkResult ->
-                        if (checkResult != null) {
-                            subUser.isFollowed = checkResult
-                            userViewModel.getBookWorm(subUser.token)
-                            menuPagerAdapter =
-                                SubMenuPagerAdapter(subUser.token, supportFragmentManager)
-
-                            userViewModel.bwdata.observe(this) { data ->
-                                if (data != null) setUI(subUser, data)
+                                userViewModel.bwdata.observe(this) { data ->
+                                    if (data != null) setUI(subUser, data)
+                                }
                             }
                         }
                     }
@@ -97,7 +94,6 @@ class ProfileInfoActivity : AppCompatActivity() {
         get() {
             cache = true
             binding.tvFollow.isSelected = true
-            binding.tvFollow.text = "팔로잉"
         }
 
     //팔로잉 중이 아님
@@ -105,7 +101,6 @@ class ProfileInfoActivity : AppCompatActivity() {
         get() {
             cache = false
             binding.tvFollow.isSelected = false
-            binding.tvFollow.text = "팔로우"
         }
 
     //UI설정
@@ -182,11 +177,9 @@ class ProfileInfoActivity : AppCompatActivity() {
         binding.tvFollow.setOnClickListener {
             if (binding.tvFollow.isSelected) {
                 binding.tvFollow.isSelected = false
-                binding.tvFollow.text = "팔로우"
                 followProcess(false, user) //언팔로잉 작업
             } else {
                 binding.tvFollow.isSelected = true
-                binding.tvFollow.text = "팔로잉"
                 followProcess(true, user) //팔로잉 작업
             }
         }

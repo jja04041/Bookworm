@@ -1,14 +1,13 @@
-package com.example.bookworm.extension.follow.modules;
+package com.example.bookworm.bottomMenu.profile.follow.modules;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.bookworm.core.userdata.UserInfo;
-import com.example.bookworm.extension.follow.view.FragmentFollowList;
+import com.example.bookworm.bottomMenu.profile.follow.view.FragmentFollowList;
 
 import java.util.ArrayList;
 

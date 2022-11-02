@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_selected="true">
+    <item android:state_selected="false">
 
         <!--image대신 직접 selector를 그리겠다고 선언한다. -->
         <shape>
@@ -26,7 +26,7 @@
 
     <!--위와 동일하다.
     -->
-    <item android:state_selected="false">
+    <item android:state_selected="true">
         <shape>
             <solid
                 android:color="#33000000" />

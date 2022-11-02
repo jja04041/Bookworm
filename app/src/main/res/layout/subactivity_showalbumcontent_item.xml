@@ -45,7 +45,7 @@
                     android:ellipsize="end"
                     android:maxLines="3"
                     android:layout_marginBottom="20dp"
-                    android:text="여기에 피드 내용이 들어갑니다"
+                    android:text="여기에 리뷰 내용이 들어갑니다"
                     android:textSize="12dp" />
                 <TextView
 

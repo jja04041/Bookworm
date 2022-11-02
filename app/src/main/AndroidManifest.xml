@@ -31,9 +31,6 @@
             android:name=".bottomMenu.challenge.board.subactivity_challenge_board"
             android:exported="false" />
         <activity
-            android:name="com.example.bookworm.bottomMenu.feed.oldItems.subActivity_Feed_Modify"
-            android:exported="false" />
-        <activity
             android:name="com.example.bookworm.bottomMenu.feed.ImagePicker"
             android:exported="false" />
         <activity
@@ -62,16 +59,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.bookworm.extension.follow.view.FollowerActivity"
+            android:name="com.example.bookworm.bottomMenu.profile.follow.view.FollowerActivity"
             android:exported="false" />
         <!-- 카카오 계정 연동을 위한 AppKey -->
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakaoKey" /> <!-- SubActivities -->
-        <activity
-            android:name="com.example.bookworm.bottomMenu.feed.oldItems.subActivity_Feed_Create"
-            android:exported="false"
-            android:parentActivityName=".appLaunch.views.MainActivity" />
+
         <activity
             android:name=".bottomMenu.profile.submenu.album.AlbumDisplay.view.ShowAlbumContentActivity"
             android:exported="false"
