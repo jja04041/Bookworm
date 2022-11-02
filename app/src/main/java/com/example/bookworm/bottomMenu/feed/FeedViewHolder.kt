@@ -116,11 +116,10 @@ class FeedViewHolder(
                     text = feed.likeCount.toString()
                 }
                 btnLike.apply {
-                    background = if (feed.isUserLiked) AppCompatResources.getDrawable(
-                        context,
-                        R.drawable.icon_like_red
-                    )
-                    else AppCompatResources.getDrawable(context, R.drawable.icon_like)
+                    if(LikeButton.UIState.UnLike == btnLike.getUIState())
+                        btnLike.setUIState(LikeButton.UIState.Like(feed.likeCount), isAnim = true)
+                    else
+                        btnLike.setUIState(LikeButton.UIState.UnLike, isAnim = true)
                 }
             }
 
@@ -259,9 +258,10 @@ class FeedViewHolder(
                     text = "${feed.likeCount}"
                 }
                 btnLike.apply {
-                    val back =
-                        if (feed.isUserLiked) R.drawable.icon_like_red else R.drawable.icon_like
-                    background = AppCompatResources.getDrawable(context, back)
+                        if (feed.isUserLiked)
+                            btnLike.setUIState(LikeButton.UIState.Like(feed.likeCount), isAnim = true)
+                        else
+                            btnLike.setUIState(LikeButton.UIState.UnLike, isAnim = true)
                 }
             }
             feedViewModel.nowLikeState.observe(context as MainActivity) { state ->
@@ -282,10 +282,12 @@ class FeedViewHolder(
                             tvLike.apply {
                                 text = backupLikeState[0].toString()
                             }
+
                             btnLike.apply {
-                                val back =
-                                    if (backupLikeState[1] as Boolean) R.drawable.icon_like_red else R.drawable.icon_like
-                                background = AppCompatResources.getDrawable(context, back)
+                                    if (backupLikeState[1] as Boolean)
+                                        btnLike.setUIState(LikeButton.UIState.Like(feed.likeCount), isAnim = true)
+                                    else
+                                        btnLike.setUIState(LikeButton.UIState.UnLike, isAnim = true)
                             }
                         }
                     }
