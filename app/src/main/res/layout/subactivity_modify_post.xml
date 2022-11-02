@@ -39,7 +39,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="피드 수정"
+                        android:text="리뷰 수정"
                         android:textColor="@color/black"
                         android:textSize="13dp" />
 
@@ -108,7 +108,7 @@
                             android:layout_height="match_parent"
                             android:ellipsize="marquee"
                             android:gravity="center"
-                            android:hint="피드로 작성할 책을 검색해주세요"
+                            android:hint="리뷰로 작성할 책을 검색해주세요"
                             android:marqueeRepeatLimit="marquee_forever"
                             android:singleLine="true"
                             android:textAlignment="center"

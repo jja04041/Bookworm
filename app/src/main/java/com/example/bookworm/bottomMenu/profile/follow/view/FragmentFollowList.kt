@@ -1,4 +1,4 @@
-package com.example.bookworm.extension.follow.view
+package com.example.bookworm.bottomMenu.profile.follow.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,8 +14,9 @@ import com.example.bookworm.LoadState
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.FragmentFollowListBinding
-import com.example.bookworm.extension.follow.interfaces.OnFollowBtnClickListener
-import com.example.bookworm.extension.follow.modules.FollowItemAdapter
+import com.example.bookworm.bottomMenu.profile.follow.interfaces.OnFollowBtnClickListener
+import com.example.bookworm.bottomMenu.profile.follow.modules.FollowItemAdapter
+import com.example.bookworm.bottomMenu.profile.follow.modules.FollowViewModel
 
 //팔로워, 팔로잉 탭의 틀을 가지고 있는 클래스 => 팔로워 탭과 팔로잉 탭의 구분은 isFollower변수로 체크한다.
 //뷰는 가져온 데이터를 화면에 표시만 하는 역할을 한다
@@ -115,7 +116,7 @@ class FragmentFollowList(
         followerAdapter!!.addListener(object : OnFollowBtnClickListener {
             override fun onItemClick(holder: FollowerViewHolder, v: View) {
                 val liveData = MutableLiveData<UserInfo>()
-                userInfoViewModel.getUser(null, liveData = liveData, true)
+                userInfoViewModel.getUser(targetUserData.token, liveData = liveData, true)
                 liveData.observe(viewLifecycleOwner) {
                     if (it != null) {
                         //팔로잉 탭의 숫자를 변경

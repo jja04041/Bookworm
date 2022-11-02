@@ -1,4 +1,4 @@
-package com.example.bookworm.extension.follow.modules
+package com.example.bookworm.bottomMenu.profile.follow.modules
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -8,10 +8,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bookworm.extension.follow.view.FollowerViewHolder
+import com.example.bookworm.bottomMenu.profile.follow.view.FollowerViewHolder
 import com.example.bookworm.R
 import com.example.bookworm.core.userdata.UserInfo
-import com.example.bookworm.extension.follow.interfaces.OnFollowBtnClickListener
+import com.example.bookworm.bottomMenu.profile.follow.interfaces.OnFollowBtnClickListener
 
 //data: ArrayList<UserInfo>?,
 class FollowItemAdapter(

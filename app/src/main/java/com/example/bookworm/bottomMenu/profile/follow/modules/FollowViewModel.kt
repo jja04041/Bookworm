@@ -1,27 +1,16 @@
-package com.example.bookworm.extension.follow.view
+package com.example.bookworm.bottomMenu.profile.follow.modules
 
 import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.bookworm.LoadState
-import com.example.bookworm.bottomMenu.feed.FireStoreLoadModule
-import com.example.bookworm.bottomMenu.profile.FollowDataRepository
 import com.example.bookworm.core.dataprocessing.repository.UserRepository
 import com.example.bookworm.core.userdata.UserInfo
-import com.example.bookworm.extension.follow.interfaces.FollowViewModelInterface
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.FieldPath
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.Transaction
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.example.bookworm.bottomMenu.profile.follow.interfaces.FollowViewModelInterface
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 
 //FollowViewModel 구현체
 class FollowViewModel(val context: Context) : ViewModel(), FollowViewModelInterface {
@@ -50,14 +39,14 @@ class FollowViewModel(val context: Context) : ViewModel(), FollowViewModelInterf
     fun getFollowList(
         stateLiveData: MutableLiveData<LoadState>,
         type: Boolean,
-        token: String,
+        targetToken: String,
         isRefreshing: Boolean,
         resultList: MutableList<UserInfo>
     ) {
         stateLiveData.value = LoadState.Loading
         viewModelScope.launch {
             val result =
-                followDataRepository.getFollowList(userToken = token, type = type, isRefreshing)
+                followDataRepository.getFollowList(targetToken = targetToken, type = type, isRefreshing)
             if (result == null) {
                 stateLiveData.value = LoadState.Error
             } else {

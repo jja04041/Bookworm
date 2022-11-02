@@ -1,11 +1,12 @@
-package com.example.bookworm.extension.follow.view
+package com.example.bookworm.bottomMenu.profile.follow.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.MutableLiveData
-import com.example.bookworm.extension.follow.modules.FollowPagerAdapter
+import com.example.bookworm.bottomMenu.profile.follow.modules.FollowPagerAdapter
 import androidx.lifecycle.ViewModelProvider
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
+import com.example.bookworm.bottomMenu.profile.follow.modules.FollowViewModel
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.ActivityFollowerBinding
 import com.google.android.material.tabs.TabLayoutMediator
@@ -33,10 +34,13 @@ class FollowerActivity : AppCompatActivity() {
     lateinit var adapter: FollowPagerAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //입력된 유저 정보를 가져오는 부분
         userInfoViewModel.getUser(token = token, liveData = targetUserInfoLiveData, true)
+
+        //데이터가 받아져왔을 때
         targetUserInfoLiveData.observe(this) { targetUserData ->
             if (targetUserData != null) {
-                userInfoViewModel.getUser(null, nowUserInfoLiveData, true)
+                userInfoViewModel.getUser(null, nowUserInfoLiveData, true) //현재 사용중인 유저의 정보를 가져오는 부분
                 nowUserInfoLiveData.observe(this@FollowerActivity) { nowUserData ->
                     if (nowUserData != null) {
                         setUI(targetUser = targetUserData, nowUser = nowUserData)

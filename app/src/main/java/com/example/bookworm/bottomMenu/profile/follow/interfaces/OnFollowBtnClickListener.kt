@@ -1,8 +1,7 @@
-package com.example.bookworm.extension.follow.interfaces
+package com.example.bookworm.bottomMenu.profile.follow.interfaces
 
 import android.view.View
-import androidx.recyclerview.widget.RecyclerView
-import com.example.bookworm.extension.follow.view.FollowerViewHolder
+import com.example.bookworm.bottomMenu.profile.follow.view.FollowerViewHolder
 
 
 //버튼이 눌린 후 진행되는 것들을 메인 액티비티에 적용시키기 위한 리스너.

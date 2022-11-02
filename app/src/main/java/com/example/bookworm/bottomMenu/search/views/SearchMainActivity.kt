@@ -49,7 +49,7 @@ class SearchMainActivity : AppCompatActivity() {
                 tabLayout.isVisible = true
                 container.isVisible = false
                 viewpager.adapter = pageAdapter
-                val pageList = listOf("도서", "피드", "챌린지", "사용자")
+                val pageList = listOf("도서", "리뷰", "챌린지", "사용자")
                 TabLayoutMediator(tabLayout, viewpager, false, false) { tab, position ->
                     tab.apply {
                         text = pageList[position];

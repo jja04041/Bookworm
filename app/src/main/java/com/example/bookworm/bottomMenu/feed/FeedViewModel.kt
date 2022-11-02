@@ -265,7 +265,6 @@ class FeedViewModel(val context: Context) : ViewModel() {
             } else if (duration / 1000 / 60 / 60 / 24 / 30 <= 12) {
                 (duration / 1000 / 60 / 60 / 24 / 30).toString() + "개월 전"
             } else {
-//                (duration / 1000 / 60 / 60 / 24 / 30 / 12).toString() + "년 전"
                 SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(duration)
             }
             return dateDuration

@@ -1,7 +1,6 @@
-package com.example.bookworm.bottomMenu.profile
+package com.example.bookworm.bottomMenu.profile.follow.modules
 
 import android.content.Context
-import android.widget.Toast
 import com.example.bookworm.bottomMenu.feed.FireStoreLoadModule
 import com.example.bookworm.core.dataprocessing.repository.UserRepository
 import com.example.bookworm.core.userdata.UserInfo
@@ -11,7 +10,6 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
@@ -24,12 +22,12 @@ class FollowDataRepository(context: Context) {
     //해당 사용자의 팔로우목록을 가져오는 함수 -> 서버와의 연동
     //true = follower , false = following
     suspend fun getFollowList(
-        userToken: String,
+        targetToken: String,
         type: Boolean = false,
         isRefreshing: Boolean = false
     ): MutableList<UserInfo>? {
         val tmp = FireStoreLoadModule.provideQueryPathToUserCollection()
-            .document(userToken)
+            .document(targetToken)
         val query: Query
         val documents: List<DocumentSnapshot>
 
@@ -68,8 +66,7 @@ class FollowDataRepository(context: Context) {
             return userList.toObjects(UserInfo::class.java).map { userData ->
                 return@map withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
                     val isFollow = isFollowNow(userData.token)
-                    if (!type || isFollow) userData.isFollowed =
-                        true //팔로잉 목록이거나, 팔로워 목록이지만 해당 유저를 맞팔한 경우
+                    userData.isFollowed = isFollow//팔로잉 목록이거나, 팔로워 목록이지만 해당 유저를 맞팔한 경우
                     return@withContext userData
                 }
             }.toMutableList()
