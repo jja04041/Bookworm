@@ -116,7 +116,7 @@ class FeedViewHolder(
                     text = feed.likeCount.toString()
                 }
                 btnLike.apply {
-                    if(LikeButton.UIState.UnLike == btnLike.getUIState())
+                    if(feed.isUserLiked)
                         btnLike.setUIState(LikeButton.UIState.Like(feed.likeCount), isAnim = true)
                     else
                         btnLike.setUIState(LikeButton.UIState.UnLike, isAnim = true)
