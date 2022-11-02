@@ -258,14 +258,11 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <Button
+                    <com.example.bookworm.bottomMenu.feed.LikeButton
                         android:id="@+id/btnLike"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_gravity="start"
-                        android:layout_marginHorizontal="10dp"
-                        android:background="@drawable/icon_like"
-                        android:clickable="false" />
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center" />
 
                     <TextView
                         android:id="@+id/tvLike"
@@ -282,8 +279,8 @@
                     android:id="@+id/btnComment"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:layout_gravity="start"
-                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/ic_comment"
                     android:backgroundTint="@color/black" />
 
@@ -291,8 +288,8 @@
                     android:id="@+id/btnShare"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:layout_gravity="start"
-                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/icon_share" />
 
 
