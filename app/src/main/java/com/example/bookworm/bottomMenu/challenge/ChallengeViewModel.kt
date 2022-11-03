@@ -15,11 +15,13 @@ import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.challenge.items.Challenge
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.core.userdata.UserInfo
+import com.google.firebase.firestore.FirebaseFirestoreException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
+import kotlin.NoSuchElementException
 import kotlin.collections.ArrayList
 
 
@@ -31,7 +33,10 @@ class ChallengeViewModel(val context: Context) : ViewModel() {
     }
     val challengeList: MutableLiveData<ArrayList<Challenge>> = MutableLiveData()
     val userInfoViewModel by lazy {
-        ViewModelProvider(context as MainActivity, UserInfoViewModel.Factory(context))[UserInfoViewModel::class.java]
+        ViewModelProvider(
+            context as MainActivity,
+            UserInfoViewModel.Factory(context)
+        )[UserInfoViewModel::class.java]
     }
     var lastVisibleDataValue: String = ""
     val alertDialog by lazy { AlertDialog.Builder(context) }
@@ -47,8 +52,8 @@ class ChallengeViewModel(val context: Context) : ViewModel() {
 
     //챌린지 목록을 가져온다. 토큰은 나중에 팔로워 기준으로만 챌린지를 보일 수도 있을 것 같아 적어둠.
     fun getChallengeList(
-            token: String = "", keyword: String? = null, isRefreshing: Boolean = false,
-            stateLiveData: MutableLiveData<LoadState>, result: ArrayList<Challenge>,
+        token: String = "", keyword: String? = null, isRefreshing: Boolean = false,
+        stateLiveData: MutableLiveData<LoadState>, result: ArrayList<Challenge>,
     ) {
         stateLiveData.value = LoadState.Loading //로딩 중임을 UI에 알림
         if (isRefreshing) { //만약 새로운 검색을 시도하거나, 새로고침을 진행한 경우
@@ -57,39 +62,48 @@ class ChallengeViewModel(val context: Context) : ViewModel() {
         //데이터를 불러온다.
         viewModelScope.launch {
             val loadedData = repo
-                    .loadChallenges(lastVisible = lastVisibleDataValue, pageSize = PAGESIZE)
+                .loadChallenges(lastVisible = lastVisibleDataValue, pageSize = PAGESIZE)
             try {
                 result.addAll(ArrayList<Challenge>(
-                        //방장의 유저 데이터를 받아서 챌린지 객체에 삽입한다.
-                        loadedData!!.map { challengeData ->
-                            return@map withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-                                challengeData.dDay = DdayCounter.getDdayByDash(challengeData.endDate) //디데이 설정
-                                challengeData.masterData = try {
-                                    //불러온 값을 방장 데이터로 설정
-                                    userInfoViewModel.suspendGetUser(challengeData.masterToken)!!
-                                } catch (e: NullPointerException) {
-                                    UserInfo() //빈 유저 데이터를 반환
-                                }
-                                challengeData.isUserJoined = try {
-                                    challengeData.currentPart.contains(userInfoViewModel.suspendGetUser(null)!!.token)
-                                } catch (e: Exception) {
-                                    false
-                                }
-                                return@withContext challengeData
+                    //방장의 유저 데이터를 받아서 챌린지 객체에 삽입한다.
+                    loadedData!!.map { challengeData ->
+                        return@map withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
+                            challengeData.dDay =
+                                DdayCounter.getDdayByDash(challengeData.endDate) //디데이 설정
+                            challengeData.masterData = try {
+                                //불러온 값을 방장 데이터로 설정
+                                userInfoViewModel.suspendGetUser(challengeData.masterToken)!!
+                            } catch (e: NullPointerException) {
+                                UserInfo() //빈 유저 데이터를 반환
                             }
+                            challengeData.isUserJoined = try {
+                                challengeData.currentPart.contains(
+                                    userInfoViewModel.suspendGetUser(
+                                        null
+                                    )!!.token
+                                )
+                            } catch (e: Exception) {
+                                false
+                            }
+                            return@withContext challengeData
                         }
+                    }
                 ))
                 lastVisibleDataValue = loadedData.last().id
                 stateLiveData.value = LoadState.Done //UI에 데이터 로딩이 완료되었음을 알림
-            } catch (e: NullPointerException) {
-                stateLiveData.value = LoadState.Error //UI에 데이터 로딩을 실패했음을 알림.
+            } catch (e: NoSuchElementException) {
+                stateLiveData.value = LoadState.Error
             }
         }
     }
 
     /** Repository를 통해 Join 로직을 구현한다.
      * */
-    private fun processToJoin(challengeId: String, userToken: String, liveData: MutableLiveData<LoadState>) {
+    private fun processToJoin(
+        challengeId: String,
+        userToken: String,
+        liveData: MutableLiveData<LoadState>
+    ) {
         liveData.value = LoadState.Loading
         try {
             viewModelScope.launch {
@@ -110,19 +124,23 @@ class ChallengeViewModel(val context: Context) : ViewModel() {
     fun createChallenge(challenge: Challenge, stateLiveData: MutableLiveData<LoadState>) {
         stateLiveData.value = LoadState.Loading
         viewModelScope.launch {
-            if (repo.createChallenge(challenge)) stateLiveData.value = LoadState.Done
-            else LoadState.Error
+            try {
+                repo.createChallenge(challenge)
+                stateLiveData.value =  LoadState.Done
+            }catch (e:FirebaseFirestoreException){
+                stateLiveData.value =  LoadState.Error
+            }
         }
     }
 
     //챌린지 참여 로직
     fun joinChallenge(id: String, userToken: String, liveData: MutableLiveData<LoadState>) {
         alertDialog.setMessage("챌린지에 참여하시겠습니까? (참여 후 탈퇴 불가)")
-                .setPositiveButton("네") { dialog, which ->
-                    processToJoin(id, userToken, liveData)
-                }.setNegativeButton("아니요") { dialog, which ->
-                    dialog.dismiss()
-                }.show()
+            .setPositiveButton("네") { dialog, which ->
+                processToJoin(id, userToken, liveData)
+            }.setNegativeButton("아니요") { dialog, which ->
+                dialog.dismiss()
+            }.show()
     }
 
     //챌린지에 참여가능한지 확인
@@ -147,7 +165,8 @@ class ChallengeViewModel(val context: Context) : ViewModel() {
 
             ddayCal[year, month] = day // D-day의 날짜를 입력
 
-            val today = todaCal.timeInMillis / 86400000 //->(24 * 60 * 60 * 1000) 24시간 60분 60초 * (ms초->초 변환 1000)
+            val today =
+                todaCal.timeInMillis / 86400000 //->(24 * 60 * 60 * 1000) 24시간 60분 60초 * (ms초->초 변환 1000)
 
             val dday = ddayCal.timeInMillis / 86400000
             val count = dday - today // 오늘 날짜에서 dday 날짜를 빼주게 됨.

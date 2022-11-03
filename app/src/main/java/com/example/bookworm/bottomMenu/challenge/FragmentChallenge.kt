@@ -41,7 +41,10 @@ class FragmentChallenge : Fragment() {
         ChallengeAdapter(requireContext())
     }
     private val challengeViewModel by lazy {
-        ViewModelProvider(this, ChallengeViewModel.Factory(requireContext()))[ChallengeViewModel::class.java]
+        ViewModelProvider(
+            this,
+            ChallengeViewModel.Factory(requireContext())
+        )[ChallengeViewModel::class.java]
     }
     private val imm by lazy {
         requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -51,23 +54,36 @@ class FragmentChallenge : Fragment() {
 
 
     private val activityResult: ActivityResultLauncher<Intent> = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
+        ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
-        //챌린지 생성 완료 시
-        if (result.resultCode == AppCompatActivity.RESULT_OK) {
-            val data = result.data!!
-            if (data.hasExtra("challengeData")) {
-                val data = data.getParcelableExtra<Challenge>("challengeData")
+        when (result.resultCode) {
+            AppCompatActivity.RESULT_OK -> {
+                val data = result.data!!
+                if (data.hasExtra("challengeData")) {
+                    val item = data.getParcelableExtra<Challenge>("challengeData")
+                    challengeAdapter.submitList(challengeAdapter.currentList.toMutableList().apply {
+                        this[item!!.pos] = item
+                    })
+                }
+            }
+            //생성 완료시
+            SubActivityCreateChallenge.CREATE_OK -> {
+                val item = result.data!!.getParcelableExtra<Challenge>("challengeData")
                 challengeAdapter.submitList(challengeAdapter.currentList.toMutableList().apply {
-                    this[data!!.pos] = data
+                    this[item!!.pos] = item
                 })
             }
         }
+
     }
 
     /** 실제 뷰를 그리는 함수
      * */
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         setAdapter()
         setUI()
         return binding.root
@@ -77,13 +93,13 @@ class FragmentChallenge : Fragment() {
     /** UI를 세팅하는 함수
      * */
     private fun setUI() {
-        loadData() //서버로부터 챌린지 데이터를 받아온다.
 
+        loadData() //서버로부터 챌린지 데이터를 받아온다.
         // 챌린지 생성 시도
         binding.apply {
             btnCreateChallenge.setOnClickListener {
                 val intent = Intent(context, SubActivityCreateChallenge::class.java)
-                startActivity(intent)
+                activityResult.launch(intent)
             }
             swiperefresh.setOnRefreshListener {
                 pageRefresh()
@@ -105,14 +121,21 @@ class FragmentChallenge : Fragment() {
     private fun loadData(isRefreshing: Boolean = true) {
         val stateLiveData = MutableLiveData<LoadState>()
         val resultList = arrayListOf<Challenge>()
+        if (binding.tvIFChallenge.isVisible) binding.tvIFChallenge.isVisible = false
         if (!isDataEnd) {
-            challengeViewModel.getChallengeList(isRefreshing = isRefreshing, stateLiveData = stateLiveData, result = resultList)
+            challengeViewModel.getChallengeList(
+                isRefreshing = isRefreshing,
+                stateLiveData = stateLiveData,
+                result = resultList
+            )
             stateLiveData.observe(viewLifecycleOwner) { state ->
                 showShimmer(
-                        if (!isRefreshing) false
-                        else state == LoadState.Loading)
+                    if (!isRefreshing) false
+                    else state == LoadState.Loading
+                )
                 when (state) {
                     LoadState.Done -> {
+
                         val current = challengeAdapter.currentList.toMutableList()
                         if (isRefreshing) {
                             current.clear()
@@ -121,7 +144,7 @@ class FragmentChallenge : Fragment() {
                         //로딩중 표시를 지움
                         if (current.isNotEmpty() && current.last().id == "") current.removeLast()
                         if (resultList.isNotEmpty() && !current.containsAll(resultList)) {
-                            var i = resultList.iterator()
+                            val i = resultList.iterator()
                             //반복하면서 중복되는 데이터가 있는 경우 삭제
                             while (i.hasNext()) {
                                 if (current.contains(i.next())) i.remove()
@@ -150,8 +173,8 @@ class FragmentChallenge : Fragment() {
     /**화면 이동 시 보여졌던 키보드를 숨김*/
     override fun onHiddenChanged(hidden: Boolean) {
         if (binding.root.findViewById<View?>(R.id.edtComment) != null) imm.hideSoftInputFromWindow(
-                binding.root.findViewById<View>(R.id.edtComment).windowToken,
-                InputMethodManager.HIDE_NOT_ALWAYS
+            binding.root.findViewById<View>(R.id.edtComment).windowToken,
+            InputMethodManager.HIDE_NOT_ALWAYS
         )
         super.onHiddenChanged(hidden)
     }
@@ -159,7 +182,7 @@ class FragmentChallenge : Fragment() {
     /**어댑터 설정*/
     private fun setAdapter() {
         challengeAdapter.setListener { holder, view, pos ->
-            if (DdayCounter.getDdayByDash(challengeAdapter.currentList[pos].dDay)!= "종료됨")
+            if (DdayCounter.getDdayByDash(challengeAdapter.currentList[pos].dDay) != "종료됨")
                 Intent(activity, SubActivityChallengeInfo::class.java).apply {
                     putExtra("challengeInfo", challengeAdapter.currentList[pos].apply {
                         this.pos = pos
@@ -178,7 +201,7 @@ class FragmentChallenge : Fragment() {
                     super.onScrolled(recyclerView, dx, dy)
                     val layoutManager = recyclerView.layoutManager as LinearLayoutManager?
                     val lastVisibleItemPosition =
-                            layoutManager!!.findLastCompletelyVisibleItemPosition()
+                        layoutManager!!.findLastCompletelyVisibleItemPosition()
                     //만약 화면끝에 도달한 경우, 데이터 로드 시도
                     if ((lastVisibleItemPosition == challengeAdapter.currentList.lastIndex) && lastVisibleItemPosition > 0)
                         loadData(false)

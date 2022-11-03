@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="100dp"
                 android:gravity="center"
-                android:text="검색어와 일치하는 피드가 존재하지 않습니다."
+                android:text="검색어와 일치하는 리뷰가 존재하지 않습니다."
                 android:textSize="18dp" />
 
         </LinearLayout>

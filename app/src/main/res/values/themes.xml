@@ -39,7 +39,7 @@
 
     <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
     <style name="StyleBottomNavIconActive">
-        <item name="android:textSize">12dp</item>
+        <item name="android:textSize">10dp</item>
         <item name="android:textStyle">bold</item>
     </style>
 </resources>
