@@ -150,6 +150,13 @@ class CommentsAdapter(val context: Context) : ListAdapter<Any, RecyclerView.View
                         }
                     }
                 }
+
+                //프로필 클릭 시 해당 사용자의 프로필 정보 화면으로 이동하게
+                llProfile.setOnClickListener {
+                    val intent = Intent(itemView.context, ProfileInfoActivity::class.java)
+                    intent.putExtra("userID", item.userToken)
+                    itemView.context.startActivity(intent)
+                }
                 //내용
                 //책
                 item.book.apply {
