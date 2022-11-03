@@ -157,7 +157,7 @@ class SubActivityComment : AppCompatActivity() {
 
                     val madeDate = LocalDateTime.now()
                         .format(
-                            DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
                                 .withLocale(Locale.KOREA)
                                 .withZone(ZoneId.of("Asia/Seoul"))
                         )
