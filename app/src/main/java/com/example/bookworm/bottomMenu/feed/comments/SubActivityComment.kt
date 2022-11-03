@@ -183,10 +183,10 @@ class SubActivityComment : AppCompatActivity() {
                     commentStateLiveData.observe(this@SubActivityComment) { state ->
                         if (state == LoadState.Done) {
                             //게시물 작성자에게 댓글이 달렸다는 알림을 보냄
-                            if (nowUser!!.token != feedItem.userToken) { //본인이 댓글을 단 경우엔 알림이 가지 않도록 함
+                            if (nowUser!!.token != feedItem.userToken) { //본인이 댓글을 단 경우엔 알림이 가지 않도록 함.
                                 myFCMService.sendPostToFCM(
                                     this@SubActivityComment, feedItem.creatorInfo!!.fCMtoken,
-                                    "${nowUser!!.username}님이 댓글을 남겼습니다. \"${text}\" "
+                                    "${nowUser!!.username}님이 댓글을 남겼습니다. \"${comment.contents}\" "
                                 )
                             }
                             comment.duration = feedViewModel.getDateDuration(comment.madeDate)
