@@ -24,7 +24,7 @@ data class UserInfo(
         : Long? = 0,
         var tier //인증 완료된 챌린지에 따른 티어(닉네임 옆 메달 표시용)
         : Long? = 0,
-        var medalAppear: Boolean? = true,
+        var medalAppear: Boolean? = false,
         var fCMtoken: String? = null,
         var token: String = "",
         var likedPost: ArrayList<String> = ArrayList(),
