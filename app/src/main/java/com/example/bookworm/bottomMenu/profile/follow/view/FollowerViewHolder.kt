@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.bookworm.LoadState
 import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
 import com.example.bookworm.core.userdata.UserInfo
@@ -32,7 +33,9 @@ class FollowerViewHolder(
         )
 
     fun setItem(item: UserInfo?) {
-        Glide.with(context).load(item!!.profileimg).circleCrop().into(binding.ivProfileImg)
+        Glide.with(context).load(item!!.profileimg).circleCrop()
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true).into(binding.ivProfileImg)
         binding.tvProfileID.text = item.username
         //사용자 본인과 다른 프로필인 경우에만 팔로우, 팔로잉이 가능 => 본인이 본인을 팔로우하는 건 기본이기 때문
         if (item.token != nowUserInfo.token) {
@@ -60,7 +63,7 @@ class FollowerViewHolder(
                             followStateLiveData.observe(context as FollowerActivity) {
                                 if (it == LoadState.Done) {
                                     following()
-                                    item.isFollowed =true
+                                    item.isFollowed = true
                                     listener.onItemClick(this, view)
                                 }
                             }

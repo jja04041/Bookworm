@@ -87,7 +87,7 @@ class BookSearchFragment : Fragment() {
                     resultBookList = resultList
             )
         }
-        searchViewModel.liveKeywordData.observe(context as SearchMainActivity) { keyword ->
+        searchViewModel.liveKeywordData.observe(viewLifecycleOwner) { keyword ->
             if (this.keyword != keyword) {
                 page = 1
                 isEnd = false
@@ -101,7 +101,7 @@ class BookSearchFragment : Fragment() {
                 )
             }
         }
-        stateLiveData.observe(context as SearchMainActivity) { state ->
+        stateLiveData.observe(viewLifecycleOwner) { state ->
             if (state == LoadState.Done) {
                 var current = bookAdapter.currentList.toMutableList() //기존에 가지고 있던 아이템 목록
                 //만약 현재 목록이 비어있지 않고, 마지막 아이템이 로딩 아이템 이라면 마지막 아이템을 제거

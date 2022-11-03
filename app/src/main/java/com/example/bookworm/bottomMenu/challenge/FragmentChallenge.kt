@@ -169,6 +169,10 @@ class FragmentChallenge : Fragment() {
             }
         }
     }
+//
+//    private fun loadSearchData() {
+//        binding
+//    }
 
     /**화면 이동 시 보여졌던 키보드를 숨김*/
     override fun onHiddenChanged(hidden: Boolean) {

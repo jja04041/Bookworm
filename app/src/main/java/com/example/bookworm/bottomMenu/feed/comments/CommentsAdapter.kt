@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.signature.ObjectKey
 import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.feed.Feed
@@ -131,7 +132,8 @@ class CommentsAdapter(val context: Context) : ListAdapter<Any, RecyclerView.View
                 item.creatorInfo.apply {
                     tvNickname.text = username
                     Glide.with(itemView.context)
-                        .load(profileimg).circleCrop()
+                        .load(profileimg).diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true).circleCrop()
                         .into(ivProfileImage)
                 }
                 btnFeedMenu.setOnClickListener { v ->

@@ -126,7 +126,9 @@ public class MessageActivity extends AppCompatActivity {
         button = (Button) findViewById(R.id.message_btn);
         editText = (EditText) findViewById(R.id.message_editText);
 
-
+        ((ImageView) findViewById(R.id.btnBack)).setOnClickListener(v -> {
+            finish();
+        });
 
         firebaseDatabase = FirebaseDatabase.getInstance();
 
