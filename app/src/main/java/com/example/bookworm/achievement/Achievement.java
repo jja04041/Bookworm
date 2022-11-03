@@ -166,8 +166,8 @@ public class Achievement {
 
         // 좋아요 업적
 
-
-        if (userinfo.getLikedPost().size() == 2) {
+        if (userinfo.getLikedPost().size() == 1) {
+//        if (userinfo.getLikedPost().size() == 2) {
             if (null == bookworm.getAchievementMap().get("하트배경")) {
                 ExecuteFB("bg_heart", "하트배경", 1);
             }
