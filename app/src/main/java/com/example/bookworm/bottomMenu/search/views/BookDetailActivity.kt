@@ -14,7 +14,7 @@ import com.example.bookworm.LoadState
 import com.example.bookworm.bottomMenu.feed.Feed
 import com.example.bookworm.bottomMenu.feed.SubActivityCreatePost
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
-import com.example.bookworm.bottomMenu.search.adapters.FeedResultAdapter
+import com.example.bookworm.bottomMenu.search.bookitems.BookDetailAdapter
 import com.example.bookworm.bottomMenu.search.bookitems.Book
 import com.example.bookworm.bottomMenu.search.modules.SearchViewModel
 import com.example.bookworm.core.userdata.UserInfo
@@ -30,7 +30,7 @@ class BookDetailActivity : AppCompatActivity() {
 
 
     private val userReviewAdapter by lazy {
-        FeedResultAdapter(this)
+        BookDetailAdapter(this)
     }
     private val searchViewModel by lazy {
         ViewModelProvider(this,

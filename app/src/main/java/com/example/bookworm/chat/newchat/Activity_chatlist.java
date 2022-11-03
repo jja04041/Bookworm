@@ -2,7 +2,9 @@ package com.example.bookworm.chat.newchat;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,8 +23,17 @@ public class Activity_chatlist extends AppCompatActivity {
 
         setContentView(R.layout.fragment_chat);
 
-        ViewGroup viewGroup =(ViewGroup)findViewById(R.id.activity_chatlist);
-        getLayoutInflater().inflate(R.layout.fragment_chat, viewGroup , false);
+        ImageView btnBack = (ImageView) findViewById(R.id.btnBack);
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        ViewGroup viewGroup = (ViewGroup) findViewById(R.id.activity_chatlist);
+        getLayoutInflater().inflate(R.layout.fragment_chat, viewGroup, false);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.fragment_chat_recyclerView);
         recyclerView.setAdapter(new ChatlistRecyclerViewAdapter(context));

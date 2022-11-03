@@ -20,14 +20,14 @@ class ShowAlbumContentAdapter(val context: Context) :
         viewType: Int
     ): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        when(viewType){
+        return when(viewType){
             0->{
                 var binding =  SubactivityShowalbumcontentItemBinding.inflate(inflater)
-                return ShowAlbumContentItemViewHolder(binding, parent.context)
+                ShowAlbumContentItemViewHolder(binding, parent.context)
             }
             else->{
                 var binding = SubactivityCreatealbumcontentAddalbumpostLayoutBinding.inflate(inflater)
-                return AddAlbumPostViewholder(binding,parent.context)
+                AddAlbumPostViewholder(binding,parent.context)
             }
         }
     }

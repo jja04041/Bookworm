@@ -17,6 +17,8 @@ import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.search.bookitems.Book
 import com.example.bookworm.bottomMenu.search.views.BookDetailActivity
 import com.example.bookworm.bottomMenu.search.views.SearchMainActivity
+import com.example.bookworm.core.userdata.UserInfo
+import com.google.firebase.firestore.FirebaseFirestoreException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,7 +43,7 @@ class SearchViewModel(context: Context) : ViewModel() {
     }
 
     class Factory(val context: Context) :
-            ViewModelProvider.Factory {
+        ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
             return SearchViewModel(context) as T
         }
@@ -49,16 +51,24 @@ class SearchViewModel(context: Context) : ViewModel() {
 
 
     private val searchDataRepository = SearchDataRepository(ct) //검색 결과를 가져오는 레포지토리
-    private val userInfoViewModel = ViewModelProvider(ct, //사용자 데이터 처리시 사용
-            UserInfoViewModel.Factory(ct))[UserInfoViewModel::class.java]
-    private val feedViewModel = ViewModelProvider(ct, //사용자 데이터 처리시 사용
-            FeedViewModel.Factory(ct))[FeedViewModel::class.java]
+    private val userInfoViewModel = ViewModelProvider(
+        ct, //사용자 데이터 처리시 사용
+        UserInfoViewModel.Factory(ct)
+    )[UserInfoViewModel::class.java]
+    private val feedViewModel = ViewModelProvider(
+        ct, //사용자 데이터 처리시 사용
+        FeedViewModel.Factory(ct)
+    )[FeedViewModel::class.java]
     private var loadDataState: MutableLiveData<LoadState>? = null
     val liveKeywordData: MutableLiveData<String> = MutableLiveData()
     var lastReviewDataVisibleFeedID: String? = null
+    var lastUserDataVisible: String? = null
 
     //알라딘의 인기도서 가져오는 메소드
-    fun loadPopularBook(stateLiveData: MutableLiveData<LoadState>, resultBookList: ArrayList<Book>) {
+    fun loadPopularBook(
+        stateLiveData: MutableLiveData<LoadState>,
+        resultBookList: ArrayList<Book>
+    ) {
         loadDataState = stateLiveData
         loadDataState!!.value = LoadState.Loading
         viewModelScope.launch {
@@ -86,28 +96,34 @@ class SearchViewModel(context: Context) : ViewModel() {
     /**
      * Json데이터를 Book 객체로 변환 */
 
-    private fun convertToBook(data: JSONObject, isRc: Boolean, isDetail: Boolean = false) = Book().apply {
-        data.apply {
-            title = getString("title")
-            imgUrl = getString("cover").replace("coversum", "cover500");
-            itemId = getString("itemId")
-            author = getString("author")
-            categoryName = getString("categoryName")
-            content = replaceLtgt(getString("description"))
-            publisher = getString("publisher")
-            isbn = getString("isbn13")
-            isRecommend = isRc
-            //상세정보에서만 필요한 데이터들
-            if (isDetail) {
-                purchaseLink = getString("link") //구매 링크
-                originPrice = getInt("priceStandard").toString()//정상가
-                salePrice = getInt("priceSales").toString()//판매가
-                userRate = getInt("customerReviewRank") / 2F//사용자 평점
+    private fun convertToBook(data: JSONObject, isRc: Boolean, isDetail: Boolean = false) =
+        Book().apply {
+            data.apply {
+                title = getString("title")
+                imgUrl = getString("cover").replace("coversum", "cover500");
+                itemId = getString("itemId")
+                author = getString("author")
+                categoryName = getString("categoryName")
+                content = replaceLtgt(getString("description"))
+                publisher = getString("publisher")
+                isbn = getString("isbn13")
+                isRecommend = isRc
+                //상세정보에서만 필요한 데이터들
+                if (isDetail) {
+                    purchaseLink = getString("link") //구매 링크
+                    originPrice = getInt("priceStandard").toString()//정상가
+                    salePrice = getInt("priceSales").toString()//판매가
+                    userRate = getInt("customerReviewRank") / 2F//사용자 평점
+                }
             }
         }
-    }
 
-    fun loadBooks(keyword: String, stateLiveData: MutableLiveData<LoadState>, resultBookList: ArrayList<Book>, page: Int) {
+    fun loadBooks(
+        keyword: String,
+        stateLiveData: MutableLiveData<LoadState>,
+        resultBookList: ArrayList<Book>,
+        page: Int
+    ) {
         loadDataState = stateLiveData
         loadDataState!!.value = LoadState.Loading
         viewModelScope.launch {
@@ -134,11 +150,20 @@ class SearchViewModel(context: Context) : ViewModel() {
     }
 
     //추가적으로 책 리뷰를 불러오는 함수
-    fun loadBookReview(itemId: String, stateLiveData: MutableLiveData<LoadState>, reviewList: ArrayList<Feed>, page: Int) {
+    fun loadBookReview(
+        itemId: String,
+        stateLiveData: MutableLiveData<LoadState>,
+        reviewList: ArrayList<Feed>,
+        page: Int
+    ) {
         stateLiveData.value = LoadState.Loading
         viewModelScope.launch {
             try {
-                val reviewResult = searchDataRepository.loadUserBookReview(itemId, page = page, lastReviewDataVisibleFeedID)!!.toObjects(Feed::class.java)
+                val reviewResult = searchDataRepository.loadUserBookReview(
+                    itemId,
+                    page = page,
+                    lastReviewDataVisibleFeedID
+                )!!.toObjects(Feed::class.java)
                 reviewList.addAll(addExtraDataInFeed(reviewResult))
                 stateLiveData.value = LoadState.Done
             } catch (e: Exception) {
@@ -148,18 +173,53 @@ class SearchViewModel(context: Context) : ViewModel() {
         }
     }
 
-    fun loadBookDetail(itemId: String, stateLiveData: MutableLiveData<Book>, reviewList: ArrayList<Feed>, page: Int) {
+    fun loadSearchedUser(
+        keyword: String,
+        stateLiveData: MutableLiveData<LoadState>,
+        userList: MutableList<UserInfo>,
+        page: Int
+    ) {
+        stateLiveData.value = LoadState.Loading
+        //입력한 이름을 가진 사용자를 검색함.
+        viewModelScope.launch {
+            try {
+                val userResult = searchDataRepository.loadUserData(keyword, page = page, lastUserDataVisible)!!
+                        .toObjects(UserInfo::class.java).toMutableList()
+                userList.addAll(userResult)
+                lastUserDataVisible = if (userResult.size > 0) userList.last().token else ""
+                stateLiveData.value = LoadState.Done
+
+            } catch (e: NoSuchElementException) {
+                stateLiveData.value = LoadState.Error
+            } catch (e: FirebaseFirestoreException) {
+                stateLiveData.value = LoadState.Error
+            }
+        }
+    }
+
+    fun loadBookDetail(
+        itemId: String,
+        stateLiveData: MutableLiveData<Book>,
+        reviewList: ArrayList<Feed>,
+        page: Int
+    ) {
         //itemId로 검색하고 데이터를 받아옴
         //책 검색과 동시에 책 리뷰를 받아와야 함.
         viewModelScope.launch {
-            val reviewResult = searchDataRepository.loadUserBookReview(itemId, page = page)!!.toObjects(Feed::class.java).toMutableList()
-            lastReviewDataVisibleFeedID = if (reviewResult.size > 0) reviewResult.last().feedID else ""
+            val reviewResult = searchDataRepository.loadUserBookReview(itemId, page = page)!!
+                .toObjects(Feed::class.java).toMutableList()
+            lastReviewDataVisibleFeedID =
+                if (reviewResult.size > 0) reviewResult.last().feedID else ""
             reviewList.addAll(addExtraDataInFeed(reviewResult))
 
             val result = searchDataRepository.loadBookDetail(itemId)
             if (result.isSuccessful) {
                 val book = result.body()?.let {
-                    convertToBook(data = (JSONObject(it)["item"] as JSONArray).getJSONObject(0), isRc = false, true)
+                    convertToBook(
+                        data = (JSONObject(it)["item"] as JSONArray).getJSONObject(0),
+                        isRc = false,
+                        true
+                    )
                 }
                 stateLiveData.value = book //검색된 책 데이터
             } else stateLiveData.value = Book()
@@ -170,30 +230,30 @@ class SearchViewModel(context: Context) : ViewModel() {
      *  => 이를 해결
      * */
     private fun replaceLtgt(text: String): String = text.replace("&lt;", "<")
-            .replace("&gt;", ">")
-            .replace("&lt", "<")
-            .replace("&gt", ">")
+        .replace("&gt;", ">")
+        .replace("&lt", "<")
+        .replace("&gt", ">")
 
     private suspend fun addExtraDataInFeed(feedList: MutableList<Feed>) =
-            feedList.map { feed: Feed ->
-                return@map withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-                    val tempUserInfo = userInfoViewModel.suspendGetUser(null)?.apply {
-                        feed.isUserLiked = likedPost.contains(feed.feedID)
-                    }
-                    feed.creatorInfo = userInfoViewModel.suspendGetUser(feed.userToken)!!
-                    feed.isUserPost = (tempUserInfo!!.token == feed.userToken)
-                    feed.duration = DdayCounter.getDuration(feed.date!!)
-                    if (feed.commentsCount > 0L) {
-                        feed.comment = FireStoreLoadModule.provideQueryCommentsLately(feed.feedID!!)
-                                .get().await()
-                                .toObjects(Comment::class.java)[0] //형변환을 자동으로 해줌.
-                        feed.comment!!.creator = userInfoViewModel.suspendGetUser(feed.comment!!.userToken)!!
-                        feed.comment!!.duration = DdayCounter.getDuration(feed.comment!!.madeDate!!)
-                    }
-                    return@withContext feed
+        feedList.map { feed: Feed ->
+            return@map withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
+                val tempUserInfo = userInfoViewModel.suspendGetUser(null)?.apply {
+                    feed.isUserLiked = likedPost.contains(feed.feedID)
                 }
+                feed.creatorInfo = userInfoViewModel.suspendGetUser(feed.userToken)!!
+                feed.isUserPost = (tempUserInfo!!.token == feed.userToken)
+                feed.duration = DdayCounter.getDuration(feed.date!!)
+                if (feed.commentsCount > 0L) {
+                    feed.comment = FireStoreLoadModule.provideQueryCommentsLately(feed.feedID!!)
+                        .get().await()
+                        .toObjects(Comment::class.java)[0] //형변환을 자동으로 해줌.
+                    feed.comment!!.creator =
+                        userInfoViewModel.suspendGetUser(feed.comment!!.userToken)!!
+                    feed.comment!!.duration = DdayCounter.getDuration(feed.comment!!.madeDate!!)
+                }
+                return@withContext feed
             }
-
+        }
 
 
 }

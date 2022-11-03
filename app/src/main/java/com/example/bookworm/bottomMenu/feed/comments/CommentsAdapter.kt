@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.signature.ObjectKey
 import com.example.bookworm.R
 import com.example.bookworm.bottomMenu.feed.Feed
@@ -131,7 +132,8 @@ class CommentsAdapter(val context: Context) : ListAdapter<Any, RecyclerView.View
                 item.creatorInfo.apply {
                     tvNickname.text = username
                     Glide.with(itemView.context)
-                        .load(profileimg).circleCrop()
+                        .load(profileimg).diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true).circleCrop()
                         .into(ivProfileImage)
                 }
                 btnFeedMenu.setOnClickListener { v ->
@@ -149,6 +151,13 @@ class CommentsAdapter(val context: Context) : ListAdapter<Any, RecyclerView.View
                             }
                         }
                     }
+                }
+
+                //프로필 클릭 시 해당 사용자의 프로필 정보 화면으로 이동하게
+                llProfile.setOnClickListener {
+                    val intent = Intent(itemView.context, ProfileInfoActivity::class.java)
+                    intent.putExtra("userID", item.userToken)
+                    itemView.context.startActivity(intent)
                 }
                 //내용
                 //책

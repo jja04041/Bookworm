@@ -94,7 +94,6 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"
             android:background="@drawable/ripplebutton"
-            android:elevation="10dp"
             android:orientation="horizontal"
             android:paddingHorizontal="10dp">
 
@@ -178,7 +177,6 @@
                 android:layout_marginHorizontal="15dp"
                 android:layout_marginVertical="10dp"
                 android:background="@drawable/bg_rounded"
-                android:elevation="10dp"
                 android:orientation="vertical"
                 android:paddingHorizontal="5dp">
 

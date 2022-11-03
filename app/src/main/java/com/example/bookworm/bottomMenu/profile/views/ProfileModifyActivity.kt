@@ -69,8 +69,17 @@ class ProfileModifyActivity : AppCompatActivity() {
     }
 
     private fun closeLogic() {
-        if (isModified) setResult(MODIFY_OK)
-        finish()
+        if (isModified) {
+            val liveData = MutableLiveData<UserInfo>()
+            userInfoViewModel.getUser(null, liveData, true)
+            liveData.observe(this) {
+                if (it != null) {
+                    userInfoViewModel.updateUser(it)
+                    setResult(MODIFY_OK)
+                    finish()
+                }
+            }
+        } else finish()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,9 +98,9 @@ class ProfileModifyActivity : AppCompatActivity() {
                     setMedal(nowUser)
                     Glide.with(this@ProfileModifyActivity)
                         .load(nowUser.profileimg)
-                        .circleCrop()
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
+                        .circleCrop()
                         .into(ivProfileImage)
                     edtIntroduce.setText(nowUser!!.introduce) //자기소개 세팅
                     //회원탈퇴 버튼
@@ -117,9 +126,8 @@ class ProfileModifyActivity : AppCompatActivity() {
                             imageProcess.uploadImage((bitmap)!!, imgName) // 이미지 업로드
                         }
                         imageProcess.imgData.observe(this@ProfileModifyActivity) { imgurl: String? ->
-                            if (checkIdChanged()) {
+                            if (checkIdChanged(nowUser)) {
                                 nowUser.profileimg = (imgurl)!!
-                                updateUser(nowUser)
                                 isModified = true
                                 closeLogic()
                             } else {
@@ -169,7 +177,7 @@ class ProfileModifyActivity : AppCompatActivity() {
                         }
 
                         override fun afterTextChanged(editable: Editable) {
-                            uploadCheck = checkIdChanged()
+                            uploadCheck = checkIdChanged(UserInfo())
                         }
                     })
                     isDuplicated.observe(this@ProfileModifyActivity) { value: Boolean? ->
@@ -337,18 +345,6 @@ class ProfileModifyActivity : AppCompatActivity() {
 
             }
 
-
-
-
-
-
-
-
-
-
-
-
-
             challengeViewmodel.challengeList.observe(this@ProfileModifyActivity)
             {
                 for (i in it) {
@@ -371,9 +367,9 @@ class ProfileModifyActivity : AppCompatActivity() {
     }
 
 
-    private fun checkIdChanged(): Boolean {
-        val name = binding!!.edtNewNickname.text.toString()
-        return if (name == "") true else !(name != "" && !uploadCheck)
+    private fun checkIdChanged(nowUser: UserInfo): Boolean {
+        val name = binding.edtNewNickname.text.toString()
+        return if (name == "" || name == nowUser.username) true else !(name != "" && !uploadCheck)
     }
 
     //메달 표시 유무에 따른 세팅

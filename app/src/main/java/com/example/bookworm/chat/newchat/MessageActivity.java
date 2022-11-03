@@ -52,7 +52,7 @@ public class MessageActivity extends AppCompatActivity {
     private String destUid;     //상대방 uid
 
     private RecyclerView recyclerView;
-    private Button button, button2;
+    private Button button;
     private EditText editText;
 
     private FirebaseDatabase firebaseDatabase;
@@ -113,19 +113,6 @@ public class MessageActivity extends AppCompatActivity {
             sendMsg();
 
 
-            button2.setOnClickListener(v -> {
-                String message = "안녕 나는 책벌레야";
-                Create_DynamicLink(message);
-                Intent msg = new Intent(Intent.ACTION_SEND);
-
-                msg.addCategory(Intent.CATEGORY_DEFAULT);
-                msg.putExtra(Intent.EXTRA_TEXT, "https://bookbollae.page.link/63fF");
-                msg.putExtra(Intent.EXTRA_TITLE, "제목");
-                msg.setType("text/plain");
-                startActivity(Intent.createChooser(msg, "앱을 선택해 주세요"));
-
-
-            });
         });
 
 
@@ -139,7 +126,9 @@ public class MessageActivity extends AppCompatActivity {
         button = (Button) findViewById(R.id.message_btn);
         editText = (EditText) findViewById(R.id.message_editText);
 
-        button2 = (Button) findViewById(R.id.btnsharee);
+        ((ImageView) findViewById(R.id.btnBack)).setOnClickListener(v -> {
+            finish();
+        });
 
         firebaseDatabase = FirebaseDatabase.getInstance();
 

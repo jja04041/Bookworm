@@ -22,6 +22,7 @@ import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing
+import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.FragmentFeedTopbarBinding
 import com.example.bookworm.databinding.TmpActivityFeedBinding
 import kotlinx.coroutines.launch
@@ -40,7 +41,8 @@ class FragmentFeed : Fragment() {
     private var isDataEnd = false // 파이어베이스 내에서 검색할 때, 데이터 끝인지 판별하는 변수
     private var need2Mov = -1
     private var storiesBar: RecyclerView? = null
-
+    private lateinit var userInfoViewModel: UserInfoViewModel
+    private val userLiveData = MutableLiveData<UserInfo>()
 
     //다른 액티비티로부터의 결과값을 받기 위함
     var startActivityResult = registerForActivityResult(
@@ -126,31 +128,27 @@ class FragmentFeed : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         binding = TmpActivityFeedBinding.inflate(layoutInflater)
+        userInfoViewModel = ViewModelProvider(
+            viewModelStore,
+            UserInfoViewModel.Factory(requireContext())
+        )[UserInfoViewModel::class.java]
         getFeeds(true) // 서버로부터 피드 정보를 받아옴
-
-        //피드 새로 만들기
-        viewLifecycleOwner.lifecycle.coroutineScope.launch {
-            val data = ViewModelProvider(
-                context as MainActivity,
-                UserInfoViewModel.Factory(requireContext())
-            )[UserInfoViewModel::class.java]
-            val mainUser = data.suspendGetUser(null)
-            FragmentFeedTopbarBinding.bind(binding.root).apply {
-                imgCreatefeed.setOnClickListener {
-                    val intent = Intent(context, SubActivityCreatePost::class.java)
-                    intent.putExtra("mainUser", mainUser)
-                    startActivityResult.launch(intent)
-                }
-                tvLogo.setOnClickListener {
-                    binding.recyclerView.smoothScrollToPosition(0)
-                }
-            }
-
-        }
-
         setAdapter()
+        userLiveData.observe(viewLifecycleOwner, Observer { userInfo ->
+            if (userInfo != null) {
+                FragmentFeedTopbarBinding.bind(binding.root).apply {
+                    imgCreatefeed.setOnClickListener {
+                        val intent = Intent(context, SubActivityCreatePost::class.java)
+                        intent.putExtra("mainUser", userInfo)
+                        startActivityResult.launch(intent)
+                    }
+                    tvLogo.setOnClickListener {
+                        binding.recyclerView.smoothScrollToPosition(0)
+                    }
+                }
 
-
+            }
+        })
         return binding.root
     }
 
@@ -303,5 +301,10 @@ class FragmentFeed : Fragment() {
         binding.llFeed.isVisible = !bool
         if (bool) binding.SFLFeed.startShimmer() else binding.SFLFeed.stopShimmer()
         binding.SFLFeed.isVisible = bool
+    }
+
+    override fun onResume() {
+        super.onResume()
+        userInfoViewModel.getUser(null, userLiveData)
     }
 }

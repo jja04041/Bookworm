@@ -48,7 +48,8 @@ class UserInfoViewModel(context: Context) : ViewModel() {
         }
     }
 
-    suspend fun suspendGetUser(token: String?) = repo.getUser(token, token != null)
+    suspend fun suspendGetUser(token: String?, boolean: Boolean = false) =
+        repo.getUser(token, if (boolean) boolean else token != null)
 
     //사용자 가져오기
     fun getUser(token: String?, liveData: MutableLiveData<UserInfo>, getFromExt: Boolean = true) {

@@ -109,13 +109,15 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:maxWidth="60dp"
                             android:id="@+id/tvNickname"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:maxLines="2"
                             android:text="닉네임"
                             android:textAlignment="center"
                             android:textColor="#000000"
-                            android:textSize="17dp"
+                            android:textSize="13dp"
                             android:textStyle="bold" />
 
                         <ImageView

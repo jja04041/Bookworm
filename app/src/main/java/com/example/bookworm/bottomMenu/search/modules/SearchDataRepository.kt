@@ -9,6 +9,8 @@ import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import java.util.*
+import kotlin.collections.HashMap
 
 
 //실제로 서버와 연동하여 데이터를 가져오는 레포지토리 (데이터 송수신을 담당)
@@ -58,12 +60,14 @@ class SearchDataRepository(val context: Context) {
     }
 
     //검색한 사용자 정보를 가져오기 위한 메소드 ->  ViewModelScope 내에서 접근해야함 -> 비동기 처리
-    suspend fun loadUserData(keyword: String) {
-        val PAGE = 10L
-        val query: Query = FireStoreLoadModule.provideQueryPathToUserCollection()
-            .whereArrayContains("userName", keyword) //전달된 키워드가 이름에 포함된 모든 사용자의 정보를 가져옴.
-            .orderBy("userId")
+    suspend fun loadUserData(keyword: String, page: Int, lastVisible: String?): QuerySnapshot? {
+        var query: Query = FireStoreLoadModule.provideQueryPathToUserCollection()
+            .whereGreaterThanOrEqualTo("username", keyword)
+            .whereLessThanOrEqualTo("username",  keyword + "\uf8ff")
 
+            .orderBy("username")
+        if (lastVisible != null) query = query.startAfter(lastVisible)
+        return query.limit(page.toLong()).get().await()
     }
 
     //Retrofit 인스턴스

@@ -125,7 +125,7 @@ public class FragmentProfile extends Fragment implements LifecycleObserver {
         //프로필사진 로딩후 삽입.
         binding.tvFollowerCount.setText(String.valueOf(user.getFollowerCounts()));
         binding.tvFollowingCount.setText(String.valueOf(user.getFollowingCounts()));
-        binding.tvUserName.setText(user.getUsername());
+        binding.tvNickname.setText(user.getUsername());
         binding.edtIntroduce.setText(user.getIntroduce());
 
 
