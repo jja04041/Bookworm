@@ -25,13 +25,12 @@ import com.example.bookworm.bottomMenu.challenge.ChallengeViewModel
 import com.example.bookworm.bottomMenu.challenge.NumberPickerDialog
 import com.example.bookworm.bottomMenu.challenge.items.Challenge
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
-import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
-import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
+import com.example.bookworm.bottomMenu.search.bookitems.Book
+import com.example.bookworm.bottomMenu.search.views.SearchMainActivity
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.SubactivityChallengeCreatechallengeBinding
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class SubActivityCreateChallenge : AppCompatActivity(), NumberPicker.OnValueChangeListener {
     val binding by lazy {
@@ -50,14 +49,18 @@ class SubActivityCreateChallenge : AppCompatActivity(), NumberPicker.OnValueChan
     /** 액티비티간 데이터 전달 핸들러 검색한 데이터의 값을 전달받는 매개체
      * */
     private val bookResult: ActivityResultLauncher<Intent> = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
+        ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
         if (result.resultCode == RESULT_OK) {
             challengeData.book = result.data!!
-                    .getParcelableExtra("bookData")!! //책데이터가 넘어오면 세팅한다.
+                .getParcelableExtra("bookData")!! //책데이터가 넘어오면 세팅한다.
             binding.tvCreatechallengeBookname.text = challengeData.book.title
             Glide.with(binding.root).load(challengeData.book.imgUrl).into(binding.ivThumbnail)
         }
+    }
+
+    companion object {
+        val CREATE_OK = 3000
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,8 +72,10 @@ class SubActivityCreateChallenge : AppCompatActivity(), NumberPicker.OnValueChan
         liveData.observe(this) { userInfo ->
             challengeData.apply {
                 masterToken = userInfo.token
-                startDate = SimpleDateFormat("yyyy-MM-dd",
-                        Locale.getDefault()).format(Calendar.getInstance().time) //오늘 날짜를 시작일자로 세팅
+                startDate = SimpleDateFormat(
+                    "yyyy-MM-dd",
+                    Locale.getDefault()
+                ).format(Calendar.getInstance().time) //오늘 날짜를 시작일자로 세팅
                 currentPart.add(masterToken) //방장을 현재 참가자로 추가
             }
             setUI()
@@ -102,8 +107,12 @@ class SubActivityCreateChallenge : AppCompatActivity(), NumberPicker.OnValueChan
                 //책 선택 화면으로
                 setOnClickListener {
                     //책가져오는 메소드 작성
-                    val intent = Intent(this@SubActivityCreateChallenge, SearchMainActivity::class.java)
-                    if (challengeData.book != Book()) intent.putExtra("prevBook", challengeData.book)
+                    val intent =
+                        Intent(this@SubActivityCreateChallenge, SearchMainActivity::class.java)
+                    if (challengeData.book != Book()) intent.putExtra(
+                        "prevBook",
+                        challengeData.book
+                    )
                     bookResult.launch(intent)
                 }
             }
@@ -120,20 +129,29 @@ class SubActivityCreateChallenge : AppCompatActivity(), NumberPicker.OnValueChan
             datePicker.apply {
                 val myCalendar = Calendar.getInstance()
                 setOnClickListener {
-                    val datePicker = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                        myCalendar[Calendar.YEAR] = year
-                        myCalendar[Calendar.MONTH] = month
-                        myCalendar[Calendar.DAY_OF_MONTH] = dayOfMonth
-                        tvEndDate.text = SimpleDateFormat("yyyy-MM-dd",
-                                Locale.getDefault()).format(myCalendar.time)
-                    }
-                    DatePickerDialog(this@SubActivityCreateChallenge, datePicker,
-                            myCalendar[Calendar.YEAR], myCalendar[Calendar.MONTH], myCalendar.get(Calendar.DAY_OF_MONTH))
-                            .apply {
-                                getDatePicker().minDate = System.currentTimeMillis() - 1000
-                                getDatePicker().maxDate = System.currentTimeMillis() - 1000 + 1000L * 60 * 60 * 24 * 30
-                                show()
-                            }
+                    val datePicker =
+                        DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                            myCalendar[Calendar.YEAR] = year
+                            myCalendar[Calendar.MONTH] = month
+                            myCalendar[Calendar.DAY_OF_MONTH] = dayOfMonth
+                            tvEndDate.text = SimpleDateFormat(
+                                "yyyy-MM-dd",
+                                Locale.getDefault()
+                            ).format(myCalendar.time)
+                        }
+                    DatePickerDialog(
+                        this@SubActivityCreateChallenge,
+                        datePicker,
+                        myCalendar[Calendar.YEAR],
+                        myCalendar[Calendar.MONTH],
+                        myCalendar.get(Calendar.DAY_OF_MONTH)
+                    )
+                        .apply {
+                            getDatePicker().minDate = System.currentTimeMillis() - 1000
+                            getDatePicker().maxDate =
+                                System.currentTimeMillis() - 1000 + 1000L * 60 * 60 * 24 * 30
+                            show()
+                        }
                 }
             }
 
@@ -151,12 +169,17 @@ class SubActivityCreateChallenge : AppCompatActivity(), NumberPicker.OnValueChan
                 val liveData = MutableLiveData<LoadState>()
                 challengeData.apply {
                     if (book == Book() || etCreatechallengeChallengeinfo.text.toString() == "" ||
-                            etCreatechallengeChallengename.text.toString() == "" || tvMax.text.toString() == "" ||
-                            tvEndDate.text.toString() == "00-00-00"
+                        etCreatechallengeChallengename.text.toString() == "" || tvMax.text.toString() == "" ||
+                        tvEndDate.text.toString() == "00-00-00"
                     )
-                        Toast.makeText(this@SubActivityCreateChallenge, "입력하지 않은 항목이 있습니다.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@SubActivityCreateChallenge,
+                            "입력하지 않은 항목이 있습니다.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     else {
-                        id = "${masterToken}_${startDate.hashCode() + title.hashCode() + masterToken.hashCode()}"
+                        id =
+                            "${masterToken}${startDate.hashCode() + endDate.hashCode() + masterToken.hashCode()}"
                         description = etCreatechallengeChallengeinfo.text.toString()
                         title = etCreatechallengeChallengename.text.toString()
                         maxPart = tvMax.text.toString().toLong()
@@ -165,12 +188,20 @@ class SubActivityCreateChallenge : AppCompatActivity(), NumberPicker.OnValueChan
                         challengeViewModel.createChallenge(this, liveData)
                         liveData.observe(this@SubActivityCreateChallenge) {
                             if (it == LoadState.Done) {
-                                Toast.makeText(this@SubActivityCreateChallenge, "챌린지를 정상적으로 생성하였습니다.", Toast.LENGTH_SHORT).show()
-                                setResult(RESULT_OK, intent.apply {
-                                    putExtra("challengeData", challengeData)
-                                })
+                                Toast.makeText(
+                                    this@SubActivityCreateChallenge,
+                                    "챌린지를 정상적으로 생성하였습니다.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                val intent = Intent()
+                                intent.putExtra("challengeData", challengeData)
+                                setResult(CREATE_OK, intent)
                                 finish()
-                            } else Toast.makeText(this@SubActivityCreateChallenge, "챌린지를 생성하는 도중 에러가 발생하였습니다.", Toast.LENGTH_SHORT).show()
+                            } else Toast.makeText(
+                                this@SubActivityCreateChallenge,
+                                "챌린지를 생성하는 도중 에러가 발생하였습니다.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }
@@ -180,7 +211,15 @@ class SubActivityCreateChallenge : AppCompatActivity(), NumberPicker.OnValueChan
         }
     }
 
-    private fun showNumberPicker(view: View, title: String, subtitle: String, maxvalue: Int, minvalue: Int, step: Int, defvalue: Int) {
+    private fun showNumberPicker(
+        view: View,
+        title: String,
+        subtitle: String,
+        maxvalue: Int,
+        minvalue: Int,
+        step: Int,
+        defvalue: Int
+    ) {
         NumberPickerDialog().apply {
             arguments = Bundle(6).apply {
                 putString("title", title) // key , value
@@ -210,13 +249,13 @@ class SubActivityCreateChallenge : AppCompatActivity(), NumberPicker.OnValueChan
         //만약 작성된 내용이 있는 경우
         if (challengeData.book != Book() || binding.etCreatechallengeChallengename.text.isNotEmpty() || binding.etCreatechallengeChallengeinfo.text.isNotEmpty()) {
             AlertDialog.Builder(this)
-                    .setTitle("현재까지 작성된 내용이 삭제됩니다. 그래도 계속하시겠습니까?")
-                    .setPositiveButton("네") { dialog, v ->
-                        finish()
-                        dialog.dismiss()
-                    }.setNegativeButton("아니오") { dialog, v ->
-                        dialog.dismiss()
-                    }.show()
+                .setTitle("현재까지 작성된 내용이 삭제됩니다. 그래도 계속하시겠습니까?")
+                .setPositiveButton("네") { dialog, v ->
+                    finish()
+                    dialog.dismiss()
+                }.setNegativeButton("아니오") { dialog, v ->
+                    dialog.dismiss()
+                }.show()
         } else finish()
     }
 }

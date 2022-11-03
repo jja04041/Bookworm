@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +17,8 @@ import com.example.bookworm.R;
 import com.example.bookworm.bottomMenu.challenge.board.Board;
 import com.example.bookworm.bottomMenu.feed.Feed;
 import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment;
+import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
+import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.databinding.FragmentRecordItemBinding;
 
 import java.util.ArrayList;
@@ -26,6 +29,8 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     Context context;
     FragmentRecordItemBinding binding;
     OnRecordItemClickListener listener;
+    UserInfoViewModel uv;
+    UserInfo NowUser;
 
 
     public RecordAdapter(ArrayList<Feed> data, Context c) {
@@ -89,15 +94,27 @@ public class RecordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             binding.feedBookTitle.setText(item.getBook().getTitle());
             binding.tvFeedtext.setText(item.getFeedText());
             binding.tvFeedDate.setText(item.getDate().substring(5, 10));
+
+            uv = new UserInfoViewModel(context);
+
+            uv.getUser(item.getUserToken(), true);
+            uv.getUserInfoLiveData().observe((LifecycleOwner) context, userInfo -> {
+                NowUser = userInfo;
+            });
+
             binding.frame.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, SubActivityComment.class);
-                    intent.putExtra("item", item);
+                    item.setCreatorInfo(NowUser);
+                    intent.putExtra("Feed", item);
+                    intent.putExtra("NowUser", NowUser);
                     intent.putExtra("position", getAbsoluteAdapterPosition());
                     context.startActivity(intent);
                 }
+
             });
+
         }
 
 

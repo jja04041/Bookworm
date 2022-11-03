@@ -21,7 +21,7 @@ class ShowFeedListForCreateAlbum : AppCompatActivity() {
         LayoutShowFeedlistForAlbumBinding.inflate(layoutInflater)
     }
 
-    val albumFeedListAdapter by lazy { AlbumProcessAdapter(this) }
+    private val albumFeedListAdapter by lazy { AlbumProcessAdapter(this) }
     val userInfoViewModel by lazy {
         ViewModelProvider(this, UserInfoViewModel.Factory(this)).get(
                 UserInfoViewModel::class.java

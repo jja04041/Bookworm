@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bookworm.R;
@@ -23,6 +25,18 @@ public class ProfileSettingActivity extends AppCompatActivity {
     private ActivityProfileSettingBinding binding;
     Context current_context;
     UserInfoViewModel pv;
+    Boolean isModified = false;
+    public static final int MODIFY_OK = 2003;
+    ActivityResultLauncher<Intent> modifyResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                {
+                    if (result.getResultCode() == ProfileModifyActivity.MODIFY_OK) {
+                        isModified = true;
+                    }
+
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +82,15 @@ public class ProfileSettingActivity extends AppCompatActivity {
         binding.btnModify.setOnClickListener(view -> {
             Intent intent = new Intent(current_context, ProfileModifyActivity.class);
             //프로필 수정 화면으로 유저정보 넘겨주기
-            startActivity(intent);
+            modifyResult.launch(intent);
         });
 
         //뒤로가기 버튼
-        binding.btnBack.setOnClickListener(view -> finish());
+        binding.btnBack.setOnClickListener(view ->
+        {
+            if (isModified) setResult(MODIFY_OK);
+            finish();
+        });
 
 
         //로그아웃 버튼

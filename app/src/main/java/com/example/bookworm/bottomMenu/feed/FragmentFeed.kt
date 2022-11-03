@@ -22,6 +22,7 @@ import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing
+import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.FragmentFeedTopbarBinding
 import com.example.bookworm.databinding.TmpActivityFeedBinding
 import kotlinx.coroutines.launch
@@ -40,11 +41,12 @@ class FragmentFeed : Fragment() {
     private var isDataEnd = false // 파이어베이스 내에서 검색할 때, 데이터 끝인지 판별하는 변수
     private var need2Mov = -1
     private var storiesBar: RecyclerView? = null
-
+    private lateinit var userInfoViewModel: UserInfoViewModel
+    private val userLiveData = MutableLiveData<UserInfo>()
 
     //다른 액티비티로부터의 결과값을 받기 위함
     var startActivityResult = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
+        ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
         if (result.resultCode == SubActivityCreatePost.CREATE_OK) {
             val item = result.data!!.getParcelableExtra<Feed>("feedData")
@@ -52,19 +54,22 @@ class FragmentFeed : Fragment() {
             feedAdapter.currentList.toList().apply {
                 feedAdapter.submitList(listOf(item) + this)
             }
-            Toast.makeText(context,
-                    "게시물이 업로드 되었습니다.", Toast.LENGTH_SHORT)
-                    .show()
+            Toast.makeText(
+                context,
+                "게시물이 업로드 되었습니다.", Toast.LENGTH_SHORT
+            )
+                .show()
 
         }
         /**
          * 게시물이 수정된 경우
          * */
-        if (result.resultCode == SubActivityModifyPost.MODIFY_OK || result.resultCode == SubActivityComment.FEED_MODIFIED) {
+        if (result.resultCode == SubActivityModifyPost.MODIFY_OK) {
             //수정된 아이템
             result.data!!.apply {
                 //게시물 업로드 하는 함수
                 val item = getParcelableExtra<Feed>("modifiedFeed")!!
+                item.modified = true
                 val newFeedLiveData = MutableLiveData<Feed>()
                 feedViewModel.uploadPost(item, null, ImageProcessing(requireContext()))
                 feedViewModel.nowFeedUploadState.observe(viewLifecycleOwner, Observer {
@@ -80,13 +85,28 @@ class FragmentFeed : Fragment() {
                                     add(need2Mov, feed)
                                     feedAdapter.submitList(this.toList())
                                 }
-                                Toast.makeText(requireContext(), "게시물이 정상적으로 수정되었습니다. ", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    requireContext(),
+                                    "리뷰가 정상적으로 수정되었습니다. ",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         })
 
                     }
                 })
 
+            }
+        }
+        //댓글 화면에서 수정한 경우 -> 이미 수정된 리뷰를 서버에 업로드한 이후.
+        if (result.resultCode == SubActivityComment.FEED_MODIFIED) {
+            val item = result.data!!.getParcelableExtra<Feed>("modifiedFeed")!!
+            need2Mov = item.position
+            item.duration = DdayCounter.getDuration(item.date!!)
+            feedAdapter.currentList.toMutableList().apply {
+                this.removeAt(need2Mov)
+                add(need2Mov, item)
+                feedAdapter.submitList(this.toList())
             }
         }
         //댓글 화면에서 게시물을 삭제하려고 한 경우
@@ -97,39 +117,38 @@ class FragmentFeed : Fragment() {
                     this.removeAt(target.position)
                     feedAdapter.submitList(this.toList())
                 }
-                Toast.makeText(context, "게시물이 정상적으로 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "리뷰가 정상적으로 삭제되었습니다.", Toast.LENGTH_SHORT).show()
             }
         }
 
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?,
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View {
         binding = TmpActivityFeedBinding.inflate(layoutInflater)
+        userInfoViewModel = ViewModelProvider(
+            viewModelStore,
+            UserInfoViewModel.Factory(requireContext())
+        )[UserInfoViewModel::class.java]
         getFeeds(true) // 서버로부터 피드 정보를 받아옴
-
-        //피드 새로 만들기
-        viewLifecycleOwner.lifecycle.coroutineScope.launch {
-            val data = ViewModelProvider(context as MainActivity, UserInfoViewModel.Factory(requireContext()))[UserInfoViewModel::class.java]
-            val mainUser = data.suspendGetUser(null)
-            FragmentFeedTopbarBinding.bind(binding.root).apply {
-                imgCreatefeed.setOnClickListener {
-                    val intent = Intent(context, SubActivityCreatePost::class.java)
-                    intent.putExtra("mainUser", mainUser)
-                    startActivityResult.launch(intent)
-                }
-                tvLogo.setOnClickListener {
-                    binding.recyclerView.smoothScrollToPosition(0)
-                }
-            }
-
-        }
-
         setAdapter()
+        userLiveData.observe(viewLifecycleOwner, Observer { userInfo ->
+            if (userInfo != null) {
+                FragmentFeedTopbarBinding.bind(binding.root).apply {
+                    imgCreatefeed.setOnClickListener {
+                        val intent = Intent(context, SubActivityCreatePost::class.java)
+                        intent.putExtra("mainUser", userInfo)
+                        startActivityResult.launch(intent)
+                    }
+                    tvLogo.setOnClickListener {
+                        binding.recyclerView.smoothScrollToPosition(0)
+                    }
+                }
 
-
+            }
+        })
         return binding.root
     }
 
@@ -203,9 +222,10 @@ class FragmentFeed : Fragment() {
                         super.onScrolled(recyclerView, dx, dy)
                         val layoutManager = recyclerView.layoutManager as LinearLayoutManager?
                         val lastVisibleItemPosition =
-                                layoutManager!!.findLastCompletelyVisibleItemPosition()
+                            layoutManager!!.findLastCompletelyVisibleItemPosition()
                         if ((lastVisibleItemPosition
-                                        == feedAdapter.currentList.lastIndex) && lastVisibleItemPosition > 0)
+                                    == feedAdapter.currentList.lastIndex) && lastVisibleItemPosition > 0
+                        )
                             getFeeds(false)
                     }
                 })
@@ -216,10 +236,10 @@ class FragmentFeed : Fragment() {
     //화면 이동 시 보여졌던 키보드를 숨김
     override fun onHiddenChanged(hidden: Boolean) {
         val imm =
-                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         if (binding.root.findViewById<View?>(R.id.edtComment) != null) imm.hideSoftInputFromWindow(
-                binding.root.findViewById<View>(R.id.edtComment).windowToken,
-                InputMethodManager.HIDE_NOT_ALWAYS
+            binding.root.findViewById<View>(R.id.edtComment).windowToken,
+            InputMethodManager.HIDE_NOT_ALWAYS
         )
         super.onHiddenChanged(hidden)
     }
@@ -241,14 +261,16 @@ class FragmentFeed : Fragment() {
             feedViewModel.nowFeedLoadState.observe(viewLifecycleOwner, Observer { nowState ->
                 //피드를 새로 불러올 때 활성화
                 showShimmer(
-                        if (!refreshing) false
-                        else nowState == LoadState.Loading)
+                    if (!refreshing) false
+                    else nowState == LoadState.Loading
+                )
                 //데이터 로딩이 다 되었다면
                 if (nowState == LoadState.Done) {
                     var current = feedAdapter.currentList.toMutableList() //기존에 가지고 있던 아이템 목록
                     if (refreshing) {
                         current.clear()
-                        binding.swiperefresh.isRefreshing = false //새로고침인 경우, 데이터가 다 로딩 된 후 새로고침 표시 없애기
+                        binding.swiperefresh.isRefreshing =
+                            false //새로고침인 경우, 데이터가 다 로딩 된 후 새로고침 표시 없애기
                     }
                     //만약 현재 목록이 비어있지 않고, 마지막 아이템이 로딩 아이템 이라면 마지막 아이템을 제거
                     if (current.isNotEmpty() && current.last().feedID == null) current.removeLast()
@@ -279,5 +301,10 @@ class FragmentFeed : Fragment() {
         binding.llFeed.isVisible = !bool
         if (bool) binding.SFLFeed.startShimmer() else binding.SFLFeed.stopShimmer()
         binding.SFLFeed.isVisible = bool
+    }
+
+    override fun onResume() {
+        super.onResume()
+        userInfoViewModel.getUser(null, userLiveData)
     }
 }

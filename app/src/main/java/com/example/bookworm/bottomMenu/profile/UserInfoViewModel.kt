@@ -41,10 +41,6 @@ class UserInfoViewModel(context: Context) : ViewModel() {
         }
     }
 
-    fun setUserLiveData(liveData: MutableLiveData<UserInfo>) {
-        userInfoLiveData = liveData;
-    }
-
     //사용자 가져오기
     fun getUser(token: String?, getFromExt: Boolean) {
         viewModelScope.launch {
@@ -52,10 +48,11 @@ class UserInfoViewModel(context: Context) : ViewModel() {
         }
     }
 
-    suspend fun suspendGetUser(token: String?) = repo.getUser(token, token != null)
+    suspend fun suspendGetUser(token: String?, boolean: Boolean = false) =
+        repo.getUser(token, if (boolean) boolean else token != null)
 
     //사용자 가져오기
-    fun getUser(token: String?, liveData: MutableLiveData<UserInfo>,getFromExt: Boolean = true) {
+    fun getUser(token: String?, liveData: MutableLiveData<UserInfo>, getFromExt: Boolean = true) {
         viewModelScope.launch {
             liveData.value = repo.getUser(token, getFromExt) //데이터 변경을 감지하면, 값이 업데이트 된다.
         }
@@ -64,9 +61,9 @@ class UserInfoViewModel(context: Context) : ViewModel() {
     //사용자 생성
     fun createUser(userInfo: UserInfo, liveData: MutableLiveData<Boolean>) =
 
-            viewModelScope.launch {
-                liveData.value = repo.createUser(userInfo) //값을 가져올 필요는 없으므로
-            }
+        viewModelScope.launch {
+            liveData.value = repo.createUser(userInfo) //값을 가져올 필요는 없으므로
+        }
 
 
     //이름 중복 확인
@@ -76,22 +73,22 @@ class UserInfoViewModel(context: Context) : ViewModel() {
             val query = collection.whereEqualTo("UserInfo.username", name)
             launch {
                 query.get()
-                        .addOnSuccessListener {
-                            isDuplicated.value = !it.isEmpty //비어있다면(isEmpty=true) 중복이 아닌 것이고,
-                            Log.d("result", Arrays.toString(it.documents.toTypedArray()))
-                            //비어 있지 않다면 (isEmpty=false) 중복인 것.
-                        }.addOnFailureListener {
-                            Log.e("resultErr", "cannot get result ")
-                        }
+                    .addOnSuccessListener {
+                        isDuplicated.value = !it.isEmpty //비어있다면(isEmpty=true) 중복이 아닌 것이고,
+                        Log.d("result", Arrays.toString(it.documents.toTypedArray()))
+                        //비어 있지 않다면 (isEmpty=false) 중복인 것.
+                    }.addOnFailureListener {
+                        Log.e("resultErr", "cannot get result ")
+                    }
             }.join()
         }
     }
 
 
     fun getBookWorm(token: String) =
-            viewModelScope.launch {
-                bwdata.value = repo.getBookWorm(token)
-            }
+        viewModelScope.launch {
+            bwdata.value = repo.getBookWorm(token)
+        }
 
     fun updateUser(user: UserInfo) {
         viewModelScope.launch {
@@ -114,12 +111,12 @@ class UserInfoViewModel(context: Context) : ViewModel() {
     fun getFeedList(token: String) {
         viewModelScope.launch {
             var data =
-                    FirebaseFirestore.getInstance().collection("feed").whereEqualTo("userToken", token)
-                            .orderBy(
-                                    "feedID",
-                                    Query.Direction.DESCENDING
-                            )
-                            .get().await()
+                FirebaseFirestore.getInstance().collection("feed").whereEqualTo("userToken", token)
+                    .orderBy(
+                        "feedID",
+                        Query.Direction.DESCENDING
+                    )
+                    .get().await()
             var arrayList = ArrayList<Feed>()
             data.documents.forEach {
                 var feed = it.toObject(Feed::class.java)!!
@@ -146,6 +143,7 @@ class UserInfoViewModel(context: Context) : ViewModel() {
 
     //장르를 설정하는 코드
     fun setGenre(categoryname: String?, user: UserInfo): String {
+        //만약 게시물 삭제시엔 카테고리를 줄임.
         val tokenizer = StringTokenizer(categoryname, ">")
         tokenizer.nextToken() // 두번째 분류를 원하기 때문에 맨 앞 분류 꺼냄
         var category = tokenizer.nextToken()
@@ -175,17 +173,10 @@ class UserInfoViewModel(context: Context) : ViewModel() {
                 category = "공부"
             }
         }
-        var unboxint = 0
-        user.apply {
-            if (null == genre!![category]) {
-                genre!![category] = 1
-            } else {
-                unboxint = genre!![category]!!
-                unboxint++
-                genre!!.replace(category, unboxint)
-            }
-        }
-
+        //장르 세팅 코드
+//        if (isDelete) user.genre!![category] = user.genre!![category]!! - 1 //만약 리뷰 삭제 시엔 해당 리뷰의 장르수를 1 줄임
+        if (!user.genre!!.containsKey(category)) user.genre!![category] = 1
+        else user.genre!![category] = user.genre!![category]!! + 1;
         return category
 
 

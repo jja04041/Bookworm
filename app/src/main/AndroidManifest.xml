@@ -31,9 +31,6 @@
             android:name=".bottomMenu.challenge.board.subactivity_challenge_board"
             android:exported="false" />
         <activity
-            android:name="com.example.bookworm.bottomMenu.feed.oldItems.subActivity_Feed_Modify"
-            android:exported="false" />
-        <activity
             android:name="com.example.bookworm.bottomMenu.feed.ImagePicker"
             android:exported="false" />
         <activity
@@ -62,16 +59,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.bookworm.extension.follow.view.FollowerActivity"
+            android:name="com.example.bookworm.bottomMenu.profile.follow.view.FollowerActivity"
             android:exported="false" />
         <!-- 카카오 계정 연동을 위한 AppKey -->
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakaoKey" /> <!-- SubActivities -->
-        <activity
-            android:name="com.example.bookworm.bottomMenu.feed.oldItems.subActivity_Feed_Create"
-            android:exported="false"
-            android:parentActivityName=".appLaunch.views.MainActivity" />
+
         <activity
             android:name=".bottomMenu.profile.submenu.album.AlbumDisplay.view.ShowAlbumContentActivity"
             android:exported="false"
@@ -144,13 +138,13 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".bottomMenu.search.searchtest.views.SearchMainActivity" />
+        <activity android:name=".bottomMenu.search.views.SearchMainActivity" />
         <activity android:name=".bottomMenu.feed.SubActivityCreatePost" />
         <activity android:name=".bottomMenu.challenge.subactivity.SubActivityCreateChallenge" />
         <activity android:name=".bottomMenu.challenge.subactivity.SubActivityChallengeInfo" />
         <activity android:name=".bottomMenu.profile.submenu.album.AlbumCreate.view.CreateAlbumContentActivity" />
         <activity android:name=".bottomMenu.profile.submenu.album.AlbumCreate.view.ShowFeedListForCreateAlbum" />
-        <activity android:name=".bottomMenu.search.searchtest.views.BookDetailActivity" />
+        <activity android:name=".bottomMenu.search.views.BookDetailActivity" />
         <activity android:name=".bottomMenu.feed.SubActivityModifyPost" /> <!-- cache directory file provider paths -->
         <provider
             android:name="androidx.core.content.FileProvider"

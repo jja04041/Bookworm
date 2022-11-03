@@ -11,13 +11,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.signature.ObjectKey
 import com.example.bookworm.R
-import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.feed.Feed
 import com.example.bookworm.bottomMenu.feed.customMenuPopup
 import com.example.bookworm.bottomMenu.profile.views.ProfileInfoActivity
-import com.example.bookworm.bottomMenu.search.searchtest.views.BookDetailActivity
+import com.example.bookworm.bottomMenu.search.views.BookDetailActivity
 import com.example.bookworm.databinding.LayoutCommentItemBinding
 import com.example.bookworm.databinding.LayoutCommentSummaryBinding
 import java.text.DateFormat
@@ -44,10 +44,10 @@ class CommentsAdapter(val context: Context) : ListAdapter<Any, RecyclerView.View
         }
     }
 
-    //각 아이템에 고유값을 부여하여, 리스트가 갱신될때, 이미 있는 아이템이라면 갱신하지 않음.
-    override fun getItemId(position: Int): Long {
-        return currentList[position].hashCode().toLong()
-    }
+//    //각 아이템에 고유값을 부여하여, 리스트가 갱신될때, 이미 있는 아이템이라면 갱신하지 않음.
+//    override fun getItemId(position: Int): Long {
+//        return currentList[position].hashCode().toLong()
+//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -83,6 +83,14 @@ class CommentsAdapter(val context: Context) : ListAdapter<Any, RecyclerView.View
     //댓글 뷰홀더
     inner class CommentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = LayoutCommentItemBinding.bind(itemView)
+
+        //댓글 삭제 후 진행할 루틴
+        private fun afterDoDeleteCommentItem(item: Comment) {
+            val current = currentList.toMutableList()
+            current.removeAt(item.position!!)//댓글 삭제
+            submitList(current.toMutableList())
+        }
+
         fun bind(item: Comment) {
             binding.apply {
                 //DataBinding을 통한 뷰 세팅
@@ -104,12 +112,7 @@ class CommentsAdapter(val context: Context) : ListAdapter<Any, RecyclerView.View
                         item.position = bindingAdapterPosition
                         popupMenu.setItem(item)
                         popupMenu.liveState.observe(context as SubActivityComment) {
-                            if (it == popupMenu.COMMENT_DELETE) {
-                                currentList.toMutableList().apply {
-                                    removeAt(item.position!!)
-                                    submitList(toList())
-                                }
-                            }
+                            if (it == popupMenu.COMMENT_DELETE) afterDoDeleteCommentItem(item)
                         }
                     }
                 }
@@ -122,10 +125,6 @@ class CommentsAdapter(val context: Context) : ListAdapter<Any, RecyclerView.View
     inner class SummaryItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = LayoutCommentSummaryBinding.bind(itemView)
 
-        private fun deleteThisFeed(feed: Feed) {
-
-        }
-
         @SuppressLint("SetTextI18n", "UseCompatLoadingForDrawables")
         fun bind(item: Feed) {
             binding.apply {
@@ -133,8 +132,9 @@ class CommentsAdapter(val context: Context) : ListAdapter<Any, RecyclerView.View
                 item.creatorInfo.apply {
                     tvNickname.text = username
                     Glide.with(itemView.context)
-                            .load(profileimg).circleCrop()
-                            .into(ivProfileImage)
+                        .load(profileimg).diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true).circleCrop()
+                        .into(ivProfileImage)
                 }
                 btnFeedMenu.setOnClickListener { v ->
                     val popupMenu = customMenuPopup(context, v)
@@ -152,6 +152,13 @@ class CommentsAdapter(val context: Context) : ListAdapter<Any, RecyclerView.View
                         }
                     }
                 }
+
+                //프로필 클릭 시 해당 사용자의 프로필 정보 화면으로 이동하게
+                llProfile.setOnClickListener {
+                    val intent = Intent(itemView.context, ProfileInfoActivity::class.java)
+                    intent.putExtra("userID", item.userToken)
+                    itemView.context.startActivity(intent)
+                }
                 //내용
                 //책
                 item.book.apply {
@@ -166,10 +173,10 @@ class CommentsAdapter(val context: Context) : ListAdapter<Any, RecyclerView.View
                 }
                 //피드 내용
                 tvFeedText.text = item.feedText
-                tvIfModified.isVisible = item.isModified
-                if (item.imgurl != "") Glide.with(itemView.context).load(item.imgurl).signature(ObjectKey(System.currentTimeMillis().toString())).into(ivFeedImage)
+                tvIfModified.isVisible = item.modified
+                if (item.imgurl != "") Glide.with(itemView.context).load(item.imgurl)
+                    .signature(ObjectKey(System.currentTimeMillis().toString())).into(ivFeedImage)
                 ivFeedImage.isVisible = (item.imgurl != "")
-                tvCommentCount.text = "댓글 ${item.commentsCount}개"
                 tvDate.text = item.duration
             }
         }
@@ -178,8 +185,7 @@ class CommentsAdapter(val context: Context) : ListAdapter<Any, RecyclerView.View
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val safePosition = holder.bindingAdapterPosition
-        var item = getItem(safePosition)
-        when (item) {
+        when (val item = getItem(safePosition)) {
             is Feed -> {
                 (holder as SummaryItemViewHolder).bind(item)
             }

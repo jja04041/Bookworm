@@ -68,35 +68,7 @@ class AlbumProcessViewModel(val context: Context, val pv: UserInfoViewModel) : V
 //        albumData.containsList!!.addAll(list)
     }
 
-    //앨범데이터 업데이트
-    fun updateAlbum() {
-        newAlbumData.value = albumData
-    }
 
-    //앨범 이름 사용가능 여부 확인
-    fun isOkayToUse(name: String) {
-        if (name.equals("") || name.contains(" ")) {
-            Toast.makeText(
-                    context,
-                    "앨범명에는 공백을 포함할 수 없습니다. \n 다시 시도해 주세요.",
-                    Toast.LENGTH_SHORT
-            ).show()
-        } else
-            viewModelScope.launch {
-                var result = collectionReference.whereEqualTo("albumName", name).get().await()
-                if (result.isEmpty) {
-                    parentActivity.albumProcessViewModel.modifyName(name)
-                    //데이터 삽입
-//                    parentActivity.switchTab(1)
-                } else {
-                    Toast.makeText(
-                            context,
-                            "앨범명이 중복되었습니다. \n 다른 이름으로 시도해주세요",
-                            Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-    }
 
     //앨범 이름 사용가능 여부 확인
     suspend fun titleDuplicationCheck(name: String): Boolean {
@@ -154,25 +126,4 @@ class AlbumProcessViewModel(val context: Context, val pv: UserInfoViewModel) : V
         }
     }
 
-    private fun getImgBitmap(): Bitmap? {
-        try {
-            var bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                ImageDecoder.decodeBitmap(
-                        ImageDecoder.createSource(
-                                context.contentResolver,
-                                Uri.parse(albumData.thumbnail!!)
-                        )
-                )
-            } else {
-                MediaStore.Images.Media.getBitmap(
-                        context.contentResolver,
-                        Uri.parse(albumData.thumbnail!!)
-                )
-            }
-            return bitmap
-        } catch (e: IOException) {
-            e.printStackTrace()
-            return null
-        }
-    }
 }

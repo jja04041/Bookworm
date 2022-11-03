@@ -3,17 +3,10 @@ package com.example.bookworm.core.dataprocessing.repository
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import androidx.lifecycle.ViewModelProvider
-import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.bookworm.BookWorm
 import com.example.bookworm.bottomMenu.feed.FireStoreLoadModule
-import com.example.bookworm.bottomMenu.feed.SubActivityCreatePost
-import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
-import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.profile.submenu.album.AlbumData
-import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
 import com.example.bookworm.core.userdata.UserInfo
-import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.*
 import com.google.firebase.messaging.FirebaseMessaging
@@ -180,20 +173,6 @@ class UserRepository(context: Context) : DataRepository.HandleUser {
 
 //Public method
 
-
-    //사용자가 현재 팔로우 중인지 확인
-    suspend fun isFollowNow(user: UserInfo) = CoroutineScope(Dispatchers.IO).async {
-        var localUser = getUser(null, false) //현재 유저의 정보를 가져옴
-        //현재 유저의 팔로잉 목록에서 인자로 넘겨받은 유저의 토큰이 있는지 확인
-
-        var query = userCollectionRef.document(localUser!!.token).collection("following")
-                .whereEqualTo(FieldPath.documentId(), user.token)
-        async {
-            var it = query.get().await()
-            !it.isEmpty //리턴 값
-        }.await()
-    }.await()
-
 //Private Method
 
     //사용자 정보 저장
@@ -283,41 +262,4 @@ class UserRepository(context: Context) : DataRepository.HandleUser {
     }
 
 
-    //팔로우 관련 함수
-    //type True: 팔로우 / False: 팔로우 해제
-    suspend fun follow(toUserInfo: UserInfo, type: Boolean): UserInfo {
-        val fromUserInfo = CoroutineScope(Dispatchers.IO).async {
-            getUser(null, false)
-        }.await()!!//현재 사용자
-        followProcessing(fromUserInfo, toUserInfo, type).await()//팔로우 처리
-        //반환할 값(업데이트된 값)
-        val returnValue = CoroutineScope(Dispatchers.IO).async {
-            getUser(toUserInfo.token, true)
-        }.await()
-        updateInLocal(getUser(null, true)!!) //업데이트 된 사용자 정보를 로컬에도 반영
-        return returnValue!!
-    }
-
-    //팔로우 처리
-    fun followProcessing(
-            fromUserInfo: UserInfo,
-            toUserInfo: UserInfo,
-            type: Boolean,
-    ): Task<Transaction> {
-        val userCollectionRef = FireStoreLoadModule.provideQueryPathToUserCollection()
-        val fromRef = userCollectionRef.document(fromUserInfo.token)
-        val toRef = userCollectionRef.document(toUserInfo.token)
-        val fromRefFollow = fromRef.collection("following").document(toUserInfo.token)
-        val toRefFollow = toRef.collection("follower").document(fromUserInfo.token)
-
-        return FireStoreLoadModule.provideFirebaseInstance().runTransaction { trans ->
-            trans.update(fromRef, "followingCounts", FieldValue.increment(if (type) 1L else -1L))
-                    .update(toRef, "followerCounts", FieldValue.increment(if (type) 1L else -1L))
-                    .apply {
-                        if (type) set(fromRefFollow, toUserInfo)
-                                .set(toRefFollow, fromUserInfo)
-                        else delete(fromRefFollow).delete(toRefFollow)
-                    }
-        }
-    }
 }

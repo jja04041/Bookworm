@@ -298,7 +298,8 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -327,7 +328,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/gray" />
+                android:background="@color/gray"
+                android:visibility="gone"/>
 
             <FrameLayout
                 android:layout_width="match_parent"

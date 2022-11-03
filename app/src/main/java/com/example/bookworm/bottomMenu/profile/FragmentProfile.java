@@ -20,25 +20,20 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.bookworm.R;
-import com.example.bookworm.achievement.Achievement;
-import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.profile.submenu.SubMenuPagerAdapter;
 import com.example.bookworm.bottomMenu.profile.views.ProfileSettingActivity;
 import com.example.bookworm.chat.newchat.Activity_chatlist;
-import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.databinding.FragmentProfileBinding;
-import com.example.bookworm.extension.follow.view.FollowViewModel;
-import com.example.bookworm.extension.follow.view.FollowerActivity;
+import com.example.bookworm.bottomMenu.profile.follow.modules.FollowViewModel;
+import com.example.bookworm.bottomMenu.profile.follow.view.FollowerActivity;
 
 public class FragmentProfile extends Fragment implements LifecycleObserver {
 
-    private BookWorm bookworm;
-    private Achievement achievement;
     private FragmentProfileBinding binding;
     private Context current_context;
-    private FBModule fbModule;
     UserInfoViewModel pv;
+    Boolean isUpdate = false; //업데이트만 하는 경우
     FollowViewModel fv;
     private UserInfo NowUser;
     SubMenuPagerAdapter menuPagerAdapter;
@@ -46,7 +41,10 @@ public class FragmentProfile extends Fragment implements LifecycleObserver {
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == RESULT_CANCELED)
-                    fv.WithoutSuspendgetUser(NowUser.getToken());
+                    pv.getUser(NowUser.getToken(), true);
+                if (result.getResultCode() == ProfileSettingActivity.MODIFY_OK) {
+                    pv.getUser(NowUser.getToken(), true);
+                }
             });
 
     @Override
@@ -61,9 +59,9 @@ public class FragmentProfile extends Fragment implements LifecycleObserver {
         binding = FragmentProfileBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         current_context = getActivity();
+        assert current_context != null;
         pv = new ViewModelProvider(this, new UserInfoViewModel.Factory(current_context)).get(UserInfoViewModel.class);
         fv = new ViewModelProvider(this, new FollowViewModel.Factory(current_context)).get(FollowViewModel.class);
-        fbModule = new FBModule(current_context);
         //서브 메뉴를 보여주기위한 어댑터
         menuPagerAdapter = new SubMenuPagerAdapter(null, getChildFragmentManager());
 
@@ -71,12 +69,13 @@ public class FragmentProfile extends Fragment implements LifecycleObserver {
 //뷰모델 안에서 데이터가 배치된다.
         binding.btnSetting.setOnClickListener(view1 -> {
             Intent intent = new Intent(current_context, ProfileSettingActivity.class);
-            startActivity(intent);
+            startActivityResult.launch(intent);
+//            startActivity(intent);
         });
 
 
         binding.btnChatlist.setOnClickListener(v -> {
-            Intent intent = new Intent (getActivity(), Activity_chatlist.class);
+            Intent intent = new Intent(getActivity(), Activity_chatlist.class);
             startActivity(intent);
         });
 
@@ -88,20 +87,15 @@ public class FragmentProfile extends Fragment implements LifecycleObserver {
         binding.tabLayout.getTabAt(0).select();
         //데이터를 가져옴
         pv.getUser(null, false);
-        fv.WithoutSuspendgetUser(null);
+        isUpdate = true;
+        pv.getUser(null, true);
 
         //데이터 수정을 감지함
         pv.getUserInfoLiveData().observe(getViewLifecycleOwner(), userinfo -> {
             NowUser = userinfo;
             pv.getBookWorm(NowUser.getToken());
-            achievement = new Achievement(current_context, fbModule, NowUser, bookworm);
-            binding.tvFollowerCount.setText(String.valueOf(userinfo.getFollowerCounts()));
-            binding.tvFollowingCount.setText(String.valueOf(userinfo.getFollowingCounts()));
-            setUI(NowUser);
-        });
-        fv.getData().observe(getViewLifecycleOwner(), userInfo -> {
-            binding.tvFollowerCount.setText(String.valueOf(userInfo.getFollowerCounts()));
-            binding.tvFollowingCount.setText(String.valueOf(userInfo.getFollowingCounts()));
+            if (!isUpdate) setUI(NowUser);
+            else updateUI(NowUser);
         });
         pv.getBwdata().observe(getViewLifecycleOwner(), bookWorm -> {
             binding.tvReadBookCount.setText(String.valueOf(bookWorm.getReadCount()));
@@ -113,6 +107,14 @@ public class FragmentProfile extends Fragment implements LifecycleObserver {
         return view;
     }
 
+    //프로필 화면으로 돌아올 떄만 실행되는 메소드
+    private void updateUI(UserInfo user) {
+        binding.tvFollowerCount.setText(String.valueOf(user.getFollowerCounts()));
+        binding.tvFollowingCount.setText(String.valueOf(user.getFollowingCounts()));
+        //진행이 다끝나면 변수를 off
+        isUpdate = false;
+    }
+
     private void setUI(UserInfo user) {
         Glide.with(current_context)
                 .load(user.getProfileimg())
@@ -121,9 +123,10 @@ public class FragmentProfile extends Fragment implements LifecycleObserver {
                 .circleCrop()
                 .into(binding.imgFragProfileProfile);
         //프로필사진 로딩후 삽입.
-        binding.tvUserName.setText(user.getUsername());
+        binding.tvFollowerCount.setText(String.valueOf(user.getFollowerCounts()));
+        binding.tvFollowingCount.setText(String.valueOf(user.getFollowingCounts()));
+        binding.tvNickname.setText(user.getUsername());
         binding.edtIntroduce.setText(user.getIntroduce());
-
 
 
         //팔로워액티비티 실행하기
@@ -154,8 +157,8 @@ public class FragmentProfile extends Fragment implements LifecycleObserver {
 
     @Override
     public void onResume() {
-        pv.getUser(null, false);
-        fv.WithoutSuspendgetUser(null);
+        pv.getUser(null, true);
+        isUpdate = true;
         super.onResume();
     }
 
@@ -163,8 +166,8 @@ public class FragmentProfile extends Fragment implements LifecycleObserver {
     public void onHiddenChanged(boolean hidden) {
         if (!hidden) {
             menuPagerAdapter.getItem(0).onResume();
-            fv.WithoutSuspendgetUser(null);
-            pv.getBookWorm(NowUser.getToken());
+            pv.getUser(null, true);
+            isUpdate = true;
         }
         super.onHiddenChanged(hidden);
     }
@@ -175,7 +178,7 @@ public class FragmentProfile extends Fragment implements LifecycleObserver {
             binding.ivMedal.setVisibility(View.VISIBLE);
             switch (Integer.parseInt(String.valueOf(userInfo.getTier()))) { //티어 0 ~ 5에 따라 다른 메달이 나오게
                 case 1:
-                    binding.ivMedal.setImageResource(R.drawable.medal_bronze);
+//                    binding.ivMedal.setImageResource(R.drawable.medal_bronze);
                     break;
                 case 2:
                     binding.ivMedal.setImageResource(R.drawable.medal_silver);
@@ -197,8 +200,6 @@ public class FragmentProfile extends Fragment implements LifecycleObserver {
             binding.ivMedal.setImageResource(0);
         }
     }
-
-
 
 
 }

@@ -47,10 +47,10 @@
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="더보기" />
+<!--            <Button-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="더보기" />-->
         </LinearLayout>
 
         <LinearLayout

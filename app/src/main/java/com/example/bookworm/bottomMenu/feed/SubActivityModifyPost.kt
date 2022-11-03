@@ -1,7 +1,6 @@
 package com.example.bookworm.bottomMenu.feed
 
 import android.app.Dialog
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -9,8 +8,6 @@ import android.os.Bundle
 import com.bumptech.glide.request.target.Target
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.isVisible
@@ -19,8 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
-import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
-import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
+import com.example.bookworm.bottomMenu.search.bookitems.Book
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing
 import com.example.bookworm.databinding.CustomDialogLabelBinding
 import com.example.bookworm.databinding.SubactivityModifyPostBinding
@@ -76,20 +72,33 @@ class SubActivityModifyPost : AppCompatActivity() {
             ivpicture.apply {
                 if (originData.imgurl != "") {
                     isVisible = true
-                    Glide.with(this@SubActivityModifyPost).load(originData.imgurl).signature(ObjectKey(System.currentTimeMillis().toString())).listener(object : RequestListener<Drawable> {
-                        //이미지 로딩 실퍂 시
-                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                            return false
-                        }
+                    Glide.with(this@SubActivityModifyPost).load(originData.imgurl)
+                        .signature(ObjectKey(System.currentTimeMillis().toString()))
+                        .listener(object : RequestListener<Drawable> {
+                            //이미지 로딩 실퍂 시
+                            override fun onLoadFailed(
+                                e: GlideException?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                return false
+                            }
 
-                        //이미지 로딩 성공시
-                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                            originBitmap = resource!!.toBitmap()
-                            imgBitmap = originBitmap
-                            btnFeedImgDelete.isVisible = true
-                            return false
-                        }
-                    }).into(this)
+                            //이미지 로딩 성공시
+                            override fun onResourceReady(
+                                resource: Drawable?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                dataSource: DataSource?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                originBitmap = resource!!.toBitmap()
+                                imgBitmap = originBitmap
+                                btnFeedImgDelete.isVisible = true
+                                return false
+                            }
+                        }).into(this)
                 }
             }
             btnBack.setOnClickListener {
@@ -102,12 +111,23 @@ class SubActivityModifyPost : AppCompatActivity() {
                         lastUri = uri //중복으로 받아와지는 문제를 해결하기 위함이다.
                         Glide.with(root).load(uri).listener(object : RequestListener<Drawable> {
                             //이미지 로딩 실퍂 시
-                            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                            override fun onLoadFailed(
+                                e: GlideException?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                isFirstResource: Boolean
+                            ): Boolean {
                                 return false
                             }
 
                             //이미지 로딩 성공시
-                            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                            override fun onResourceReady(
+                                resource: Drawable?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                dataSource: DataSource?,
+                                isFirstResource: Boolean
+                            ): Boolean {
                                 imgBitmap = resource!!.toBitmap()
                                 ivpicture.isVisible = true
                                 btnFeedImgDelete.isVisible = true
@@ -127,7 +147,11 @@ class SubActivityModifyPost : AppCompatActivity() {
                 text = newData.book.title
                 // 수정 시엔 책 변경 불가
                 setOnClickListener {
-                    Toast.makeText(this@SubActivityModifyPost, "게시물 수정 시엔 도서를 변경할 수 없습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@SubActivityModifyPost,
+                        "리뷰 수정 시엔 도서를 변경할 수 없습니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
 //                setOnClickListener {
 //                    val intent = Intent(this@SubActivityModifyPost, SearchMainActivity::class.java)
@@ -136,12 +160,14 @@ class SubActivityModifyPost : AppCompatActivity() {
 //                }
             }
             btnFinish.setOnClickListener {
+
                 createAlert("upload")
             }
             edtFeedText.setText(newData.feedText)
 
             originData.creatorInfo.apply {
-                Glide.with(this@SubActivityModifyPost).load(profileimg).circleCrop().into(ivProfileImage)
+                Glide.with(this@SubActivityModifyPost).load(profileimg).circleCrop()
+                    .into(ivProfileImage)
                 tvNickname.text = username
             }
         }
@@ -157,10 +183,11 @@ class SubActivityModifyPost : AppCompatActivity() {
         binding!!.apply {
             newData.feedText = edtFeedText.text.toString()
             if (newData.feedText == "" || newData.book == Book()) {
-                Toast.makeText(this@SubActivityModifyPost, "작성되지 않은 항목이 있습니다. ", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@SubActivityModifyPost, "작성되지 않은 항목이 있습니다. ", Toast.LENGTH_SHORT)
+                    .show()
             } else if (newData.feedText != originData.feedText || newData.book.itemId != originData.book.itemId || originBitmap != imgBitmap) {
                 newData.date = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
-                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
                 //이곳에서 이미지를 서버에 올리고, 그 url을 받아 게시물을 작성해보아야겠다.
                 val liveData = MutableLiveData<String>()
                 if (imgBitmap == null) {
@@ -168,10 +195,9 @@ class SubActivityModifyPost : AppCompatActivity() {
                     sendDataToBeforeActivity()
                 } else {
                     feedViewModel.getFeedImgUrl(newData, imgBitmap, imageProcessing, liveData)
-                    val tmpUrl: String? = null //임시 저장하는 변수
                     liveData.observe(this@SubActivityModifyPost) {
                         //수정된 게시물 정보를 intent를 통해 이 액티비티를 호출한 부모 액티비티에 데이터를 전달한다.
-                        if (it != null && it != tmpUrl) {
+                        if (it != null && !(imgBitmap != null && it == "")) {
                             newData.imgurl = it
                             sendDataToBeforeActivity()
                         }
@@ -202,14 +228,14 @@ class SubActivityModifyPost : AppCompatActivity() {
                 }
                 when (type) {
                     "upload" -> {
-                        tvMessage.text = "게시물을 수정하시겠습니까?"
+                        tvMessage.text = "리뷰를 수정하시겠습니까?"
                         btnYes.setOnClickListener {
                             dismiss()
                             processUpdatePost()
                         }
                     }
                     "btnBack" -> {
-                        tvMessage.text = "게시물 수정을 그만하시겠습니까?"
+                        tvMessage.text = "리뷰 수정을 그만하시겠습니까?"
                         btnYes.setOnClickListener {
                             dismiss()
                             finish()

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.bookworm.bottomMenu.feed.oldItems.subActivity_Feed_Create;
 import com.example.bookworm.bottomMenu.profile.views.ProfileModifyActivity;
 import com.example.bookworm.core.internet.interfaces.GetDataInterface;
 
@@ -71,34 +70,7 @@ public class Module {
                 break;
         }
 
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
 
-                if (response.isSuccessful() && response.body() != null) {
-                    Log.d("책 정보 : ", response.body());
-                    if (idx == 3 && context instanceof subActivity_Feed_Create) {
-                        ((subActivity_Feed_Create) context).feedUpload(url + response.body());
-                    } else if (idx == 3 && context instanceof ProfileModifyActivity) {
-
-                    } else {
-                        try {
-                            JSONObject json = new JSONObject(response.body());
-                            parseResult(idx, json);
-                        } catch (JSONException | InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Log.e("에러 : ", t.getMessage());
-                Toast.makeText(context, "서버에 접속할 수 없습니다.\n 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
 

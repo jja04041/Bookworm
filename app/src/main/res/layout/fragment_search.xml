@@ -67,12 +67,12 @@
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/btnMore"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/white_button"
-                    android:text="더보기" />
+<!--                <Button-->
+<!--                    android:id="@+id/btnMore"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:background="@drawable/white_button"-->
+<!--                    android:text="더보기" />-->
             </LinearLayout>
 
 

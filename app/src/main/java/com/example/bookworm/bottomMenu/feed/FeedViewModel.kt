@@ -11,17 +11,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.bookworm.LoadState
-import com.example.bookworm.achievement.Achievement
 import com.example.bookworm.appLaunch.views.MainActivity
 import com.example.bookworm.bottomMenu.feed.comments.Comment
 import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
-import com.example.bookworm.bottomMenu.search.searchtest.views.BookDetailActivity
-import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
+import com.example.bookworm.bottomMenu.search.views.BookDetailActivity
+import com.example.bookworm.bottomMenu.search.views.SearchMainActivity
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing
-import com.example.bookworm.core.internet.FBModule
 import com.example.bookworm.core.userdata.UserInfo
-import com.google.firebase.firestore.FieldValue
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import java.text.DateFormat
@@ -33,15 +30,16 @@ import java.util.*
 class FeedViewModel(val context: Context) : ViewModel() {
     private val dataRepository = FeedDataRepository()
     private val userInfoViewModel = ViewModelProvider(
-            when (context) {
-                is MainActivity -> context
-                is SubActivityComment -> context
-                is SubActivityCreatePost -> context
-                is SubActivityModifyPost -> context
-                is BookDetailActivity -> context //책 리뷰 받기 위해
-                else -> context as SearchMainActivity
-            },
-            UserInfoViewModel.Factory(context))[UserInfoViewModel::class.java]
+        when (context) {
+            is MainActivity -> context
+            is SubActivityComment -> context
+            is SubActivityCreatePost -> context
+            is SubActivityModifyPost -> context
+            is BookDetailActivity -> context //책 리뷰 받기 위해
+            else -> context as SearchMainActivity
+        },
+        UserInfoViewModel.Factory(context)
+    )[UserInfoViewModel::class.java]
     var postsData: List<Feed>? = emptyList() //불러오는 피드 데이터 목록을 저장
     var commentsData: List<Comment>? = emptyList() //불러오는 댓글 데이터 목록을 저장
     val nowFeedLoadState = MutableLiveData<LoadState>() //현재 피드 로드 상태를 추적하는 LiveData
@@ -59,8 +57,6 @@ class FeedViewModel(val context: Context) : ViewModel() {
             } else ""
         }
     }
-
-    val fbModule = FBModule(context)
 
     class Factory(val context: Context) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -81,7 +77,12 @@ class FeedViewModel(val context: Context) : ViewModel() {
         }
     }
 
-    fun getFeedImgUrl(feed: Feed, bitmap: Bitmap?, imageProcess: ImageProcessing, liveData: MutableLiveData<String>) {
+    fun getFeedImgUrl(
+        feed: Feed,
+        bitmap: Bitmap?,
+        imageProcess: ImageProcessing,
+        liveData: MutableLiveData<String>
+    ) {
         liveData.value = null
         viewModelScope.launch {
             if (bitmap != null) {
@@ -97,11 +98,11 @@ class FeedViewModel(val context: Context) : ViewModel() {
         viewModelScope.launch {
             val url = imageJob(imgBitmap, imageProcess, feed).await()
             if (url != null) {
-                if (!feed.isModified) feed.imgurl = url
+                if (!feed.modified) feed.imgurl = url
                 //파이어스토어에 게시물 업로드
                 try {
                     //수정된 게시물인 경우
-                    if (feed.isModified) {
+                    if (feed.modified) {
                         dataRepository.modifyPost(feed).await()
                         nowFeedUploadState.value = LoadState.Done
                     }
@@ -119,7 +120,12 @@ class FeedViewModel(val context: Context) : ViewModel() {
     }
 
     //댓글을 추가/삭제하는 함수
-    fun manageComment(comment: Comment, feedId: String, isAdd: Boolean = true, state: MutableLiveData<LoadState>? = null) {
+    fun manageComment(
+        comment: Comment,
+        feedId: String,
+        isAdd: Boolean = true,
+        state: MutableLiveData<LoadState>? = null
+    ) {
         viewModelScope.launch {
             if (state != null) state.value = LoadState.Loading
             else nowCommentLoadState.value = LoadState.Loading
@@ -139,15 +145,15 @@ class FeedViewModel(val context: Context) : ViewModel() {
     }
 
     //좋아요를 관리하는 함수
-    fun manageLike(feedId: String, nowUser: UserInfo, isLiked: Boolean) {
+    fun manageLike(feed: Feed, nowUser: UserInfo) {
         nowLikeState.value = LoadState.Loading
         viewModelScope.launch {
             try {
-                dataRepository.manageLike(feedId, nowUser.token, isLiked)
-                val user = userInfoViewModel.suspendGetUser(nowUser.token)
-                userInfoViewModel.updateUser(user!!)
+                dataRepository.manageLike(feed.feedID!!, nowUser.token, feed.isUserLiked) ?: throw Exception()
+                val user = userInfoViewModel.suspendGetUser(nowUser.token)!!
+                userInfoViewModel.updateUser(user)
                 nowLikeState.value = LoadState.Done
-            } catch (e: NullPointerException) {
+            } catch (e: Exception) {
                 //좋아요 처리가 불가한 경우
                 nowLikeState.value = LoadState.Error
             }
@@ -157,14 +163,16 @@ class FeedViewModel(val context: Context) : ViewModel() {
     //유저의 정보 업데이트 (게시물 업로드시)
     private fun updateUserInfo(feed: Feed, isDelete: Boolean = false) {
         feed.creatorInfo.apply {
+            // 리뷰 업로드 시
             if (!isDelete) {
-                userInfoViewModel.setGenre(feed.book.categoryName, this)
+                userInfoViewModel.setGenre(feed.book.categoryName, this) //장르 업데이트
                 userInfoViewModel.getBookWorm(token).onJoin
                 val data = userInfoViewModel.bwdata.value
                 data!!.readCount++
                 userInfoViewModel.updateBw(token, data)
                 userInfoViewModel.updateUser(this)
-            } else {
+            } //리뷰 삭제 시
+            else {
                 userInfoViewModel.getBookWorm(token).onJoin
                 val data = userInfoViewModel.bwdata.value
                 data!!.readCount--
@@ -206,9 +214,14 @@ class FeedViewModel(val context: Context) : ViewModel() {
         viewModelScope.launch {
             if (isRefresh) {
                 dataRepository.reset()
-                dataRepository.setQuery(FireStoreLoadModule.provideQueryCommentsInFeedByFeedID(feedId))
+                dataRepository.setQuery(
+                    FireStoreLoadModule.provideQueryCommentsInFeedByFeedID(
+                        feedId
+                    )
+                )
             }
-            val loadedData = dataRepository.loadFireStoreData(FeedDataRepository.DataType.CommentType, 10)
+            val loadedData =
+                dataRepository.loadFireStoreData(FeedDataRepository.DataType.CommentType, 10)
             commentsData = if (loadedData != null) {
                 (loadedData as MutableList<Comment>).map { comment: Comment ->
                     return@map addCommentData(comment)
@@ -223,8 +236,11 @@ class FeedViewModel(val context: Context) : ViewModel() {
         liveData.value = null
         viewModelScope.launch {
             val loadedData =
-                    if (feedId == null) dataRepository.loadFireStoreData(FeedDataRepository.DataType.FeedType, pageSize = 1)
-                    else dataRepository.loadOnePost(feedId).toObject(Feed::class.java)
+                if (feedId == null) dataRepository.loadFireStoreData(
+                    FeedDataRepository.DataType.FeedType,
+                    pageSize = 1
+                )
+                else dataRepository.loadOnePost(feedId).toObject(Feed::class.java)
             liveData.value = addFeedData(loadedData as Feed)
         }
     }
@@ -249,7 +265,6 @@ class FeedViewModel(val context: Context) : ViewModel() {
             } else if (duration / 1000 / 60 / 60 / 24 / 30 <= 12) {
                 (duration / 1000 / 60 / 60 / 24 / 30).toString() + "개월 전"
             } else {
-//                (duration / 1000 / 60 / 60 / 24 / 30 / 12).toString() + "년 전"
                 SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(duration)
             }
             return dateDuration
@@ -260,27 +275,30 @@ class FeedViewModel(val context: Context) : ViewModel() {
     }
 
     //넘겨준 정보에 필요한 정보를 담아서 보내주는 converter
-    private suspend fun addFeedData(feed: Feed) = withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-        val tempUserInfo = userInfoViewModel.suspendGetUser(null)?.apply {
-            feed.isUserLiked = likedPost.contains(feed.feedID)
-        }
-        feed.creatorInfo = userInfoViewModel.suspendGetUser(feed.userToken)!!
-        feed.isUserPost = (tempUserInfo!!.token == feed.userToken)
-        feed.duration = getDateDuration(feed.date)
-        if (feed.commentsCount > 0L) {
-            feed.comment = FireStoreLoadModule.provideQueryCommentsLately(feed.feedID!!)
+    private suspend fun addFeedData(feed: Feed) =
+        withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
+            val tempUserInfo = userInfoViewModel.suspendGetUser(null)?.apply {
+                feed.isUserLiked = likedPost.contains(feed.feedID)
+            }
+            feed.creatorInfo = userInfoViewModel.suspendGetUser(feed.userToken)!!
+            feed.isUserPost = (tempUserInfo!!.token == feed.userToken)
+            feed.duration = getDateDuration(feed.date)
+            if (feed.commentsCount > 0L) {
+                feed.comment = FireStoreLoadModule.provideQueryCommentsLately(feed.feedID!!)
                     .get().await()
                     .toObjects(Comment::class.java)[0] //형변환을 자동으로 해줌.
-            feed.comment!!.creator = userInfoViewModel.suspendGetUser(feed.comment!!.userToken)!!
-            feed.comment!!.duration = getDateDuration(feed.comment!!.madeDate)
+                feed.comment!!.creator =
+                    userInfoViewModel.suspendGetUser(feed.comment!!.userToken)!!
+                feed.comment!!.duration = getDateDuration(feed.comment!!.madeDate)
+            }
+            return@withContext feed
         }
-        return@withContext feed
-    }
 
-    private suspend fun addCommentData(comment: Comment) = withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-        val tempUserInfo = userInfoViewModel.suspendGetUser(null)
-        comment.creator = userInfoViewModel.suspendGetUser(comment.userToken)!!
-        comment.isUserComment = (tempUserInfo!!.token == comment.userToken)
-        return@withContext comment
-    }
+    private suspend fun addCommentData(comment: Comment) =
+        withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
+            val tempUserInfo = userInfoViewModel.suspendGetUser(null)
+            comment.creator = userInfoViewModel.suspendGetUser(comment.userToken)!!
+            comment.isUserComment = (tempUserInfo!!.token == comment.userToken)
+            return@withContext comment
+        }
 }

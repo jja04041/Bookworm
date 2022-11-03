@@ -5,13 +5,13 @@
     <item
         android:id="@+id/tab_feed"
         android:enabled="true"
-        android:icon="@drawable/icon_home"
-        android:title="피드"
+        android:icon="@drawable/icon_home_selector"
+        android:title="홈"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/tab_search"
         android:enabled="true"
-        android:icon="@drawable/search"
+        android:icon="@drawable/icon_search_selector"
         android:title="탐색"
         app:showAsAction="ifRoom" />
     <item
@@ -23,13 +23,13 @@
     <item
         android:id="@+id/tab_challenge"
         android:enabled="true"
-        android:icon="@drawable/icon_challenge"
+        android:icon="@drawable/icon_challenge_selector"
         android:title="챌린지"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/tab_profile"
         android:enabled="true"
-        android:icon="@drawable/icon_profile"
+        android:icon="@drawable/icon_profile_selector"
         android:title="프로필"
         app:showAsAction="ifRoom" />
 

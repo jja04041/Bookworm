@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="350dp"
     android:layout_height="wrap_content"
-    android:background="@drawable/square_button"
+    android:backgroundTint="#00555555"
     android:orientation="vertical"
     android:padding="10dp">
 
@@ -43,7 +43,7 @@
                     android:id="@+id/btnNo"
                     android:layout_width="60dp"
                     android:layout_height="30dp"
-                    android:background="@drawable/label_design"
+                    android:background="@drawable/square_button"
                     android:text="아니요" />
 
             </LinearLayout>
