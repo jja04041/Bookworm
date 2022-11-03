@@ -31,7 +31,7 @@
 //import com.example.bookworm.bottomMenu.challenge.items.ChallengeAdapter;
 //import com.example.bookworm.bottomMenu.challenge.items.OnChallengeItemClickListener;
 //import com.example.bookworm.bottomMenu.profile.UserInfoViewModel;
-//import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book;
+//import com.example.bookworm.bottomMenu.search.Book;
 //import com.example.bookworm.core.userdata.UserInfo;
 //import com.example.bookworm.databinding.FragmentChallengeBinding;
 //import com.example.bookworm.core.internet.FBModule;

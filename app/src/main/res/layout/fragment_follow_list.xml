@@ -9,12 +9,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
-
-
+            <include layout="@layout/shimmer_layout_user_item"/>
+            <include layout="@layout/shimmer_layout_user_item"/>
+            <include layout="@layout/shimmer_layout_user_item"/>
+            <include layout="@layout/shimmer_layout_user_item"/>
+            <include layout="@layout/shimmer_layout_user_item"/>
+            <include layout="@layout/shimmer_layout_user_item"/>
+            <include layout="@layout/shimmer_layout_user_item"/>
+            <include layout="@layout/shimmer_layout_user_item"/>
+            <include layout="@layout/shimmer_layout_user_item"/>
+            <include layout="@layout/shimmer_layout_user_item"/>
         </LinearLayout>
 
     </com.facebook.shimmer.ShimmerFrameLayout>

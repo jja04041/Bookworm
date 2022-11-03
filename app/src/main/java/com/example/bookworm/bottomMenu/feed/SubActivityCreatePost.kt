@@ -18,8 +18,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.bookworm.LoadState
-import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book
-import com.example.bookworm.bottomMenu.search.searchtest.views.SearchMainActivity
+import com.example.bookworm.bottomMenu.search.bookitems.Book
+import com.example.bookworm.bottomMenu.search.views.SearchMainActivity
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.CustomDialogLabelBinding
@@ -160,7 +160,7 @@ class SubActivityCreatePost : AppCompatActivity() {
                 }
                 when (type) {
                     "back" -> {
-                        tvMessage.text = "피드 작성을 그만 하시겠습니까?"
+                        tvMessage.text = "리뷰 작성을 그만 하시겠습니까?"
                         btnYes.setOnClickListener {
                             this@SubActivityCreatePost.finish()
                             dismiss()
@@ -168,7 +168,7 @@ class SubActivityCreatePost : AppCompatActivity() {
                         show()
                     }
                     else -> {
-                        tvMessage.text = "피드를 업로드하시겠습니까?"
+                        tvMessage.text = "리뷰를 업로드하시겠습니까?"
                         btnYes.setOnClickListener {
                             if (feedData.book == Book() || feedData.feedText == "") {
                                 Toast.makeText(context, "내용을 입력한 후 완료를 선택해 주세요.", Toast.LENGTH_SHORT).show()

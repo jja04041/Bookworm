@@ -20,16 +20,13 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.bookworm.R;
-import com.example.bookworm.achievement.Achievement;
-import com.example.bookworm.bottomMenu.bookworm.BookWorm;
 import com.example.bookworm.bottomMenu.profile.submenu.SubMenuPagerAdapter;
 import com.example.bookworm.bottomMenu.profile.views.ProfileSettingActivity;
 import com.example.bookworm.chat.newchat.Activity_chatlist;
-import com.example.bookworm.core.internet.FBModule;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.databinding.FragmentProfileBinding;
-import com.example.bookworm.extension.follow.view.FollowViewModel;
-import com.example.bookworm.extension.follow.view.FollowerActivity;
+import com.example.bookworm.bottomMenu.profile.follow.modules.FollowViewModel;
+import com.example.bookworm.bottomMenu.profile.follow.view.FollowerActivity;
 
 public class FragmentProfile extends Fragment implements LifecycleObserver {
 
@@ -45,6 +42,9 @@ public class FragmentProfile extends Fragment implements LifecycleObserver {
             result -> {
                 if (result.getResultCode() == RESULT_CANCELED)
                     pv.getUser(NowUser.getToken(), true);
+                if (result.getResultCode() == ProfileSettingActivity.MODIFY_OK) {
+                    pv.getUser(NowUser.getToken(), true);
+                }
             });
 
     @Override
@@ -69,7 +69,8 @@ public class FragmentProfile extends Fragment implements LifecycleObserver {
 //뷰모델 안에서 데이터가 배치된다.
         binding.btnSetting.setOnClickListener(view1 -> {
             Intent intent = new Intent(current_context, ProfileSettingActivity.class);
-            startActivity(intent);
+            startActivityResult.launch(intent);
+//            startActivity(intent);
         });
 
 
@@ -177,7 +178,7 @@ public class FragmentProfile extends Fragment implements LifecycleObserver {
             binding.ivMedal.setVisibility(View.VISIBLE);
             switch (Integer.parseInt(String.valueOf(userInfo.getTier()))) { //티어 0 ~ 5에 따라 다른 메달이 나오게
                 case 1:
-                    binding.ivMedal.setImageResource(R.drawable.medal_bronze);
+//                    binding.ivMedal.setImageResource(R.drawable.medal_bronze);
                     break;
                 case 2:
                     binding.ivMedal.setImageResource(R.drawable.medal_silver);

@@ -84,7 +84,7 @@ class customMenuPopup(val context: Context, anchor: View) : PopupMenu(context, a
                 AlertDialog.Builder(context)
                         .setMessage(
                                 when (code) {
-                                    FEED_DELETE -> "게시물을 삭제하시겠습니까?" //피드(게시물) 삭제
+                                    FEED_DELETE -> "리뷰를 삭제하시겠습니까?" //피드(게시물) 삭제
                                     COMMENT_DELETE -> "댓글을 삭제하시겠습니까?" //댓글 삭제
                                     else -> ""
                                 })

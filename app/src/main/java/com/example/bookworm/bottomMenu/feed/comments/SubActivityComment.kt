@@ -1,6 +1,7 @@
 package com.example.bookworm.bottomMenu.feed.comments
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -8,6 +9,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,11 +23,11 @@ import com.example.bookworm.core.dataprocessing.image.ImageProcessing
 import com.example.bookworm.core.userdata.UserInfo
 import com.example.bookworm.databinding.SubactivityCommentBinding
 import com.example.bookworm.notification.MyFCMService
-import java.lang.NullPointerException
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.NullPointerException
 
 //메커니즘 순서
 //1. 이전 화면(fragmentFeed)에서 넘어온 Feed데이터를 가지고 화면에 세팅해준다.
@@ -52,7 +54,7 @@ class SubActivityComment : AppCompatActivity() {
 
     //액티비티 간 데이터 전달 핸들러(검색한 데이터의 값을 전달받는 매개체가 된다.) [책 데이터 이동]
     var startActivityResult = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
+        ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
         //수정 완료 시, 맨위 ( 피드 내용에 반영을 한다. )
         if (result.resultCode == SubActivityModifyPost.MODIFY_OK) {
@@ -60,9 +62,9 @@ class SubActivityComment : AppCompatActivity() {
             result.data!!.apply {
                 //게시물 업로드 하는 함수
                 feedItem = getParcelableExtra("modifiedFeed")!!
-                if (!feedItem.isModified) feedItem.isModified = true
                 isModified = true
                 feedItem.apply {
+                    feedItem.modified = true
                     feedViewModel.uploadPost(this, null, imageProcessModule)
                     feedViewModel.nowFeedUploadState.observe(this@SubActivityComment) {
                         if (it == LoadState.Done) {
@@ -72,7 +74,11 @@ class SubActivityComment : AppCompatActivity() {
                             current.removeAt(0)
                             current.add(0, feedItem)
                             commentAdapter.submitList(current.toList())
-                            Toast.makeText(this@SubActivityComment, "게시물이 정상적으로 수정되었습니다. ", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this@SubActivityComment,
+                                "게시물이 정상적으로 수정되었습니다. ",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }
@@ -86,27 +92,40 @@ class SubActivityComment : AppCompatActivity() {
     private val feedViewModel by lazy {
         ViewModelProvider(this, FeedViewModel.Factory(this))[FeedViewModel::class.java]
     }
+    private var isCommentAdded = false
     private var isModified = false //수정된 게시물인 경우, 해당 데이터를 저장하는 변수
     private var isDataEnd = false
     private val myFCMService = MyFCMService.getInstance()
     private lateinit var feedItem: Feed
-    val nowUser by lazy {
-        intent.getParcelableExtra<UserInfo>("NowUser")
-    }
+    lateinit var nowUser: UserInfo
     private val commentAdapter by lazy { CommentsAdapter(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         feedItem = intent.getParcelableExtra("Feed")!!
-        showShimmer(true)
+        init()
+        try {
+            showShimmer(true)
+            nowUser = intent.getParcelableExtra("NowUser")!!
+            loadCommentData(true)
+        } catch (e: NullPointerException) {
+            val nowUserLiveData = MutableLiveData<UserInfo>()
+            userInfoViewModel.getUser(null, nowUserLiveData, false)
+            nowUserLiveData.observe(this) {
+                if (it != null) {
+                    nowUser = it
+                    loadCommentData(true)
+                }
+            }
+        }
+    }
+
+    private fun init() {
         binding.apply {
             setContentView(root)
             setUI()
             setRecyclerView()
-            loadCommentData(true)
         }
-
     }
 
     private fun setUI() {
@@ -124,8 +143,9 @@ class SubActivityComment : AppCompatActivity() {
 
     //피드를 불러오는 어댑터 장착
     override fun onBackPressed() {
-        super.onBackPressed()
         closeActivity()
+        super.onBackPressed()
+
     }
 
     //댓글 추가 메소드 구현
@@ -136,41 +156,47 @@ class SubActivityComment : AppCompatActivity() {
                 edtComment.apply {
 
                     val madeDate = LocalDateTime.now()
-                            .format(
-                                    DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")
-                                            .withLocale(Locale.KOREA)
-                                            .withZone(ZoneId.of("Asia/Seoul"))
-                            )
-                    val comment = Comment(
-                            commentID = "${madeDate}_${nowUser!!.token}",
-                            contents = commentText,
-                            userToken = nowUser!!.token,
-                            madeDate = madeDate
-                    )
-                    feedViewModel.manageComment(comment, feedItem.feedID!!, true) //서버에 댓글 추가
-                    //게시물 작성자에게 댓글이 달렸다는 알림을 보냄
-                    if (nowUser!!.token != feedItem.userToken) { //본인이 댓글을 단 경우엔 알림이 가지 않도록 함
-                        myFCMService.sendPostToFCM(
-                                this@SubActivityComment, feedItem.creatorInfo!!.fCMtoken,
-                                "${nowUser!!.username}님이 댓글을 남겼습니다. \"${text}\" "
+                        .format(
+                            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                                .withLocale(Locale.KOREA)
+                                .withZone(ZoneId.of("Asia/Seoul"))
                         )
-                    }
-
+                    val comment = Comment(
+                        commentID = "${madeDate}_${nowUser!!.token}",
+                        contents = commentText,
+                        userToken = nowUser!!.token,
+                        madeDate = madeDate
+                    )
+                    val commentStateLiveData = MutableLiveData<LoadState>()
+                    feedViewModel.manageComment(
+                        comment = comment,
+                        feedId = feedItem.feedID!!,
+                        state = commentStateLiveData,
+                        isAdd = true
+                    ) //서버에 댓글 추가
                     //키보드 내리기
                     (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-                            .hideSoftInputFromWindow(windowToken, 0)
+                        .hideSoftInputFromWindow(windowToken, 0)
                     clearFocus()
                     text = null
 
-                    feedViewModel.nowCommentLoadState.observe(context as SubActivityComment) { state ->
+                    commentStateLiveData.observe(this@SubActivityComment) { state ->
                         if (state == LoadState.Done) {
-                            comment.duration = feedViewModel.getDateDuration(comment!!.madeDate)
-                            comment.creator = nowUser!!
-                            comment.isUserComment = true //내가 달은 댓글이므로. 이 코드가 없으면 내거라고 인식을 못해서 댓글을 달은 직후 상태에서 댓글 삭제 팝업이 뜨지 않음.
-                            commentAdapter.currentList.toMutableList().apply {
-                                add(1, comment)
-                                commentAdapter.submitList(this)
+                            //게시물 작성자에게 댓글이 달렸다는 알림을 보냄
+                            if (nowUser!!.token != feedItem.userToken) { //본인이 댓글을 단 경우엔 알림이 가지 않도록 함.
+                                myFCMService.sendPostToFCM(
+                                    this@SubActivityComment, feedItem.creatorInfo!!.fCMtoken,
+                                    "${nowUser!!.username}님이 댓글을 남겼습니다. \"${comment.contents}\" "
+                                )
                             }
+                            comment.duration = feedViewModel.getDateDuration(comment.madeDate)
+                            comment.creator = nowUser!!
+                            comment.isUserComment =
+                                true //내가 달은 댓글이므로. 이 코드가 없으면 내거라고 인식을 못해서 댓글을 달은 직후 상태에서 댓글 삭제 팝업이 뜨지 않음.
+                            val current = commentAdapter.currentList.toMutableList()
+                            current.add(1, comment)
+                            isCommentAdded = true
+                            commentAdapter.submitList(current.toMutableList())//현재 댓글 창의 최상단에 업로드한 댓글을 등록함.
                         }
 
                         binding.mRecyclerView.apply {
@@ -188,6 +214,7 @@ class SubActivityComment : AppCompatActivity() {
         try {
             //수정된 게시물을 메인 피드에 반영한다.
             if (isModified) {
+                val intent = Intent()
                 intent.putExtra("modifiedFeed", feedItem)
                 setResult(FEED_MODIFIED, intent)
             }
@@ -216,7 +243,8 @@ class SubActivityComment : AppCompatActivity() {
                     val current = commentAdapter.currentList.toMutableList() //기존에 가지고 있던 아이템 목록
                     if (isRefreshing) {
                         current.clear()
-                        binding.swiperefresh.isRefreshing = false //새로고침인 경우, 데이터가 다 로딩 된 후 새로고침 표시 없애기
+                        binding.swiperefresh.isRefreshing =
+                            false //새로고침인 경우, 데이터가 다 로딩 된 후 새로고침 표시 없애기
                         current.add(0, feedItem) //피드 데이터를 가져온다.
                     }
                     //만약 현재 목록이 비어있지 않고, 마지막 아이템이 로딩 아이템 이라면 마지막 아이템을 제거
@@ -238,6 +266,17 @@ class SubActivityComment : AppCompatActivity() {
 
     //리사이클러뷰를 위한 재료 세팅
     private fun setRecyclerView() {
+        commentAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                if (isCommentAdded) {
+                    binding.mRecyclerView.smoothScrollToPosition(1)
+                    isCommentAdded = false
+                }
+            }
+
+            override fun onChanged() {
+            }
+        })
         binding.apply {
             mRecyclerView.adapter = commentAdapter //어댑터 세팅
 //            mRecyclerView.itemAnimator = null //리사이클러뷰 애니메이션 제거
@@ -252,9 +291,12 @@ class SubActivityComment : AppCompatActivity() {
                         super.onScrolled(recyclerView, dx, dy)
                         val layoutManager = recyclerView.layoutManager as LinearLayoutManager?
                         val lastVisibleItemPosition =
-                                layoutManager!!.findLastCompletelyVisibleItemPosition()
+                            layoutManager!!.findLastCompletelyVisibleItemPosition()
                         if ((lastVisibleItemPosition
-                                        == commentAdapter.currentList.lastIndex) && lastVisibleItemPosition > 0)
+                                    == commentAdapter.currentList.lastIndex) && lastVisibleItemPosition > 1 && !isDataEnd
+                            && (commentAdapter.currentList.last() as Comment).commentID == "" //만약 추가 로딩할 데이터가 남아있다면, 로딩을 진행
+                        // 이부분이 없어서, 계속해서 두번씩 댓글이 추가되는 오류가 생겼던 것!
+                        )
                             loadCommentData(false)
                     }
                 })

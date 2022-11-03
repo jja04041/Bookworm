@@ -1,7 +1,6 @@
 package com.example.bookworm.bottomMenu.challenge.board;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -9,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bookworm.R;
-import com.example.bookworm.bottomMenu.search.searchtest.bookitems.Book;
+import com.example.bookworm.bottomMenu.search.bookitems.Book;
 import com.example.bookworm.core.userdata.PersonalD;
 import com.example.bookworm.core.userdata.UserInfo;
 import com.example.bookworm.core.userdata.interfaces.UserContract;

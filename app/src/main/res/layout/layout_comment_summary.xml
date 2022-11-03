@@ -1,19 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-
-        <variable
-            name="comment"
-            type="com.example.bookworm.bottomMenu.feed.comments.Comment" />
-
-        <variable
-            name="feed"
-            type="com.example.bookworm.bottomMenu.feed.Feed" />
-    </data>
 
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -68,6 +58,7 @@
                 </LinearLayout>
 
             </LinearLayout>
+
             <TextView
                 android:id="@+id/tvIfModified"
                 android:layout_width="wrap_content"
@@ -77,8 +68,7 @@
                 android:text="(수정됨)"
                 android:textSize="12dp"
                 android:textStyle="bold"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tvDate"
@@ -212,24 +202,13 @@
             </FrameLayout>
 
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/llcomment_stroke">
 
             </LinearLayout>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvCommentCount"
-            android:layout_width="wrap_content"
-            android:layout_height="31dp"
-            android:layout_marginHorizontal="10dp"
-            android:text="댓글  "
-            android:textColor="#000000"
-            android:textSize="17dp"
-            android:textStyle="bold" />
-
     </LinearLayout>
-</layout>
