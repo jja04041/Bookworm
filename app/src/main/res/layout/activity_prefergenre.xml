@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mother"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:orientation="vertical"
-    android:id="@+id/mother"
     tools:context=".bottomMenu.profile.views.PreferGenreActivity">
 
     <FrameLayout
@@ -28,7 +28,8 @@
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:background="@drawable/back_icon" />
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/back_icon" />
 
         </LinearLayout>
 
@@ -53,6 +54,7 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:gravity="center"
                 android:text="완료"
                 android:textColor="@color/black"
@@ -66,75 +68,80 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
             android:gravity="bottom"
             android:text="평소 선호하시는 장르들을 선택 해보세요! (최대5개)"
-            android:textSize="10dp" />
+            android:textSize="13dp" />
 
 
         <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-
-
-        <TextView
-            android:id="@+id/lbl0"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginEnd="15dp"
-            android:background="@drawable/selector_selected_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:gravity="center"
-            android:paddingHorizontal="10dp"
-            android:text=""
-            android:textSize="18dp" />
-
-        <TextView
-            android:id="@+id/lbl1"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginEnd="15dp"
-            android:background="@drawable/selector_selected_label"
-            android:gravity="center"
-            android:paddingHorizontal="10dp"
-            android:text=""
-            android:textSize="18dp" />
-
-        <TextView
-            android:id="@+id/lbl2"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginEnd="15dp"
-            android:background="@drawable/selector_selected_label"
-            android:gravity="center"
-            android:paddingHorizontal="10dp"
-            android:text=""
-            android:textSize="18dp" />
-
-        <TextView
-            android:id="@+id/lbl3"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginEnd="15dp"
-            android:background="@drawable/selector_selected_label"
-            android:gravity="center"
-            android:paddingHorizontal="10dp"
-            android:text=""
-            android:textSize="18dp" />
+            android:orientation="horizontal">
 
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/lbl0"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/selector_selected_label"
+                android:gravity="center"
+                android:paddingHorizontal="10dp"
+                android:text=""
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/lbl1"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/selector_selected_label"
+                android:gravity="center"
+                android:paddingHorizontal="10dp"
+                android:text=""
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/lbl2"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/selector_selected_label"
+                android:gravity="center"
+                android:paddingHorizontal="10dp"
+                android:text=""
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/lbl3"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/selector_selected_label"
+                android:gravity="center"
+                android:paddingHorizontal="10dp"
+                android:text=""
+                android:textSize="18dp" />
+
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
+            android:gravity="center"
             android:orientation="horizontal">
 
 
@@ -188,6 +195,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
         android:gravity="bottom"
         android:text="선택하신 장르들은 독자님들께 책을 추천하는데 사용됩니다."
         android:textSize="10dp" />

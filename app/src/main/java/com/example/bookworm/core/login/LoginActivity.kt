@@ -1,8 +1,13 @@
 package com.example.bookworm.core.login
 
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.Window
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -45,11 +50,12 @@ class LoginActivity : AppCompatActivity() {
     private var userInfo = UserInfo()
     private val userViewModel by lazy {
         ViewModelProvider(
-                this, UserInfoViewModel.Factory(this)
+            this, UserInfoViewModel.Factory(this)
         )[UserInfoViewModel::class.java]
     }
+    private val loginProgressDialog by lazy { customLoadingDialog(this) }
     var startActivityResult = registerForActivityResult<Intent, ActivityResult>(
-            ActivityResultContracts.StartActivityForResult()
+        ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
         if (result.resultCode == RESULT_OK) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
@@ -60,15 +66,15 @@ class LoginActivity : AppCompatActivity() {
                 Log.d("구글 로그인 데이터", task1.result.idToken!!)
                 //회원 정보 객체를 생성
                 userInfo = UserInfo(
-                        username = account.displayName!!,
-                        token = account.id!!,
-                        profileimg = try {
-                            account.photoUrl.toString()!!
-                        } catch (e: NullPointerException) {
-                            ""
-                        },
-                        email = account.email.let { "" },
-                        platform = "Google"
+                    username = account.displayName!!,
+                    token = account.id!!,
+                    profileimg = try {
+                        account.photoUrl.toString()!!
+                    } catch (e: NullPointerException) {
+                        ""
+                    },
+                    email = account.email.let { "" },
+                    platform = "Google"
                 )
                 //회원 가입 함수로 데이터를 전달%
                 signUp(userInfo)
@@ -112,9 +118,9 @@ class LoginActivity : AppCompatActivity() {
 
         // Configure Google Sign In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.server_client_id))
-                .requestEmail()
-                .build()
+            .requestIdToken(getString(R.string.server_client_id))
+            .requestEmail()
+            .build()
         gsi = GoogleSignIn.getClient(this, gso)
         gsa = GoogleSignIn.getLastSignedInAccount(this)
         // 구글 자동 로그인
@@ -139,13 +145,19 @@ class LoginActivity : AppCompatActivity() {
                             }
 
                             //카카오톡에 연결된 카카오 계정이 없는 경우, 카카오 계정으로 로그인 시도
-                            UserApiClient.instance.loginWithKakaoAccount(context = this@LoginActivity, callback = callback)
+                            UserApiClient.instance.loginWithKakaoAccount(
+                                context = this@LoginActivity,
+                                callback = callback
+                            )
                         } else if (token != null) {
                             //카카오 톡으로 로그인 성공
                             createUserByKakao()
                         }
                     }
-                } else UserApiClient.instance.loginWithKakaoAccount(context = this@LoginActivity, callback = callback)
+                } else UserApiClient.instance.loginWithKakaoAccount(
+                    context = this@LoginActivity,
+                    callback = callback
+                )
             }
 
         }
@@ -154,12 +166,14 @@ class LoginActivity : AppCompatActivity() {
 
     private fun createUserByKakao() {
         UserApiClient.instance.me { user, error ->
-            signUp(UserInfo(
+            signUp(
+                UserInfo(
                     username = user!!.kakaoAccount!!.profile!!.nickname!!,
                     token = user.id.toString(),
                     profileimg = user.kakaoAccount!!.profile!!.profileImageUrl!!,
                     platform = "Kakao"
-            ))
+                )
+            )
         }
     }
 
@@ -174,13 +188,16 @@ class LoginActivity : AppCompatActivity() {
         if (_iFlag == 0) {
             val intent = Intent(this, PreferGenreActivity::class.java)
             intent.putExtra("Login", 1)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            intent.flags =
+                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             startActivity(intent)
+            loginProgressDialog.close()
             finish()
         }
         if (_iFlag == 1) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+            loginProgressDialog.close()
             finish()
 //            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
@@ -192,10 +209,16 @@ class LoginActivity : AppCompatActivity() {
             val accessToken = gsa!!.idToken
             val credential = GoogleAuthProvider.getCredential(accessToken, null)
             Log.d("구글 토큰", accessToken.toString());
-            mAuth!!.signInWithCredential(credential).addOnCompleteListener { task: Task<AuthResult> -> Log.d("로그인 완료", task.result.toString()) }
+            mAuth!!.signInWithCredential(credential)
+                .addOnCompleteListener { task: Task<AuthResult> ->
+                    Log.d(
+                        "로그인 완료",
+                        task.result.toString()
+                    )
+                }
         }
 
-
+        loginProgressDialog.init()
         val livedata = MutableLiveData<UserInfo>()
         userViewModel.getUser(userInfo.token, livedata)
         livedata.observe(this) { userinfo: UserInfo? ->
@@ -227,7 +250,11 @@ class LoginActivity : AppCompatActivity() {
                  * */
 
                 if (userInfo.platform == "Kakao") UserApiClient.instance.logout {
-                    Toast.makeText(this, "카카오 로그인 시도 중 오류가 발생하였습니다. \n다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "카카오 로그인 시도 중 오류가 발생하였습니다. \n다시 시도해주세요.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
@@ -254,5 +281,22 @@ class LoginActivity : AppCompatActivity() {
 
         @JvmField
         var gsi: GoogleSignInClient? = null
+    }
+
+    inner class customLoadingDialog(val con: Context) : Dialog(con) {
+        init {
+            requestWindowFeature(Window.FEATURE_NO_TITLE)
+            setContentView(R.layout.layout_login_progress)
+            window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setCancelable(false) //화면밖 터치시 종료 막기
+        }
+
+        fun init() {
+            this.show()
+        }
+
+        fun close() {
+            this.dismiss()
+        }
     }
 }

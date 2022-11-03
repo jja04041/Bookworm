@@ -13,7 +13,7 @@ import com.google.firebase.firestore.QuerySnapshot
 interface ContractChallengeRepo {
     //챌린지 관련
     suspend fun loadChallenges(keyword: String = "", lastVisible: String? = null, pageSize: Long):ArrayList<Challenge>?//챌린지 목록을 불러옴
-    suspend fun createChallenge(challenge: Challenge) :Boolean //챌린지를 생성
+    suspend fun createChallenge(challenge: Challenge)  //챌린지를 생성
     suspend fun joinChallenge(challengeID: String,userToken:String) //챌린지에 참여가능한지 확인
 
 

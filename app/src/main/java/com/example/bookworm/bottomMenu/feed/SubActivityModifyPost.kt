@@ -149,7 +149,7 @@ class SubActivityModifyPost : AppCompatActivity() {
                 setOnClickListener {
                     Toast.makeText(
                         this@SubActivityModifyPost,
-                        "게시물 수정 시엔 도서를 변경할 수 없습니다.",
+                        "리뷰 수정 시엔 도서를 변경할 수 없습니다.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -228,14 +228,14 @@ class SubActivityModifyPost : AppCompatActivity() {
                 }
                 when (type) {
                     "upload" -> {
-                        tvMessage.text = "게시물을 수정하시겠습니까?"
+                        tvMessage.text = "리뷰를 수정하시겠습니까?"
                         btnYes.setOnClickListener {
                             dismiss()
                             processUpdatePost()
                         }
                     }
                     "btnBack" -> {
-                        tvMessage.text = "게시물 수정을 그만하시겠습니까?"
+                        tvMessage.text = "리뷰 수정을 그만하시겠습니까?"
                         btnYes.setOnClickListener {
                             dismiss()
                             finish()

@@ -42,6 +42,9 @@ public class FragmentProfile extends Fragment implements LifecycleObserver {
             result -> {
                 if (result.getResultCode() == RESULT_CANCELED)
                     pv.getUser(NowUser.getToken(), true);
+                if (result.getResultCode() == ProfileSettingActivity.MODIFY_OK) {
+                    pv.getUser(NowUser.getToken(), true);
+                }
             });
 
     @Override
@@ -66,7 +69,8 @@ public class FragmentProfile extends Fragment implements LifecycleObserver {
 //뷰모델 안에서 데이터가 배치된다.
         binding.btnSetting.setOnClickListener(view1 -> {
             Intent intent = new Intent(current_context, ProfileSettingActivity.class);
-            startActivity(intent);
+            startActivityResult.launch(intent);
+//            startActivity(intent);
         });
 
 

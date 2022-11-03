@@ -9,33 +9,29 @@ import kotlinx.coroutines.tasks.await
 class ChallengeDataRepository(context: Context) : ContractChallengeRepo {
 
     //챌린지 목록을 가져오는 메소드
-    override suspend fun loadChallenges(keyword: String, lastVisible: String?, pageSize: Long) = try {
-        ArrayList<Challenge>(
+    override suspend fun loadChallenges(keyword: String, lastVisible: String?, pageSize: Long) =
+        try {
+            ArrayList<Challenge>(
                 FireStoreLoadModule.provideQueryChallenges().apply {
                     if (keyword != "") this.startAt(keyword).endAt(keyword + "\uf8ff")
                     if (lastVisible != "") this.startAfter(lastVisible)
                 }.limit(pageSize).get().await().toObjects(Challenge::class.java)
-        )
-    } catch (e: Exception) {
-        null
-    }
-
-
-    override suspend fun createChallenge(challenge: Challenge): Boolean {
-        return try {
-            FireStoreLoadModule.provideQueryPathToChallengeCollection()
-                    .document(challenge.id).set(challenge).await()
-            true
+            )
         } catch (e: Exception) {
-            false
+            null
         }
+
+
+    override suspend fun createChallenge(challenge: Challenge) {
+        FireStoreLoadModule.provideQueryPathToChallengeCollection()
+            .document(challenge.id).set(challenge).await()
 
     }
 
     //참여 가능한 경우에는 정상적으로 참여가 되게 하고, 안되는 경우에는 에러를 띄워준다.
     override suspend fun joinChallenge(challengeID: String, userToken: String) {
         val challengeRef = FireStoreLoadModule
-                .provideQueryPathToChallengeCollection().document(challengeID)
+            .provideQueryPathToChallengeCollection().document(challengeID)
         FireStoreLoadModule.provideFirebaseInstance().runTransaction { transaction ->
             transaction.apply {
                 val doc = get(challengeRef)
