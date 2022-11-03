@@ -54,7 +54,7 @@ class SubActivityComment : AppCompatActivity() {
 
     //액티비티 간 데이터 전달 핸들러(검색한 데이터의 값을 전달받는 매개체가 된다.) [책 데이터 이동]
     var startActivityResult = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
+            ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
         //수정 완료 시, 맨위 ( 피드 내용에 반영을 한다. )
         if (result.resultCode == SubActivityModifyPost.MODIFY_OK) {
@@ -75,9 +75,9 @@ class SubActivityComment : AppCompatActivity() {
                             current.add(0, feedItem)
                             commentAdapter.submitList(current.toList())
                             Toast.makeText(
-                                this@SubActivityComment,
-                                "게시물이 정상적으로 수정되었습니다. ",
-                                Toast.LENGTH_SHORT
+                                    this@SubActivityComment,
+                                    "게시물이 정상적으로 수정되었습니다. ",
+                                    Toast.LENGTH_SHORT
                             ).show()
                         }
                     }
@@ -156,27 +156,27 @@ class SubActivityComment : AppCompatActivity() {
                 edtComment.apply {
 
                     val madeDate = LocalDateTime.now()
-                        .format(
-                            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-                                .withLocale(Locale.KOREA)
-                                .withZone(ZoneId.of("Asia/Seoul"))
-                        )
+                            .format(
+                                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                                            .withLocale(Locale.KOREA)
+                                            .withZone(ZoneId.of("Asia/Seoul"))
+                            )
                     val comment = Comment(
-                        commentID = "${madeDate}_${nowUser!!.token}",
-                        contents = commentText,
-                        userToken = nowUser!!.token,
-                        madeDate = madeDate
+                            commentID = "${madeDate}_${nowUser!!.token}",
+                            contents = commentText,
+                            userToken = nowUser!!.token,
+                            madeDate = madeDate
                     )
                     val commentStateLiveData = MutableLiveData<LoadState>()
                     feedViewModel.manageComment(
-                        comment = comment,
-                        feedId = feedItem.feedID!!,
-                        state = commentStateLiveData,
-                        isAdd = true
+                            comment = comment,
+                            feedId = feedItem.feedID!!,
+                            state = commentStateLiveData,
+                            isAdd = true
                     ) //서버에 댓글 추가
                     //키보드 내리기
                     (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-                        .hideSoftInputFromWindow(windowToken, 0)
+                            .hideSoftInputFromWindow(windowToken, 0)
                     clearFocus()
                     text = null
 
@@ -185,14 +185,14 @@ class SubActivityComment : AppCompatActivity() {
                             //게시물 작성자에게 댓글이 달렸다는 알림을 보냄
                             if (nowUser!!.token != feedItem.userToken) { //본인이 댓글을 단 경우엔 알림이 가지 않도록 함.
                                 myFCMService.sendPostToFCM(
-                                    this@SubActivityComment, feedItem.creatorInfo!!.fCMtoken,
-                                    "${nowUser!!.username}님이 댓글을 남겼습니다. \"${comment.contents}\" "
+                                        this@SubActivityComment, feedItem.creatorInfo!!.fCMtoken,
+                                        "${nowUser!!.username}님이 댓글을 남겼습니다. \"${comment.contents}\" "
                                 )
                             }
                             comment.duration = feedViewModel.getDateDuration(comment.madeDate)
                             comment.creator = nowUser!!
                             comment.isUserComment =
-                                true //내가 달은 댓글이므로. 이 코드가 없으면 내거라고 인식을 못해서 댓글을 달은 직후 상태에서 댓글 삭제 팝업이 뜨지 않음.
+                                    true //내가 달은 댓글이므로. 이 코드가 없으면 내거라고 인식을 못해서 댓글을 달은 직후 상태에서 댓글 삭제 팝업이 뜨지 않음.
                             val current = commentAdapter.currentList.toMutableList()
                             current.add(1, comment)
                             isCommentAdded = true
@@ -244,7 +244,7 @@ class SubActivityComment : AppCompatActivity() {
                     if (isRefreshing) {
                         current.clear()
                         binding.swiperefresh.isRefreshing =
-                            false //새로고침인 경우, 데이터가 다 로딩 된 후 새로고침 표시 없애기
+                                false //새로고침인 경우, 데이터가 다 로딩 된 후 새로고침 표시 없애기
                         current.add(0, feedItem) //피드 데이터를 가져온다.
                     }
                     //만약 현재 목록이 비어있지 않고, 마지막 아이템이 로딩 아이템 이라면 마지막 아이템을 제거
@@ -291,10 +291,10 @@ class SubActivityComment : AppCompatActivity() {
                         super.onScrolled(recyclerView, dx, dy)
                         val layoutManager = recyclerView.layoutManager as LinearLayoutManager?
                         val lastVisibleItemPosition =
-                            layoutManager!!.findLastCompletelyVisibleItemPosition()
+                                layoutManager!!.findLastCompletelyVisibleItemPosition()
                         if ((lastVisibleItemPosition
-                                    == commentAdapter.currentList.lastIndex) && lastVisibleItemPosition > 1 && !isDataEnd
-                            && (commentAdapter.currentList.last() as Comment).commentID == "" //만약 추가 로딩할 데이터가 남아있다면, 로딩을 진행
+                                        == commentAdapter.currentList.lastIndex) && lastVisibleItemPosition > 1 && !isDataEnd
+                                && (commentAdapter.currentList.last() as Comment).commentID == "" //만약 추가 로딩할 데이터가 남아있다면, 로딩을 진행
                         // 이부분이 없어서, 계속해서 두번씩 댓글이 추가되는 오류가 생겼던 것!
                         )
                             loadCommentData(false)
