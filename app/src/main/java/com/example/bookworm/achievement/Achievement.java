@@ -83,7 +83,7 @@ public class Achievement {
         HashMap<String, Object> map = new HashMap<>();
 
         if (userinfo.getGenre().get("자기계발") != null) {
-            if (userinfo.getGenre().get("자기계발") == 2) {
+            if (userinfo.getGenre().get("자기계발") == 1) {
                 if (null == bookworm.getAchievementMap().get("자존감왕")) {
                     ExecuteFB("confidence", "자존감왕", 0);
                 }
@@ -98,14 +98,14 @@ public class Achievement {
             }
         }
         if (userinfo.getGenre().get("육아") != null) {
-            if (userinfo.getGenre().get("육아") == 3) {
+            if (userinfo.getGenre().get("육아") == 1) {
                 if (null == bookworm.getAchievementMap().get("좋은엄마")) {
                     ExecuteFB("mom", "좋은엄마", 0);
                 }
             }
         }
         if (userinfo.getGenre().get("어린이") != null) {
-            if (userinfo.getGenre().get("어린이") == 3) {
+            if (userinfo.getGenre().get("어린이") == 1) {
                 if (null == bookworm.getAchievementMap().get("착한어린이")) {
                     ExecuteFB("child", "착한어린이", 0);
                 }
@@ -113,7 +113,7 @@ public class Achievement {
         }
 
         if (userinfo.getGenre().get("청소년") != null) {
-            if (userinfo.getGenre().get("청소년") == 3) {
+            if (userinfo.getGenre().get("청소년") == 1) {
                 if (null == bookworm.getAchievementMap().get("사춘기볼레")) {
                     ExecuteFB("student", "사춘기볼레", 0);
                 }
@@ -121,28 +121,28 @@ public class Achievement {
         }
 
         if (userinfo.getGenre().get("공부") != null) {
-            if (userinfo.getGenre().get("공부") == 3) {
+            if (userinfo.getGenre().get("공부") == 1) {
                 if (null == bookworm.getAchievementMap().get("공부벌레")) {
                     ExecuteFB("study", "공부벌레", 0);
                 }
             }
         }
         if (userinfo.getGenre().get("사회") != null) {
-            if (userinfo.getGenre().get("사회") == 3) {
+            if (userinfo.getGenre().get("사회") == 1) {
                 if (null == bookworm.getAchievementMap().get("사회왕")) {
                     ExecuteFB("social", "사회왕", 0);
                 }
             }
         }
         if (userinfo.getGenre().get("과학") != null) {
-            if (userinfo.getGenre().get("과학") == 3) {
+            if (userinfo.getGenre().get("과학") == 1) {
                 if (null == bookworm.getAchievementMap().get("싸이언쓰볼레")) {
                     ExecuteFB("science", "싸이언쓰볼레", 0);
                 }
             }
         }
         if (userinfo.getGenre().get("인문") != null) {
-            if (userinfo.getGenre().get("인문") == 3) {
+            if (userinfo.getGenre().get("인문") == 1) {
                 if (null == bookworm.getAchievementMap().get("문학볼레")) {
                     ExecuteFB("literature", "문학볼레", 0);
                 }
@@ -156,7 +156,7 @@ public class Achievement {
 //            }
 //        }
         if (userinfo.getGenre().get("만화") != null) {
-            if (userinfo.getGenre().get("만화") == 3) {
+            if (userinfo.getGenre().get("만화") == 1) {
                 if (null == bookworm.getAchievementMap().get("만화광")) {
                     ExecuteFB("cartoon", "만화광", 0);
                 }
