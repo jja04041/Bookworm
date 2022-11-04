@@ -74,7 +74,6 @@ class ProfileModifyActivity : AppCompatActivity() {
             userInfoViewModel.getUser(null, liveData, true)
             liveData.observe(this) {
                 if (it != null) {
-                    userInfoViewModel.updateUser(it)
                     setResult(MODIFY_OK)
                     finish()
                 }
@@ -128,6 +127,7 @@ class ProfileModifyActivity : AppCompatActivity() {
                         imageProcess.imgData.observe(this@ProfileModifyActivity) { imgurl: String? ->
                             if (checkIdChanged(nowUser)) {
                                 nowUser.profileimg = (imgurl)!!
+                                userInfoViewModel.updateUser(nowUser)
                                 isModified = true
                                 closeLogic()
                             } else {
