@@ -11,13 +11,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.bookworm.LoadState
+import com.example.bookworm.achievement.Achievement
 import com.example.bookworm.appLaunch.views.MainActivity
+import com.example.bookworm.bottomMenu.challenge.subactivity.subactivity_challenge_board_create
 import com.example.bookworm.bottomMenu.feed.comments.Comment
 import com.example.bookworm.bottomMenu.feed.comments.SubActivityComment
 import com.example.bookworm.bottomMenu.profile.UserInfoViewModel
 import com.example.bookworm.bottomMenu.search.views.BookDetailActivity
 import com.example.bookworm.bottomMenu.search.views.SearchMainActivity
 import com.example.bookworm.core.dataprocessing.image.ImageProcessing
+import com.example.bookworm.core.internet.FBModule
 import com.example.bookworm.core.userdata.UserInfo
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
@@ -149,7 +152,8 @@ class FeedViewModel(val context: Context) : ViewModel() {
         nowLikeState.value = LoadState.Loading
         viewModelScope.launch {
             try {
-                dataRepository.manageLike(feed.feedID!!, nowUser.token, feed.isUserLiked) ?: throw Exception()
+                dataRepository.manageLike(feed.feedID!!, nowUser.token, feed.isUserLiked)
+                    ?: throw Exception()
                 val user = userInfoViewModel.suspendGetUser(nowUser.token)!!
                 userInfoViewModel.updateUser(user)
                 nowLikeState.value = LoadState.Done
@@ -169,6 +173,10 @@ class FeedViewModel(val context: Context) : ViewModel() {
                 userInfoViewModel.getBookWorm(token).onJoin
                 val data = userInfoViewModel.bwdata.value
                 data!!.readCount++
+                val fbModule = FBModule(context)
+                val achievement = Achievement(context, fbModule, this, data)
+                achievement.CompleteAchievement(this, context)
+                achievement.canreturn()
                 userInfoViewModel.updateBw(token, data)
                 userInfoViewModel.updateUser(this)
             } //리뷰 삭제 시
